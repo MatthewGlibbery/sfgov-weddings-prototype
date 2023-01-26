@@ -1,8 +1,8 @@
 import Head from 'next/head'
-import { Box, Container, PrimaryButton, TitleSm } from '@sfgov/react'
+import { Box, Container, PrimaryButton, TitleSm } from '@sfgov/design-system/react'
 import Link from 'next/link'
 
-export default function Home() {
+export default function Home () {
   return (
     <>
       <Head>
@@ -22,8 +22,8 @@ export default function Home() {
 
         <Box css={{ bg: '$yellowL2', py: 20 }}>
           <Container>
-            <Link href="/departments/city-administrator">
-              City administrator
+            <Link href="/about">
+              About
             </Link>
           </Container>
         </Box>

@@ -1,8 +1,8 @@
-import { BodyText } from '@sfgov/react'
+import { BodyText } from '@sfgov/design-system/react'
 import { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStylesheet } from '../components/ServerStylesheet'
 
-export default function Document() {
+export default function Document () {
   return (
     <Html>
       <Head>

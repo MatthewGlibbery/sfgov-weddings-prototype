@@ -1,8 +1,8 @@
 import React from 'react'
 import { useServerInsertedHTML } from 'next/navigation'
-import { SSRStyle, SSRStyleProps } from '@sfgov/react'
+import { SSRStyle, SSRStyleProps } from '@sfgov/design-system/react'
 
-export function ServerStylesheet(props: SSRStyleProps) {
+export function ServerStylesheet (props: SSRStyleProps) {
   useServerInsertedHTML(() => {
     if (typeof window === 'undefined') {
       return <SSRStyle {...props} />
