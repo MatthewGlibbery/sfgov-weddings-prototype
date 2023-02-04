@@ -9,6 +9,16 @@ module.exports = {
       'fil'
     ]
   },
+  images: {
+    domains: ['localhost'],
+    remotePatterns: [
+      {
+        hostname: 'localhost',
+        port: '8000',
+        protocol: 'http'
+      }
+    ]
+  },
   poweredByHeader: false,
   experimental: {
   }
