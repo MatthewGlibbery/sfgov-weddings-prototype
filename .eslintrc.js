@@ -9,7 +9,8 @@ module.exports = {
     'plugin:sfgov/recommended'
   ],
   rules: {
-    'react/no-unescaped-entities': ['off']
+    'react/no-unescaped-entities': ['off'],
+    'react/jsx-no-leaked-render': ['error']
   },
   overrides: [
     {

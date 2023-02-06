@@ -1,23 +1,10 @@
-import { ComponentType } from 'react'
 import { isMatch } from 'micromatch'
-import type { IContentAPI, PageData, PageProps, QueryParams } from './types'
+import type { IContentAPI, IController, MakeGetServerSidePropsOptions, MakeViewComponentOptions, PageComponent, PageData, PageProps, QueryParams } from '../types'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { i18n } from '../next.config'
+import { renderWithErrorBoundary } from '@/components/ErrorBoundary'
 
 const DEFAULT_LOCALE = i18n.defaultLocale
-
-/**
- * A PageComponent is a React comoponent type that accepts
- * a props object extending PageProps:
- *
- * ```ts
- * type AgencyProps = PageProps &  {
- *   title: string
- * }
- * const AgencyPage: PageComponent<AgencyProps> = (...)
- * ```
- */
-export type PageComponent<P extends PageProps = PageProps> = ComponentType<P>
 
 /**
  * The map of content types to template components is expressed
@@ -38,7 +25,7 @@ type ContentTypeTemplateMapEntries = [
   PageComponent
 ][]
 
-export class Controller {
+export class Controller implements IController {
   api: IContentAPI
   templates: ContentTypeTemplateMapEntries
   templateMap: Map<string, PageComponent>
@@ -54,31 +41,61 @@ export class Controller {
     this.templateMap = new Map<string, PageComponent>()
   }
 
-  makeGetServerSideProps<P extends PageData = PageData> (options?: {
-    overridePath?: string
-  }): GetServerSideProps<PageProps<P>> {
+  /**
+   * Create a getServerSideProps() function from this controller.
+   * This is usually used in Next.js page routes:
+   *
+   * ```ts
+   * export const getServerSideProps = controller.makeGetServerSideProps()
+   * ```
+   */
+  makeGetServerSideProps<P extends PageData = PageData> (options?: MakeGetServerSidePropsOptions): GetServerSideProps<PageProps<P>> {
     return async context => {
-      const { locale } = context
-      const path = options?.overridePath || this.getContextPath(context)
-      if (locale && locale !== DEFAULT_LOCALE) {
-        const props = await Promise.any([
-          this.getPageProps<P>(path, { locale }),
-          this.getPageProps<P>(path)
-        ])
-        return props
-          ? { props }
-          : { notFound: true }
-      }
+      const path = this.getContextPath(context)
       const props = await this.getPageProps<P>(path)
-      return props
+      return props?.page
         ? { props }
         : { notFound: true }
     }
   }
 
+  makeViewComponent<P extends PageData = PageData> (options?: MakeViewComponentOptions): PageComponent<PageProps<P>> {
+    type RenderProps = PageProps<P> & typeof options['staticProps']
+    const controller = this
+    const { api } = this
+    return function ControllerView (props) {
+      if (!props.page?.meta?.type) {
+        throw new Error('No page.meta.type found in page props')
+      }
+      const { type } = props.page.meta
+      const Template = controller.getTemplateForType<PageProps<P>>(type)
+      if (!Template) {
+        throw new Error(`No template found for page.meta.type "${type}"`)
+      }
+      return renderWithErrorBoundary<RenderProps>(Template, { ...props, api })
+    }
+  }
+
   async getPageProps<P extends PageData = PageData> (path: string, params?: QueryParams, options?: RequestInit): Promise<PageProps<P>> {
-    // console.info('getPageProps():', path, params)
-    const data = await this.api.getPageByPath<P>(path, params, options)
+    const locale = params?.locale
+    let data: P
+    if (locale && locale !== DEFAULT_LOCALE) {
+      try {
+        data = await this.api.getPageByPath<P>(path, params, options)
+      } catch (error) {
+        params = { ...params }
+        delete params.locale
+        data = await this.api.getPageByPath<P>(path, params, options)
+      }
+    } else {
+      data = await this.api.getPageByPath<P>(path, params, options)
+    }
+    const Template = data?.meta?.type
+      ? this.getTemplateForType<PageProps<P>>(data.meta.type)
+      : undefined
+    if (Template?.loadReferences) {
+      await Template.loadReferences(data, this.api)
+    }
     return {
       page: data,
       path,
@@ -93,9 +110,9 @@ export class Controller {
       : resolvedUrl
   }
 
-  getTemplateForType<P extends PageProps = PageProps> (type: string) {
+  getTemplateForType<P extends PageProps = PageProps> (type: string): PageComponent<P> {
     if (this.templateMap.has(type)) {
-      return this.templateMap.get(type)
+      return this.templateMap.get(type) as PageComponent<P>
     }
     for (const [pattern, template] of this.templates) {
       if (isMatch(type, pattern)) {

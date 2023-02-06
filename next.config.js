@@ -10,12 +10,24 @@ module.exports = {
     ]
   },
   images: {
-    domains: ['localhost'],
+    domains: [
+      'sf.gov',
+      'localhost',
+      'via.placeholder.com'
+    ],
     remotePatterns: [
+      {
+        hostname: 'sf.gov',
+        protocol: 'https'
+      },
       {
         hostname: 'localhost',
         port: '8000',
         protocol: 'http'
+      },
+      {
+        hostname: 'via.placeholder.com',
+        protocol: 'https'
       }
     ]
   },

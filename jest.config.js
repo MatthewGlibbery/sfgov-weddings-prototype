@@ -20,7 +20,8 @@ const customJestConfig = {
   ci: !!process.env.CI,
   collectCoverageFrom: [
     '<rootDir>/components/**/*.tsx',
-    '<rootDir>/lib/**/*.ts'
+    '<rootDir>/lib/**/*.ts',
+    '!<rootDir>/lib/constants.ts'
   ],
   moduleNameMapper,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],

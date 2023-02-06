@@ -1,4 +1,4 @@
-import { ContentAPI } from './api'
+import { ContentAPI, FixtureAPI } from './api'
 import mockEnv from 'mocked-env'
 import fetchMock from 'jest-fetch-mock'
 
@@ -73,6 +73,28 @@ describe('ContentAPI', () => {
       const res = await example.loadJSON<typeof data>('foo')
       expect(res).toEqual(data)
     })
+
+    it('rejects on 4xx statuses', async () => {
+      fetchMock.mockResponseOnce(req => Promise.resolve({
+        body: JSON.stringify({
+          message: 'not found'
+        }),
+        init: {
+          status: 404
+        }
+      }))
+      await expect(example.loadJSON('derp')).rejects.toThrow('not found')
+    })
+
+    it('rejects on 4xx statuses with "bad response" if no message is provided', async () => {
+      fetchMock.mockResponseOnce(req => Promise.resolve({
+        body: JSON.stringify({}),
+        init: {
+          status: 404
+        }
+      }))
+      await expect(example.loadJSON('derp')).rejects.toThrow('bad response')
+    })
   })
 
   describe('getURL()', () => {
@@ -108,6 +130,69 @@ describe('ContentAPI', () => {
         apiBasePath: ''
       })
       expect(api.getURL('foo')).toStringifyTo('http://localhost:8000/foo')
+    })
+  })
+})
+
+describe('FixtureAPI', () => {
+  describe('constructor', () => {
+    it('throws on invalid arguments', () => {
+      // @ts-expect-error
+      expect(() => new FixtureAPI()).toThrow()
+      // @ts-expect-error
+      expect(() => new FixtureAPI({ pages: { wut: null } })).toThrow()
+      expect(() => new FixtureAPI({ pages: [null] })).toThrow()
+      expect(() => new FixtureAPI({ pages: [], images: [null] })).toThrow()
+    })
+
+    it('does not throw on valid arguments', () => {
+      expect(() => new FixtureAPI({ pages: [], images: [] })).not.toThrow()
+    })
+  })
+
+  describe('getPageByPath()', () => {
+    const page = {
+      id: 10,
+      meta: {
+        type: 'huh.Wut',
+        url_path: 'wut'
+      }
+    }
+    const api = new FixtureAPI({
+      pages: [
+        page
+      ]
+    })
+
+    it('loads the right page from the expected path', () => {
+      expect(api.getPageByPath('wut')).resolves.toEqual(page)
+    })
+
+    it('rejects on missing pages', () => {
+      expect(api.getPageByPath('nope')).rejects.toThrow(/not found/)
+    })
+  })
+
+  describe('loadJSON()', () => {
+    const page = {
+      id: 99,
+      meta: {
+        type: 'huh.Wut',
+        url_path: 'wut'
+      }
+    }
+    const api = new FixtureAPI({
+      pages: [
+        page
+      ]
+    })
+
+    it('resolves to page at the expected "api/{id}" path', () => {
+      expect(api.loadJSON('page/99')).resolves.toEqual(page)
+    })
+
+    it('rejects on missing pages', () => {
+      expect(api.loadJSON('page/100')).rejects.toThrow(/not found/)
     })
   })
 })

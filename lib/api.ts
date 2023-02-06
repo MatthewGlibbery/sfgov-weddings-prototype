@@ -1,5 +1,5 @@
 import { join } from 'path'
-import type { FetchImpl, PageData, QueryParams, IContentAPI } from './types'
+import type { FetchImpl, PageData, QueryParams, IContentAPI, WagtailImageData } from '../types'
 
 export type ContentAPIOptions = {
   fetch?: FetchImpl
@@ -37,6 +37,9 @@ export class ContentAPI implements IContentAPI {
   async loadJSON<T = unknown> (path: string, params?: QueryParams, options?: RequestInit) {
     const res = await this.load(path, params, options)
     const data = await res.json()
+    if (res.status === 404) {
+      throw new Error(data?.message || 'bad response')
+    }
     return data as T
   }
 
@@ -58,5 +61,44 @@ export class ContentAPI implements IContentAPI {
       }
     }
     return url
+  }
+}
+
+export class FixtureAPI implements IContentAPI {
+  pages: PageData[]
+  images: WagtailImageData[]
+  dataByApiPath: Record<string, PageData>
+  pagesByUrlPath: Record<string, PageData>
+
+  constructor ({ pages, images }: {
+    pages: PageData[]
+    images?: WagtailImageData[]
+  }) {
+    this.pages = pages
+    this.images = images || []
+    this.dataByApiPath = Object.fromEntries([
+      ...this.pages.map(page => [`page/${page.id}`, page]),
+      ...this.images.map(image => [`images/${image.id}`, image])
+    ])
+    this.pagesByUrlPath = Object.fromEntries(
+      this.pages.map(page => [page.meta.url_path, page])
+    )
+  }
+
+  loadJSON<T = unknown> (path: string, params?: QueryParams, options?: RequestInit): Promise<T> {
+    const page = (
+      this.dataByApiPath[path] ||
+      this.dataByApiPath[`/${path}`]
+    ) as T
+    return page
+      ? Promise.resolve(page)
+      : Promise.reject(new Error(`not found: ${path}`))
+  }
+
+  getPageByPath<T extends PageData = PageData> (path: string, params?: QueryParams, options?: RequestInit): Promise<T> {
+    const page = this.pagesByUrlPath[path] as T
+    return page
+      ? Promise.resolve(page)
+      : Promise.reject(new Error(`not found: ${path}`))
   }
 }
