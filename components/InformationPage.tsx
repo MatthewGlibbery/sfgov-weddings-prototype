@@ -1,6 +1,5 @@
 import { resolveImage, resolvePage } from '@/lib/utils'
 import { BigDesc, Box, Container, DisplayLg, TitleLg } from '@sfgov/design-system/dist/react'
-import AgencyList from './AgencyList'
 import Image from './Image'
 import { AgencyData, InfoPageData, PageComponent, PageData, PageProps, WagtailImageData } from '@/types'
 import { ComponentProps } from 'react'
@@ -19,7 +18,7 @@ const InformationPage: PageComponent<InfoPageProps> = props => {
     title,
     description,
     information_section: content,
-    departments_or_public_bodies: divisions,
+    // departments_or_public_bodies: divisions,
     topics,
     related
   } = props.page
@@ -30,7 +29,7 @@ const InformationPage: PageComponent<InfoPageProps> = props => {
         {description ? <BigDesc as='p'>{description}</BigDesc> : null}
       </Container>
       <InfoPageContent as='main' blocks={content} />
-      <InfoPageAgencyList id='divisions' agencies={divisions.map(block => block.value as AgencyData)} />
+      {/* <InfoPagesServiceList id='divisions' agencies={divisions} /> */}
       <InfoPageTopicList id='topics' topics={topics} />
       <InfoPageRelatedList id='related' related={related} />
     </Box>
@@ -78,16 +77,16 @@ function InfoPageContentBlock ({ block }: { block: ContentBlock }) {
   }
 }
 
-function InfoPageAgencyList ({ agencies, ...rest }: { agencies: AgencyData[] } & ContainerProps) {
+/* function InfoPageAgencyList ({ agencies, ...rest }: { agencies: { data: AgencyData }[] } & ContainerProps) {
   if (!agencies?.length) return null
   return (
     <Container {...rest}>
       <TitleLg as='h2'>Divisions</TitleLg>
       <p>The title of this section is currently hard-coded in the template.</p>
-      <AgencyList agencies={agencies} />
+      <AgencyList agencies={agencies.map(block => block.value)} />
     </Container>
   )
-}
+} */
 
 function InfoPageTopicList ({ topics, ...rest }: ContainerProps & { topics: TopicBlock[] }) {
   if (!topics?.length) return null

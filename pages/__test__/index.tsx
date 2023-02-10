@@ -1,6 +1,6 @@
 import PageLink from '@/components/PageLink'
 import { Container, Monospace, TitleLg } from '@sfgov/design-system/dist/react'
-import { pages } from './_fixtures'
+import { pages } from '@/__fixtures__'
 
 export async function getServerSideProps () {
   // pass the page fixtures to the page so that it can render the props debugger

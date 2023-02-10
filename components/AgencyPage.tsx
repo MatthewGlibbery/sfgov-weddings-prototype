@@ -1,10 +1,10 @@
 import { BigDesc, Box, Button, Container, DisplayLg, Flex, TitleLg, TitleMd } from '@sfgov/design-system/dist/react'
-import { AgencyData, PageProps, SpotlightBlock, PageComponent, ServiceSectionBlock } from '@/types'
+import { AgencyData, PageProps, SpotlightBlock, PageComponent, ServiceSectionBlock, AgencyParent } from '@/types'
 import { getPageURL, resolveImage, resolvePage } from '@/lib/utils'
 import QuickLinks from './QuickLinks'
 import Image from './Image'
 import PageLink from './PageLink'
-import { AGENCY_TYPE } from '@/lib/constants'
+import { AGENCY_TYPE } from '@/constants'
 
 type AgencyPageProps = PageProps<AgencyData>
 
@@ -61,9 +61,11 @@ AgencyPage.loadReferences = async (data, api) => {
   }
   if (Array.isArray(data.service_section)) {
     for (const section of data.service_section) {
-      section.value.services = await Promise.all(
-        section.value.services.map(serv => resolvePage<AgencyData>(serv, api))
-      )
+      if (section.value.services?.length) {
+        section.value.services = await Promise.all(
+          section.value.services.map(serv => resolvePage<AgencyData>(serv, api))
+        )
+      }
     }
   }
 }
@@ -94,7 +96,8 @@ function AgencyServices ({ serviceSections, ...rest }: { serviceSections: Servic
 }
 
 function AgencyServiceSection ({ block, ...rest }: { block: ServiceSectionBlock }) {
-  const services = block.value.services.filter(service => typeof service !== 'number')
+  const services = block.value?.services
+  if (!services?.length) return null
   return <Box as='section' {...rest}>
     <TitleMd as='h3'>{block.value.title}</TitleMd>
     <ul>
@@ -105,7 +108,7 @@ function AgencyServiceSection ({ block, ...rest }: { block: ServiceSectionBlock 
   </Box>
 }
 
-function getAgencyParentLink (parent: AgencyData) {
+function getAgencyParentLink (parent: AgencyParent) {
   return {
     title: parent.title,
     url: getPageURL(parent)

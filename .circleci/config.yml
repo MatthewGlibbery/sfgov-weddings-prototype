@@ -5,6 +5,7 @@ version: 2.1
 orbs:
   # Docs: https://circleci.com/developer/orbs/orb/circleci/node
   node: circleci/node@5.1.0
+  coveralls: coveralls/coveralls@1.0.6
 
 jobs:
   test:
@@ -28,6 +29,7 @@ jobs:
       - run:
           name: Unit tests
           command: npm run test:unit
+      - coveralls/upload
       - run:
           name: Browser tests
           command: npm run test:browser

@@ -22,8 +22,14 @@ export type PageData<M extends PageMeta = PageMeta> = {
   title?: string
 }
 
+export type ParentMeta<P extends PageData = PageData> = {
+  id: number
+  title?: string
+  meta: P['meta']
+}
+
 export type AgencyData = PageData<PageMeta & {
-  parent?: AgencyData
+  parent?: ParentMeta
 }> & {
   title: string
   logo?: WagtailImageData
@@ -34,6 +40,8 @@ export type AgencyData = PageData<PageMeta & {
   spotlight2?: SpotlightBlock[],
   contact?: ContactBlock[]
 }
+
+export type AgencyParent = AgencyData['meta']['parent']
 
 export type ImageBlock = GenericBlock<'image', number | WagtailImageData>
 

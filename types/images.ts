@@ -1,4 +1,4 @@
-import { WAGTAIL_IMAGE_TYPE } from '@/lib/constants'
+import { WAGTAIL_IMAGE_TYPE } from '@/constants'
 import { PageData } from './pages'
 
 export type WagtailImageData = PageData<{

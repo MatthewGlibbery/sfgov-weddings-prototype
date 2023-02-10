@@ -94,6 +94,7 @@ export class Controller implements IController {
       ? this.getTemplateForType<PageProps<P>>(data.meta.type)
       : undefined
     if (Template?.loadReferences) {
+      // FIXME: we might want to try/catch this
       await Template.loadReferences(data, this.api)
     }
     return {
@@ -104,10 +105,7 @@ export class Controller implements IController {
   }
 
   getContextPath (context: GetServerSidePropsContext) {
-    const { resolvedUrl, params } = context
-    return Array.isArray(params.path)
-      ? params.path.join('/')
-      : resolvedUrl
+    return context.resolvedUrl
   }
 
   getTemplateForType<P extends PageProps = PageProps> (type: string): PageComponent<P> {
