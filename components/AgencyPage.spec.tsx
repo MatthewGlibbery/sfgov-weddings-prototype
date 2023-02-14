@@ -3,6 +3,8 @@ import { render, screen, within } from '@testing-library/react'
 import { AgencyFactory, ImageFactory, QuickLinkFactory, SpotlightFactory } from '@/lib/factories'
 import { PageProps, SpotlightBlock } from '@/types'
 
+jest.mock('next/router')
+
 describe('<AgencyPage>', () => {
   describe('text content', () => {
     const fixture = AgencyFactory.make({

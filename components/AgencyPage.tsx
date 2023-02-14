@@ -6,6 +6,7 @@ import QuickLinkList from './QuickLinkList'
 import Image from './Image'
 import PageLink from './PageLink'
 import { AGENCY_TYPE } from '@/constants'
+import PageWrapper from './page/PageWrapper'
 
 type AgencyPageProps = PageProps<AgencyData>
 
@@ -21,8 +22,8 @@ const AgencyPage: PageComponent<AgencyPageProps> = props => {
     meta
   } = page
   return (
-    <>
-      <Container css={{ mt: 40, mb: 80 }}>
+    <PageWrapper title={title}>
+      <Container>
         {meta.parent?.meta?.type === AGENCY_TYPE
           ? <Box css={{ mb: 20 }}>
               Part of <PageLink page={meta.parent} data-testid='agency-parent-link' />
@@ -50,7 +51,7 @@ const AgencyPage: PageComponent<AgencyPageProps> = props => {
           : null}
         <AgencySpotlight data={spot2} data-testid='agency-spotlight2' />
       </Container>
-    </>
+    </PageWrapper>
   )
 }
 

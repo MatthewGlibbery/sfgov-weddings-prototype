@@ -4,6 +4,8 @@ import { AgencyFactory, ImageBlockFactory, InfoPageFactory, MysteryBlockFactory,
 import InformationPage from './InformationPage'
 import { PageProps } from '@/types'
 
+jest.mock('next/router')
+
 describe('<InformationPage>', () => {
   describe('text content', () => {
     // eslint-disable-next-line unused-imports/no-unused-vars

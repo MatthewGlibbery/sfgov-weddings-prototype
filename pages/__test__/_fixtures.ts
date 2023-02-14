@@ -1,7 +1,7 @@
 import AgencyPage from '@/components/AgencyPage'
 import InformationPage from '@/components/InformationPage'
-import { AgencyData, CallToAction, InfoPageData, PageData, QuickLinkBlock, SpotlightBlock, WagtailImageData, WAGTAIL_IMAGE_TYPE } from '@/types'
-import { AGENCY_TYPE, INFO_PAGE_TYPE } from '@/lib/constants'
+import { AgencyData, CallToAction, InfoPageData, PageData, QuickLinkBlock, SpotlightBlock, WagtailImageData } from '@/types'
+import { AGENCY_TYPE, INFO_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
 
 export const templates = {
   [AGENCY_TYPE]: AgencyPage,

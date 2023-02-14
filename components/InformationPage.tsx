@@ -1,11 +1,12 @@
 import NextImage from 'next/image'
 import { resolveImage, resolvePage } from '@/lib/utils'
-import { BigDesc, Box, Container, DisplayLg, TitleMd } from '@sfgov/design-system/dist/react'
+import { BigDesc, Container, DisplayLg, TitleMd } from '@sfgov/design-system/dist/react'
 import Image from './Image'
 import { AgencyData, InfoPageData, PageBlock, PageComponent, PageProps, WagtailImageData } from '@/types'
 import React, { ComponentProps } from 'react'
 import PageLink from './PageLink'
 import TitleAndText from './TitleAndText'
+import PageWrapper from './page/PageWrapper'
 
 export type InfoPageProps = PageProps<InfoPageData>
 
@@ -23,7 +24,7 @@ const InformationPage: PageComponent<InfoPageProps> = props => {
     related
   } = props.page
   return (
-    <Box css={{ mt: 40, mb: 80 }}>
+    <PageWrapper title={title}>
       <Container css={{ mb: 20 }}>
         <DisplayLg as='h1' css={{ my: 40 }} data-testid='info-page-title'>{title}</DisplayLg>
         {description
@@ -53,15 +54,17 @@ const InformationPage: PageComponent<InfoPageProps> = props => {
         title='Related' /* FIXME: translate */
         blocks={related}
         data-testid='info-page-related' />
-    </Box>
+    </PageWrapper>
   )
 }
 
 /* istanbul ignore next */
 InformationPage.loadReferences = async (data, api) => {
-  for (const block of data.information_section) {
-    if (block.type === 'image') {
-      block.value = await resolveImage(block.value, api)
+  if (Array.isArray(data.information_section)) {
+    for (const block of data.information_section) {
+      if (block.type === 'image') {
+        block.value = await resolveImage(block.value, api)
+      }
     }
   }
   if (Array.isArray(data.departments_or_public_bodies)) {

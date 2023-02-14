@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import AboutPage from './AboutPage'
 
+jest.mock('next/router')
+
 describe('<AboutPage>', () => {
   it('renders a heading', () => {
     render(<AboutPage />)

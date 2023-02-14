@@ -11,6 +11,7 @@ export default function QuickLink (props: QuickLinkProps) {
   const href = externalUrl
   return (
     <Box as={'a'} href={href} css={{
+      display: 'block',
       textDecoration: 'none',
       borderRadius: 8,
       border: '3px solid $colors$greyL2',
