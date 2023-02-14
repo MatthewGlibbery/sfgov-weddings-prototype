@@ -49,6 +49,7 @@ export class Controller implements IController {
    * export const getServerSideProps = controller.makeGetServerSideProps()
    * ```
    */
+  // eslint-disable-next-line unused-imports/no-unused-vars
   makeGetServerSideProps<P extends PageData = PageData> (options?: MakeGetServerSidePropsOptions): GetServerSideProps<PageProps<P>> {
     return async context => {
       const path = this.getContextPath(context)
@@ -59,8 +60,8 @@ export class Controller implements IController {
     }
   }
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   makeViewComponent<P extends PageData = PageData> (options?: MakeViewComponentOptions): PageComponent<PageProps<P>> {
-    type RenderProps = PageProps<P> & typeof options['staticProps']
     const controller = this
     const { api } = this
     return function ControllerView (props) {
@@ -72,7 +73,7 @@ export class Controller implements IController {
       if (!Template) {
         throw new Error(`No template found for page.meta.type "${type}"`)
       }
-      return renderWithErrorBoundary<RenderProps>(Template, { ...props, api })
+      return renderWithErrorBoundary(Template, { ...props, api })
     }
   }
 

@@ -1,5 +1,5 @@
 import { IContentAPI } from '@/types'
-import { getPageURL, resolvePage, resolveImage } from './utils'
+import { getPageURL, resolvePage, resolveImage, getImageURL } from './utils'
 
 describe('getPageURL()', () => {
   it('returns meta.html_url without the hostname', () => {
@@ -36,6 +36,40 @@ describe('getPageURL()', () => {
         url_path: '/'
       }
     })).toBe('/')
+  })
+})
+
+describe('getImageURL()', () => {
+  it('returns the meta.download_url', () => {
+    const url = 'https://example.com/cool.gif'
+    expect(getImageURL({
+      // @ts-expect-error
+      meta: {
+        download_url: url
+      }
+    })).toBe(url)
+  })
+
+  it('resolves meta.download_url relative to a given base URL', () => {
+    const url = '/images/cool.gif'
+    expect(getImageURL({
+      // @ts-expect-error
+      meta: {
+        download_url: url
+      }
+    }, 'https://example.com')).toBe('https://example.com/images/cool.gif')
+  })
+
+  it('returns undefined if there is no meta.download_url', () => {
+    const fixtures = [
+      { meta: { download_url: '' } },
+      { meta: {} },
+      {}
+    ]
+    for (const img of fixtures) {
+      // @ts-expect-error
+      expect(getImageURL(img)).toBe(undefined)
+    }
   })
 })
 

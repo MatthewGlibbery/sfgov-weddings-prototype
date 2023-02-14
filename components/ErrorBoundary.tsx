@@ -1,57 +1,38 @@
-import { Component, ComponentType, ErrorInfo } from 'react'
+/* istanbul ignore file */
+
+import { ComponentProps, ComponentType, ErrorInfo } from 'react'
 import { Container, Monospace, TitleMd } from '@sfgov/design-system/dist/react'
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 
-export type ErrorBoundaryProps = {
-  children: JSX.Element | JSX.Element[] | (() => JSX.Element | JSX.Element[])
-}
-
-export type ErrorState = {
-  error?: any
-}
-
-class ErrorBoundary extends Component {
-  state: ErrorState
-  props: ErrorBoundaryProps
-
-  constructor (props: ErrorBoundaryProps) {
-    super(props)
-    this.state = { }
-  }
-
-  static getDerivedStateFromError (error: any) {
-    return { error }
-  }
-
-  componentDidCatch (error: any, errorInfo: ErrorInfo) {
-    // You can use your own error logging service here
-    console.error('componentDidCatch()', { error, errorInfo })
-  }
-
-  render () {
-    const { error } = this.state
-    // Check if the error is thrown
-    if (error) {
-      // You can render any custom fallback UI
-      return (
-        <Container>
-          <TitleMd as='h1'>Error</TitleMd>
-          <Monospace as='pre'>
-            {JSON.stringify(error, null, 2)}
-          </Monospace>
-        </Container>
-      )
-    }
-    const { children } = this.props
-    return (typeof children === 'function') ? children() : children
-  }
-}
-
-export default ErrorBoundary
-
-export function renderWithErrorBoundary<P extends {} = {}> (Component: ComponentType<P>, props: P) {
+export function renderWithErrorBoundary (
+  Component: ComponentType,
+  componentProps: ComponentProps<typeof Component>
+) {
   return (
-    <ErrorBoundary>
-      {() => <Component {...props} />}
-    </ErrorBoundary>
+    <>
+      <ErrorBoundary FallbackComponent={ErrorFallback} onError={onError}>
+        <Component {...componentProps} />
+      </ErrorBoundary>
+    </>
   )
+
+  function onError (error: Error, info: ErrorInfo) {
+    console.error('ERROR:', error, info)
+  }
+
+  function ErrorFallback (props: FallbackProps) {
+    const { error } = props
+    return (
+      <Container>
+        <TitleMd as='h1'>Error</TitleMd>
+        <Monospace as='p'>{error.message}</Monospace>
+        {error.stack
+          ? <details>
+              <summary>Stack trace</summary>
+              <Monospace as='pre'>{error.stack}</Monospace>
+            </details>
+          : null}
+      </Container>
+    )
+  }
 }

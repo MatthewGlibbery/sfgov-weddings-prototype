@@ -123,6 +123,7 @@ describe('Controller', () => {
 
     it('calls Template.loadReferences() if it exists', async () => {
       // @ts-expect-error
+      // eslint-disable-next-line unused-imports/no-unused-vars
       MockPageTemplate.loadReferences = jest.fn(async (data: PageData, api: IContentAPI) => {
         // @ts-expect-error
         data.hello = 'world'

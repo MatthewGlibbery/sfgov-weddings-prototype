@@ -14,7 +14,7 @@ const PageLink = styled((props: PageLinkProps) => {
   const {
     as: Component = 'a',
     page,
-    children = page?.title || '(no page)',
+    children = page?.title,
     href = getPageURL(page),
     ...rest
   } = props

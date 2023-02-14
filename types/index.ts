@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { GetServerSideProps } from 'next'
 import { ComponentType } from 'react'
 import { PageData } from './pages'

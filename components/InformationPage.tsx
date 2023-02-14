@@ -1,8 +1,9 @@
+import NextImage from 'next/image'
 import { resolveImage, resolvePage } from '@/lib/utils'
-import { BigDesc, Box, Container, DisplayLg, TitleLg } from '@sfgov/design-system/dist/react'
+import { BigDesc, Box, Container, DisplayLg, TitleMd } from '@sfgov/design-system/dist/react'
 import Image from './Image'
-import { AgencyData, InfoPageData, PageComponent, PageData, PageProps, WagtailImageData } from '@/types'
-import { ComponentProps } from 'react'
+import { AgencyData, InfoPageData, PageBlock, PageComponent, PageProps, WagtailImageData } from '@/types'
+import React, { ComponentProps } from 'react'
 import PageLink from './PageLink'
 import TitleAndText from './TitleAndText'
 
@@ -10,32 +11,53 @@ export type InfoPageProps = PageProps<InfoPageData>
 
 type ContainerProps = ComponentProps<typeof Container>
 type ContentBlock = InfoPageData['information_section'][number]
-type TopicBlock = InfoPageData['topics'][number]
-type RelatedBlock = InfoPageData['related'][number]
 
 const InformationPage: PageComponent<InfoPageProps> = props => {
   const {
     title,
     description,
-    information_section: content,
-    // departments_or_public_bodies: divisions,
+    part_of: partOf,
+    information_section: infoSections,
+    departments_or_public_bodies: agencies,
     topics,
     related
   } = props.page
   return (
     <Box css={{ mt: 40, mb: 80 }}>
       <Container css={{ mb: 20 }}>
-        <DisplayLg as='h1' css={{ my: 40 }}>{title}</DisplayLg>
-        {description ? <BigDesc as='p'>{description}</BigDesc> : null}
+        <DisplayLg as='h1' css={{ my: 40 }} data-testid='info-page-title'>{title}</DisplayLg>
+        {description
+          ? <BigDesc as='p' data-testid='info-page-description'>{description}</BigDesc>
+          : null}
       </Container>
-      <InfoPageContent as='main' blocks={content} />
-      {/* <InfoPagesServiceList id='divisions' agencies={divisions} /> */}
-      <InfoPageTopicList id='topics' topics={topics} />
-      <InfoPageRelatedList id='related' related={related} />
+      <PageBlockList
+        title='Part of' /* FIXME: translate */
+        blocks={partOf}
+        data-testid='info-page-part-of' />
+      <InfoSectionList
+        as='main'
+        blocks={infoSections}
+        data-testid='info-page-content' />
+      <PageBlockList
+        id='divisions'
+        title='Departments' /* FIXME: translate */
+        blocks={agencies}
+        data-testid='info-page-agencies' />
+      <PageBlockList
+        id='topics'
+        title='Topics' /* FIXME: translate */
+        blocks={topics}
+        data-testid='info-page-topics' />
+      <PageBlockList
+        id='related'
+        title='Related' /* FIXME: translate */
+        blocks={related}
+        data-testid='info-page-related' />
     </Box>
   )
 }
 
+/* istanbul ignore next */
 InformationPage.loadReferences = async (data, api) => {
   for (const block of data.information_section) {
     if (block.type === 'image') {
@@ -61,57 +83,43 @@ InformationPage.loadReferences = async (data, api) => {
 
 export default InformationPage
 
-function InfoPageContent ({ blocks, ...rest }: { blocks: ContentBlock[] } & ContainerProps) {
+type PageBlockListProps = {
+  blocks: PageBlock[]
+  title?: string | JSX.Element
+} & ContainerProps
+
+function InfoSectionList ({ blocks, ...rest }: { blocks: ContentBlock[] } & ContainerProps) {
   if (!blocks?.length) return null
   return <Container {...rest}>
-    {blocks.map(block => <InfoPageContentBlock key={block.id} block={block} />)}
+    {blocks.map(block => (
+      <InfoSectionContent
+        key={block.id}
+        block={block}
+        data-testid={`block-${block.id}`}
+      />
+    ))}
   </Container>
 }
 
-function InfoPageContentBlock ({ block }: { block: ContentBlock }) {
+function InfoSectionContent ({ block, ...rest }: { block: ContentBlock }) {
   switch (block.type) {
     case 'image':
-      return <Image alt='' imageRef={block.value as WagtailImageData} />
+      return <Image as={NextImage} alt='' imageRef={block.value as WagtailImageData} {...rest} />
     case 'title_and_text':
-      return <TitleAndText block={block} />
+      return <TitleAndText block={block} {...rest} />
   }
+  return null
 }
 
-/* function InfoPageAgencyList ({ agencies, ...rest }: { agencies: { data: AgencyData }[] } & ContainerProps) {
-  if (!agencies?.length) return null
-  return (
-    <Container {...rest}>
-      <TitleLg as='h2'>Divisions</TitleLg>
-      <p>The title of this section is currently hard-coded in the template.</p>
-      <AgencyList agencies={agencies.map(block => block.value)} />
-    </Container>
-  )
-} */
-
-function InfoPageTopicList ({ topics, ...rest }: ContainerProps & { topics: TopicBlock[] }) {
-  if (!topics?.length) return null
-  return (
-    <Container {...rest}>
-      <TitleLg as='h2'>Topics</TitleLg>
-      <ul>
-        {topics.map(block => <li key={block.id}>
-          <PageLink page={block.value as PageData} />
-        </li>)}
-      </ul>
-    </Container>
-  )
-}
-
-function InfoPageRelatedList ({ related, ...rest }: { related: RelatedBlock[] } & ContainerProps) {
-  if (!related?.length) return null
-  return (
-    <Container {...rest}>
-      <TitleLg as='h2'>Related</TitleLg>
-      <ul>
-        {related.map(block => <li key={block.id}>
-          <PageLink page={block.value as PageData} />
-        </li>)}
-      </ul>
-    </Container>
-  )
+function PageBlockList ({ blocks, title, ...rest }: PageBlockListProps) {
+  if (!blocks?.length) return null
+  const actualTitle = title ? <TitleMd as='h2'>{title}</TitleMd> : null
+  return <Container {...rest}>
+    {actualTitle}
+    <ul>
+      {blocks.map((block: PageBlock, i: number) => <li key={i}>
+        <PageLink page={block.value} />
+      </li>)}
+    </ul>
+  </Container>
 }

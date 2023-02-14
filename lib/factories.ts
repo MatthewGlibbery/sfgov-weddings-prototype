@@ -1,12 +1,29 @@
+/* istanbul ignore file */
+
 import { factory } from 'node-factory'
-import { AgencyData, AgencyParent, CallToAction, InfoPageData, PageMeta, QuickLinkBlock, SpotlightBlock, TitleAndTextBlock, WagtailImageData } from '@/types'
+import {
+  AgencyData,
+  AgencyPageBlock,
+  AgencyParent,
+  BlockType,
+  CallToAction,
+  ImageBlock,
+  InfoPageData,
+  PageBlock,
+  PageData,
+  PageMeta,
+  QuickLinkBlock,
+  SpotlightBlock,
+  TitleAndTextBlock,
+  WagtailImageData
+} from '@/types'
 import { AGENCY_TYPE, INFO_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
 
 export const PageMetaFactory = factory<PageMeta>(gen => ({
   type: gen.lorem.word()
 }))
 
-export const AgencyMetaFactory = factory<AgencyData['meta']>(gen => ({
+export const AgencyMetaFactory = factory<AgencyData['meta']>(() => ({
   type: AGENCY_TYPE,
   parent: null
 }))
@@ -19,6 +36,20 @@ export const AgencyFactory = factory<AgencyData>(gen => ({
   quick_links: QuickLinkFactory.make(3)
 }))
 
+/**
+ * This is a utility for converting a full-blown AgencyData type into a more
+ * minimal representation for use in another agency's meta.parent. If you don't
+ * use this, your agency data won't serialize properly in the page props
+ * debugger with circular references (child -> parent -> child).
+ */
+export function getAgencyAsParent (agency: AgencyData): AgencyParent {
+  return {
+    id: agency.id,
+    title: agency.title,
+    meta: agency.meta
+  }
+}
+
 export const InfoPageFactory = factory<InfoPageData>(gen => ({
   id: gen.datatype.number(),
   meta: PageMetaFactory.make({
@@ -26,11 +57,13 @@ export const InfoPageFactory = factory<InfoPageData>(gen => ({
   }),
   title: 'Info page',
   description: 'Info page description',
-  departments_or_public_bodies: AgencyFactory.make(3).map(agency => ({
-    id: gen.datatype.uuid(),
-    type: 'agency',
-    value: agency
-  }))
+  departments_or_public_bodies: AgencyPageBlockFactory.make(3, {
+    type: 'agency'
+  }),
+  // @ts-expect-error
+  topics: PageBlockFactory.make(2, {
+    type: 'topic'
+  })
 }))
 
 export const QuickLinkFactory = factory<QuickLinkBlock>(gen => ({
@@ -84,10 +117,34 @@ export const TitleAndTextFactory = factory<TitleAndTextBlock>(gen => ({
   }
 }))
 
-export function getAgencyAsParent (agency: AgencyData): AgencyParent {
-  return {
-    id: agency.id,
-    title: agency.title,
-    meta: agency.meta
-  }
-}
+export const PageFactory = factory<PageData>(gen => ({
+  meta: {
+    type: `sfgov_${gen.lorem.word()}.${gen.lorem.sentence(1).replace(/\.$/, '')}`,
+    url_path: new URL(gen.internet.url()).pathname
+  },
+  title: gen.commerce.productName()
+}))
+
+export const PageBlockFactory = factory<PageBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  value: PageFactory.make(),
+  type: gen.lorem.word()
+}))
+
+export const AgencyPageBlockFactory = factory<AgencyPageBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  value: AgencyFactory.make(),
+  type: 'agency'
+}))
+
+export const ImageBlockFactory = factory<ImageBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  value: ImageFactory.make(),
+  type: 'image'
+}))
+
+export const MysteryBlockFactory = factory<BlockType<string, any>>(gen => ({
+  id: gen.datatype.uuid(),
+  value: {},
+  type: gen.lorem.word()
+}))

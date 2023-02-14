@@ -2,15 +2,24 @@
 module.exports = {
   plugins: [
     'sfgov',
-    'testing-library'
+    'testing-library',
+    'unused-imports'
   ],
   extends: [
     'next/core-web-vitals',
     'plugin:sfgov/recommended'
   ],
   rules: {
-    'react/no-unescaped-entities': ['off'],
-    'react/jsx-no-leaked-render': ['error']
+    'react/no-unescaped-entities': 'warn',
+    'react/jsx-no-leaked-render': 'error',
+    'no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': ['warn', {
+      vars: 'all',
+      varsIgnorePattern: '^_',
+      args: 'after-used',
+      argsIgnorePattern: '^_'
+    }]
   },
   overrides: [
     {

@@ -1,12 +1,19 @@
 import { WagtailImageData } from './images'
-import { AgencyData } from './pages'
+import { AgencyData, PageData } from './pages'
 import { Address } from './snippets'
 
-export type GenericBlock<T extends string = string, V = any> = {
+export type BlockType<T extends string = string, V = any> = {
   type: T
   value: V
   id: string
 }
+
+export type PageBlock<
+  T extends string = string,
+  P extends PageData = PageData
+> = BlockType<T, P>
+
+export type AgencyPageBlock<T extends string = string> = PageBlock<T, AgencyData>
 
 type LinkBlockTarget = 'page' | 'file' | 'custom_url' | 'anchor' | 'email' | 'phone'
 
@@ -22,25 +29,25 @@ export type CallToAction = {
   button_link?: LinkBlock
 }
 
-export type SpotlightBlock = GenericBlock<'spotlight', {
+export type SpotlightBlock = BlockType<'spotlight', {
   title: string
   description: string
   image: WagtailImageData
   cta: CallToAction
 }>
 
-export type QuickLinkBlock = GenericBlock<'quick_links', {
+export type QuickLinkBlock = BlockType<'quick_links', {
   title: string
   internal_page?: number
   external_url: string
   description: string
 }>
 
-export type ServiceSectionBlock = GenericBlock<'services', {
+export type ServiceSectionBlock = BlockType<'services', {
   title: string
   services: (number | AgencyData)[]
 }>
 
-export type AddressBlock = GenericBlock<'address', Address>
+export type AddressBlock = BlockType<'address', Address>
 
-export type ContactBlock = AddressBlock | GenericBlock
+export type ContactBlock = AddressBlock | BlockType

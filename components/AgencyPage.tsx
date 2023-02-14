@@ -1,7 +1,8 @@
+import NextImage from 'next/image'
 import { BigDesc, Box, Button, Container, DisplayLg, Flex, TitleLg, TitleMd } from '@sfgov/design-system/dist/react'
-import { AgencyData, PageProps, SpotlightBlock, PageComponent, ServiceSectionBlock, AgencyParent } from '@/types'
-import { getPageURL, resolveImage, resolvePage } from '@/lib/utils'
-import QuickLinks from './QuickLinks'
+import { AgencyData, PageProps, SpotlightBlock, PageComponent, ServiceSectionBlock } from '@/types'
+import { resolveImage, resolvePage } from '@/lib/utils'
+import QuickLinkList from './QuickLinkList'
 import Image from './Image'
 import PageLink from './PageLink'
 import { AGENCY_TYPE } from '@/constants'
@@ -16,32 +17,38 @@ const AgencyPage: PageComponent<AgencyPageProps> = props => {
     description,
     spotlight1: [spot1] = [],
     spotlight2: [spot2] = [],
-    service_section: serviceSections = []
+    service_section: serviceSections = [],
+    meta
   } = page
-  const parent = page.meta.parent?.meta?.type === AGENCY_TYPE
-    ? getAgencyParentLink(page.meta.parent)
-    : null
   return (
     <>
       <Container css={{ mt: 40, mb: 80 }}>
-        {parent
-          ? <Box css={{ mb: 20 }}>Part of <a href={parent.url}>{parent.title}</a></Box>
+        {meta.parent?.meta?.type === AGENCY_TYPE
+          ? <Box css={{ mb: 20 }}>
+              Part of <PageLink page={meta.parent} data-testid='agency-parent-link' />
+            </Box>
           : null}
         <Flex css={{ justifyContent: 'space-between' }}>
           <Box>
-            <DisplayLg>{title}</DisplayLg>
-            {description ? <BigDesc as='p' css={{ my: 20 }}>{description}</BigDesc> : null}
+            <DisplayLg as='h1' data-testid='agency-title'>{title}</DisplayLg>
+            {description
+              ? <BigDesc as='p' css={{ my: 20 }} data-testid='agency-description'>
+                  {description}
+                </BigDesc>
+              : null}
           </Box>
           {logo
             ? <Box css={{ my: 20 }}>
-            <Image alt='' imageRef={logo} />
-          </Box>
+                <Image as={NextImage} alt='' imageRef={logo} data-testid='agency-logo' />
+              </Box>
             : null}
         </Flex>
-        {spot1 ? <AgencySpotlight data={spot1} /> : null}
-        <QuickLinks links={page.quick_links} css={{ my: 20 }} />
-        {serviceSections?.length ? <AgencyServices serviceSections={serviceSections} /> : null}
-        {spot2 ? <AgencySpotlight data={spot2} /> : null}
+        <AgencySpotlight data={spot1} data-testid='agency-spotlight1' />
+        <QuickLinkList links={page.quick_links} css={{ my: 20 }} />
+        {serviceSections?.length
+          ? <AgencyServices serviceSections={serviceSections} data-testid='agency-services' />
+          : null}
+        <AgencySpotlight data={spot2} data-testid='agency-spotlight2' />
       </Container>
     </>
   )
@@ -49,6 +56,7 @@ const AgencyPage: PageComponent<AgencyPageProps> = props => {
 
 export default AgencyPage
 
+/* istanbul ignore next */
 AgencyPage.loadReferences = async (data, api) => {
   if (data.logo) {
     data.logo = await resolveImage(data.logo, api)
@@ -71,9 +79,11 @@ AgencyPage.loadReferences = async (data, api) => {
 }
 
 function AgencySpotlight ({ data, ...rest }: { data: SpotlightBlock }) {
+  if (!data) return null
   return (
     <Flex css={{ my: 60 }} {...rest}>
-      <Image alt='' imageRef={data.value.image} css={{
+      {/* eslint-disable-next-line jsx-a11y/alt-text */}
+      <Image as={NextImage} imageRef={data.value.image} css={{
         objectFit: 'fill'
       }} />
       <Box css={{ p: 20 }}>
@@ -88,9 +98,10 @@ function AgencySpotlight ({ data, ...rest }: { data: SpotlightBlock }) {
 }
 
 function AgencyServices ({ serviceSections, ...rest }: { serviceSections: ServiceSectionBlock[] }) {
+  if (!serviceSections?.length) return null
   return <Box {...rest}>
-    {serviceSections.map(block => (
-      <AgencyServiceSection block={block} key={block.id} />
+    {serviceSections.map((block, i) => (
+      <AgencyServiceSection block={block} key={block.id} data-testid={`agency-service-section-${i}`} />
     ))}
   </Box>
 }
@@ -102,15 +113,10 @@ function AgencyServiceSection ({ block, ...rest }: { block: ServiceSectionBlock 
     <TitleMd as='h3'>{block.value.title}</TitleMd>
     <ul>
       {services.map((service, i) => (
-        <li key={i}><PageLink page={service as AgencyData} /></li>
+        (service as AgencyData).title
+          ? <li key={i}><PageLink page={service} /></li>
+          : null
       ))}
     </ul>
   </Box>
-}
-
-function getAgencyParentLink (parent: AgencyParent) {
-  return {
-    title: parent.title,
-    url: getPageURL(parent)
-  }
 }

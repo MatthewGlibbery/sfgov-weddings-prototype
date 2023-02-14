@@ -3,7 +3,7 @@ import { Box, Text, TitleMd } from '@sfgov/design-system/dist/react'
 
 export type QuickLinkProps = {
   link: QuickLinkBlock
-} // & BoxProps
+} & JSX.IntrinsicAttributes
 
 export default function QuickLink (props: QuickLinkProps) {
   const { link, ...rest } = props

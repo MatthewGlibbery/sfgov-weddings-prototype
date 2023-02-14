@@ -30,6 +30,7 @@ export type QueryParams = {
 }
 
 export interface IContentAPI {
+  // eslint-disable-next-line unused-imports/no-unused-vars
   getPageByPath<T extends PageData = PageData> (path:string, params?: QueryParams, options?: RequestInit): Promise<T>
 }
 

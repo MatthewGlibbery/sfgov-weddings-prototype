@@ -16,7 +16,7 @@ export default function Home () {
 
         <Box css={{ bg: '$blueL1', py: 20, marginBottom: 60 }}>
           <Container>
-            <PrimaryButton>Hi, I'm a button!</PrimaryButton>
+            <PrimaryButton>Hi, I am a button!</PrimaryButton>
           </Container>
         </Box>
 

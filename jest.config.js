@@ -20,9 +20,9 @@ const customJestConfig = {
   ci: !!process.env.CI,
   collectCoverageFrom: [
     '<rootDir>/components/**/*.tsx',
-    '<rootDir>/lib/**/*.ts',
-    '!<rootDir>/constants',
-    '!<rootDir>/lib/factories.ts'
+    // FIXME: there's no good way to cover this in tests
+    '!<rootDir>/components/ServerStylesheet.tsx',
+    '<rootDir>/lib/**/*.{ts,tsx}'
   ],
   moduleNameMapper,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],

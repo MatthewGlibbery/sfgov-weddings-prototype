@@ -29,3 +29,27 @@ export function resolvePage<T extends PageData = PageData> (idOrObj: number | T,
     return idOrObj as T
   }
 }
+
+export function getImageURL (image: WagtailImageData, baseURL?: string) {
+  const url = image?.meta?.download_url
+  if (url && baseURL) {
+    return new URL(url, baseURL).toString()
+  }
+  return url || undefined
+}
+
+type PrimitiveImageProps = {
+  src: string
+  width: number
+  height: number
+  alt: string
+}
+
+export function getImageProps (image: WagtailImageData, baseURL?: string): PrimitiveImageProps {
+  return {
+    src: getImageURL(image, baseURL),
+    width: image.width,
+    height: image.height,
+    alt: image.title
+  }
+}

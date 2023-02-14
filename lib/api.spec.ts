@@ -75,7 +75,7 @@ describe('ContentAPI', () => {
     })
 
     it('rejects on 4xx statuses', async () => {
-      fetchMock.mockResponseOnce(req => Promise.resolve({
+      fetchMock.mockResponseOnce(() => Promise.resolve({
         body: JSON.stringify({
           message: 'not found'
         }),
@@ -87,7 +87,7 @@ describe('ContentAPI', () => {
     })
 
     it('rejects on 4xx statuses with "bad response" if no message is provided', async () => {
-      fetchMock.mockResponseOnce(req => Promise.resolve({
+      fetchMock.mockResponseOnce(() => Promise.resolve({
         body: JSON.stringify({}),
         init: {
           status: 404
