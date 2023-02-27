@@ -1,8 +1,8 @@
 import NextImage from 'next/image'
-import { resolveImage, resolvePage } from '@/lib/utils'
+import { resolveImage } from '@/lib/utils'
 import { BigDesc, Container, DisplayLg, TitleMd } from '@sfgov/design-system/dist/react'
 import Image from './Image'
-import { AgencyData, InfoPageData, PageBlock, PageComponent, PageProps, WagtailImageData } from '@/types'
+import { InfoPageData, PageComponent, PageProps, RelatedContentData, WagtailImageData } from '@/types'
 import React, { ComponentProps } from 'react'
 import PageLink from './PageLink'
 import TitleAndText from './TitleAndText'
@@ -17,11 +17,11 @@ const InformationPage: PageComponent<InfoPageProps> = props => {
   const {
     title,
     description,
-    part_of: partOf,
+    related_content_part_of: partOf,
     information_section: infoSections,
-    departments_or_public_bodies: agencies,
-    topics,
-    related
+    related_content_agencies: agencies,
+    related_content_topics: topics,
+    related_content_page: pages
   } = props.page
   return (
     <PageWrapper title={title}>
@@ -31,28 +31,28 @@ const InformationPage: PageComponent<InfoPageProps> = props => {
           ? <BigDesc as='p' data-testid='info-page-description'>{description}</BigDesc>
           : null}
       </Container>
-      <PageBlockList
+      <RelatedContentList
         title='Part of' /* FIXME: translate */
-        blocks={partOf}
+        content={partOf}
         data-testid='info-page-part-of' />
       <InfoSectionList
         as='main'
         blocks={infoSections}
         data-testid='info-page-content' />
-      <PageBlockList
+      <RelatedContentList
         id='divisions'
         title='Departments' /* FIXME: translate */
-        blocks={agencies}
+        content={agencies}
         data-testid='info-page-agencies' />
-      <PageBlockList
+      <RelatedContentList
         id='topics'
         title='Topics' /* FIXME: translate */
-        blocks={topics}
+        content={topics}
         data-testid='info-page-topics' />
-      <PageBlockList
+      <RelatedContentList
         id='related'
         title='Related' /* FIXME: translate */
-        blocks={related}
+        content={pages}
         data-testid='info-page-related' />
     </PageWrapper>
   )
@@ -67,28 +67,12 @@ InformationPage.loadReferences = async (data, api) => {
       }
     }
   }
-  if (Array.isArray(data.departments_or_public_bodies)) {
-    for (const block of data.departments_or_public_bodies) {
-      block.value = await resolvePage<AgencyData>(block.value, api)
-    }
-  }
-  if (Array.isArray(data.topics)) {
-    for (const block of data.topics) {
-      block.value = await resolvePage(block.value, api)
-    }
-  }
-  if (Array.isArray(data.related)) {
-    for (const block of data.related) {
-      block.value = await resolvePage(block.value, api)
-    }
-  }
 }
 
 export default InformationPage
 
-type PageBlockListProps = {
-  blocks: PageBlock[]
-  title?: string | JSX.Element
+type RelatedContentProps = {
+  content: RelatedContentData[]
 } & ContainerProps
 
 function InfoSectionList ({ blocks, ...rest }: { blocks: ContentBlock[] } & ContainerProps) {
@@ -114,14 +98,14 @@ function InfoSectionContent ({ block, ...rest }: { block: ContentBlock }) {
   return null
 }
 
-function PageBlockList ({ blocks, title, ...rest }: PageBlockListProps) {
-  if (!blocks?.length) return null
+function RelatedContentList ({ content, title, ...rest }: RelatedContentProps) {
+  if (!content?.length) return null
   const actualTitle = title ? <TitleMd as='h2'>{title}</TitleMd> : null
   return <Container {...rest}>
     {actualTitle}
     <ul>
-      {blocks.map((block: PageBlock, i: number) => <li key={i}>
-        <PageLink page={block.value} />
+      {content.map((item: RelatedContentData, i: number) => <li key={i}>
+        <PageLink page={item.related_content} />
       </li>)}
     </ul>
   </Container>

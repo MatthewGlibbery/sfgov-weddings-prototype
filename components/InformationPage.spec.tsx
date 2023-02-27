@@ -26,12 +26,7 @@ describe('<InformationPage>', () => {
 
     const fixture = InfoPageFactory.make({
       title: 'Information page title',
-      description: 'Information page description',
-      part_of: [],
-      information_section: [],
-      departments_or_public_bodies: [],
-      topics: [],
-      related: []
+      description: 'Information page description'
     })
 
     const pageProps: Omit<PageProps, 'page'> = {
@@ -112,6 +107,37 @@ describe('<InformationPage>', () => {
 
         await expect(() => screen.findByTestId(`block-${mysteryBlock.id}`))
           .rejects.toThrow(/Unable to find/)
+      })
+    })
+
+    describe('related content part of', () => {
+      it('renders a related content link', async () => {
+        expect(() =>
+          render(<InformationPage page={{
+            ...fixture,
+            related_content_part_of: [
+              {
+                id: 4,
+                meta: {
+                  type: 'sfgov_information_page.RelatedContentPartOf'
+                },
+                related_content: {
+                  id: 4,
+                  meta: {
+                    type: 'sfgov_information_page.InformationPage',
+                    detail_url: 'http://localhost:8000/api/v2/pages/4/',
+                    html_url: 'http://localhost/some-other-information-page/',
+                    slug: 'some-other-information-page',
+                    seo_title: 'meta title tag',
+                    search_description: 'meta description'
+                  },
+                  title: 'Some other information page'
+                }
+              }
+            ]
+          }} {...pageProps} />)
+        ).not.toThrow()
+        const link = await screen.findByText('Some other information page')
       })
     })
   })

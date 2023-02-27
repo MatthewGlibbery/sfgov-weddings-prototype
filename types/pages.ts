@@ -1,4 +1,4 @@
-import { SpotlightBlock, QuickLinkBlock, BlockType, ServiceSectionBlock, ContactBlock, AgencyPageBlock, PageBlock } from './blocks'
+import { SpotlightBlock, QuickLinkBlock, BlockType, ServiceSectionBlock, ContactBlock } from './blocks'
 import { WagtailImageData } from './images'
 
 export type PageMeta = {
@@ -50,12 +50,17 @@ export type TitleAndTextBlock = BlockType<'title_and_text', {
   text: string
 }>
 
+export type RelatedContentData = PageData<PageMeta> & {
+  related_content: PageData
+}
+
 export type InfoPageData = PageData<PageMeta> & {
   title: string
   description: string
-  part_of?: AgencyPageBlock[]
   information_section?: (ImageBlock | TitleAndTextBlock)[]
-  departments_or_public_bodies?: AgencyPageBlock[]
-  topics?: PageBlock<'topics'>[]
-  related?: PageBlock<'related'>[]
+  related_content_part_of?: RelatedContentData[]
+  related_content_agencies?: RelatedContentData[]
+  related_content_topics?: RelatedContentData[]
+  related_content_page?: RelatedContentData[]
+
 }
