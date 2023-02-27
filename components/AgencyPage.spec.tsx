@@ -1,4 +1,4 @@
-import AgencyPage from './AgencyPage'
+import { AgencyPage } from './AgencyPage'
 import { render, screen, within } from '@testing-library/react'
 import { AgencyFactory, ImageFactory, QuickLinkFactory, SpotlightFactory } from '@/lib/factories'
 import { PageProps, SpotlightBlock } from '@/types'
@@ -33,7 +33,31 @@ describe('<AgencyPage>', () => {
             button_text: 'Spotlight 2 CTA'
           }
         }
-      })]
+      })],
+      service_section: [
+        {
+          id: '1',
+          type: 'services',
+          value: {
+            title: 'Services',
+            services: []
+          }
+        },
+        {
+          id: '2',
+          type: 'services',
+          value: {
+            title: 'Services',
+            services: [{ title: 'child service' }, { title: '' }]
+          }
+        }
+      ]
+    })
+
+    const fixture2 = AgencyFactory.make({
+      ...fixture,
+      description: '',
+      service_section: []
     })
 
     const parent = AgencyFactory.make({
@@ -110,7 +134,7 @@ describe('<AgencyPage>', () => {
 
     describe('spotlights', () => {
       it('renders spotlight1 (stream field)', async () => {
-        render(<AgencyPage page={fixture} {...pageProps} />)
+        render(<AgencyPage page={fixture2} {...pageProps} />)
         const el = await screen.findByTestId('agency-spotlight1')
         assertSpotlightRenders(fixture.spotlight1[0], el)
       })

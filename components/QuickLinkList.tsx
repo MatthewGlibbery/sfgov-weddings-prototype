@@ -1,13 +1,13 @@
 import { QuickLinkBlock } from '@/types'
-import { CSS, Grid } from '@sfgov/design-system/dist/react'
-import QuickLink from './QuickLink'
+import { Grid } from '@/design-system'
+import { QuickLink } from './QuickLink'
 
 export type QuickLinkGridProps = {
   links?: QuickLinkBlock[]
-  css?: CSS
+  css?: any
 }
 
-export default function QuickLinkList (props: QuickLinkGridProps) {
+export function QuickLinkList (props: QuickLinkGridProps) {
   const { links, css, ...rest } = props
   if (!links?.length) return null
   return (

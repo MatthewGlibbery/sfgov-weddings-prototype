@@ -1,4 +1,4 @@
-import Image from './Image'
+import { Image } from './Image'
 import NextImage from 'next/image'
 import { render, screen } from '@testing-library/react'
 import { ImageFactory } from '@/lib/factories'

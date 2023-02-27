@@ -1,5 +1,4 @@
-import AgencyPage from '@/components/AgencyPage'
-import InformationPage from '@/components/InformationPage'
+import { AgencyPage, InformationPage } from '@/components'
 import { AgencyData, CallToAction, InfoPageData, PageData, QuickLinkBlock, SpotlightBlock, WagtailImageData } from '@/types'
 import { AGENCY_TYPE, INFO_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
 

@@ -1,11 +1,11 @@
 import { QuickLinkBlock } from '@/types'
-import { Box, Text, TitleMd } from '@sfgov/design-system/dist/react'
+import { Box, Text, TitleMd } from '@/design-system'
 
 export type QuickLinkProps = {
   link: QuickLinkBlock
 } & JSX.IntrinsicAttributes
 
-export default function QuickLink (props: QuickLinkProps) {
+export const QuickLink = (props: QuickLinkProps) => {
   const { link, ...rest } = props
   const { title, description, external_url: externalUrl } = link.value
   const href = externalUrl

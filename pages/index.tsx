@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Box, Container, PrimaryButton, TitleSm } from '@sfgov/design-system/react'
+import { Box, Container, PrimaryButton, TitleSm } from '@/design-system'
 import Link from 'next/link'
 
 export default function Home () {

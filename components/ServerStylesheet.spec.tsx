@@ -1,4 +1,4 @@
-import ServerStylesheet from './ServerStylesheet'
+import { ServerStylesheet } from './ServerStylesheet'
 import { render, screen, configure } from '@testing-library/react'
 
 configure({

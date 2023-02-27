@@ -1,11 +1,9 @@
 import NextImage from 'next/image'
 import { resolveImage } from '@/lib/utils'
-import { BigDesc, Container, DisplayLg, TitleMd } from '@sfgov/design-system/dist/react'
-import Image from './Image'
+import { PageLink, TitleAndText } from '@/components'
+import { BigDesc, Container, DisplayLg, Image, TitleMd } from '@/design-system'
 import { InfoPageData, PageComponent, PageProps, RelatedContentData, WagtailImageData } from '@/types'
 import React, { ComponentProps } from 'react'
-import PageLink from './PageLink'
-import TitleAndText from './TitleAndText'
 import PageWrapper from './page/PageWrapper'
 
 export type InfoPageProps = PageProps<InfoPageData>
@@ -13,7 +11,7 @@ export type InfoPageProps = PageProps<InfoPageData>
 type ContainerProps = ComponentProps<typeof Container>
 type ContentBlock = InfoPageData['information_section'][number]
 
-const InformationPage: PageComponent<InfoPageProps> = props => {
+export const InformationPage: PageComponent<InfoPageProps> = props => {
   const {
     title,
     description,
@@ -68,8 +66,6 @@ InformationPage.loadReferences = async (data, api) => {
     }
   }
 }
-
-export default InformationPage
 
 type RelatedContentProps = {
   content: RelatedContentData[]

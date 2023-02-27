@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import AboutPage from './AboutPage'
+import { AboutPage } from './AboutPage'
 
 jest.mock('next/router')
 

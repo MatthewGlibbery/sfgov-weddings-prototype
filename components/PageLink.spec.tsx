@@ -1,6 +1,6 @@
 import { PageData } from '@/types'
 import { render, screen } from '@testing-library/react'
-import PageLink from './PageLink'
+import { PageLink } from './PageLink'
 
 describe('PageLink', () => {
   it('renders the page URL as the href', () => {

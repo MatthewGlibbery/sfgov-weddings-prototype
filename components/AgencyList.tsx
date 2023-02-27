@@ -1,11 +1,11 @@
 import { AgencyData } from '@/types'
-import PageLink from './PageLink'
+import { PageLink } from './PageLink'
 
 type AgencyListProps = {
   agencies: AgencyData[]
 }
 
-export default function AgencyList (props: AgencyListProps) {
+export const AgencyList = (props: AgencyListProps) => {
   const { agencies, ...rest } = props
   if (!agencies?.length) return null
   return (

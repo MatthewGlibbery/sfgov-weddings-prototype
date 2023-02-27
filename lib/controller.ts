@@ -2,9 +2,9 @@ import { isMatch } from 'micromatch'
 import type { IContentAPI, IController, MakeGetServerSidePropsOptions, MakeViewComponentOptions, PageComponent, PageData, PageProps, QueryParams } from '../types'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { i18n } from '../next.config'
-import { renderWithErrorBoundary } from '@/components/ErrorBoundary'
+import { renderWithErrorBoundary } from '@/components'
 
-const DEFAULT_LOCALE = i18n.defaultLocale
+const DEFAULT_LOCALE = i18n?.defaultLocale
 
 /**
  * The map of content types to template components is expressed

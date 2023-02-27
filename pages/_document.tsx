@@ -1,7 +1,7 @@
-import { BodyText } from '@sfgov/design-system/react'
-import { Html, Head, Main, NextScript, DocumentProps } from 'next/document'
-import ServerStylesheet from '@/components/ServerStylesheet'
+import { BodyText } from '@/design-system'
+import { ServerStylesheet } from '@/components'
 import PropsDebug from '@/components/server/PropsDebug'
+import { Html, Head, Main, NextScript, DocumentProps } from 'next/document'
 
 export default function Document (props: DocumentProps) {
   return (

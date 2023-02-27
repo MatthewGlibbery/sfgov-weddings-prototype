@@ -1,12 +1,12 @@
 import { getImageProps } from '@/lib/utils'
 import { WagtailImageData } from '@/types'
-import { CSS, styled } from '@sfgov/design-system/dist/react'
+import { styled } from '../stitches.config'
 import NextImage, { ImageProps } from 'next/image'
 import type { ComponentType } from 'react'
 
 type StyledImageProps = Partial<ImageProps> & {
   as?: 'img' | typeof NextImage
-  css?: CSS
+  css?: any
   baseURL?: string
 } & JSX.IntrinsicElements['img']
 
@@ -16,7 +16,7 @@ const StyledImage = styled('img', {
 }) as ComponentType<StyledImageProps>
 
 /** istanbul ignore */
-export default function Image ({ imageRef, baseURL, ...rest }: StyledImageProps & { imageRef: WagtailImageData }) {
+export function Image ({ imageRef, baseURL, ...rest }: StyledImageProps & { imageRef: WagtailImageData }) {
   const props = getImageProps(imageRef, baseURL)
   return <StyledImage {...props} {...rest} />
 }

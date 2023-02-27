@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import { ComponentProps, ComponentType, ErrorInfo } from 'react'
-import { Container, Monospace, TitleMd } from '@sfgov/design-system/dist/react'
+import { Container, Monospace, TitleMd } from '@/design-system'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 
 export function renderWithErrorBoundary (

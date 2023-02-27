@@ -1,4 +1,18 @@
 {
+  "createTests.testDirectoryName": "",
+  "createTests.testFilesSuffix": "spec",
+  "createTests.template.default": [
+    "import { render, screen } from '@testing-library/react'",
+    "import { ${moduleName} } from './${modulePath}'",
+    "",
+    "describe('${moduleName}', () => {",
+    "\tit('', () => {",
+    "\t\trender(<${moduleName} />)",
+    "",
+    "\t\texpect()",
+    "\t})",
+    "})"
+  ],
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "editor.codeActionsOnSave": {

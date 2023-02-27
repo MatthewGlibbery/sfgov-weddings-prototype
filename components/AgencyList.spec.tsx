@@ -1,4 +1,4 @@
-import AgencyList from './AgencyList'
+import { AgencyList } from './AgencyList'
 import { render, screen } from '@testing-library/react'
 import { AgencyFactory } from '@/lib/factories'
 

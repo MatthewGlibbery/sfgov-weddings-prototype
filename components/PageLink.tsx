@@ -1,5 +1,5 @@
 import NextLink from 'next/link'
-import { styled } from '@sfgov/design-system/dist/react'
+import { styled } from '@stitches/react'
 import { PageData } from '@/types'
 import { getPageURL } from '@/lib/utils'
 import { ComponentPropsWithRef } from 'react'
@@ -10,7 +10,7 @@ export type PageLinkProps<P extends PageData = PageData> = {
   children?: (JSX.Element | string)[]
 } & ComponentPropsWithRef<'a'>
 
-const PageLink = styled((props: PageLinkProps) => {
+export const PageLink = styled((props: PageLinkProps) => {
   const {
     as: Component = 'a',
     page,
@@ -22,5 +22,3 @@ const PageLink = styled((props: PageLinkProps) => {
 }, {
   color: '$action'
 })
-
-export default PageLink

@@ -1,7 +1,7 @@
 // import InformationPage from './InformationPage'
 import { render, screen, within } from '@testing-library/react'
 import { AgencyFactory, ImageBlockFactory, InfoPageFactory, MysteryBlockFactory, TitleAndTextFactory } from '@/lib/factories'
-import InformationPage from './InformationPage'
+import { InformationPage } from './InformationPage'
 import { PageProps } from '@/types'
 
 jest.mock('next/router')
@@ -26,7 +26,12 @@ describe('<InformationPage>', () => {
 
     const fixture = InfoPageFactory.make({
       title: 'Information page title',
-      description: 'Information page description'
+      description: 'Information page description',
+      part_of: [],
+      information_section: [],
+      departments_or_public_bodies: [{ id: '1', type: 'agency', value: dept1 }],
+      topics: [],
+      related: []
     })
 
     const pageProps: Omit<PageProps, 'page'> = {

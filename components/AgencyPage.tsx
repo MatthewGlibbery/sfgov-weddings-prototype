@@ -1,16 +1,14 @@
 import NextImage from 'next/image'
-import { BigDesc, Box, Button, Container, DisplayLg, Flex, TitleLg, TitleMd } from '@sfgov/design-system/dist/react'
+import { PageLink, QuickLinkList } from '@/components'
+import { BigDesc, Box, Button, Container, DisplayLg, Flex, Image, TitleLg, TitleMd } from '@/design-system'
 import { AgencyData, PageProps, SpotlightBlock, PageComponent, ServiceSectionBlock } from '@/types'
 import { resolveImage, resolvePage } from '@/lib/utils'
-import QuickLinkList from './QuickLinkList'
-import Image from './Image'
-import PageLink from './PageLink'
 import { AGENCY_TYPE } from '@/constants'
 import PageWrapper from './page/PageWrapper'
 
 type AgencyPageProps = PageProps<AgencyData>
 
-const AgencyPage: PageComponent<AgencyPageProps> = props => {
+export const AgencyPage: PageComponent<AgencyPageProps> = props => {
   const { page } = props
   const {
     title,
@@ -55,20 +53,18 @@ const AgencyPage: PageComponent<AgencyPageProps> = props => {
   )
 }
 
-export default AgencyPage
-
 /* istanbul ignore next */
 AgencyPage.loadReferences = async (data, api) => {
-  if (data.logo) {
-    data.logo = await resolveImage(data.logo, api)
+  if (data?.logo) {
+    data.logo = await resolveImage(data?.logo, api)
   }
-  if (data.spotlight1?.[0]?.value.image) {
-    data.spotlight1[0].value.image = await resolveImage(data.spotlight1[0].value.image, api)
+  if (data?.spotlight1?.[0]?.value.image) {
+    data.spotlight1[0].value.image = await resolveImage(data?.spotlight1[0].value.image, api)
   }
-  if (data.spotlight2?.[0]?.value.image) {
-    data.spotlight2[0].value.image = await resolveImage(data.spotlight2[0].value.image, api)
+  if (data?.spotlight2?.[0]?.value.image) {
+    data.spotlight2[0].value.image = await resolveImage(data?.spotlight2[0].value.image, api)
   }
-  if (Array.isArray(data.service_section)) {
+  if (Array.isArray(data?.service_section)) {
     for (const section of data.service_section) {
       if (section.value.services?.length) {
         section.value.services = await Promise.all(

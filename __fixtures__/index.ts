@@ -1,5 +1,4 @@
-import AgencyPage from '@/components/AgencyPage'
-import InformationPage from '@/components/InformationPage'
+import { AgencyPage, InformationPage } from '@/components'
 import { PageData } from '@/types'
 import { AGENCY_TYPE, INFO_PAGE_TYPE } from '@/constants'
 import { AgencyFactory, getAgencyAsParent, ImageFactory, InfoPageFactory, SpotlightFactory, TitleAndTextFactory } from '@/lib/factories'

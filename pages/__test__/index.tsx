@@ -1,5 +1,5 @@
-import PageLink from '@/components/PageLink'
-import { Container, Monospace, TitleLg } from '@sfgov/design-system/dist/react'
+import { PageLink } from '@/components'
+import { Container, Monospace, TitleLg } from '@/design-system'
 import { pages } from '@/__fixtures__'
 
 export async function getServerSideProps () {

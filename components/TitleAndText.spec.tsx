@@ -1,4 +1,4 @@
-import TitleAndText from './TitleAndText'
+import { TitleAndText } from './TitleAndText'
 import { render, screen } from '@testing-library/react'
 import { TitleAndTextFactory } from '@/lib/factories'
 

@@ -1,11 +1,11 @@
 import { TitleAndTextBlock } from '@/types'
-import { Box, TitleLg } from '@sfgov/design-system/dist/react'
+import { Box, TitleLg } from '@/design-system'
 
 export type TitleAndTextProps = {
   block: TitleAndTextBlock
 } & JSX.IntrinsicElements['section']
 
-export default function TitleAndText ({ block, ...rest }: TitleAndTextProps) {
+export const TitleAndText = ({ block, ...rest }: TitleAndTextProps) => {
   if (!block?.value?.title && !block?.value?.text) return null
   return (
     <Box as="section" {...rest}>

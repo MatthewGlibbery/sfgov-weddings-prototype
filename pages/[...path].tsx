@@ -1,5 +1,4 @@
-import AgencyPage from '@/components/AgencyPage'
-import InformationPage from '@/components/InformationPage'
+import { AgencyPage, InformationPage } from '@/components'
 import { AGENCY_TYPE, INFO_PAGE_TYPE } from '@/constants'
 import { ContentAPI } from '@/lib/api'
 import { Controller } from '@/lib/controller'

@@ -3,6 +3,12 @@
     "target": "es5",
     "baseUrl": ".",
     "paths": {
+      "@/design-system": [
+        "./design-system"
+      ],
+      "@/components": [
+        "./components"
+      ],
       "@/components/*": [
         "./components/*"
       ],
@@ -32,7 +38,7 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,

@@ -1,4 +1,4 @@
-import QuickLinkList from './QuickLinkList'
+import { QuickLinkList } from './QuickLinkList'
 import { render, screen } from '@testing-library/react'
 import { QuickLinkFactory } from '@/lib/factories'
 

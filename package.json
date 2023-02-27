@@ -4,7 +4,9 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "figma-export": "env-cmd -f .env.local figma-export use-config",
     "lint": "eslint . *.js",
+    "postfigma-export": "eslint --fix 'design-system/components/icons/**/*.js{,x}'",
     "postinstall": "playwright install --with-deps",
     "prestart": "npm run build",
     "start": "next start",
@@ -26,6 +28,7 @@
   },
   "dependencies": {
     "@sfgov/design-system": "^0.0.1",
+    "@stitches/react": "^1.2.8",
     "micromatch": "^4.0.5",
     "next": "13.0.6",
     "react": "18.2.0",
@@ -34,6 +37,11 @@
     "safe-json-stringify": "^1.2.0"
   },
   "devDependencies": {
+    "@figma-export/cli": "^4.5.0",
+    "@figma-export/output-components-as-svg": "^4.5.0",
+    "@figma-export/output-components-as-svgr": "^4.5.0",
+    "@figma-export/transform-svg-with-svgo": "^4.5.0",
+    "@figma-export/types": "^4.5.0",
     "@playwright/test": "^1.30.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -42,6 +50,7 @@
     "@types/node": "18.11.15",
     "@types/react": "18.0.26",
     "@types/testing-library__jest-dom": "^5.14.5",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.31.0",
     "eslint-config-next": "^13.1.1",
     "eslint-plugin-react": "^7.32.0",
