@@ -1,4 +1,4 @@
-import { Box, BoxProps, Container, styled } from '@sfgov/design-system/dist/react'
+import { Box, BoxProps, Container, styled } from '@/design-system'
 
 export type SiteFooterProps = BoxProps & {
 }

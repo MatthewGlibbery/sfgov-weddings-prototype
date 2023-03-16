@@ -1,4 +1,4 @@
-import { Box, Container } from '@sfgov/design-system/dist/react'
+import { Box, Container } from '@/design-system'
 import LanguageSelector from './LanguageSelector'
 
 export type SiteHeaderProps = JSX.IntrinsicElements['header'] & {

@@ -23,7 +23,6 @@
     }
   },
   "dependencies": {
-    "@sfgov/design-system": "^0.0.1",
     "@stitches/react": "^1.2.8",
     "micromatch": "^4.0.5",
     "next": "13.0.6",
@@ -45,6 +44,7 @@
     "@types/micromatch": "^4.0.2",
     "@types/node": "18.11.15",
     "@types/react": "18.0.26",
+    "@types/safe-json-stringify": "^1.1.2",
     "@types/testing-library__jest-dom": "^5.14.5",
     "env-cmd": "^10.1.0",
     "eslint": "^8.31.0",

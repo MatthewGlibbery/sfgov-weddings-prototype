@@ -1,4 +1,4 @@
-import { Box, BoxProps, Container, Monospace, TitleSm } from '@sfgov/design-system/dist/react'
+import { Box, BoxProps, Container, Monospace, TitleSm } from '@/design-system'
 import safeJsonStringify from 'safe-json-stringify'
 
 export type PagePropsDebugProps = BoxProps & {

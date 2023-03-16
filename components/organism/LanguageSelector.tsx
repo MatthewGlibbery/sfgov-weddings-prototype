@@ -1,5 +1,5 @@
 import NextLink, { LinkProps } from 'next/link'
-import { BoxProps, styled, textStyles } from '@sfgov/design-system/dist/react'
+import { BoxProps, styled, textStyles } from '@/design-system'
 import { useRouter } from 'next/router'
 
 export type LanguageSelectorProps = BoxProps & {
