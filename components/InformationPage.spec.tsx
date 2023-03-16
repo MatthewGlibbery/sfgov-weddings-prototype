@@ -126,7 +126,7 @@ describe('<InformationPage>', () => {
                 meta: {
                   type: 'sfgov_information_page.RelatedContentPartOf'
                 },
-                related_content: {
+                page_content: {
                   id: 4,
                   meta: {
                     type: 'sfgov_information_page.InformationPage',

@@ -101,7 +101,7 @@ function RelatedContentList ({ content, title, ...rest }: RelatedContentProps) {
     {actualTitle}
     <ul>
       {content.map((item: RelatedContentData, i: number) => <li key={i}>
-        <PageLink page={item.related_content} />
+        <PageLink page={item.page_content} />
       </li>)}
     </ul>
   </Container>

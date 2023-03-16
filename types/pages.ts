@@ -51,7 +51,7 @@ export type TitleAndTextBlock = BlockType<'title_and_text', {
 }>
 
 export type RelatedContentData = PageData<PageMeta> & {
-  related_content: PageData
+  page_content: PageData
 }
 
 export type InfoPageData = PageData<PageMeta> & {
