@@ -3,24 +3,21 @@ import type { FetchImpl, PageData, QueryParams, IContentAPI, WagtailImageData } 
 
 export type ContentAPIOptions = {
   fetch?: FetchImpl
-  apiBaseURL: string
-  apiBasePath: string
+  baseURL?: string | null
   apiHeaders?: Record<string, string>
 }
 
 export class ContentAPI implements IContentAPI {
+  baseURL: string
   options: ContentAPIOptions
 
-  constructor (options?: Partial<ContentAPIOptions>) {
-    this.options = {
-      apiBaseURL: process.env.NEXT_PUBLIC_CONTENT_API_BASE_URL,
-      apiBasePath: process.env.NEXT_PUBLIC_CONTENT_API_BASE_PATH,
-      ...options
+  constructor (options?: ContentAPIOptions) {
+    const baseURL = options?.baseURL || process.env.NEXT_PUBLIC_CONTENT_API_BASE_URL
+    if (!baseURL) {
+      throw new Error(`The baseURL argument is required; got ${JSON.stringify(baseURL)}`)
     }
-    // console.info('ContentAPI:', this.options)
-    if (!this.options.apiBaseURL) {
-      throw new Error(`The apiBaseURL option is required; got ${JSON.stringify(this.options)}`)
-    }
+    this.baseURL = baseURL
+    this.options = options || {}
   }
 
   get fetch () {
@@ -51,14 +48,15 @@ export class ContentAPI implements IContentAPI {
   }
 
   getURL (path?: string, params?: QueryParams): URL {
-    const { apiBaseURL, apiBasePath } = this.options
-    const url = new URL(apiBasePath || '', apiBaseURL)
+    const url = new URL(this.baseURL)
     if (path) {
       url.pathname = join(url.pathname, path)
     }
     if (params) {
       for (const [key, val] of Object.entries(params)) {
-        url.searchParams.set(key, val)
+        if (val) {
+          url.searchParams.set(key, val)
+        }
       }
     }
     return url

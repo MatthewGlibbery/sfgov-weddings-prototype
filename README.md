@@ -14,21 +14,16 @@ This is the future [SF.gov] front end, built with the [SF.gov design system] and
 
 ### Development server
 
-First, you'll need to copy `.env.example` to `.env.local`:
-
-```sh
-cp .env.example .env.local
-```
-
-Next, run `npm run dev` (or `npx next dev`) to run the [Next.js development
+Run `npm run dev` (or `npx next dev`) to run the [Next.js development
 server][next dev]. This should automatically open a web browser to
-`http://localhost:3000`, or whichever port you've specified in `$PORT`.
+`http://localhost:3000`.
 
 ### Figma export
 
 We use [figma-export] to export icons as SVG and React components from our
 design system Figma files. To update the icons, you'll need to set `FIGMA_TOKEN`
-in your `.env.local` file. You can get an access token [from Figma][figma access token].
+in your `.env` file, which you can bootstrap by copying `.env.example` and
+filling it with an access token [from Figma][figma access token].
 
 [sf.gov]: https://sf.gov
 [sf.gov design system]: https://design-system.sf.gov

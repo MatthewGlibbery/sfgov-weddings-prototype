@@ -4,7 +4,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "figma-export": "env-cmd -f .env.local figma-export use-config",
+    "figma-export": "env-cmd -f .env figma-export use-config",
     "lint": "eslint . *.js",
     "postfigma-export": "eslint --fix 'design-system/components/icons/**/*.js{,x}'",
     "postinstall": "playwright install --with-deps",

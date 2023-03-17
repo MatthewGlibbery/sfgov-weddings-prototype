@@ -3,28 +3,26 @@ import mockEnv from 'mocked-env'
 import fetchMock from 'jest-fetch-mock'
 
 describe('ContentAPI', () => {
-  const example = new ContentAPI({
-    apiBaseURL: 'https://api.example.com',
-    apiBasePath: '/api/v3'
-  })
+  const example = new ContentAPI({ baseURL: 'https://api.example.com/api/v3' })
 
   beforeEach(() => {
     fetchMock.resetMocks()
   })
 
   describe('constructor', () => {
-    it('throws if apiBaseURL is falsy', () => {
-      expect(
-        () => new ContentAPI({ apiBaseURL: '' })
-      ).toThrow(/apiBaseURL.+required/)
+    mockEnv({
+      NEXT_PUBLIC_CONTENT_API_BASE_URL: undefined
     })
 
-    it('allows apiBasePath to be empty', () => {
+    it('throws if baseURL is falsy', () => {
       expect(
-        () => new ContentAPI({
-          apiBaseURL: 'http://localhost',
-          apiBasePath: ''
-        })
+        () => new ContentAPI({ baseURL: '' })
+      ).toThrow(/baseURL.+required/)
+    })
+
+    it('allows baseURL path to be empty', () => {
+      expect(
+        () => new ContentAPI({ baseURL: 'http://localhost' })
       ).not.toThrow()
     })
   })
@@ -106,15 +104,13 @@ describe('ContentAPI', () => {
     })
 
     it('defaults to $NEXT_PUBLIC_CONTENT_API_BASE_URL and $NEXT_PUBLIC_CONTENT_API_BASE_PATH', () => {
-      const resetEnv = mockEnv({
-        NEXT_PUBLIC_CONTENT_API_BASE_URL: 'https://content.sf.gov',
-        NEXT_PUBLIC_CONTENT_API_BASE_PATH: '/api'
+      mockEnv({
+        NEXT_PUBLIC_CONTENT_API_BASE_URL: 'https://content.sf.gov/api'
       })
       const api = new ContentAPI()
       expect(api.getURL()).toStringifyTo('https://content.sf.gov/api')
       expect(api.getURL('')).toStringifyTo('https://content.sf.gov/api')
       expect(api.getURL('derp')).toStringifyTo('https://content.sf.gov/api/derp')
-      resetEnv()
     })
 
     it('adds query string params', () => {
@@ -126,8 +122,7 @@ describe('ContentAPI', () => {
 
     it('ignores apiBasePath if empty', () => {
       const api = new ContentAPI({
-        apiBaseURL: 'http://localhost:8000',
-        apiBasePath: ''
+        baseURL: 'http://localhost:8000'
       })
       expect(api.getURL('foo')).toStringifyTo('http://localhost:8000/foo')
     })
