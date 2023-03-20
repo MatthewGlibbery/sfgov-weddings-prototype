@@ -1,21 +1,19 @@
 import NextImage from 'next/image'
 import { PageLink, QuickLinkList } from '@/components'
 import { BigDesc, Box, Button, Container, DisplayLg, Flex, Image, TitleLg, TitleMd } from '@/design-system'
-import { AgencyData, PageProps, SpotlightBlock, PageComponent, ServiceSectionBlock } from '@/types'
+import { AgencyData, SpotlightBlock, PageComponent, ServiceSectionBlock, WagtailImageData } from '@/types'
 import { resolveImage, resolvePage } from '@/lib/utils'
 import { AGENCY_TYPE } from '@/constants'
 import PageWrapper from './page/PageWrapper'
 
-type AgencyPageProps = PageProps<AgencyData>
-
-export const AgencyPage: PageComponent<AgencyPageProps> = props => {
-  const { page } = props
+export const AgencyPage: PageComponent<AgencyData> = props => {
+  const page = props.page as AgencyData
   const {
     title,
     logo,
     description,
-    spotlight1: [spot1] = [],
-    spotlight2: [spot2] = [],
+    spotlight1,
+    spotlight2,
     service_section: serviceSections = [],
     meta
   } = page
@@ -42,27 +40,28 @@ export const AgencyPage: PageComponent<AgencyPageProps> = props => {
               </Box>
             : null}
         </Flex>
-        <AgencySpotlight data={spot1} data-testid='agency-spotlight1' />
+        <AgencySpotlight data={spotlight1?.[0]} data-testid='agency-spotlight1' />
         <QuickLinkList links={page.quick_links} css={{ my: 20 }} />
         {serviceSections?.length
           ? <AgencyServices serviceSections={serviceSections} data-testid='agency-services' />
           : null}
-        <AgencySpotlight data={spot2} data-testid='agency-spotlight2' />
+        <AgencySpotlight data={spotlight2?.[0]} data-testid='agency-spotlight2' />
       </Container>
     </PageWrapper>
   )
 }
 
 /* istanbul ignore next */
-AgencyPage.loadReferences = async (data, api) => {
+AgencyPage.loadReferences = async (untypedData, api) => {
+  const data = untypedData as AgencyData
   if (data?.logo) {
     data.logo = await resolveImage(data?.logo, api)
   }
   if (data?.spotlight1?.[0]?.value.image) {
-    data.spotlight1[0].value.image = await resolveImage(data?.spotlight1[0].value.image, api)
+    data.spotlight1[0].value.image = await resolveImage(data?.spotlight1[0].value.image, api) as WagtailImageData
   }
   if (data?.spotlight2?.[0]?.value.image) {
-    data.spotlight2[0].value.image = await resolveImage(data?.spotlight2[0].value.image, api)
+    data.spotlight2[0].value.image = await resolveImage(data?.spotlight2[0].value.image, api) as WagtailImageData
   }
   if (Array.isArray(data?.service_section)) {
     for (const section of data.service_section) {
@@ -75,7 +74,8 @@ AgencyPage.loadReferences = async (data, api) => {
   }
 }
 
-function AgencySpotlight ({ data, ...rest }: { data: SpotlightBlock }) {
+/* istanbul ignore next */
+function AgencySpotlight ({ data, ...rest }: { data: SpotlightBlock | undefined }) {
   if (!data) return null
   return (
     <Flex css={{ my: 60 }} {...rest}>
@@ -109,11 +109,17 @@ function AgencyServiceSection ({ block, ...rest }: { block: ServiceSectionBlock 
   return <Box as='section' {...rest}>
     <TitleMd as='h3'>{block.value.title}</TitleMd>
     <ul>
-      {services.map((service, i) => (
-        (service as AgencyData).title
-          ? <li key={i}><PageLink page={service} /></li>
-          : null
-      ))}
+      {services
+        .filter(isAgencyData)
+        .map((service: AgencyData, i) => (
+          service.title
+            ? <li key={i}><PageLink page={service} /></li>
+            : null
+        ))}
     </ul>
   </Box>
+}
+
+function isAgencyData (data: AgencyData | number): data is AgencyData {
+  return typeof data === 'object'
 }

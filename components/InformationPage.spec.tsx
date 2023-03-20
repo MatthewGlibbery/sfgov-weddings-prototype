@@ -1,14 +1,12 @@
 // import InformationPage from './InformationPage'
 import { render, screen, within } from '@testing-library/react'
-import { AgencyFactory, ImageBlockFactory, InfoPageFactory, MysteryBlockFactory, TitleAndTextFactory } from '@/lib/factories'
+import { AgencyFactory, ImageBlockFactory, InfoPageFactory, MysteryBlockFactory, RelatedContentFactory, TitleAndTextFactory } from '@/lib/factories'
 import { InformationPage } from './InformationPage'
-import { PageProps } from '@/types'
 
 jest.mock('next/router')
 
 describe('<InformationPage>', () => {
   describe('text content', () => {
-    // eslint-disable-next-line unused-imports/no-unused-vars
     const dept1 = AgencyFactory.make({
       title: 'Department 1',
       meta: {
@@ -16,31 +14,18 @@ describe('<InformationPage>', () => {
       }
     })
 
-    // eslint-disable-next-line unused-imports/no-unused-vars
-    const dept2 = AgencyFactory.make({
-      title: 'Public body 1',
-      meta: {
-        url_path: '/public-bodies/one'
-      }
-    })
-
     const fixture = InfoPageFactory.make({
       title: 'Information page title',
       description: 'Information page description',
-      part_of: [],
-      information_section: [],
-      departments_or_public_bodies: [{ id: '1', type: 'agency', value: dept1 }],
-      topics: [],
-      related: []
+      related_content_agencies: [
+        RelatedContentFactory.make({
+          page_content: dept1
+        })
+      ]
     })
 
-    const pageProps: Omit<PageProps, 'page'> = {
-      path: '/some-info-page',
-      locale: 'en'
-    }
-
     it('renders the page title', async () => {
-      render(<InformationPage page={fixture} {...pageProps} />)
+      render(<InformationPage page={fixture} />)
       const title = await screen.findByRole('heading', {
         level: 1
       })
@@ -50,7 +35,7 @@ describe('<InformationPage>', () => {
 
     describe('description', () => {
       it('renders if present', async () => {
-        render(<InformationPage page={fixture} {...pageProps} />)
+        render(<InformationPage page={fixture} />)
         const desc = await screen.findByText(fixture.description, {
           selector: 'p'
         })
@@ -61,7 +46,7 @@ describe('<InformationPage>', () => {
         render(<InformationPage page={{
           ...fixture,
           description: ''
-        }} {...pageProps} />)
+        }} />)
         await expect(() => screen.findByTestId('info-page-description'))
           .rejects.toThrow(/Unable to find.+"info-page-description"/)
       })
@@ -81,7 +66,7 @@ describe('<InformationPage>', () => {
         render(<InformationPage page={{
           ...fixture,
           information_section: [image]
-        }} {...pageProps} />)
+        }} />)
         const img = await screen.findByTestId(`block-${image.id}`)
         expect(img).toBeInTheDocument()
         expect(img.nodeName).toBe('IMG')
@@ -91,7 +76,7 @@ describe('<InformationPage>', () => {
         render(<InformationPage page={{
           ...fixture,
           information_section: [titleAndText]
-        }} {...pageProps} />)
+        }} />)
         const block = await screen.findByTestId(`block-${titleAndText.id}`)
         expect(block).toBeInTheDocument()
         const title = await within(block).findByRole('heading')
@@ -105,9 +90,9 @@ describe('<InformationPage>', () => {
         expect(() =>
           render(<InformationPage page={{
             ...fixture,
-            // @ts-expect-error
+            // @ts-expect-error intentionally malformed block data
             information_section: [mysteryBlock]
-          }} {...pageProps} />)
+          }} />)
         ).not.toThrow()
 
         await expect(() => screen.findByTestId(`block-${mysteryBlock.id}`))
@@ -140,9 +125,11 @@ describe('<InformationPage>', () => {
                 }
               }
             ]
-          }} {...pageProps} />)
+          }} />)
         ).not.toThrow()
+
         const link = await screen.findByText('Some other information page')
+        expect(link).toBeInTheDocument()
       })
     })
   })

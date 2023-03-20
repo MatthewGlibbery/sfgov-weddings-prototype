@@ -1,7 +1,7 @@
 import { AgencyPage, InformationPage } from '@/components'
 import { PageData } from '@/types'
 import { AGENCY_TYPE, INFO_PAGE_TYPE } from '@/constants'
-import { AgencyFactory, getAgencyAsParent, ImageFactory, InfoPageFactory, SpotlightFactory, TitleAndTextFactory } from '@/lib/factories'
+import { AgencyFactory, getAgencyAsParent, ImageFactory, InfoPageFactory, RelatedContentFactory, SpotlightFactory, TitleAndTextFactory } from '@/lib/factories'
 
 export const templates = {
   [AGENCY_TYPE]: AgencyPage,
@@ -58,15 +58,13 @@ const DepartmentsPage = InfoPageFactory.make({
   information_section: [
     TitleAndTextFactory.make()
   ],
-  departments_or_public_bodies: [
-    {
-      type: 'agency',
-      value: CityAdministrator
-    },
-    {
-      type: 'agency',
-      value: DigitalServices
-    }
+  related_content_agencies: [
+    RelatedContentFactory.make({
+      page_content: CityAdministrator
+    }),
+    RelatedContentFactory.make({
+      page_content: DigitalServices
+    })
   ]
 })
 

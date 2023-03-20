@@ -1,19 +1,21 @@
 import { AgencyPage } from './AgencyPage'
 import { render, screen, within } from '@testing-library/react'
 import { AgencyFactory, ImageFactory, QuickLinkFactory, SpotlightFactory } from '@/lib/factories'
-import { PageProps, SpotlightBlock } from '@/types'
+import { SpotlightBlock } from '@/types'
 
 jest.mock('next/router')
 
 describe('<AgencyPage>', () => {
   describe('text content', () => {
+    const agencyLogo = ImageFactory.make({
+      width: 200,
+      height: 200,
+      title: 'Agency logo'
+    })
+
     const fixture = AgencyFactory.make({
       title: 'Agency title',
-      logo: ImageFactory.make({
-        width: 200,
-        height: 200,
-        title: 'Agency logo'
-      }),
+      logo: agencyLogo,
       description: 'The agency description',
       quick_links: QuickLinkFactory.make(3),
       spotlight1: [SpotlightFactory.make({
@@ -67,13 +69,8 @@ describe('<AgencyPage>', () => {
       }
     })
 
-    const pageProps: Omit<PageProps, 'page'> = {
-      path: '/agency',
-      locale: 'en'
-    }
-
     it('renders the agency title in an <h1>', async () => {
-      render(<AgencyPage page={fixture} {...pageProps} />)
+      render(<AgencyPage page={fixture} />)
       const heading = await screen.findByRole('heading', {
         level: 1
       })
@@ -82,7 +79,7 @@ describe('<AgencyPage>', () => {
     })
 
     it('renders the agency description in a <p>', async () => {
-      render(<AgencyPage page={fixture} {...pageProps} />)
+      render(<AgencyPage page={fixture} />)
       const el = await screen.findByText(fixture.description)
       expect(el).toBeInTheDocument()
       expect(el.nodeName).toBe('P')
@@ -94,10 +91,9 @@ describe('<AgencyPage>', () => {
           ...fixture,
           meta: {
             ...fixture.meta,
-            // @ts-expect-error
             parent
           }
-        }} {...pageProps} />)
+        }} />)
 
         const link = await screen.findByText(parent.title, {
           selector: 'a'
@@ -106,7 +102,7 @@ describe('<AgencyPage>', () => {
       })
 
       it('does not render when meta.parent is not an agency', async () => {
-        render(<AgencyPage page={fixture} {...pageProps} />)
+        render(<AgencyPage page={fixture} />)
         const links = await screen.findAllByRole('link')
         for (const link of links) {
           expect(link.getAttribute('href')).not.toBe(parent.meta.html_url)
@@ -116,17 +112,17 @@ describe('<AgencyPage>', () => {
 
     describe('logo', () => {
       it('renders an image if .logo is set', async () => {
-        render(<AgencyPage page={fixture} {...pageProps} />)
+        render(<AgencyPage page={fixture} />)
         const logo = await screen.findByTestId('agency-logo') as HTMLImageElement
         expect(logo.nodeName).toBe('IMG')
-        expect(logo.src).toContain(encodeURIComponent(fixture.logo.meta.download_url))
+        expect(logo.src).toContain(encodeURIComponent(agencyLogo.meta.download_url))
       })
 
       it('does not render an image if .logo is falsy', async () => {
         render(<AgencyPage page={{
           ...fixture,
-          logo: null
-        }} {...pageProps} />)
+          logo: undefined
+        }} />)
         await expect(() => screen.findByTestId('agency-logo'))
           .rejects.toThrow(/Unable to find.+"agency-logo"/)
       })
@@ -134,14 +130,16 @@ describe('<AgencyPage>', () => {
 
     describe('spotlights', () => {
       it('renders spotlight1 (stream field)', async () => {
-        render(<AgencyPage page={fixture2} {...pageProps} />)
+        render(<AgencyPage page={fixture2} />)
         const el = await screen.findByTestId('agency-spotlight1')
+        // @ts-expect-error we know that fixture.spotlight1[0] exists here
         assertSpotlightRenders(fixture.spotlight1[0], el)
       })
 
       it('renders spotlight2 (stream field)', async () => {
-        render(<AgencyPage page={fixture} {...pageProps} />)
+        render(<AgencyPage page={fixture} />)
         const el = await screen.findByTestId('agency-spotlight2')
+        // @ts-expect-error we know that fixture.spotlight2[0] exists here
         assertSpotlightRenders(fixture.spotlight2[0], el)
       })
 

@@ -1,25 +1,19 @@
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
   plugins: [
+    '@typescript-eslint',
     'sfgov',
-    'testing-library',
-    'unused-imports'
+    'testing-library'
   ],
   extends: [
     'next/core-web-vitals',
-    'plugin:sfgov/recommended'
+    'plugin:sfgov/recommended',
+    'plugin:@typescript-eslint/recommended'
   ],
   rules: {
     'react/no-unescaped-entities': 'warn',
     'react/jsx-no-leaked-render': 'error',
-    'no-unused-vars': 'off',
-    'unused-imports/no-unused-imports': 'error',
-    'unused-imports/no-unused-vars': ['warn', {
-      vars: 'all',
-      varsIgnorePattern: '^_',
-      args: 'after-used',
-      argsIgnorePattern: '^_'
-    }]
+    'no-unused-vars': 'off'
   },
   overrides: [
     {

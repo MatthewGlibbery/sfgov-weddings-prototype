@@ -1,7 +1,6 @@
 import { BoxProps, Container, styled } from '@/design-system'
 
-export type SiteFooterProps = BoxProps & {
-}
+export type SiteFooterProps = BoxProps
 
 const FooterBox = styled('footer', {
   bg: '$black',
@@ -12,7 +11,7 @@ const FooterBox = styled('footer', {
 
 export default function SiteFooter (props: SiteFooterProps) {
   return (
-    <FooterBox {...props}>
+    <FooterBox as='footer' {...props}>
       <Container>
       </Container>
     </FooterBox>

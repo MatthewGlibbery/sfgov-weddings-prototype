@@ -1,6 +1,6 @@
 import { styled } from '../stitches.config'
 import { Box } from './Box'
-import type { VariantProps } from '../utils'
+import { ComponentProps } from 'react'
 
 export const Flex = styled(Box, {
   display: 'flex',
@@ -13,4 +13,4 @@ export const Flex = styled(Box, {
   }
 })
 
-export type FlexVariant = VariantProps<typeof Flex>
+export type FlexVariant = ComponentProps<typeof Flex>

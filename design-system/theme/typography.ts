@@ -9,12 +9,19 @@ export const fonts = {
   ...Object.fromEntries(
     defaultFonts.map(font => [
       font.name.replace(/ +/g, ''),
-      `${[font.name, ...font.fallbacks
-    ].join(', ')}`])
+      `${[font.name, ...(font.fallbacks || [])].join(', ')}`
+    ])
   )
 }
 
-export const textStyles: Record<string> = {
+export type TextStyle = {
+  fontFamily?: string
+  fontSize?: string
+  fontWeight?: string
+  lineHeight?: string
+}
+
+export const textStyles: Record<string, TextStyle> = {
   body: {
     fontFamily: '$body',
     fontSize: '16px',
@@ -124,11 +131,12 @@ export const fontSizes = collect('fontSize')
 export const lineHeights = collect('lineHeight')
 export const letterSpacings = collect('letterSpacing')
 
-function collect (prop) {
-  const map = {}
+function collect (prop: string) {
+  const map: Record<string, string> = {}
   for (const [name, style] of Object.entries(textStyles)) {
     if (prop in style) {
-      map[name] = style[prop]
+      // @ts-expect-error this is so dumb
+      map[name] = style[prop as keyof TextStyle]
     }
   }
   return map

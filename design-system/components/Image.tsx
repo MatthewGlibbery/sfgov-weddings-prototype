@@ -1,14 +1,14 @@
+import NextImage, { ImageProps } from 'next/image'
 import { getImageProps } from '@/lib/utils'
 import { WagtailImageData } from '@/types'
 import { styled } from '../stitches.config'
-import NextImage, { ImageProps } from 'next/image'
-import type { ComponentType } from 'react'
+import { ComponentType } from 'react'
+import { FIXMECSSProps } from '../types'
 
 type StyledImageProps = Partial<ImageProps> & {
   as?: 'img' | typeof NextImage
-  css?: any
   baseURL?: string
-} & JSX.IntrinsicElements['img']
+} & FIXMECSSProps
 
 const StyledImage = styled('img', {
   width: 'auto',

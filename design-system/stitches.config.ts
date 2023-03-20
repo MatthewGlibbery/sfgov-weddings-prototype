@@ -48,6 +48,8 @@ export const {
 
 type StitchesCSSProp = keyof Stitches.CSSProperties
 
+export type CSS = Stitches.CSSProperties
+
 /**
  * Create an alias function that outputs one or more style properties from a single value:
  *
@@ -65,9 +67,9 @@ type StitchesCSSProp = keyof Stitches.CSSProperties
  * @param keyOrKeys A single CSS style property or array of them
  * @param transform Optionally transform the input value with this function
  */
-function alias <Input = any> (
+function alias <Input = string | number> (
   keyOrKeys: StitchesCSSProp | StitchesCSSProp[] | string,
-  transform?: Function
+  transform?: (value: Input) => string | number
 ) {
   const t = transform || identity
   return Array.isArray(keyOrKeys)

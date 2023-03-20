@@ -132,11 +132,13 @@ describe('ContentAPI', () => {
 describe('FixtureAPI', () => {
   describe('constructor', () => {
     it('throws on invalid arguments', () => {
-      // @ts-expect-error
+      // @ts-expect-error bad constructor
       expect(() => new FixtureAPI()).toThrow()
-      // @ts-expect-error
+      // @ts-expect-error bad constructor
       expect(() => new FixtureAPI({ pages: { wut: null } })).toThrow()
+      // @ts-expect-error bad constructor
       expect(() => new FixtureAPI({ pages: [null] })).toThrow()
+      // @ts-expect-error bad constructor
       expect(() => new FixtureAPI({ pages: [], images: [null] })).toThrow()
     })
 
@@ -151,7 +153,8 @@ describe('FixtureAPI', () => {
       meta: {
         type: 'huh.Wut',
         url_path: 'wut'
-      }
+      },
+      title: 'Yo'
     }
     const api = new FixtureAPI({
       pages: [
@@ -174,7 +177,8 @@ describe('FixtureAPI', () => {
       meta: {
         type: 'huh.Wut',
         url_path: 'wut'
-      }
+      },
+      title: 'Hi'
     }
     const api = new FixtureAPI({
       pages: [

@@ -1,6 +1,6 @@
+import { ComponentProps } from 'react'
 import { styled } from '../stitches.config'
-import type { VariantProps } from '../utils'
 
 export const Box = styled('div')
 
-export type BoxProps = VariantProps<typeof Box>
+export type BoxProps = ComponentProps<typeof Box>

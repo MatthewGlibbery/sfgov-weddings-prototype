@@ -1,8 +1,13 @@
 import { PageLink } from '@/components'
 import { Container, Monospace, TitleLg } from '@/design-system'
 import { pages } from '@/__fixtures__'
+import { GetServerSideProps } from 'next'
 
-export async function getServerSideProps () {
+type TestIndexProps = {
+  pages: typeof pages
+}
+
+export const getServerSideProps: GetServerSideProps<TestIndexProps> = async () => {
   // pass the page fixtures to the page so that it can render the props debugger
   return {
     props: {
@@ -11,7 +16,7 @@ export async function getServerSideProps () {
   }
 }
 
-export default function TestIndex ({ pages }) {
+export default function TestIndex ({ pages }: TestIndexProps) {
   return (
     <Container css={{
       my: 60,

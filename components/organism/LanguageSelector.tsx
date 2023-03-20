@@ -1,9 +1,8 @@
 import NextLink, { LinkProps } from 'next/link'
-import { BoxProps, styled, textStyles } from '@/design-system'
+import { styled, textStyles } from '@/design-system'
 import { useRouter } from 'next/router'
 
-export type LanguageSelectorProps = BoxProps & {
-}
+type LanguageSelectorProps = JSX.IntrinsicElements['ul']
 
 const localeNames: Record<string, string> = {
   en: 'English',
@@ -12,7 +11,7 @@ const localeNames: Record<string, string> = {
   fil: 'Filipino'
 }
 
-export default function LanguageSelector ({ ...rest }: LanguageSelectorProps) {
+export default function LanguageSelector (props: LanguageSelectorProps) {
   const {
     asPath: currentPath,
     locale: currentLocale,
@@ -25,9 +24,10 @@ export default function LanguageSelector ({ ...rest }: LanguageSelectorProps) {
     locale,
     'aria-current': locale === currentLocale ? 'page' : false,
     children: localeNames[locale]
-  }))
+  })) || []
 
-  return <FlexList {...rest}>
+  // @ts-expect-error wtf
+  return <FlexList {...props}>
     {links.map(link => <li key={link.locale as string}>
       <LanguageLink {...link} />
     </li>)}

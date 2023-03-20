@@ -24,7 +24,7 @@ export class ContentAPI implements IContentAPI {
     return this.options.fetch || global.fetch
   }
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getPageByPath<T extends PageData = PageData> (path:string, params?: QueryParams, options?: RequestInit) {
     return this.loadJSON<T>('pages/find', {
       html_path: path,
@@ -55,7 +55,7 @@ export class ContentAPI implements IContentAPI {
     if (params) {
       for (const [key, val] of Object.entries(params)) {
         if (val) {
-          url.searchParams.set(key, val)
+          url.searchParams.set(key, String(val))
         }
       }
     }
@@ -84,7 +84,7 @@ export class FixtureAPI implements IContentAPI {
     )
   }
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loadJSON<T = unknown> (path: string, params?: QueryParams, options?: RequestInit): Promise<T> {
     const page = (
       this.dataByApiPath[path] ||
@@ -95,7 +95,7 @@ export class FixtureAPI implements IContentAPI {
       : Promise.reject(new Error(`not found: ${path}`))
   }
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getPageByPath<T extends PageData = PageData> (path: string, params?: QueryParams, options?: RequestInit): Promise<T> {
     const page = this.pagesByUrlPath[path] as T
     return page

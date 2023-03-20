@@ -31,6 +31,9 @@ jobs:
           command: npm run test:unit
       - coveralls/upload
       - run:
+          name: Build
+          command: npm run build
+      - run:
           name: Browser tests
           command: npm run test:browser
 

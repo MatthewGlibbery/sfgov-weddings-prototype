@@ -17,6 +17,7 @@ describe('<PagePropsDebug>', () => {
       foo: 'bar',
       child
     }
+    // @ts-expect-error yeah no
     child.parent = parent
     render(<PropsDebug data={parent} />)
     const pre = screen.getByTestId(preId)

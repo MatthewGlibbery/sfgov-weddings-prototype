@@ -1,7 +1,8 @@
 import type { ComponentProps, ComponentType } from 'react'
 import { textStyles } from '../theme/typography'
 import { styled } from '../stitches.config'
-import { withFixedProps, VariantProps } from '../utils'
+import { withFixedProps } from '../utils'
+import { FIXMEAsableProps } from 'design-system/types'
 
 export type TextVariant =
   'body' | 'small' | 'bigDesc' |
@@ -58,8 +59,8 @@ export const Text = styled('div', {
   }
 })
 
-export type TextProps = VariantProps<ComponentProps<typeof Text>>
-type TextPropsNoVariant = Omit<TextProps, 'variant'>
+export type TextProps = ComponentProps<typeof Text>
+type TextPropsNoVariant = Omit<TextProps, 'variant'> & FIXMEAsableProps
 
 export const BodyText = createVariant('body')
 export const SmallText = createVariant('small')

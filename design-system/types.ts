@@ -1,4 +1,5 @@
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ComponentType } from 'react'
+import { CSS } from './stitches.config'
 
 export type LinkProps = ComponentProps<'link'>
 
@@ -29,3 +30,15 @@ export type FontSpecProps = {
 }
 
 export type GlobalCSSProps = FontSpecProps
+
+export type FIXMEChildrenProps = {
+  children?: string | string[] | JSX.Element | JSX.Element[]
+}
+
+export type FIXMEAsableProps = {
+  as?: keyof JSX.IntrinsicElements | ComponentType
+}
+
+export type FIXMECSSProps = {
+  css?: CSS
+}

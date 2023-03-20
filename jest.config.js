@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const nextJest = require('next/jest')
 const tsConfig = require('./tsconfig.json')
 

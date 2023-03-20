@@ -1,7 +1,7 @@
 import { SpotlightBlock, QuickLinkBlock, BlockType, ServiceSectionBlock, ContactBlock } from './blocks'
 import { WagtailImageData } from './images'
 
-export type PageMeta = {
+interface MinimalMeta {
   type: string
   locale?: string
   url_path?: string
@@ -13,25 +13,23 @@ export type PageMeta = {
   search_description?: string
   first_published_at?: string
   alias_of?: object
-  parent?: object
 }
 
-export type PageData<M extends PageMeta = PageMeta> = {
-  id?: number
-  meta: M
-  title?: string
-}
-
-export type ParentMeta<P extends PageData = PageData> = {
+interface MinimalPageData {
   id: number
-  title?: string
-  meta: P['meta']
+  meta: MinimalMeta
+  title: string
 }
 
-export type AgencyData = PageData<PageMeta & {
-  parent?: ParentMeta
-}> & {
-  title: string
+export interface PageMeta<Parent extends MinimalPageData = MinimalPageData> extends MinimalMeta {
+  parent?: Parent | undefined
+}
+
+export type PageData = MinimalPageData & {
+  meta: PageMeta<PageData>
+}
+
+export type AgencyData = PageData & {
   logo?: WagtailImageData
   description: string
   spotlight1?: SpotlightBlock[]
@@ -41,8 +39,6 @@ export type AgencyData = PageData<PageMeta & {
   contact?: ContactBlock[]
 }
 
-export type AgencyParent = AgencyData['meta']['parent']
-
 export type ImageBlock = BlockType<'image', number | WagtailImageData>
 
 export type TitleAndTextBlock = BlockType<'title_and_text', {
@@ -50,17 +46,17 @@ export type TitleAndTextBlock = BlockType<'title_and_text', {
   text: string
 }>
 
-export type RelatedContentData = PageData<PageMeta> & {
+export type RelatedContentData = Omit<PageData, 'title'> & {
   page_content: PageData
 }
 
-export type InfoPageData = PageData<PageMeta> & {
-  title: string
+export type InfoPageSection = ImageBlock | TitleAndTextBlock
+
+export interface InfoPageData extends PageData {
   description: string
-  information_section?: (ImageBlock | TitleAndTextBlock)[]
+  information_section?: InfoPageSection[]
   related_content_part_of?: RelatedContentData[]
   related_content_agencies?: RelatedContentData[]
   related_content_topics?: RelatedContentData[]
   related_content_page?: RelatedContentData[]
-
 }

@@ -1,8 +1,8 @@
 import { isMatch } from 'micromatch'
-import type { IContentAPI, IController, MakeGetServerSidePropsOptions, MakeViewComponentOptions, PageComponent, PageData, PageProps, QueryParams } from '../types'
+import type { IContentAPI, IController, PageComponent, PageData, PageProps, QueryParams } from '../types'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { i18n } from '../next.config'
-import { renderWithErrorBoundary } from '@/components'
+import { ErrorBoundary, ErrorFallbackReport } from '@/components'
 
 const DEFAULT_LOCALE = i18n?.defaultLocale
 
@@ -49,74 +49,71 @@ export class Controller implements IController {
    * export const getServerSideProps = controller.makeGetServerSideProps()
    * ```
    */
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  makeGetServerSideProps<P extends PageData = PageData> (options?: MakeGetServerSidePropsOptions): GetServerSideProps<PageProps<P>> {
+  makeGetServerSideProps (): GetServerSideProps<PageProps> {
     return async context => {
       const path = this.getContextPath(context)
-      const props = await this.getPageProps<P>(path)
+      const props = await this.getPageProps(path)
       return props?.page
         ? { props }
         : { notFound: true }
     }
   }
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  makeViewComponent<P extends PageData = PageData> (options?: MakeViewComponentOptions): PageComponent<PageProps<P>> {
-    const controller = this
-    const { api } = this
+  makeViewComponent (): PageComponent {
+    const getTemplate = (type: string) => this.getTemplateForType(type)
     return function ControllerView (props) {
       if (!props.page?.meta?.type) {
         throw new Error('No page.meta.type found in page props')
       }
       const { type } = props.page.meta
-      const Template = controller.getTemplateForType<PageProps<P>>(type)
+      const Template = getTemplate(type)
       if (!Template) {
         throw new Error(`No template found for page.meta.type "${type}"`)
       }
-      return renderWithErrorBoundary(Template, { ...props, api })
+      return (
+        <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
+          <Template {...props} />
+        </ErrorBoundary>
+      )
     }
   }
 
-  async getPageProps<P extends PageData = PageData> (path: string, params?: QueryParams, options?: RequestInit): Promise<PageProps<P>> {
+  async getPageProps (path: string, params?: QueryParams, options?: RequestInit): Promise<PageProps> {
     const locale = params?.locale
-    let data: P
+    let data: PageData
     if (locale && locale !== DEFAULT_LOCALE) {
       try {
-        data = await this.api.getPageByPath<P>(path, params, options)
+        data = await this.api.getPageByPath(path, params, options)
       } catch (error) {
         params = { ...params }
         delete params.locale
-        data = await this.api.getPageByPath<P>(path, params, options)
+        data = await this.api.getPageByPath(path, params, options)
       }
     } else {
-      data = await this.api.getPageByPath<P>(path, params, options)
+      data = await this.api.getPageByPath(path, params, options)
     }
     const Template = data?.meta?.type
-      ? this.getTemplateForType<PageProps<P>>(data.meta.type)
+      ? this.getTemplateForType(data.meta.type)
       : undefined
     if (Template?.loadReferences) {
       // FIXME: we might want to try/catch this
       await Template.loadReferences(data, this.api)
     }
-    return {
-      page: data,
-      path,
-      locale: params?.locale || null
-    }
+    return { page: data }
   }
 
   getContextPath (context: GetServerSidePropsContext) {
     return context.resolvedUrl
   }
 
-  getTemplateForType<P extends PageProps = PageProps> (type: string): PageComponent<P> | undefined {
+  getTemplateForType (type: string): PageComponent | undefined {
     if (this.templateMap.has(type)) {
-      return this.templateMap.get(type) as PageComponent<P>
+      return this.templateMap.get(type)
     }
     for (const [pattern, template] of this.templates) {
       if (isMatch(type, pattern)) {
         this.templateMap.set(type, template)
-        return template as PageComponent<P>
+        return template
       }
     }
   }

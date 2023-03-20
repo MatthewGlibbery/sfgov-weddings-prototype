@@ -1,6 +1,5 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { GetServerSideProps } from 'next'
-import { ComponentType } from 'react'
+import { FunctionComponent } from 'react'
 import { PageData } from './pages'
 
 export * from './pages'
@@ -17,42 +16,21 @@ export interface IContentAPI {
   getPageByPath<T extends PageData = PageData> (path:string, params?: QueryParams, options?: RequestInit): Promise<T>
 }
 
-export type PageProps<P extends PageData = PageData> = {
-  page?: P
-  path: string
-  locale: string | null
-  api?: IContentAPI
+export interface PageProps<SpecificData extends PageData = never> {
+  page: SpecificData | PageData
 }
 
-export type ReferenceLoader<P extends PageData = PageData> = (
-  (data: P, api: IContentAPI) => Promise<void> | void
+export type ReferenceLoader<SpecificData extends PageData = never> = (
+  (data: SpecificData | PageData, api: IContentAPI) => Promise<void> | void
 )
 
-/**
- * A PageComponent is a React comoponent type that accepts a props type
- * extending PageProps, and includes references to the content API:
- *
- * ```ts
- * type AgencyProps = PageProps &  {
- *   title: string
- * }
- * const AgencyPage: PageComponent<AgencyProps> = (...)
- * ```
- */
-export type PageComponent<P extends PageProps = PageProps> = ComponentType<P> & {
-  loadReferences?: ReferenceLoader<P['page']>
-}
-
-export type MakeGetServerSidePropsOptions = {
-}
-
-export type MakeViewComponentOptions = {
-  staticProps?: object
+export type PageComponent<SpecificData extends PageData = never> = FunctionComponent<PageProps<SpecificData>> & {
+  loadReferences?: ReferenceLoader<SpecificData>
 }
 
 export interface IController {
-  makeGetServerSideProps<P extends PageData = PageData> (options?: MakeGetServerSidePropsOptions): GetServerSideProps<PageProps<P>>
-  makeViewComponent<P extends PageData = PageData> (options?: MakeViewComponentOptions): PageComponent<PageProps<P>>
+  makeGetServerSideProps (): GetServerSideProps<PageProps>
+  makeViewComponent (): PageComponent
 }
 
 export type FetchImpl = typeof fetch

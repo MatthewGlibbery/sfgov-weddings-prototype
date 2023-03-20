@@ -2,7 +2,7 @@ import { Box, BoxProps, Container, Monospace, TitleSm } from '@/design-system'
 import safeJsonStringify from 'safe-json-stringify'
 
 export type PagePropsDebugProps = BoxProps & {
-  data: any
+  data: object
 }
 
 export default function PropsDebug ({ data, ...rest }: PagePropsDebugProps) {

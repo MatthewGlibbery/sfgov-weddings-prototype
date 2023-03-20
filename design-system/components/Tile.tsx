@@ -43,7 +43,12 @@ const TileTitle = styled(TitleXs, {
   mb: 20
 })
 
-const BaseTile = ({ href, children }) => (
+type BaseTileProps = {
+  href: string
+  children: JSX.Element | JSX.Element[]
+}
+
+const BaseTile = ({ href, children }: BaseTileProps) => (
   <TileContainer as='a' href={href}>
     <ContentWrapper>{children}</ContentWrapper>
   </TileContainer>
@@ -77,7 +82,7 @@ export const EventTile = ({
   title,
   body,
   href,
-  imgSrc,
+  imgSrc, // eslint-disable-line
   eventType
 }: EventTileProps) => (
   <BaseTile href={href}>

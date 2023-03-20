@@ -1,17 +1,14 @@
+import React from 'react'
 import NextImage from 'next/image'
 import { resolveImage } from '@/lib/utils'
 import { PageLink, TitleAndText } from '@/components'
-import { BigDesc, Container, DisplayLg, Image, TitleMd } from '@/design-system'
-import { InfoPageData, PageComponent, PageProps, RelatedContentData, WagtailImageData } from '@/types'
-import React, { ComponentProps } from 'react'
+import { BigDesc, Container, ContainerProps, DisplayLg, Image, TitleMd } from '@/design-system'
+import { InfoPageData, InfoPageSection, PageComponent, RelatedContentData, WagtailImageData } from '@/types'
 import PageWrapper from './page/PageWrapper'
+import { FIXMEAsableProps } from 'design-system/types'
 
-export type InfoPageProps = PageProps<InfoPageData>
-
-type ContainerProps = ComponentProps<typeof Container>
-type ContentBlock = InfoPageData['information_section'][number]
-
-export const InformationPage: PageComponent<InfoPageProps> = props => {
+export const InformationPage: PageComponent<InfoPageData> = props => {
+  const page = props.page as InfoPageData
   const {
     title,
     description,
@@ -20,7 +17,7 @@ export const InformationPage: PageComponent<InfoPageProps> = props => {
     related_content_agencies: agencies,
     related_content_topics: topics,
     related_content_page: pages
-  } = props.page
+  } = page
   return (
     <PageWrapper title={title}>
       <Container css={{ mb: 20 }}>
@@ -57,21 +54,22 @@ export const InformationPage: PageComponent<InfoPageProps> = props => {
 }
 
 /* istanbul ignore next */
-InformationPage.loadReferences = async (data, api) => {
+InformationPage.loadReferences = async (untypedData, api) => {
+  const data = untypedData as InfoPageData
   if (Array.isArray(data.information_section)) {
     for (const block of data.information_section) {
       if (block.type === 'image') {
-        block.value = await resolveImage(block.value, api)
+        block.value = await resolveImage(block.value, api) as WagtailImageData
       }
     }
   }
 }
 
-type RelatedContentProps = {
-  content: RelatedContentData[]
-} & ContainerProps
+type InfoSectionListProps = ContainerProps & {
+  blocks: InfoPageSection[] | undefined
+} & FIXMEAsableProps
 
-function InfoSectionList ({ blocks, ...rest }: { blocks: ContentBlock[] } & ContainerProps) {
+function InfoSectionList ({ blocks, ...rest }: InfoSectionListProps) {
   if (!blocks?.length) return null
   return <Container {...rest}>
     {blocks.map(block => (
@@ -84,7 +82,11 @@ function InfoSectionList ({ blocks, ...rest }: { blocks: ContentBlock[] } & Cont
   </Container>
 }
 
-function InfoSectionContent ({ block, ...rest }: { block: ContentBlock }) {
+type InfoSectionContentProps = {
+  block: InfoPageSection
+}
+
+function InfoSectionContent ({ block, ...rest }: InfoSectionContentProps) {
   switch (block.type) {
     case 'image':
       return <Image as={NextImage} alt='' imageRef={block.value as WagtailImageData} {...rest} />
@@ -94,7 +96,13 @@ function InfoSectionContent ({ block, ...rest }: { block: ContentBlock }) {
   return null
 }
 
-function RelatedContentList ({ content, title, ...rest }: RelatedContentProps) {
+type RelatedContentListProps = {
+  title: string
+  content: RelatedContentData[] | undefined
+  id?: string
+} & JSX.IntrinsicAttributes
+
+function RelatedContentList ({ content, title, ...rest }: RelatedContentListProps) {
   if (!content?.length) return null
   const actualTitle = title ? <TitleMd as='h2'>{title}</TitleMd> : null
   return <Container {...rest}>

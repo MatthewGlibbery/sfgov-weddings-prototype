@@ -2,7 +2,7 @@ import { WagtailImageData } from './images'
 import { AgencyData, PageData } from './pages'
 import { Address } from './snippets'
 
-export type BlockType<T extends string = string, V = any> = {
+export interface BlockType<T extends string = string, V = object> {
   type: T
   value: V
   id: string

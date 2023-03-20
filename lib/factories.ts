@@ -4,7 +4,6 @@ import { factory } from 'node-factory'
 import {
   AgencyData,
   AgencyPageBlock,
-  AgencyParent,
   BlockType,
   CallToAction,
   ImageBlock,
@@ -13,6 +12,7 @@ import {
   PageData,
   PageMeta,
   QuickLinkBlock,
+  RelatedContentData,
   SpotlightBlock,
   TitleAndTextBlock,
   WagtailImageData
@@ -25,7 +25,7 @@ export const PageMetaFactory = factory<PageMeta>(gen => ({
 
 export const AgencyMetaFactory = factory<AgencyData['meta']>(() => ({
   type: AGENCY_TYPE,
-  parent: null
+  parent: undefined
 }))
 
 export const AgencyFactory = factory<AgencyData>(gen => ({
@@ -42,7 +42,7 @@ export const AgencyFactory = factory<AgencyData>(gen => ({
  * use this, your agency data won't serialize properly in the page props
  * debugger with circular references (child -> parent -> child).
  */
-export function getAgencyAsParent (agency: AgencyData): AgencyParent {
+export function getAgencyAsParent (agency: AgencyData): PageData {
   return {
     id: agency.id,
     title: agency.title,
@@ -60,7 +60,6 @@ export const InfoPageFactory = factory<InfoPageData>(gen => ({
   departments_or_public_bodies: AgencyPageBlockFactory.make(3, {
     type: 'agency'
   }),
-  // @ts-expect-error
   topics: PageBlockFactory.make(2, {
     type: 'topic'
   })
@@ -118,6 +117,7 @@ export const TitleAndTextFactory = factory<TitleAndTextBlock>(gen => ({
 }))
 
 export const PageFactory = factory<PageData>(gen => ({
+  id: gen.datatype.number(),
   meta: {
     type: `sfgov_${gen.lorem.word()}.${gen.lorem.sentence(1).replace(/\.$/, '')}`,
     url_path: new URL(gen.internet.url()).pathname
@@ -143,7 +143,15 @@ export const ImageBlockFactory = factory<ImageBlock>(gen => ({
   type: 'image'
 }))
 
-export const MysteryBlockFactory = factory<BlockType<string, any>>(gen => ({
+export const RelatedContentFactory = factory<RelatedContentData>(gen => ({
+  id: gen.datatype.number(),
+  meta: {
+    type: 'RelatedContent'
+  },
+  page_content: PageFactory.make()
+}))
+
+export const MysteryBlockFactory = factory<BlockType<string, object>>(gen => ({
   id: gen.datatype.uuid(),
   value: {},
   type: gen.lorem.word()

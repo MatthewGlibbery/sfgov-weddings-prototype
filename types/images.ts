@@ -1,10 +1,11 @@
 import { WAGTAIL_IMAGE_TYPE } from '@/constants'
 import { PageData } from './pages'
 
-export type WagtailImageData = PageData<{
-  type: typeof WAGTAIL_IMAGE_TYPE
-  download_url: string
-}> & {
+export interface WagtailImageData extends PageData {
+  meta: {
+    type: typeof WAGTAIL_IMAGE_TYPE
+    download_url: string
+  }
   title: string
   width: number
   height: number

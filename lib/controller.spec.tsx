@@ -1,14 +1,17 @@
 import { Controller } from './controller'
 import { FixtureAPI } from './api'
 import type { GetServerSidePropsContext } from 'next'
-import { IContentAPI, PageData, PageProps } from '@/types'
+import { PageComponent, PageData, PageProps } from '@/types'
 import { render, screen } from '@testing-library/react'
 import mockConsole from 'jest-mock-console'
+
+type MockedFunction = ReturnType<typeof jest.fn>
 
 describe('Controller', () => {
   const mockPath = 'departments/sf-environment'
   const mockMetaType = 'sfgov.Info'
   const mockPage = {
+    id: 123,
     meta: {
       type: mockMetaType,
       url_path: mockPath
@@ -21,7 +24,7 @@ describe('Controller', () => {
     ]
   })
 
-  const MockPageTemplate = jest.fn((props: PageProps) => (
+  const MockPageTemplate: PageComponent = jest.fn((props: PageProps) => (
     <div>Hello, {props.page.meta.type}!</div>
   ))
   const mockTemplates = {
@@ -29,17 +32,17 @@ describe('Controller', () => {
   }
 
   afterEach(() => {
-    MockPageTemplate.mockClear()
+    (MockPageTemplate as MockedFunction).mockClear()
   })
 
   describe('constructor', () => {
     it('requires a ContentAPI and template map', () => {
       expect(
-        // @ts-expect-error
+        // @ts-expect-error testing without any args
         () => new Controller()
       ).toThrow(/ContentAPI.+required/)
       expect(
-        // @ts-expect-error
+        // @ts-expect-error testing without a template map
         () => new Controller(api)
       ).toThrow(/template map.+required/)
       expect(
@@ -72,11 +75,7 @@ describe('Controller', () => {
     it('gets the right page', async () => {
       const controller = new Controller(api, {})
       await expect(controller.getPageProps(mockPath))
-        .resolves.toEqual({
-          page: mockPage,
-          path: mockPath,
-          locale: null
-        })
+        .resolves.toEqual({ page: mockPage })
     })
 
     it('respects the locale', async () => {
@@ -96,14 +95,10 @@ describe('Controller', () => {
         })
       }
 
-      // @ts-expect-error
+      // @ts-expect-error stubAPI doesn't fully implement ContentAPI
       const controller = new Controller(stubAPI, {})
       await expect(controller.getPageProps(mockPath, { locale: 'es' }))
-        .resolves.toEqual({
-          page: spanishPage,
-          path: mockPath,
-          locale: 'es'
-        })
+        .resolves.toEqual({ page: spanishPage })
     })
 
     it('falls back to English if the locale-specific query rejects', async () => {
@@ -115,27 +110,21 @@ describe('Controller', () => {
         })
       }
 
-      // @ts-expect-error
+      // @ts-expect-error stubAPI doesn't fully implement ContentAPI
       const controller = new Controller(stubAPI, {})
       await controller.getPageProps(mockPath, { locale: 'es' })
       expect(stubAPI.getPageByPath).toHaveBeenCalledTimes(2)
     })
 
     it('calls Template.loadReferences() if it exists', async () => {
-      // @ts-expect-error
-      // eslint-disable-next-line unused-imports/no-unused-vars
-      MockPageTemplate.loadReferences = jest.fn(async (data: PageData, api: IContentAPI) => {
-        // @ts-expect-error
-        data.hello = 'world'
+      MockPageTemplate.loadReferences = jest.fn(async (data: PageData) => {
+        data.title = 'Hello, world!'
         await new Promise(resolve => setTimeout(resolve, 10))
       })
       const controller = new Controller(api, mockTemplates)
       const props = await controller.getPageProps(mockPath)
-      // @ts-expect-error
       expect(MockPageTemplate.loadReferences).toBeCalledTimes(1)
-      // @ts-expect-error
-      await expect(props.page.hello).toEqual('world')
-      // @ts-expect-error
+      await expect(props.page.title).toEqual('Hello, world!')
       delete MockPageTemplate.loadReferences
     })
   })
@@ -154,9 +143,7 @@ describe('Controller', () => {
       })
       expect(getServerSideProps(context)).resolves.toMatchObject({
         props: {
-          page: mockPage,
-          path: mockPath,
-          locale: null
+          page: mockPage
         }
       })
     })
@@ -187,7 +174,7 @@ describe('Controller', () => {
         { page: { meta: null } },
         { page: { meta: { type: null } } }
       ]) {
-        // @ts-expect-error
+        // @ts-expect-error not sure what either of these errors is about, tbh
         expect(() => render(<View {...props} />)).toThrow('No page.meta.type found in page props')
       }
       restoreConsole()
@@ -196,11 +183,12 @@ describe('Controller', () => {
     it('throws if it gets a page.meta.type with no matching template', () => {
       const View = controller.makeViewComponent()
       const restoreConsole = mockConsole()
-      // @ts-expect-error
       expect(() => render(<View page={{
+        id: 1,
         meta: {
           type: 'wut'
-        }
+        },
+        title: 'Hi'
       }} />)).toThrow('No template found for page.meta.type "wut"')
       restoreConsole()
     })

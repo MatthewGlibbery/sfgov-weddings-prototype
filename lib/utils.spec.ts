@@ -1,23 +1,27 @@
 import { IContentAPI } from '@/types'
+import { ImageFactory } from './factories'
 import { getPageURL, resolvePage, resolveImage, getImageURL } from './utils'
 
 describe('getPageURL()', () => {
   it('returns meta.html_url without the hostname', () => {
     expect(getPageURL({
-      // @ts-expect-error
+      id: 1,
       meta: {
+        type: 'foo',
         html_url: 'https://example.com/foo/bar'
       }
     })).toBe('/foo/bar')
     expect(getPageURL({
-      // @ts-expect-error
+      id: 2,
       meta: {
+        type: 'bar',
         html_url: '/foo/bar'
       }
     })).toBe('/foo/bar')
     expect(getPageURL({
-      // @ts-expect-error
+      id: 3,
       meta: {
+        type: 'baz',
         html_url: '/'
       }
     })).toBe('/')
@@ -25,14 +29,16 @@ describe('getPageURL()', () => {
 
   it('returns meta.url_path when no html_url is provided', () => {
     expect(getPageURL({
-      // @ts-expect-error
+      id: 1,
       meta: {
+        type: 'foo',
         url_path: '/foo/bar'
       }
     })).toBe('/foo/bar')
     expect(getPageURL({
-      // @ts-expect-error
+      id: 2,
       meta: {
+        type: 'bar',
         url_path: '/'
       }
     })).toBe('/')
@@ -42,22 +48,22 @@ describe('getPageURL()', () => {
 describe('getImageURL()', () => {
   it('returns the meta.download_url', () => {
     const url = 'https://example.com/cool.gif'
-    expect(getImageURL({
-      // @ts-expect-error
+    const image = ImageFactory.make({
       meta: {
         download_url: url
       }
-    })).toBe(url)
+    })
+    expect(getImageURL(image)).toBe(url)
   })
 
   it('resolves meta.download_url relative to a given base URL', () => {
     const url = '/images/cool.gif'
-    expect(getImageURL({
-      // @ts-expect-error
+    const image = ImageFactory.make({
       meta: {
         download_url: url
       }
-    }, 'https://example.com')).toBe('https://example.com/images/cool.gif')
+    })
+    expect(getImageURL(image, 'https://example.com')).toBe('https://example.com/images/cool.gif')
   })
 
   it('returns undefined if there is no meta.download_url', () => {
@@ -67,7 +73,7 @@ describe('getImageURL()', () => {
       {}
     ]
     for (const img of fixtures) {
-      // @ts-expect-error
+      // @ts-expect-error img is intentionally malformed
       expect(getImageURL(img)).toBe(undefined)
     }
   })
@@ -90,7 +96,7 @@ describe('resolvers', () => {
     })
 
     it('does not attempt to resolve an object', async () => {
-      // @ts-expect-error
+      // @ts-expect-error intentionally malformed data
       await resolvePage({ id: 1 }, api)
       expect(api.loadJSON).not.toHaveBeenCalled()
     })
@@ -103,19 +109,20 @@ describe('resolvers', () => {
     })
 
     it('attempts to resolve an object without meta.download_url', async () => {
-      // @ts-expect-error
+      // @ts-expect-error intentionally malformed data
       await resolveImage({ id: 1 }, api)
       expect(api.loadJSON).toHaveBeenCalledWith('images/1')
     })
 
     it('does not attempt to resolve object with meta.download_url', async () => {
-      // @ts-expect-error
+      // @ts-expect-error intentionally sparse data
       await resolveImage({ meta: { download_url: 'foo.jpg' } }, api)
       expect(api.loadJSON).not.toHaveBeenCalled()
     })
 
     it('does nothing if the value is falsy', async () => {
       const values = await Promise.all([
+        // @ts-expect-error null is not allowed
         resolveImage(null, api),
         resolveImage(0, api)
       ])

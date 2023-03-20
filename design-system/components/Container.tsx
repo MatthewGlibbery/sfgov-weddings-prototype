@@ -1,6 +1,6 @@
-import { VariantProps } from '@stitches/react'
-import { styled } from '../stitches.config'
 import { Box } from './Box'
+import { styled } from '../stitches.config'
+import { ComponentProps } from 'react'
 
 export const Container = styled(Box, {
   mx: 20,
@@ -16,4 +16,4 @@ export const Container = styled(Box, {
   }
 })
 
-export type ContainerProps = VariantProps<typeof Container>
+export type ContainerProps = ComponentProps<typeof Container>

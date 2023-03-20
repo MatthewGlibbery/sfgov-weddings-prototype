@@ -1,6 +1,6 @@
 import React, { ComponentProps, ComponentType } from 'react'
 
-export function identity (v: any) {
+export function identity (v: unknown) {
   return v
 }
 
@@ -13,7 +13,7 @@ export function px (n: number | string) {
 }
 
 export function withFixedProps (
-  Component: ComponentType<any>,
+  Component: ComponentType,
   fixed: Partial<ComponentProps<typeof Component>>
 ) {
   type Unfixed = Omit<ComponentProps<typeof Component>, keyof typeof fixed>
@@ -21,5 +21,3 @@ export function withFixedProps (
     return <Component {...fixed} {...props} />
   }
 }
-
-export type VariantProps<T> = T & JSX.IntrinsicAttributes
