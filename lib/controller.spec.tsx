@@ -18,6 +18,17 @@ describe('Controller', () => {
     },
     title: 'Mock page'
   }
+
+  const spanishPage = {
+    id: 456,
+    meta: {
+      type: mockMetaType,
+      locale: 'es',
+      url_path: mockPath
+    },
+    title: 'Hola'
+  }
+
   const api = new FixtureAPI({
     pages: [
       mockPage
@@ -78,15 +89,7 @@ describe('Controller', () => {
         .resolves.toEqual({ page: mockPage })
     })
 
-    it('respects the locale', async () => {
-      const spanishPage = {
-        meta: {
-          type: mockMetaType,
-          locale: 'es',
-          url_path: mockPath
-        },
-        title: 'Hola'
-      }
+    it('passes locale to the API', async () => {
       const stubAPI = {
         getPageByPath: jest.fn((path, params) => {
           return params?.locale === 'es'
@@ -101,21 +104,6 @@ describe('Controller', () => {
         .resolves.toEqual({ page: spanishPage })
     })
 
-    it('falls back to English if the locale-specific query rejects', async () => {
-      const stubAPI = {
-        getPageByPath: jest.fn((path, params) => {
-          return params?.locale === 'es'
-            ? Promise.reject(new Error('not found'))
-            : Promise.resolve(mockPage)
-        })
-      }
-
-      // @ts-expect-error stubAPI doesn't fully implement ContentAPI
-      const controller = new Controller(stubAPI, {})
-      await controller.getPageProps(mockPath, { locale: 'es' })
-      expect(stubAPI.getPageByPath).toHaveBeenCalledTimes(2)
-    })
-
     it('calls Template.loadReferences() if it exists', async () => {
       MockPageTemplate.loadReferences = jest.fn(async (data: PageData) => {
         data.title = 'Hello, world!'
@@ -124,7 +112,7 @@ describe('Controller', () => {
       const controller = new Controller(api, mockTemplates)
       const props = await controller.getPageProps(mockPath)
       expect(MockPageTemplate.loadReferences).toBeCalledTimes(1)
-      await expect(props.page.title).toEqual('Hello, world!')
+      expect(props.page.title).toEqual('Hello, world!')
       delete MockPageTemplate.loadReferences
     })
   })
@@ -136,12 +124,25 @@ describe('Controller', () => {
       expect(typeof controller.makeGetServerSideProps()).toBe('function')
     })
 
-    it('returns a function that resolves to GetServerSideProps', () => {
+    it('returns a function that resolves to GetServerSideProps', async () => {
       const getServerSideProps = controller.makeGetServerSideProps()
       const context = stubContext({
         resolvedUrl: mockPath
       })
-      expect(getServerSideProps(context)).resolves.toMatchObject({
+      await expect(getServerSideProps(context)).resolves.toMatchObject({
+        props: {
+          page: mockPage
+        }
+      })
+    })
+
+    it('passes the context locale to the api', async () => {
+      const getServerSideProps = controller.makeGetServerSideProps()
+      const context = stubContext({
+        resolvedUrl: mockPath,
+        locale: 'es'
+      })
+      await expect(getServerSideProps(context)).resolves.toMatchObject({
         props: {
           page: mockPage
         }

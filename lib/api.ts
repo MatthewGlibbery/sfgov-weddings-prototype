@@ -1,10 +1,21 @@
 import { join } from 'path'
 import type { FetchImpl, PageData, QueryParams, IContentAPI, WagtailImageData } from '../types'
+import { i18n } from '../next.config'
+
+// @ts-expect-error no, it's really not null/undefined
+const DEFAULT_LOCALE = i18n.defaultLocale
 
 export type ContentAPIOptions = {
   fetch?: FetchImpl
   baseURL?: string | null
   apiHeaders?: Record<string, string>
+}
+
+type ListData<T> = {
+  items: T[],
+  meta: {
+    total_count: number
+  }
 }
 
 export class ContentAPI implements IContentAPI {
@@ -26,17 +37,45 @@ export class ContentAPI implements IContentAPI {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getPageByPath<T extends PageData = PageData> (path:string, params?: QueryParams, options?: RequestInit) {
-    return this.loadJSON<T>('pages/find', {
-      html_path: path,
-      ...params
-    })
+    const english = await this.loadJSON<T>('pages/find/', {
+      html_path: path
+    }, options)
+    if (params?.locale && params.locale !== DEFAULT_LOCALE) {
+      let translation: PageData
+      try {
+        const list = await this.loadJSON<ListData<T>>('pages/', {
+          translation_of: english.id,
+          locale: params.locale
+        }, options)
+        if (list?.items?.length) {
+          translation = await this.loadJSON<T>(`pages/${list.items[0].id}/`)
+        }
+      } catch (error) {
+        // TODO: log errors
+      }
+      // @ts-expect-error uh no
+      if (translation) {
+        return translation as T
+      }
+    }
+    return english
   }
 
   async loadJSON<T = unknown> (path: string, params?: QueryParams, options?: RequestInit) {
     const res = await this.load(path, params, options)
-    const data = await res.json()
+    // eslint-disable-next-line n/handle-callback-err
+    const data = await res.json().catch(() => {
+      // console.error(error)
+      return {}
+    })
     if (res.status === 404) {
-      throw new Error(data?.message || 'bad response')
+      throw new Error(data?.message || 'not found')
+    } else if (!res.ok) {
+      let error = `${res.status} ${res.statusText}`
+      if (data?.message) {
+        error = `${error}: ${data.message}`
+      }
+      throw new Error(error)
     }
     return data as T
   }

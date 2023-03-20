@@ -92,7 +92,7 @@ describe('resolvers', () => {
   describe('resolvePage()', () => {
     it('resolves an id with api.loadJSON()', async () => {
       await resolvePage(1, api)
-      expect(api.loadJSON).toHaveBeenCalledWith('pages/1')
+      expect(api.loadJSON).toHaveBeenCalledWith('pages/1/')
     })
 
     it('does not attempt to resolve an object', async () => {

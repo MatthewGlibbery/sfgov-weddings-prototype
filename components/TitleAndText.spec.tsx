@@ -68,7 +68,7 @@ describe('<TitleAndText>', () => {
 
   it('does not render if there is no title or text', async () => {
     expect(() => render(<TitleAndText block={null} />)).not.toThrow()
-    expect(() => screen.findByRole('region'))
+    await expect(() => screen.findByRole('region'))
       .rejects.toThrow(/Unable to find role="region"/)
   })
 })

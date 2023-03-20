@@ -24,7 +24,7 @@ export async function resolveImage (img: WagtailImageData | number, api: IConten
 
 export function resolvePage<T extends PageData = PageData> (idOrObj: number | T, api: IContentAPI) {
   if (typeof idOrObj === 'number') {
-    return api.loadJSON<T>(`pages/${idOrObj}`)
+    return api.loadJSON<T>(`pages/${idOrObj}/`)
   } else {
     return idOrObj as T
   }

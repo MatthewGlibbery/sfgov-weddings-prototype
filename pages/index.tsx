@@ -17,9 +17,9 @@ type PagesData = {
   items: PageData[]
 }
 
-export const getServerSideProps: GetServerSideProps = async _context => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const api = new ContentAPI()
-  const data: PagesData = await api.loadJSON<PagesData>('pages/')
+  const data: PagesData = await api.loadJSON<PagesData>('pages/', { locale: 'en' })
     .catch(error => {
       console.error('Error fetching pages:', error)
       return {

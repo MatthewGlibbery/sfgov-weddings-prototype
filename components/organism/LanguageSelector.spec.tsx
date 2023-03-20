@@ -22,6 +22,7 @@ describe('LanguageSelector', () => {
     render(<LanguageSelector />)
     const list = screen.getByRole('list')
     expect(list).toBeInTheDocument()
-    await expect(() => screen.findAllByRole('listitem')).rejects.toThrow(/Unable to find role="listitem"/)
+    await expect(() => screen.findAllByRole('listitem'))
+      .rejects.toThrow(/Unable to find role="listitem"/)
   })
 })

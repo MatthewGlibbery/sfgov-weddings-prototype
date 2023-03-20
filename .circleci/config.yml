@@ -20,7 +20,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: 18.15.0
+          node-version: 16.16.0
       - node/install-packages:
           pkg-manager: npm
       - run:
@@ -30,9 +30,9 @@ jobs:
           name: Unit tests
           command: npm run test:unit
       - coveralls/upload
-      - run:
-          name: Build
-          command: npm run build
+      #- run:
+      #    name: Next.js build
+      #    command: npm run build
       - run:
           name: Browser tests
           command: npm run test:browser

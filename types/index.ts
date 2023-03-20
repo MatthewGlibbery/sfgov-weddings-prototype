@@ -7,9 +7,9 @@ export * from './blocks'
 export * from './images'
 
 export type QueryParams = {
-  locale?: string | null
-  [param: string]: string | null | undefined
-}
+  locale?: string | undefined
+  translation_of?: number
+} & Record<string, string | number | undefined>
 
 export interface IContentAPI {
   loadJSON<T = unknown> (path: string, params?: QueryParams, options?: RequestInit): Promise<T>

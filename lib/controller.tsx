@@ -1,10 +1,7 @@
 import { isMatch } from 'micromatch'
-import type { IContentAPI, IController, PageComponent, PageData, PageProps, QueryParams } from '../types'
+import type { IContentAPI, IController, PageComponent, PageProps, QueryParams } from '../types'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { i18n } from '../next.config'
 import { ErrorBoundary, ErrorFallbackReport } from '@/components'
-
-const DEFAULT_LOCALE = i18n?.defaultLocale
 
 /**
  * The map of content types to template components is expressed
@@ -52,7 +49,9 @@ export class Controller implements IController {
   makeGetServerSideProps (): GetServerSideProps<PageProps> {
     return async context => {
       const path = this.getContextPath(context)
-      const props = await this.getPageProps(path)
+      const props = await this.getPageProps(path, {
+        locale: context.locale
+      })
       return props?.page
         ? { props }
         : { notFound: true }
@@ -79,19 +78,7 @@ export class Controller implements IController {
   }
 
   async getPageProps (path: string, params?: QueryParams, options?: RequestInit): Promise<PageProps> {
-    const locale = params?.locale
-    let data: PageData
-    if (locale && locale !== DEFAULT_LOCALE) {
-      try {
-        data = await this.api.getPageByPath(path, params, options)
-      } catch (error) {
-        params = { ...params }
-        delete params.locale
-        data = await this.api.getPageByPath(path, params, options)
-      }
-    } else {
-      data = await this.api.getPageByPath(path, params, options)
-    }
+    const data = await this.api.getPageByPath(path, params, options)
     const Template = data?.meta?.type
       ? this.getTemplateForType(data.meta.type)
       : undefined
