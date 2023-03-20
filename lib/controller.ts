@@ -109,7 +109,7 @@ export class Controller implements IController {
     return context.resolvedUrl
   }
 
-  getTemplateForType<P extends PageProps = PageProps> (type: string): PageComponent<P> {
+  getTemplateForType<P extends PageProps = PageProps> (type: string): PageComponent<P> | undefined {
     if (this.templateMap.has(type)) {
       return this.templateMap.get(type) as PageComponent<P>
     }

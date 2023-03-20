@@ -8,8 +8,8 @@ export * from './blocks'
 export * from './images'
 
 export type QueryParams = {
-  locale?: string
-  [param: string]: string
+  locale?: string | null
+  [param: string]: string | null | undefined
 }
 
 export interface IContentAPI {
@@ -20,7 +20,7 @@ export interface IContentAPI {
 export type PageProps<P extends PageData = PageData> = {
   page?: P
   path: string
-  locale: string
+  locale: string | null
   api?: IContentAPI
 }
 

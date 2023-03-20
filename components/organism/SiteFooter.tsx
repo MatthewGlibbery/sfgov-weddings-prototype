@@ -1,9 +1,9 @@
-import { Box, BoxProps, Container, styled } from '@/design-system'
+import { BoxProps, Container, styled } from '@/design-system'
 
 export type SiteFooterProps = BoxProps & {
 }
 
-const FooterBox = styled(Box, {
+const FooterBox = styled('footer', {
   bg: '$black',
   color: '$white',
   mt: 80,

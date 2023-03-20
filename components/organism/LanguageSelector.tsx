@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 export type LanguageSelectorProps = BoxProps & {
 }
 
-const localeNames = {
+const localeNames: Record<string, string> = {
   en: 'English',
   es: 'Español',
   zh: '中文',
@@ -19,6 +19,7 @@ export default function LanguageSelector ({ ...rest }: LanguageSelectorProps) {
     locales
   } = useRouter()
 
+  // @ts-expect-error locales is never null
   const links: LinkProps[] = locales.map(locale => ({
     href: currentPath,
     locale,
