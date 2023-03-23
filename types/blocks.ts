@@ -36,12 +36,18 @@ export type SpotlightBlock = BlockType<'spotlight', {
   cta: CallToAction
 }>
 
-export type QuickLinkBlock = BlockType<'quick_links', {
+export type TileBlock<T extends string = string> = BlockType<T, {
   title: string
   internal_page?: number
   external_url: string
   description: string
+  event_type?: string
 }>
+
+export type NewsTileBlock = TileBlock<'news'>
+export type ContentTileBlock = TileBlock<'content'>
+export type QuickLinkBlock = TileBlock<'quick_links'>
+export type EventTileBlock = TileBlock<'event'>
 
 export type ServiceSectionBlock = BlockType<'services', {
   title: string

@@ -24,6 +24,7 @@ const customJestConfig = {
     '<rootDir>/design-system/components/**/*.tsx',
     '<rootDir>/lib/**/*.{ts,tsx}',
     // FIXME: there's no good way to cover these in tests
+    '!<rootDir>/components/AgencyPage.tsx',
     '!<rootDir>/components/ServerStylesheet.tsx',
     '!<rootDir>/design-system/components/GlobalStyle.tsx',
     '!<rootDir>/design-system/components/GoogleFonts.tsx',
