@@ -1,11 +1,12 @@
-import { AgencyPage, InformationPage } from '@/components'
-import { AGENCY_TYPE, INFO_PAGE_TYPE } from '@/constants'
+import { AgencyPage, InformationPage, StepByStepPage } from '@/components'
+import { AGENCY_TYPE, INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE } from '@/constants'
 import { ContentAPI } from '@/lib/api'
 import { Controller } from '@/lib/controller'
 
 const controller = new Controller(new ContentAPI(), {
   [AGENCY_TYPE]: AgencyPage,
-  [INFO_PAGE_TYPE]: InformationPage
+  [INFO_PAGE_TYPE]: InformationPage,
+  [STEP_BY_STEP_PAGE_TYPE]: StepByStepPage
 })
 
 export const getServerSideProps = controller.makeGetServerSideProps()

@@ -1,11 +1,11 @@
 import React from 'react'
 import NextImage from 'next/image'
 import { resolveImage } from '@/lib/utils'
-import { PageLink, TitleAndText } from '@/components'
-import { BigDesc, Container, ContainerProps, DisplayLg, Image, TitleMd } from '@/design-system'
-import { InfoPageData, InfoPageSection, PageComponent, RelatedContentData, WagtailImageData } from '@/types'
+import { TitleAndText } from '@/components'
+import { BigDesc, Container, ContainerProps, DisplayLg, FIXMEAsableProps, Image } from '@/design-system'
+import { InfoPageData, InfoPageSection, PageComponent, WagtailImageData } from '@/types'
 import PageWrapper from './page/PageWrapper'
-import { FIXMEAsableProps } from 'design-system/types'
+import { RelatedContentList } from './RelatedContentList'
 
 export const InformationPage: PageComponent<InfoPageData> = props => {
   const page = props.page as InfoPageData
@@ -28,27 +28,22 @@ export const InformationPage: PageComponent<InfoPageData> = props => {
       </Container>
       <RelatedContentList
         title='Part of' /* FIXME: translate */
-        content={partOf}
-        data-testid='info-page-part-of' />
+        content={partOf} />
       <InfoSectionList
         as='main'
-        blocks={infoSections}
-        data-testid='info-page-content' />
+        blocks={infoSections} />
       <RelatedContentList
         id='divisions'
         title='Departments' /* FIXME: translate */
-        content={agencies}
-        data-testid='info-page-agencies' />
+        content={agencies} />
       <RelatedContentList
         id='topics'
         title='Topics' /* FIXME: translate */
-        content={topics}
-        data-testid='info-page-topics' />
+        content={topics} />
       <RelatedContentList
         id='related'
         title='Related' /* FIXME: translate */
-        content={pages}
-        data-testid='info-page-related' />
+        content={pages} />
     </PageWrapper>
   )
 }
@@ -94,23 +89,4 @@ function InfoSectionContent ({ block, ...rest }: InfoSectionContentProps) {
       return <TitleAndText block={block} {...rest} />
   }
   return null
-}
-
-type RelatedContentListProps = {
-  title: string
-  content: RelatedContentData[] | undefined
-  id?: string
-} & JSX.IntrinsicAttributes
-
-function RelatedContentList ({ content, title, ...rest }: RelatedContentListProps) {
-  if (!content?.length) return null
-  const actualTitle = title ? <TitleMd as='h2'>{title}</TitleMd> : null
-  return <Container {...rest}>
-    {actualTitle}
-    <ul>
-      {content.map((item: RelatedContentData, i: number) => <li key={i}>
-        <PageLink page={item.page_content} />
-      </li>)}
-    </ul>
-  </Container>
 }

@@ -7,7 +7,7 @@ import { FIXMEAsableProps } from 'design-system/types'
 export type TextVariant =
   'body' | 'small' | 'bigDesc' |
   'titleXs' | 'titleSm' | 'titleMd' | 'titleLg' | 'titleXl' |
-  'displaySm' | 'displayLg' | 'mono'
+  'displaySm' | 'displayLg' | 'mono' | 'label'
 
 export const Text = styled('div', {
   m: 0,
@@ -51,6 +51,10 @@ export const Text = styled('div', {
       mono: {
         ...textStyles.body,
         fontFamily: '$monospace'
+      },
+      label: {
+        ...textStyles.body,
+        fontWeight: '$bold'
       }
     }
   },
@@ -73,6 +77,7 @@ export const TitleXl = createVariant('titleXl')
 export const DisplaySm = createVariant('displaySm')
 export const DisplayLg = createVariant('displayLg')
 export const Monospace = createVariant('mono')
+export const Label = createVariant('label')
 
 function createVariant (variant: TextVariant) {
   return withFixedProps(Text, { variant }) as ComponentType<TextPropsNoVariant>

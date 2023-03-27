@@ -1,4 +1,11 @@
-import { SpotlightBlock, QuickLinkBlock, BlockType, ServiceSectionBlock, ContactBlock } from './blocks'
+import {
+  BlockType,
+  ContactBlock,
+  QuickLinkBlock,
+  ServiceSectionBlock,
+  SpotlightBlock,
+  StepBlock
+} from './blocks'
 import { WagtailImageData } from './images'
 
 interface MinimalMeta {
@@ -39,7 +46,10 @@ export type AgencyData = PageData & {
   contact?: ContactBlock[]
 }
 
-export type ImageBlock = BlockType<'image', number | WagtailImageData>
+export type AgencyParent = AgencyData['meta']['parent']
+
+export type ImageBlock = BlockType<'image',
+number | WagtailImageData>
 
 export type TitleAndTextBlock = BlockType<'title_and_text', {
   title: string
@@ -55,8 +65,17 @@ export type InfoPageSection = ImageBlock | TitleAndTextBlock
 export interface InfoPageData extends PageData {
   description: string
   information_section?: InfoPageSection[]
-  related_content_part_of?: RelatedContentData[]
-  related_content_agencies?: RelatedContentData[]
-  related_content_topics?: RelatedContentData[]
-  related_content_page?: RelatedContentData[]
+  related_content_part_of: RelatedContentData[]
+  related_content_agencies: RelatedContentData[]
+  related_content_topics: RelatedContentData[]
+  related_content_page: RelatedContentData[]
+}
+
+export interface StepByStepData extends PageData {
+  title: string
+  description: string
+  intro: string
+  steps?: StepBlock[]
+  related_content_agencies: RelatedContentData[]
+  related_content_topics: RelatedContentData[]
 }

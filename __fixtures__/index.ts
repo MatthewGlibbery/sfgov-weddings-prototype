@@ -1,11 +1,12 @@
-import { AgencyPage, InformationPage } from '@/components'
+import { AgencyPage, InformationPage, StepByStepPage } from '@/components'
 import { PageData } from '@/types'
-import { AGENCY_TYPE, INFO_PAGE_TYPE } from '@/constants'
-import { AgencyFactory, getAgencyAsParent, ImageFactory, InfoPageFactory, RelatedContentFactory, SpotlightFactory, TitleAndTextFactory } from '@/lib/factories'
+import { AGENCY_TYPE, INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE } from '@/constants'
+import { AgencyFactory, getAgencyAsParent, ImageFactory, InfoPageFactory, RelatedContentFactory, SpotlightFactory, StepBlockFactory, StepByStepPageFactory, TitleAndTextFactory } from '@/lib/factories'
 
 export const templates = {
   [AGENCY_TYPE]: AgencyPage,
-  [INFO_PAGE_TYPE]: InformationPage
+  [INFO_PAGE_TYPE]: InformationPage,
+  [STEP_BY_STEP_PAGE_TYPE]: StepByStepPage
 }
 
 const DigitalServices = AgencyFactory.make({
@@ -68,8 +69,19 @@ const DepartmentsPage = InfoPageFactory.make({
   ]
 })
 
+const ApplyForHousingPage = StepByStepPageFactory.make({
+  meta: {
+    url_path: '/__test__/step-by-step/apply-housing'
+  },
+  title: 'Apply for housing',
+  description: 'Applications are being accepted on a first come first served basis until all available units are leased.',
+  intro: 'Initial Posting Date on DAHLIA San Francisco Housing Portal: November 4, 2021. See the complete listing details on DAHLIA.',
+  steps: StepBlockFactory.make(5)
+})
+
 export const pages: PageData[] = [
   DepartmentsPage,
   CityAdministrator,
-  DigitalServices
+  DigitalServices,
+  ApplyForHousingPage
 ]

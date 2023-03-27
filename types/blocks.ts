@@ -15,6 +15,8 @@ export type PageBlock<
 
 export type AgencyPageBlock<T extends string = string> = PageBlock<T, AgencyData>
 
+export type StepType = 'number' | 'and' | 'or'
+
 type LinkBlockTarget = 'page' | 'file' | 'custom_url' | 'anchor' | 'email' | 'phone'
 
 export type LinkBlock = {
@@ -52,6 +54,16 @@ export type EventTileBlock = TileBlock<'event'>
 export type ServiceSectionBlock = BlockType<'services', {
   title: string
   services: (number | AgencyData)[]
+}>
+
+export type StepBlock = BlockType<'step', {
+  title: string
+  step_type: StepType
+  optional?: boolean
+  cost?: any // TODO: CostBlock
+  time?: string
+  step_description?: string
+  transaction_link?: string
 }>
 
 export type AddressBlock = BlockType<'address', Address>

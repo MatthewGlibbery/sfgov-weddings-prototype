@@ -8,16 +8,18 @@ import {
   CallToAction,
   ImageBlock,
   InfoPageData,
-  PageBlock,
   PageData,
   PageMeta,
   QuickLinkBlock,
   RelatedContentData,
   SpotlightBlock,
+  StepBlock,
+  StepByStepData,
+  StepType,
   TitleAndTextBlock,
   WagtailImageData
 } from '@/types'
-import { AGENCY_TYPE, INFO_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
+import { AGENCY_TYPE, INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
 
 export const PageMetaFactory = factory<PageMeta>(gen => ({
   type: gen.lorem.word()
@@ -57,12 +59,51 @@ export const InfoPageFactory = factory<InfoPageData>(gen => ({
   }),
   title: 'Info page',
   description: 'Info page description',
-  departments_or_public_bodies: AgencyPageBlockFactory.make(3, {
-    type: 'agency'
+  related_content_agencies: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
   }),
-  topics: PageBlockFactory.make(2, {
-    type: 'topic'
+  related_content_topics: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentTopic'
+    }
   })
+}))
+
+export const StepByStepPageFactory = factory<StepByStepData>(gen => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: STEP_BY_STEP_PAGE_TYPE
+  }),
+  title: 'Step by step',
+  description: 'Step by step description',
+  intro: '<h2>intro</h2',
+  steps: StepBlockFactory.make(3),
+  related_content_agencies: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  related_content_topics: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentTopic'
+    }
+  })
+}))
+
+export const StepBlockFactory = factory<StepBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  type: 'step',
+  value: {
+    title: gen.commerce.productName(),
+    step_type: gen.random.arrayElement<StepType>(['number', 'and', 'or']),
+    optional: gen.datatype.boolean(),
+    cost: gen.commerce.price(),
+    time: `${gen.datatype.number()} minutes`,
+    step_description: gen.commerce.productDescription(),
+    transaction_link: gen.internet.url()
+  }
 }))
 
 export const QuickLinkFactory = factory<QuickLinkBlock>(gen => ({
@@ -125,10 +166,19 @@ export const PageFactory = factory<PageData>(gen => ({
   title: gen.commerce.productName()
 }))
 
-export const PageBlockFactory = factory<PageBlock>(gen => ({
-  id: gen.datatype.uuid(),
-  value: PageFactory.make(),
-  type: gen.lorem.word()
+export const RelatedContentBlockFactory = factory<RelatedContentData>(gen => ({
+  id: gen.datatype.number(),
+  meta: {
+    type: `sfgov_${gen.lorem.word()}.${gen.lorem.sentence(1).replace(/\.$/, '')}`
+  },
+  page_content: {
+    id: gen.datatype.number(),
+    meta: {
+      type: 'wagtailcore.Page',
+      html_url: gen.internet.url()
+    },
+    title: gen.commerce.productName()
+  }
 }))
 
 export const AgencyPageBlockFactory = factory<AgencyPageBlock>(gen => ({

@@ -72,7 +72,7 @@ describe('<InformationPage>', () => {
         expect(img.nodeName).toBe('IMG')
       })
 
-      it('renders an image block', async () => {
+      it('renders a title and text block', async () => {
         render(<InformationPage page={{
           ...fixture,
           information_section: [titleAndText]
