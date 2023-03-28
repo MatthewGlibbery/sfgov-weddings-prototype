@@ -6,6 +6,7 @@ import {
   AgencyPageBlock,
   BlockType,
   CallToAction,
+  EmailBlock,
   ImageBlock,
   InfoPageData,
   PageData,
@@ -200,6 +201,19 @@ export const RelatedContentFactory = factory<RelatedContentData>(gen => ({
   },
   page_content: PageFactory.make()
 }))
+
+export const EmailBlockFactory = factory<EmailBlock>(gen => {
+  const email = gen.internet.email()
+
+  return {
+    id: gen.datatype.uuid(),
+    value: {
+      title: email,
+      email
+    },
+    type: 'email'
+  }
+})
 
 export const MysteryBlockFactory = factory<BlockType<string, object>>(gen => ({
   id: gen.datatype.uuid(),

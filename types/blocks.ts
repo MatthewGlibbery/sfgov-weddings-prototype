@@ -66,6 +66,11 @@ export type StepBlock = BlockType<'step', {
   transaction_link?: string
 }>
 
+export type EmailBlock = BlockType<'email', {
+  title: string
+  email: string
+}>
+
 export type AddressBlock = BlockType<'address', Address>
 
 export type ContactBlock = AddressBlock | BlockType
