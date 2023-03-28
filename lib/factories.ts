@@ -2,56 +2,24 @@
 
 import { factory } from 'node-factory'
 import {
-  AgencyData,
-  AgencyPageBlock,
   BlockType,
-  CallToAction,
-  EmailBlock,
   ImageBlock,
   InfoPageData,
   PageData,
   PageMeta,
-  QuickLinkBlock,
   RelatedContentData,
-  SpotlightBlock,
+  QuickLinkBlock,
   StepBlock,
   StepByStepData,
   StepType,
   TitleAndTextBlock,
   WagtailImageData
 } from '@/types'
-import { AGENCY_TYPE, INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
+import { INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
 
 export const PageMetaFactory = factory<PageMeta>(gen => ({
   type: gen.lorem.word()
 }))
-
-export const AgencyMetaFactory = factory<AgencyData['meta']>(() => ({
-  type: AGENCY_TYPE,
-  parent: undefined
-}))
-
-export const AgencyFactory = factory<AgencyData>(gen => ({
-  id: gen.datatype.number(),
-  meta: AgencyMetaFactory.make(),
-  title: gen.company.companyName(),
-  description: gen.company.catchPhrase(),
-  quick_links: QuickLinkFactory.make(3)
-}))
-
-/**
- * This is a utility for converting a full-blown AgencyData type into a more
- * minimal representation for use in another agency's meta.parent. If you don't
- * use this, your agency data won't serialize properly in the page props
- * debugger with circular references (child -> parent -> child).
- */
-export function getAgencyAsParent (agency: AgencyData): PageData {
-  return {
-    id: agency.id,
-    title: agency.title,
-    meta: agency.meta
-  }
-}
 
 export const InfoPageFactory = factory<InfoPageData>(gen => ({
   id: gen.datatype.number(),
@@ -60,6 +28,8 @@ export const InfoPageFactory = factory<InfoPageData>(gen => ({
   }),
   title: 'Info page',
   description: 'Info page description',
+  related_content_page: [],
+  related_content_part_of: [],
   related_content_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
@@ -133,22 +103,6 @@ export const ImageFactory = factory<WagtailImageData>(gen => ({
   id: gen.datatype.number()
 }))
 
-export const CallToActionFactory = factory<CallToAction>(gen => ({
-  button_text: 'Call to action',
-  button_url: gen.internet.url()
-}))
-
-export const SpotlightFactory = factory<SpotlightBlock>(gen => ({
-  id: gen.datatype.uuid(),
-  type: 'spotlight',
-  value: {
-    title: gen.company.catchPhrase(),
-    description: gen.commerce.productDescription(),
-    image: ImageFactory.make(),
-    cta: CallToActionFactory.make()
-  }
-}))
-
 export const TitleAndTextFactory = factory<TitleAndTextBlock>(gen => ({
   id: gen.datatype.uuid(),
   type: 'title_and_text',
@@ -180,12 +134,6 @@ export const RelatedContentBlockFactory = factory<RelatedContentData>(gen => ({
     },
     title: gen.commerce.productName()
   }
-}))
-
-export const AgencyPageBlockFactory = factory<AgencyPageBlock>(gen => ({
-  id: gen.datatype.uuid(),
-  value: AgencyFactory.make(),
-  type: 'agency'
 }))
 
 export const ImageBlockFactory = factory<ImageBlock>(gen => ({

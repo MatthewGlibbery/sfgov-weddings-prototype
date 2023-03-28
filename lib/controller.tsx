@@ -49,12 +49,15 @@ export class Controller implements IController {
   makeGetServerSideProps (): GetServerSideProps<PageProps> {
     return async context => {
       const path = this.getContextPath(context)
-      const props = await this.getPageProps(path, {
-        locale: context.locale
-      })
-      return props?.page
-        ? { props }
-        : { notFound: true }
+      try {
+        const props = await this.getPageProps(path, {
+          locale: context.locale
+        })
+        return { props }
+      } catch (error) {
+        // TODO: log errors
+        return { notFound: true }
+      }
     }
   }
 

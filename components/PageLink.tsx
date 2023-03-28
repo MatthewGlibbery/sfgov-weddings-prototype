@@ -18,7 +18,7 @@ export const PageLink = styled((props: PageLinkProps) => {
     href = getPageURL(page),
     ...rest
   } = props
-  return <Component href={href || ''} {...rest}>{children}</Component>
+  return <Component href={href as string} {...rest}>{children}</Component>
 }, {
   color: '$action'
 })

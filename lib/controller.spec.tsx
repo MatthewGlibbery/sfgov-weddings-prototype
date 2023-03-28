@@ -148,6 +148,22 @@ describe('Controller', () => {
         }
       })
     })
+
+    it('catches 404s', async () => {
+      const stubAPI = {
+        getPageByPath: jest.fn(() => Promise.reject(new Error('not found')))
+      }
+
+      // @ts-expect-error stub api
+      const controller = new Controller(stubAPI, {})
+      const getServerSideProps = controller.makeGetServerSideProps()
+      const context = stubContext({
+        resolvedUrl: mockPath
+      })
+      await expect(getServerSideProps(context)).resolves.toEqual({
+        notFound: true
+      })
+    })
   })
 
   describe('makeViewComponent()', () => {

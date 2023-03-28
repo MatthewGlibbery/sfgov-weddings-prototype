@@ -1,47 +1,37 @@
 import { IContentAPI } from '@/types'
-import { ImageFactory } from './factories'
+import { ImageFactory, PageFactory } from './factories'
 import { getPageURL, resolvePage, resolveImage, getImageURL } from './utils'
 
 describe('getPageURL()', () => {
   it('returns meta.html_url without the hostname', () => {
-    expect(getPageURL({
-      id: 1,
+    expect(getPageURL(PageFactory.make({
       meta: {
-        type: 'foo',
         html_url: 'https://example.com/foo/bar'
       }
-    })).toBe('/foo/bar')
-    expect(getPageURL({
-      id: 2,
+    }))).toBe('/foo/bar')
+    expect(getPageURL(PageFactory.make({
       meta: {
-        type: 'bar',
         html_url: '/foo/bar'
       }
-    })).toBe('/foo/bar')
-    expect(getPageURL({
-      id: 3,
+    }))).toBe('/foo/bar')
+    expect(getPageURL(PageFactory.make({
       meta: {
-        type: 'baz',
         html_url: '/'
       }
-    })).toBe('/')
+    }))).toBe('/')
   })
 
   it('returns meta.url_path when no html_url is provided', () => {
-    expect(getPageURL({
-      id: 1,
+    expect(getPageURL(PageFactory.make({
       meta: {
-        type: 'foo',
         url_path: '/foo/bar'
       }
-    })).toBe('/foo/bar')
-    expect(getPageURL({
-      id: 2,
+    }))).toBe('/foo/bar')
+    expect(getPageURL(PageFactory.make({
       meta: {
-        type: 'bar',
         url_path: '/'
       }
-    })).toBe('/')
+    }))).toBe('/')
   })
 })
 

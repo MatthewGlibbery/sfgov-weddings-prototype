@@ -18,8 +18,7 @@ export default function LanguageSelector (props: LanguageSelectorProps) {
     locales
   } = useRouter()
 
-  // @ts-expect-error locales is never null
-  const links: LinkProps[] = locales.map(locale => ({
+  const links: LinkProps[] = locales?.map(locale => ({
     href: currentPath,
     locale,
     'aria-current': locale === currentLocale ? 'page' : false,

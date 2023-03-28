@@ -12,17 +12,16 @@ describe('LanguageSelector', () => {
     expect(list).toBeInTheDocument()
   })
 
-  it('renders an empty list if there are no locales', async () => {
+  it('renders an empty list if there are no locales', () => {
     (useRouter as MockedRouter).mockImplementationOnce(() => ({
       asPath: '/',
       locale: 'en',
-      locales: [],
+      locales: undefined,
       defaultLocale: 'en'
     }))
     render(<LanguageSelector />)
     const list = screen.getByRole('list')
     expect(list).toBeInTheDocument()
-    await expect(() => screen.findAllByRole('listitem'))
-      .rejects.toThrow(/Unable to find role="listitem"/)
+    expect(screen.queryByRole('listitem')).not.toBeInTheDocument()
   })
 })

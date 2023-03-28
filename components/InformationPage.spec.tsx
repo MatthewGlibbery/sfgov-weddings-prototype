@@ -1,13 +1,13 @@
 // import InformationPage from './InformationPage'
 import { render, screen, within } from '@testing-library/react'
-import { AgencyFactory, ImageBlockFactory, InfoPageFactory, MysteryBlockFactory, RelatedContentFactory, TitleAndTextFactory } from '@/lib/factories'
+import { ImageBlockFactory, InfoPageFactory, MysteryBlockFactory, PageFactory, RelatedContentFactory, TitleAndTextFactory } from '@/lib/factories'
 import { InformationPage } from './InformationPage'
 
 jest.mock('next/router')
 
 describe('<InformationPage>', () => {
   describe('text content', () => {
-    const dept1 = AgencyFactory.make({
+    const dept1 = PageFactory.make({
       title: 'Department 1',
       meta: {
         url_path: '/departments/one'

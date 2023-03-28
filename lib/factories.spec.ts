@@ -1,7 +1,7 @@
 import { WAGTAIL_IMAGE_TYPE } from '@/constants'
 import { ImageFactory } from './factories'
 
-describe('makeImage()', () => {
+describe('ImageFactory.make()', () => {
   it('creates an image with no arguments', () => {
     const img = ImageFactory.make()
     expect(typeof img.id).toBe('number')
@@ -22,29 +22,3 @@ describe('makeImage()', () => {
     }).meta.download_url).toBe(url)
   })
 })
-
-/*
-describe('makeInfoPage()', () => {
-
-})
-
-describe('makeAgency()', () => {
-
-})
-
-describe('makeQuickLink()', () => {
-
-})
-
-describe('makeSpotlight()', () => {
-
-})
-
-describe('getPageId()', () => {
-  it('returns the ')
-})
-
-describe('getBlockId()', () => {
-
-})
- */

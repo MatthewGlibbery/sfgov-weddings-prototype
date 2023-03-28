@@ -1,9 +1,5 @@
 import {
   BlockType,
-  ContactBlock,
-  QuickLinkBlock,
-  ServiceSectionBlock,
-  SpotlightBlock,
   StepBlock
 } from './blocks'
 import { WagtailImageData } from './images'
@@ -36,20 +32,7 @@ export type PageData = MinimalPageData & {
   meta: PageMeta<PageData>
 }
 
-export type AgencyData = PageData & {
-  logo?: WagtailImageData
-  description: string
-  spotlight1?: SpotlightBlock[]
-  quick_links?: QuickLinkBlock[]
-  service_section?: ServiceSectionBlock[],
-  spotlight2?: SpotlightBlock[],
-  contact?: ContactBlock[]
-}
-
-export type AgencyParent = AgencyData['meta']['parent']
-
-export type ImageBlock = BlockType<'image',
-number | WagtailImageData>
+export type ImageBlock = BlockType<'image', number | WagtailImageData>
 
 export type TitleAndTextBlock = BlockType<'title_and_text', {
   title: string
