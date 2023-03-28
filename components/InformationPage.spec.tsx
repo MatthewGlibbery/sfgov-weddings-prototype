@@ -24,9 +24,9 @@ describe('<InformationPage>', () => {
       ]
     })
 
-    it('renders the page title', async () => {
+    it('renders the page title', () => {
       render(<InformationPage page={fixture} />)
-      const title = await screen.findByRole('heading', {
+      const title = screen.getByRole('heading', {
         level: 1
       })
       expect(title).toBeInTheDocument()
@@ -34,21 +34,20 @@ describe('<InformationPage>', () => {
     })
 
     describe('description', () => {
-      it('renders if present', async () => {
+      it('renders if present', () => {
         render(<InformationPage page={fixture} />)
-        const desc = await screen.findByText(fixture.description, {
+        const desc = screen.getByText(fixture.description, {
           selector: 'p'
         })
         expect(desc).toBeInTheDocument()
       })
 
-      it('does not render if empty', async () => {
+      it('does not render if empty', () => {
         render(<InformationPage page={{
           ...fixture,
           description: ''
         }} />)
-        await expect(() => screen.findByTestId('info-page-description'))
-          .rejects.toThrow(/Unable to find.+"info-page-description"/)
+        expect(screen.queryByTestId('info-page-description')).not.toBeInTheDocument()
       })
     })
 
@@ -62,31 +61,32 @@ describe('<InformationPage>', () => {
       })
       const mysteryBlock = MysteryBlockFactory.make()
 
-      it('renders an image block', async () => {
+      it('renders an image block', () => {
         render(<InformationPage page={{
           ...fixture,
           information_section: [image]
         }} />)
-        const img = await screen.findByTestId(`block-${image.id}`)
+        const img = screen.queryByTestId(`block-${image.id}`)
         expect(img).toBeInTheDocument()
+        // @ts-expect-error img is not null
         expect(img.nodeName).toBe('IMG')
       })
 
-      it('renders a title and text block', async () => {
+      it('renders a title and text block', () => {
         render(<InformationPage page={{
           ...fixture,
           information_section: [titleAndText]
         }} />)
-        const block = await screen.findByTestId(`block-${titleAndText.id}`)
+        const block = screen.queryByTestId(`block-${titleAndText.id}`)
         expect(block).toBeInTheDocument()
-        const title = await within(block).findByRole('heading')
+        const title = within(block as HTMLElement).queryByRole('heading')
         expect(title).toBeInTheDocument()
         expect(title).toHaveTextContent(titleAndText.value.title)
-        const text = await within(block).findByText(titleAndText.value.text)
+        const text = within(block as HTMLElement).queryByText(titleAndText.value.text)
         expect(text).toBeInTheDocument()
       })
 
-      it('ignores unknown block types', async () => {
+      it('ignores unknown block types', () => {
         expect(() =>
           render(<InformationPage page={{
             ...fixture,
@@ -95,13 +95,12 @@ describe('<InformationPage>', () => {
           }} />)
         ).not.toThrow()
 
-        await expect(() => screen.findByTestId(`block-${mysteryBlock.id}`))
-          .rejects.toThrow(/Unable to find/)
+        expect(screen.queryByTestId(`block-${mysteryBlock.id}`)).not.toBeInTheDocument()
       })
     })
 
     describe('related content part of', () => {
-      it('renders a related content link', async () => {
+      it('renders a related content link', () => {
         expect(() =>
           render(<InformationPage page={{
             ...fixture,
@@ -128,7 +127,7 @@ describe('<InformationPage>', () => {
           }} />)
         ).not.toThrow()
 
-        const link = await screen.findByText('Some other information page')
+        const link = screen.getByText('Some other information page')
         expect(link).toBeInTheDocument()
       })
     })

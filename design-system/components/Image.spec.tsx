@@ -15,6 +15,11 @@ describe('<Image>', () => {
     }
   })
 
+  /**
+   * NB: these tests need to be async; `screen.getByRole('img')`
+   * doesn't return a (valid?) image element after a synchronous render.
+   */
+
   it('renders an <img>', async () => {
     // eslint-disable-next-line jsx-a11y/alt-text
     render(<Image imageRef={data} />)

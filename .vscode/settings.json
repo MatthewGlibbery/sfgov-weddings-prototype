@@ -19,7 +19,9 @@
     "source.fixAll.eslint": true,
   },
   "[javascript][javascriptreact][typescript][typescriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true
