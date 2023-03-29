@@ -1,7 +1,6 @@
 import React, { ComponentProps } from 'react'
-import { Container, TitleMd } from '@/design-system'
+import { Container, PageLink, TitleMd } from '@/design-system'
 import { RelatedContentData } from '@/types'
-import { PageLink } from './PageLink'
 
 type ContainerProps = ComponentProps<typeof Container>
 type RelatedContentProps = {

@@ -1,5 +1,4 @@
-import { PageLink } from '@/components'
-import { Container, Monospace, TitleLg } from '@/design-system'
+import { Container, Monospace, PageLink, TitleLg } from '@/design-system'
 import { pages } from '@/__fixtures__'
 import { GetServerSideProps } from 'next'
 

@@ -43,6 +43,8 @@ export type RelatedContentData = Omit<PageData, 'title'> & {
   page_content: PageData
 }
 
+export type RelatedContentTransactions = BlockType<'transaction', MinimalPageData>
+
 export type InfoPageSection = ImageBlock | TitleAndTextBlock
 
 export interface InfoPageData extends PageData {

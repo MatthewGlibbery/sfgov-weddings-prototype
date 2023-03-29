@@ -1,4 +1,4 @@
-import { PageData } from './pages'
+import { PageData, RelatedContentTransactions } from './pages'
 import { Address } from './snippets'
 
 export interface BlockType<T extends string = string, V = object> {
@@ -16,10 +16,24 @@ export type StepType = 'number' | 'and' | 'or'
 
 type LinkBlockTarget = 'page' | 'file' | 'custom_url' | 'anchor' | 'email' | 'phone'
 
+export type CostType = 'free' | 'flat_fee' | 'range' | 'minimum'
+
+interface RangeType {
+  minimum: number
+  maximum: number
+}
+
 export type LinkBlock = {
   title?: string
   link_to: LinkBlockTarget
 } & Record<LinkBlockTarget, string | null>
+
+export type CostBlock = BlockType<'cost', {
+  cost: CostType
+  flat_fee?: number
+  range?: RangeType
+  description?: string
+}>
 
 export type TileBlock<T extends string = string> = BlockType<T, {
   title: string
@@ -38,11 +52,10 @@ export type StepBlock = BlockType<'step', {
   title: string
   step_type: StepType
   optional?: boolean
-  // TODO: CostBlock
-  cost?: any
+  cost?: CostBlock[]
   time?: string
   step_description?: string
-  transaction_link?: string
+  related_content_transactions?: RelatedContentTransactions[]
 }>
 
 export type EmailBlock = BlockType<'email', {

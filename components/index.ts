@@ -1,7 +1,6 @@
 export * from './AboutPage'
 export * from './ErrorBoundary'
 export * from './InformationPage'
-export * from './PageLink'
 export * from './RelatedContentList'
 export * from './ServerStylesheet'
 export * from './StepByStepPage'

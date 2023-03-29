@@ -1,9 +1,12 @@
 import React from 'react'
+import { When } from 'react-if'
+import { Cost } from './Cost'
 import { Flex } from './Flex'
 import { styled } from '../stitches.config'
 import { StepBlock } from '@/types'
 import { BodyText, Label, TitleMd } from './Text'
 import { Box } from './Box'
+import { PageLink } from './PageLink'
 
 type StepType = {
   step: StepBlock
@@ -69,15 +72,17 @@ export const Step = ({ step: { id, value: step }, index, last }: StepType) => {
           flexDirection: 'row'
         }
       }}>
-        <Box css={{ flexBasis: '20%' }}>
+        <Box css={{ flexBasis: '33%' }}>
           <TitleMd css={{ mb: 12 }}>{step.title}</TitleMd>
-          {step.optional ? <OptionalLabel css={{ mb: 12 }} data-testid='step-optional' /> : null}
-          {step.cost && step.cost.length ? <Flex data-testid='step-cost'><Label css={{ pr: 7 }}>Cost:</Label> {step.cost}</Flex> : null}
-          {step.time ? <Flex data-testid='step-time'><Label css={{ pr: 7 }}>Time:</Label> {step.time}</Flex> : null}
+          <When condition={step.optional}><OptionalLabel css={{ mb: 12 }} data-testid='step-optional' /></When>
+          <When condition={step.cost ? step.cost.length : null}><Cost {...step?.cost?.[0]} /></When>
+          <When condition={step.time}><Flex data-testid='step-time'><Label css={{ pr: 8 }}>Time:</Label><span>{step.time}</span></Flex></When>
         </Box>
         <Box css={{ flexBasis: '60%' }}>
-          {step.step_description ? <BodyText css={{ mb: 12 }} data-testid='step-description'>{step.step_description}</BodyText> : null}
-          {step.transaction_link ? <a href={step.transaction_link} data-testid='step-transaction-link'>{ step.transaction_link }</a> : null}
+          <When condition={step.step_description}><BodyText css={{ mb: 12 }} data-testid='step-description'>{step.step_description}</BodyText></When>
+          <When condition={step.related_content_transactions?.length}>
+            <PageLink data-testid='step-transaction-link' page={step?.related_content_transactions?.[0]} />
+          </When>
         </Box>
       </Flex>
     </Flex>

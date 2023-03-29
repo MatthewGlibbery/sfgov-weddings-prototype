@@ -62,7 +62,7 @@ describe('Step', () => {
   })
 
   it('does not render the transaction link field when empty', () => {
-    render(<Step step={{ ...step, value: { ...step.value, transaction_link: '' } }} index={1} last />)
+    render(<Step step={{ ...step, value: { ...step.value, related_content_transactions: [] } }} index={1} last />)
     expect(screen.queryByTestId('step-transaction-link')).not.toBeInTheDocument()
   })
 })

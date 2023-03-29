@@ -1,6 +1,7 @@
-import { Box, Container, PageLink, TitleSm } from '@/design-system'
+import { Box, Container, TitleSm } from '@/design-system'
 import { PageData } from '@/types'
 import PageWrapper from '@/components/page/PageWrapper'
+import { PageLink } from '@/components'
 import { GetServerSideProps } from 'next'
 import { ContentAPI } from '@/lib/api'
 import Link from 'next/link'

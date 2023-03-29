@@ -3,6 +3,9 @@
 import { factory } from 'node-factory'
 import {
   BlockType,
+  CostBlock,
+  CostType,
+  EmailBlock,
   ImageBlock,
   InfoPageData,
   PageData,
@@ -70,12 +73,44 @@ export const StepBlockFactory = factory<StepBlock>(gen => ({
     title: gen.commerce.productName(),
     step_type: gen.random.arrayElement<StepType>(['number', 'and', 'or']),
     optional: gen.datatype.boolean(),
-    cost: gen.commerce.price(),
+    cost: [CostBlockFactory.make()],
     time: `${gen.datatype.number()} minutes`,
     step_description: gen.commerce.productDescription(),
-    transaction_link: gen.internet.url()
+    related_content_transactions: [ // TODO: update to use RelatedContentFactory once API shape is aligned
+      {
+        id: gen.datatype.uuid(),
+        type: 'transaction',
+        value: {
+          id: gen.datatype.number(),
+          meta: {
+            html_url: gen.internet.url(),
+            type: 'wagtailcore'
+          },
+          title: gen.commerce.productDescription()
+        }
+      }
+    ]
   }
 }))
+
+export const CostBlockFactory = factory<CostBlock>(gen => {
+  const minimum = gen.datatype.number({ max: 9999 })
+  const maximum = minimum + gen.datatype.number()
+
+  return {
+    id: gen.datatype.uuid(),
+    type: 'cost',
+    value: {
+      cost: gen.random.arrayElement<CostType>(['free', 'flat_fee', 'range', 'minimum']),
+      flat_fee: gen.datatype.number({ precision: 0.01 }),
+      range: {
+        minimum,
+        maximum
+      },
+      description: gen.commerce.productDescription()
+    }
+  }
+})
 
 export const QuickLinkFactory = factory<QuickLinkBlock>(gen => ({
   id: gen.datatype.uuid(),
