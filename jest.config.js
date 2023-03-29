@@ -19,12 +19,19 @@ const createJestConfig = nextJest({
 /** @type {import('jest').Config} */
 const customJestConfig = {
   ci: !!process.env.CI,
+  coverageThreshold: {
+    global: {
+      lines: 100,
+      functions: 100,
+      statements: 100,
+      branches: 97
+    }
+  },
   collectCoverageFrom: [
     '<rootDir>/components/**/*.tsx',
     '<rootDir>/design-system/components/**/*.tsx',
     '<rootDir>/lib/**/*.{ts,tsx}',
     // FIXME: there's no good way to cover these in tests
-    '!<rootDir>/components/AgencyPage.tsx',
     '!<rootDir>/components/ServerStylesheet.tsx',
     '!<rootDir>/design-system/components/GlobalStyle.tsx',
     '!<rootDir>/design-system/components/GoogleFonts.tsx',
