@@ -13,4 +13,4 @@ export const Flex = styled(Box, {
   }
 })
 
-export type FlexVariant = ComponentProps<typeof Flex>
+export type FlexProps = ComponentProps<typeof Flex>

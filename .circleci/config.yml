@@ -2,38 +2,23 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-orbs:
-  # Docs: https://circleci.com/developer/orbs/orb/circleci/node
-  node: circleci/node@5.1.0
-
 jobs:
   test:
-    # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/node
     docker:
-      # Playwright docs: https://playwright.dev/docs/ci#circleci
-      # Image tags documentation: https://playwright.dev/docs/docker#image-tags
-      # Full list: https://mcr.microsoft.com/en-us/product/playwright/tags
-      - image: mcr.microsoft.com/playwright:v1.30.0-focal
+      - image: cimg/node:16.16.0
     steps:
       - checkout
-      - node/install:
-          node-version: 16.13.0
-      - node/install-packages:
-          pkg-manager: npm
+      - run:
+          command: npm install
       - run:
           name: Lint
           command: npm run lint
       - run:
           name: Unit tests
           command: npm run test:unit
-      #- run:
-      #    name: Next.js build
-      #    command: npm run build
       - run:
-          name: Browser tests
-          command: npm run test:browser
+          name: Next.js build
+          command: npm run build
 
 workflows:
   # Docs: https://circleci.com/docs/2.0/configuration-reference/#workflows

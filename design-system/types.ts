@@ -1,5 +1,5 @@
 import type { ComponentProps, ComponentType } from 'react'
-import { CSS } from './stitches.config'
+import type { CSS } from './stitches.config'
 
 export type LinkProps = ComponentProps<'link'>
 

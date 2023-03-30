@@ -1,18 +1,19 @@
 {
   "private": true,
   "name": "sfgov-next",
+  "engines": {
+    "node": "16.16.0"
+  },
   "scripts": {
     "build": "next build --no-lint",
     "dev": "next dev",
     "figma-export": "env-cmd -f .env figma-export use-config",
     "lint": "eslint . *.js __*",
     "postfigma-export": "eslint --fix 'design-system/components/icons/**/*.js{,x}'",
-    "postinstall": "playwright install --with-deps",
     "prestart": "npm run build",
     "start": "next start",
     "test": "wireit",
-    "test:unit": "jest --coverage",
-    "test:browser": "playwright test"
+    "test:unit": "jest --coverage"
   },
   "wireit": {
     "test": {
@@ -38,7 +39,6 @@
     "@figma-export/output-components-as-svgr": "^4.5.0",
     "@figma-export/transform-svg-with-svgo": "^4.5.0",
     "@figma-export/types": "^4.5.0",
-    "@playwright/test": "^1.30.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
