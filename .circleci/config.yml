@@ -15,10 +15,10 @@ jobs:
           command: npm run lint
       - run:
           name: Unit tests
-          command: npm run test:unit
+          command: npm test
       - run:
-          name: Next.js build
-          command: npm run build
+          name: SF.gov site build
+          command: npm run build -w @sfgov/next
 
 workflows:
   # Docs: https://circleci.com/docs/2.0/configuration-reference/#workflows

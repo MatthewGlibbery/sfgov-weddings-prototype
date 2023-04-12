@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "@sfgov/next",
+  "scripts": {
+    "build": "next build --no-lint",
+    "dev": "next dev",
+    "lint": "eslint . *.js __*",
+    "prestart": "npm run build",
+    "start": "next start",
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "micromatch": "^4.0.5",
+    "next": "^13.2.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-error-boundary": "^3.1.4",
+    "safe-json-stringify": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/micromatch": "^4.0.2",
+    "@types/safe-json-stringify": "^1.1.2"
+  }
+}

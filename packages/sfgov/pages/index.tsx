@@ -1,10 +1,8 @@
 import { Box, Container, TitleSm } from '@/design-system'
-import { PageData } from '@/types'
-import PageWrapper from '@/components/page/PageWrapper'
-import { PageLink } from '@/components'
-import { GetServerSideProps } from 'next'
+import { PageLink, PageWrapper } from '@/components'
 import { ContentAPI } from '@/lib/api'
-import Link from 'next/link'
+import type { PageData } from '@/types'
+import type { GetServerSideProps } from 'next'
 
 export const config = {
   runtime: 'nodejs'
@@ -45,9 +43,6 @@ export default function Home ({ pages }: { pages: PageData[] }) {
             </ul>
           </>
           : <Box css={{ bg: '$redL1', color: '$redL4', p: 20, br: 8 }}>No pages found?</Box>}
-        <div>
-          Obligatory link for testing: <Link href='/about'>About SF.gov</Link>
-        </div>
       </Container>
     </PageWrapper>
   )

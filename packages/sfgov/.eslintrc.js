@@ -3,23 +3,26 @@ module.exports = {
   plugins: [
     '@typescript-eslint',
     'sfgov',
-    'react',
     'testing-library'
   ],
-  settings: {
-    react: {
-      version: 'detect'
-    }
-  },
   extends: [
-    'plugin:react/recommended',
+    'next/core-web-vitals',
     'plugin:sfgov/recommended',
     'plugin:@typescript-eslint/recommended'
   ],
   rules: {
     'react/no-unescaped-entities': 'warn',
     'react/jsx-no-leaked-render': 'error',
-    'no-unused-vars': 'off'
+    'no-unused-vars': 'off',
+    'import/no-internal-modules': ['error', {
+      forbid: [
+        // always use the '@/design-system' specifier (see: tsconfig.json)
+        '**/../design-system/**',
+        // always import styled(), etc. from '@/design-system'
+        '@stitches/**'
+      ]
+    }]
+
   },
   overrides: [
     {

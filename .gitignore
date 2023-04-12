@@ -1,20 +1,19 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.js
 
 # testing
-/coverage/
-/test-results/
+coverage/
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
-/build/
+build/
 
 # misc
 .DS_Store
@@ -27,3 +26,10 @@
 .env
 .env.local
 .env.*.local
+
+# build artifacts
+dist/
+
+# Generated Docusaurus files
+.docusaurus/
+.cache-loader/

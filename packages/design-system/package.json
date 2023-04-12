@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "name": "@sfgov/design-system",
+  "scripts": {
+    "build": "tsc --build && tsc-alias",
+    "build-tokens": "style-dictionary build --config ./sd.config.js",
+    "clean": "tsc --build --clean",
+    "lint": "eslint --ext js,jsx,mjs,ts,tsx '*.{js,mjs}'",
+    "figma-export": "env-cmd -f .env figma-export use-config",
+    "postbuild-tokens": "eslint --fix tokens/*.js",
+    "postfigma-export": "eslint --fix 'components/icons/**/*.{js,ts}{,x}'",
+    "test": "jest --coverage",
+    "watch": "npm run build-tokens && chokidar \"tokens/**/*.json\" -c \"npm run build-tokens\""
+  },
+  "repository": "SFDigitalServices/sfgov-next",
+  "dependencies": {
+    "@stitches/react": "^1.2.8",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@figma-export/cli": "^4.5.0",
+    "@figma-export/output-components-as-svg": "^4.5.0",
+    "@figma-export/output-components-as-svgr": "^4.5.0",
+    "@figma-export/transform-svg-with-svgo": "^4.5.0",
+    "@figma-export/types": "^4.5.0",
+    "chokidar-cli": "^3.0.0",
+    "react-if": "^4.1.4",
+    "style-dictionary": "^3.7.2",
+    "tsc-alias": "^1.8.2"
+  }
+}
