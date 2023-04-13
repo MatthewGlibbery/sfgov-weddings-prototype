@@ -5,6 +5,7 @@ import {
   BlockType,
   CostBlock,
   CostType,
+  DateTimeBlock,
   EmailBlock,
   ImageBlock,
   InfoPageData,
@@ -203,3 +204,22 @@ export const MysteryBlockFactory = factory<BlockType<string, object>>(gen => ({
   value: {},
   type: gen.lorem.word()
 }))
+
+export const DateTimeBlockFactory = factory<DateTimeBlock>(gen => {
+  const soonDateObj = gen.date.soon()
+  const [soonDate, soonTime] = soonDateObj.toString().split('T')
+  const [futureDate, futureTime] = gen.date.future(5, soonDateObj).toString().split('T')
+
+  return {
+    id: gen.datatype.uuid(),
+    type: gen.lorem.word(),
+    value: {
+      start_date: soonDate,
+      start_time: soonTime,
+      end_date: futureDate,
+      end_time: futureTime,
+      is_all_day: gen.datatype.boolean(),
+      include_end_date_time: gen.datatype.boolean() ? 'yes' : 'no'
+    }
+  }
+})

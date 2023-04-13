@@ -66,3 +66,13 @@ export type EmailBlock = BlockType<'email', {
 export type AddressBlock = BlockType<'address', Address>
 
 export type ContactBlock = AddressBlock | BlockType
+
+export type DateTimeValues = {
+  start_date: string
+  start_time: string
+  end_date: string
+  end_time: string
+  is_all_day: boolean
+  include_end_date_time: string // TODO: convert to a Boolean later!
+}
+export type DateTimeBlock = BlockType<string, DateTimeValues>
