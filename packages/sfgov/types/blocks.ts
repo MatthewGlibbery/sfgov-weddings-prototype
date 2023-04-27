@@ -67,6 +67,14 @@ export type AddressBlock = BlockType<'address', Address>
 
 export type ContactBlock = AddressBlock | BlockType
 
+export type PhoneNumberValues = {
+  owner: string
+  phone_number: string
+  details: string
+}
+
+export type PhoneNumberBlock = BlockType<string, PhoneNumberValues>
+
 export type DateTimeValues = {
   start_date: string
   start_time: string

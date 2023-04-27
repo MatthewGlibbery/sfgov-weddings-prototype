@@ -17,7 +17,8 @@ import {
   StepByStepData,
   StepType,
   TitleAndTextBlock,
-  WagtailImageData
+  WagtailImageData,
+  PhoneNumberBlock
 } from '@/types'
 import { INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
 
@@ -203,6 +204,16 @@ export const MysteryBlockFactory = factory<BlockType<string, object>>(gen => ({
   id: gen.datatype.uuid(),
   value: {},
   type: gen.lorem.word()
+}))
+
+export const PhoneNumberFactory = factory<PhoneNumberBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  type: 'phone',
+  value: {
+    owner: gen.commerce.productName(),
+    phone_number: gen.internet.url(),
+    details: gen.lorem.sentence()
+  }
 }))
 
 export const DateTimeBlockFactory = factory<DateTimeBlock>(gen => {
