@@ -14,8 +14,6 @@ export type PageBlock<
 
 export type StepType = 'number' | 'and' | 'or'
 
-type LinkBlockTarget = 'page' | 'file' | 'custom_url' | 'anchor' | 'email' | 'phone'
-
 export type CostType = 'free' | 'flat_fee' | 'range' | 'minimum'
 
 interface RangeType {
@@ -24,9 +22,9 @@ interface RangeType {
 }
 
 export type LinkBlock = {
-  title?: string
-  link_to: LinkBlockTarget
-} & Record<LinkBlockTarget, string | null>
+  text: string
+  url: string
+}
 
 export type CostBlock = BlockType<'cost', {
   cost: CostType
@@ -84,3 +82,10 @@ export type DateTimeValues = {
   include_end_date_time: string // TODO: convert to a Boolean later!
 }
 export type DateTimeBlock = BlockType<string, DateTimeValues>
+
+export type CallToActionValues = {
+  title: string
+  link: LinkBlock
+}
+
+export type CallToActionBlock = BlockType<string, CallToActionValues>

@@ -18,7 +18,8 @@ import {
   StepType,
   TitleAndTextBlock,
   WagtailImageData,
-  PhoneNumberBlock
+  PhoneNumberBlock,
+  CallToActionBlock
 } from '@/types'
 import { INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
 
@@ -234,3 +235,15 @@ export const DateTimeBlockFactory = factory<DateTimeBlock>(gen => {
     }
   }
 })
+
+export const CallToActionFactory = factory<CallToActionBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  type: 'cta',
+  value: {
+    title: gen.commerce.productName(),
+    link: {
+      text: gen.lorem.word(),
+      url: gen.internet.url()
+    }
+  }
+}))
