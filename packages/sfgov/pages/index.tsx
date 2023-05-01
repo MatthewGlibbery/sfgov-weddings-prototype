@@ -3,6 +3,9 @@ import { PageLink, PageWrapper } from '@/components'
 import { ContentAPI } from '@/lib/api'
 import type { PageData } from '@/types'
 import type { GetServerSideProps } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
+import Link from 'next/link'
 
 export const config = {
   runtime: 'nodejs'
@@ -15,7 +18,7 @@ type PagesData = {
   items: PageData[]
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   const api = new ContentAPI()
   const data: PagesData = await api.loadJSON<PagesData>('pages/', { locale: 'en' })
     .catch(error => {
@@ -24,18 +27,23 @@ export const getServerSideProps: GetServerSideProps = async () => {
         items: []
       }
     })
+
+  const translations = await serverSideTranslations(locale || 'en', ['common'])
+
   return {
     props: {
-      pages: data.items
+      pages: data.items,
+      ...translations
     }
   }
 }
 
 export default function Home ({ pages }: { pages: PageData[] }) {
+  const { t } = useTranslation()
   return (
     <PageWrapper>
       <Container css={{ py: 8, marginBottom: 20 }}>
-        <TitleSm as='h1'>Pages</TitleSm>
+        <TitleSm as='h1'>{t('pages')}</TitleSm>
         {pages.length
           ? <>
             <ul>
@@ -43,6 +51,9 @@ export default function Home ({ pages }: { pages: PageData[] }) {
             </ul>
           </>
           : <Box css={{ bg: '$redL1', color: '$redL4', p: 20, br: 8 }}>No pages found?</Box>}
+          <div>
+            <Link href='/__test__'>{t('testPages')}</Link>
+          </div>
       </Container>
     </PageWrapper>
   )
