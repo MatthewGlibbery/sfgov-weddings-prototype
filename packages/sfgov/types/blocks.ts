@@ -1,5 +1,4 @@
-import { PageData, RelatedContentTransactionBlock } from './pages'
-import { Address } from './snippets'
+import { AgencyPage, PageData, RelatedContentTransactionBlock } from './pages'
 
 export interface BlockType<T extends string = string, V = object> {
   type: T
@@ -61,9 +60,19 @@ export type EmailBlock = BlockType<'email', {
   email: string
 }>
 
-export type AddressBlock = BlockType<'address', Address>
-
-export type ContactBlock = AddressBlock | BlockType
+export type LocationValues = {
+  agency?: AgencyPage
+  organization?: string
+  addressee?: string
+  location_name?: string
+  location_notes?: string
+  line1: string
+  line2?: string
+  city: string
+  state: string
+  zip: string
+}
+export type LocationBlock = BlockType<string, LocationValues>
 
 export type PhoneNumberValues = {
   owner: string

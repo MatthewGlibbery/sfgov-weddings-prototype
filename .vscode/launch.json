@@ -21,8 +21,20 @@
             "serverReadyAction": {
                 "pattern": "started server on .+, url: (https?://.+)",
                 "uriFormat": "%s",
-                "action": "debugWithChrome"
             }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "SFGOV:Jest: Current File",
+            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "args": [
+                "${fileBasenameNoExtension}",
+                "--config",
+                "${workspaceFolder}/packages/sfgov/jest.config.js"
+            ],
+            "cwd": "${workspaceFolder}/packages/sfgov",
+            "console": "integratedTerminal",
         }
     ]
 }

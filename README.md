@@ -14,9 +14,20 @@ This is the future [SF.gov] front end, built with the [SF.gov design system] and
 
 ### Development server
 
+#### From the Console
+
 Run `npm run dev` (or `npx next dev`) to run the [Next.js development
 server][next dev]. This should automatically open a web browser to
 `http://localhost:3000`.
+
+#### VS Code
+
+There are 4 launch configurations available to run the server through VS Code. For the most part, they should just be a one-click operation to get it working and are all controlled through VS Code's `Run and Debug` section.
+
+1. `Next.js: debug server-side` - Use this to just run the server. If you set breakpoints in the code, it should respect them.
+2. `Next.js: debug client-side` - This will launch a Chrome browser and attach to the session so you can do frontend debugging should you not be using the browser built-in debugger.
+3. `Next.js: debug full stack` - A combination of option 1 & 2.
+4. `SFGOV:Jest: Current File` - This is not a runtime, per say, but instead, allows you to debug any tests you're writing as it will respect your breakpoints. To use this, make sure you have focus on the file you want to run and then click on the "play" button. It should pop-up a console in which you can do debugging things and see the output.
 
 ### Figma export
 

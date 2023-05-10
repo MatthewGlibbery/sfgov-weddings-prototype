@@ -64,3 +64,8 @@ export interface StepByStepData extends PageData {
   related_content_agencies: RelatedContentData[]
   related_content_topics: RelatedContentData[]
 }
+
+export interface AgencyPage extends PageData {
+  title: string
+  description: string
+}

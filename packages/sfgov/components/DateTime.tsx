@@ -141,7 +141,7 @@ export const ComposedTime = ({ startDateTimeInput, endDateTimeInput = '', locale
  *  - Date range with no time
  *  - Date range with a start time only
  */
-const DateTimeBlock = ({ start_date, start_time, end_date, end_time, is_all_day, include_end_date_time }: DateTimeValues) => {
+export const DateTimeBlock = ({ start_date, start_time, end_date, end_time, is_all_day, include_end_date_time }: DateTimeValues) => {
   let composedTimeProps = {} as ComposedTimeProps
   if (!is_all_day && start_date && start_time) {
     let endDateTime = ''
@@ -169,4 +169,3 @@ const DateTimeBlock = ({ start_date, start_time, end_date, end_time, is_all_day,
   )
 }
 /* eslint-enable camelcase */
-export default DateTimeBlock

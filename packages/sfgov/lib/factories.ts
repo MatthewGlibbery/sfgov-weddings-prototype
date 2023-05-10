@@ -1,7 +1,8 @@
 /* istanbul ignore file */
 
 import { factory } from 'node-factory'
-import {
+import type {
+  AgencyPage,
   BlockType,
   CostBlock,
   CostType,
@@ -9,6 +10,7 @@ import {
   EmailBlock,
   ImageBlock,
   InfoPageData,
+  LocationBlock,
   PageData,
   PageMeta,
   RelatedContentData,
@@ -232,6 +234,37 @@ export const DateTimeBlockFactory = factory<DateTimeBlock>(gen => {
       end_time: futureTime,
       is_all_day: gen.datatype.boolean(),
       include_end_date_time: gen.datatype.boolean() ? 'yes' : 'no'
+    }
+  }
+})
+
+export const AgencyPageFactory = factory<AgencyPage>(gen => {
+  return {
+    id: gen.datatype.number(),
+    description: gen.lorem.word(),
+    title: gen.lorem.words(),
+    meta: {
+      type: `sfgov_${gen.lorem.word()}.${gen.lorem.sentence(1).replace(/\.$/, '')}`,
+      html_url: gen.internet.url()
+    }
+  }
+})
+
+export const LocationBlockFactory = factory<LocationBlock>(gen => {
+  return {
+    id: gen.datatype.uuid(),
+    type: gen.lorem.word(),
+    value: {
+      agency: AgencyPageFactory.make(),
+      organization: gen.name.jobTitle(),
+      addressee: `${gen.name.firstName()} ${gen.name.lastName()}`,
+      location_name: gen.lorem.word(),
+      location_notes: gen.lorem.words(),
+      line1: gen.address.streetAddress(),
+      line2: `Room ${gen.datatype.number()}`,
+      city: gen.address.city(),
+      state: gen.address.stateAbbr(),
+      zip: gen.address.zipCode()
     }
   }
 })

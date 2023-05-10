@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import mockConsole from 'jest-mock-console'
 
 import type { DateTimeValues } from '@/types'
-import DateTimeBlock, { ComposedDate, ComposedTime } from './DateTime'
+import { DateTimeBlock, ComposedDate, ComposedTime } from './DateTime'
 
 describe('DateTime Component', () => {
   describe('<ComposedDate />', () => {
@@ -51,6 +51,12 @@ describe('DateTime Component', () => {
       expect(screen.getByText('to')).toBeInTheDocument()
       expect(endDate).toBeInTheDocument()
       expect(endDate).toEqual(expect.any(HTMLTimeElement))
+    })
+
+    it('ignores non-"en dash" date range separators', () => {
+      render(<ComposedDate startDateInput='2023-11-19' endDateInput='2023-11-25' locale='ko' />)
+      expect(screen.queryByText('to')).not.toBeInTheDocument()
+      expect(screen.getByText(') ~')).toBeInTheDocument()
     })
 
     it.each([
