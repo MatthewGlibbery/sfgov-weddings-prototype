@@ -19,7 +19,12 @@ jobs:
       - run:
           name: SF.gov site build
           command: npm run build -w @sfgov/next
-
+      - run:
+          command: |
+            if ! [[ -n "$CIRCLE_PULL_REQUEST" ]]; then
+              curl --location --request POST "$AWX_API_ENDPOINT_PROD" -H "Content-Type: application/json" -H "Authorization: Bearer $AWX_ACCESS_TOKEN" --data-raw "{\"extra_vars\": {\"version\":  \"main\"}}"
+              curl --location --request POST "$AWX_API_ENDPOINT" -H "Content-Type: application/json" -H "Authorization: Bearer $AWX_ACCESS_TOKEN" --data-raw "{\"extra_vars\": {\"version\":  \"main\"}}"
+            fi
 workflows:
   # Docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   build_and_test:
