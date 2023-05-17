@@ -1,3 +1,4 @@
+import { WagtailImageData } from './images'
 import { AgencyPage, PageData, RelatedContentTransactionBlock } from './pages'
 
 export interface BlockType<T extends string = string, V = object> {
@@ -29,7 +30,7 @@ export type CostBlock = BlockType<'cost', {
   cost: CostType
   flat_fee?: number
   range?: RangeType
-  description?: string
+  description: string
 }>
 
 export type TileBlock<T extends string = string> = BlockType<T, {
@@ -55,10 +56,21 @@ export type StepBlock = BlockType<'step', {
   related_content_transactions?: RelatedContentTransactionBlock[]
 }>
 
-export type EmailBlock = BlockType<'email', {
+export type ImageBlock = BlockType<'image', number | WagtailImageData>
+
+type TitleAndTextValues = {
+  title: string
+  text: string
+}
+
+export type TitleAndTextBlock = BlockType<'title_and_text', TitleAndTextValues>
+
+export type EmailValues = {
   title: string
   email: string
-}>
+}
+
+export type EmailBlock = BlockType<'email', EmailValues>
 
 export type LocationValues = {
   agency?: AgencyPage
@@ -72,7 +84,8 @@ export type LocationValues = {
   state: string
   zip: string
 }
-export type LocationBlock = BlockType<string, LocationValues>
+
+export type LocationBlock = BlockType<'address', LocationValues>
 
 export type PhoneNumberValues = {
   owner: string
@@ -80,7 +93,7 @@ export type PhoneNumberValues = {
   details: string
 }
 
-export type PhoneNumberBlock = BlockType<string, PhoneNumberValues>
+export type PhoneNumberBlock = BlockType<'phone_number', PhoneNumberValues>
 
 export type DateTimeValues = {
   start_date: string
@@ -98,3 +111,22 @@ export type CallToActionValues = {
 }
 
 export type CallToActionBlock = BlockType<string, CallToActionValues>
+
+/* Transaction Page */
+
+export type TextBlock = BlockType<'text', string>
+
+export type ButtonLinkBlock = BlockType<'button_link', LinkBlock>
+
+export type WhatToDoType = 'online' | 'in_person' | 'phone' | 'email' | 'mail'
+
+export type CalloutBlock = BlockType<'callout', string>
+
+export type StepSpecificsTypes = LocationBlock | CalloutBlock | EmailBlock | ButtonLinkBlock | PhoneNumberBlock | TextBlock // TODO: add document upload type once we handle uploads
+
+export type WhatToDoStepBlock = BlockType<'what_to_do_step', {
+  step_title: string
+  step_specifics: StepSpecificsTypes[]
+}>
+
+export type WhatToDoBlock = BlockType<WhatToDoType, (CalloutBlock | WhatToDoStepBlock)[]>

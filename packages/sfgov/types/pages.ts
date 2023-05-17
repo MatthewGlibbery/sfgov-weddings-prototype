@@ -1,8 +1,14 @@
 import {
   BlockType,
-  StepBlock
+  CostBlock,
+  EmailBlock,
+  ImageBlock,
+  LocationBlock,
+  PhoneNumberBlock,
+  StepBlock,
+  TitleAndTextBlock,
+  WhatToDoBlock
 } from './blocks'
-import { WagtailImageData } from './images'
 
 interface MinimalMeta {
   type: string
@@ -32,13 +38,6 @@ export type PageData = MinimalPageData & {
   meta: PageMeta<PageData>
 }
 
-export type ImageBlock = BlockType<'image', number | WagtailImageData>
-
-export type TitleAndTextBlock = BlockType<'title_and_text', {
-  title: string
-  text: string
-}>
-
 export type RelatedContentData = Omit<PageData, 'title'> & {
   page_content: PageData
 }
@@ -53,7 +52,7 @@ export interface InfoPageData extends PageData {
   related_content_part_of: RelatedContentData[]
   related_content_agencies: RelatedContentData[]
   related_content_topics: RelatedContentData[]
-  related_content_page: RelatedContentData[]
+  related_content_pages: RelatedContentData[]
 }
 
 export interface StepByStepData extends PageData {
@@ -66,6 +65,21 @@ export interface StepByStepData extends PageData {
 }
 
 export interface AgencyPage extends PageData {
-  title: string
   description: string
+}
+
+export type GetHelpBlockTypes = EmailBlock | PhoneNumberBlock | LocationBlock | TitleAndTextBlock
+
+export interface TransactionPageData extends PageData {
+  description: string
+  cost: CostBlock[]
+  things_to_know: TitleAndTextBlock[]
+  what_to_do: WhatToDoBlock[]
+  special_cases: TitleAndTextBlock[]
+  custom_section: TitleAndTextBlock[]
+  get_help: GetHelpBlockTypes[]
+  good_for_community: TitleAndTextBlock[]
+  related_content_topics: RelatedContentData[]
+  related_content_agencies: RelatedContentData[]
+  related_content_pages: RelatedContentData[]
 }

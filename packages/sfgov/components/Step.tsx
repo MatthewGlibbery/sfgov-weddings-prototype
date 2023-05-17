@@ -77,7 +77,7 @@ export function Step ({ step: { id, value: step }, index, last }: StepType) {
         <Box css={{ flexBasis: '33%' }}>
           <TitleMd css={{ mb: 12 }}>{step.title}</TitleMd>
           <When condition={step.optional}><OptionalLabel css={{ mb: 12 }} data-testid='step-optional' /></When>
-          <When condition={step.cost?.length}><CostBlockDisplay {...step?.cost?.[0] as CostBlock} /></When>
+          <When condition={step.cost?.length}><CostBlockDisplay variant='step' {...step?.cost?.[0] as CostBlock} /></When>
           <When condition={step.time}><Flex data-testid='step-time'><Label css={{ pr: 8 }}>Time:</Label><span>{step.time}</span></Flex></When>
         </Box>
         <Box css={{ flexBasis: '60%' }}>

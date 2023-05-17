@@ -1,5 +1,5 @@
 import React from 'react'
-import { EmailBlock } from '@/types'
+import { EmailValues } from '@/types'
 
-export const EmailBlockLink = ({ value }: EmailBlock) =>
-  value?.email ? <a href={`mailto:${value.email}`}>{value.title || value.email}</a> : null
+export const EmailBlockLink = ({ email, title }: EmailValues) =>
+  email ? <a href={`mailto:${email}`}>{title || email}</a> : null

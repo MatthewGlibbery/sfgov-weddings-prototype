@@ -11,7 +11,7 @@ import { PhoneNumberValues } from '@/types'
  *  - Details
  */
 export const PhoneNumberBlock = ({ owner, phone_number: phoneNumber, details }: PhoneNumberValues) =>
-  <Flex>
+  <Flex css={{ flexDirection: 'column', gapY: 10 }}>
     <When condition={owner}><TitleXs>{owner}</TitleXs></When>
     <When condition={phoneNumber}><a href={`tel:${phoneNumber}`}>{phoneNumber}</a></When>
     <When condition={details}>{details}</When>

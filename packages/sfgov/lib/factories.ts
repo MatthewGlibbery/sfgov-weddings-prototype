@@ -4,6 +4,9 @@ import { factory } from 'node-factory'
 import type {
   AgencyPage,
   BlockType,
+  ButtonLinkBlock,
+  CalloutBlock,
+  CallToActionBlock,
   CostBlock,
   CostType,
   DateTimeBlock,
@@ -13,17 +16,21 @@ import type {
   LocationBlock,
   PageData,
   PageMeta,
-  RelatedContentData,
+  PhoneNumberBlock,
   QuickLinkBlock,
+  RelatedContentData,
   StepBlock,
   StepByStepData,
   StepType,
+  TextBlock,
   TitleAndTextBlock,
+  TransactionPageData,
   WagtailImageData,
-  PhoneNumberBlock,
-  CallToActionBlock
+  WhatToDoBlock,
+  WhatToDoStepBlock,
+  WhatToDoType
 } from '@/types'
-import { INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
+import { INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, TRANSACTION_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
 
 export const PageMetaFactory = factory<PageMeta>(gen => ({
   type: gen.lorem.word()
@@ -36,7 +43,7 @@ export const InfoPageFactory = factory<InfoPageData>(gen => ({
   }),
   title: 'Info page',
   description: 'Info page description',
-  related_content_page: [],
+  related_content_pages: [],
   related_content_part_of: [],
   related_content_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
@@ -69,6 +76,64 @@ export const StepByStepPageFactory = factory<StepByStepData>(gen => ({
       type: 'sfgov_base.RelatedContentTopic'
     }
   })
+}))
+
+export const TransactionPageFactory = factory<TransactionPageData>(gen => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: TRANSACTION_PAGE_TYPE
+  }),
+  title: 'Transaction',
+  description: 'Transaction description',
+  cost: [CostBlockFactory.make()],
+  things_to_know: [
+    TitleAndTextFactory.make({
+      value: {
+        title: 'thing to know',
+        text: 'text for thing'
+      }
+    }),
+    TitleAndTextFactory.make({
+      value: {
+        title: 'thing to know 2',
+        text: 'text for thing 2'
+      }
+    })
+  ],
+  what_to_do: WhatToDoFactory.make(1),
+  special_cases: [
+    TitleAndTextFactory.make({
+      value: {
+        title: 'special case',
+        text: 'text for special case'
+      }
+    })
+  ],
+  custom_section: [
+    TitleAndTextFactory.make({
+      value: {
+        title: 'custom section',
+        text: 'text for custom section'
+      }
+    })
+  ],
+  get_help: [EmailBlockFactory.make(), PhoneNumberFactory.make(), LocationBlockFactory.make(), TitleAndTextFactory.make()],
+  related_content_agencies: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  related_content_topics: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentTopic'
+    }
+  }),
+  related_content_pages: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentcPage'
+    }
+  }),
+  good_for_community: TitleAndTextFactory.make(2)
 }))
 
 export const StepBlockFactory = factory<StepBlock>(gen => ({
@@ -148,7 +213,7 @@ export const TitleAndTextFactory = factory<TitleAndTextBlock>(gen => ({
   type: 'title_and_text',
   value: {
     title: gen.commerce.productName(),
-    text: `<p>${gen.lorem.paragraphs(2, '</p>\n<p>')}</p>`
+    text: `<p>${gen.lorem.paragraphs(2, '</p><p>')}</p>`
   }
 }))
 
@@ -211,10 +276,10 @@ export const MysteryBlockFactory = factory<BlockType<string, object>>(gen => ({
 
 export const PhoneNumberFactory = factory<PhoneNumberBlock>(gen => ({
   id: gen.datatype.uuid(),
-  type: 'phone',
+  type: 'phone_number',
   value: {
     owner: gen.commerce.productName(),
-    phone_number: gen.internet.url(),
+    phone_number: gen.phone.phoneNumber('###-###-####'),
     details: gen.lorem.sentence()
   }
 }))
@@ -253,7 +318,7 @@ export const AgencyPageFactory = factory<AgencyPage>(gen => {
 export const LocationBlockFactory = factory<LocationBlock>(gen => {
   return {
     id: gen.datatype.uuid(),
-    type: gen.lorem.word(),
+    type: 'address',
     value: {
       agency: AgencyPageFactory.make(),
       organization: gen.name.jobTitle(),
@@ -279,4 +344,47 @@ export const CallToActionFactory = factory<CallToActionBlock>(gen => ({
       url: gen.internet.url()
     }
   }
+}))
+
+export const CalloutFactory = factory<CalloutBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  type: 'callout',
+  value: gen.lorem.sentence()
+}))
+
+export const TextBlockFactory = factory<TextBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  type: 'text',
+  value: gen.lorem.sentence()
+}))
+
+export const ButtonLinkFactory = factory<ButtonLinkBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  type: 'button_link',
+  value: {
+    text: gen.lorem.sentence(),
+    url: gen.internet.url()
+  }
+}))
+
+export const WhatToDoStepFactory = factory<WhatToDoStepBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  type: 'what_to_do_step',
+  value: {
+    step_title: gen.lorem.sentence(),
+    step_specifics: [
+      TextBlockFactory.make(),
+      PhoneNumberFactory.make(),
+      LocationBlockFactory.make(),
+      ButtonLinkFactory.make(),
+      EmailBlockFactory.make(),
+      CalloutFactory.make()
+    ]
+  }
+}))
+
+export const WhatToDoFactory = factory<WhatToDoBlock>(gen => ({
+  id: gen.datatype.uuid(),
+  type: gen.random.arrayElement<WhatToDoType>(['online', 'in_person', 'phone', 'email', 'mail']),
+  value: WhatToDoStepFactory.make(2)
 }))

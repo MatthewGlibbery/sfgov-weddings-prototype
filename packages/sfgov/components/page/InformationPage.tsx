@@ -16,7 +16,7 @@ export const InformationPage: PageComponent<InfoPageData> = props => {
     information_section: infoSections,
     related_content_agencies: agencies,
     related_content_topics: topics,
-    related_content_page: pages
+    related_content_pages: pages
   } = page
   return (
     <PageWrapper title={title}>

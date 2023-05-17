@@ -6,7 +6,7 @@ describe('EmailBlockLink', () => {
   const email = EmailBlockFactory.make()
 
   it('renders an email anchor tag', () => {
-    render(<EmailBlockLink {...email} />)
+    render(<EmailBlockLink {...email.value} />)
 
     const emailLink = screen.getByRole('link')
     expect(emailLink).toBeInTheDocument()
@@ -19,7 +19,7 @@ describe('EmailBlockLink', () => {
 
   it('renders value.email if the title is falsy or empty', () => {
     const email = 'foo@bar.com'
-    render(<EmailBlockLink value={{ email, title: '' }} type={'email'} id={''} />)
+    render(<EmailBlockLink email={ email } title='' />)
 
     const link = screen.getByRole('link')
     expect(link).toBeInTheDocument()

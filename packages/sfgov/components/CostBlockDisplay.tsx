@@ -1,8 +1,15 @@
 import type { CostBlock } from '@/types'
-import { Label } from '@/design-system'
-import { When } from 'react-if'
+import { TitleMd, TitleXs } from '@/design-system'
+import { If, Then, Else, When } from 'react-if'
+import { useTranslation } from 'next-i18next'
 
-export function CostBlockDisplay ({ value: { cost: costType, flat_fee: flatFee, range, description } }: CostBlock) {
+type CostBlockProps = CostBlock & {
+  variant?: string
+}
+
+export function CostBlockDisplay ({ value: { cost: costType, flat_fee: flatFee, range, description }, variant }: CostBlockProps) {
+  const { t } = useTranslation()
+
   let cost = ''
 
   if (costType === 'free') {
@@ -15,11 +22,32 @@ export function CostBlockDisplay ({ value: { cost: costType, flat_fee: flatFee, 
     cost = `$${range?.minimum} and up`
   }
 
+  const css = {
+    pr: 8,
+    mb: 20,
+    display: 'block'
+  }
+
+  if (variant === 'step') {
+    css.mb = 0
+    css.display = 'inline-block'
+  }
+
   return (
     <div data-testid='step-cost'>
-      <Label css={{ pr: 8, display: 'inline-block' }}>Cost:</Label>
-      <span>{cost}</span>.
-      <When condition={description}> {description}</When>
+      <If condition={variant === 'step'}>
+        <Then>
+          <TitleMd as='h3' css={css}>{t('Cost')}:</TitleMd>
+          <span>{cost}</span>.
+          <When condition={description}> <span dangerouslySetInnerHTML={{ __html: description }} /></When>
+        </Then>
+        <Else>
+          <TitleMd as='h3' css={css}>{t('Cost')}</TitleMd>
+          <TitleXs css={{ mb: 12 }}>{cost}</TitleXs>
+          <When condition={description}><div dangerouslySetInnerHTML={{ __html: description }} /></When>
+        </Else>
+      </If>
+
     </div>
   )
 }

@@ -26,7 +26,6 @@
     "@figma-export/transform-svg-with-svgo": "^4.5.0",
     "@figma-export/types": "^4.5.0",
     "chokidar-cli": "^3.0.0",
-    "react-if": "^4.1.4",
     "style-dictionary": "^3.7.2",
     "tsc-alias": "^1.8.2"
   }
