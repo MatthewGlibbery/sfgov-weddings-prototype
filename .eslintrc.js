@@ -17,17 +17,26 @@ module.exports = {
     'plugin:@typescript-eslint/recommended'
   ],
   rules: {
-    'react/no-unescaped-entities': 'warn',
+    'max-len': ['warn', {
+      code: 80
+    }],
     'react/jsx-no-leaked-render': 'error',
-    'no-unused-vars': 'off'
+    'react/no-unescaped-entities': 'warn'
   },
   overrides: [
     {
       files: '**/*.{ts,tsx}',
       rules: {
-        'no-undef': ['off'],
-        'import/no-unresolved': ['off'],
-        'import/named': ['off']
+        'import/named': 'off',
+        'import/no-unresolved': 'off',
+        'no-undef': 'off',
+        'no-unused-vars': 'off'
+      }
+    },
+    {
+      files: '**/*.js',
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off'
       }
     },
     {
