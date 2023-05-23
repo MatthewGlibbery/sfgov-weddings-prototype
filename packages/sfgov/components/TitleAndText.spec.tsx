@@ -1,8 +1,19 @@
+import mockConsole from 'jest-mock-console'
 import { TitleAndText } from './TitleAndText'
 import { render, screen } from '@testing-library/react'
 import { TitleAndTextFactory } from '@/lib/factories'
 
 describe('<TitleAndText>', () => {
+  // mocking the console is necessary because <RichText> logs "forbidden"
+  // elements
+  let restoreConsole: (() => void)
+  beforeEach(() => {
+    restoreConsole = mockConsole()
+  })
+  afterEach(() => {
+    restoreConsole()
+  })
+
   it('renders the title', async () => {
     const fixture = TitleAndTextFactory.make({
       value: {

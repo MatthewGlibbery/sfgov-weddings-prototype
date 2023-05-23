@@ -10,10 +10,11 @@
     "test": "jest --coverage"
   },
   "dependencies": {
+    "html-react-parser": "^3.0.16",
     "i18next": "^22.4.14",
     "micromatch": "^4.0.5",
-    "next": "^13.2.3",
-    "next-i18next": "^13.2.2",
+    "next": "13.4.2",
+    "next-i18next": "13.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-error-boundary": "^3.1.4",

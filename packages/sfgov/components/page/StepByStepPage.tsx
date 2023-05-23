@@ -3,6 +3,7 @@ import type { StepByStepData, PageComponent } from '@/types'
 import { PageWrapper } from './PageWrapper'
 import { StepList } from '../Step'
 import { RelatedContentList } from '../RelatedContentList'
+import { RichText } from '../RichText'
 
 export const StepByStepPage: PageComponent<StepByStepData> = props => {
   const { page } = props
@@ -26,11 +27,8 @@ export const StepByStepPage: PageComponent<StepByStepData> = props => {
               </BigDesc>
             : null}
           <BodyText as='p' css={{ my: 60, width: '50%' }} data-testid='step-by-step-intro'>
-            {/*
-              TODO: find an elegant way to render markup without causing hydration errors/forcing a
-              switch to client side rendering (this happens if we use `dangerouslySetInnerHtml`)
-            */}
-            {intro}
+            {/* FIXME: do we need to forbid block-level elements here since this is wrapped in a <p>? */}
+            <RichText html={intro} />
           </BodyText>
         </Box>
         <StepList steps={steps} />
