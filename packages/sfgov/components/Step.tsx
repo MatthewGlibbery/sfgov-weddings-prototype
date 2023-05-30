@@ -14,7 +14,7 @@ type StepType = {
 const StepBadge = styled(Flex, {
   width: 50,
   height: 50,
-  bg: '$slateL4',
+  bg: '$slate400',
   fg: '$white',
   br: 74,
   ml: -26,
@@ -24,7 +24,7 @@ const StepBadge = styled(Flex, {
     alpha: {
       true: {
         bg: '$white',
-        fg: '$slateL4'
+        fg: '$slate400'
       }
     }
   }

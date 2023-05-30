@@ -177,7 +177,7 @@ describe('Controller', () => {
       const View = controller.makeViewComponent()
       const props = await controller.getPageProps(mockPath)
       render(<View {...props} />)
-      const div = await screen.findByText(/Hello/)
+      const div = screen.getByText(/Hello/)
       expect(div).toBeInTheDocument()
       expect(MockPageTemplate).toHaveBeenCalledTimes(1)
     })

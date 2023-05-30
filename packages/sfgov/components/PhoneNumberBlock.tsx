@@ -1,5 +1,5 @@
 import { When } from 'react-if'
-import { Flex, TitleXs } from '@/design-system'
+import { Flex, SmallText, TitleXs } from '@/design-system'
 import { PhoneNumberValues } from '@/types'
 
 /**
@@ -14,5 +14,5 @@ export const PhoneNumberBlock = ({ owner, phone_number: phoneNumber, details }: 
   <Flex css={{ flexDirection: 'column', gapY: 10 }}>
     <When condition={owner}><TitleXs>{owner}</TitleXs></When>
     <When condition={phoneNumber}><a href={`tel:${phoneNumber}`}>{phoneNumber}</a></When>
-    <When condition={details}>{details}</When>
+    <When condition={details}><SmallText>{details}</SmallText></When>
   </Flex>

@@ -23,10 +23,10 @@ describe('RelatedContentList', () => {
     }
   ]
 
-  it('renders a related content link', async () => {
+  it('renders a related content link', () => {
     render(<RelatedContentList content={content} />)
 
-    const link = await screen.findByText('Hello there')
+    const link = screen.getByText('Hello there')
     expect(link).toBeInTheDocument()
   })
 

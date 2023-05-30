@@ -1,9 +1,10 @@
-import { InformationPage, StepByStepPage, TransactionPage } from '@/components'
+import { EventPage, InformationPage, StepByStepPage, TransactionPage } from '@/components'
 import { PageData } from '@/types'
-import { INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, TRANSACTION_PAGE_TYPE } from '@/constants'
+import { EVENT_PAGE_TYPE, INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, TRANSACTION_PAGE_TYPE } from '@/constants'
 import { InfoPageFactory, RelatedContentFactory, StepBlockFactory, StepByStepPageFactory, TitleAndTextFactory } from '@/lib/factories'
 
 export const templates = {
+  [EVENT_PAGE_TYPE]: EventPage,
   [INFO_PAGE_TYPE]: InformationPage,
   [STEP_BY_STEP_PAGE_TYPE]: StepByStepPage,
   [TRANSACTION_PAGE_TYPE]: TransactionPage

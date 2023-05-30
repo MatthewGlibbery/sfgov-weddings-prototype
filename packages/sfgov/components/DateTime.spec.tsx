@@ -181,9 +181,9 @@ describe('DateTime Component', () => {
       }
     })
 
-    it('renders a single day with a simple time range', async () => {
+    it('renders a single day with a simple time range', () => {
       render(<DateTimeBlock {...baseProps} />)
-      await screen.findByRole('heading')
+      screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
       expect(screen.getByText(/Sunday, November 19, 2023/)).toBeInTheDocument()
@@ -191,13 +191,13 @@ describe('DateTime Component', () => {
       expect(screen.getByText(/to/)).toBeInTheDocument()
     })
 
-    it('renders a single day with no time (all day)', async () => {
+    it('renders a single day with no time (all day)', () => {
       const props = {
         ...baseProps,
         ...{ is_all_day: true }
       }
       render(<DateTimeBlock {...props} />)
-      await screen.findByRole('heading')
+      screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
       expect(screen.getByText('Sunday, November 19, 2023')).toBeInTheDocument()
@@ -205,13 +205,13 @@ describe('DateTime Component', () => {
       expect(screen.queryByText(/to/)).not.toBeInTheDocument()
     })
 
-    it('renders a date range with a simple time range', async () => {
+    it('renders a date range with a simple time range', () => {
       const props = {
         ...baseProps,
         ...{ end_date: '2023-11-25' }
       }
       render(<DateTimeBlock {...props} />)
-      await screen.findByRole('heading')
+      screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
       ;[
@@ -223,13 +223,13 @@ describe('DateTime Component', () => {
       expect(screen.getAllByText(/to/)).toHaveLength(2)
     })
 
-    it('renders a date range with no time', async () => {
+    it('renders a date range with no time', () => {
       const props = {
         ...baseProps,
         ...{ end_date: '2023-11-25', start_time: '', end_time: '' }
       }
       render(<DateTimeBlock {...props} />)
-      await screen.findByRole('heading')
+      screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
       ;[
@@ -240,13 +240,13 @@ describe('DateTime Component', () => {
       expect(screen.getAllByText(/to/)).toHaveLength(1)
     })
 
-    it('renders a date range with a start time only', async () => {
+    it('renders a date range with a start time only', () => {
       const props = {
         ...baseProps,
         ...{ end_date: '2023-11-25', include_end_date_time: 'no' }
       }
       render(<DateTimeBlock {...props} />)
-      await screen.findByRole('heading')
+      screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
       ;[
@@ -261,7 +261,7 @@ describe('DateTime Component', () => {
     it.each([
       { modProps: { start_date: '20-11-19' } },
       { modProps: { end_date: '20-11-25' } }
-    ])('does not render the date and time with improper inputs: $modProps', async ({ modProps }) => {
+    ])('does not render the date and time with improper inputs: $modProps', ({ modProps }) => {
       // Mock the warn as the handler calls it in the try/catch
       const restoreConsole = mockConsole()
       const props = {
@@ -270,7 +270,7 @@ describe('DateTime Component', () => {
       }
 
       render(<DateTimeBlock {...props} />)
-      await screen.findByRole('heading')
+      screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
       expect(screen.queryByText('Sunday, November 19, 2023')).not.toBeInTheDocument()
@@ -285,7 +285,7 @@ describe('DateTime Component', () => {
     it.each([
       { modProps: { start_time: ':23:45' } },
       { modProps: { end_time: ':02:34' } }
-    ])('does not render the time with improper inputs: $modProps', async ({ modProps }) => {
+    ])('does not render the time with improper inputs: $modProps', ({ modProps }) => {
       // Mock the warn as the handler calls it in the try/catch
       const restoreConsole = mockConsole()
       const props = {
@@ -294,7 +294,7 @@ describe('DateTime Component', () => {
       }
 
       render(<DateTimeBlock {...props} />)
-      await screen.findByRole('heading')
+      screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
       expect(screen.getByText('Sunday, November 19, 2023')).toBeInTheDocument()

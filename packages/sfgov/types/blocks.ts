@@ -26,12 +26,14 @@ export type LinkBlock = {
   url: string
 }
 
-export type CostBlock = BlockType<'cost', {
+export type CostValues = {
   cost: CostType
   flat_fee?: number
   range?: RangeType
   description: string
-}>
+}
+
+export type CostBlock = BlockType<'cost', CostValues>
 
 export type TileBlock<T extends string = string> = BlockType<T, {
   title: string
@@ -50,7 +52,7 @@ export type StepBlock = BlockType<'step', {
   title: string
   step_type: StepType
   optional?: boolean
-  cost?: CostBlock[]
+  cost: CostBlock[]
   time?: string
   step_description?: string
   related_content_transactions?: RelatedContentTransactionBlock[]
@@ -93,7 +95,7 @@ export type PhoneNumberValues = {
   details: string
 }
 
-export type PhoneNumberBlock = BlockType<'phone_number', PhoneNumberValues>
+export type PhoneNumberBlockType = BlockType<'phone_number', PhoneNumberValues>
 
 export type DateTimeValues = {
   start_date: string
@@ -122,7 +124,7 @@ export type WhatToDoType = 'online' | 'in_person' | 'phone' | 'email' | 'mail'
 
 export type CalloutBlock = BlockType<'callout', string>
 
-export type StepSpecificsTypes = LocationBlock | CalloutBlock | EmailBlock | ButtonLinkBlock | PhoneNumberBlock | TextBlock // TODO: add document upload type once we handle uploads
+export type StepSpecificsTypes = LocationBlock | CalloutBlock | EmailBlock | ButtonLinkBlock | PhoneNumberBlockType | TextBlock // TODO: add document upload type once we handle uploads
 
 export type WhatToDoStepBlock = BlockType<'what_to_do_step', {
   step_title: string

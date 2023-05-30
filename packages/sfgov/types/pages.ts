@@ -1,10 +1,12 @@
 import {
   BlockType,
+  CallToActionBlock,
   CostBlock,
+  DateTimeBlock,
   EmailBlock,
   ImageBlock,
   LocationBlock,
-  PhoneNumberBlock,
+  PhoneNumberBlockType,
   StepBlock,
   TitleAndTextBlock,
   WhatToDoBlock
@@ -28,6 +30,7 @@ interface MinimalPageData {
   id: number
   meta: MinimalMeta
   title: string
+  // should we add description here?
 }
 
 export interface PageMeta<Parent extends MinimalPageData = MinimalPageData> extends MinimalMeta {
@@ -46,6 +49,19 @@ export type RelatedContentTransactionBlock = BlockType<'transaction', MinimalPag
 
 export type InfoPageSection = ImageBlock | TitleAndTextBlock
 
+export interface EventPageData extends PageData {
+  description: string
+  date_time: DateTimeBlock[]
+  cost: CostBlock[]
+  location: LocationBlock[]
+  call_to_action: CallToActionBlock[]
+  image: ImageBlock
+  body: string
+  contact: (EmailBlock | PhoneNumberBlockType)[]
+  related_content_agencies: RelatedContentData[]
+  related_content_topics: RelatedContentData[]
+}
+
 export interface InfoPageData extends PageData {
   description: string
   information_section?: InfoPageSection[]
@@ -56,7 +72,6 @@ export interface InfoPageData extends PageData {
 }
 
 export interface StepByStepData extends PageData {
-  title: string
   description: string
   intro: string
   steps?: StepBlock[]
@@ -68,7 +83,7 @@ export interface AgencyPage extends PageData {
   description: string
 }
 
-export type GetHelpBlockTypes = EmailBlock | PhoneNumberBlock | LocationBlock | TitleAndTextBlock
+export type GetHelpBlockTypes = EmailBlock | PhoneNumberBlockType | LocationBlock | TitleAndTextBlock
 
 export interface TransactionPageData extends PageData {
   description: string

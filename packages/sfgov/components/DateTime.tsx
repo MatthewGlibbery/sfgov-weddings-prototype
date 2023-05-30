@@ -158,12 +158,10 @@ export const DateTimeBlock = ({ start_date, start_time, end_date, end_time, is_a
     <div>
         <TitleXs as={'h2'} css={{ mb: 20 }}>Date</TitleXs>
         <BodyText>
-            <>
-              <ComposedDate startDateInput={start_date} endDateInput={end_date} />
-              <When condition={!!Object.keys(composedTimeProps).length}>
-                <Box><ComposedTime {...composedTimeProps} /></Box>
-              </When>
-            </>
+            <ComposedDate startDateInput={start_date} endDateInput={end_date} />
+            <When condition={!!Object.keys(composedTimeProps).length}>
+              <Box><ComposedTime {...composedTimeProps} /></Box>
+            </When>
         </BodyText>
     </div>
   )

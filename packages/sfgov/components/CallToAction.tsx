@@ -8,7 +8,7 @@ import { Button, Flex, TitleMd } from '@/design-system'
  */
 
 export const CallToAction = ({ title, link }: CallToActionValues) =>
-  <Flex>
+  <Flex css={{ flexDirection: 'column', gapY: 20 }}>
     <When condition={title}><TitleMd>{title}</TitleMd></When>
     <When condition={!!(link.url && link.text)}>
       <Button as="a" href={link.url} aria-label={`${title} ${link.text}`}>{link.text}</Button>

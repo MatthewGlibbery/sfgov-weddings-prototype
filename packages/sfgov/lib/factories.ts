@@ -11,12 +11,13 @@ import type {
   CostType,
   DateTimeBlock,
   EmailBlock,
+  EventPageData,
   ImageBlock,
   InfoPageData,
   LocationBlock,
   PageData,
   PageMeta,
-  PhoneNumberBlock,
+  PhoneNumberBlockType,
   QuickLinkBlock,
   RelatedContentData,
   StepBlock,
@@ -30,10 +31,39 @@ import type {
   WhatToDoStepBlock,
   WhatToDoType
 } from '@/types'
-import { INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, TRANSACTION_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
+import { EVENT_PAGE_TYPE, INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, TRANSACTION_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
 
 export const PageMetaFactory = factory<PageMeta>(gen => ({
   type: gen.lorem.word()
+}))
+
+export const EventPageFactory = factory<EventPageData>(gen => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: EVENT_PAGE_TYPE
+  }),
+  title: 'Event page',
+  description: 'Event page description',
+  date_time: DateTimeBlockFactory.make(1),
+  cost: CostBlockFactory.make(1),
+  location: [LocationBlockFactory.make()],
+  call_to_action: CallToActionFactory.make(1),
+  image: ImageBlockFactory.make(),
+  body: gen.lorem.paragraph(),
+  contact: [
+    PhoneNumberFactory.make(),
+    EmailBlockFactory.make()
+  ],
+  related_content_agencies: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  related_content_topics: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentTopic'
+    }
+  })
 }))
 
 export const InfoPageFactory = factory<InfoPageData>(gen => ({
@@ -130,7 +160,7 @@ export const TransactionPageFactory = factory<TransactionPageData>(gen => ({
   }),
   related_content_pages: RelatedContentBlockFactory.make(3, {
     meta: {
-      type: 'sfgov_base.RelatedContentcPage'
+      type: 'sfgov_base.RelatedContentPage'
     }
   }),
   good_for_community: TitleAndTextFactory.make(2)
@@ -274,7 +304,7 @@ export const MysteryBlockFactory = factory<BlockType<string, object>>(gen => ({
   type: gen.lorem.word()
 }))
 
-export const PhoneNumberFactory = factory<PhoneNumberBlock>(gen => ({
+export const PhoneNumberFactory = factory<PhoneNumberBlockType>(gen => ({
   id: gen.datatype.uuid(),
   type: 'phone_number',
   value: {
