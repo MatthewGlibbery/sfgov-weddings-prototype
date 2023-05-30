@@ -51,7 +51,7 @@ export type RichTextProps = {
  * }} />)
  * ```
  */
-export function RichText (props: RichTextProps) {
+export const RichText = (props: RichTextProps) => {
   const { html, components = {} } = props
 
   const options: HTMLReactParserOptions = {

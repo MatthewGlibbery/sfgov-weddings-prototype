@@ -1,23 +1,24 @@
 import { BodyText } from '@/design-system'
 import { ServerStylesheet } from '@/components'
-import PropsDebug from '@/components/server/PropsDebug'
+import { PropsDebug } from '@/components/server/PropsDebug'
 import { Html, Head, Main, NextScript, DocumentProps } from 'next/document'
 
-export default function Document (props: DocumentProps) {
+const Document = (props: DocumentProps) => {
   return (
     <Html>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <ServerStylesheet />
       </Head>
-      <BodyText as='body' css={{
-        color: '$slateL4',
-        m: 0
-      }}>
+      <BodyText as='body' css={{ color: '$slateL4', m: 0 }}>
         <Main />
         <NextScript />
-        {props.isDevelopment ? <PropsDebug data={props.__NEXT_DATA__?.props?.pageProps} /> : null}
+        {props.isDevelopment
+          ? <PropsDebug data={props.__NEXT_DATA__?.props?.pageProps} />
+          : null}
       </BodyText>
     </Html>
   )
 }
+
+export default Document

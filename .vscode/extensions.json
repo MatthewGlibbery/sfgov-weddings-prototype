@@ -4,7 +4,8 @@
     "dbaeumer.vscode-eslint",
     "davidanson.vscode-markdownlint",
     "hardikmodha.create-tests",
-    "firsttris.vscode-jest-runner"
+    "firsttris.vscode-jest-runner",
+    "stkb.rewrap"
   ],
   "unwantedRecommendations": []
 }

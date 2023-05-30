@@ -8,7 +8,7 @@ export type PageWrapperProps = {
   children?: ReactNode
 }
 
-export function PageWrapper ({ children, title }: PageWrapperProps) {
+export const PageWrapper = ({ children, title }: PageWrapperProps) => {
   return (
     <>
       <Head>

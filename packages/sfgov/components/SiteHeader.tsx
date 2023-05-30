@@ -7,7 +7,7 @@ const HeaderBox = styled(Box, {
   mb: 40
 })
 
-export function SiteHeader (props: SiteHeaderProps) {
+export const SiteHeader = (props: SiteHeaderProps) => {
   return (
     // @ts-expect-error FIXME
     <HeaderBox as='header' {...props}>

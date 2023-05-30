@@ -36,11 +36,11 @@ const OptionalLabelBox = styled(Flex, {
   bg: '$greyL2'
 })
 
-function OptionalLabel (props: FlexProps) {
+const OptionalLabel = (props: FlexProps) => {
   return <OptionalLabelBox inline {...props}>OPTIONAL STEP</OptionalLabelBox>
 }
 
-export function StepList ({ steps }: { steps: StepBlock[] }) {
+export const StepList = ({ steps }: { steps: StepBlock[] }) => {
   return <>
   {steps.map((step: StepBlock, i: number) =>
       <Step key={step.id} step={step} index={i + 1} last={i === steps.length - 1} />
@@ -48,7 +48,7 @@ export function StepList ({ steps }: { steps: StepBlock[] }) {
   </>
 }
 
-export function Step ({ step: { id, value: step }, index, last }: StepType) {
+export const Step = ({ step: { id, value: step }, index, last }: StepType) => {
   const css = {
     pb: 80,
     ml: 24,
@@ -73,7 +73,8 @@ export function Step ({ step: { id, value: step }, index, last }: StepType) {
         '@md': {
           flexDirection: 'row'
         }
-      }}>
+      }}
+      >
         <Box css={{ flexBasis: '33%' }}>
           <TitleMd css={{ mb: 12 }}>{step.title}</TitleMd>
           <When condition={step.optional}><OptionalLabel css={{ mb: 12 }} data-testid='step-optional' /></When>

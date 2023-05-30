@@ -5,7 +5,7 @@ export type PagePropsDebugProps = BoxProps & {
   data: object
 }
 
-export default function PropsDebug ({ data, ...rest }: PagePropsDebugProps) {
+export const PropsDebug = ({ data, ...rest }: PagePropsDebugProps) => {
   const id = 'props-debug'
   return (
     <Box css={{ color: '$white', bg: '$greyDark', py: 20 }} id={id} {...rest}>

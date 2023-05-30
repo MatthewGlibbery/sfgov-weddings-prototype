@@ -3,7 +3,7 @@ import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 
 export { ErrorBoundary }
 
-export function ErrorFallbackReport (props: FallbackProps) {
+export const ErrorFallbackReport = (props: FallbackProps) => {
   const { error } = props
   return (
     <Container>

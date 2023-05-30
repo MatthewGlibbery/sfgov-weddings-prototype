@@ -1,4 +1,15 @@
-import { Flex, Grid, SmallText, TitleMd, TitleXs, styled, IconArrowRight, IconCalendar, IconDocument, FIXMECSSProps } from '@/design-system'
+import {
+  Flex,
+  Grid,
+  SmallText,
+  TitleMd,
+  TitleXs,
+  styled,
+  IconArrowRight,
+  IconCalendar,
+  IconDocument,
+  type FIXMECSSProps
+} from '@/design-system'
 import type { ComponentType, ReactNode } from 'react'
 import type { TileBlock } from '@/types'
 
@@ -86,6 +97,7 @@ export const EventTile = ({ link }: TileProps) => (
 )
 
 function createTileList (TileComponent: ComponentType<TileProps>) {
+  // eslint-disable-next-line react/function-component-definition
   return function TileList (props: TileSectionProps) {
     const { links, ...rest } = props
     if (!links?.length) return null

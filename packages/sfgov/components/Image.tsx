@@ -15,7 +15,7 @@ const StyledImage = styled('img', {
 }) as ComponentType<StyledImageProps>
 
 /** istanbul ignore */
-export function Image ({ imageRef, baseURL, ...rest }: StyledImageProps & { imageRef: WagtailImageData }) {
+export const Image = ({ imageRef, baseURL, ...rest }: StyledImageProps & { imageRef: WagtailImageData }) => {
   const props = getImageProps(imageRef, baseURL)
   return <StyledImage { ...props } {...rest } />
 }

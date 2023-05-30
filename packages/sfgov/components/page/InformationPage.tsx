@@ -1,6 +1,17 @@
 import NextImage from 'next/image'
-import { BigDesc, Container, ContainerProps, DisplayLg, FIXMEAsableProps } from '@/design-system'
-import type { InfoPageData, InfoPageSection, PageComponent, WagtailImageData } from '@/types'
+import {
+  BigDesc,
+  Container,
+  ContainerProps,
+  DisplayLg,
+  type FIXMEAsableProps
+} from '@/design-system'
+import type {
+  InfoPageData,
+  InfoPageSection,
+  PageComponent,
+  WagtailImageData
+} from '@/types'
 import { resolveImage } from '@/lib/utils'
 import { RelatedContentList } from '../RelatedContentList'
 import { TitleAndText } from '../TitleAndText'
@@ -21,9 +32,12 @@ export const InformationPage: PageComponent<InfoPageData> = props => {
   return (
     <PageWrapper title={title}>
       <Container css={{ mb: 20 }}>
-        <DisplayLg as='h1' css={{ my: 40 }} data-testid='info-page-title'>{title}</DisplayLg>
+        <DisplayLg as='h1' css={{ my: 40 }} data-testid='info-page-title'>
+          {title}
+        </DisplayLg>
         {description
-          ? <BigDesc as='p' data-testid='info-page-description'>{description}</BigDesc>
+          ? <BigDesc as='p' data-testid='info-page-description'>
+              {description}</BigDesc>
           : null}
       </Container>
       <RelatedContentList
@@ -64,7 +78,7 @@ type InfoSectionListProps = ContainerProps & {
   blocks: InfoPageSection[] | undefined
 } & FIXMEAsableProps
 
-function InfoSectionList ({ blocks, ...rest }: InfoSectionListProps) {
+const InfoSectionList = ({ blocks, ...rest }: InfoSectionListProps) => {
   if (!blocks?.length) return null
   return <Container {...rest}>
     {blocks.map(block => (
@@ -81,10 +95,15 @@ type InfoSectionContentProps = {
   block: InfoPageSection
 }
 
-function InfoSectionContent ({ block, ...rest }: InfoSectionContentProps) {
+const InfoSectionContent = ({ block, ...rest }: InfoSectionContentProps) => {
   switch (block.type) {
     case 'image':
-      return <Image as={NextImage} alt='' imageRef={block.value as WagtailImageData} {...rest} />
+      return (
+        <Image as={NextImage}
+          alt=''
+          imageRef={block.value as WagtailImageData}
+          {...rest} />
+      )
     case 'title_and_text':
       return <TitleAndText block={block} {...rest} />
   }

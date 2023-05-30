@@ -7,7 +7,7 @@ type CostBlockProps = CostBlock & {
   variant?: string
 }
 
-export function CostBlockDisplay ({ value: { cost: costType, flat_fee: flatFee, range, description }, variant }: CostBlockProps) {
+export const CostBlockDisplay = ({ value: { cost: costType, flat_fee: flatFee, range, description }, variant }: CostBlockProps) => {
   const { t } = useTranslation()
 
   let cost = ''

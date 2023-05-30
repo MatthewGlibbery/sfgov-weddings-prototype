@@ -20,7 +20,9 @@ type PagesData = {
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   const api = new ContentAPI()
-  const data: PagesData = await api.loadJSON<PagesData>('pages/', { locale: 'en' })
+  const data: PagesData = await api.loadJSON<PagesData>('pages/', {
+    locale: 'en'
+  })
     .catch(error => {
       console.error('Error fetching pages:', error)
       return {
@@ -38,19 +40,21 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   }
 }
 
-export default function Home ({ pages }: { pages: PageData[] }) {
+const Home = ({ pages }: { pages: PageData[] }) => {
   const { t } = useTranslation()
   return (
     <PageWrapper>
       <Container css={{ py: 8, marginBottom: 20 }}>
         <TitleSm as='h1'>{t('pages')}</TitleSm>
         {pages.length
-          ? <>
-            <ul>
-              {pages.map(page => <li key={page.id}><PageLink page={page} /></li>)}
+          ? <ul>
+              {pages.map(page => (
+                <li key={page.id}><PageLink page={page} /></li>
+              ))}
             </ul>
-          </>
-          : <Box css={{ bg: '$redL1', color: '$redL4', p: 20, br: 8 }}>No pages found?</Box>}
+          : <Box css={{ bg: '$redL1', color: '$redL4', p: 20, br: 8 }}>
+            No pages found?
+          </Box>}
           <div>
             <Link href='/__test__'>{t('testPages')}</Link>
           </div>
@@ -58,3 +62,5 @@ export default function Home ({ pages }: { pages: PageData[] }) {
     </PageWrapper>
   )
 }
+
+export default Home

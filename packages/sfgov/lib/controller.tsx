@@ -63,6 +63,7 @@ export class Controller implements IController {
 
   makeViewComponent (): PageComponent {
     const getTemplate = (type: string) => this.getTemplateForType(type)
+    // eslint-disable-next-line react/function-component-definition
     return function ControllerView (props) {
       if (!props.page?.meta?.type) {
         throw new Error('No page.meta.type found in page props')

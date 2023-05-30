@@ -9,7 +9,7 @@ const FooterBox = styled('footer', {
   py: 20
 })
 
-export function SiteFooter (props: SiteFooterProps) {
+export const SiteFooter = (props: SiteFooterProps) => {
   return (
     <FooterBox as='footer' {...props}>
       <Container>

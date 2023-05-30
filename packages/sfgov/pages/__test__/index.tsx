@@ -16,14 +16,9 @@ export const getServerSideProps: GetServerSideProps<TestIndexProps> = async () =
   }
 }
 
-export default function TestIndex ({ pages }: TestIndexProps) {
+const TestIndex = ({ pages }: TestIndexProps) => {
   return (
-    <Container css={{
-      my: 60,
-      'td, th': {
-        p: 4
-      }
-    }}>
+    <Container css={{ my: 60, 'td, th': { p: 4 } }}>
       <TitleLg as='h1' css={{ mb: 20 }}>Test page fixtures</TitleLg>
       <table>
         <thead>
@@ -48,3 +43,5 @@ export default function TestIndex ({ pages }: TestIndexProps) {
     </Container>
   )
 }
+
+export default TestIndex

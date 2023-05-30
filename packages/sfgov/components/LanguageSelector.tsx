@@ -11,7 +11,7 @@ const localeNames: Record<string, string> = {
   fil: 'Filipino'
 }
 
-export function LanguageSelector (props: LanguageSelectorProps) {
+export const LanguageSelector = (props: LanguageSelectorProps) => {
   const {
     asPath: currentPath,
     locale: currentLocale,

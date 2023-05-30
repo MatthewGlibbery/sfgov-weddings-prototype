@@ -17,6 +17,7 @@ export function withFixedProps (
   fixed: Partial<ComponentProps<typeof Component>>
 ) {
   type Unfixed = Omit<ComponentProps<typeof Component>, keyof typeof fixed>
+  // eslint-disable-next-line react/function-component-definition
   return function FixedProps (props: Unfixed) {
     return <Component {...fixed} {...props} />
   }

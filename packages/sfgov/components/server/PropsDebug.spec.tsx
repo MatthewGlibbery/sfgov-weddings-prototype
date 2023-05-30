@@ -1,4 +1,4 @@
-import PropsDebug from './PropsDebug'
+import { PropsDebug } from './PropsDebug'
 import { render, screen } from '@testing-library/react'
 
 const preId = 'debug-pre'
