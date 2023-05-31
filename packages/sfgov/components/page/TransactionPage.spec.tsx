@@ -1,4 +1,4 @@
-import { TransactionPageFactory } from '@/lib/factories'
+import { TitleAndTextFactory, TransactionPageFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
 import { TransactionPage } from './TransactionPage'
 
@@ -36,7 +36,9 @@ describe('TransactionPage', () => {
     { what: 'custom_section', input: fixture.custom_section[0].value.title },
     { what: 'special_cases', input: fixture.special_cases[0].value.title },
     { what: 'good_for_community', input: fixture.good_for_community[0].value.title },
+    // @ts-expect-error this is silly
     { what: 'get_help', input: fixture.get_help[0].value.title },
+    // @ts-expect-error this is silly
     { what: 'get_help', input: fixture.get_help[1].value.owner }
   ])('renders the $what section when present', ({ input }) => {
     render(<TransactionPage page={fixture} />)
@@ -54,10 +56,59 @@ describe('TransactionPage', () => {
     { what: 'good_for_community' },
     { what: 'get_help' }
   ])('does not render the $what section when not present', ({ what }) => {
-    // @ts-expect-error 'blegh'
-    fixture[what] = []
-    render(<TransactionPage page={fixture} />)
+    render(<TransactionPage page={{ ...fixture, [what]: [] }} />)
 
     expect(screen.queryByTestId(`${what}-section`)).not.toBeInTheDocument()
+  })
+
+  it('renders when no cost is provided', () => {
+    const page = TransactionPageFactory.make({
+      cost: []
+    })
+    render(<TransactionPage page={page} />)
+    expect(screen.getByText(page.title)).toBeInTheDocument()
+  })
+
+  describe('special cases', () => {
+    const case1 = TitleAndTextFactory.make({
+      value: {
+        text: '<p>Special case one</p>'
+      }
+    })
+
+    const case2 = TitleAndTextFactory.make({
+      value: {
+        text: '<p>Special case two</p>'
+      }
+    })
+
+    const page = TransactionPageFactory.make({
+      special_cases: [case1, case2]
+    })
+
+    it('renders HTML as rich text', () => {
+      render(<TransactionPage page={page} />)
+
+      const details = screen.getByTestId(`special-case-${case1.id}`)
+      expect(details).toBeInTheDocument()
+      expect(details).toHaveTextContent(/Special case one/)
+      expect(details).not.toHaveTextContent(/<p>/)
+    })
+
+    it('renders the first accordion open', () => {
+      render(<TransactionPage page={page} />)
+
+      const para = screen.getByText('Special case one')
+      expect(para).toBeInTheDocument()
+      expect(para).toBeVisible()
+    })
+
+    it('renders the second accordion closed', () => {
+      render(<TransactionPage page={page} />)
+
+      const para = screen.getByText('Special case two')
+      expect(para).toBeInTheDocument()
+      expect(para).not.toBeVisible()
+    })
   })
 })

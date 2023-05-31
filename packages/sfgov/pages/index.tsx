@@ -21,7 +21,7 @@ type PagesData = {
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   const api = new ContentAPI()
   const data: PagesData = await api.getData<PagesData>('pages/', {
-    ocale: 'en'
+    locale: 'en'
   })
     .catch(error => {
       console.error('Error fetching pages:', error)

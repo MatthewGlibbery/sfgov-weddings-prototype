@@ -147,7 +147,12 @@ export const TransactionPageFactory = factory<TransactionPageData>(gen => ({
       }
     })
   ],
-  get_help: [EmailBlockFactory.make(), PhoneNumberFactory.make(), LocationBlockFactory.make(), TitleAndTextFactory.make()],
+  get_help: [
+    EmailBlockFactory.make(),
+    PhoneNumberFactory.make(),
+    LocationBlockFactory.make(),
+    TitleAndTextFactory.make()
+  ],
   related_content_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
@@ -176,7 +181,8 @@ export const StepBlockFactory = factory<StepBlock>(gen => ({
     cost: [CostBlockFactory.make()],
     time: `${gen.datatype.number()} minutes`,
     step_description: gen.commerce.productDescription(),
-    related_content_transactions: [ // TODO: update to use RelatedContentFactory once API shape is aligned
+    related_content_transactions: [
+      // TODO: update to use RelatedContentFactory once API shape is aligned
       {
         id: gen.datatype.uuid(),
         type: 'transaction',

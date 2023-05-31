@@ -30,6 +30,7 @@ import {
   EmailBlockLink,
   PhoneNumberBlock,
   RelatedContentList,
+  RichText,
   TitleAndText,
   WhatToDo
 } from '../'
@@ -105,7 +106,9 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
         {agencies.map((agency, i) => (
           <span key={agency.page_content.id} data-testid='related_content_agencies-section'>
             {i > 0 && ', '}
-            <a href={agency.page_content.meta.html_url}>{agency.page_content.title}</a>
+            <a href={agency.page_content.meta.html_url}>
+              {agency.page_content.title}
+            </a>
           </span>
         ))}
         <When condition={description}><BigDesc css={{ mb: 20 }} as='p' data-testid='transaction-page-description'>{description}</BigDesc></When>
@@ -114,7 +117,9 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
             <IconInfo width={40} />
             <TitleLg as='h2'>{t('What to Know')}</TitleLg>
           </Flex>
-          <CostBlockDisplay {...cost[0]} />
+          <When condition={!!cost[0]}>
+            <CostBlockDisplay {...cost[0]} />
+          </When>
           {thingsToKnow.map(thing => (
             <Box key={thing.id} data-testid='things_to_know-section'>
               <TitleAndText block={thing} />
@@ -135,14 +140,21 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
         <When condition={!!specialCases.length}>
           <Box css={{ mb: 40 }} data-testid='special_cases-section'>
             <TitleLg as='h2' css={{ mb: 20 }}>{t('Special cases')}</TitleLg>
-            {
-              specialCases.map((item) => <Accordion key={item.value.title} title={item.value.title}>{item.value.text}</Accordion>)
-            }
+            {specialCases.map((item, i) => (
+              <Accordion
+                key={item.value.title}
+                title={item.value.title}
+                data-testid={`special-case-${item.id}`}
+                open={i === 0}
+              >
+                <RichText html={item.value.text} />
+              </Accordion>
+            ))}
           </Box>
         </When>
         {goodForCommunity.map(block => (
           <Flex key={block.id} css={{ flexDirection: 'column', mb: 40, gapY: 28 }} data-testid='good_for_community-section'>
-              <TitleAndText block={block} />
+            <TitleAndText block={block} />
           </Flex>
         ))}
         <When condition={!!relatedContentPages.length}>
@@ -150,7 +162,9 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
         </When>
         <When condition={!!getHelp.length}>
           <TitleLg as='h2'><IconQuestion width={32} /> {t('Get Help')}</TitleLg>
-          <StackedContainer css={{ mt: 28 }}>{ renderGetHelpSection(getHelp) }</StackedContainer>
+          <StackedContainer css={{ mt: 28 }}>
+            {renderGetHelpSection(getHelp)}
+          </StackedContainer>
         </When>
       </Container>
     </PageWrapper>

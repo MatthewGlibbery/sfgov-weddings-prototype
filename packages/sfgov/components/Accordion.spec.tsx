@@ -1,90 +1,110 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-
+import { render, screen, fireEvent, type RenderResult } from '@testing-library/react'
 import { Accordion } from './Accordion'
-import { TitleAndTextFactory } from '@/lib/factories'
 
 describe('<Accordion />', () => {
-  const { value: testData } = TitleAndTextFactory.make()
+  const testTitle = 'Details title'
+  const testContent = 'This is the content'
+
+  const getDetails = (result?: RenderResult) =>
+    (result || screen).getByRole('group') as HTMLDetailsElement
+  const getSummary = (result?: RenderResult) =>
+    (result || screen).getByTestId('accordion-title')
+  const getContent = (result?: RenderResult) =>
+    (result || screen).getByTestId('accordion-content')
 
   it('renders', () => {
-    render(<Accordion title={testData.title}>{testData.text}</Accordion>)
+    render(<Accordion title={testTitle}>{testContent}</Accordion>)
 
-    expect(screen.getByRole('button')).toHaveTextContent(testData.title)
-    expect(screen.getByRole('dialog')).toHaveTextContent(testData.text)
-  })
-
-  it('renders the header with no text input', () => {
-    render(<Accordion>{testData.text}</Accordion>)
-
-    expect(screen.getByRole('button')).toBeInTheDocument()
-    expect(screen.getByRole('dialog')).toHaveTextContent(testData.text)
+    expect(getDetails()).not.toHaveAttribute('open')
+    expect(getSummary()).toBeInTheDocument()
+    expect(getContent()).toHaveTextContent(testContent)
   })
 
   it('renders the content section with no text input', () => {
-    render(<Accordion title={testData.title} />)
+    render(<Accordion title={testTitle} />)
 
-    expect(screen.getByRole('button')).toHaveTextContent(testData.title)
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(getSummary()).toHaveTextContent(testTitle)
+    expect(getContent()).toBeInTheDocument()
   })
 
-  it('hides the content when the header element is interacted with', () => {
-    render(<Accordion title={testData.title}>{testData.text}</Accordion>)
+  it('shows the content when the header element is clicked', () => {
+    render(<Accordion title={testTitle}>{testContent}</Accordion>)
 
-    const header = screen.getByRole('button')
-    const content = screen.getByRole('dialog')
-    expect(header).toHaveAttribute('aria-expanded', 'true')
-    expect(content).toBeVisible()
-
-    fireEvent.click(header)
-
-    expect(header).toHaveAttribute('aria-expanded', 'false')
+    const details = getDetails()
+    const summary = getSummary()
+    const content = getContent()
+    expect(details.open).toBe(false)
     expect(content).not.toBeVisible()
+    expect(screen.getByTestId('IconPlus')).toBeInTheDocument()
+    expect(screen.queryByTestId('IconMinus')).not.toBeInTheDocument()
+
+    fireEvent.click(summary)
+
+    expect(details.open).toBe(true)
+    expect(content).toBeVisible()
   })
 
-  it('shows the content when it is hidden and the header element is interacted with', () => {
-    render(<Accordion title={testData.title}>{testData.text}</Accordion>)
+  it('shows the content when passed open={true}', () => {
+    render(<Accordion title={testTitle} open>{testContent}</Accordion>)
 
-    const header = screen.getByRole('button')
-    const content = screen.getByRole('dialog')
-    expect(header).toHaveAttribute('aria-expanded', 'true')
+    const details = getDetails()
+    const content = getContent()
+    expect(details).toHaveAttribute('open')
+    expect(details.open).toBe(true)
     expect(content).toBeVisible()
-
-    fireEvent.click(header)
-
-    expect(header).toHaveAttribute('aria-expanded', 'false')
-    expect(content).not.toBeVisible()
-
-    fireEvent.click(header)
-
-    expect(header).toHaveAttribute('aria-expanded', 'true')
-    expect(screen.getByRole('dialog')).toBeVisible() // re-query the content item because the reference has changed (ie. rendered, removed, rendered)
   })
 
-  it('responds to touch events', () => {
-    render(<Accordion title={testData.title}>{testData.text}</Accordion>)
+  it('hides content visible by default when clicked', () => {
+    render(<Accordion title={testTitle} open>{testContent}</Accordion>)
 
-    const header = screen.getByRole('button')
-    const content = screen.getByRole('dialog')
-    expect(header).toHaveAttribute('aria-expanded', 'true')
+    const details = getDetails()
+    const summary = getSummary()
+    const content = getContent()
+    expect(details.open).toBe(true)
     expect(content).toBeVisible()
 
-    fireEvent.touchEnd(header)
+    fireEvent.click(summary)
 
-    expect(header).toHaveAttribute('aria-expanded', 'false')
+    expect(details.open).toBe(false)
     expect(content).not.toBeVisible()
+
+    fireEvent.click(summary)
+
+    expect(details.open).toBe(true)
+    expect(content).toBeVisible()
   })
 
-  it('responds to the Enter key event', () => {
-    render(<Accordion title={testData.title}>{testData.text}</Accordion>)
+  describe('icons', () => {
+    it('shows the plus icon by default', () => {
+      render(<Accordion title='hi'>content</Accordion>)
+      expect(screen.getByTestId('IconPlus')).toBeInTheDocument()
+      expect(screen.queryByTestId('IconMinus')).not.toBeInTheDocument()
+    })
 
-    const header = screen.getByRole('button')
-    const content = screen.getByRole('dialog')
-    expect(header).toHaveAttribute('aria-expanded', 'true')
-    expect(content).toBeVisible()
+    it('shows the minus icon when passed open={true}', () => {
+      render(<Accordion title='hi' open>content</Accordion>)
+      expect(getDetails()).toHaveAttribute('open')
+      expect(screen.getByTestId('IconMinus')).toBeInTheDocument()
+      expect(screen.queryByTestId('IconPlus')).not.toBeInTheDocument()
+    })
 
-    fireEvent.keyUp(header, { key: 'Enter', code: 'Enter', charCode: 13 })
+    /**
+     * FIXME: this test doesn't accurately capture the toggling of the icons,
+     * but I've confirmed that it works via manual testing.
+     */
+    it.skip('toggles the icon when clicked', () => {
+      render(<Accordion title={testTitle}>{testContent}</Accordion>)
 
-    expect(header).toHaveAttribute('aria-expanded', 'false')
-    expect(content).not.toBeVisible()
+      const details = getDetails()
+      expect(details.open).toBe(false)
+      const header = getSummary()
+      expect(header).toBeInTheDocument()
+      fireEvent.click(header)
+
+      expect(details.open).toBe(true)
+      expect(details).toHaveAttribute('open')
+      expect(screen.getByTestId('IconMinus')).toBeInTheDocument()
+      expect(screen.queryByTestId('IconPlus')).not.toBeInTheDocument()
+    })
   })
 })

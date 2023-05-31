@@ -22,6 +22,7 @@ module.exports = {
     }],
     'max-len': ['warn', {
       code: 80,
+      ignoreStrings: true,
       ignoreUrls: true
     }],
     'react/jsx-no-leaked-render': 'error',
