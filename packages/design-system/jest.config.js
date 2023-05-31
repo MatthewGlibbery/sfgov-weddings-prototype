@@ -5,7 +5,10 @@ const moduleNameMapper = Object.fromEntries(
   Object.entries(tsConfig.compilerOptions.paths)
     .map(([alias, [path]]) => [
       `^${alias.replace('*', '(.*)')}$`,
-      path.replace(/^..\//, '<rootDir>/../').replace(/^.\//, '<rootDir>/').replace('/*', '/$1')
+      path
+        .replace(/^..\//, '<rootDir>/../')
+        .replace(/^.\//, '<rootDir>/')
+        .replace('/*', '/$1')
     ])
 )
 
@@ -38,5 +41,6 @@ const customJestConfig = {
   }
 }
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
+// createJestConfig is exported this way to ensure that next/jest can load the
+// Next.js config, which is async
 module.exports = customJestConfig

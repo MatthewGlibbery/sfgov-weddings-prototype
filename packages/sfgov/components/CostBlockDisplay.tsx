@@ -1,13 +1,15 @@
-import type { CostBlock } from '@/types'
 import { TitleMd, TitleXs } from '@/design-system'
 import { If, Then, Else, When } from 'react-if'
 import { useTranslation } from 'next-i18next'
+import type { CostBlock } from '@/types'
+import { RichText } from './RichText'
 
 type CostBlockProps = CostBlock & {
   variant?: string
 }
 
-export const CostBlockDisplay = ({ value: { cost: costType, flat_fee: flatFee, range, description }, variant }: CostBlockProps) => {
+export const CostBlockDisplay = ({ value, variant }: CostBlockProps) => {
+  const { cost: costType, flat_fee: flatFee, range, description } = value
   const { t } = useTranslation()
 
   let cost = ''
@@ -39,12 +41,16 @@ export const CostBlockDisplay = ({ value: { cost: costType, flat_fee: flatFee, r
         <Then>
           <TitleMd as='h3' css={css}>{t('Cost')}:</TitleMd>
           <span>{cost}</span>.
-          <When condition={description}> <span dangerouslySetInnerHTML={{ __html: description }} /></When>
+          <When condition={description}>
+            <RichText html={description} />
+          </When>
         </Then>
         <Else>
           <TitleMd as='h3' css={css}>{t('Cost')}</TitleMd>
           <TitleXs css={{ mb: 12 }}>{cost}</TitleXs>
-          <When condition={description}><div dangerouslySetInnerHTML={{ __html: description }} /></When>
+          <When condition={description}>
+            <div><RichText html={description} /></div>
+          </When>
         </Else>
       </If>
 

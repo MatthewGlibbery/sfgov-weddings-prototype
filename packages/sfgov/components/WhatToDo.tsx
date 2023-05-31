@@ -5,12 +5,17 @@ import { Callout } from './Callout'
 import { EmailBlockLink } from './EmailBlockLink'
 import { LocationBlock } from './Location'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
+import { RichText } from './RichText'
 
 type WhatToDoStepBlockProps = WhatToDoStepBlock & {
   index: number
 }
 
-const WhatToDoStep = ({ value: { step_title: stepTitle, step_specifics: stepSpecifics }, index }: WhatToDoStepBlockProps) => {
+const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
+  const {
+    value: { step_title: stepTitle, step_specifics: stepSpecifics },
+    index
+  } = props
   return (
     <>
       <BigDesc>{`${index}. ${stepTitle}`}</BigDesc>
@@ -56,13 +61,15 @@ const WhatToDoStep = ({ value: { step_title: stepTitle, step_specifics: stepSpec
           case 'text':
             StepComponent = BodyText
             props = {
-              dangerouslySetInnerHTML: { __html: block.value }
+              children: <RichText html={block.value} />
             }
             break
         }
 
         return (
-          <Flex key={block.id} {...flexProps} data-testid={`${block.type}-field`}>
+          <Flex key={block.id} {...flexProps}
+            data-testid={`${block.type}-field`}
+          >
             {/* @ts-expect-error 'erg idk how we should fix the error below' */}
             <StepComponent {...props} />
           </Flex>
