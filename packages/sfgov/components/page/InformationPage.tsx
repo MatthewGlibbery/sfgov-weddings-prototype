@@ -2,24 +2,22 @@ import NextImage from 'next/image'
 import {
   BigDesc,
   Container,
-  ContainerProps,
   DisplayLg,
+  type ContainerProps,
   type FIXMEAsableProps
 } from '@/design-system'
-import type {
-  InfoPageData,
-  InfoPageSection,
-  PageComponent,
-  WagtailImageData
-} from '@/types'
-import { resolveImage } from '@/lib/utils'
 import { RelatedContentList } from '../RelatedContentList'
 import { TitleAndText } from '../TitleAndText'
 import { Image } from '../Image'
 import { PageWrapper } from './PageWrapper'
+import type {
+  InfoPageData,
+  InfoPageSection,
+  WagtailImageData
+} from '@/types'
+import type { ComponentType } from 'react'
 
-export const InformationPage: PageComponent<InfoPageData> = props => {
-  const page = props.page as InfoPageData
+export const InformationPage: ComponentType<{ page: InfoPageData }> = ({ page }) => {
   const {
     title,
     description,
@@ -29,6 +27,7 @@ export const InformationPage: PageComponent<InfoPageData> = props => {
     related_content_topics: topics,
     related_content_pages: pages
   } = page
+
   return (
     <PageWrapper title={title}>
       <Container css={{ mb: 20 }}>
@@ -60,18 +59,6 @@ export const InformationPage: PageComponent<InfoPageData> = props => {
         content={pages} />
     </PageWrapper>
   )
-}
-
-/* istanbul ignore next */
-InformationPage.loadReferences = async (untypedData, api) => {
-  const data = untypedData as InfoPageData
-  if (Array.isArray(data.information_section)) {
-    for (const block of data.information_section) {
-      if (block.type === 'image') {
-        block.value = await resolveImage(block.value, api) as WagtailImageData
-      }
-    }
-  }
 }
 
 type InfoSectionListProps = ContainerProps & {

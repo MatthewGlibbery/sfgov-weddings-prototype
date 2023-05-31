@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { StepBlockFactory, StepByStepPageFactory } from '@/lib/factories'
 import { StepByStepPage } from './StepByStepPage'
-import { PageProps } from '@/types'
 
 describe('StepByStepPage', () => {
   const fixture = StepByStepPageFactory.make({
@@ -11,13 +10,8 @@ describe('StepByStepPage', () => {
     steps: StepBlockFactory.make(5)
   })
 
-  const pageProps: Omit<PageProps, 'page'> = {
-    path: '/some-step-by-step-page',
-    locale: 'en'
-  }
-
   it('renders the page title', () => {
-    render(<StepByStepPage page={fixture} {...pageProps} />)
+    render(<StepByStepPage page={fixture} />)
     const title = screen.getByRole('heading', {
       level: 1
     })
@@ -27,7 +21,7 @@ describe('StepByStepPage', () => {
 
   describe('description', () => {
     it('renders if present', () => {
-      render(<StepByStepPage page={fixture} {...pageProps} />)
+      render(<StepByStepPage page={fixture} />)
       const description = screen.getByText(fixture.description, {
         selector: 'p'
       })
@@ -35,13 +29,13 @@ describe('StepByStepPage', () => {
     })
 
     it('does not render if empty', async () => {
-      render(<StepByStepPage page={{ ...fixture, description: '' }} {...pageProps} />)
+      render(<StepByStepPage page={{ ...fixture, description: '' }} />)
       expect(screen.queryByTestId('step-by-step-description')).not.toBeInTheDocument()
     })
   })
 
   it('renders the intro', () => {
-    render(<StepByStepPage page={fixture} {...pageProps} />)
+    render(<StepByStepPage page={fixture} />)
     const intro = screen.getByText(fixture.intro, {
       selector: 'p'
     })
@@ -52,7 +46,7 @@ describe('StepByStepPage', () => {
     const step = StepBlockFactory.make({
       id: '1'
     })
-    render(<StepByStepPage page={{ ...fixture, steps: [step] }} {...pageProps} />)
+    render(<StepByStepPage page={{ ...fixture, steps: [step] }} />)
 
     expect(
       screen.getByTestId(`step-${step.id}`)

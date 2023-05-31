@@ -1,18 +1,12 @@
 import { TransactionPageFactory } from '@/lib/factories'
-import { PageProps } from '@/types'
 import { render, screen } from '@testing-library/react'
 import { TransactionPage } from './TransactionPage'
 
 describe('TransactionPage', () => {
   const fixture = TransactionPageFactory.make()
 
-  const pageProps: Omit<PageProps, 'page'> = {
-    path: '/some-transaction-page',
-    locale: 'en'
-  }
-
   it('renders the page title', () => {
-    render(<TransactionPage page={fixture} {...pageProps} />)
+    render(<TransactionPage page={fixture} />)
     const title = screen.getByRole('heading', {
       level: 1
     })
@@ -22,7 +16,7 @@ describe('TransactionPage', () => {
 
   describe('description', () => {
     it('renders if present', () => {
-      render(<TransactionPage page={fixture} {...pageProps} />)
+      render(<TransactionPage page={fixture} />)
       const description = screen.getByText(fixture.description, {
         selector: 'p'
       })
@@ -30,7 +24,7 @@ describe('TransactionPage', () => {
     })
 
     it('does not render if empty', async () => {
-      render(<TransactionPage page={{ ...fixture, description: '' }} {...pageProps} />)
+      render(<TransactionPage page={{ ...fixture, description: '' }} />)
       expect(screen.queryByTestId('step-by-step-description')).not.toBeInTheDocument()
     })
   })
@@ -45,7 +39,7 @@ describe('TransactionPage', () => {
     { what: 'get_help', input: fixture.get_help[0].value.title },
     { what: 'get_help', input: fixture.get_help[1].value.owner }
   ])('renders the $what section when present', ({ input }) => {
-    render(<TransactionPage page={fixture} {...pageProps} />)
+    render(<TransactionPage page={fixture} />)
 
     const section = screen.getByText(input)
     expect(section).toBeInTheDocument()
@@ -62,7 +56,7 @@ describe('TransactionPage', () => {
   ])('does not render the $what section when not present', ({ what }) => {
     // @ts-expect-error 'blegh'
     fixture[what] = []
-    render(<TransactionPage page={fixture} {...pageProps} />)
+    render(<TransactionPage page={fixture} />)
 
     expect(screen.queryByTestId(`${what}-section`)).not.toBeInTheDocument()
   })

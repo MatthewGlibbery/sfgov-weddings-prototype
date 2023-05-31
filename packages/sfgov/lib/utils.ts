@@ -14,17 +14,17 @@ export async function resolveImage (img: WagtailImageData | number, api: IConten
   if (!img) {
     // noop
   } else if (typeof img === 'number') {
-    return api.loadJSON<WagtailImageData>(`images/${img}`)
+    return api.getData<WagtailImageData>(`images/${img}`)
   } else if (img.meta?.download_url) {
     return img
   } else if (img.id && !img.meta?.download_url) {
-    return api.loadJSON<WagtailImageData>(`images/${img.id}`)
+    return api.getData<WagtailImageData>(`images/${img.id}`)
   }
 }
 
 export function resolvePage<T extends PageData = PageData> (idOrObj: number | T, api: IContentAPI) {
   if (typeof idOrObj === 'number') {
-    return api.loadJSON<T>(`pages/${idOrObj}/`)
+    return api.getData<T>(`pages/${idOrObj}/`)
   } else {
     return idOrObj as T
   }

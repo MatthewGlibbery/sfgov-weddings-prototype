@@ -1,6 +1,6 @@
 // import NextImage from 'next/image'
 import { BigDesc, BodyText, Box, Container, DisplayLg, Flex, styled, TitleLg, TitleXs } from '@/design-system'
-import type { EmailBlock, EventPageData, PageComponent, PhoneNumberBlockType } from '@/types'
+import type { EmailBlock, EventPageData, PhoneNumberBlockType } from '@/types'
 import { RelatedContentList } from '../RelatedContentList'
 // import { Image } from '../Image'
 import {
@@ -13,9 +13,9 @@ import {
   EmailBlockLink
 } from '../'
 import { When } from 'react-if'
+import type { ComponentType } from 'react'
 
-export const EventPage: PageComponent<EventPageData> = props => {
-  const page: EventPageData = props.page
+export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
   const {
     title,
     description,

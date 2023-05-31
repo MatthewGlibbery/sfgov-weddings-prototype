@@ -1,111 +1,123 @@
-import { isMatch } from 'micromatch'
-import type { IContentAPI, IController, PageComponent, PageProps, QueryParams } from '../types'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { ErrorBoundary, ErrorFallbackReport } from '@/components'
+import type { ComponentType } from 'react'
+import type { PageData, PageProps, IContentAPI } from '@/types'
+import type { GetServerSideProps } from 'next'
+import safeJsonStringify from 'safe-json-stringify'
+
+// "unknown" page props literally have { page: unknown }
+type UnknownPageProps = PageProps<unknown>
+
+// And "known" page props have a "page" prop that explicitly extends PageData
+type KnownPageProps = PageProps<PageData>
 
 /**
- * The map of content types to template components is expressed
- * as an object literal where the keys are glob patterns and the
- * values are PageComponent functions:
+ * A page component is just a React component that takes a "page" prop of a
+ * known type. The Controller implementation distinguishes "unknown" page props
+ * from "known" page props, which are assumed to have a "page" prop whose type
+ * extends {@link PageData}.
  *
- * ```js
- * {
- *   'sfgov.Info': InfoPage
- * }
+ * NB: This type will _not_ work as expected in page component declarations
+ * (that's why it's not exported). You should use
+ * `ComponentType<{ page: SpecificPageData }>` or
+ * `ComponentType<PageProps<SpecificPageData>>` instead.
+ */
+type PageComponent<
+  T extends PageData = PageData
+> = Omit<ComponentType<PageProps<T>>, 'propTypes'>
+
+/**
+ * IPageTemplate is the interface that page template objects (or classes) need
+ * to implement in order for the {@link Controller} class to use them. The
+ * interface is generic so that TypeScript can infer both the component props
+ * and canRender() type predicate.
+ */
+export interface IPageTemplate<SpecificPageData extends PageData = PageData> {
+  canRender (data: unknown): data is SpecificPageData
+  component: PageComponent<SpecificPageData>
+}
+
+/**
+ * The WagtailPageTemplate is a page template class that implements
+ * {@link IPageTemplate} using components whose "page" prop is narrowly typed to
+ * extend {@link PageData}. The generic types are inferred from the first
+ * constructor argument so that you don't have to provide them, and TypeScript
+ * will complain if the component doesn't accept a "page" prop that extends
+ * PageData:
+ *
+ * ```ts
+ * new WagtailPageTemplate((props: { page: string }) => null, 'whatever')
  * ```
  */
-export type ContentTypeTemplateMap = Record<string, PageComponent>
+export class WagtailPageTemplate<
+  PageComponentType extends PageComponent,
+  SpecificPageData extends PageData = PageComponentType extends PageComponent<infer T extends PageData>
+    ? T
+    : never
+> implements IPageTemplate<SpecificPageData> {
+  metaType: string
+  component: PageComponent<SpecificPageData>
 
-// the internal representation is the Object.entries() transformation
-type ContentTypeTemplateMapEntries = [
-  string | string[],
-  PageComponent
-][]
+  constructor (component: PageComponentType, metaType: string) {
+    this.component = component as PageComponent<SpecificPageData>
+    this.metaType = metaType
+  }
 
-export class Controller implements IController {
+  canRender (data: unknown): data is SpecificPageData {
+    return (data as PageData)?.meta?.type === this.metaType
+  }
+}
+
+export class Controller {
   api: IContentAPI
-  templates: ContentTypeTemplateMapEntries
-  templateMap: Map<string, PageComponent>
+  templates: IPageTemplate[]
 
-  constructor (api: IContentAPI, templates: ContentTypeTemplateMap) {
+  constructor (api: IContentAPI, templates: IPageTemplate[]) {
     if (!api) {
-      throw new Error('A ContentAPI instance is required')
-    } else if (!templates) {
-      throw new Error('A content type template map is required')
+      throw new Error('A ContentAPI is required')
+    } else if (!Array.isArray(templates)) {
+      throw new Error('An array of templates is required')
     }
     this.api = api
-    this.templates = Object.entries(templates)
-    this.templateMap = new Map<string, PageComponent>()
+    this.templates = templates
   }
 
-  /**
-   * Create a getServerSideProps() function from this controller.
-   * This is usually used in Next.js page routes:
-   *
-   * ```ts
-   * export const getServerSideProps = controller.makeGetServerSideProps()
-   * ```
-   */
-  makeGetServerSideProps (): GetServerSideProps<PageProps> {
-    return async context => {
-      const path = this.getContextPath(context)
+  makeGetServerSideProps (): GetServerSideProps<UnknownPageProps> {
+    return async ({ resolvedUrl, locale }) => {
       try {
-        const props = await this.getPageProps(path, {
-          locale: context.locale
-        })
-        return { props }
+        const page = await this.api.getPageByPath(resolvedUrl, { locale })
+        return {
+          props: { page }
+        }
       } catch (error) {
-        // TODO: log errors
-        return { notFound: true }
+        console.error('No page found for path: "%s", locale: "%s"', resolvedUrl, locale)
+      }
+      return {
+        notFound: true
       }
     }
   }
 
-  makeViewComponent (): PageComponent {
-    const getTemplate = (type: string) => this.getTemplateForType(type)
+  getViewComponent (props: UnknownPageProps): ComponentType<KnownPageProps> {
+    const { page } = props
+    if (page) {
+      for (const template of this.templates) {
+        if (template.canRender(page)) {
+          return template.component as ComponentType<KnownPageProps>
+        }
+      }
+    }
+    throw new Error(`No template found for page: ${
+      typeof props.page === 'object'
+        ? safeJsonStringify(props.page as object)
+        : 'null'
+    }`)
+  }
+
+  makeViewComponent (): ComponentType<KnownPageProps> {
+    const getViewComponent = this.getViewComponent.bind(this)
     // eslint-disable-next-line react/function-component-definition
     return function ControllerView (props) {
-      if (!props.page?.meta?.type) {
-        throw new Error('No page.meta.type found in page props')
-      }
-      const { type } = props.page.meta
-      const Template = getTemplate(type)
-      if (!Template) {
-        throw new Error(`No template found for page.meta.type "${type}"`)
-      }
-      return (
-        <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
-          <Template {...props} />
-        </ErrorBoundary>
-      )
-    }
-  }
-
-  async getPageProps (path: string, params?: QueryParams, options?: RequestInit): Promise<PageProps> {
-    const data = await this.api.getPageByPath(path, params, options)
-    const Template = data?.meta?.type
-      ? this.getTemplateForType(data.meta.type)
-      : undefined
-    if (Template?.loadReferences) {
-      // FIXME: we might want to try/catch this
-      await Template.loadReferences(data, this.api)
-    }
-    return { page: data }
-  }
-
-  getContextPath (context: GetServerSidePropsContext) {
-    return context.resolvedUrl
-  }
-
-  getTemplateForType (type: string): PageComponent | undefined {
-    if (this.templateMap.has(type)) {
-      return this.templateMap.get(type)
-    }
-    for (const [pattern, template] of this.templates) {
-      if (isMatch(type, pattern)) {
-        this.templateMap.set(type, template)
-        return template
-      }
+      const Component = getViewComponent(props)
+      return <Component {...props} />
     }
   }
 }

@@ -1,6 +1,4 @@
-import { GetServerSideProps } from 'next'
-import { FunctionComponent } from 'react'
-import { PageData } from './pages'
+import type { PageData } from './pages'
 
 export * from './pages'
 export * from './blocks'
@@ -11,26 +9,31 @@ export type QueryParams = {
   translation_of?: number
 } & Record<string, string | number | undefined>
 
+/**
+ * The Content API interface implements the bare minimum of methods necessary to
+ * get arbitrary JSON data by path. Implementations can decide what to do with
+ * the paths, e.g. joining them onto a base URL for fetch or just looking up data
+ * in a map.
+ */
 export interface IContentAPI {
-  loadJSON<T = unknown> (path: string, params?: QueryParams, options?: RequestInit): Promise<T>
-  getPageByPath<T extends PageData = PageData> (path:string, params?: QueryParams, options?: RequestInit): Promise<T>
+  getData<T = unknown> (
+    path: string,
+    params?: QueryParams,
+    options?: RequestInit
+  ): Promise<T>
+  getPageByPath<T extends PageData = PageData> (
+    path:string,
+    params?: QueryParams,
+    options?: RequestInit
+  ): Promise<T>
 }
 
-export interface PageProps<SpecificData extends PageData = PageData> {
+/**
+ * PageProps are the common interface for props generated via a Controller's
+ * getServerSideProps(). The first generic argument is the expected "page" prop
+ * data type, which _should_ extend {@link PageData} and will be assumed
+ * unknown if it doesn't.
+ */
+export type PageProps<T, SpecificData = T extends PageData ? T : unknown> = {
   page: SpecificData
 }
-
-export type ReferenceLoader<SpecificData extends PageData = PageData> = (
-  (data: SpecificData, api: IContentAPI) => Promise<void> | void
-)
-
-export type PageComponent<SpecificData extends PageData = PageData> = FunctionComponent<PageProps<SpecificData>> & {
-  loadReferences?: ReferenceLoader<SpecificData>
-}
-
-export interface IController {
-  makeGetServerSideProps (): GetServerSideProps<PageProps>
-  makeViewComponent (): PageComponent
-}
-
-export type FetchImpl = typeof fetch

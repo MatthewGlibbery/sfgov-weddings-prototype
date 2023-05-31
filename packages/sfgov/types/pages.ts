@@ -12,7 +12,7 @@ import {
   WhatToDoBlock
 } from './blocks'
 
-interface MinimalMeta {
+type MinimalMeta = {
   type: string
   locale?: string
   url_path?: string
@@ -26,18 +26,18 @@ interface MinimalMeta {
   alias_of?: object
 }
 
-interface MinimalPageData {
+type MinimalPageData = {
   id: number
   meta: MinimalMeta
   title: string
   // should we add description here?
 }
 
-export interface PageMeta<Parent extends MinimalPageData = MinimalPageData> extends MinimalMeta {
+export type PageMeta<Parent extends MinimalPageData = MinimalPageData> = MinimalMeta & {
   parent?: Parent | undefined
 }
 
-export type PageData = MinimalPageData & {
+export type PageData = object & MinimalPageData & {
   meta: PageMeta<PageData>
 }
 
@@ -47,9 +47,7 @@ export type RelatedContentData = Omit<PageData, 'title'> & {
 
 export type RelatedContentTransactionBlock = BlockType<'transaction', MinimalPageData>
 
-export type InfoPageSection = ImageBlock | TitleAndTextBlock
-
-export interface EventPageData extends PageData {
+export type EventPageData = PageData & {
   description: string
   date_time: DateTimeBlock[]
   cost: CostBlock[]
@@ -62,7 +60,9 @@ export interface EventPageData extends PageData {
   related_content_topics: RelatedContentData[]
 }
 
-export interface InfoPageData extends PageData {
+export type InfoPageSection = ImageBlock | TitleAndTextBlock
+
+export type InfoPageData = PageData & {
   description: string
   information_section?: InfoPageSection[]
   related_content_part_of: RelatedContentData[]
@@ -71,7 +71,7 @@ export interface InfoPageData extends PageData {
   related_content_pages: RelatedContentData[]
 }
 
-export interface StepByStepData extends PageData {
+export type StepByStepData = PageData & {
   description: string
   intro: string
   steps?: StepBlock[]
@@ -79,13 +79,13 @@ export interface StepByStepData extends PageData {
   related_content_topics: RelatedContentData[]
 }
 
-export interface AgencyPage extends PageData {
+export type AgencyPage = PageData & {
   description: string
 }
 
 export type GetHelpBlockTypes = EmailBlock | PhoneNumberBlockType | LocationBlock | TitleAndTextBlock
 
-export interface TransactionPageData extends PageData {
+export type TransactionPageData = PageData & {
   description: string
   cost: CostBlock[]
   things_to_know: TitleAndTextBlock[]

@@ -1,12 +1,18 @@
-import { BigDesc, BodyText, Box, Container, DisplayLg } from '@/design-system'
-import type { StepByStepData, PageComponent } from '@/types'
+import {
+  BigDesc,
+  BodyText,
+  Box,
+  Container,
+  DisplayLg
+} from '@/design-system'
 import { PageWrapper } from './PageWrapper'
 import { StepList } from '../Step'
 import { RelatedContentList } from '../RelatedContentList'
+import type { StepByStepData } from '@/types'
+import type { ComponentType } from 'react'
 import { RichText } from '../RichText'
 
-export const StepByStepPage: PageComponent<StepByStepData> = props => {
-  const { page } = props
+export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({ page }) => {
   const {
     title,
     description,

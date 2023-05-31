@@ -1,6 +1,6 @@
-import React from 'react'
 import { When } from 'react-if'
 import { useTranslation } from 'next-i18next'
+import type { ComponentType } from 'react'
 
 import {
   BigDesc,
@@ -18,9 +18,8 @@ import {
   IconBuilding,
   IconCheck
 } from '@/design-system'
-import {
+import type {
   GetHelpBlockTypes,
-  PageComponent,
   TransactionPageData
 } from '@/types'
 
@@ -36,8 +35,7 @@ import {
 } from '../'
 import { LocationBlock } from '../Location'
 
-export const TransactionPage: PageComponent<TransactionPageData> = props => {
-  const page:TransactionPageData = props.page
+export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ page }) => {
   const {
     title,
     description,

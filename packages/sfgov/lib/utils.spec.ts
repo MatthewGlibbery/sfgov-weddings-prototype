@@ -72,7 +72,7 @@ describe('getImageURL()', () => {
 describe('resolvers', () => {
   const mockLoadJSON = jest.fn()
   const api = {
-    loadJSON: mockLoadJSON
+    getData: mockLoadJSON
   } as unknown as IContentAPI
 
   afterEach(() => {
@@ -80,34 +80,34 @@ describe('resolvers', () => {
   })
 
   describe('resolvePage()', () => {
-    it('resolves an id with api.loadJSON()', async () => {
+    it('resolves an id with api.getData()', async () => {
       await resolvePage(1, api)
-      expect(api.loadJSON).toHaveBeenCalledWith('pages/1/')
+      expect(api.getData).toHaveBeenCalledWith('pages/1/')
     })
 
     it('does not attempt to resolve an object', async () => {
       // @ts-expect-error intentionally malformed data
       await resolvePage({ id: 1 }, api)
-      expect(api.loadJSON).not.toHaveBeenCalled()
+      expect(api.getData).not.toHaveBeenCalled()
     })
   })
 
   describe('resolveImage()', () => {
-    it('resolves an id with api.loadJSON()', async () => {
+    it('resolves an id with api.getData()', async () => {
       await resolveImage(1, api)
-      expect(api.loadJSON).toHaveBeenCalledWith('images/1')
+      expect(api.getData).toHaveBeenCalledWith('images/1')
     })
 
     it('attempts to resolve an object without meta.download_url', async () => {
       // @ts-expect-error intentionally malformed data
       await resolveImage({ id: 1 }, api)
-      expect(api.loadJSON).toHaveBeenCalledWith('images/1')
+      expect(api.getData).toHaveBeenCalledWith('images/1')
     })
 
     it('does not attempt to resolve object with meta.download_url', async () => {
       // @ts-expect-error intentionally sparse data
       await resolveImage({ meta: { download_url: 'foo.jpg' } }, api)
-      expect(api.loadJSON).not.toHaveBeenCalled()
+      expect(api.getData).not.toHaveBeenCalled()
     })
 
     it('does nothing if the value is falsy', async () => {
@@ -117,7 +117,7 @@ describe('resolvers', () => {
         resolveImage(0, api)
       ])
       expect(values).toEqual([undefined, undefined])
-      expect(api.loadJSON).not.toHaveBeenCalled()
+      expect(api.getData).not.toHaveBeenCalled()
     })
   })
 })

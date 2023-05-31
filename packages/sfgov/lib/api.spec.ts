@@ -121,13 +121,13 @@ describe('ContentAPI', () => {
     })
   })
 
-  describe('loadJSON()', () => {
+  describe('getData()', () => {
     it('fetches JSON', async () => {
       const data = {
         foo: 'bar'
       }
       fetchMock.mockResponseOnce(JSON.stringify(data))
-      const res = await example.loadJSON<typeof data>('foo')
+      const res = await example.getData<typeof data>('foo')
       expect(res).toEqual(data)
     })
 
@@ -140,7 +140,7 @@ describe('ContentAPI', () => {
           status: 404
         }
       }))
-      await expect(example.loadJSON('derp')).rejects.toThrow('not found')
+      await expect(example.getData('derp')).rejects.toThrow('not found')
     })
 
     it('rejects on 4xx statuses with "not found" if no message is provided', async () => {
@@ -150,7 +150,7 @@ describe('ContentAPI', () => {
           status: 404
         }
       }))
-      await expect(example.loadJSON('derp')).rejects.toThrow('not found')
+      await expect(example.getData('derp')).rejects.toThrow('not found')
     })
 
     it('rejects on other non-200 statuses', async () => {
@@ -168,7 +168,7 @@ describe('ContentAPI', () => {
             statusText
           }
         }))
-        await expect(example.loadJSON('derp')).rejects.toThrow(`${status} ${statusText}`)
+        await expect(example.getData('derp')).rejects.toThrow(`${status} ${statusText}`)
       }
     })
 
@@ -181,7 +181,7 @@ describe('ContentAPI', () => {
           statusText: 'Bad Request'
         }
       }))
-      await expect(example.loadJSON('derp')).rejects.toThrow(`400 Bad Request: ${message}`)
+      await expect(example.getData('derp')).rejects.toThrow(`400 Bad Request: ${message}`)
     })
   })
 
@@ -261,7 +261,7 @@ describe('FixtureAPI', () => {
     })
   })
 
-  describe('loadJSON()', () => {
+  describe('getData()', () => {
     const page = {
       id: 99,
       meta: {
@@ -277,11 +277,11 @@ describe('FixtureAPI', () => {
     })
 
     it('resolves to page at the expected "api/{id}" path', async () => {
-      await expect(api.loadJSON('page/99')).resolves.toEqual(page)
+      await expect(api.getData('page/99')).resolves.toEqual(page)
     })
 
     it('rejects on missing pages', async () => {
-      await expect(api.loadJSON('page/100')).rejects.toThrow(/not found/)
+      await expect(api.getData('page/100')).rejects.toThrow(/not found/)
     })
   })
 })

@@ -1,12 +1,12 @@
 import { join } from 'path'
-import type { FetchImpl, PageData, QueryParams, IContentAPI, WagtailImageData } from '../types'
+import type { PageData, QueryParams, IContentAPI, WagtailImageData } from '../types'
 import { i18n } from '../next.config'
 
 // @ts-expect-error no, it's really not null/undefined
 const DEFAULT_LOCALE = i18n.defaultLocale
 
 export type ContentAPIOptions = {
-  fetch?: FetchImpl
+  fetch?: typeof fetch
   baseURL?: string | null
   apiHeaders?: Record<string, string>
 }
@@ -37,18 +37,18 @@ export class ContentAPI implements IContentAPI {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getPageByPath<T extends PageData = PageData> (path:string, params?: QueryParams, options?: RequestInit) {
-    const english = await this.loadJSON<T>('pages/find/', {
+    const english = await this.getData<T>('pages/find/', {
       html_path: path
     }, options)
     if (params?.locale && params.locale !== DEFAULT_LOCALE) {
       let translation: PageData
       try {
-        const list = await this.loadJSON<ListData<T>>('pages/', {
+        const list = await this.getData<ListData<T>>('pages/', {
           translation_of: english.id,
           locale: params.locale
         }, options)
         if (list?.items?.length) {
-          translation = await this.loadJSON<T>(`pages/${list.items[0].id}/`)
+          translation = await this.getData<T>(`pages/${list.items[0].id}/`)
         }
       } catch (error) {
         // TODO: log errors
@@ -61,7 +61,7 @@ export class ContentAPI implements IContentAPI {
     return english
   }
 
-  async loadJSON<T = unknown> (path: string, params?: QueryParams, options?: RequestInit) {
+  async getData<T = unknown> (path: string, params?: QueryParams, options?: RequestInit) {
     const res = await this.load(path, params, options)
     // eslint-disable-next-line n/handle-callback-err
     const data = await res.json().catch(() => {
@@ -124,7 +124,7 @@ export class FixtureAPI implements IContentAPI {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  loadJSON<T = unknown> (path: string, params?: QueryParams, options?: RequestInit): Promise<T> {
+  getData<T = unknown> (path: string, params?: QueryParams, options?: RequestInit): Promise<T> {
     const page = (
       this.dataByApiPath[path] ||
       this.dataByApiPath[`/${path}`]
