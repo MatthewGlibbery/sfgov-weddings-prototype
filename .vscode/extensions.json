@@ -1,11 +1,12 @@
 {
   "recommendations": [
     "ban.spellright",
-    "dbaeumer.vscode-eslint",
     "davidanson.vscode-markdownlint",
-    "hardikmodha.create-tests",
+    "dbaeumer.vscode-eslint",
+    "deque-systems.vscode-axe-linter",
     "firsttris.vscode-jest-runner",
-    "stkb.rewrap"
+    "hardikmodha.create-tests",
+    "stkb.rewrap",
   ],
   "unwantedRecommendations": []
 }
