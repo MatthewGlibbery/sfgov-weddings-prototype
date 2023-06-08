@@ -1,4 +1,4 @@
-import { Box, Container, TitleSm } from '@/design-system'
+import { Container, TitleSm } from '@/design-system'
 import { PageLink, PageWrapper } from '@/components'
 import { ContentAPI } from '@/lib/api'
 import type { PageData } from '@/types'
@@ -44,7 +44,7 @@ const Home = ({ pages }: { pages: PageData[] }) => {
   const { t } = useTranslation()
   return (
     <PageWrapper>
-      <Container css={{ py: 8, marginBottom: 20 }}>
+      <Container className='py-8 mb-20'>
         <TitleSm as='h1'>{t('pages')}</TitleSm>
         {pages.length
           ? <ul>
@@ -52,9 +52,9 @@ const Home = ({ pages }: { pages: PageData[] }) => {
                 <li key={page.id}><PageLink page={page} /></li>
               ))}
             </ul>
-          : <Box css={{ bg: '$redL1', color: '$redL4', p: 20, br: 8 }}>
+          : <div className='bg-red100 text-red400 p-20 rounded-[8px]'>
             No pages found?
-          </Box>}
+          </div>}
           <div>
             <Link href='/__test__'>{t('testPages')}</Link>
           </div>

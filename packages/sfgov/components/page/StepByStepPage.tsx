@@ -1,7 +1,6 @@
 import {
   BigDesc,
   BodyText,
-  Box,
   Container,
   DisplayLg
 } from '@/design-system'
@@ -25,18 +24,21 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({ page }
   return (
     <PageWrapper title={title}>
       <Container>
-        <Box>
+        <div>
           <DisplayLg as='h1' data-testid='step-by-step-title'>{title}</DisplayLg>
           {description
-            ? <BigDesc as='p' css={{ my: 20 }} data-testid='step-by-step-description'>
+            ? <BigDesc as='p' className='my-20' data-testid='step-by-step-description'>
                 {description}
               </BigDesc>
             : null}
-          <BodyText as='p' css={{ my: 60, width: '50%' }} data-testid='step-by-step-intro'>
-            {/* FIXME: do we need to forbid block-level elements here since this is wrapped in a <p>? */}
+          <BodyText as='p' className='my-60 w-1/2' data-testid='step-by-step-intro'>
+            {/**
+              * FIXME: do we need to forbid block-level elements here since
+              * this is wrapped in a <p>?
+              */}
             <RichText html={intro} />
           </BodyText>
-        </Box>
+        </div>
         <StepList steps={steps} />
       </Container>
       <RelatedContentList

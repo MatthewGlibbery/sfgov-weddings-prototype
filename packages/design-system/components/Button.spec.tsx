@@ -1,40 +1,51 @@
+import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { Button, InverseButton, LinkButton, PrimaryButton, SecondaryButton } from './Button'
+import { Button } from './Button'
 
 describe('Button', () => {
   it('renders a button', () => {
-    render(<Button />)
+    render(<Button>hi</Button>)
+    const button = screen.getByRole('button', { name: 'hi' })
+    expect(button).toBeInTheDocument()
+    expect(button).toHaveTextContent('hi')
+  })
 
+  describe('as="a"', () => {
+    it('renders a link', () => {
+      render(<Button as='a' href='#derp'>hi</Button>)
+      const button = screen.getByRole('link')
+      expect(button).toBeInTheDocument()
+      expect(button).toHaveTextContent('hi')
+      expect(button).toHaveAttribute('href', '#derp')
+    })
+  })
+
+  describe('variants', () => {
+    it.each([
+      ['primary'],
+      ['secondary'],
+      ['link'],
+      ['whatever']
+    ])('renders the variant', variant => {
+      // @ts-expect-error these are not all valid
+      render(<Button variant={variant}>yo</Button>)
+      const button = screen.getByRole('button')
+      expect(button).toBeInTheDocument()
+      expect(button).toHaveTextContent('yo')
+    })
+  })
+
+  describe('block prop', () => {
+    render(<Button block>yo</Button>)
     const button = screen.getByRole('button')
-
-    expect(button).toBeInTheDocument()
+    expect(button).toHaveClass('flex', 'w-full')
   })
 
-  it('renders a primary button', () => {
-    render(<PrimaryButton data-testid="primary" />)
-
-    const button = screen.getByTestId('primary')
-    expect(button).toBeInTheDocument()
-  })
-
-  it('renders a secondary button', () => {
-    render(<SecondaryButton data-testid="secondary" />)
-
-    const button = screen.getByTestId('secondary')
-    expect(button).toBeInTheDocument()
-  })
-
-  it('renders an inverse button', () => {
-    render(<InverseButton data-testid="inverse" />)
-
-    const button = screen.getByTestId('inverse')
-    expect(button).toBeInTheDocument()
-  })
-
-  it('renders a link button', () => {
-    render(<LinkButton data-testid="link" />)
-
-    const button = screen.getByTestId('link')
-    expect(button).toBeInTheDocument()
+  describe('className', () => {
+    it('adds className values', () => {
+      render(<Button className='wut'>yo</Button>)
+      const button = screen.getByRole('button')
+      expect(button).toHaveClass('inline-flex', 'wut')
+    })
   })
 })

@@ -1,19 +1,14 @@
-import { Box } from './Box'
-import { styled } from '../stitches.config'
-import { ComponentProps } from 'react'
+import React from 'react'
+import clsx from 'clsx'
 
-export const Container = styled(Box, {
-  mx: 20,
-  maxWidth: '$lg',
-  '@md': {
-    mx: 28
-  },
-  '@lg': {
-    mx: 96
-  },
-  '@xl': {
-    mx: 'auto'
-  }
-})
+export type ContainerProps = JSX.IntrinsicElements['div']
 
-export type ContainerProps = ComponentProps<typeof Container>
+export const Container = ({ className, ...rest }: ContainerProps) => (
+  <div className={clsx(
+    'mx-20 max-w-lg',
+    'md:mx-28',
+    'lg:mx-96',
+    'xl:mx-auto',
+    className
+  )} {...rest} />
+)

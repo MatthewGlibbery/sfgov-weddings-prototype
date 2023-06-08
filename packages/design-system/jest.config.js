@@ -25,12 +25,7 @@ const customJestConfig = {
     }
   },
   collectCoverageFrom: [
-    '<rootDir>/components/**/*.tsx',
-    // FIXME: there's no good way to cover these in tests
-    '!<rootDir>/components/GlobalStyle.tsx',
-    '!<rootDir>/components/GoogleFonts.tsx',
-    '!<rootDir>/components/SSRStyle.tsx',
-    '!<rootDir>/components/icons/wrapped.tsx'
+    '<rootDir>/components/**/*.tsx'
   ],
   moduleNameMapper,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],

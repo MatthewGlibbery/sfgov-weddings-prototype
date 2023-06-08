@@ -1,7 +1,14 @@
-import type { ComponentProps, ComponentType, ReactNode } from 'react'
-import type { CSS } from './stitches.config'
+import type { ComponentProps, ComponentType, ElementType, ReactNode } from 'react'
 
-export type LinkProps = ComponentProps<'link'>
+export type ClassProps = {
+  className?: string
+}
+
+export type IntrinsicPropsWithoutClass<
+  C extends ElementType
+> = Omit<ComponentProps<C>, 'className'>
+
+export type LinkProps = JSX.IntrinsicElements['link']
 
 export type FontWeightName = 'light' | 'normal' | 'bold' | 'semibold'
 export type FixedFontWeightMap = Partial<Record<FontWeightName, number>>
@@ -20,7 +27,7 @@ export type GoogleFontOptions = {
 
 export type FontSpec = {
   name: string
-  fallbacks?: string[]
+  fallbacks: string[]
   weights: FixedFontWeightMap
   googleFont?: GoogleFontOptions
 }
@@ -36,9 +43,9 @@ export type FIXMEChildrenProps = {
 }
 
 export type FIXMEAsableProps = {
-  as?: keyof JSX.IntrinsicElements | ComponentType
+  as?: ComponentType | ElementType
 }
 
-export type FIXMECSSProps = {
-  css?: CSS
-}
+export type ChildrenProps = {
+  children?: ReactNode
+} & JSX.IntrinsicAttributes

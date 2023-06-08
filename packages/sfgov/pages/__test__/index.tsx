@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { Container, Monospace, TitleLg } from '@/design-system'
 import { PageLink } from '@/components'
 import { pages } from '@/__fixtures__'
@@ -16,26 +17,34 @@ export const getServerSideProps: GetServerSideProps<TestIndexProps> = async () =
   }
 }
 
+const TD = ({ className, ...rest }: JSX.IntrinsicElements['td']) => (
+  <td className={clsx('p-4', className)} {...rest} />
+)
+
+const TH = ({ className, ...rest }: JSX.IntrinsicElements['th']) => (
+  <th className={clsx('p-4', className)} {...rest} />
+)
+
 const TestIndex = ({ pages }: TestIndexProps) => {
   return (
-    <Container css={{ my: 60, 'td, th': { p: 4 } }}>
-      <TitleLg as='h1' css={{ mb: 20 }}>Test page fixtures</TitleLg>
+    <Container className='my-60'>
+      <TitleLg as='h1' className='mb-20'>Test page fixtures</TitleLg>
       <table>
         <thead>
           <tr>
-            <th align='left'>Link</th>
-            <th align='left'>Type</th>
+            <TH align='left'>Link</TH>
+            <TH align='left'>Type</TH>
           </tr>
         </thead>
         <tbody>
           {pages.map(data => (
             <tr key={data.id}>
-              <td>
+              <TD>
                 <PageLink page={data} />
-              </td>
-              <td>
+              </TD>
+              <TD>
                 <Monospace as='code'>{data.meta.type}</Monospace>
-              </td>
+              </TD>
             </tr>
           ))}
         </tbody>

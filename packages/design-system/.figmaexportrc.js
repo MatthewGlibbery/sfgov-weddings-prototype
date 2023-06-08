@@ -40,9 +40,6 @@ module.exports = {
           getComponentName: ({ componentName }) => normalizeComponentName(componentName),
           getComponentFilename: ({ componentName }) => normalizeComponentName(componentName)
         }),
-        outputWrappedReactIcons({
-          output: `${componentsDir}/wrapped.tsx`
-        }),
         outputReactIndex({
           output: `${componentsDir}/index.json`
         })
@@ -106,26 +103,6 @@ function outputReactIndex ({ output }) {
       }))
     }
     await writeJSON(output, index)
-  }
-}
-
-/**
- * @param {{ output: string }} options 
- * @returns {ComponentOutputter}
- */
-function outputWrappedReactIcons ({ output }) {
-  return async pages => {
-    const components = gatherComponents(pages)
-    const wrapped = dedent`
-      import * as icons from './index.js'
-      import { createStyledIcon as wrap } from '../SVGIcon'
-
-      ${components.map(({ component }) => {
-        const name = normalizeComponentName(component.name)
-        return `export const ${name} = wrap(icons.${name})`
-      }).join('\n')}
-    `
-    await writeFile(output, `${wrapped}\n`)
   }
 }
 

@@ -1,19 +1,13 @@
-import { BoxProps, Container, styled } from '@/design-system'
+import { Container } from '@/design-system'
+import clsx from 'clsx'
 
-export type SiteFooterProps = BoxProps
+export type SiteFooterProps = JSX.IntrinsicElements['footer']
 
-const FooterBox = styled('footer', {
-  bg: '$black',
-  color: '$white',
-  mt: 80,
-  py: 20
-})
-
-export const SiteFooter = (props: SiteFooterProps) => {
+export const SiteFooter = ({ className, ...rest }: SiteFooterProps) => {
   return (
-    <FooterBox as='footer' {...props}>
+    <footer className={clsx('bg-black text-white mt-80 py-20', className)} {...rest}>
       <Container>
       </Container>
-    </FooterBox>
+    </footer>
   )
 }

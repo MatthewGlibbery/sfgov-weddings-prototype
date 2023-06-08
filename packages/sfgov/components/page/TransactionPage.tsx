@@ -4,10 +4,8 @@ import type { ComponentType } from 'react'
 
 import {
   BigDesc,
-  Box,
   Container,
   DisplayLg,
-  Flex,
   IconMail,
   IconInfo,
   IconPhone,
@@ -100,8 +98,8 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
 
   return (
     <PageWrapper title={title}>
-      <Container css={{ mb: 20, pb: 40 }}>
-        <DisplayLg as='h1' css={{ my: 40 }}>{title}</DisplayLg>
+      <Container className='mb-20 pb-40'>
+        <DisplayLg as='h1' className='my-40'>{title}</DisplayLg>
         {/* Related Agencies list */}
         {agencies.map((agency, i) => (
           <span key={agency.page_content.id} data-testid='related_content_agencies-section'>
@@ -111,35 +109,44 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
             </a>
           </span>
         ))}
-        <When condition={description}><BigDesc css={{ mb: 20 }} as='p' data-testid='transaction-page-description'>{description}</BigDesc></When>
-        <Flex css={{ flexDirection: 'column', gapY: 28, p: 28, my: 40, bg: '$grey100', br: 8 }}>
-          <Flex css={{ mb: 28, gapX: 8 }}>
+        <When condition={description}>
+          <BigDesc as='p' className='mb-20' data-testid='transaction-page-description'>
+            {description}
+          </BigDesc>
+        </When>
+        <div className={`
+          flex flex-col gap-y-28
+          p-28 my-4 bg-grey100 rounded-[8px]
+        `}>
+          <div className='flex mb-28 gap-x-8'>
             <IconInfo width={40} />
             <TitleLg as='h2'>{t('What to Know')}</TitleLg>
-          </Flex>
+          </div>
           <When condition={!!cost[0]}>
             <CostBlockDisplay {...cost[0]} />
           </When>
           {thingsToKnow.map(thing => (
-            <Box key={thing.id} data-testid='things_to_know-section'>
+            <div key={thing.id} data-testid='things_to_know-section'>
               <TitleAndText block={thing} />
-            </Box>
+            </div>
           ))}
-        </Flex>
-        <Flex css={{ flexDirection: 'column', my: 40, gapY: 28 }}>
+        </div>
+        <div className='flex flex-col my-40 gap-y-28'>
           <TitleLg as='h2'>{t('What to Do')}</TitleLg>
           {whatToDo.map(what => (
             <WhatToDo key={what.id} {...what} />
           ))}
-        </Flex>
+        </div>
         {customSection.map(block => (
-          <Flex key={block.id} css={{ flexDirection: 'column', mb: 40, gapY: 28 }} data-testid='custom_section-section'>
+          <div key={block.id}
+            className='flex flex-col mb-40 gap-y-28'
+            data-testid='custom_section-section'>
             <TitleAndText block={block} />
-          </Flex>
+          </div>
         ))}
         <When condition={!!specialCases.length}>
-          <Box css={{ mb: 40 }} data-testid='special_cases-section'>
-            <TitleLg as='h2' css={{ mb: 20 }}>{t('Special cases')}</TitleLg>
+          <div className='mb-40' data-testid='special_cases-section'>
+            <TitleLg as='h2' className='mb-20'>{t('Special cases')}</TitleLg>
             {specialCases.map((item, i) => (
               <Accordion
                 key={item.value.title}
@@ -150,19 +157,19 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
                 <RichText html={item.value.text} />
               </Accordion>
             ))}
-          </Box>
+          </div>
         </When>
         {goodForCommunity.map(block => (
-          <Flex key={block.id} css={{ flexDirection: 'column', mb: 40, gapY: 28 }} data-testid='good_for_community-section'>
+          <div key={block.id} className='flex flex-col mb-40 gap-y-28' data-testid='good_for_community-section'>
             <TitleAndText block={block} />
-          </Flex>
+          </div>
         ))}
         <When condition={!!relatedContentPages.length}>
-          <RelatedContentList css={{ my: 40 }} content={relatedContentPages} title={t('Related') as string} />
+          <RelatedContentList className='my-40' content={relatedContentPages} title={t('Related') as string} />
         </When>
         <When condition={!!getHelp.length}>
           <TitleLg as='h2'><IconQuestion width={32} /> {t('Get Help')}</TitleLg>
-          <StackedContainer css={{ mt: 28 }}>
+          <StackedContainer className='mt-28'>
             {renderGetHelpSection(getHelp)}
           </StackedContainer>
         </When>

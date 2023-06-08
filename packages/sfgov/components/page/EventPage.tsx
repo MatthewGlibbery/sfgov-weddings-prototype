@@ -1,5 +1,5 @@
 // import NextImage from 'next/image'
-import { BigDesc, BodyText, Box, Container, DisplayLg, Flex, styled, TitleLg, TitleXs } from '@/design-system'
+import { BigDesc, BodyText, Container, DisplayLg, TitleLg, TitleXs } from '@/design-system'
 import type { EmailBlock, EventPageData, PhoneNumberBlockType } from '@/types'
 import { RelatedContentList } from '../RelatedContentList'
 // import { Image } from '../Image'
@@ -30,31 +30,20 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
     related_content_topics: topics
   } = page
 
-  const InfoWrapper = styled('div', {
-    flexBasis: '33%'
-  })
-
-  const SidebarItemWrapper = styled(Flex, {
-    flexDirection: 'column',
-    bg: '$grey100',
-    p: 40,
-    mb: 20,
-    gapY: 20,
-    br: 8
-  })
-
   const phoneNumbers: PhoneNumberBlockType[] = []
   const emails: EmailBlock[] = []
   contact.forEach((item) => item.type === 'email' ? emails.push(item) : phoneNumbers.push(item))
 
   return (
     <PageWrapper title={title}>
-      <Container css={{ mb: 20, borderBottom: 'solid $grey200 1px', pb: 40 }}>
-        <DisplayLg as='h1' css={{ my: 40 }}>{title}</DisplayLg>
+      <Container className='mb-20 border-b-solid border-b-1 border-grey200 pb-40'>
+        <DisplayLg as='h1' className='my-40'>{title}</DisplayLg>
         <When condition={description}>
-          <BigDesc css={{ mb: 20 }} as='p' data-testid='event-page-description'>{description}</BigDesc>
+          <BigDesc className='mb-20' as='p' data-testid='event-page-description'>
+            {description}
+          </BigDesc>
         </When>
-        <Flex css={{ justifyContent: 'space-evenly', gapX: 20 }}>
+        <div className='flex justify-evenly gap-x-20'>
           <When condition={!!cost?.[0]?.value}>
             <InfoWrapper>
               <CostBlockDisplay {...cost[0]} />
@@ -68,19 +57,19 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
           </When>
           <When condition={!!location?.[0]?.value?.agency?.title}>
             <InfoWrapper>
-              <TitleXs css={{ mb: 20 }}>Location</TitleXs>
+              <TitleXs className='mb-20'>Location</TitleXs>
               <BodyText>{location[0]?.value?.agency?.title}</BodyText>
             </InfoWrapper>
           </When>
-        </Flex>
+        </div>
       </Container>
       <Container>
-        <Flex css={{ gapX: 20 }}>
-          <Box>
+        <div className='flex gap-x-20'>
+          <div>
             {/* <When condition={!!image}><Image as={NextImage} alt='' imageRef={image} width={20} height={20} /></When> */}
             <When condition={body}><div>{body}</div></When>
-          </Box>
-          <Box>
+          </div>
+          <div>
             <When condition={!!callToAction?.[0]?.value}>
               <SidebarItemWrapper>
                 <CallToAction {...callToAction[0]?.value} />
@@ -111,8 +100,8 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
                 </When>
               </SidebarItemWrapper>
             </When>
-          </Box>
-        </Flex>
+          </div>
+        </div>
       </Container>
       <RelatedContentList
         id='divisions'
@@ -125,3 +114,11 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
     </PageWrapper>
   )
 }
+
+const InfoWrapper = (props: JSX.IntrinsicElements['div']) => (
+  <div className='basis-1/3' {...props} />
+)
+
+const SidebarItemWrapper = (props: JSX.IntrinsicElements['div']) => (
+  <div className='flex flex-col bg-grey100 p-40 mb-20 gap-y-20 rounded-[8px]' {...props} />
+)

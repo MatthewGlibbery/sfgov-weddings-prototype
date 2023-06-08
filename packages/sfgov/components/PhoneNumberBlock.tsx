@@ -1,18 +1,25 @@
 import { When } from 'react-if'
-import { Flex, SmallText, TitleXs } from '@/design-system'
+import { SmallText, TitleXs } from '@/design-system'
 import { PhoneNumberValues } from '@/types'
 
 /**
- * The PhoneNumberBlock is the visualization of a PhoneNumberBlock from the backend. It contains the following
- * fields, each optional:
+ * The PhoneNumberBlock is the visualization of a PhoneNumberBlock from the
+ * backend. It contains the following fields, each optional:
  *
  *  - Owner
  *  - Phone number
  *  - Details
  */
-export const PhoneNumberBlock = ({ owner, phone_number: phoneNumber, details }: PhoneNumberValues) =>
-  <Flex css={{ flexDirection: 'column', gapY: 10 }}>
-    <When condition={owner}><TitleXs>{owner}</TitleXs></When>
-    <When condition={phoneNumber}><a href={`tel:${phoneNumber}`}>{phoneNumber}</a></When>
+export const PhoneNumberBlock = (
+  { owner, phone_number: phoneNumber, details }: PhoneNumberValues
+) => (
+  <div className='flex flex-col gap-y-12'>
+    <When condition={owner}>
+      <TitleXs>{owner}</TitleXs>
+    </When>
+    <When condition={phoneNumber}>
+      <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
+    </When>
     <When condition={details}><SmallText>{details}</SmallText></When>
-  </Flex>
+  </div>
+)

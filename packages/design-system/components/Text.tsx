@@ -1,84 +1,28 @@
-import type { ComponentProps, ComponentType } from 'react'
-import { textStyles } from '../theme/typography'
-import { styled } from '../stitches.config'
-import { withFixedProps } from '../utils'
-import { FIXMEAsableProps } from '../types'
+import React, { type ComponentType, type ElementType } from 'react'
+import { withClasses, withFixedProps } from '../utils'
+import type { FIXMEChildrenProps, FIXMEAsableProps } from '../types'
 
-export type TextVariant =
-  'body' | 'small' | 'bigDesc' |
-  'titleXs' | 'titleSm' | 'titleMd' | 'titleLg' | 'titleXl' |
-  'displaySm' | 'displayLg' | 'mono' | 'label'
+type TextProps = FIXMEChildrenProps & FIXMEAsableProps
 
-export const Text = styled('div', {
-  m: 0,
-  // Chinese text should be rendered in Noto Sans TC,
-  // with bold font weights at 500 (not 600)
-  '&:lang(zh)': {
-    fontFamily: '$chinese',
-    $fontWeights$bold: '$fontWeights$boldChinese',
-    letterSpacing: '0 !important'
-  },
-  variants: {
-    variant: {
-      body: textStyles.body,
-      small: textStyles.small,
-      bigDesc: {
-        ...textStyles.bigDesc,
-        '@lg': textStyles.bigDescDesktop
-      },
-      titleXs: textStyles.titleXs,
-      titleSm: textStyles.titleSm,
-      titleMd: {
-        ...textStyles.titleMd,
-        '@lg': textStyles.titleMdDesktop
-      },
-      titleLg: {
-        ...textStyles.titleLg,
-        '@lg': textStyles.titleLgDesktop
-      },
-      titleXl: {
-        ...textStyles.titleXl,
-        '@lg': textStyles.titleXlDesktop
-      },
-      displaySm: {
-        ...textStyles.displaySm,
-        '@lg': textStyles.displaySmDesktop
-      },
-      displayLg: {
-        ...textStyles.displayLg,
-        '@lg': textStyles.displayLgDesktop
-      },
-      mono: {
-        ...textStyles.body,
-        fontFamily: '$monospace'
-      },
-      label: {
-        ...textStyles.body,
-        fontWeight: '$bold'
-      }
-    }
-  },
-  defaultVariants: {
-    variant: 'body'
-  }
-})
+export const Text = ({ as: Component = 'div', ...rest }: TextProps) => <Component {...rest} />
 
-export type TextProps = ComponentProps<typeof Text>
-type TextPropsNoVariant = Omit<TextProps, 'variant'> & FIXMEAsableProps
+Text.as = (el: ComponentType | ElementType) => withFixedProps(Text, { as: el })
 
-export const BodyText = createVariant('body')
-export const SmallText = createVariant('small')
-export const BigDesc = createVariant('bigDesc')
-export const TitleXs = createVariant('titleXs')
-export const TitleSm = createVariant('titleSm')
-export const TitleMd = createVariant('titleMd')
-export const TitleLg = createVariant('titleLg')
-export const TitleXl = createVariant('titleXl')
-export const DisplaySm = createVariant('displaySm')
-export const DisplayLg = createVariant('displayLg')
-export const Monospace = createVariant('mono')
-export const Label = createVariant('label')
+export const Heading1 = Text.as('h1')
+export const Heading2 = Text.as('h2')
+export const Heading3 = Text.as('h3')
+export const Heading4 = Text.as('h4')
+export const Heading5 = Text.as('h5')
 
-function createVariant (variant: TextVariant) {
-  return withFixedProps(Text, { variant }) as ComponentType<TextPropsNoVariant>
-}
+export const BodyText = withClasses(Text, 'font-body text-body')
+export const SmallText = withClasses(Text, 'font-body text-small')
+export const BigDesc = withClasses(Text, 'font-body font-bold text-h4 lg:text-h3')
+export const TitleXs = withClasses(Heading5, 'font-body text-heading-xs')
+export const TitleSm = withClasses(Heading4, 'font-body text-heading-sm')
+export const TitleMd = withClasses(Heading3, 'font-body text-heading-md')
+export const TitleLg = withClasses(Heading2, 'font-slab text-heading-xl')
+export const TitleXl = withClasses(Text, 'font-slab text-heading-xxl')
+export const DisplaySm = withClasses(Text, 'font-body text-display-lg')
+export const DisplayLg = withClasses(Heading1, 'font-slab text-display-xxxl')
+export const Monospace = withClasses(Text, 'mono')
+export const Label = withClasses(Text, 'label')

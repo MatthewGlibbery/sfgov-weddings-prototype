@@ -11,7 +11,8 @@ const moduleNameMapper = Object.fromEntries(
 )
 
 const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
+  // Provide the path to your Next.js app to
+  // load next.config.js and .env files in your test environment
   dir: './'
 })
 
@@ -32,7 +33,7 @@ const customJestConfig = {
     '<rootDir>/lib/**/*.{ts,tsx}',
     // FIXME: there's no good way to cover these in tests
     '!<rootDir>/**/ErrorBoundary.tsx',
-    '!<rootDir>/**/ServerStylesheet.tsx'
+    '!<rootDir>/**/GoogleFonts.tsx'
   ],
   moduleNameMapper,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
@@ -40,5 +41,6 @@ const customJestConfig = {
   testPathIgnorePatterns: ['/browser/']
 }
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
+// createJestConfig is exported this way to ensure
+// that next/jest can load the Next.js config which is async
 module.exports = createJestConfig(customJestConfig)

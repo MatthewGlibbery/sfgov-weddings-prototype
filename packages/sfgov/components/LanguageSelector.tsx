@@ -1,5 +1,5 @@
-import NextLink, { LinkProps } from 'next/link'
-import { styled, textStyles } from '@/design-system'
+import clsx from 'clsx'
+import NextLink, { type LinkProps } from 'next/link'
 import { useRouter } from 'next/router'
 
 type LanguageSelectorProps = JSX.IntrinsicElements['ul']
@@ -21,35 +21,22 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
   const links: LinkProps[] = locales?.map(locale => ({
     href: currentPath,
     locale,
-    'aria-current': locale === currentLocale ? 'page' : false,
     children: localeNames[locale]
   })) || []
 
-  // @ts-expect-error wtf
-  return <FlexList {...props}>
-    {links.map(link => <li key={link.locale as string}>
-      <LanguageLink {...link} />
-    </li>)}
-  </FlexList>
+  return <ul className='list-none m-0 p-0 flex justify-end gap-[24px]' {...props}>
+    {links.map(link => {
+      const current = link.locale === currentLocale ? 'page' : false
+      return <li key={link.locale as string}>
+        <NextLink
+          aria-current={current ? 'page' : false}
+          className={clsx(
+            'text-slate300 no-underline hover:underline',
+            current && 'font-bold'
+          )}
+          {...link}
+        />
+      </li>
+    })}
+  </ul>
 }
-
-const FlexList = styled('ul', {
-  listStyle: 'none',
-  m: 0,
-  p: 0,
-  display: 'flex',
-  justifyContent: 'end',
-  gap: 24,
-  ...textStyles.small
-})
-
-const LanguageLink = styled(NextLink, {
-  color: '$slateL3',
-  textDecoration: 'none',
-  '&:hover': {
-    textDecoration: 'underline'
-  },
-  '&[aria-current=page]': {
-    fontWeight: '$bold'
-  }
-})

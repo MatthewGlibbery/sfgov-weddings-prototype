@@ -2,13 +2,14 @@ import { ReactElement } from 'react'
 import { When } from 'react-if'
 
 import type { DateTimeValues } from '@/types'
-import { BodyText, Box, TitleXs } from '@/design-system'
+import { BodyText, TitleXs } from '@/design-system'
 
 type ComposedDateProps = {
   startDateInput: string
   endDateInput?: string
   locale?: string
 }
+
 /**
  * Handles formatting for a single or range date section of the display and will allow us to handle locales
  * easily.
@@ -156,13 +157,13 @@ export const DateTimeBlock = ({ start_date, start_time, end_date, end_time, is_a
 
   return (
     <div>
-        <TitleXs as={'h2'} css={{ mb: 20 }}>Date</TitleXs>
-        <BodyText>
-            <ComposedDate startDateInput={start_date} endDateInput={end_date} />
-            <When condition={!!Object.keys(composedTimeProps).length}>
-              <Box><ComposedTime {...composedTimeProps} /></Box>
-            </When>
-        </BodyText>
+      <TitleXs as='h2' className='mb-20'>Date</TitleXs>
+      <BodyText>
+        <ComposedDate startDateInput={start_date} endDateInput={end_date} />
+        <When condition={!!Object.keys(composedTimeProps).length}>
+          <div><ComposedTime {...composedTimeProps} /></div>
+        </When>
+      </BodyText>
     </div>
   )
 }

@@ -1,21 +1,22 @@
-import NextImage, { ImageProps } from 'next/image'
+import clsx from 'clsx'
+import NextImage, { type ImageProps } from 'next/image'
 import { getImageProps } from '@/lib/utils'
-import { WagtailImageData } from '@/types'
-import { FIXMECSSProps, styled } from '@/design-system'
-import type { ComponentType } from 'react'
+import type { WagtailImageData } from '@/types'
 
 type StyledImageProps = Partial<ImageProps> & {
   as?: 'img' | typeof NextImage
   baseURL?: string
-} & FIXMECSSProps
+}
 
-const StyledImage = styled('img', {
-  width: 'auto',
-  height: 'auto'
-}) as ComponentType<StyledImageProps>
+const StyledImage = ({ as: Component = 'img', className, ...rest }: StyledImageProps) => (
+  // @ts-expect-error derp derp
+  <Component className={clsx('w-auto h-auto', className)} {...rest} />
+)
+
+export type ImageOwnProps = StyledImageProps & { imageRef: WagtailImageData }
 
 /** istanbul ignore */
-export const Image = ({ imageRef, baseURL, ...rest }: StyledImageProps & { imageRef: WagtailImageData }) => {
+export const Image = ({ imageRef, baseURL, ...rest }: ImageOwnProps) => {
   const props = getImageProps(imageRef, baseURL)
   return <StyledImage { ...props } {...rest } />
 }

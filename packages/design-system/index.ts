@@ -1,4 +1,3 @@
 export * from './components'
-export * from './stitches.config'
-export * from './theme'
+export * from './constants'
 export * from './types'

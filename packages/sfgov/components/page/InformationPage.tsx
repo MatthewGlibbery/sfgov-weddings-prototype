@@ -30,13 +30,14 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({ page })
 
   return (
     <PageWrapper title={title}>
-      <Container css={{ mb: 20 }}>
-        <DisplayLg as='h1' css={{ my: 40 }} data-testid='info-page-title'>
+      <Container className='mb-20'>
+        <DisplayLg as='h1' className='my-40' data-testid='info-page-title'>
           {title}
         </DisplayLg>
         {description
           ? <BigDesc as='p' data-testid='info-page-description'>
-              {description}</BigDesc>
+              {description}
+            </BigDesc>
           : null}
       </Container>
       <RelatedContentList

@@ -1,4 +1,5 @@
-import { BigDesc, BodyText, Button, Flex, TitleMd } from '@/design-system'
+import clsx from 'clsx'
+import { BigDesc, BodyText, Button, TitleMd } from '@/design-system'
 import { CalloutBlock, StepSpecificsTypes, WhatToDoBlock, WhatToDoStepBlock } from '@/types'
 import { When } from 'react-if'
 import { Callout } from './Callout'
@@ -22,16 +23,12 @@ const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
       {stepSpecifics.map((block: StepSpecificsTypes) => {
         let StepComponent
         let props = block as unknown
-        let flexProps = {}
+        const classNames = []
 
         switch (block.type) {
           case 'callout':
             StepComponent = Callout
-            flexProps = {
-              css: {
-                flexFlow: 'column'
-              }
-            }
+            classNames.push('flex-col')
             break
           case 'address':
             StepComponent = LocationBlock
@@ -67,12 +64,14 @@ const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
         }
 
         return (
-          <Flex key={block.id} {...flexProps}
+          <div
+            key={block.id}
+            className={clsx('flex', classNames)}
             data-testid={`${block.type}-field`}
           >
             {/* @ts-expect-error 'erg idk how we should fix the error below' */}
             <StepComponent {...props} />
-          </Flex>
+          </div>
         )
       })}
     </>
@@ -93,12 +92,12 @@ export const WhatToDo = (props: WhatToDoBlock) => {
       {value.map(block => {
         if (block.type === 'what_to_do_step') i++
         return (
-          <Flex key={block.id} css={{ flexDirection: 'column', gapY: 28 }}>
+          <div className='flex flex-col gap-y-28' key={block.id}>
             <When condition={block.type === 'callout'}><Callout {...block as CalloutBlock} /></When>
             <When condition={block.type === 'what_to_do_step'}>
               <WhatToDoStep index={i} {...block as WhatToDoStepBlock} />
             </When>
-          </Flex>
+          </div>
         )
       })}
     </>

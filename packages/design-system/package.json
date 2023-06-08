@@ -14,7 +14,7 @@
   },
   "repository": "SFDigitalServices/sfgov-next",
   "dependencies": {
-    "@stitches/react": "^1.2.8",
+    "clsx": "^1.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tslib": "^2.3.0"

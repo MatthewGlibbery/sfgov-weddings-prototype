@@ -34,6 +34,7 @@ const ALWAYS_FORBID_ATTR_VALUES: Matcher[] = [
 export type RichTextProps = {
   html: string
   components?: ComponentMap
+  'data-testid'?: never
 }
 
 /**

@@ -1,35 +1,13 @@
-import { ComponentProps, useState } from 'react'
-import { styled, Box, TitleXs, IconMinus, IconPlus } from '@/design-system'
+import clsx from 'clsx'
+import { useState } from 'react'
+import { TitleXs, IconMinus, IconPlus } from '@/design-system'
 
-const AccordionBox = styled('details', {
-  display: 'block',
-  listStyle: 'none'
-})
-
-// this _should_ include JSX.IntrinsicElements['details']
-type AccordionBoxProps = ComponentProps<typeof AccordionBox>
-
-const AccordionSummary = styled('summary', {
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  borderBottom: '1px solid #707070', // FIXME: need real color
-  pb: 10
-})
-
-const AccordionContent = styled(Box, {
-  bg: '#F2F4F7', // FIXME: use theme colors when ready
-  p: 32
-})
-
-export type AccordionProps = {
+export type AccordionProps = JSX.IntrinsicElements['details'] & {
   title: string
-  open?: boolean
-} & AccordionBoxProps
+}
 
 export const Accordion = (props: AccordionProps) => {
-  const { title, children, open, ...boxProps } = props
+  const { title, open, className, children, ...rest } = props
 
   const [isOpen, setOpen] = useState(!!open)
   const Icon = isOpen ? IconMinus : IconPlus
@@ -38,16 +16,23 @@ export const Accordion = (props: AccordionProps) => {
   const toggleOpen = () => setOpen(!isOpen)
 
   return (
-    <AccordionBox open={isOpen} onToggle={toggleOpen}
-      {...boxProps}
+    <details
+      className={clsx('block list-none', className)}
+      open={isOpen} onToggle={toggleOpen}
+      {...rest}
     >
-      <AccordionSummary data-testid='accordion-summary'>
+      <summary className={`
+        cursor-pointer
+        flex items-center content-between
+        pb-12
+        border-solid border-b-1 border-[#707070]
+      `} data-testid='accordion-summary'>
         <TitleXs data-testid='accordion-title'>{title}</TitleXs>
         <Icon data-testid={Icon.name} width={14} />
-      </AccordionSummary>
-      <AccordionContent data-testid='accordion-content'>
+      </summary>
+      <div className='bg-[#F2F4F7] p-[32px]' data-testid='accordion-content'>
         {children}
-      </AccordionContent>
-    </AccordionBox>
+      </div>
+    </details>
   )
 }

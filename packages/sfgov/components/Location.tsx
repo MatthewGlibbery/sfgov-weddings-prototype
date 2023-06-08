@@ -1,28 +1,38 @@
 import { When } from 'react-if'
 
-import { BodyText } from '@/design-system'
+import { BodyText, TitleSm } from '@/design-system'
 
 import type { LocationValues } from '@/types'
 
 /* eslint-disable camelcase */
 export const LocationBlock = (props: LocationValues) => {
-  const { agency, organization, addressee, location_name, line1, line2, city, state, zip, location_notes } = props
-  const boldedTitle = (agency && agency.title) || organization || addressee || location_name
+  const {
+    agency,
+    organization,
+    addressee,
+    location_name: locationName,
+    line1, line2, city, state, zip, location_notes
+  } = props
+
+  const boldedTitle = (agency && agency.title) ||
+    organization || addressee || locationName
 
   return (
     <div>
       <When condition={!!boldedTitle}>
-        <BodyText as='h4' data-testid='title' css={{ fontWeight: 700 }}>{boldedTitle}</BodyText>
+        <TitleSm as='h4' data-testid='title' className='font-bold'>
+          {boldedTitle}
+        </TitleSm>
       </When>
-      <BodyText as='p'>
+      <BodyText>
         <When condition={!!organization && (organization !== boldedTitle)}>
           {organization}<br />
         </When>
         <When condition={!!addressee && (addressee !== boldedTitle)}>
           {addressee}<br />
         </When>
-        <When condition={!!location_name && (location_name !== boldedTitle)}>
-          {location_name}<br />
+        <When condition={!!locationName && (locationName !== boldedTitle)}>
+          {locationName}<br />
         </When>
         {line1}<br />
         <When condition={!!line2}>{line2}<br /></When>

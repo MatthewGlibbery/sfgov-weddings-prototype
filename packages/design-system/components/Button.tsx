@@ -1,93 +1,66 @@
-import { styled } from '../stitches.config'
-import { HOCUS_SELECTOR } from '../constants'
-import { withFixedProps } from '../utils'
-import { ComponentProps } from 'react'
+import clsx from 'clsx'
+import React, { type ComponentProps, type ElementType } from 'react'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'inverse' | 'link'
+export type ButtonVariant = 'primary' | 'secondary' | 'link'
 
-const baseButtonStyles = {
-  // layout
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyItems: 'center',
-  justifyContent: 'center',
-  borderRadius: 8,
-  gap: 8,
-  px: 20,
-  py: 8,
-  // border
-  borderColor: 'transparent',
-  borderStyle: 'solid',
-  borderWidth: 3,
-  // cursor
-  cursor: 'pointer',
-  // typography
-  fontFamily: '$body',
-  fontSize: '$body',
-  lineHeight: '$body',
-  fontWeight: '$bold',
-  textAlign: 'center',
-  textDecoration: 'none',
-  whiteSpace: 'nowrap'
+const baseButtonClasses = [
+  'items-center',
+  'justify-center',
+  'rounded-[8px]',
+  'gap-8',
+  'px-20',
+  'py-8',
+  'border-[transparent]',
+  'border-solid',
+  'border-[3px]',
+  'cursor-pointer',
+  'font-body',
+  'text-body',
+  'text-center',
+  'no-underline',
+  'whitespace-nowrap'
+]
+
+const inverseButtonClasses = [
+  'text-action',
+  'bg-white',
+  'hover:text-blue400 hover:bg-white',
+  'focus:text-blue400 focus:bg-white'
+]
+
+const variants = {
+  primary: [
+    'text-white',
+    'bg-action',
+    'hover:bg-blue400',
+    'focus:bg-blue400'
+  ],
+  secondary: [
+    ...inverseButtonClasses,
+    'border-current'
+  ],
+  link: [
+    ...inverseButtonClasses,
+    'bg-[transparent]',
+    'underline'
+  ]
 }
 
-const primaryButtonStyles = {
-  color: '$white',
-  backgroundColor: '$action',
-  [HOCUS_SELECTOR]: {
-    color: '$white',
-    backgroundColor: '$blueDark'
-  }
-}
+export type ButtonProps<C extends ElementType> = {
+  as?: C
+  variant?: ButtonVariant
+  block?: boolean
+} & ComponentProps<C>
 
-const inverseButtonStyles = {
-  color: '$action',
-  backgroundColor: '$white',
-  [HOCUS_SELECTOR]: {
-    color: '$blueDark',
-    backgroundColor: '$white'
-  }
-}
-
-const secondaryButtonStyles = {
-  ...inverseButtonStyles,
-  borderColor: 'currentcolor'
-}
-
-const linkButtonStyles = {
-  ...inverseButtonStyles,
-  backgroundColor: 'transparent',
-  textDecoration: 'underline'
-}
-
-export const Button = styled('button', {
-  ...baseButtonStyles,
-  variants: {
-    variant: {
-      primary: primaryButtonStyles,
-      secondary: secondaryButtonStyles,
-      inverse: inverseButtonStyles,
-      link: linkButtonStyles
-    },
-    block: {
-      true: {
-        display: 'flex',
-        width: '100%'
-      }
-    }
-  },
-  defaultVariants: {
-    variant: 'primary'
-  }
-})
-
-export type ButtonProps = ComponentProps<typeof Button>
-
-export const PrimaryButton = createVariant('primary')
-export const SecondaryButton = createVariant('secondary')
-export const InverseButton = createVariant('inverse')
-export const LinkButton = createVariant('link')
-
-function createVariant (variant: ButtonVariant) {
-  return withFixedProps(Button, { variant })
+export const Button = <C extends ElementType = 'button'>(
+  { as, className, variant, block, ...rest }: ButtonProps<C>
+) => {
+  const Component = as || 'button'
+  return <Component className={clsx(
+    block ? 'flex w-full' : 'inline-flex',
+    baseButtonClasses,
+    // @ts-expect-error whatever
+    variants[variant || 'primary'],
+    className
+  )} {...rest} />
 }
