@@ -13,7 +13,12 @@ describe('LanguageSelector', () => {
   })
 
   it('renders an empty list if there are no locales', () => {
-    (useRouter as MockedRouter).mockImplementationOnce(() => ({
+    // FIXME: funky syntax here means
+    // linting wants a semicolon prepended. we should find a workaround either
+    // in code or via linting rules. In the mean time, save without
+    // formatting ): (⌘ + K + S)
+
+    ;(useRouter as MockedRouter).mockImplementationOnce(() => ({
       asPath: '/',
       locale: 'en',
       locales: undefined,

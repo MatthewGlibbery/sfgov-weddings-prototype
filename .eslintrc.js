@@ -1,11 +1,6 @@
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
-  plugins: [
-    '@typescript-eslint',
-    'sfgov',
-    'react',
-    'testing-library'
-  ],
+  plugins: ['@typescript-eslint', 'sfgov', 'react', 'testing-library'],
   settings: {
     react: {
       version: 'detect'
@@ -14,17 +9,24 @@ module.exports = {
   extends: [
     'plugin:react/recommended',
     'plugin:sfgov/recommended',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/recommended',
+    'prettier'
   ],
   rules: {
-    'prefer-arrow-callback': ['error', {
-      allowNamedFunctions: true
-    }],
-    'max-len': ['warn', {
-      code: 80,
-      ignoreStrings: true,
-      ignoreUrls: true
-    }],
+    'prefer-arrow-callback': [
+      'error',
+      {
+        allowNamedFunctions: true
+      }
+    ],
+    'max-len': [
+      'warn',
+      {
+        code: 80,
+        ignoreStrings: true,
+        ignoreUrls: true
+      }
+    ],
     'react/jsx-no-leaked-render': 'error',
     'react/no-unescaped-entities': 'warn'
   },
@@ -40,10 +42,13 @@ module.exports = {
         'no-undef': 'off',
         'no-unused-vars': 'off',
         // React overrides
-        'react/function-component-definition': ['error', {
-          namedComponents: 'arrow-function',
-          unnamedComponents: 'arrow-function'
-        }]
+        'react/function-component-definition': [
+          'error',
+          {
+            namedComponents: 'arrow-function',
+            unnamedComponents: 'arrow-function'
+          }
+        ]
       }
     },
     {
@@ -53,10 +58,7 @@ module.exports = {
       }
     },
     {
-      files: [
-        '**/__tests__/**/*.[jt]s?(x)',
-        '**/?(*.)+(spec|test).[jt]s?(x)'
-      ],
+      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
       extends: ['plugin:testing-library/react']
     }
   ]

@@ -1,6 +1,6 @@
 import { IContentAPI, PageData, WagtailImageData } from '@/types'
 
-export function getPageURL (page: PageData) {
+export function getPageURL(page: PageData) {
   if (page?.meta?.html_url) {
     return page.meta.html_url.includes('://')
       ? new URL(page.meta.html_url).pathname
@@ -10,7 +10,10 @@ export function getPageURL (page: PageData) {
   }
 }
 
-export async function resolveImage (img: WagtailImageData | number, api: IContentAPI) {
+export async function resolveImage(
+  img: WagtailImageData | number,
+  api: IContentAPI
+) {
   if (!img) {
     // noop
   } else if (typeof img === 'number') {
@@ -22,7 +25,10 @@ export async function resolveImage (img: WagtailImageData | number, api: IConten
   }
 }
 
-export function resolvePage<T extends PageData = PageData> (idOrObj: number | T, api: IContentAPI) {
+export function resolvePage<T extends PageData = PageData>(
+  idOrObj: number | T,
+  api: IContentAPI
+) {
   if (typeof idOrObj === 'number') {
     return api.getData<T>(`pages/${idOrObj}/`)
   } else {
@@ -30,7 +36,10 @@ export function resolvePage<T extends PageData = PageData> (idOrObj: number | T,
   }
 }
 
-export function getImageURL (image: WagtailImageData, baseURL?: string): string | undefined {
+export function getImageURL(
+  image: WagtailImageData,
+  baseURL?: string
+): string | undefined {
   const url = image?.meta?.download_url
   if (url && baseURL) {
     return new URL(url, baseURL).toString()
@@ -45,7 +54,10 @@ type PrimitiveImageProps = {
   height?: number
 }
 
-export function getImageProps (image: WagtailImageData, baseURL?: string): PrimitiveImageProps {
+export function getImageProps(
+  image: WagtailImageData,
+  baseURL?: string
+): PrimitiveImageProps {
   return {
     src: getImageURL(image, baseURL),
     width: image.width,

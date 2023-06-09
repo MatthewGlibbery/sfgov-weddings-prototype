@@ -29,21 +29,9 @@ const inverseButtonClasses = [
 ]
 
 const variants = {
-  primary: [
-    'text-white',
-    'bg-action',
-    'hover:bg-blue400',
-    'focus:bg-blue400'
-  ],
-  secondary: [
-    ...inverseButtonClasses,
-    'border-current'
-  ],
-  link: [
-    ...inverseButtonClasses,
-    'bg-[transparent]',
-    'underline'
-  ]
+  primary: ['text-white', 'bg-action', 'hover:bg-blue400', 'focus:bg-blue400'],
+  secondary: [...inverseButtonClasses, 'border-current'],
+  link: [...inverseButtonClasses, 'bg-[transparent]', 'underline']
 }
 
 export type ButtonProps<C extends ElementType> = {
@@ -52,15 +40,24 @@ export type ButtonProps<C extends ElementType> = {
   block?: boolean
 } & ComponentProps<C>
 
-export const Button = <C extends ElementType = 'button'>(
-  { as, className, variant, block, ...rest }: ButtonProps<C>
-) => {
+export const Button = <C extends ElementType = 'button'>({
+  as,
+  className,
+  variant,
+  block,
+  ...rest
+}: ButtonProps<C>) => {
   const Component = as || 'button'
-  return <Component className={clsx(
-    block ? 'flex w-full' : 'inline-flex',
-    baseButtonClasses,
-    // @ts-expect-error whatever
-    variants[variant || 'primary'],
-    className
-  )} {...rest} />
+  return (
+    <Component
+      className={clsx(
+        block ? 'flex w-full' : 'inline-flex',
+        baseButtonClasses,
+        // @ts-expect-error whatever
+        variants[variant || 'primary'],
+        className
+      )}
+      {...rest}
+    />
+  )
 }

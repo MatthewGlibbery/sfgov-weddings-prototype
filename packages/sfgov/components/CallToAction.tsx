@@ -7,10 +7,15 @@ import { Button, TitleMd } from '@/design-system'
  * redesigned CTA, adding them should be a simple additional prop (I think)
  */
 
-export const CallToAction = ({ title, link }: CallToActionValues) =>
-  <div className='flex flex-col gap-y-20'>
-    <When condition={title}><TitleMd>{title}</TitleMd></When>
+export const CallToAction = ({ title, link }: CallToActionValues) => (
+  <div className="flex flex-col gap-y-20">
+    <When condition={title}>
+      <TitleMd>{title}</TitleMd>
+    </When>
     <When condition={!!(link.url && link.text)}>
-      <Button as="a" href={link.url} aria-label={`${title} ${link.text}`}>{link.text}</Button>
+      <Button as="a" href={link.url} aria-label={`${title} ${link.text}`}>
+        {link.text}
+      </Button>
     </When>
   </div>
+)

@@ -9,7 +9,11 @@ describe('ErrorBoundary', () => {
 
   it('should render an error boundary when a descendant throws an error', () => {
     const restoreConsole = mockConsole()
-    render(<ErrorBoundary FallbackComponent={ErrorFallbackReport}><ChildWithError /></ErrorBoundary>)
+    render(
+      <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
+        <ChildWithError />
+      </ErrorBoundary>
+    )
 
     const error = screen.getByText('There was an error')
     expect(error).toBeInTheDocument()

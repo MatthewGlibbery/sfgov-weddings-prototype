@@ -5,6 +5,7 @@
     "dbaeumer.vscode-eslint",
     "deque-systems.vscode-axe-linter",
     "firsttris.vscode-jest-runner",
+    "esbenp.prettier-vscode",
     "hardikmodha.create-tests",
     "stkb.rewrap",
   ],

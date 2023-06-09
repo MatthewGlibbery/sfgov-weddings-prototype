@@ -20,9 +20,10 @@ type KnownPageProps = PageProps<PageData>
  * `ComponentType<{ page: SpecificPageData }>` or
  * `ComponentType<PageProps<SpecificPageData>>` instead.
  */
-type PageComponent<
-  T extends PageData = PageData
-> = Omit<ComponentType<PageProps<T>>, 'propTypes'>
+type PageComponent<T extends PageData = PageData> = Omit<
+  ComponentType<PageProps<T>>,
+  'propTypes'
+>
 
 /**
  * IPageTemplate is the interface that page template objects (or classes) need
@@ -31,7 +32,7 @@ type PageComponent<
  * and canRender() type predicate.
  */
 export interface IPageTemplate<SpecificPageData extends PageData = PageData> {
-  canRender (data: unknown): data is SpecificPageData
+  canRender(data: unknown): data is SpecificPageData
   component: PageComponent<SpecificPageData>
 }
 
@@ -49,19 +50,22 @@ export interface IPageTemplate<SpecificPageData extends PageData = PageData> {
  */
 export class WagtailPageTemplate<
   PageComponentType extends PageComponent,
-  SpecificPageData extends PageData = PageComponentType extends PageComponent<infer T extends PageData>
+  SpecificPageData extends PageData = PageComponentType extends PageComponent<
+    infer T extends PageData
+  >
     ? T
     : never
-> implements IPageTemplate<SpecificPageData> {
+> implements IPageTemplate<SpecificPageData>
+{
   metaType: string
   component: PageComponent<SpecificPageData>
 
-  constructor (component: PageComponentType, metaType: string) {
+  constructor(component: PageComponentType, metaType: string) {
     this.component = component as PageComponent<SpecificPageData>
     this.metaType = metaType
   }
 
-  canRender (data: unknown): data is SpecificPageData {
+  canRender(data: unknown): data is SpecificPageData {
     return (data as PageData)?.meta?.type === this.metaType
   }
 }
@@ -70,7 +74,7 @@ export class Controller {
   api: IContentAPI
   templates: IPageTemplate[]
 
-  constructor (api: IContentAPI, templates: IPageTemplate[]) {
+  constructor(api: IContentAPI, templates: IPageTemplate[]) {
     if (!api) {
       throw new Error('A ContentAPI is required')
     } else if (!Array.isArray(templates)) {
@@ -80,7 +84,7 @@ export class Controller {
     this.templates = templates
   }
 
-  makeGetServerSideProps (): GetServerSideProps<UnknownPageProps> {
+  makeGetServerSideProps(): GetServerSideProps<UnknownPageProps> {
     return async ({ resolvedUrl, locale }) => {
       try {
         const page = await this.api.getPageByPath(resolvedUrl, { locale })
@@ -88,7 +92,11 @@ export class Controller {
           props: { page }
         }
       } catch (error) {
-        console.error('No page found for path: "%s", locale: "%s"', resolvedUrl, locale)
+        console.error(
+          'No page found for path: "%s", locale: "%s"',
+          resolvedUrl,
+          locale
+        )
       }
       return {
         notFound: true
@@ -96,7 +104,7 @@ export class Controller {
     }
   }
 
-  getViewComponent (props: UnknownPageProps): ComponentType<KnownPageProps> {
+  getViewComponent(props: UnknownPageProps): ComponentType<KnownPageProps> {
     const { page } = props
     if (page) {
       for (const template of this.templates) {
@@ -105,17 +113,19 @@ export class Controller {
         }
       }
     }
-    throw new Error(`No template found for page: ${
-      typeof props.page === 'object'
-        ? safeJsonStringify(props.page as object)
-        : 'null'
-    }`)
+    throw new Error(
+      `No template found for page: ${
+        typeof props.page === 'object'
+          ? safeJsonStringify(props.page as object)
+          : 'null'
+      }`
+    )
   }
 
-  makeViewComponent (): ComponentType<KnownPageProps> {
+  makeViewComponent(): ComponentType<KnownPageProps> {
     const getViewComponent = this.getViewComponent.bind(this)
     // eslint-disable-next-line react/function-component-definition
-    return function ControllerView (props) {
+    return function ControllerView(props) {
       const Component = getViewComponent(props)
       return <Component {...props} />
     }

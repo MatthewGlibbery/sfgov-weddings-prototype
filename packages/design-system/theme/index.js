@@ -30,20 +30,11 @@ module.exports = {
   borderRadius: {
     DEFAULT: '8px',
     full: '100%',
-    ...pxMap([
-      0,
-      2,
-      4
-    ])
+    ...pxMap([0, 2, 4])
   },
   borderWidth: {
     DEFAULT: '3px',
-    ...pxMap([
-      0,
-      1,
-      2,
-      3
-    ])
+    ...pxMap([0, 1, 2, 3])
   },
   gap: {
     ...spacing

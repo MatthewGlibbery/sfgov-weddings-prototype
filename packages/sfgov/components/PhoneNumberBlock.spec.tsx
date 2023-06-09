@@ -16,9 +16,21 @@ describe('PhoneNumberBlock', () => {
   })
 
   it.each([
-    { what: 'owner field', input: { owner: '', phone_number: phoneNumber, details }, expected: owner },
-    { what: 'phone number field', input: { owner, phone_number: '', details }, expected: phoneNumber },
-    { what: 'details field', input: { owner, phone_number: phoneNumber, details: '' }, expected: details }
+    {
+      what: 'owner field',
+      input: { owner: '', phone_number: phoneNumber, details },
+      expected: owner
+    },
+    {
+      what: 'phone number field',
+      input: { owner, phone_number: '', details },
+      expected: phoneNumber
+    },
+    {
+      what: 'details field',
+      input: { owner, phone_number: phoneNumber, details: '' },
+      expected: details
+    }
   ])('does not render the $what when not present', ({ input, expected }) => {
     render(<PhoneNumberBlock {...input} />)
     expect(screen.queryByText(expected)).not.toBeInTheDocument()

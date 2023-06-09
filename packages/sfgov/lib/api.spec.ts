@@ -15,9 +15,7 @@ describe('ContentAPI', () => {
     })
 
     it('throws if baseURL is falsy', () => {
-      expect(
-        () => new ContentAPI({ baseURL: '' })
-      ).toThrow(/baseURL.+required/)
+      expect(() => new ContentAPI({ baseURL: '' })).toThrow(/baseURL.+required/)
     })
 
     it('allows baseURL path to be empty', () => {
@@ -132,24 +130,28 @@ describe('ContentAPI', () => {
     })
 
     it('rejects on 4xx statuses', async () => {
-      fetchMock.mockResponseOnce(() => Promise.resolve({
-        body: JSON.stringify({
-          message: 'not found'
-        }),
-        init: {
-          status: 404
-        }
-      }))
+      fetchMock.mockResponseOnce(() =>
+        Promise.resolve({
+          body: JSON.stringify({
+            message: 'not found'
+          }),
+          init: {
+            status: 404
+          }
+        })
+      )
       await expect(example.getData('derp')).rejects.toThrow('not found')
     })
 
     it('rejects on 4xx statuses with "not found" if no message is provided', async () => {
-      fetchMock.mockResponseOnce(() => Promise.resolve({
-        body: JSON.stringify({}),
-        init: {
-          status: 404
-        }
-      }))
+      fetchMock.mockResponseOnce(() =>
+        Promise.resolve({
+          body: JSON.stringify({}),
+          init: {
+            status: 404
+          }
+        })
+      )
       await expect(example.getData('derp')).rejects.toThrow('not found')
     })
 
@@ -161,27 +163,35 @@ describe('ContentAPI', () => {
         500: 'Server error'
       }
       for (const [status, statusText] of Object.entries(statuses)) {
-        fetchMock.mockResponseOnce(() => Promise.resolve({
-          body: '',
-          init: {
-            status: Number(status),
-            statusText
-          }
-        }))
-        await expect(example.getData('derp')).rejects.toThrow(`${status} ${statusText}`)
+        fetchMock.mockResponseOnce(() =>
+          Promise.resolve({
+            body: '',
+            init: {
+              status: Number(status),
+              statusText
+            }
+          })
+        )
+        await expect(example.getData('derp')).rejects.toThrow(
+          `${status} ${statusText}`
+        )
       }
     })
 
     it('includes the JSON data "message" in the error', async () => {
       const message = 'invalid query parameter: derp'
-      fetchMock.mockResponseOnce(() => Promise.resolve({
-        body: JSON.stringify({ message }),
-        init: {
-          status: 400,
-          statusText: 'Bad Request'
-        }
-      }))
-      await expect(example.getData('derp')).rejects.toThrow(`400 Bad Request: ${message}`)
+      fetchMock.mockResponseOnce(() =>
+        Promise.resolve({
+          body: JSON.stringify({ message }),
+          init: {
+            status: 400,
+            statusText: 'Bad Request'
+          }
+        })
+      )
+      await expect(example.getData('derp')).rejects.toThrow(
+        `400 Bad Request: ${message}`
+      )
     })
   })
 
@@ -190,7 +200,9 @@ describe('ContentAPI', () => {
       const api = example
       expect(api.getURL()).toStringifyTo('https://api.example.com/api/v3')
       expect(api.getURL('')).toStringifyTo('https://api.example.com/api/v3')
-      expect(api.getURL('foo')).toStringifyTo('https://api.example.com/api/v3/foo')
+      expect(api.getURL('foo')).toStringifyTo(
+        'https://api.example.com/api/v3/foo'
+      )
     })
 
     it('defaults to $NEXT_PUBLIC_CONTENT_API_BASE_URL and $NEXT_PUBLIC_CONTENT_API_BASE_PATH', () => {
@@ -200,7 +212,9 @@ describe('ContentAPI', () => {
       const api = new ContentAPI()
       expect(api.getURL()).toStringifyTo('https://content.sf.gov/api')
       expect(api.getURL('')).toStringifyTo('https://content.sf.gov/api')
-      expect(api.getURL('derp')).toStringifyTo('https://content.sf.gov/api/derp')
+      expect(api.getURL('derp')).toStringifyTo(
+        'https://content.sf.gov/api/derp'
+      )
     })
 
     it('adds query string params', () => {
@@ -247,9 +261,7 @@ describe('FixtureAPI', () => {
       title: 'Yo'
     }
     const api = new FixtureAPI({
-      pages: [
-        page
-      ]
+      pages: [page]
     })
 
     it('loads the right page from the expected path', async () => {
@@ -271,9 +283,7 @@ describe('FixtureAPI', () => {
       title: 'Hi'
     }
     const api = new FixtureAPI({
-      pages: [
-        page
-      ]
+      pages: [page]
     })
 
     it('resolves to page at the expected "api/{id}" path', async () => {

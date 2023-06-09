@@ -6,7 +6,7 @@ import { TitleAndTextFactory } from '@/lib/factories'
 describe('<TitleAndText>', () => {
   // mocking the console is necessary because <RichText> logs "forbidden"
   // elements
-  let restoreConsole: (() => void)
+  let restoreConsole: () => void
   beforeEach(() => {
     restoreConsole = mockConsole()
   })
@@ -39,11 +39,15 @@ describe('<TitleAndText>', () => {
   })
 
   it('renders the text as unsafe HTML', () => {
-    render(<TitleAndText block={TitleAndTextFactory.make({
-      value: {
-        text: '<div data-id=123>wut</div>'
-      }
-    })} />)
+    render(
+      <TitleAndText
+        block={TitleAndTextFactory.make({
+          value: {
+            text: '<div data-id=123>wut</div>'
+          }
+        })}
+      />
+    )
     const text = screen.queryByText('wut') as HTMLElement
     expect(text).toBeInTheDocument()
     expect(text).toHaveTextContent('wut')
@@ -51,12 +55,16 @@ describe('<TitleAndText>', () => {
   })
 
   it('does not render the text if empty', () => {
-    render(<TitleAndText block={TitleAndTextFactory.make({
-      value: {
-        title: 'Not empty',
-        text: ''
-      }
-    })} />)
+    render(
+      <TitleAndText
+        block={TitleAndTextFactory.make({
+          value: {
+            title: 'Not empty',
+            text: ''
+          }
+        })}
+      />
+    )
     expect(screen.queryByTestId('text')).not.toBeInTheDocument()
   })
 

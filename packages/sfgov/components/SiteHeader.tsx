@@ -5,8 +5,8 @@ export type SiteHeaderProps = Omit<JSX.IntrinsicElements['header'], 'className'>
 
 export const SiteHeader = (props: SiteHeaderProps) => {
   return (
-    <header className='mb-40' {...props}>
-      <div className='bg-grey100 py-12'>
+    <header className="mb-40" {...props}>
+      <div className="bg-grey100 py-12">
         <Container>
           <LanguageSelector />
         </Container>

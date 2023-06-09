@@ -4,7 +4,8 @@ import { render, screen } from '@testing-library/react'
 import { ImageFactory } from '@/lib/factories'
 
 describe('<Image>', () => {
-  const src = 'https://sf.gov/sites/default/files/styles/836x484/public/2022-03/Civic%20Center.jpg?itok=MoJOWKv1'
+  const src =
+    'https://sf.gov/sites/default/files/styles/836x484/public/2022-03/Civic%20Center.jpg?itok=MoJOWKv1'
   const alt = 'Alt text'
   const data = ImageFactory.make({
     title: alt,
@@ -33,7 +34,7 @@ describe('<Image>', () => {
     // eslint-disable-next-line jsx-a11y/alt-text
     render(<Image imageRef={data} as={NextImage} />)
 
-    const img = await screen.findByRole('img') as HTMLImageElement
+    const img = (await screen.findByRole('img')) as HTMLImageElement
     expect(img).toBeInTheDocument()
     expect(img.src).toContain(encodeURIComponent(src))
     expect(img).toHaveAttribute('alt', alt)

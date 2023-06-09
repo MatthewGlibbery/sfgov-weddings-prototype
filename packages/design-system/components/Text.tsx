@@ -4,7 +4,9 @@ import type { FIXMEChildrenProps, FIXMEAsableProps } from '../types'
 
 type TextProps = FIXMEChildrenProps & FIXMEAsableProps
 
-export const Text = ({ as: Component = 'div', ...rest }: TextProps) => <Component {...rest} />
+export const Text = ({ as: Component = 'div', ...rest }: TextProps) => (
+  <Component {...rest} />
+)
 
 Text.as = (el: ComponentType | ElementType) => withFixedProps(Text, { as: el })
 
@@ -16,7 +18,10 @@ export const Heading5 = Text.as('h5')
 
 export const BodyText = withClasses(Text, 'font-body text-body')
 export const SmallText = withClasses(Text, 'font-body text-small')
-export const BigDesc = withClasses(Text, 'font-body font-bold text-h4 lg:text-h3')
+export const BigDesc = withClasses(
+  Text,
+  'font-body font-bold text-h4 lg:text-h3'
+)
 export const TitleXs = withClasses(Heading5, 'font-body text-heading-xs')
 export const TitleSm = withClasses(Heading4, 'font-body text-heading-sm')
 export const TitleMd = withClasses(Heading3, 'font-body text-heading-md')

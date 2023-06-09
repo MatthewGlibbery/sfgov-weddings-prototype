@@ -33,19 +33,24 @@ type MinimalPageData = {
   // should we add description here?
 }
 
-export type PageMeta<Parent extends MinimalPageData = MinimalPageData> = MinimalMeta & {
-  parent?: Parent | undefined
-}
+export type PageMeta<Parent extends MinimalPageData = MinimalPageData> =
+  MinimalMeta & {
+    parent?: Parent | undefined
+  }
 
-export type PageData = object & MinimalPageData & {
-  meta: PageMeta<PageData>
-}
+export type PageData = object &
+  MinimalPageData & {
+    meta: PageMeta<PageData>
+  }
 
 export type RelatedContentData = Omit<PageData, 'title'> & {
   page_content: PageData
 }
 
-export type RelatedContentTransactionBlock = BlockType<'transaction', MinimalPageData>
+export type RelatedContentTransactionBlock = BlockType<
+  'transaction',
+  MinimalPageData
+>
 
 export type EventPageData = PageData & {
   description: string
@@ -83,7 +88,11 @@ export type AgencyPage = PageData & {
   description: string
 }
 
-export type GetHelpBlockTypes = EmailBlock | PhoneNumberBlockType | LocationBlock | TitleAndTextBlock
+export type GetHelpBlockTypes =
+  | EmailBlock
+  | PhoneNumberBlockType
+  | LocationBlock
+  | TitleAndTextBlock
 
 export type TransactionPageData = PageData & {
   description: string

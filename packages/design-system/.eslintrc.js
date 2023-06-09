@@ -2,12 +2,11 @@
 module.exports = {
   rules: {
     'react/no-danger': 'error',
-    'import/no-internal-modules': ['error', {
-      forbid: [
-        '@/**',
-        'next',
-        'next/*'
-      ]
-    }]
+    'import/no-internal-modules': [
+      'error',
+      {
+        forbid: ['@/**', 'next', 'next/*']
+      }
+    ]
   }
 }

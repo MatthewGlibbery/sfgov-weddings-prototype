@@ -25,7 +25,9 @@ describe('EventPage', () => {
 
     it('does not render if empty', async () => {
       render(<EventPage page={{ ...fixture, description: '' }} />)
-      expect(screen.queryByTestId('event-page-description')).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId('event-page-description')
+      ).not.toBeInTheDocument()
     })
   })
 
@@ -41,17 +43,19 @@ describe('EventPage', () => {
     { what: 'contact', input: fixture.contact[1].value.title }
   ])('renders the $what section when present', ({ what, input }) => {
     if (what === 'date_time') {
-      fixture.date_time = [{
-        ...fixture.date_time[0],
-        value: {
-          start_date: '2023-11-19',
-          start_time: '01:23:45',
-          end_date: '2023-11-19',
-          end_time: '21:02:34',
-          is_all_day: false,
-          include_end_date_time: 'yes'
+      fixture.date_time = [
+        {
+          ...fixture.date_time[0],
+          value: {
+            start_date: '2023-11-19',
+            start_time: '01:23:45',
+            end_date: '2023-11-19',
+            end_time: '21:02:34',
+            is_all_day: false,
+            include_end_date_time: 'yes'
+          }
         }
-      }]
+      ]
     }
     render(<EventPage page={fixture} />)
 
@@ -69,12 +73,15 @@ describe('EventPage', () => {
     { what: 'contact', input: fixture.contact[0].value.owner },
     // @ts-expect-error 'blegh
     { what: 'contact', input: fixture.contact[1].value.title }
-  ])('does not render the $what section when not present', ({ what, input }) => {
-    const fixtureCopy = fixture
-    // @ts-expect-error 'blegh'
-    fixtureCopy[what] = []
-    render(<EventPage page={fixture} />)
+  ])(
+    'does not render the $what section when not present',
+    ({ what, input }) => {
+      const fixtureCopy = fixture
+      // @ts-expect-error 'blegh'
+      fixtureCopy[what] = []
+      render(<EventPage page={fixture} />)
 
-    expect(screen.queryByText(input)).not.toBeInTheDocument()
-  })
+      expect(screen.queryByText(input)).not.toBeInTheDocument()
+    }
+  )
 })

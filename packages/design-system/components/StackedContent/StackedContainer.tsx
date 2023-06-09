@@ -33,11 +33,15 @@ export const StackedContainer = ({
   })
 
   return (
-    <div className={clsx(
-      stackedContentStyles,
-      direction === StackedContentDirection.ROW ? 'flex-row' : 'flex-col',
-      className
-    )} data-testid='stacked-content-container' {...rest}>
+    <div
+      className={clsx(
+        stackedContentStyles,
+        direction === StackedContentDirection.ROW ? 'flex-row' : 'flex-col',
+        className
+      )}
+      data-testid="stacked-content-container"
+      {...rest}
+    >
       {modChildren}
     </div>
   )

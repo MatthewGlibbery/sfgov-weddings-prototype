@@ -20,10 +20,11 @@ type PagesData = {
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   const api = new ContentAPI()
-  const data: PagesData = await api.getData<PagesData>('pages/', {
-    locale: 'en'
-  })
-    .catch(error => {
+  const data: PagesData = await api
+    .getData<PagesData>('pages/', {
+      locale: 'en'
+    })
+    .catch((error) => {
       console.error('Error fetching pages:', error)
       return {
         items: []
@@ -44,20 +45,24 @@ const Home = ({ pages }: { pages: PageData[] }) => {
   const { t } = useTranslation()
   return (
     <PageWrapper>
-      <Container className='py-8 mb-20'>
-        <TitleSm as='h1'>{t('pages')}</TitleSm>
-        {pages.length
-          ? <ul>
-              {pages.map(page => (
-                <li key={page.id}><PageLink page={page} /></li>
-              ))}
-            </ul>
-          : <div className='bg-red100 text-red400 p-20 rounded-[8px]'>
+      <Container className="py-8 mb-20">
+        <TitleSm as="h1">{t('pages')}</TitleSm>
+        {pages.length ? (
+          <ul>
+            {pages.map((page) => (
+              <li key={page.id}>
+                <PageLink page={page} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="bg-red100 text-red400 p-20 rounded-[8px]">
             No pages found?
-          </div>}
-          <div>
-            <Link href='/__test__'>{t('testPages')}</Link>
           </div>
+        )}
+        <div>
+          <Link href="/__test__">{t('testPages')}</Link>
+        </div>
       </Container>
     </PageWrapper>
   )

@@ -11,10 +11,7 @@ module.exports = {
       },
       name: 'color.red.100',
       attributes: {},
-      path: [
-        'red',
-        '100'
-      ]
+      path: ['red', '100']
     },
     200: {
       value: '#dadada',
@@ -27,10 +24,7 @@ module.exports = {
       },
       name: 'color.red.200',
       attributes: {},
-      path: [
-        'red',
-        '200'
-      ]
+      path: ['red', '200']
     },
     300: {
       value: '#c0c0c0',
@@ -43,10 +37,7 @@ module.exports = {
       },
       name: 'color.red.300',
       attributes: {},
-      path: [
-        'red',
-        '300'
-      ]
+      path: ['red', '300']
     },
     400: {
       value: '#a5a5a5',
@@ -59,10 +50,7 @@ module.exports = {
       },
       name: 'color.red.400',
       attributes: {},
-      path: [
-        'red',
-        '400'
-      ]
+      path: ['red', '400']
     },
     500: {
       value: '#8b8b8b',
@@ -75,10 +63,7 @@ module.exports = {
       },
       name: 'color.red.500',
       attributes: {},
-      path: [
-        'red',
-        '500'
-      ]
+      path: ['red', '500']
     },
     600: {
       value: '#707070',
@@ -91,10 +76,7 @@ module.exports = {
       },
       name: 'color.red.600',
       attributes: {},
-      path: [
-        'red',
-        '600'
-      ]
+      path: ['red', '600']
     },
     700: {
       value: '#555555',
@@ -107,10 +89,7 @@ module.exports = {
       },
       name: 'color.red.700',
       attributes: {},
-      path: [
-        'red',
-        '700'
-      ]
+      path: ['red', '700']
     },
     800: {
       value: '#3b3b3b',
@@ -123,10 +102,7 @@ module.exports = {
       },
       name: 'color.red.800',
       attributes: {},
-      path: [
-        'red',
-        '800'
-      ]
+      path: ['red', '800']
     },
     900: {
       value: '#202020',
@@ -139,10 +115,7 @@ module.exports = {
       },
       name: 'color.red.900',
       attributes: {},
-      path: [
-        'red',
-        '900'
-      ]
+      path: ['red', '900']
     }
   },
   orange: {
@@ -157,10 +130,7 @@ module.exports = {
       },
       name: 'color.orange.100',
       attributes: {},
-      path: [
-        'orange',
-        '100'
-      ]
+      path: ['orange', '100']
     },
     200: {
       value: '#dadada',
@@ -173,10 +143,7 @@ module.exports = {
       },
       name: 'color.orange.200',
       attributes: {},
-      path: [
-        'orange',
-        '200'
-      ]
+      path: ['orange', '200']
     },
     300: {
       value: '#c0c0c0',
@@ -189,10 +156,7 @@ module.exports = {
       },
       name: 'color.orange.300',
       attributes: {},
-      path: [
-        'orange',
-        '300'
-      ]
+      path: ['orange', '300']
     },
     400: {
       value: '#a5a5a5',
@@ -205,10 +169,7 @@ module.exports = {
       },
       name: 'color.orange.400',
       attributes: {},
-      path: [
-        'orange',
-        '400'
-      ]
+      path: ['orange', '400']
     },
     500: {
       value: '#8b8b8b',
@@ -221,10 +182,7 @@ module.exports = {
       },
       name: 'color.orange.500',
       attributes: {},
-      path: [
-        'orange',
-        '500'
-      ]
+      path: ['orange', '500']
     },
     600: {
       value: '#707070',
@@ -237,10 +195,7 @@ module.exports = {
       },
       name: 'color.orange.600',
       attributes: {},
-      path: [
-        'orange',
-        '600'
-      ]
+      path: ['orange', '600']
     },
     700: {
       value: '#555555',
@@ -253,10 +208,7 @@ module.exports = {
       },
       name: 'color.orange.700',
       attributes: {},
-      path: [
-        'orange',
-        '700'
-      ]
+      path: ['orange', '700']
     },
     800: {
       value: '#3b3b3b',
@@ -269,10 +221,7 @@ module.exports = {
       },
       name: 'color.orange.800',
       attributes: {},
-      path: [
-        'orange',
-        '800'
-      ]
+      path: ['orange', '800']
     },
     900: {
       value: '#202020',
@@ -285,10 +234,7 @@ module.exports = {
       },
       name: 'color.orange.900',
       attributes: {},
-      path: [
-        'orange',
-        '900'
-      ]
+      path: ['orange', '900']
     }
   },
   yellow: {
@@ -303,10 +249,7 @@ module.exports = {
       },
       name: 'color.yellow.100',
       attributes: {},
-      path: [
-        'yellow',
-        '100'
-      ]
+      path: ['yellow', '100']
     },
     200: {
       value: '#dadada',
@@ -319,10 +262,7 @@ module.exports = {
       },
       name: 'color.yellow.200',
       attributes: {},
-      path: [
-        'yellow',
-        '200'
-      ]
+      path: ['yellow', '200']
     },
     300: {
       value: '#c0c0c0',
@@ -335,10 +275,7 @@ module.exports = {
       },
       name: 'color.yellow.300',
       attributes: {},
-      path: [
-        'yellow',
-        '300'
-      ]
+      path: ['yellow', '300']
     },
     400: {
       value: '#a5a5a5',
@@ -351,10 +288,7 @@ module.exports = {
       },
       name: 'color.yellow.400',
       attributes: {},
-      path: [
-        'yellow',
-        '400'
-      ]
+      path: ['yellow', '400']
     },
     500: {
       value: '#8b8b8b',
@@ -367,10 +301,7 @@ module.exports = {
       },
       name: 'color.yellow.500',
       attributes: {},
-      path: [
-        'yellow',
-        '500'
-      ]
+      path: ['yellow', '500']
     },
     600: {
       value: '#707070',
@@ -383,10 +314,7 @@ module.exports = {
       },
       name: 'color.yellow.600',
       attributes: {},
-      path: [
-        'yellow',
-        '600'
-      ]
+      path: ['yellow', '600']
     },
     700: {
       value: '#555555',
@@ -399,10 +327,7 @@ module.exports = {
       },
       name: 'color.yellow.700',
       attributes: {},
-      path: [
-        'yellow',
-        '700'
-      ]
+      path: ['yellow', '700']
     },
     800: {
       value: '#3b3b3b',
@@ -415,10 +340,7 @@ module.exports = {
       },
       name: 'color.yellow.800',
       attributes: {},
-      path: [
-        'yellow',
-        '800'
-      ]
+      path: ['yellow', '800']
     },
     900: {
       value: '#202020',
@@ -431,10 +353,7 @@ module.exports = {
       },
       name: 'color.yellow.900',
       attributes: {},
-      path: [
-        'yellow',
-        '900'
-      ]
+      path: ['yellow', '900']
     }
   },
   green: {
@@ -449,10 +368,7 @@ module.exports = {
       },
       name: 'color.green.100',
       attributes: {},
-      path: [
-        'green',
-        '100'
-      ]
+      path: ['green', '100']
     },
     200: {
       value: '#dadada',
@@ -465,10 +381,7 @@ module.exports = {
       },
       name: 'color.green.200',
       attributes: {},
-      path: [
-        'green',
-        '200'
-      ]
+      path: ['green', '200']
     },
     300: {
       value: '#c0c0c0',
@@ -481,10 +394,7 @@ module.exports = {
       },
       name: 'color.green.300',
       attributes: {},
-      path: [
-        'green',
-        '300'
-      ]
+      path: ['green', '300']
     },
     400: {
       value: '#a5a5a5',
@@ -497,10 +407,7 @@ module.exports = {
       },
       name: 'color.green.400',
       attributes: {},
-      path: [
-        'green',
-        '400'
-      ]
+      path: ['green', '400']
     },
     500: {
       value: '#8b8b8b',
@@ -513,10 +420,7 @@ module.exports = {
       },
       name: 'color.green.500',
       attributes: {},
-      path: [
-        'green',
-        '500'
-      ]
+      path: ['green', '500']
     },
     600: {
       value: '#707070',
@@ -529,10 +433,7 @@ module.exports = {
       },
       name: 'color.green.600',
       attributes: {},
-      path: [
-        'green',
-        '600'
-      ]
+      path: ['green', '600']
     },
     700: {
       value: '#555555',
@@ -545,10 +446,7 @@ module.exports = {
       },
       name: 'color.green.700',
       attributes: {},
-      path: [
-        'green',
-        '700'
-      ]
+      path: ['green', '700']
     },
     800: {
       value: '#3b3b3b',
@@ -561,10 +459,7 @@ module.exports = {
       },
       name: 'color.green.800',
       attributes: {},
-      path: [
-        'green',
-        '800'
-      ]
+      path: ['green', '800']
     },
     900: {
       value: '#202020',
@@ -577,10 +472,7 @@ module.exports = {
       },
       name: 'color.green.900',
       attributes: {},
-      path: [
-        'green',
-        '900'
-      ]
+      path: ['green', '900']
     }
   },
   blue: {
@@ -595,10 +487,7 @@ module.exports = {
       },
       name: 'color.blue.100',
       attributes: {},
-      path: [
-        'blue',
-        '100'
-      ]
+      path: ['blue', '100']
     },
     200: {
       value: '#dadada',
@@ -611,10 +500,7 @@ module.exports = {
       },
       name: 'color.blue.200',
       attributes: {},
-      path: [
-        'blue',
-        '200'
-      ]
+      path: ['blue', '200']
     },
     300: {
       value: '#c0c0c0',
@@ -627,10 +513,7 @@ module.exports = {
       },
       name: 'color.blue.300',
       attributes: {},
-      path: [
-        'blue',
-        '300'
-      ]
+      path: ['blue', '300']
     },
     400: {
       value: '#a5a5a5',
@@ -643,10 +526,7 @@ module.exports = {
       },
       name: 'color.blue.400',
       attributes: {},
-      path: [
-        'blue',
-        '400'
-      ]
+      path: ['blue', '400']
     },
     500: {
       value: '#8b8b8b',
@@ -659,10 +539,7 @@ module.exports = {
       },
       name: 'color.blue.500',
       attributes: {},
-      path: [
-        'blue',
-        '500'
-      ]
+      path: ['blue', '500']
     },
     600: {
       value: '#707070',
@@ -675,10 +552,7 @@ module.exports = {
       },
       name: 'color.blue.600',
       attributes: {},
-      path: [
-        'blue',
-        '600'
-      ]
+      path: ['blue', '600']
     },
     700: {
       value: '#555555',
@@ -691,10 +565,7 @@ module.exports = {
       },
       name: 'color.blue.700',
       attributes: {},
-      path: [
-        'blue',
-        '700'
-      ]
+      path: ['blue', '700']
     },
     800: {
       value: '#3b3b3b',
@@ -707,10 +578,7 @@ module.exports = {
       },
       name: 'color.blue.800',
       attributes: {},
-      path: [
-        'blue',
-        '800'
-      ]
+      path: ['blue', '800']
     },
     900: {
       value: '#202020',
@@ -723,10 +591,7 @@ module.exports = {
       },
       name: 'color.blue.900',
       attributes: {},
-      path: [
-        'blue',
-        '900'
-      ]
+      path: ['blue', '900']
     }
   },
   purple: {
@@ -741,10 +606,7 @@ module.exports = {
       },
       name: 'color.purple.100',
       attributes: {},
-      path: [
-        'purple',
-        '100'
-      ]
+      path: ['purple', '100']
     },
     200: {
       value: '#dadada',
@@ -757,10 +619,7 @@ module.exports = {
       },
       name: 'color.purple.200',
       attributes: {},
-      path: [
-        'purple',
-        '200'
-      ]
+      path: ['purple', '200']
     },
     300: {
       value: '#c0c0c0',
@@ -773,10 +632,7 @@ module.exports = {
       },
       name: 'color.purple.300',
       attributes: {},
-      path: [
-        'purple',
-        '300'
-      ]
+      path: ['purple', '300']
     },
     400: {
       value: '#a5a5a5',
@@ -789,10 +645,7 @@ module.exports = {
       },
       name: 'color.purple.400',
       attributes: {},
-      path: [
-        'purple',
-        '400'
-      ]
+      path: ['purple', '400']
     },
     500: {
       value: '#8b8b8b',
@@ -805,10 +658,7 @@ module.exports = {
       },
       name: 'color.purple.500',
       attributes: {},
-      path: [
-        'purple',
-        '500'
-      ]
+      path: ['purple', '500']
     },
     600: {
       value: '#707070',
@@ -821,10 +671,7 @@ module.exports = {
       },
       name: 'color.purple.600',
       attributes: {},
-      path: [
-        'purple',
-        '600'
-      ]
+      path: ['purple', '600']
     },
     700: {
       value: '#555555',
@@ -837,10 +684,7 @@ module.exports = {
       },
       name: 'color.purple.700',
       attributes: {},
-      path: [
-        'purple',
-        '700'
-      ]
+      path: ['purple', '700']
     },
     800: {
       value: '#3b3b3b',
@@ -853,10 +697,7 @@ module.exports = {
       },
       name: 'color.purple.800',
       attributes: {},
-      path: [
-        'purple',
-        '800'
-      ]
+      path: ['purple', '800']
     },
     900: {
       value: '#202020',
@@ -869,10 +710,7 @@ module.exports = {
       },
       name: 'color.purple.900',
       attributes: {},
-      path: [
-        'purple',
-        '900'
-      ]
+      path: ['purple', '900']
     }
   },
   grey: {
@@ -887,10 +725,7 @@ module.exports = {
       },
       name: 'color.grey.100',
       attributes: {},
-      path: [
-        'grey',
-        '100'
-      ]
+      path: ['grey', '100']
     },
     200: {
       value: '#dadada',
@@ -903,10 +738,7 @@ module.exports = {
       },
       name: 'color.grey.200',
       attributes: {},
-      path: [
-        'grey',
-        '200'
-      ]
+      path: ['grey', '200']
     },
     300: {
       value: '#c0c0c0',
@@ -919,10 +751,7 @@ module.exports = {
       },
       name: 'color.grey.300',
       attributes: {},
-      path: [
-        'grey',
-        '300'
-      ]
+      path: ['grey', '300']
     },
     400: {
       value: '#a5a5a5',
@@ -935,10 +764,7 @@ module.exports = {
       },
       name: 'color.grey.400',
       attributes: {},
-      path: [
-        'grey',
-        '400'
-      ]
+      path: ['grey', '400']
     },
     500: {
       value: '#8b8b8b',
@@ -951,10 +777,7 @@ module.exports = {
       },
       name: 'color.grey.500',
       attributes: {},
-      path: [
-        'grey',
-        '500'
-      ]
+      path: ['grey', '500']
     },
     600: {
       value: '#707070',
@@ -967,10 +790,7 @@ module.exports = {
       },
       name: 'color.grey.600',
       attributes: {},
-      path: [
-        'grey',
-        '600'
-      ]
+      path: ['grey', '600']
     },
     700: {
       value: '#555555',
@@ -983,10 +803,7 @@ module.exports = {
       },
       name: 'color.grey.700',
       attributes: {},
-      path: [
-        'grey',
-        '700'
-      ]
+      path: ['grey', '700']
     },
     800: {
       value: '#3b3b3b',
@@ -999,10 +816,7 @@ module.exports = {
       },
       name: 'color.grey.800',
       attributes: {},
-      path: [
-        'grey',
-        '800'
-      ]
+      path: ['grey', '800']
     },
     900: {
       value: '#202020',
@@ -1015,10 +829,7 @@ module.exports = {
       },
       name: 'color.grey.900',
       attributes: {},
-      path: [
-        'grey',
-        '900'
-      ]
+      path: ['grey', '900']
     }
   },
   white: {
@@ -1032,9 +843,7 @@ module.exports = {
     },
     name: 'color.white.white',
     attributes: {},
-    path: [
-      'white'
-    ]
+    path: ['white']
   },
   black: {
     value: '#090909',
@@ -1047,9 +856,7 @@ module.exports = {
     },
     name: 'color.black.black',
     attributes: {},
-    path: [
-      'black'
-    ]
+    path: ['black']
   },
   fontFamilies: {
     'roboto-slab': {
@@ -1063,10 +870,7 @@ module.exports = {
       },
       name: 'fontFamilies.fontFamilies.roboto-slab',
       attributes: {},
-      path: [
-        'fontFamilies',
-        'roboto-slab'
-      ]
+      path: ['fontFamilies', 'roboto-slab']
     },
     'roboto-flex': {
       value: 'Roboto Flex',
@@ -1079,10 +883,7 @@ module.exports = {
       },
       name: 'fontFamilies.fontFamilies.roboto-flex',
       attributes: {},
-      path: [
-        'fontFamilies',
-        'roboto-flex'
-      ]
+      path: ['fontFamilies', 'roboto-flex']
     }
   },
   fontSize: {
@@ -1097,10 +898,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.0',
       attributes: {},
-      path: [
-        'fontSize',
-        '0'
-      ]
+      path: ['fontSize', '0']
     },
     1: {
       value: '16',
@@ -1113,10 +911,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.1',
       attributes: {},
-      path: [
-        'fontSize',
-        '1'
-      ]
+      path: ['fontSize', '1']
     },
     2: {
       value: '20',
@@ -1129,10 +924,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.2',
       attributes: {},
-      path: [
-        'fontSize',
-        '2'
-      ]
+      path: ['fontSize', '2']
     },
     3: {
       value: '21',
@@ -1145,10 +937,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.3',
       attributes: {},
-      path: [
-        'fontSize',
-        '3'
-      ]
+      path: ['fontSize', '3']
     },
     4: {
       value: '25',
@@ -1161,10 +950,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.4',
       attributes: {},
-      path: [
-        'fontSize',
-        '4'
-      ]
+      path: ['fontSize', '4']
     },
     5: {
       value: '26',
@@ -1177,10 +963,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.5',
       attributes: {},
-      path: [
-        'fontSize',
-        '5'
-      ]
+      path: ['fontSize', '5']
     },
     6: {
       value: '30',
@@ -1193,10 +976,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.6',
       attributes: {},
-      path: [
-        'fontSize',
-        '6'
-      ]
+      path: ['fontSize', '6']
     },
     7: {
       value: '32',
@@ -1209,10 +989,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.7',
       attributes: {},
-      path: [
-        'fontSize',
-        '7'
-      ]
+      path: ['fontSize', '7']
     },
     8: {
       value: '38',
@@ -1225,10 +1002,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.8',
       attributes: {},
-      path: [
-        'fontSize',
-        '8'
-      ]
+      path: ['fontSize', '8']
     },
     9: {
       value: '40',
@@ -1241,10 +1015,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.9',
       attributes: {},
-      path: [
-        'fontSize',
-        '9'
-      ]
+      path: ['fontSize', '9']
     },
     10: {
       value: '48',
@@ -1257,10 +1028,7 @@ module.exports = {
       },
       name: 'fontSizes.fontSize.10',
       attributes: {},
-      path: [
-        'fontSize',
-        '10'
-      ]
+      path: ['fontSize', '10']
     }
   },
   Desktop: {
@@ -1276,11 +1044,7 @@ module.exports = {
         },
         name: 'fontFamilies.Desktop.fontFamily',
         attributes: {},
-        path: [
-          'Desktop',
-          'h1',
-          'fontFamily'
-        ]
+        path: ['Desktop', 'h1', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -1293,11 +1057,7 @@ module.exports = {
         },
         name: 'fontWeights.Desktop.fontWeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h1',
-          'fontWeight'
-        ]
+        path: ['Desktop', 'h1', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -1310,11 +1070,7 @@ module.exports = {
         },
         name: 'lineHeight.Desktop.lineHeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h1',
-          'lineHeight'
-        ]
+        path: ['Desktop', 'h1', 'lineHeight']
       },
       fontSize: {
         value: '48',
@@ -1327,11 +1083,7 @@ module.exports = {
         },
         name: 'fontSizes.Desktop.fontSize',
         attributes: {},
-        path: [
-          'Desktop',
-          'h1',
-          'fontSize'
-        ]
+        path: ['Desktop', 'h1', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -1344,11 +1096,7 @@ module.exports = {
         },
         name: 'letterSpacing.Desktop.letterSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h1',
-          'letterSpacing'
-        ]
+        path: ['Desktop', 'h1', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -1361,11 +1109,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Desktop.paragraphSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h1',
-          'paragraphSpacing'
-        ]
+        path: ['Desktop', 'h1', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -1378,11 +1122,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Desktop.paragraphIndent',
         attributes: {},
-        path: [
-          'Desktop',
-          'h1',
-          'paragraphIndent'
-        ]
+        path: ['Desktop', 'h1', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -1395,11 +1135,7 @@ module.exports = {
         },
         name: 'textCase.Desktop.textCase',
         attributes: {},
-        path: [
-          'Desktop',
-          'h1',
-          'textCase'
-        ]
+        path: ['Desktop', 'h1', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -1412,11 +1148,7 @@ module.exports = {
         },
         name: 'textDecoration.Desktop.textDecoration',
         attributes: {},
-        path: [
-          'Desktop',
-          'h1',
-          'textDecoration'
-        ]
+        path: ['Desktop', 'h1', 'textDecoration']
       }
     },
     h2: {
@@ -1431,11 +1163,7 @@ module.exports = {
         },
         name: 'fontFamilies.Desktop.fontFamily',
         attributes: {},
-        path: [
-          'Desktop',
-          'h2',
-          'fontFamily'
-        ]
+        path: ['Desktop', 'h2', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -1448,11 +1176,7 @@ module.exports = {
         },
         name: 'fontWeights.Desktop.fontWeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h2',
-          'fontWeight'
-        ]
+        path: ['Desktop', 'h2', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -1465,11 +1189,7 @@ module.exports = {
         },
         name: 'lineHeight.Desktop.lineHeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h2',
-          'lineHeight'
-        ]
+        path: ['Desktop', 'h2', 'lineHeight']
       },
       fontSize: {
         value: '40',
@@ -1482,11 +1202,7 @@ module.exports = {
         },
         name: 'fontSizes.Desktop.fontSize',
         attributes: {},
-        path: [
-          'Desktop',
-          'h2',
-          'fontSize'
-        ]
+        path: ['Desktop', 'h2', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -1499,11 +1215,7 @@ module.exports = {
         },
         name: 'letterSpacing.Desktop.letterSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h2',
-          'letterSpacing'
-        ]
+        path: ['Desktop', 'h2', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -1516,11 +1228,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Desktop.paragraphSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h2',
-          'paragraphSpacing'
-        ]
+        path: ['Desktop', 'h2', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -1533,11 +1241,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Desktop.paragraphIndent',
         attributes: {},
-        path: [
-          'Desktop',
-          'h2',
-          'paragraphIndent'
-        ]
+        path: ['Desktop', 'h2', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -1550,11 +1254,7 @@ module.exports = {
         },
         name: 'textCase.Desktop.textCase',
         attributes: {},
-        path: [
-          'Desktop',
-          'h2',
-          'textCase'
-        ]
+        path: ['Desktop', 'h2', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -1567,11 +1267,7 @@ module.exports = {
         },
         name: 'textDecoration.Desktop.textDecoration',
         attributes: {},
-        path: [
-          'Desktop',
-          'h2',
-          'textDecoration'
-        ]
+        path: ['Desktop', 'h2', 'textDecoration']
       }
     },
     h3: {
@@ -1586,11 +1282,7 @@ module.exports = {
         },
         name: 'fontFamilies.Desktop.fontFamily',
         attributes: {},
-        path: [
-          'Desktop',
-          'h3',
-          'fontFamily'
-        ]
+        path: ['Desktop', 'h3', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -1603,11 +1295,7 @@ module.exports = {
         },
         name: 'fontWeights.Desktop.fontWeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h3',
-          'fontWeight'
-        ]
+        path: ['Desktop', 'h3', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -1620,11 +1308,7 @@ module.exports = {
         },
         name: 'lineHeight.Desktop.lineHeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h3',
-          'lineHeight'
-        ]
+        path: ['Desktop', 'h3', 'lineHeight']
       },
       fontSize: {
         value: '32',
@@ -1637,11 +1321,7 @@ module.exports = {
         },
         name: 'fontSizes.Desktop.fontSize',
         attributes: {},
-        path: [
-          'Desktop',
-          'h3',
-          'fontSize'
-        ]
+        path: ['Desktop', 'h3', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -1654,11 +1334,7 @@ module.exports = {
         },
         name: 'letterSpacing.Desktop.letterSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h3',
-          'letterSpacing'
-        ]
+        path: ['Desktop', 'h3', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -1671,11 +1347,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Desktop.paragraphSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h3',
-          'paragraphSpacing'
-        ]
+        path: ['Desktop', 'h3', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -1688,11 +1360,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Desktop.paragraphIndent',
         attributes: {},
-        path: [
-          'Desktop',
-          'h3',
-          'paragraphIndent'
-        ]
+        path: ['Desktop', 'h3', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -1705,11 +1373,7 @@ module.exports = {
         },
         name: 'textCase.Desktop.textCase',
         attributes: {},
-        path: [
-          'Desktop',
-          'h3',
-          'textCase'
-        ]
+        path: ['Desktop', 'h3', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -1722,11 +1386,7 @@ module.exports = {
         },
         name: 'textDecoration.Desktop.textDecoration',
         attributes: {},
-        path: [
-          'Desktop',
-          'h3',
-          'textDecoration'
-        ]
+        path: ['Desktop', 'h3', 'textDecoration']
       }
     },
     h4: {
@@ -1741,11 +1401,7 @@ module.exports = {
         },
         name: 'fontFamilies.Desktop.fontFamily',
         attributes: {},
-        path: [
-          'Desktop',
-          'h4',
-          'fontFamily'
-        ]
+        path: ['Desktop', 'h4', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -1758,11 +1414,7 @@ module.exports = {
         },
         name: 'fontWeights.Desktop.fontWeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h4',
-          'fontWeight'
-        ]
+        path: ['Desktop', 'h4', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -1775,11 +1427,7 @@ module.exports = {
         },
         name: 'lineHeight.Desktop.lineHeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h4',
-          'lineHeight'
-        ]
+        path: ['Desktop', 'h4', 'lineHeight']
       },
       fontSize: {
         value: '25',
@@ -1792,11 +1440,7 @@ module.exports = {
         },
         name: 'fontSizes.Desktop.fontSize',
         attributes: {},
-        path: [
-          'Desktop',
-          'h4',
-          'fontSize'
-        ]
+        path: ['Desktop', 'h4', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -1809,11 +1453,7 @@ module.exports = {
         },
         name: 'letterSpacing.Desktop.letterSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h4',
-          'letterSpacing'
-        ]
+        path: ['Desktop', 'h4', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -1826,11 +1466,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Desktop.paragraphSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h4',
-          'paragraphSpacing'
-        ]
+        path: ['Desktop', 'h4', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -1843,11 +1479,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Desktop.paragraphIndent',
         attributes: {},
-        path: [
-          'Desktop',
-          'h4',
-          'paragraphIndent'
-        ]
+        path: ['Desktop', 'h4', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -1860,11 +1492,7 @@ module.exports = {
         },
         name: 'textCase.Desktop.textCase',
         attributes: {},
-        path: [
-          'Desktop',
-          'h4',
-          'textCase'
-        ]
+        path: ['Desktop', 'h4', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -1877,11 +1505,7 @@ module.exports = {
         },
         name: 'textDecoration.Desktop.textDecoration',
         attributes: {},
-        path: [
-          'Desktop',
-          'h4',
-          'textDecoration'
-        ]
+        path: ['Desktop', 'h4', 'textDecoration']
       }
     },
     h5: {
@@ -1896,11 +1520,7 @@ module.exports = {
         },
         name: 'fontFamilies.Desktop.fontFamily',
         attributes: {},
-        path: [
-          'Desktop',
-          'h5',
-          'fontFamily'
-        ]
+        path: ['Desktop', 'h5', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -1913,11 +1533,7 @@ module.exports = {
         },
         name: 'fontWeights.Desktop.fontWeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h5',
-          'fontWeight'
-        ]
+        path: ['Desktop', 'h5', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -1930,11 +1546,7 @@ module.exports = {
         },
         name: 'lineHeight.Desktop.lineHeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'h5',
-          'lineHeight'
-        ]
+        path: ['Desktop', 'h5', 'lineHeight']
       },
       fontSize: {
         value: '20',
@@ -1947,11 +1559,7 @@ module.exports = {
         },
         name: 'fontSizes.Desktop.fontSize',
         attributes: {},
-        path: [
-          'Desktop',
-          'h5',
-          'fontSize'
-        ]
+        path: ['Desktop', 'h5', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -1964,11 +1572,7 @@ module.exports = {
         },
         name: 'letterSpacing.Desktop.letterSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h5',
-          'letterSpacing'
-        ]
+        path: ['Desktop', 'h5', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -1981,11 +1585,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Desktop.paragraphSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'h5',
-          'paragraphSpacing'
-        ]
+        path: ['Desktop', 'h5', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -1998,11 +1598,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Desktop.paragraphIndent',
         attributes: {},
-        path: [
-          'Desktop',
-          'h5',
-          'paragraphIndent'
-        ]
+        path: ['Desktop', 'h5', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -2015,11 +1611,7 @@ module.exports = {
         },
         name: 'textCase.Desktop.textCase',
         attributes: {},
-        path: [
-          'Desktop',
-          'h5',
-          'textCase'
-        ]
+        path: ['Desktop', 'h5', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -2032,11 +1624,7 @@ module.exports = {
         },
         name: 'textDecoration.Desktop.textDecoration',
         attributes: {},
-        path: [
-          'Desktop',
-          'h5',
-          'textDecoration'
-        ]
+        path: ['Desktop', 'h5', 'textDecoration']
       }
     },
     p: {
@@ -2051,11 +1639,7 @@ module.exports = {
         },
         name: 'fontFamilies.Desktop.fontFamily',
         attributes: {},
-        path: [
-          'Desktop',
-          'p',
-          'fontFamily'
-        ]
+        path: ['Desktop', 'p', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -2068,11 +1652,7 @@ module.exports = {
         },
         name: 'fontWeights.Desktop.fontWeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'p',
-          'fontWeight'
-        ]
+        path: ['Desktop', 'p', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -2085,11 +1665,7 @@ module.exports = {
         },
         name: 'lineHeight.Desktop.lineHeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'p',
-          'lineHeight'
-        ]
+        path: ['Desktop', 'p', 'lineHeight']
       },
       fontSize: {
         value: '16',
@@ -2102,11 +1678,7 @@ module.exports = {
         },
         name: 'fontSizes.Desktop.fontSize',
         attributes: {},
-        path: [
-          'Desktop',
-          'p',
-          'fontSize'
-        ]
+        path: ['Desktop', 'p', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -2119,11 +1691,7 @@ module.exports = {
         },
         name: 'letterSpacing.Desktop.letterSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'p',
-          'letterSpacing'
-        ]
+        path: ['Desktop', 'p', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -2136,11 +1704,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Desktop.paragraphSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'p',
-          'paragraphSpacing'
-        ]
+        path: ['Desktop', 'p', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -2153,11 +1717,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Desktop.paragraphIndent',
         attributes: {},
-        path: [
-          'Desktop',
-          'p',
-          'paragraphIndent'
-        ]
+        path: ['Desktop', 'p', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -2170,11 +1730,7 @@ module.exports = {
         },
         name: 'textCase.Desktop.textCase',
         attributes: {},
-        path: [
-          'Desktop',
-          'p',
-          'textCase'
-        ]
+        path: ['Desktop', 'p', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -2187,11 +1743,7 @@ module.exports = {
         },
         name: 'textDecoration.Desktop.textDecoration',
         attributes: {},
-        path: [
-          'Desktop',
-          'p',
-          'textDecoration'
-        ]
+        path: ['Desktop', 'p', 'textDecoration']
       }
     },
     Subtitle: {
@@ -2206,11 +1758,7 @@ module.exports = {
         },
         name: 'fontFamilies.Desktop.fontFamily',
         attributes: {},
-        path: [
-          'Desktop',
-          'Subtitle',
-          'fontFamily'
-        ]
+        path: ['Desktop', 'Subtitle', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -2223,11 +1771,7 @@ module.exports = {
         },
         name: 'fontWeights.Desktop.fontWeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'Subtitle',
-          'fontWeight'
-        ]
+        path: ['Desktop', 'Subtitle', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -2240,11 +1784,7 @@ module.exports = {
         },
         name: 'lineHeight.Desktop.lineHeight',
         attributes: {},
-        path: [
-          'Desktop',
-          'Subtitle',
-          'lineHeight'
-        ]
+        path: ['Desktop', 'Subtitle', 'lineHeight']
       },
       fontSize: {
         value: '14',
@@ -2257,11 +1797,7 @@ module.exports = {
         },
         name: 'fontSizes.Desktop.fontSize',
         attributes: {},
-        path: [
-          'Desktop',
-          'Subtitle',
-          'fontSize'
-        ]
+        path: ['Desktop', 'Subtitle', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -2274,11 +1810,7 @@ module.exports = {
         },
         name: 'letterSpacing.Desktop.letterSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'Subtitle',
-          'letterSpacing'
-        ]
+        path: ['Desktop', 'Subtitle', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -2291,11 +1823,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Desktop.paragraphSpacing',
         attributes: {},
-        path: [
-          'Desktop',
-          'Subtitle',
-          'paragraphSpacing'
-        ]
+        path: ['Desktop', 'Subtitle', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -2308,11 +1836,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Desktop.paragraphIndent',
         attributes: {},
-        path: [
-          'Desktop',
-          'Subtitle',
-          'paragraphIndent'
-        ]
+        path: ['Desktop', 'Subtitle', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -2325,11 +1849,7 @@ module.exports = {
         },
         name: 'textCase.Desktop.textCase',
         attributes: {},
-        path: [
-          'Desktop',
-          'Subtitle',
-          'textCase'
-        ]
+        path: ['Desktop', 'Subtitle', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -2342,11 +1862,7 @@ module.exports = {
         },
         name: 'textDecoration.Desktop.textDecoration',
         attributes: {},
-        path: [
-          'Desktop',
-          'Subtitle',
-          'textDecoration'
-        ]
+        path: ['Desktop', 'Subtitle', 'textDecoration']
       }
     }
   },
@@ -2363,11 +1879,7 @@ module.exports = {
         },
         name: 'fontFamilies.Tablet.fontFamily',
         attributes: {},
-        path: [
-          'Tablet',
-          'h1',
-          'fontFamily'
-        ]
+        path: ['Tablet', 'h1', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -2380,11 +1892,7 @@ module.exports = {
         },
         name: 'fontWeights.Tablet.fontWeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h1',
-          'fontWeight'
-        ]
+        path: ['Tablet', 'h1', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -2397,11 +1905,7 @@ module.exports = {
         },
         name: 'lineHeight.Tablet.lineHeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h1',
-          'lineHeight'
-        ]
+        path: ['Tablet', 'h1', 'lineHeight']
       },
       fontSize: {
         value: '38',
@@ -2414,11 +1918,7 @@ module.exports = {
         },
         name: 'fontSizes.Tablet.fontSize',
         attributes: {},
-        path: [
-          'Tablet',
-          'h1',
-          'fontSize'
-        ]
+        path: ['Tablet', 'h1', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -2431,11 +1931,7 @@ module.exports = {
         },
         name: 'letterSpacing.Tablet.letterSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h1',
-          'letterSpacing'
-        ]
+        path: ['Tablet', 'h1', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -2448,11 +1944,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Tablet.paragraphSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h1',
-          'paragraphSpacing'
-        ]
+        path: ['Tablet', 'h1', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -2465,11 +1957,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Tablet.paragraphIndent',
         attributes: {},
-        path: [
-          'Tablet',
-          'h1',
-          'paragraphIndent'
-        ]
+        path: ['Tablet', 'h1', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -2482,11 +1970,7 @@ module.exports = {
         },
         name: 'textCase.Tablet.textCase',
         attributes: {},
-        path: [
-          'Tablet',
-          'h1',
-          'textCase'
-        ]
+        path: ['Tablet', 'h1', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -2499,11 +1983,7 @@ module.exports = {
         },
         name: 'textDecoration.Tablet.textDecoration',
         attributes: {},
-        path: [
-          'Tablet',
-          'h1',
-          'textDecoration'
-        ]
+        path: ['Tablet', 'h1', 'textDecoration']
       }
     },
     h2: {
@@ -2518,11 +1998,7 @@ module.exports = {
         },
         name: 'fontFamilies.Tablet.fontFamily',
         attributes: {},
-        path: [
-          'Tablet',
-          'h2',
-          'fontFamily'
-        ]
+        path: ['Tablet', 'h2', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -2535,11 +2011,7 @@ module.exports = {
         },
         name: 'fontWeights.Tablet.fontWeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h2',
-          'fontWeight'
-        ]
+        path: ['Tablet', 'h2', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -2552,11 +2024,7 @@ module.exports = {
         },
         name: 'lineHeight.Tablet.lineHeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h2',
-          'lineHeight'
-        ]
+        path: ['Tablet', 'h2', 'lineHeight']
       },
       fontSize: {
         value: '32',
@@ -2569,11 +2037,7 @@ module.exports = {
         },
         name: 'fontSizes.Tablet.fontSize',
         attributes: {},
-        path: [
-          'Tablet',
-          'h2',
-          'fontSize'
-        ]
+        path: ['Tablet', 'h2', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -2586,11 +2050,7 @@ module.exports = {
         },
         name: 'letterSpacing.Tablet.letterSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h2',
-          'letterSpacing'
-        ]
+        path: ['Tablet', 'h2', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -2603,11 +2063,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Tablet.paragraphSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h2',
-          'paragraphSpacing'
-        ]
+        path: ['Tablet', 'h2', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -2620,11 +2076,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Tablet.paragraphIndent',
         attributes: {},
-        path: [
-          'Tablet',
-          'h2',
-          'paragraphIndent'
-        ]
+        path: ['Tablet', 'h2', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -2637,11 +2089,7 @@ module.exports = {
         },
         name: 'textCase.Tablet.textCase',
         attributes: {},
-        path: [
-          'Tablet',
-          'h2',
-          'textCase'
-        ]
+        path: ['Tablet', 'h2', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -2654,11 +2102,7 @@ module.exports = {
         },
         name: 'textDecoration.Tablet.textDecoration',
         attributes: {},
-        path: [
-          'Tablet',
-          'h2',
-          'textDecoration'
-        ]
+        path: ['Tablet', 'h2', 'textDecoration']
       }
     },
     h3: {
@@ -2673,11 +2117,7 @@ module.exports = {
         },
         name: 'fontFamilies.Tablet.fontFamily',
         attributes: {},
-        path: [
-          'Tablet',
-          'h3',
-          'fontFamily'
-        ]
+        path: ['Tablet', 'h3', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -2690,11 +2130,7 @@ module.exports = {
         },
         name: 'fontWeights.Tablet.fontWeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h3',
-          'fontWeight'
-        ]
+        path: ['Tablet', 'h3', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -2707,11 +2143,7 @@ module.exports = {
         },
         name: 'lineHeight.Tablet.lineHeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h3',
-          'lineHeight'
-        ]
+        path: ['Tablet', 'h3', 'lineHeight']
       },
       fontSize: {
         value: '26',
@@ -2724,11 +2156,7 @@ module.exports = {
         },
         name: 'fontSizes.Tablet.fontSize',
         attributes: {},
-        path: [
-          'Tablet',
-          'h3',
-          'fontSize'
-        ]
+        path: ['Tablet', 'h3', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -2741,11 +2169,7 @@ module.exports = {
         },
         name: 'letterSpacing.Tablet.letterSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h3',
-          'letterSpacing'
-        ]
+        path: ['Tablet', 'h3', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -2758,11 +2182,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Tablet.paragraphSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h3',
-          'paragraphSpacing'
-        ]
+        path: ['Tablet', 'h3', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -2775,11 +2195,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Tablet.paragraphIndent',
         attributes: {},
-        path: [
-          'Tablet',
-          'h3',
-          'paragraphIndent'
-        ]
+        path: ['Tablet', 'h3', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -2792,11 +2208,7 @@ module.exports = {
         },
         name: 'textCase.Tablet.textCase',
         attributes: {},
-        path: [
-          'Tablet',
-          'h3',
-          'textCase'
-        ]
+        path: ['Tablet', 'h3', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -2809,11 +2221,7 @@ module.exports = {
         },
         name: 'textDecoration.Tablet.textDecoration',
         attributes: {},
-        path: [
-          'Tablet',
-          'h3',
-          'textDecoration'
-        ]
+        path: ['Tablet', 'h3', 'textDecoration']
       }
     },
     h4: {
@@ -2828,11 +2236,7 @@ module.exports = {
         },
         name: 'fontFamilies.Tablet.fontFamily',
         attributes: {},
-        path: [
-          'Tablet',
-          'h4',
-          'fontFamily'
-        ]
+        path: ['Tablet', 'h4', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -2845,11 +2249,7 @@ module.exports = {
         },
         name: 'fontWeights.Tablet.fontWeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h4',
-          'fontWeight'
-        ]
+        path: ['Tablet', 'h4', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -2862,11 +2262,7 @@ module.exports = {
         },
         name: 'lineHeight.Tablet.lineHeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h4',
-          'lineHeight'
-        ]
+        path: ['Tablet', 'h4', 'lineHeight']
       },
       fontSize: {
         value: '20',
@@ -2879,11 +2275,7 @@ module.exports = {
         },
         name: 'fontSizes.Tablet.fontSize',
         attributes: {},
-        path: [
-          'Tablet',
-          'h4',
-          'fontSize'
-        ]
+        path: ['Tablet', 'h4', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -2896,11 +2288,7 @@ module.exports = {
         },
         name: 'letterSpacing.Tablet.letterSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h4',
-          'letterSpacing'
-        ]
+        path: ['Tablet', 'h4', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -2913,11 +2301,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Tablet.paragraphSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h4',
-          'paragraphSpacing'
-        ]
+        path: ['Tablet', 'h4', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -2930,11 +2314,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Tablet.paragraphIndent',
         attributes: {},
-        path: [
-          'Tablet',
-          'h4',
-          'paragraphIndent'
-        ]
+        path: ['Tablet', 'h4', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -2947,11 +2327,7 @@ module.exports = {
         },
         name: 'textCase.Tablet.textCase',
         attributes: {},
-        path: [
-          'Tablet',
-          'h4',
-          'textCase'
-        ]
+        path: ['Tablet', 'h4', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -2964,11 +2340,7 @@ module.exports = {
         },
         name: 'textDecoration.Tablet.textDecoration',
         attributes: {},
-        path: [
-          'Tablet',
-          'h4',
-          'textDecoration'
-        ]
+        path: ['Tablet', 'h4', 'textDecoration']
       }
     },
     h5: {
@@ -2983,11 +2355,7 @@ module.exports = {
         },
         name: 'fontFamilies.Tablet.fontFamily',
         attributes: {},
-        path: [
-          'Tablet',
-          'h5',
-          'fontFamily'
-        ]
+        path: ['Tablet', 'h5', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -3000,11 +2368,7 @@ module.exports = {
         },
         name: 'fontWeights.Tablet.fontWeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h5',
-          'fontWeight'
-        ]
+        path: ['Tablet', 'h5', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -3017,11 +2381,7 @@ module.exports = {
         },
         name: 'lineHeight.Tablet.lineHeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'h5',
-          'lineHeight'
-        ]
+        path: ['Tablet', 'h5', 'lineHeight']
       },
       fontSize: {
         value: '16',
@@ -3034,11 +2394,7 @@ module.exports = {
         },
         name: 'fontSizes.Tablet.fontSize',
         attributes: {},
-        path: [
-          'Tablet',
-          'h5',
-          'fontSize'
-        ]
+        path: ['Tablet', 'h5', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -3051,11 +2407,7 @@ module.exports = {
         },
         name: 'letterSpacing.Tablet.letterSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h5',
-          'letterSpacing'
-        ]
+        path: ['Tablet', 'h5', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -3068,11 +2420,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Tablet.paragraphSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'h5',
-          'paragraphSpacing'
-        ]
+        path: ['Tablet', 'h5', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -3085,11 +2433,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Tablet.paragraphIndent',
         attributes: {},
-        path: [
-          'Tablet',
-          'h5',
-          'paragraphIndent'
-        ]
+        path: ['Tablet', 'h5', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -3102,11 +2446,7 @@ module.exports = {
         },
         name: 'textCase.Tablet.textCase',
         attributes: {},
-        path: [
-          'Tablet',
-          'h5',
-          'textCase'
-        ]
+        path: ['Tablet', 'h5', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -3119,11 +2459,7 @@ module.exports = {
         },
         name: 'textDecoration.Tablet.textDecoration',
         attributes: {},
-        path: [
-          'Tablet',
-          'h5',
-          'textDecoration'
-        ]
+        path: ['Tablet', 'h5', 'textDecoration']
       }
     },
     p: {
@@ -3138,11 +2474,7 @@ module.exports = {
         },
         name: 'fontFamilies.Tablet.fontFamily',
         attributes: {},
-        path: [
-          'Tablet',
-          'p',
-          'fontFamily'
-        ]
+        path: ['Tablet', 'p', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -3155,11 +2487,7 @@ module.exports = {
         },
         name: 'fontWeights.Tablet.fontWeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'p',
-          'fontWeight'
-        ]
+        path: ['Tablet', 'p', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -3172,11 +2500,7 @@ module.exports = {
         },
         name: 'lineHeight.Tablet.lineHeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'p',
-          'lineHeight'
-        ]
+        path: ['Tablet', 'p', 'lineHeight']
       },
       fontSize: {
         value: '16',
@@ -3189,11 +2513,7 @@ module.exports = {
         },
         name: 'fontSizes.Tablet.fontSize',
         attributes: {},
-        path: [
-          'Tablet',
-          'p',
-          'fontSize'
-        ]
+        path: ['Tablet', 'p', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -3206,11 +2526,7 @@ module.exports = {
         },
         name: 'letterSpacing.Tablet.letterSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'p',
-          'letterSpacing'
-        ]
+        path: ['Tablet', 'p', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -3223,11 +2539,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Tablet.paragraphSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'p',
-          'paragraphSpacing'
-        ]
+        path: ['Tablet', 'p', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -3240,11 +2552,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Tablet.paragraphIndent',
         attributes: {},
-        path: [
-          'Tablet',
-          'p',
-          'paragraphIndent'
-        ]
+        path: ['Tablet', 'p', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -3257,11 +2565,7 @@ module.exports = {
         },
         name: 'textCase.Tablet.textCase',
         attributes: {},
-        path: [
-          'Tablet',
-          'p',
-          'textCase'
-        ]
+        path: ['Tablet', 'p', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -3274,11 +2578,7 @@ module.exports = {
         },
         name: 'textDecoration.Tablet.textDecoration',
         attributes: {},
-        path: [
-          'Tablet',
-          'p',
-          'textDecoration'
-        ]
+        path: ['Tablet', 'p', 'textDecoration']
       }
     },
     Subtitle: {
@@ -3293,11 +2593,7 @@ module.exports = {
         },
         name: 'fontFamilies.Tablet.fontFamily',
         attributes: {},
-        path: [
-          'Tablet',
-          'Subtitle',
-          'fontFamily'
-        ]
+        path: ['Tablet', 'Subtitle', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -3310,11 +2606,7 @@ module.exports = {
         },
         name: 'fontWeights.Tablet.fontWeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'Subtitle',
-          'fontWeight'
-        ]
+        path: ['Tablet', 'Subtitle', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -3327,11 +2619,7 @@ module.exports = {
         },
         name: 'lineHeight.Tablet.lineHeight',
         attributes: {},
-        path: [
-          'Tablet',
-          'Subtitle',
-          'lineHeight'
-        ]
+        path: ['Tablet', 'Subtitle', 'lineHeight']
       },
       fontSize: {
         value: '14',
@@ -3344,11 +2632,7 @@ module.exports = {
         },
         name: 'fontSizes.Tablet.fontSize',
         attributes: {},
-        path: [
-          'Tablet',
-          'Subtitle',
-          'fontSize'
-        ]
+        path: ['Tablet', 'Subtitle', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -3361,11 +2645,7 @@ module.exports = {
         },
         name: 'letterSpacing.Tablet.letterSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'Subtitle',
-          'letterSpacing'
-        ]
+        path: ['Tablet', 'Subtitle', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -3378,11 +2658,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Tablet.paragraphSpacing',
         attributes: {},
-        path: [
-          'Tablet',
-          'Subtitle',
-          'paragraphSpacing'
-        ]
+        path: ['Tablet', 'Subtitle', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -3395,11 +2671,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Tablet.paragraphIndent',
         attributes: {},
-        path: [
-          'Tablet',
-          'Subtitle',
-          'paragraphIndent'
-        ]
+        path: ['Tablet', 'Subtitle', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -3412,11 +2684,7 @@ module.exports = {
         },
         name: 'textCase.Tablet.textCase',
         attributes: {},
-        path: [
-          'Tablet',
-          'Subtitle',
-          'textCase'
-        ]
+        path: ['Tablet', 'Subtitle', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -3429,11 +2697,7 @@ module.exports = {
         },
         name: 'textDecoration.Tablet.textDecoration',
         attributes: {},
-        path: [
-          'Tablet',
-          'Subtitle',
-          'textDecoration'
-        ]
+        path: ['Tablet', 'Subtitle', 'textDecoration']
       }
     }
   },
@@ -3450,11 +2714,7 @@ module.exports = {
         },
         name: 'fontFamilies.Mobile.fontFamily',
         attributes: {},
-        path: [
-          'Mobile',
-          'h1',
-          'fontFamily'
-        ]
+        path: ['Mobile', 'h1', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -3467,11 +2727,7 @@ module.exports = {
         },
         name: 'fontWeights.Mobile.fontWeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h1',
-          'fontWeight'
-        ]
+        path: ['Mobile', 'h1', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -3484,11 +2740,7 @@ module.exports = {
         },
         name: 'lineHeight.Mobile.lineHeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h1',
-          'lineHeight'
-        ]
+        path: ['Mobile', 'h1', 'lineHeight']
       },
       fontSize: {
         value: '30',
@@ -3501,11 +2753,7 @@ module.exports = {
         },
         name: 'fontSizes.Mobile.fontSize',
         attributes: {},
-        path: [
-          'Mobile',
-          'h1',
-          'fontSize'
-        ]
+        path: ['Mobile', 'h1', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -3518,11 +2766,7 @@ module.exports = {
         },
         name: 'letterSpacing.Mobile.letterSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h1',
-          'letterSpacing'
-        ]
+        path: ['Mobile', 'h1', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -3535,11 +2779,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Mobile.paragraphSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h1',
-          'paragraphSpacing'
-        ]
+        path: ['Mobile', 'h1', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -3552,11 +2792,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Mobile.paragraphIndent',
         attributes: {},
-        path: [
-          'Mobile',
-          'h1',
-          'paragraphIndent'
-        ]
+        path: ['Mobile', 'h1', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -3569,11 +2805,7 @@ module.exports = {
         },
         name: 'textCase.Mobile.textCase',
         attributes: {},
-        path: [
-          'Mobile',
-          'h1',
-          'textCase'
-        ]
+        path: ['Mobile', 'h1', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -3586,11 +2818,7 @@ module.exports = {
         },
         name: 'textDecoration.Mobile.textDecoration',
         attributes: {},
-        path: [
-          'Mobile',
-          'h1',
-          'textDecoration'
-        ]
+        path: ['Mobile', 'h1', 'textDecoration']
       }
     },
     h2: {
@@ -3605,11 +2833,7 @@ module.exports = {
         },
         name: 'fontFamilies.Mobile.fontFamily',
         attributes: {},
-        path: [
-          'Mobile',
-          'h2',
-          'fontFamily'
-        ]
+        path: ['Mobile', 'h2', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -3622,11 +2846,7 @@ module.exports = {
         },
         name: 'fontWeights.Mobile.fontWeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h2',
-          'fontWeight'
-        ]
+        path: ['Mobile', 'h2', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -3639,11 +2859,7 @@ module.exports = {
         },
         name: 'lineHeight.Mobile.lineHeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h2',
-          'lineHeight'
-        ]
+        path: ['Mobile', 'h2', 'lineHeight']
       },
       fontSize: {
         value: '26',
@@ -3656,11 +2872,7 @@ module.exports = {
         },
         name: 'fontSizes.Mobile.fontSize',
         attributes: {},
-        path: [
-          'Mobile',
-          'h2',
-          'fontSize'
-        ]
+        path: ['Mobile', 'h2', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -3673,11 +2885,7 @@ module.exports = {
         },
         name: 'letterSpacing.Mobile.letterSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h2',
-          'letterSpacing'
-        ]
+        path: ['Mobile', 'h2', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -3690,11 +2898,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Mobile.paragraphSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h2',
-          'paragraphSpacing'
-        ]
+        path: ['Mobile', 'h2', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -3707,11 +2911,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Mobile.paragraphIndent',
         attributes: {},
-        path: [
-          'Mobile',
-          'h2',
-          'paragraphIndent'
-        ]
+        path: ['Mobile', 'h2', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -3724,11 +2924,7 @@ module.exports = {
         },
         name: 'textCase.Mobile.textCase',
         attributes: {},
-        path: [
-          'Mobile',
-          'h2',
-          'textCase'
-        ]
+        path: ['Mobile', 'h2', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -3741,11 +2937,7 @@ module.exports = {
         },
         name: 'textDecoration.Mobile.textDecoration',
         attributes: {},
-        path: [
-          'Mobile',
-          'h2',
-          'textDecoration'
-        ]
+        path: ['Mobile', 'h2', 'textDecoration']
       }
     },
     h3: {
@@ -3760,11 +2952,7 @@ module.exports = {
         },
         name: 'fontFamilies.Mobile.fontFamily',
         attributes: {},
-        path: [
-          'Mobile',
-          'h3',
-          'fontFamily'
-        ]
+        path: ['Mobile', 'h3', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -3777,11 +2965,7 @@ module.exports = {
         },
         name: 'fontWeights.Mobile.fontWeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h3',
-          'fontWeight'
-        ]
+        path: ['Mobile', 'h3', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -3794,11 +2978,7 @@ module.exports = {
         },
         name: 'lineHeight.Mobile.lineHeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h3',
-          'lineHeight'
-        ]
+        path: ['Mobile', 'h3', 'lineHeight']
       },
       fontSize: {
         value: '21',
@@ -3811,11 +2991,7 @@ module.exports = {
         },
         name: 'fontSizes.Mobile.fontSize',
         attributes: {},
-        path: [
-          'Mobile',
-          'h3',
-          'fontSize'
-        ]
+        path: ['Mobile', 'h3', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -3828,11 +3004,7 @@ module.exports = {
         },
         name: 'letterSpacing.Mobile.letterSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h3',
-          'letterSpacing'
-        ]
+        path: ['Mobile', 'h3', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -3845,11 +3017,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Mobile.paragraphSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h3',
-          'paragraphSpacing'
-        ]
+        path: ['Mobile', 'h3', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -3862,11 +3030,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Mobile.paragraphIndent',
         attributes: {},
-        path: [
-          'Mobile',
-          'h3',
-          'paragraphIndent'
-        ]
+        path: ['Mobile', 'h3', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -3879,11 +3043,7 @@ module.exports = {
         },
         name: 'textCase.Mobile.textCase',
         attributes: {},
-        path: [
-          'Mobile',
-          'h3',
-          'textCase'
-        ]
+        path: ['Mobile', 'h3', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -3896,11 +3056,7 @@ module.exports = {
         },
         name: 'textDecoration.Mobile.textDecoration',
         attributes: {},
-        path: [
-          'Mobile',
-          'h3',
-          'textDecoration'
-        ]
+        path: ['Mobile', 'h3', 'textDecoration']
       }
     },
     h4: {
@@ -3915,11 +3071,7 @@ module.exports = {
         },
         name: 'fontFamilies.Mobile.fontFamily',
         attributes: {},
-        path: [
-          'Mobile',
-          'h4',
-          'fontFamily'
-        ]
+        path: ['Mobile', 'h4', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -3932,11 +3084,7 @@ module.exports = {
         },
         name: 'fontWeights.Mobile.fontWeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h4',
-          'fontWeight'
-        ]
+        path: ['Mobile', 'h4', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -3949,11 +3097,7 @@ module.exports = {
         },
         name: 'lineHeight.Mobile.lineHeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h4',
-          'lineHeight'
-        ]
+        path: ['Mobile', 'h4', 'lineHeight']
       },
       fontSize: {
         value: '16',
@@ -3966,11 +3110,7 @@ module.exports = {
         },
         name: 'fontSizes.Mobile.fontSize',
         attributes: {},
-        path: [
-          'Mobile',
-          'h4',
-          'fontSize'
-        ]
+        path: ['Mobile', 'h4', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -3983,11 +3123,7 @@ module.exports = {
         },
         name: 'letterSpacing.Mobile.letterSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h4',
-          'letterSpacing'
-        ]
+        path: ['Mobile', 'h4', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -4000,11 +3136,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Mobile.paragraphSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h4',
-          'paragraphSpacing'
-        ]
+        path: ['Mobile', 'h4', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -4017,11 +3149,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Mobile.paragraphIndent',
         attributes: {},
-        path: [
-          'Mobile',
-          'h4',
-          'paragraphIndent'
-        ]
+        path: ['Mobile', 'h4', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -4034,11 +3162,7 @@ module.exports = {
         },
         name: 'textCase.Mobile.textCase',
         attributes: {},
-        path: [
-          'Mobile',
-          'h4',
-          'textCase'
-        ]
+        path: ['Mobile', 'h4', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -4051,11 +3175,7 @@ module.exports = {
         },
         name: 'textDecoration.Mobile.textDecoration',
         attributes: {},
-        path: [
-          'Mobile',
-          'h4',
-          'textDecoration'
-        ]
+        path: ['Mobile', 'h4', 'textDecoration']
       }
     },
     h5: {
@@ -4070,11 +3190,7 @@ module.exports = {
         },
         name: 'fontFamilies.Mobile.fontFamily',
         attributes: {},
-        path: [
-          'Mobile',
-          'h5',
-          'fontFamily'
-        ]
+        path: ['Mobile', 'h5', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -4087,11 +3203,7 @@ module.exports = {
         },
         name: 'fontWeights.Mobile.fontWeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h5',
-          'fontWeight'
-        ]
+        path: ['Mobile', 'h5', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -4104,11 +3216,7 @@ module.exports = {
         },
         name: 'lineHeight.Mobile.lineHeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'h5',
-          'lineHeight'
-        ]
+        path: ['Mobile', 'h5', 'lineHeight']
       },
       fontSize: {
         value: '16',
@@ -4121,11 +3229,7 @@ module.exports = {
         },
         name: 'fontSizes.Mobile.fontSize',
         attributes: {},
-        path: [
-          'Mobile',
-          'h5',
-          'fontSize'
-        ]
+        path: ['Mobile', 'h5', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -4138,11 +3242,7 @@ module.exports = {
         },
         name: 'letterSpacing.Mobile.letterSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h5',
-          'letterSpacing'
-        ]
+        path: ['Mobile', 'h5', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -4155,11 +3255,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Mobile.paragraphSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'h5',
-          'paragraphSpacing'
-        ]
+        path: ['Mobile', 'h5', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -4172,11 +3268,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Mobile.paragraphIndent',
         attributes: {},
-        path: [
-          'Mobile',
-          'h5',
-          'paragraphIndent'
-        ]
+        path: ['Mobile', 'h5', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -4189,11 +3281,7 @@ module.exports = {
         },
         name: 'textCase.Mobile.textCase',
         attributes: {},
-        path: [
-          'Mobile',
-          'h5',
-          'textCase'
-        ]
+        path: ['Mobile', 'h5', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -4206,11 +3294,7 @@ module.exports = {
         },
         name: 'textDecoration.Mobile.textDecoration',
         attributes: {},
-        path: [
-          'Mobile',
-          'h5',
-          'textDecoration'
-        ]
+        path: ['Mobile', 'h5', 'textDecoration']
       }
     },
     p: {
@@ -4225,11 +3309,7 @@ module.exports = {
         },
         name: 'fontFamilies.Mobile.fontFamily',
         attributes: {},
-        path: [
-          'Mobile',
-          'p',
-          'fontFamily'
-        ]
+        path: ['Mobile', 'p', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -4242,11 +3322,7 @@ module.exports = {
         },
         name: 'fontWeights.Mobile.fontWeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'p',
-          'fontWeight'
-        ]
+        path: ['Mobile', 'p', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -4259,11 +3335,7 @@ module.exports = {
         },
         name: 'lineHeight.Mobile.lineHeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'p',
-          'lineHeight'
-        ]
+        path: ['Mobile', 'p', 'lineHeight']
       },
       fontSize: {
         value: '16',
@@ -4276,11 +3348,7 @@ module.exports = {
         },
         name: 'fontSizes.Mobile.fontSize',
         attributes: {},
-        path: [
-          'Mobile',
-          'p',
-          'fontSize'
-        ]
+        path: ['Mobile', 'p', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -4293,11 +3361,7 @@ module.exports = {
         },
         name: 'letterSpacing.Mobile.letterSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'p',
-          'letterSpacing'
-        ]
+        path: ['Mobile', 'p', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -4310,11 +3374,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Mobile.paragraphSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'p',
-          'paragraphSpacing'
-        ]
+        path: ['Mobile', 'p', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -4327,11 +3387,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Mobile.paragraphIndent',
         attributes: {},
-        path: [
-          'Mobile',
-          'p',
-          'paragraphIndent'
-        ]
+        path: ['Mobile', 'p', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -4344,11 +3400,7 @@ module.exports = {
         },
         name: 'textCase.Mobile.textCase',
         attributes: {},
-        path: [
-          'Mobile',
-          'p',
-          'textCase'
-        ]
+        path: ['Mobile', 'p', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -4361,11 +3413,7 @@ module.exports = {
         },
         name: 'textDecoration.Mobile.textDecoration',
         attributes: {},
-        path: [
-          'Mobile',
-          'p',
-          'textDecoration'
-        ]
+        path: ['Mobile', 'p', 'textDecoration']
       }
     },
     Subtitle: {
@@ -4380,11 +3428,7 @@ module.exports = {
         },
         name: 'fontFamilies.Mobile.fontFamily',
         attributes: {},
-        path: [
-          'Mobile',
-          'Subtitle',
-          'fontFamily'
-        ]
+        path: ['Mobile', 'Subtitle', 'fontFamily']
       },
       fontWeight: {
         value: 'Regular',
@@ -4397,11 +3441,7 @@ module.exports = {
         },
         name: 'fontWeights.Mobile.fontWeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'Subtitle',
-          'fontWeight'
-        ]
+        path: ['Mobile', 'Subtitle', 'fontWeight']
       },
       lineHeight: {
         value: 'AUTO',
@@ -4414,11 +3454,7 @@ module.exports = {
         },
         name: 'lineHeight.Mobile.lineHeight',
         attributes: {},
-        path: [
-          'Mobile',
-          'Subtitle',
-          'lineHeight'
-        ]
+        path: ['Mobile', 'Subtitle', 'lineHeight']
       },
       fontSize: {
         value: '14',
@@ -4431,11 +3467,7 @@ module.exports = {
         },
         name: 'fontSizes.Mobile.fontSize',
         attributes: {},
-        path: [
-          'Mobile',
-          'Subtitle',
-          'fontSize'
-        ]
+        path: ['Mobile', 'Subtitle', 'fontSize']
       },
       letterSpacing: {
         value: '0',
@@ -4448,11 +3480,7 @@ module.exports = {
         },
         name: 'letterSpacing.Mobile.letterSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'Subtitle',
-          'letterSpacing'
-        ]
+        path: ['Mobile', 'Subtitle', 'letterSpacing']
       },
       paragraphSpacing: {
         value: '0',
@@ -4465,11 +3493,7 @@ module.exports = {
         },
         name: 'paragraphSpacing.Mobile.paragraphSpacing',
         attributes: {},
-        path: [
-          'Mobile',
-          'Subtitle',
-          'paragraphSpacing'
-        ]
+        path: ['Mobile', 'Subtitle', 'paragraphSpacing']
       },
       paragraphIndent: {
         value: '0px',
@@ -4482,11 +3506,7 @@ module.exports = {
         },
         name: 'paragraphIndent.Mobile.paragraphIndent',
         attributes: {},
-        path: [
-          'Mobile',
-          'Subtitle',
-          'paragraphIndent'
-        ]
+        path: ['Mobile', 'Subtitle', 'paragraphIndent']
       },
       textCase: {
         value: 'none',
@@ -4499,11 +3519,7 @@ module.exports = {
         },
         name: 'textCase.Mobile.textCase',
         attributes: {},
-        path: [
-          'Mobile',
-          'Subtitle',
-          'textCase'
-        ]
+        path: ['Mobile', 'Subtitle', 'textCase']
       },
       textDecoration: {
         value: 'none',
@@ -4516,11 +3532,7 @@ module.exports = {
         },
         name: 'textDecoration.Mobile.textDecoration',
         attributes: {},
-        path: [
-          'Mobile',
-          'Subtitle',
-          'textDecoration'
-        ]
+        path: ['Mobile', 'Subtitle', 'textDecoration']
       }
     }
   },
@@ -4536,10 +3548,7 @@ module.exports = {
       },
       name: 'lineHeights.lineHeights.0',
       attributes: {},
-      path: [
-        'lineHeights',
-        '0'
-      ]
+      path: ['lineHeights', '0']
     }
   },
   fontWeights: {
@@ -4554,10 +3563,7 @@ module.exports = {
       },
       name: 'fontWeights.fontWeights.roboto-slab-0',
       attributes: {},
-      path: [
-        'fontWeights',
-        'roboto-slab-0'
-      ]
+      path: ['fontWeights', 'roboto-slab-0']
     },
     'roboto-flex-1': {
       value: 'Regular',
@@ -4570,10 +3576,7 @@ module.exports = {
       },
       name: 'fontWeights.fontWeights.roboto-flex-1',
       attributes: {},
-      path: [
-        'fontWeights',
-        'roboto-flex-1'
-      ]
+      path: ['fontWeights', 'roboto-flex-1']
     }
   },
   letterSpacing: {
@@ -4588,10 +3591,7 @@ module.exports = {
       },
       name: 'letterSpacing.letterSpacing.0',
       attributes: {},
-      path: [
-        'letterSpacing',
-        '0'
-      ]
+      path: ['letterSpacing', '0']
     }
   },
   paragraphSpacing: {
@@ -4606,10 +3606,7 @@ module.exports = {
       },
       name: 'paragraphSpacing.paragraphSpacing.0',
       attributes: {},
-      path: [
-        'paragraphSpacing',
-        '0'
-      ]
+      path: ['paragraphSpacing', '0']
     }
   },
   textCase: {
@@ -4624,10 +3621,7 @@ module.exports = {
       },
       name: 'textCase.textCase.none',
       attributes: {},
-      path: [
-        'textCase',
-        'none'
-      ]
+      path: ['textCase', 'none']
     }
   },
   textDecoration: {
@@ -4642,10 +3636,7 @@ module.exports = {
       },
       name: 'textDecoration.textDecoration.none',
       attributes: {},
-      path: [
-        'textDecoration',
-        'none'
-      ]
+      path: ['textDecoration', 'none']
     }
   },
   paragraphIndent: {
@@ -4660,10 +3651,7 @@ module.exports = {
       },
       name: 'dimension.paragraphIndent.0',
       attributes: {},
-      path: [
-        'paragraphIndent',
-        '0'
-      ]
+      path: ['paragraphIndent', '0']
     }
   }
 }

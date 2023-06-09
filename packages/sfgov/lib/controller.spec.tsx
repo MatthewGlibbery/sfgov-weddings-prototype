@@ -21,15 +21,16 @@ describe('Controller', () => {
   }
 
   const api = new FixtureAPI({
-    pages: [
-      mockPage
-    ]
+    pages: [mockPage]
   })
 
-  const MockPageComponent: ComponentType<{ page: PageData }> = jest.fn(props => (
-    <div>Hello, {props.page.meta.type}!</div>
-  ))
-  const MockPageTemplate = new WagtailPageTemplate(MockPageComponent, mockMetaType)
+  const MockPageComponent: ComponentType<{ page: PageData }> = jest.fn(
+    props => <div>Hello, {props.page.meta.type}!</div>
+  )
+  const MockPageTemplate = new WagtailPageTemplate(
+    MockPageComponent,
+    mockMetaType
+  )
   const mockTemplates = [MockPageTemplate]
 
   afterEach(() => {
@@ -46,18 +47,18 @@ describe('Controller', () => {
         // @ts-expect-error testing without a template map
         () => new Controller(api)
       ).toThrow(/templates.+required/)
-      expect(
-        () => new Controller(api, [])
-      ).not.toThrow()
+      expect(() => new Controller(api, [])).not.toThrow()
     })
   })
 
   describe('getTemplateForType()', () => {
     it('finds exact matches', () => {
       const controller = new Controller(api, mockTemplates)
-      expect(controller.getViewComponent({
-        page: mockPage
-      })).toBe(MockPageComponent)
+      expect(
+        controller.getViewComponent({
+          page: mockPage
+        })
+      ).toBe(MockPageComponent)
     })
 
     it.skip('matches globs', () => {
@@ -137,7 +138,9 @@ describe('Controller', () => {
         { page: { meta: { type: null } } }
       ]) {
         // @ts-expect-error not sure what either of these errors is about, tbh
-        expect(() => render(<View {...props} />)).toThrow(/No template found for page:/)
+        expect(() => render(<View {...props} />)).toThrow(
+          /No template found for page:/
+        )
       }
       restoreConsole()
     })
@@ -145,19 +148,27 @@ describe('Controller', () => {
     it('throws if it gets a page.meta.type with no matching template', () => {
       const View = controller.makeViewComponent()
       const restoreConsole = mockConsole()
-      expect(() => render(<View page={{
-        id: 1,
-        meta: {
-          type: 'wut'
-        },
-        title: 'Hi'
-      }} />)).toThrow(/No template found for page/)
+      expect(() =>
+        render(
+          <View
+            page={{
+              id: 1,
+              meta: {
+                type: 'wut'
+              },
+              title: 'Hi'
+            }}
+          />
+        )
+      ).toThrow(/No template found for page/)
       restoreConsole()
     })
   })
 })
 
-function stubContext (c: Partial<GetServerSidePropsContext>): GetServerSidePropsContext {
+function stubContext(
+  c: Partial<GetServerSidePropsContext>
+): GetServerSidePropsContext {
   return {
     defaultLocale: 'en',
     query: c.query || {},

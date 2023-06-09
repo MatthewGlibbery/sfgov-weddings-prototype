@@ -35,28 +35,34 @@ export type CostValues = {
 
 export type CostBlock = BlockType<'cost', CostValues>
 
-export type TileBlock<T extends string = string> = BlockType<T, {
-  title: string
-  internal_page?: number
-  external_url: string
-  description: string
-  event_type?: string
-}>
+export type TileBlock<T extends string = string> = BlockType<
+  T,
+  {
+    title: string
+    internal_page?: number
+    external_url: string
+    description: string
+    event_type?: string
+  }
+>
 
 export type NewsTileBlock = TileBlock<'news'>
 export type ContentTileBlock = TileBlock<'content'>
 export type QuickLinkBlock = TileBlock<'quick_links'>
 export type EventTileBlock = TileBlock<'event'>
 
-export type StepBlock = BlockType<'step', {
-  title: string
-  step_type: StepType
-  optional?: boolean
-  cost: CostBlock[]
-  time?: string
-  step_description?: string
-  related_content_transactions?: RelatedContentTransactionBlock[]
-}>
+export type StepBlock = BlockType<
+  'step',
+  {
+    title: string
+    step_type: StepType
+    optional?: boolean
+    cost: CostBlock[]
+    time?: string
+    step_description?: string
+    related_content_transactions?: RelatedContentTransactionBlock[]
+  }
+>
 
 export type ImageBlock = BlockType<'image', number | WagtailImageData>
 
@@ -124,11 +130,23 @@ export type WhatToDoType = 'online' | 'in_person' | 'phone' | 'email' | 'mail'
 
 export type CalloutBlock = BlockType<'callout', string>
 
-export type StepSpecificsTypes = LocationBlock | CalloutBlock | EmailBlock | ButtonLinkBlock | PhoneNumberBlockType | TextBlock // TODO: add document upload type once we handle uploads
+export type StepSpecificsTypes =
+  | LocationBlock
+  | CalloutBlock
+  | EmailBlock
+  | ButtonLinkBlock
+  | PhoneNumberBlockType
+  | TextBlock // TODO: add document upload type once we handle uploads
 
-export type WhatToDoStepBlock = BlockType<'what_to_do_step', {
-  step_title: string
-  step_specifics: StepSpecificsTypes[]
-}>
+export type WhatToDoStepBlock = BlockType<
+  'what_to_do_step',
+  {
+    step_title: string
+    step_specifics: StepSpecificsTypes[]
+  }
+>
 
-export type WhatToDoBlock = BlockType<WhatToDoType, (CalloutBlock | WhatToDoStepBlock)[]>
+export type WhatToDoBlock = BlockType<
+  WhatToDoType,
+  (CalloutBlock | WhatToDoStepBlock)[]
+>

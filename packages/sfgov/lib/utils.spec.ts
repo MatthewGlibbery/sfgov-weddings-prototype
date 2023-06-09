@@ -4,34 +4,54 @@ import { getPageURL, resolvePage, resolveImage, getImageURL } from './utils'
 
 describe('getPageURL()', () => {
   it('returns meta.html_url without the hostname', () => {
-    expect(getPageURL(PageFactory.make({
-      meta: {
-        html_url: 'https://example.com/foo/bar'
-      }
-    }))).toBe('/foo/bar')
-    expect(getPageURL(PageFactory.make({
-      meta: {
-        html_url: '/foo/bar'
-      }
-    }))).toBe('/foo/bar')
-    expect(getPageURL(PageFactory.make({
-      meta: {
-        html_url: '/'
-      }
-    }))).toBe('/')
+    expect(
+      getPageURL(
+        PageFactory.make({
+          meta: {
+            html_url: 'https://example.com/foo/bar'
+          }
+        })
+      )
+    ).toBe('/foo/bar')
+    expect(
+      getPageURL(
+        PageFactory.make({
+          meta: {
+            html_url: '/foo/bar'
+          }
+        })
+      )
+    ).toBe('/foo/bar')
+    expect(
+      getPageURL(
+        PageFactory.make({
+          meta: {
+            html_url: '/'
+          }
+        })
+      )
+    ).toBe('/')
   })
 
   it('returns meta.url_path when no html_url is provided', () => {
-    expect(getPageURL(PageFactory.make({
-      meta: {
-        url_path: '/foo/bar'
-      }
-    }))).toBe('/foo/bar')
-    expect(getPageURL(PageFactory.make({
-      meta: {
-        url_path: '/'
-      }
-    }))).toBe('/')
+    expect(
+      getPageURL(
+        PageFactory.make({
+          meta: {
+            url_path: '/foo/bar'
+          }
+        })
+      )
+    ).toBe('/foo/bar')
+    expect(
+      getPageURL(
+        PageFactory.make({
+          meta: {
+            url_path: '/'
+          }
+        })
+      )
+    ).toBe('/')
   })
 })
 
@@ -53,15 +73,13 @@ describe('getImageURL()', () => {
         download_url: url
       }
     })
-    expect(getImageURL(image, 'https://example.com')).toBe('https://example.com/images/cool.gif')
+    expect(getImageURL(image, 'https://example.com')).toBe(
+      'https://example.com/images/cool.gif'
+    )
   })
 
   it('returns undefined if there is no meta.download_url', () => {
-    const fixtures = [
-      { meta: { download_url: '' } },
-      { meta: {} },
-      {}
-    ]
+    const fixtures = [{ meta: { download_url: '' } }, { meta: {} }, {}]
     for (const img of fixtures) {
       // @ts-expect-error img is intentionally malformed
       expect(getImageURL(img)).toBe(undefined)

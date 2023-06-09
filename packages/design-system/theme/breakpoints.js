@@ -7,9 +7,10 @@ const breakpoints = {
 }
 
 const media = Object.fromEntries(
-  Object.entries(breakpoints).map(
-    ([name, value]) => [name, `(min-width: ${value})`]
-  )
+  Object.entries(breakpoints).map(([name, value]) => [
+    name,
+    `(min-width: ${value})`
+  ])
 )
 
 module.exports = {

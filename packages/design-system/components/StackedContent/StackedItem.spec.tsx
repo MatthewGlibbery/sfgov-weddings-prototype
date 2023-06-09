@@ -17,12 +17,17 @@ describe('<StackedItem />', () => {
 
     /* eslint-disable testing-library/no-node-access */
     // need to reach in and get the value for the test
-    const expected = typeof value === 'object'
-      ? value?.props.children
-      : value === true || value === undefined ? '' : value
+    const expected =
+      typeof value === 'object'
+        ? value?.props.children
+        : value === true || value === undefined
+        ? ''
+        : value
     /* eslint-enable testing-library/no-node-access */
 
-    expect(screen.getByTestId('stacked-content-item')).toHaveTextContent(expected)
+    expect(screen.getByTestId('stacked-content-item')).toHaveTextContent(
+      expected
+    )
   })
 
   it('renders an icon when provided', () => {
@@ -31,13 +36,21 @@ describe('<StackedItem />', () => {
   })
 
   it('renders a title when provided', () => {
-    render(<StackedItem title='wohoo'>Testing</StackedItem>)
-    expect(screen.getByTestId('stacked-content-item')).toHaveTextContent('wohoo')
+    render(<StackedItem title="wohoo">Testing</StackedItem>)
+    expect(screen.getByTestId('stacked-content-item')).toHaveTextContent(
+      'wohoo'
+    )
   })
 
   it('renders when changing the "direction', () => {
-    render(<StackedItem direction={StackedContentDirection.COLUMN}>Testing</StackedItem>)
-    expect((screen.getByTestId('stacked-content-item'))).toHaveTextContent('Testing')
+    render(
+      <StackedItem direction={StackedContentDirection.COLUMN}>
+        Testing
+      </StackedItem>
+    )
+    expect(screen.getByTestId('stacked-content-item')).toHaveTextContent(
+      'Testing'
+    )
   })
 
   it.skip('changes the styles appropriately based upon "direction"', () => {

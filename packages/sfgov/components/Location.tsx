@@ -11,32 +11,45 @@ export const LocationBlock = (props: LocationValues) => {
     organization,
     addressee,
     location_name: locationName,
-    line1, line2, city, state, zip, location_notes
+    line1,
+    line2,
+    city,
+    state,
+    zip,
+    location_notes
   } = props
 
-  const boldedTitle = (agency && agency.title) ||
-    organization || addressee || locationName
+  const boldedTitle =
+    (agency && agency.title) || organization || addressee || locationName
 
   return (
     <div>
       <When condition={!!boldedTitle}>
-        <TitleSm as='h4' data-testid='title' className='font-bold'>
+        <TitleSm as="h4" data-testid="title" className="font-bold">
           {boldedTitle}
         </TitleSm>
       </When>
       <BodyText>
-        <When condition={!!organization && (organization !== boldedTitle)}>
-          {organization}<br />
+        <When condition={!!organization && organization !== boldedTitle}>
+          {organization}
+          <br />
         </When>
-        <When condition={!!addressee && (addressee !== boldedTitle)}>
-          {addressee}<br />
+        <When condition={!!addressee && addressee !== boldedTitle}>
+          {addressee}
+          <br />
         </When>
-        <When condition={!!locationName && (locationName !== boldedTitle)}>
-          {locationName}<br />
+        <When condition={!!locationName && locationName !== boldedTitle}>
+          {locationName}
+          <br />
         </When>
-        {line1}<br />
-        <When condition={!!line2}>{line2}<br /></When>
-        {city}, {state} {zip}<br />
+        {line1}
+        <br />
+        <When condition={!!line2}>
+          {line2}
+          <br />
+        </When>
+        {city}, {state} {zip}
+        <br />
         <When condition={!!location_notes}>{location_notes}</When>
       </BodyText>
     </div>

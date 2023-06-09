@@ -25,17 +25,25 @@ describe('TransactionPage', () => {
 
     it('does not render if empty', async () => {
       render(<TransactionPage page={{ ...fixture, description: '' }} />)
-      expect(screen.queryByTestId('step-by-step-description')).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId('step-by-step-description')
+      ).not.toBeInTheDocument()
     })
   })
 
   it.each([
-    { what: 'related_content_agencies', input: fixture.related_content_agencies[0].page_content.title },
+    {
+      what: 'related_content_agencies',
+      input: fixture.related_content_agencies[0].page_content.title
+    },
     { what: 'things_to_know', input: fixture.things_to_know[0].value.title },
     { what: 'what_to_do', input: fixture.what_to_do[0].type },
     { what: 'custom_section', input: fixture.custom_section[0].value.title },
     { what: 'special_cases', input: fixture.special_cases[0].value.title },
-    { what: 'good_for_community', input: fixture.good_for_community[0].value.title },
+    {
+      what: 'good_for_community',
+      input: fixture.good_for_community[0].value.title
+    },
     // @ts-expect-error this is silly
     { what: 'get_help', input: fixture.get_help[0].value.title },
     // @ts-expect-error this is silly

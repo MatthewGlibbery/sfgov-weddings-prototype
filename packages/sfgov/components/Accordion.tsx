@@ -18,19 +18,23 @@ export const Accordion = (props: AccordionProps) => {
   return (
     <details
       className={clsx('block list-none', className)}
-      open={isOpen} onToggle={toggleOpen}
+      open={isOpen}
+      onToggle={toggleOpen}
       {...rest}
     >
-      <summary className={`
+      <summary
+        className={`
         cursor-pointer
         flex items-center content-between
         pb-12
         border-solid border-b-1 border-[#707070]
-      `} data-testid='accordion-summary'>
-        <TitleXs data-testid='accordion-title'>{title}</TitleXs>
+      `}
+        data-testid="accordion-summary"
+      >
+        <TitleXs data-testid="accordion-title">{title}</TitleXs>
         <Icon data-testid={Icon.name} width={14} />
       </summary>
-      <div className='bg-[#F2F4F7] p-[32px]' data-testid='accordion-content'>
+      <div className="bg-[#F2F4F7] p-[32px]" data-testid="accordion-content">
         {children}
       </div>
     </details>

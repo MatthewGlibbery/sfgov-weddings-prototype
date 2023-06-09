@@ -16,10 +16,7 @@ import {
   IconBuilding,
   IconCheck
 } from '@/design-system'
-import type {
-  GetHelpBlockTypes,
-  TransactionPageData
-} from '@/types'
+import type { GetHelpBlockTypes, TransactionPageData } from '@/types'
 
 import { PageWrapper } from './PageWrapper'
 import {
@@ -34,7 +31,9 @@ import {
 } from '../'
 import { LocationBlock } from '../Location'
 
-export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ page }) => {
+export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
+  page
+}) => {
   const {
     title,
     description,
@@ -59,30 +58,34 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
       const computedKey = `${type}-${i}`
 
       switch (type) {
-        case ('address'):
+        case 'address':
           Component = (
-            <StackedItem key={computedKey} icon={IconBuilding} title='Address'>
+            <StackedItem key={computedKey} icon={IconBuilding} title="Address">
               <LocationBlock {...value} />
             </StackedItem>
           )
           break
-        case ('title_and_text'):
+        case 'title_and_text':
           Component = (
-            <StackedItem key={computedKey} icon={IconCheck} title='Additional Info'>
+            <StackedItem
+              key={computedKey}
+              icon={IconCheck}
+              title="Additional Info"
+            >
               <TitleAndText block={item} />
             </StackedItem>
           )
           break
-        case ('email'):
+        case 'email':
           Component = (
-            <StackedItem key={computedKey} icon={IconMail} title='Email'>
+            <StackedItem key={computedKey} icon={IconMail} title="Email">
               <EmailBlockLink {...value} />
             </StackedItem>
           )
           break
-        case ('phone_number'):
+        case 'phone_number':
           Component = (
-            <StackedItem key={computedKey} icon={IconPhone} title='Phone'>
+            <StackedItem key={computedKey} icon={IconPhone} title="Phone">
               <PhoneNumberBlock {...value} />
             </StackedItem>
           )
@@ -98,11 +101,16 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
 
   return (
     <PageWrapper title={title}>
-      <Container className='mb-20 pb-40'>
-        <DisplayLg as='h1' className='my-40'>{title}</DisplayLg>
+      <Container className="mb-20 pb-40">
+        <DisplayLg as="h1" className="my-40">
+          {title}
+        </DisplayLg>
         {/* Related Agencies list */}
         {agencies.map((agency, i) => (
-          <span key={agency.page_content.id} data-testid='related_content_agencies-section'>
+          <span
+            key={agency.page_content.id}
+            data-testid="related_content_agencies-section"
+          >
             {i > 0 && ', '}
             <a href={agency.page_content.meta.html_url}>
               {agency.page_content.title}
@@ -110,43 +118,53 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
           </span>
         ))}
         <When condition={description}>
-          <BigDesc as='p' className='mb-20' data-testid='transaction-page-description'>
+          <BigDesc
+            as="p"
+            className="mb-20"
+            data-testid="transaction-page-description"
+          >
             {description}
           </BigDesc>
         </When>
-        <div className={`
+        <div
+          className={`
           flex flex-col gap-y-28
           p-28 my-4 bg-grey100 rounded-[8px]
-        `}>
-          <div className='flex mb-28 gap-x-8'>
+        `}
+        >
+          <div className="flex mb-28 gap-x-8">
             <IconInfo width={40} />
-            <TitleLg as='h2'>{t('What to Know')}</TitleLg>
+            <TitleLg as="h2">{t('What to Know')}</TitleLg>
           </div>
           <When condition={!!cost[0]}>
             <CostBlockDisplay {...cost[0]} />
           </When>
-          {thingsToKnow.map(thing => (
-            <div key={thing.id} data-testid='things_to_know-section'>
+          {thingsToKnow.map((thing) => (
+            <div key={thing.id} data-testid="things_to_know-section">
               <TitleAndText block={thing} />
             </div>
           ))}
         </div>
-        <div className='flex flex-col my-40 gap-y-28'>
-          <TitleLg as='h2'>{t('What to Do')}</TitleLg>
-          {whatToDo.map(what => (
+        <div className="flex flex-col my-40 gap-y-28">
+          <TitleLg as="h2">{t('What to Do')}</TitleLg>
+          {whatToDo.map((what) => (
             <WhatToDo key={what.id} {...what} />
           ))}
         </div>
-        {customSection.map(block => (
-          <div key={block.id}
-            className='flex flex-col mb-40 gap-y-28'
-            data-testid='custom_section-section'>
+        {customSection.map((block) => (
+          <div
+            key={block.id}
+            className="flex flex-col mb-40 gap-y-28"
+            data-testid="custom_section-section"
+          >
             <TitleAndText block={block} />
           </div>
         ))}
         <When condition={!!specialCases.length}>
-          <div className='mb-40' data-testid='special_cases-section'>
-            <TitleLg as='h2' className='mb-20'>{t('Special cases')}</TitleLg>
+          <div className="mb-40" data-testid="special_cases-section">
+            <TitleLg as="h2" className="mb-20">
+              {t('Special cases')}
+            </TitleLg>
             {specialCases.map((item, i) => (
               <Accordion
                 key={item.value.title}
@@ -159,17 +177,27 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({ 
             ))}
           </div>
         </When>
-        {goodForCommunity.map(block => (
-          <div key={block.id} className='flex flex-col mb-40 gap-y-28' data-testid='good_for_community-section'>
+        {goodForCommunity.map((block) => (
+          <div
+            key={block.id}
+            className="flex flex-col mb-40 gap-y-28"
+            data-testid="good_for_community-section"
+          >
             <TitleAndText block={block} />
           </div>
         ))}
         <When condition={!!relatedContentPages.length}>
-          <RelatedContentList className='my-40' content={relatedContentPages} title={t('Related') as string} />
+          <RelatedContentList
+            className="my-40"
+            content={relatedContentPages}
+            title={t('Related') as string}
+          />
         </When>
         <When condition={!!getHelp.length}>
-          <TitleLg as='h2'><IconQuestion width={32} /> {t('Get Help')}</TitleLg>
-          <StackedContainer className='mt-28'>
+          <TitleLg as="h2">
+            <IconQuestion width={32} /> {t('Get Help')}
+          </TitleLg>
+          <StackedContainer className="mt-28">
             {renderGetHelpSection(getHelp)}
           </StackedContainer>
         </When>

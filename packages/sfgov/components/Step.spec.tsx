@@ -17,7 +17,13 @@ describe('Step', () => {
   })
 
   it('renders the step badge as the word And', () => {
-    render(<Step step={{ ...step, value: { ...step.value, step_type: 'and' } }} index={1} last />)
+    render(
+      <Step
+        step={{ ...step, value: { ...step.value, step_type: 'and' } }}
+        index={1}
+        last
+      />
+    )
     const badge = screen.getByTestId('step-badge')
     expect(badge).toHaveTextContent('and')
   })
@@ -29,7 +35,13 @@ describe('Step', () => {
   })
 
   it('does not render the cost field when empty', () => {
-    render(<Step step={{ ...step, value: { ...step.value, cost: '' } }} index={1} last />)
+    render(
+      <Step
+        step={{ ...step, value: { ...step.value, cost: '' } }}
+        index={1}
+        last
+      />
+    )
     expect(screen.queryByTestId('step-cost')).not.toBeInTheDocument()
   })
 
@@ -40,7 +52,13 @@ describe('Step', () => {
   })
 
   it('does not render the time field when empty', () => {
-    render(<Step step={{ ...step, value: { ...step.value, time: '' } }} index={1} last />)
+    render(
+      <Step
+        step={{ ...step, value: { ...step.value, time: '' } }}
+        index={1}
+        last
+      />
+    )
     expect(screen.queryByTestId('step-time')).not.toBeInTheDocument()
   })
 
@@ -51,7 +69,13 @@ describe('Step', () => {
   })
 
   it('does not render the step description field when empty', () => {
-    render(<Step step={{ ...step, value: { ...step.value, step_description: '' } }} index={1} last />)
+    render(
+      <Step
+        step={{ ...step, value: { ...step.value, step_description: '' } }}
+        index={1}
+        last
+      />
+    )
     expect(screen.queryByTestId('step-description')).not.toBeInTheDocument()
   })
 
@@ -62,7 +86,18 @@ describe('Step', () => {
   })
 
   it('does not render the transaction link field when empty', () => {
-    render(<Step step={{ ...step, value: { ...step.value, related_content_transactions: [] } }} index={1} last />)
-    expect(screen.queryByTestId('step-transaction-link')).not.toBeInTheDocument()
+    render(
+      <Step
+        step={{
+          ...step,
+          value: { ...step.value, related_content_transactions: [] }
+        }}
+        index={1}
+        last
+      />
+    )
+    expect(
+      screen.queryByTestId('step-transaction-link')
+    ).not.toBeInTheDocument()
   })
 })

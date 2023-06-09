@@ -8,7 +8,11 @@ type StyledImageProps = Partial<ImageProps> & {
   baseURL?: string
 }
 
-const StyledImage = ({ as: Component = 'img', className, ...rest }: StyledImageProps) => (
+const StyledImage = ({
+  as: Component = 'img',
+  className,
+  ...rest
+}: StyledImageProps) => (
   // @ts-expect-error derp derp
   <Component className={clsx('w-auto h-auto', className)} {...rest} />
 )
@@ -18,5 +22,5 @@ export type ImageOwnProps = StyledImageProps & { imageRef: WagtailImageData }
 /** istanbul ignore */
 export const Image = ({ imageRef, baseURL, ...rest }: ImageOwnProps) => {
   const props = getImageProps(imageRef, baseURL)
-  return <StyledImage { ...props } {...rest } />
+  return <StyledImage {...props} {...rest} />
 }

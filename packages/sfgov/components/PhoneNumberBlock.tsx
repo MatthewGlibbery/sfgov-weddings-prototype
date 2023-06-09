@@ -10,16 +10,20 @@ import { PhoneNumberValues } from '@/types'
  *  - Phone number
  *  - Details
  */
-export const PhoneNumberBlock = (
-  { owner, phone_number: phoneNumber, details }: PhoneNumberValues
-) => (
-  <div className='flex flex-col gap-y-12'>
+export const PhoneNumberBlock = ({
+  owner,
+  phone_number: phoneNumber,
+  details
+}: PhoneNumberValues) => (
+  <div className="flex flex-col gap-y-12">
     <When condition={owner}>
       <TitleXs>{owner}</TitleXs>
     </When>
     <When condition={phoneNumber}>
       <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
     </When>
-    <When condition={details}><SmallText>{details}</SmallText></When>
+    <When condition={details}>
+      <SmallText>{details}</SmallText>
+    </When>
   </div>
 )

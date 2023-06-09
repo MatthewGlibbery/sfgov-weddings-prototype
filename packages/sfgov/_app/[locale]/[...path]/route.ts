@@ -11,14 +11,15 @@ type RequestContext = {
   }
 }
 
-export async function GET (request: Request, context: RequestContext) {
+export async function GET(request: Request, context: RequestContext) {
   const { locale } = context.params
   const path = context.params.path.join('/')
-  const redirectUri = locale === defaultLocale
-    ? `/page/${path}/`
-    : locales.includes(locale)
-      ? `/page/${locale}/${path}/`
-      : undefined
+  let redirectUri
+  if (locale === defaultLocale) {
+    redirectUri = `/page/${path}/`
+  } else if (locales.includes(locale)) {
+    redirectUri = `/page/${locale}/${path}/`
+  }
   if (redirectUri) {
     console.warn('redirecting to', redirectUri)
     return NextResponse.redirect(redirectUri)

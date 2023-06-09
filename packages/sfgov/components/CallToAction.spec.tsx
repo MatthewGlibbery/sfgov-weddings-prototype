@@ -30,14 +30,19 @@ describe('<CallToAction />', () => {
     { title: ctaValues.title, link: { text: '', url: ctaValues.link.url } },
     { title: ctaValues.title, link: { text: ctaValues.link.text, url: '' } },
     { title: ctaValues.title, link: { text: '', url: '' } }
-  ])('does not render the button when a link field is not present', (ctaValues) => {
-    render(<CallToAction {...ctaValues} />)
-    expect(screen.queryByRole('link')).not.toBeInTheDocument()
-  })
+  ])(
+    'does not render the button when a link field is not present',
+    (ctaValues) => {
+      render(<CallToAction {...ctaValues} />)
+      expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    }
+  )
 
   it('renders a link button with an aria label of the title and the link text', () => {
     render(<CallToAction {...ctaValues} />)
-    const link = screen.getByLabelText(`${ctaValues.title} ${ctaValues.link.text}`)
+    const link = screen.getByLabelText(
+      `${ctaValues.title} ${ctaValues.link.text}`
+    )
 
     expect(link).toBeInTheDocument()
   })

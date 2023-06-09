@@ -19,7 +19,13 @@ export const PageLink = (props: PageLinkProps) => {
     href = getPageURL(page),
     ...rest
   } = props
-  return <Component href={href as string} className={clsx('text-action', className)} {...rest}>
-    {children}
-  </Component>
+  return (
+    <Component
+      href={href as string}
+      className={clsx('text-action', className)}
+      {...rest}
+    >
+      {children}
+    </Component>
+  )
 }

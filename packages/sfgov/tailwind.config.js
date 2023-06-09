@@ -5,7 +5,5 @@ module.exports = {
     './components/**/*.{ts,tsx}',
     '../design-system/components/**/*.{ts,tsx}'
   ],
-  presets: [
-    require('../design-system/tailwind.preset')
-  ]
+  presets: [require('../design-system/tailwind.preset')]
 }

@@ -18,7 +18,11 @@ describe('<StackedContainer />', () => {
 
   describe('Content Direction', () => {
     it('defaults to "row" orientation', () => {
-      render(<StackedContainer><div data-testid='testing'>test</div></StackedContainer>)
+      render(
+        <StackedContainer>
+          <div data-testid="testing">test</div>
+        </StackedContainer>
+      )
       expect(screen.getByTestId('testing')).toHaveAttribute(
         'direction',
         StackedContentDirection.ROW
@@ -28,7 +32,7 @@ describe('<StackedContainer />', () => {
     it('changes to "column" orientation', () => {
       render(
         <StackedContainer direction={StackedContentDirection.COLUMN}>
-          <div data-testid='testing'>test</div>
+          <div data-testid="testing">test</div>
         </StackedContainer>
       )
       expect(screen.getByTestId('testing')).toHaveAttribute(

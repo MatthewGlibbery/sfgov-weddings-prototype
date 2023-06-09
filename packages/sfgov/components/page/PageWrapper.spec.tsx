@@ -9,7 +9,7 @@ describe('<PageWrapper>', () => {
   })
 
   it('renders a page title as "{title} | SF.gov"', async () => {
-    render(<PageWrapper title='Page title' />)
+    render(<PageWrapper title="Page title" />)
     const title = screen.getByText('Page title | SF.gov')
     expect(title.nodeName).toBe('TITLE')
   })

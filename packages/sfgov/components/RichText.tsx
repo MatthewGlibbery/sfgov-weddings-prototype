@@ -27,9 +27,7 @@ const ALWAYS_FORBID_ATTRS: Matcher[] = [
   /^on/
 ]
 
-const ALWAYS_FORBID_ATTR_VALUES: Matcher[] = [
-  /javascript:/
-]
+const ALWAYS_FORBID_ATTR_VALUES: Matcher[] = [/javascript:/]
 
 export type RichTextProps = {
   html: string
@@ -56,7 +54,7 @@ export const RichText = (props: RichTextProps) => {
   const { html, components = {} } = props
 
   const options: HTMLReactParserOptions = {
-    replace (node) {
+    replace(node) {
       if (!isElementNode(node)) {
         return
       }
@@ -65,7 +63,8 @@ export const RichText = (props: RichTextProps) => {
       if (!isAllowedElement(tagName)) {
         console.warn(
           'skipping forbidden element "%s" with attributes:',
-          node.tagName, node.attribs
+          node.tagName,
+          node.attribs
         )
         return <></>
       }
@@ -76,25 +75,26 @@ export const RichText = (props: RichTextProps) => {
       }
 
       const props = Object.fromEntries(
-        Object.entries(attribs)
-          .filter(([attr, value]) => isAllowedAttr(attr, value))
+        Object.entries(attribs).filter(([attr, value]) =>
+          isAllowedAttr(attr, value)
+        )
       )
 
       // @ts-expect-error this is dumb
-      return <Component {...props}>
-        {domToReact(node.children, options)}
-      </Component>
+      return (
+        <Component {...props}>{domToReact(node.children, options)}</Component>
+      )
     }
   }
   return <>{parse(html, options)}</>
 
-  function isAllowedElement (name: string): boolean {
+  function isAllowedElement(name: string): boolean {
     const lowerName = name.toLowerCase()
     if (ALWAYS_FORBID_ELEMENTS.includes(lowerName)) return false
     return true
   }
 
-  function isAllowedAttr (name: string, value: string) {
+  function isAllowedAttr(name: string, value: string) {
     if (matchesAny(name, ALWAYS_FORBID_ATTRS)) {
       return false
     } else if (matchesAny(value, ALWAYS_FORBID_ATTR_VALUES)) {
@@ -104,16 +104,14 @@ export const RichText = (props: RichTextProps) => {
   }
 }
 
-function isElementNode (node: unknown): node is Element {
+function isElementNode(node: unknown): node is Element {
   return node instanceof Element || (node as Element)?.nodeType === 1
 }
 
-function matches (value: string, matcher: Matcher) {
-  return matcher instanceof RegExp
-    ? matcher.test(value)
-    : matcher === value
+function matches(value: string, matcher: Matcher) {
+  return matcher instanceof RegExp ? matcher.test(value) : matcher === value
 }
 
-function matchesAny (value: string, matchers: Matcher[]): boolean {
-  return matchers?.some(matcher => matches(value, matcher))
+function matchesAny(value: string, matchers: Matcher[]): boolean {
+  return matchers?.some((matcher) => matches(value, matcher))
 }

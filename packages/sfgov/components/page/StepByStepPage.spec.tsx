@@ -5,8 +5,10 @@ import { StepByStepPage } from './StepByStepPage'
 describe('StepByStepPage', () => {
   const fixture = StepByStepPageFactory.make({
     title: 'Apply for housing',
-    description: 'Applications are being accepted on a first come first served basis until all available units are leased.',
-    intro: 'Initial Posting Date on DAHLIA San Francisco Housing Portal: November 4, 2021. See the complete listing details on DAHLIA.',
+    description:
+      'Applications are being accepted on a first come first served basis until all available units are leased.',
+    intro:
+      'Initial Posting Date on DAHLIA San Francisco Housing Portal: November 4, 2021. See the complete listing details on DAHLIA.',
     steps: StepBlockFactory.make(5)
   })
 
@@ -30,7 +32,9 @@ describe('StepByStepPage', () => {
 
     it('does not render if empty', async () => {
       render(<StepByStepPage page={{ ...fixture, description: '' }} />)
-      expect(screen.queryByTestId('step-by-step-description')).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId('step-by-step-description')
+      ).not.toBeInTheDocument()
     })
   })
 
@@ -48,8 +52,6 @@ describe('StepByStepPage', () => {
     })
     render(<StepByStepPage page={{ ...fixture, steps: [step] }} />)
 
-    expect(
-      screen.getByTestId(`step-${step.id}`)
-    ).toBeInTheDocument()
+    expect(screen.getByTestId(`step-${step.id}`)).toBeInTheDocument()
   })
 })

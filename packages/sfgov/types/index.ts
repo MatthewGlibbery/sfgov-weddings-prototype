@@ -12,17 +12,17 @@ export type QueryParams = {
 /**
  * The Content API interface implements the bare minimum of methods necessary to
  * get arbitrary JSON data by path. Implementations can decide what to do with
- * the paths, e.g. joining them onto a base URL for fetch or just looking up data
- * in a map.
+ * the paths, e.g. joining them onto a base URL for fetch or just
+ * looking up data in a map.
  */
 export interface IContentAPI {
-  getData<T = unknown> (
+  getData<T = unknown>(
     path: string,
     params?: QueryParams,
     options?: RequestInit
   ): Promise<T>
-  getPageByPath<T extends PageData = PageData> (
-    path:string,
+  getPageByPath<T extends PageData = PageData>(
+    path: string,
     params?: QueryParams,
     options?: RequestInit
   ): Promise<T>

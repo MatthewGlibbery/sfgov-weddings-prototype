@@ -1,4 +1,9 @@
-import { render, screen, fireEvent, type RenderResult } from '@testing-library/react'
+import {
+  render,
+  screen,
+  fireEvent,
+  type RenderResult
+} from '@testing-library/react'
 import { Accordion } from './Accordion'
 
 describe('<Accordion />', () => {
@@ -45,7 +50,11 @@ describe('<Accordion />', () => {
   })
 
   it('shows the content when passed open={true}', () => {
-    render(<Accordion title={testTitle} open>{testContent}</Accordion>)
+    render(
+      <Accordion title={testTitle} open>
+        {testContent}
+      </Accordion>
+    )
 
     const details = getDetails()
     const content = getContent()
@@ -55,7 +64,11 @@ describe('<Accordion />', () => {
   })
 
   it('hides content visible by default when clicked', () => {
-    render(<Accordion title={testTitle} open>{testContent}</Accordion>)
+    render(
+      <Accordion title={testTitle} open>
+        {testContent}
+      </Accordion>
+    )
 
     const details = getDetails()
     const summary = getSummary()
@@ -76,13 +89,17 @@ describe('<Accordion />', () => {
 
   describe('icons', () => {
     it('shows the plus icon by default', () => {
-      render(<Accordion title='hi'>content</Accordion>)
+      render(<Accordion title="hi">content</Accordion>)
       expect(screen.getByTestId('IconPlus')).toBeInTheDocument()
       expect(screen.queryByTestId('IconMinus')).not.toBeInTheDocument()
     })
 
     it('shows the minus icon when passed open={true}', () => {
-      render(<Accordion title='hi' open>content</Accordion>)
+      render(
+        <Accordion title="hi" open>
+          content
+        </Accordion>
+      )
       expect(getDetails()).toHaveAttribute('open')
       expect(screen.getByTestId('IconMinus')).toBeInTheDocument()
       expect(screen.queryByTestId('IconPlus')).not.toBeInTheDocument()

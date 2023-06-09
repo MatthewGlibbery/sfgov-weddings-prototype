@@ -12,7 +12,11 @@ describe('Button', () => {
 
   describe('as="a"', () => {
     it('renders a link', () => {
-      render(<Button as='a' href='#derp'>hi</Button>)
+      render(
+        <Button as="a" href="#derp">
+          hi
+        </Button>
+      )
       const button = screen.getByRole('link')
       expect(button).toBeInTheDocument()
       expect(button).toHaveTextContent('hi')
@@ -21,18 +25,16 @@ describe('Button', () => {
   })
 
   describe('variants', () => {
-    it.each([
-      ['primary'],
-      ['secondary'],
-      ['link'],
-      ['whatever']
-    ])('renders the variant', variant => {
-      // @ts-expect-error these are not all valid
-      render(<Button variant={variant}>yo</Button>)
-      const button = screen.getByRole('button')
-      expect(button).toBeInTheDocument()
-      expect(button).toHaveTextContent('yo')
-    })
+    it.each([['primary'], ['secondary'], ['link'], ['whatever']])(
+      'renders the variant',
+      (variant) => {
+        // @ts-expect-error these are not all valid
+        render(<Button variant={variant}>yo</Button>)
+        const button = screen.getByRole('button')
+        expect(button).toBeInTheDocument()
+        expect(button).toHaveTextContent('yo')
+      }
+    )
   })
 
   describe('block prop', () => {
@@ -43,7 +45,7 @@ describe('Button', () => {
 
   describe('className', () => {
     it('adds className values', () => {
-      render(<Button className='wut'>yo</Button>)
+      render(<Button className="wut">yo</Button>)
       const button = screen.getByRole('button')
       expect(button).toHaveClass('inline-flex', 'wut')
     })

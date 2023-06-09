@@ -3,11 +3,13 @@ const nextJest = require('next/jest')
 const tsConfig = require('./tsconfig.json')
 
 const moduleNameMapper = Object.fromEntries(
-  Object.entries(tsConfig.compilerOptions.paths)
-    .map(([alias, [path]]) => [
-      `^${alias.replace('*', '(.*)')}$`,
-      path.replace(/^..\//, '<rootDir>/../').replace(/^.\//, '<rootDir>/').replace('/*', '/$1')
-    ])
+  Object.entries(tsConfig.compilerOptions.paths).map(([alias, [path]]) => [
+    `^${alias.replace('*', '(.*)')}$`,
+    path
+      .replace(/^..\//, '<rootDir>/../')
+      .replace(/^.\//, '<rootDir>/')
+      .replace('/*', '/$1')
+  ])
 )
 
 const createJestConfig = nextJest({

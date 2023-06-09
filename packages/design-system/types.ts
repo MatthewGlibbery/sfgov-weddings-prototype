@@ -1,12 +1,18 @@
-import type { ComponentProps, ComponentType, ElementType, ReactNode } from 'react'
+import type {
+  ComponentProps,
+  ComponentType,
+  ElementType,
+  ReactNode
+} from 'react'
 
 export type ClassProps = {
   className?: string
 }
 
-export type IntrinsicPropsWithoutClass<
-  C extends ElementType
-> = Omit<ComponentProps<C>, 'className'>
+export type IntrinsicPropsWithoutClass<C extends ElementType> = Omit<
+  ComponentProps<C>,
+  'className'
+>
 
 export type LinkProps = JSX.IntrinsicElements['link']
 
@@ -21,9 +27,11 @@ export type OpticalGoogleFont = {
   weights: OpticalWeights
 }
 
-export type GoogleFontOptions = {
-  optical: false
-} | OpticalGoogleFont
+export type GoogleFontOptions =
+  | {
+      optical: false
+    }
+  | OpticalGoogleFont
 
 export type FontSpec = {
   name: string

@@ -15,10 +15,12 @@ describe('ImageFactory.make()', () => {
 
   it('can partially override meta.download_url', () => {
     const url = 'https://sf.gov/whatever.jpg'
-    expect(ImageFactory.make({
-      meta: {
-        download_url: url
-      }
-    }).meta.download_url).toBe(url)
+    expect(
+      ImageFactory.make({
+        meta: {
+          download_url: url
+        }
+      }).meta.download_url
+    ).toBe(url)
   })
 })

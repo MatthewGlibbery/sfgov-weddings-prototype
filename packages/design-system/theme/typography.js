@@ -10,17 +10,7 @@ const fontFamily = {
 
 const lineHeight = {
   auto: 'AUTO',
-  ...pxMap([
-    52,
-    44,
-    40,
-    36,
-    32,
-    28,
-    24,
-    20,
-    16
-  ])
+  ...pxMap([52, 44, 40, 36, 32, 28, 24, 20, 16])
 }
 
 const fontWeight = {
@@ -40,96 +30,150 @@ const fontSize = {
   h3: ['26px', '24px'],
   h4: ['20px', '24px'],
   h6: ['16px', '24px'],
-  'desktop-display-xxxl': ['48px', {
-    lineHeight: lineHeight['52'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.semibold
-  }],
-  'desktop-display-lg': ['16px', {
-    lineHeight: lineHeight['24'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.normal
-  }],
-  'desktop-heading-xxl': ['28px', {
-    lineHeight: lineHeight['36'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.medium
-  }],
-  'desktop-heading-xl': ['24px', {
-    lineHeight: lineHeight['24'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.semibold
-  }],
-  'desktop-heading-md': ['18px', {
-    lineHeight: lineHeight['20'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.bold
-  }],
-  'desktop-heading-sm': ['16px', {
-    lineHeight: lineHeight['16'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.extrabold
-  }],
-  'desktop-heading-xs': ['14px', {
-    lineHeight: lineHeight['16'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.light
-  }],
-  'desktop-body': ['16px', {
-    lineHeight: lineHeight['24'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.normal
-  }],
-  'desktop-label': ['14px', {
-    lineHeight: lineHeight.auto,
-    letterSpacing: '0px',
-    fontWeight: fontWeight.normal
-  }],
-  'display-xxxl': ['48px', {
-    lineHeight: lineHeight['52'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.semibold
-  }],
-  'display-lg': ['16px', {
-    lineHeight: lineHeight['24'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.normal
-  }],
-  'heading-xxl': ['28px', {
-    lineHeight: lineHeight['36'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.medium
-  }],
-  'heading-xl': ['24px', {
-    lineHeight: lineHeight['24'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.semibold
-  }],
-  'heading-md': ['18px', {
-    lineHeight: lineHeight['20'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.bold
-  }],
-  'heading-sm': ['16px', {
-    lineHeight: lineHeight['16'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.extrabold
-  }],
-  'heading-xs': ['14px', {
-    lineHeight: lineHeight['16'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.light
-  }],
-  body: ['16px', {
-    lineHeight: lineHeight['24'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.normal
-  }],
-  label: ['14px', {
-    lineHeight: lineHeight['24'],
-    letterSpacing: '0px',
-    fontWeight: fontWeight.normal
-  }]
+  'desktop-display-xxxl': [
+    '48px',
+    {
+      lineHeight: lineHeight['52'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.semibold
+    }
+  ],
+  'desktop-display-lg': [
+    '16px',
+    {
+      lineHeight: lineHeight['24'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.normal
+    }
+  ],
+  'desktop-heading-xxl': [
+    '28px',
+    {
+      lineHeight: lineHeight['36'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.medium
+    }
+  ],
+  'desktop-heading-xl': [
+    '24px',
+    {
+      lineHeight: lineHeight['24'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.semibold
+    }
+  ],
+  'desktop-heading-md': [
+    '18px',
+    {
+      lineHeight: lineHeight['20'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.bold
+    }
+  ],
+  'desktop-heading-sm': [
+    '16px',
+    {
+      lineHeight: lineHeight['16'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.extrabold
+    }
+  ],
+  'desktop-heading-xs': [
+    '14px',
+    {
+      lineHeight: lineHeight['16'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.light
+    }
+  ],
+  'desktop-body': [
+    '16px',
+    {
+      lineHeight: lineHeight['24'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.normal
+    }
+  ],
+  'desktop-label': [
+    '14px',
+    {
+      lineHeight: lineHeight.auto,
+      letterSpacing: '0px',
+      fontWeight: fontWeight.normal
+    }
+  ],
+  'display-xxxl': [
+    '48px',
+    {
+      lineHeight: lineHeight['52'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.semibold
+    }
+  ],
+  'display-lg': [
+    '16px',
+    {
+      lineHeight: lineHeight['24'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.normal
+    }
+  ],
+  'heading-xxl': [
+    '28px',
+    {
+      lineHeight: lineHeight['36'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.medium
+    }
+  ],
+  'heading-xl': [
+    '24px',
+    {
+      lineHeight: lineHeight['24'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.semibold
+    }
+  ],
+  'heading-md': [
+    '18px',
+    {
+      lineHeight: lineHeight['20'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.bold
+    }
+  ],
+  'heading-sm': [
+    '16px',
+    {
+      lineHeight: lineHeight['16'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.extrabold
+    }
+  ],
+  'heading-xs': [
+    '14px',
+    {
+      lineHeight: lineHeight['16'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.light
+    }
+  ],
+  body: [
+    '16px',
+    {
+      lineHeight: lineHeight['24'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.normal
+    }
+  ],
+  label: [
+    '14px',
+    {
+      lineHeight: lineHeight['24'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.normal
+    }
+  ]
 }
 
 module.exports = {

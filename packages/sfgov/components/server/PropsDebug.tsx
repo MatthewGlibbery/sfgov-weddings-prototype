@@ -8,13 +8,13 @@ export type PagePropsDebugProps = JSX.IntrinsicElements['div'] & {
 export const PropsDebug = ({ data, ...rest }: PagePropsDebugProps) => {
   const id = 'props-debug'
   return (
-    <div className='text-white bg-grey700 py-20' id={id} {...rest}>
-      <Container className='overflow-x-auto'>
+    <div className="text-white bg-grey700 py-20" id={id} {...rest}>
+      <Container className="overflow-x-auto">
         <details>
-          <TitleXs as='summary' className='m-0'>
+          <TitleXs as="summary" className="m-0">
             Page props
           </TitleXs>
-          <Monospace as='pre' className='mt-20' data-testid='debug-pre'>
+          <Monospace as="pre" className="mt-20" data-testid="debug-pre">
             {safeJsonStringify(data, null, 2)}
           </Monospace>
         </details>

@@ -25,27 +25,31 @@ export const StackedItem = ({
   title = ''
 }: StackedItemProps) => {
   const StyledItem = ({ className, ...rest }: JSX.IntrinsicElements['div']) => {
-    return <div className={clsx(
-      stackedItemStyles,
-      className,
-      direction === StackedContentDirection.ROW ? 'px-16' : 'pb-12'
-    )} {...rest} />
+    return (
+      <div
+        className={clsx(
+          stackedItemStyles,
+          className,
+          direction === StackedContentDirection.ROW ? 'px-16' : 'pb-12'
+        )}
+        {...rest}
+      />
+    )
   }
 
   // TODO: handle icons as paths instead of assuming an Icon element
 
   return (
-    <StyledItem data-testid='stacked-content-item'>
-      <TitleSm className='flex'>
-        { Icon
-          ? <div className='flex mr-10' data-testid='stacked-content-item-icon'>
-              <Icon width={28} />
-            </div>
-          : null
-          }
-        { title }
+    <StyledItem data-testid="stacked-content-item">
+      <TitleSm className="flex">
+        {Icon ? (
+          <div className="flex mr-10" data-testid="stacked-content-item-icon">
+            <Icon width={28} />
+          </div>
+        ) : null}
+        {title}
       </TitleSm>
-      { children }
+      {children}
     </StyledItem>
   )
 }

@@ -10,10 +10,10 @@ import fetchMock from 'jest-fetch-mock'
 fetchMock.enableMocks()
 
 expect.extend({
-  toStringifyTo (received, expected) {
+  toStringifyTo(received, expected) {
     return {
       pass: String(received) === expected,
-      message () {
+      message() {
         return `String value "${received}" !== "${expected}"`
       }
     }

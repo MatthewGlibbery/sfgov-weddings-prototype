@@ -11,7 +11,7 @@ type RequestContext = {
 
 const api = new ContentAPI()
 
-export async function GET (request: Request, context: RequestContext) {
+export async function GET(request: Request, context: RequestContext) {
   const { locale: possiblePageId, path } = context.params
   if (path.length === 0 && isNumeric(possiblePageId)) {
     const page = await api.loadJSON<PageData>(`page/${possiblePageId}/`)
@@ -22,6 +22,6 @@ export async function GET (request: Request, context: RequestContext) {
   }
 }
 
-function isNumeric (value: string): boolean {
+function isNumeric(value: string): boolean {
   return !isNaN(parseInt(value))
 }

@@ -1,6 +1,11 @@
 import clsx from 'clsx'
 import { BigDesc, BodyText, Button, TitleMd } from '@/design-system'
-import { CalloutBlock, StepSpecificsTypes, WhatToDoBlock, WhatToDoStepBlock } from '@/types'
+import {
+  CalloutBlock,
+  StepSpecificsTypes,
+  WhatToDoBlock,
+  WhatToDoStepBlock
+} from '@/types'
 import { When } from 'react-if'
 import { Callout } from './Callout'
 import { EmailBlockLink } from './EmailBlockLink'
@@ -79,23 +84,24 @@ const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
 }
 
 export const WhatToDo = (props: WhatToDoBlock) => {
-  const {
-    type,
-    value
-  } = props
+  const { type, value } = props
 
   let i = 0
 
   return (
     <>
-      <TitleMd as='h3' data-testid='whatToDoSection'>{type}</TitleMd>
-      {value.map(block => {
+      <TitleMd as="h3" data-testid="whatToDoSection">
+        {type}
+      </TitleMd>
+      {value.map((block) => {
         if (block.type === 'what_to_do_step') i++
         return (
-          <div className='flex flex-col gap-y-28' key={block.id}>
-            <When condition={block.type === 'callout'}><Callout {...block as CalloutBlock} /></When>
+          <div className="flex flex-col gap-y-28" key={block.id}>
+            <When condition={block.type === 'callout'}>
+              <Callout {...(block as CalloutBlock)} />
+            </When>
             <When condition={block.type === 'what_to_do_step'}>
-              <WhatToDoStep index={i} {...block as WhatToDoStepBlock} />
+              <WhatToDoStep index={i} {...(block as WhatToDoStepBlock)} />
             </When>
           </div>
         )

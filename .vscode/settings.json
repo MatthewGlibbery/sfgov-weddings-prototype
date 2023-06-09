@@ -19,7 +19,7 @@
     "source.fixAll.eslint": true,
   },
   "[javascript][javascriptreact][typescript][typescriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "rewrap.wrappingColumn": 80,

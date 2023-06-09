@@ -15,7 +15,9 @@ describe('DateTime Component', () => {
     })
 
     it('constructs the proper date range', () => {
-      render(<ComposedDate startDateInput='2023-11-19' endDateInput='2023-11-25' />)
+      render(
+        <ComposedDate startDateInput="2023-11-19" endDateInput="2023-11-25" />
+      )
 
       // TODO: revise when i10n/i18n come into play
       // Checks the following:
@@ -32,12 +34,20 @@ describe('DateTime Component', () => {
     })
 
     it('accepts a locale and adjusts its output accordingly for a single day', () => {
-      render(<ComposedDate startDateInput='2023-11-19' locale='es' />)
-      expect(screen.getByText('domingo, 19 de noviembre de 2023')).toBeInTheDocument()
+      render(<ComposedDate startDateInput="2023-11-19" locale="es" />)
+      expect(
+        screen.getByText('domingo, 19 de noviembre de 2023')
+      ).toBeInTheDocument()
     })
 
     it('accepts a locale and adjusts its output accordingly for a date range', () => {
-      render(<ComposedDate startDateInput='2023-11-19' endDateInput='2023-11-25' locale='es' />)
+      render(
+        <ComposedDate
+          startDateInput="2023-11-19"
+          endDateInput="2023-11-25"
+          locale="es"
+        />
+      )
 
       // TODO: revise when i10n/i18n come into play
       // Checks the following:
@@ -54,7 +64,13 @@ describe('DateTime Component', () => {
     })
 
     it('ignores non-"en dash" date range separators', () => {
-      render(<ComposedDate startDateInput='2023-11-19' endDateInput='2023-11-25' locale='ko' />)
+      render(
+        <ComposedDate
+          startDateInput="2023-11-19"
+          endDateInput="2023-11-25"
+          locale="ko"
+        />
+      )
       expect(screen.queryByText('to')).not.toBeInTheDocument()
       expect(screen.getByText(') ~')).toBeInTheDocument()
     })
@@ -94,7 +110,12 @@ describe('DateTime Component', () => {
     })
 
     it('constructs the proper time range', () => {
-      render(<ComposedTime startDateTimeInput='2023-11-19T01:23:45' endDateTimeInput='2023-11-25T21:01:23' />)
+      render(
+        <ComposedTime
+          startDateTimeInput="2023-11-19T01:23:45"
+          endDateTimeInput="2023-11-25T21:01:23"
+        />
+      )
 
       // Checks the following:
       // - Date and time conversion
@@ -111,14 +132,21 @@ describe('DateTime Component', () => {
     })
 
     it('accepts a locale and adjusts its output accordingly for a time', () => {
-      render(<ComposedTime startDateTimeInput='2023-11-19T01:23:45' locale='es' />)
+      render(
+        <ComposedTime startDateTimeInput="2023-11-19T01:23:45" locale="es" />
+      )
       expect(screen.getByText('1:23')).toBeInTheDocument()
     })
 
-    // TODO: Note the 'to' in the expected output. This test needs to change once we get i18n/l10n done
+    // TODO: Note the 'to' in the expected output.
+    // This test needs to change once we get i18n/l10n done
     it('accepts a locale and adjusts its output accordingly for a time range', () => {
       render(
-        <ComposedTime startDateTimeInput='2023-11-19T01:23:45' endDateTimeInput='2023-11-25T21:01:23' locale='es' />
+        <ComposedTime
+          startDateTimeInput="2023-11-19T01:23:45"
+          endDateTimeInput="2023-11-25T21:01:23"
+          locale="es"
+        />
       )
 
       // Checks the following:
@@ -187,7 +215,9 @@ describe('DateTime Component', () => {
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
       expect(screen.getByText(/Sunday, November 19, 2023/)).toBeInTheDocument()
-      ;['1:23 am', '9:02 pm'].forEach((input) => expect(screen.getByText(input)).toBeInTheDocument())
+      ;['1:23 am', '9:02 pm'].forEach((input) =>
+        expect(screen.getByText(input)).toBeInTheDocument()
+      )
       expect(screen.getByText(/to/)).toBeInTheDocument()
     })
 
@@ -201,7 +231,9 @@ describe('DateTime Component', () => {
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
       expect(screen.getByText('Sunday, November 19, 2023')).toBeInTheDocument()
-      ;['1:23 am', '9:02 pm'].forEach((input) => expect(screen.queryByText(input)).not.toBeInTheDocument())
+      ;['1:23 am', '9:02 pm'].forEach((input) =>
+        expect(screen.queryByText(input)).not.toBeInTheDocument()
+      )
       expect(screen.queryByText(/to/)).not.toBeInTheDocument()
     })
 
@@ -232,11 +264,12 @@ describe('DateTime Component', () => {
       screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
-      ;[
-        'Sunday, November 19',
-        'Saturday, November 25, 2023'
-      ].forEach((input) => expect(screen.getByText(input)).toBeInTheDocument())
-      ;['1:23 am', '9:02 pm'].forEach((input) => expect(screen.queryByText(input)).not.toBeInTheDocument())
+      ;['Sunday, November 19', 'Saturday, November 25, 2023'].forEach((input) =>
+        expect(screen.getByText(input)).toBeInTheDocument()
+      )
+      ;['1:23 am', '9:02 pm'].forEach((input) =>
+        expect(screen.queryByText(input)).not.toBeInTheDocument()
+      )
       expect(screen.getAllByText(/to/)).toHaveLength(1)
     })
 
@@ -261,48 +294,62 @@ describe('DateTime Component', () => {
     it.each([
       { modProps: { start_date: '20-11-19' } },
       { modProps: { end_date: '20-11-25' } }
-    ])('does not render the date and time with improper inputs: $modProps', ({ modProps }) => {
-      // Mock the warn as the handler calls it in the try/catch
-      const restoreConsole = mockConsole()
-      const props = {
-        ...baseProps,
-        ...modProps
+    ])(
+      'does not render the date and time with improper inputs: $modProps',
+      ({ modProps }) => {
+        // Mock the warn as the handler calls it in the try/catch
+        const restoreConsole = mockConsole()
+        const props = {
+          ...baseProps,
+          ...modProps
+        }
+
+        render(<DateTimeBlock {...props} />)
+        screen.getByRole('heading')
+
+        expect(screen.getByRole('heading')).toHaveTextContent('Date')
+        expect(
+          screen.queryByText('Sunday, November 19, 2023')
+        ).not.toBeInTheDocument()
+        // Because date is used in generating the time, it will not be rendered
+        ;['1:23 am', '9:02 pm'].forEach((input) =>
+          expect(screen.queryByText(input)).not.toBeInTheDocument()
+        )
+        expect(console.warn).toHaveBeenCalled()
+
+        // Restore it
+        restoreConsole()
       }
-
-      render(<DateTimeBlock {...props} />)
-      screen.getByRole('heading')
-
-      expect(screen.getByRole('heading')).toHaveTextContent('Date')
-      expect(screen.queryByText('Sunday, November 19, 2023')).not.toBeInTheDocument()
-      // Because date is used in generating the time, it will not be rendered
-      ;['1:23 am', '9:02 pm'].forEach((input) => expect(screen.queryByText(input)).not.toBeInTheDocument())
-      expect(console.warn).toHaveBeenCalled()
-
-      // Restore it
-      restoreConsole()
-    })
+    )
 
     it.each([
       { modProps: { start_time: ':23:45' } },
       { modProps: { end_time: ':02:34' } }
-    ])('does not render the time with improper inputs: $modProps', ({ modProps }) => {
-      // Mock the warn as the handler calls it in the try/catch
-      const restoreConsole = mockConsole()
-      const props = {
-        ...baseProps,
-        ...modProps
+    ])(
+      'does not render the time with improper inputs: $modProps',
+      ({ modProps }) => {
+        // Mock the warn as the handler calls it in the try/catch
+        const restoreConsole = mockConsole()
+        const props = {
+          ...baseProps,
+          ...modProps
+        }
+
+        render(<DateTimeBlock {...props} />)
+        screen.getByRole('heading')
+
+        expect(screen.getByRole('heading')).toHaveTextContent('Date')
+        expect(
+          screen.getByText('Sunday, November 19, 2023')
+        ).toBeInTheDocument()
+        ;['1:23 am', '9:02 pm'].forEach((input) =>
+          expect(screen.queryByText(input)).not.toBeInTheDocument()
+        )
+        expect(console.warn).toHaveBeenCalled()
+
+        // Restore it
+        restoreConsole()
       }
-
-      render(<DateTimeBlock {...props} />)
-      screen.getByRole('heading')
-
-      expect(screen.getByRole('heading')).toHaveTextContent('Date')
-      expect(screen.getByText('Sunday, November 19, 2023')).toBeInTheDocument()
-      ;['1:23 am', '9:02 pm'].forEach((input) => expect(screen.queryByText(input)).not.toBeInTheDocument())
-      expect(console.warn).toHaveBeenCalled()
-
-      // Restore it
-      restoreConsole()
-    })
+    )
   })
 })

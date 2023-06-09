@@ -10,14 +10,12 @@ import { RelatedContentList } from '../RelatedContentList'
 import { TitleAndText } from '../TitleAndText'
 import { Image } from '../Image'
 import { PageWrapper } from './PageWrapper'
-import type {
-  InfoPageData,
-  InfoPageSection,
-  WagtailImageData
-} from '@/types'
+import type { InfoPageData, InfoPageSection, WagtailImageData } from '@/types'
 import type { ComponentType } from 'react'
 
-export const InformationPage: ComponentType<{ page: InfoPageData }> = ({ page }) => {
+export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
+  page
+}) => {
   const {
     title,
     description,
@@ -30,34 +28,36 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({ page })
 
   return (
     <PageWrapper title={title}>
-      <Container className='mb-20'>
-        <DisplayLg as='h1' className='my-40' data-testid='info-page-title'>
+      <Container className="mb-20">
+        <DisplayLg as="h1" className="my-40" data-testid="info-page-title">
           {title}
         </DisplayLg>
-        {description
-          ? <BigDesc as='p' data-testid='info-page-description'>
-              {description}
-            </BigDesc>
-          : null}
+        {description ? (
+          <BigDesc as="p" data-testid="info-page-description">
+            {description}
+          </BigDesc>
+        ) : null}
       </Container>
       <RelatedContentList
-        title='Part of' /* FIXME: translate */
-        content={partOf} />
-      <InfoSectionList
-        as='main'
-        blocks={infoSections} />
+        title="Part of" /* FIXME: translate */
+        content={partOf}
+      />
+      <InfoSectionList as="main" blocks={infoSections} />
       <RelatedContentList
-        id='divisions'
-        title='Departments' /* FIXME: translate */
-        content={agencies} />
+        id="divisions"
+        title="Departments" /* FIXME: translate */
+        content={agencies}
+      />
       <RelatedContentList
-        id='topics'
-        title='Topics' /* FIXME: translate */
-        content={topics} />
+        id="topics"
+        title="Topics" /* FIXME: translate */
+        content={topics}
+      />
       <RelatedContentList
-        id='related'
-        title='Related' /* FIXME: translate */
-        content={pages} />
+        id="related"
+        title="Related" /* FIXME: translate */
+        content={pages}
+      />
     </PageWrapper>
   )
 }
@@ -68,15 +68,17 @@ type InfoSectionListProps = ContainerProps & {
 
 const InfoSectionList = ({ blocks, ...rest }: InfoSectionListProps) => {
   if (!blocks?.length) return null
-  return <Container {...rest}>
-    {blocks.map(block => (
-      <InfoSectionContent
-        key={block.id}
-        block={block}
-        data-testid={`block-${block.id}`}
-      />
-    ))}
-  </Container>
+  return (
+    <Container {...rest}>
+      {blocks.map((block) => (
+        <InfoSectionContent
+          key={block.id}
+          block={block}
+          data-testid={`block-${block.id}`}
+        />
+      ))}
+    </Container>
+  )
 }
 
 type InfoSectionContentProps = {
@@ -87,10 +89,12 @@ const InfoSectionContent = ({ block, ...rest }: InfoSectionContentProps) => {
   switch (block.type) {
     case 'image':
       return (
-        <Image as={NextImage}
-          alt=''
+        <Image
+          as={NextImage}
+          alt=""
           imageRef={block.value as WagtailImageData}
-          {...rest} />
+          {...rest}
+        />
       )
     case 'title_and_text':
       return <TitleAndText block={block} {...rest} />

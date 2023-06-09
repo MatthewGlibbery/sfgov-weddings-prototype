@@ -31,7 +31,13 @@ import type {
   WhatToDoStepBlock,
   WhatToDoType
 } from '@/types'
-import { EVENT_PAGE_TYPE, INFO_PAGE_TYPE, STEP_BY_STEP_PAGE_TYPE, TRANSACTION_PAGE_TYPE, WAGTAIL_IMAGE_TYPE } from '@/constants'
+import {
+  EVENT_PAGE_TYPE,
+  INFO_PAGE_TYPE,
+  STEP_BY_STEP_PAGE_TYPE,
+  TRANSACTION_PAGE_TYPE,
+  WAGTAIL_IMAGE_TYPE
+} from '@/constants'
 
 export const PageMetaFactory = factory<PageMeta>(gen => ({
   type: gen.lorem.word()
@@ -50,10 +56,7 @@ export const EventPageFactory = factory<EventPageData>(gen => ({
   call_to_action: CallToActionFactory.make(1),
   image: ImageBlockFactory.make(),
   body: gen.lorem.paragraph(),
-  contact: [
-    PhoneNumberFactory.make(),
-    EmailBlockFactory.make()
-  ],
+  contact: [PhoneNumberFactory.make(), EmailBlockFactory.make()],
   related_content_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
@@ -207,7 +210,12 @@ export const CostBlockFactory = factory<CostBlock>(gen => {
     id: gen.datatype.uuid(),
     type: 'cost',
     value: {
-      cost: gen.random.arrayElement<CostType>(['free', 'flat_fee', 'range', 'minimum']),
+      cost: gen.random.arrayElement<CostType>([
+        'free',
+        'flat_fee',
+        'range',
+        'minimum'
+      ]),
       flat_fee: gen.datatype.number({ precision: 0.01 }),
       range: {
         minimum,
@@ -256,7 +264,9 @@ export const TitleAndTextFactory = factory<TitleAndTextBlock>(gen => ({
 export const PageFactory = factory<PageData>(gen => ({
   id: gen.datatype.number(),
   meta: {
-    type: `sfgov_${gen.lorem.word()}.${gen.lorem.sentence(1).replace(/\.$/, '')}`,
+    type: `sfgov_${gen.lorem.word()}.${gen.lorem
+      .sentence(1)
+      .replace(/\.$/, '')}`,
     url_path: new URL(gen.internet.url()).pathname
   },
   title: gen.commerce.productName()
@@ -265,7 +275,9 @@ export const PageFactory = factory<PageData>(gen => ({
 export const RelatedContentBlockFactory = factory<RelatedContentData>(gen => ({
   id: gen.datatype.number(),
   meta: {
-    type: `sfgov_${gen.lorem.word()}.${gen.lorem.sentence(1).replace(/\.$/, '')}`
+    type: `sfgov_${gen.lorem.word()}.${gen.lorem
+      .sentence(1)
+      .replace(/\.$/, '')}`
   },
   page_content: {
     id: gen.datatype.number(),
@@ -323,7 +335,10 @@ export const PhoneNumberFactory = factory<PhoneNumberBlockType>(gen => ({
 export const DateTimeBlockFactory = factory<DateTimeBlock>(gen => {
   const soonDateObj = gen.date.soon()
   const [soonDate, soonTime] = soonDateObj.toString().split('T')
-  const [futureDate, futureTime] = gen.date.future(5, soonDateObj).toString().split('T')
+  const [futureDate, futureTime] = gen.date
+    .future(5, soonDateObj)
+    .toString()
+    .split('T')
 
   return {
     id: gen.datatype.uuid(),
@@ -345,7 +360,9 @@ export const AgencyPageFactory = factory<AgencyPage>(gen => {
     description: gen.lorem.word(),
     title: gen.lorem.words(),
     meta: {
-      type: `sfgov_${gen.lorem.word()}.${gen.lorem.sentence(1).replace(/\.$/, '')}`,
+      type: `sfgov_${gen.lorem.word()}.${gen.lorem
+        .sentence(1)
+        .replace(/\.$/, '')}`,
       html_url: gen.internet.url()
     }
   }
@@ -421,6 +438,12 @@ export const WhatToDoStepFactory = factory<WhatToDoStepBlock>(gen => ({
 
 export const WhatToDoFactory = factory<WhatToDoBlock>(gen => ({
   id: gen.datatype.uuid(),
-  type: gen.random.arrayElement<WhatToDoType>(['online', 'in_person', 'phone', 'email', 'mail']),
+  type: gen.random.arrayElement<WhatToDoType>([
+    'online',
+    'in_person',
+    'phone',
+    'email',
+    'mail'
+  ]),
   value: WhatToDoStepFactory.make(2)
 }))

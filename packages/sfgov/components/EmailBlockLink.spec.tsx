@@ -13,13 +13,15 @@ describe('EmailBlockLink', () => {
   })
 
   it('does not render without value.email', () => {
-    // @ts-expect-error simulating bad data
-    expect(render(<EmailBlockLink value={null} />).container).toBeEmptyDOMElement()
+    expect(
+      // @ts-expect-error simulating bad data
+      render(<EmailBlockLink value={null} />).container
+    ).toBeEmptyDOMElement()
   })
 
   it('renders value.email if the title is falsy or empty', () => {
     const email = 'foo@bar.com'
-    render(<EmailBlockLink email={ email } title='' />)
+    render(<EmailBlockLink email={email} title="" />)
 
     const link = screen.getByRole('link')
     expect(link).toBeInTheDocument()

@@ -16,12 +16,17 @@ type PageComponentProps = {
 const api = new ContentAPI()
 
 const componentsByPageType = new Map([
-  [INFO_PAGE_TYPE, dynamic(
-    () => import('@/components/page/InformationPage').then(mod => mod.InformationPage)
-  )]
+  [
+    INFO_PAGE_TYPE,
+    dynamic(() =>
+      import('@/components/page/InformationPage').then(
+        (mod) => mod.InformationPage
+      )
+    )
+  ]
 ])
 
-export default async function Page ({ params }: PageComponentProps) {
+export default async function Page({ params }: PageComponentProps) {
   const path = params.path.join('/')
   const { locale } = params
   const page = await api.getPageByPath(path, { locale })
