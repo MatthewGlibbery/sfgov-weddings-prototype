@@ -1,63 +1,55 @@
-import clsx from 'clsx'
-import React, { type ComponentProps, type ElementType } from 'react'
+import { classed, classes } from './utils'
+import type { AnyComponent, ComponentProps } from '../types'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'link'
+const inverseButtonClasses = classes(`
+  text-action
+  bg-white
+  hover:text-blue400 hover:bg-white
+  focus:text-blue400 focus:bg-white
+`)
 
-const baseButtonClasses = [
-  'items-center',
-  'justify-center',
-  'rounded-[8px]',
-  'gap-8',
-  'px-20',
-  'py-8',
-  'border-[transparent]',
-  'border-solid',
-  'border-[3px]',
-  'cursor-pointer',
-  'font-body',
-  'text-body',
-  'text-center',
-  'no-underline',
-  'whitespace-nowrap'
-]
+export const Button = classed('button' as AnyComponent, {
+  base: classes(
+    'items-center',
+    'justify-center',
+    'rounded-[8px]', // FIXME: need 8px in theme.radii
+    'gap-8',
+    'px-20',
+    'py-8',
+    'border-[transparent]', // FIXME: need transparent in theme.colors
+    'border-solid',
+    'border-3',
+    'cursor-pointer',
+    'font-body',
+    'text-body',
+    'text-center',
+    'no-underline',
+    'whitespace-nowrap'
+  ),
+  variants: {
+    variant: {
+      primary: classes(
+        'text-white',
+        'bg-action',
+        'hover:bg-blue400',
+        'focus:bg-blue400'
+      ),
+      secondary: classes(inverseButtonClasses, 'border-current'),
+      link: classes(
+        inverseButtonClasses,
+        'bg-[transparent]', // FIXME: need transparent in theme.colors
+        'underline'
+      )
+    },
+    block: {
+      true: classes('flex w-full'),
+      false: classes('inline-flex')
+    }
+  },
+  defaultVariants: {
+    variant: 'primary',
+    block: false
+  }
+})
 
-const inverseButtonClasses = [
-  'text-action',
-  'bg-white',
-  'hover:text-blue400 hover:bg-white',
-  'focus:text-blue400 focus:bg-white'
-]
-
-const variants = {
-  primary: ['text-white', 'bg-action', 'hover:bg-blue400', 'focus:bg-blue400'],
-  secondary: [...inverseButtonClasses, 'border-current'],
-  link: [...inverseButtonClasses, 'bg-[transparent]', 'underline']
-}
-
-export type ButtonProps<C extends ElementType> = {
-  as?: C
-  variant?: ButtonVariant
-  block?: boolean
-} & ComponentProps<C>
-
-export const Button = <C extends ElementType = 'button'>({
-  as,
-  className,
-  variant,
-  block,
-  ...rest
-}: ButtonProps<C>) => {
-  const Component = as || 'button'
-  return (
-    <Component
-      className={clsx(
-        block ? 'flex w-full' : 'inline-flex',
-        baseButtonClasses,
-        // @ts-expect-error whatever
-        variants[variant || 'primary'],
-        className
-      )}
-      {...rest}
-    />
-  )
-}
+export type ButtonProps = ComponentProps<typeof Button>

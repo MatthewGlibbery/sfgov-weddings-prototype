@@ -1,8 +1,17 @@
-import clsx from 'clsx'
 import NextLink, { type LinkProps } from 'next/link'
+import { classed, type ComponentProps } from '@/design-system'
 import { useRouter } from 'next/router'
 
-type LanguageSelectorProps = JSX.IntrinsicElements['ul']
+const StyledList = classed('ul', 'list-none m-0 p-0 flex justify-end gap-28')
+
+const StyledLanguageLink = classed(NextLink, {
+  base: 'text-slate300 no-underline hover:underline',
+  variants: {
+    current: {
+      true: 'font-bold'
+    }
+  }
+})
 
 const localeNames: Record<string, string> = {
   en: 'English',
@@ -10,6 +19,8 @@ const localeNames: Record<string, string> = {
   zh: '中文',
   fil: 'Filipino'
 }
+
+export type LanguageSelectorProps = ComponentProps<typeof StyledList>
 
 export const LanguageSelector = (props: LanguageSelectorProps) => {
   const { asPath: currentPath, locale: currentLocale, locales } = useRouter()
@@ -22,22 +33,20 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
     })) || []
 
   return (
-    <ul className="list-none m-0 p-0 flex justify-end gap-[24px]" {...props}>
+    <StyledList {...props}>
       {links.map((link) => {
-        const current = link.locale === currentLocale ? 'page' : false
+        const current = link.locale === currentLocale
         return (
           <li key={link.locale as string}>
-            <NextLink
+            {/* @ts-expect-error derp */}
+            <StyledLanguageLink
               aria-current={current ? 'page' : false}
-              className={clsx(
-                'text-slate300 no-underline hover:underline',
-                current && 'font-bold'
-              )}
+              current={current}
               {...link}
             />
           </li>
         )
       })}
-    </ul>
+    </StyledList>
   )
 }

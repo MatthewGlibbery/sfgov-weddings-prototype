@@ -1,17 +1,8 @@
-import React from 'react'
-import clsx from 'clsx'
+import { classed, classes } from './utils'
+import type { AnyComponent, ComponentProps } from '../types'
 
-export type ContainerProps = JSX.IntrinsicElements['div']
+export const Container = classed('div' as AnyComponent, {
+  base: classes('mx-20 max-w-lg', 'md:mx-28', 'lg:mx-96', 'xl:mx-auto')
+})
 
-export const Container = ({ className, ...rest }: ContainerProps) => (
-  <div
-    className={clsx(
-      'mx-20 max-w-lg',
-      'md:mx-28',
-      'lg:mx-96',
-      'xl:mx-auto',
-      className
-    )}
-    {...rest}
-  />
-)
+export type ContainerProps = ComponentProps<typeof Container>

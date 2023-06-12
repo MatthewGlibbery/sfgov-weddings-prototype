@@ -1,31 +1,31 @@
-import NextLink from 'next/link'
-import clsx from 'clsx'
+import NextLink, { type LinkProps } from 'next/link'
 import { getPageURL } from '@/lib/utils'
+import { classed } from '@/design-system'
+import { ComponentProps, ReactNode } from 'react'
 import type { PageData } from '@/types'
-import type { ComponentPropsWithRef, ReactNode } from 'react'
 
-export type PageLinkProps = {
-  page: PageData
-  as?: 'a' | typeof NextLink
-  children?: ReactNode
-} & ComponentPropsWithRef<'a'>
-
-export const PageLink = (props: PageLinkProps) => {
+const PageLinkImpl = (
+  props: Omit<LinkProps, 'href'> & {
+    page: PageData
+    as?: 'a' | typeof NextLink
+    href?: LinkProps['href']
+    children?: ReactNode
+  }
+) => {
   const {
-    as: Component = 'a',
+    as: Component = NextLink,
     page,
     children = page?.title,
-    className,
     href = getPageURL(page),
     ...rest
   } = props
   return (
-    <Component
-      href={href as string}
-      className={clsx('text-action', className)}
-      {...rest}
-    >
+    <Component href={href as string} {...rest}>
       {children}
     </Component>
   )
 }
+
+export const PageLink = classed(PageLinkImpl, 'text-action')
+
+export type PageLinkProps = ComponentProps<typeof PageLink>

@@ -39,11 +39,11 @@ import {
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
 
-export const PageMetaFactory = factory<PageMeta>(gen => ({
+export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word()
 }))
 
-export const EventPageFactory = factory<EventPageData>(gen => ({
+export const EventPageFactory = factory<EventPageData>((gen) => ({
   id: gen.datatype.number(),
   meta: PageMetaFactory.make({
     type: EVENT_PAGE_TYPE
@@ -69,7 +69,7 @@ export const EventPageFactory = factory<EventPageData>(gen => ({
   })
 }))
 
-export const InfoPageFactory = factory<InfoPageData>(gen => ({
+export const InfoPageFactory = factory<InfoPageData>((gen) => ({
   id: gen.datatype.number(),
   meta: PageMetaFactory.make({
     type: INFO_PAGE_TYPE
@@ -90,7 +90,7 @@ export const InfoPageFactory = factory<InfoPageData>(gen => ({
   })
 }))
 
-export const StepByStepPageFactory = factory<StepByStepData>(gen => ({
+export const StepByStepPageFactory = factory<StepByStepData>((gen) => ({
   id: gen.datatype.number(),
   meta: PageMetaFactory.make({
     type: STEP_BY_STEP_PAGE_TYPE
@@ -111,7 +111,7 @@ export const StepByStepPageFactory = factory<StepByStepData>(gen => ({
   })
 }))
 
-export const TransactionPageFactory = factory<TransactionPageData>(gen => ({
+export const TransactionPageFactory = factory<TransactionPageData>((gen) => ({
   id: gen.datatype.number(),
   meta: PageMetaFactory.make({
     type: TRANSACTION_PAGE_TYPE
@@ -174,7 +174,7 @@ export const TransactionPageFactory = factory<TransactionPageData>(gen => ({
   good_for_community: TitleAndTextFactory.make(2)
 }))
 
-export const StepBlockFactory = factory<StepBlock>(gen => ({
+export const StepBlockFactory = factory<StepBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'step',
   value: {
@@ -202,7 +202,7 @@ export const StepBlockFactory = factory<StepBlock>(gen => ({
   }
 }))
 
-export const CostBlockFactory = factory<CostBlock>(gen => {
+export const CostBlockFactory = factory<CostBlock>((gen) => {
   const minimum = gen.datatype.number({ max: 9999 })
   const maximum = minimum + gen.datatype.number()
 
@@ -226,7 +226,7 @@ export const CostBlockFactory = factory<CostBlock>(gen => {
   }
 })
 
-export const QuickLinkFactory = factory<QuickLinkBlock>(gen => ({
+export const QuickLinkFactory = factory<QuickLinkBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'quick_links',
   value: {
@@ -236,12 +236,12 @@ export const QuickLinkFactory = factory<QuickLinkBlock>(gen => ({
   }
 }))
 
-export const ImageMetaFactory = factory<WagtailImageData['meta']>(gen => ({
+export const ImageMetaFactory = factory<WagtailImageData['meta']>((gen) => ({
   type: WAGTAIL_IMAGE_TYPE,
   download_url: gen.internet.url()
 }))
 
-export const ImageFactory = factory<WagtailImageData>(gen => ({
+export const ImageFactory = factory<WagtailImageData>((gen) => ({
   width: 300,
   height: 300,
   title: gen.lorem.sentence(5),
@@ -252,7 +252,7 @@ export const ImageFactory = factory<WagtailImageData>(gen => ({
   id: gen.datatype.number()
 }))
 
-export const TitleAndTextFactory = factory<TitleAndTextBlock>(gen => ({
+export const TitleAndTextFactory = factory<TitleAndTextBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'title_and_text',
   value: {
@@ -261,7 +261,7 @@ export const TitleAndTextFactory = factory<TitleAndTextBlock>(gen => ({
   }
 }))
 
-export const PageFactory = factory<PageData>(gen => ({
+export const PageFactory = factory<PageData>((gen) => ({
   id: gen.datatype.number(),
   meta: {
     type: `sfgov_${gen.lorem.word()}.${gen.lorem
@@ -272,30 +272,32 @@ export const PageFactory = factory<PageData>(gen => ({
   title: gen.commerce.productName()
 }))
 
-export const RelatedContentBlockFactory = factory<RelatedContentData>(gen => ({
-  id: gen.datatype.number(),
-  meta: {
-    type: `sfgov_${gen.lorem.word()}.${gen.lorem
-      .sentence(1)
-      .replace(/\.$/, '')}`
-  },
-  page_content: {
+export const RelatedContentBlockFactory = factory<RelatedContentData>(
+  (gen) => ({
     id: gen.datatype.number(),
     meta: {
-      type: 'wagtailcore.Page',
-      html_url: gen.internet.url()
+      type: `sfgov_${gen.lorem.word()}.${gen.lorem
+        .sentence(1)
+        .replace(/\.$/, '')}`
     },
-    title: gen.commerce.productName()
-  }
-}))
+    page_content: {
+      id: gen.datatype.number(),
+      meta: {
+        type: 'wagtailcore.Page',
+        html_url: gen.internet.url()
+      },
+      title: gen.commerce.productName()
+    }
+  })
+)
 
-export const ImageBlockFactory = factory<ImageBlock>(gen => ({
+export const ImageBlockFactory = factory<ImageBlock>((gen) => ({
   id: gen.datatype.uuid(),
   value: ImageFactory.make(),
   type: 'image'
 }))
 
-export const RelatedContentFactory = factory<RelatedContentData>(gen => ({
+export const RelatedContentFactory = factory<RelatedContentData>((gen) => ({
   id: gen.datatype.number(),
   meta: {
     type: 'RelatedContent'
@@ -303,7 +305,7 @@ export const RelatedContentFactory = factory<RelatedContentData>(gen => ({
   page_content: PageFactory.make()
 }))
 
-export const EmailBlockFactory = factory<EmailBlock>(gen => {
+export const EmailBlockFactory = factory<EmailBlock>((gen) => {
   const email = gen.internet.email()
 
   return {
@@ -316,13 +318,15 @@ export const EmailBlockFactory = factory<EmailBlock>(gen => {
   }
 })
 
-export const MysteryBlockFactory = factory<BlockType<string, object>>(gen => ({
-  id: gen.datatype.uuid(),
-  value: {},
-  type: gen.lorem.word()
-}))
+export const MysteryBlockFactory = factory<BlockType<string, object>>(
+  (gen) => ({
+    id: gen.datatype.uuid(),
+    value: {},
+    type: gen.lorem.word()
+  })
+)
 
-export const PhoneNumberFactory = factory<PhoneNumberBlockType>(gen => ({
+export const PhoneNumberFactory = factory<PhoneNumberBlockType>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'phone_number',
   value: {
@@ -332,7 +336,7 @@ export const PhoneNumberFactory = factory<PhoneNumberBlockType>(gen => ({
   }
 }))
 
-export const DateTimeBlockFactory = factory<DateTimeBlock>(gen => {
+export const DateTimeBlockFactory = factory<DateTimeBlock>((gen) => {
   const soonDateObj = gen.date.soon()
   const [soonDate, soonTime] = soonDateObj.toString().split('T')
   const [futureDate, futureTime] = gen.date
@@ -354,7 +358,7 @@ export const DateTimeBlockFactory = factory<DateTimeBlock>(gen => {
   }
 })
 
-export const AgencyPageFactory = factory<AgencyPage>(gen => {
+export const AgencyPageFactory = factory<AgencyPage>((gen) => {
   return {
     id: gen.datatype.number(),
     description: gen.lorem.word(),
@@ -368,7 +372,7 @@ export const AgencyPageFactory = factory<AgencyPage>(gen => {
   }
 })
 
-export const LocationBlockFactory = factory<LocationBlock>(gen => {
+export const LocationBlockFactory = factory<LocationBlock>((gen) => {
   return {
     id: gen.datatype.uuid(),
     type: 'address',
@@ -387,7 +391,7 @@ export const LocationBlockFactory = factory<LocationBlock>(gen => {
   }
 })
 
-export const CallToActionFactory = factory<CallToActionBlock>(gen => ({
+export const CallToActionFactory = factory<CallToActionBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'cta',
   value: {
@@ -399,19 +403,19 @@ export const CallToActionFactory = factory<CallToActionBlock>(gen => ({
   }
 }))
 
-export const CalloutFactory = factory<CalloutBlock>(gen => ({
+export const CalloutFactory = factory<CalloutBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'callout',
   value: gen.lorem.sentence()
 }))
 
-export const TextBlockFactory = factory<TextBlock>(gen => ({
+export const TextBlockFactory = factory<TextBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'text',
   value: gen.lorem.sentence()
 }))
 
-export const ButtonLinkFactory = factory<ButtonLinkBlock>(gen => ({
+export const ButtonLinkFactory = factory<ButtonLinkBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'button_link',
   value: {
@@ -420,7 +424,7 @@ export const ButtonLinkFactory = factory<ButtonLinkBlock>(gen => ({
   }
 }))
 
-export const WhatToDoStepFactory = factory<WhatToDoStepBlock>(gen => ({
+export const WhatToDoStepFactory = factory<WhatToDoStepBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'what_to_do_step',
   value: {
@@ -436,7 +440,7 @@ export const WhatToDoStepFactory = factory<WhatToDoStepBlock>(gen => ({
   }
 }))
 
-export const WhatToDoFactory = factory<WhatToDoBlock>(gen => ({
+export const WhatToDoFactory = factory<WhatToDoBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: gen.random.arrayElement<WhatToDoType>([
     'online',

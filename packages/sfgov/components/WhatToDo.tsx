@@ -1,20 +1,55 @@
-import clsx from 'clsx'
-import { BigDesc, BodyText, Button, TitleMd } from '@/design-system'
-import {
-  CalloutBlock,
-  StepSpecificsTypes,
-  WhatToDoBlock,
-  WhatToDoStepBlock
-} from '@/types'
+import { BigDesc, BodyText, Button, classed, TitleMd } from '@/design-system'
 import { When } from 'react-if'
 import { Callout } from './Callout'
 import { EmailBlockLink } from './EmailBlockLink'
 import { LocationBlock } from './Location'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { RichText } from './RichText'
+import type * as Types from '@/types'
 
-type WhatToDoStepBlockProps = WhatToDoStepBlock & {
+type WhatToDoStepBlockProps = Types.WhatToDoStepBlock & {
   index: number
+}
+
+type BlockType =
+  Types.WhatToDoStepBlock['value']['step_specifics'][number]['type']
+
+const StyledStep = classed('div', {
+  base: 'flex',
+  variants: {
+    blockType: {
+      callout: 'flex-col'
+    } as Record<BlockType, string>
+  }
+})
+
+const StepContent = (block: Types.StepSpecificsTypes) => {
+  switch (block.type) {
+    case 'callout':
+      return <Callout {...block} />
+    case 'address':
+      return <LocationBlock {...block.value} />
+    case 'email':
+      return <EmailBlockLink {...block.value} />
+    case 'button_link':
+      return (
+        <Button as="a" href={block.value.url}>
+          {block.value.text}
+        </Button>
+      )
+    case 'phone_number':
+      return <PhoneNumberBlock {...block.value} />
+    case 'text':
+      return (
+        <BodyText>
+          <RichText html={block.value} />
+        </BodyText>
+      )
+    /* TODO: document upload component
+    case 'document':
+      content = <BodyText>{block.value}</BodyText>
+    */
+  }
 }
 
 const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
@@ -25,65 +60,22 @@ const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
   return (
     <>
       <BigDesc>{`${index}. ${stepTitle}`}</BigDesc>
-      {stepSpecifics.map((block: StepSpecificsTypes) => {
-        let StepComponent
-        let props = block as unknown
-        const classNames = []
-
-        switch (block.type) {
-          case 'callout':
-            StepComponent = Callout
-            classNames.push('flex-col')
-            break
-          case 'address':
-            StepComponent = LocationBlock
-            props = block.value
-            break
-          // case 'document':
-          //   StepComponent = BodyText // TODO: document upload component
-          //   props = {
-          //     children: block.value
-          //   }
-          //   break
-          case 'email':
-            StepComponent = EmailBlockLink
-            break
-          case 'button_link':
-            StepComponent = Button
-            props = {
-              as: 'a',
-              href: block.value.url,
-              children: block.value.text
-            }
-            break
-          case 'phone_number':
-            StepComponent = PhoneNumberBlock
-            props = block.value
-            break
-          case 'text':
-            StepComponent = BodyText
-            props = {
-              children: <RichText html={block.value} />
-            }
-            break
-        }
-
+      {stepSpecifics.map((block: Types.StepSpecificsTypes) => {
         return (
-          <div
+          <StyledStep
             key={block.id}
-            className={clsx('flex', classNames)}
+            blockType={block.type}
             data-testid={`${block.type}-field`}
           >
-            {/* @ts-expect-error 'erg idk how we should fix the error below' */}
-            <StepComponent {...props} />
-          </div>
+            <StepContent {...block} />
+          </StyledStep>
         )
       })}
     </>
   )
 }
 
-export const WhatToDo = (props: WhatToDoBlock) => {
+export const WhatToDo = (props: Types.WhatToDoBlock) => {
   const { type, value } = props
 
   let i = 0
@@ -98,10 +90,10 @@ export const WhatToDo = (props: WhatToDoBlock) => {
         return (
           <div className="flex flex-col gap-y-28" key={block.id}>
             <When condition={block.type === 'callout'}>
-              <Callout {...(block as CalloutBlock)} />
+              <Callout {...(block as Types.CalloutBlock)} />
             </When>
             <When condition={block.type === 'what_to_do_step'}>
-              <WhatToDoStep index={i} {...(block as WhatToDoStepBlock)} />
+              <WhatToDoStep index={i} {...(block as Types.WhatToDoStepBlock)} />
             </When>
           </div>
         )

@@ -1,13 +1,30 @@
-import clsx from 'clsx'
-import { useState } from 'react'
-import { TitleXs, IconMinus, IconPlus } from '@/design-system'
+import { type ComponentProps, useState } from 'react'
+import { classed, TitleXs, IconMinus, IconPlus, classes } from '@/design-system'
 
-export type AccordionProps = JSX.IntrinsicElements['details'] & {
+const StyledDetails = classed('details', 'block list-none')
+
+const StyledSummary = classed('summary', {
+  base: classes(
+    'cursor-pointer',
+    'flex items-center content-between',
+    'pb-12',
+    'border-solid border-b-1 border-[#707070]'
+  ),
+  variants: {
+    open: {
+      true: 'bg-blue200'
+    }
+  }
+})
+
+const StyledContent = classed('div', 'bg-[#F2F4F7] p-[32px]')
+
+export type AccordionProps = ComponentProps<typeof StyledDetails> & {
   title: string
 }
 
 export const Accordion = (props: AccordionProps) => {
-  const { title, open, className, children, ...rest } = props
+  const { title, open, children, ...rest } = props
 
   const [isOpen, setOpen] = useState(!!open)
   const Icon = isOpen ? IconMinus : IconPlus
@@ -16,27 +33,12 @@ export const Accordion = (props: AccordionProps) => {
   const toggleOpen = () => setOpen(!isOpen)
 
   return (
-    <details
-      className={clsx('block list-none', className)}
-      open={isOpen}
-      onToggle={toggleOpen}
-      {...rest}
-    >
-      <summary
-        className={`
-        cursor-pointer
-        flex items-center content-between
-        pb-12
-        border-solid border-b-1 border-[#707070]
-      `}
-        data-testid="accordion-summary"
-      >
+    <StyledDetails open={isOpen} onToggle={toggleOpen} {...rest}>
+      <StyledSummary data-testid="accordion-summary" open={isOpen}>
         <TitleXs data-testid="accordion-title">{title}</TitleXs>
         <Icon data-testid={Icon.name} width={14} />
-      </summary>
-      <div className="bg-[#F2F4F7] p-[32px]" data-testid="accordion-content">
-        {children}
-      </div>
-    </details>
+      </StyledSummary>
+      <StyledContent data-testid="accordion-content">{children}</StyledContent>
+    </StyledDetails>
   )
 }

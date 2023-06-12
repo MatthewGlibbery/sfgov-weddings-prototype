@@ -5,18 +5,19 @@
     "build": "tsc --build && tsc-alias",
     "build-tokens": "style-dictionary build --config ./sd.config.js",
     "clean": "tsc --build --clean",
-    "lint": "eslint --ext js,jsx,mjs,ts,tsx '*.{js,mjs}'",
+    "lint": "eslint .",
     "figma-export": "env-cmd -f .env figma-export use-config",
-    "postbuild-tokens": "eslint --fix tokens/*.js",
-    "postfigma-export": "eslint --fix 'components/icons/**/*.{js,ts}{,x}'",
+    "postbuild-tokens": "eslint --fix tokens",
+    "postfigma-export": "eslint --fix components/icons",
     "test": "jest --coverage",
-    "watch": "npm run build-tokens && chokidar \"tokens/**/*.json\" -c \"npm run build-tokens\""
+    "watch": "npm run build-tokens && chokidar 'tokens/**/*.json' -c 'npm run build-tokens'"
   },
   "repository": "SFDigitalServices/sfgov-next",
   "dependencies": {
-    "clsx": "^1.2.1",
+    "@tw-classed/react": "^1.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "tailwind-merge": "^1.13.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

@@ -10,7 +10,6 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "clsx": "^1.2.1",
     "html-react-parser": "^3.0.16",
     "i18next": "^22.4.14",
     "micromatch": "^4.0.5",

@@ -1,15 +1,13 @@
-import { Container } from '@/design-system'
-import clsx from 'clsx'
+import { classed, Container, type ComponentProps } from '@/design-system'
 
-export type SiteFooterProps = JSX.IntrinsicElements['footer']
+const StyledFooter = classed('footer', 'bg-black text-white mt-80 py-20')
 
-export const SiteFooter = ({ className, ...rest }: SiteFooterProps) => {
+export type SiteFooterProps = ComponentProps<typeof StyledFooter>
+
+export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
   return (
-    <footer
-      className={clsx('bg-black text-white mt-80 py-20', className)}
-      {...rest}
-    >
-      <Container></Container>
-    </footer>
+    <StyledFooter {...rest}>
+      <Container>{children}</Container>
+    </StyledFooter>
   )
 }

@@ -1,7 +1,13 @@
-import clsx from 'clsx'
 import { ALL_FONTS } from '@/components/server/GoogleFonts'
 import { PropsDebug } from '@/components/server/PropsDebug'
 import { Html, Head, Main, NextScript, DocumentProps } from 'next/document'
+import { classed } from '@/design-system'
+
+const StyledBody = classed(
+  'body',
+  'font-body text-body text-black m-0 p-0',
+  ALL_FONTS.map((font) => font.variable).join(' ')
+)
 
 const Document = (props: DocumentProps) => {
   return (
@@ -9,18 +15,13 @@ const Document = (props: DocumentProps) => {
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <body
-        className={clsx(
-          'font-body text-body text-black m-0',
-          ALL_FONTS.map((font) => font.variable)
-        )}
-      >
+      <StyledBody>
         <Main />
         <NextScript />
         {props.isDevelopment ? (
           <PropsDebug data={props.__NEXT_DATA__?.props?.pageProps} />
         ) : null}
-      </body>
+      </StyledBody>
     </Html>
   )
 }

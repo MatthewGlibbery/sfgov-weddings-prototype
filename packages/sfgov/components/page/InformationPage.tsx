@@ -3,8 +3,7 @@ import {
   BigDesc,
   Container,
   DisplayLg,
-  type ContainerProps,
-  type FIXMEAsableProps
+  type ContainerProps
 } from '@/design-system'
 import { RelatedContentList } from '../RelatedContentList'
 import { TitleAndText } from '../TitleAndText'
@@ -64,7 +63,7 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
 
 type InfoSectionListProps = ContainerProps & {
   blocks: InfoPageSection[] | undefined
-} & FIXMEAsableProps
+}
 
 const InfoSectionList = ({ blocks, ...rest }: InfoSectionListProps) => {
   if (!blocks?.length) return null

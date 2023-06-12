@@ -25,7 +25,7 @@ describe('Controller', () => {
   })
 
   const MockPageComponent: ComponentType<{ page: PageData }> = jest.fn(
-    props => <div>Hello, {props.page.meta.type}!</div>
+    (props) => <div>Hello, {props.page.meta.type}!</div>
   )
   const MockPageTemplate = new WagtailPageTemplate(
     MockPageComponent,
@@ -34,7 +34,7 @@ describe('Controller', () => {
   const mockTemplates = [MockPageTemplate]
 
   afterEach(() => {
-    (MockPageComponent as MockedFunction).mockClear()
+    ;(MockPageComponent as MockedFunction).mockClear()
   })
 
   describe('constructor', () => {

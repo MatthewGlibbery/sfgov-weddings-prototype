@@ -1,5 +1,4 @@
-import clsx from 'clsx'
-import { Container, Monospace, TitleLg } from '@/design-system'
+import { classed, Container, Monospace, TitleLg } from '@/design-system'
 import { PageLink } from '@/components'
 import { pages } from '@/__fixtures__'
 import type { GetServerSideProps } from 'next'
@@ -19,13 +18,8 @@ export const getServerSideProps: GetServerSideProps<
   }
 }
 
-const TD = ({ className, ...rest }: JSX.IntrinsicElements['td']) => (
-  <td className={clsx('p-4', className)} {...rest} />
-)
-
-const TH = ({ className, ...rest }: JSX.IntrinsicElements['th']) => (
-  <th className={clsx('p-4', className)} {...rest} />
-)
+const TD = classed('td', 'p-4')
+const TH = classed('th', 'p-4')
 
 const TestIndex = ({ pages }: TestIndexProps) => {
   return (

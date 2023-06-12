@@ -1,20 +1,14 @@
-import type {
-  ComponentProps,
-  ComponentType,
-  ElementType,
-  ReactNode
-} from 'react'
+import type { ComponentType, ElementType } from 'react'
+// eslint-disable-next-line
+import type * as Classed from '@tw-classed/react'
 
-export type ClassProps = {
-  className?: string
-}
+export type { Classed }
 
-export type IntrinsicPropsWithoutClass<C extends ElementType> = Omit<
-  ComponentProps<C>,
-  'className'
->
+export { ComponentType, ElementType }
 
-export type LinkProps = JSX.IntrinsicElements['link']
+export type ComponentProps<C> = Classed.ComponentProps<C>
+
+export type AnyComponent<P = unknown> = ElementType | ComponentType<P>
 
 export type FontWeightName = 'light' | 'normal' | 'bold' | 'semibold'
 export type FixedFontWeightMap = Partial<Record<FontWeightName, number>>
@@ -40,20 +34,6 @@ export type FontSpec = {
   googleFont?: GoogleFontOptions
 }
 
-export type FontSpecProps = {
-  fonts?: FontSpec[]
-}
-
-export type GlobalCSSProps = FontSpecProps
-
-export type FIXMEChildrenProps = {
-  children?: ReactNode
-}
-
 export type FIXMEAsableProps = {
   as?: ComponentType | ElementType
 }
-
-export type ChildrenProps = {
-  children?: ReactNode
-} & JSX.IntrinsicAttributes

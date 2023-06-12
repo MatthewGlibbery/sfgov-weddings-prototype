@@ -1,9 +1,6 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
-
-import { IconAlert } from '../icons'
+import { IconAlert } from './icons'
 import { StackedItem } from './StackedItem'
-import { StackedContentDirection } from './common'
 
 describe('<StackedItem />', () => {
   it.each([
@@ -40,25 +37,5 @@ describe('<StackedItem />', () => {
     expect(screen.getByTestId('stacked-content-item')).toHaveTextContent(
       'wohoo'
     )
-  })
-
-  it('renders when changing the "direction', () => {
-    render(
-      <StackedItem direction={StackedContentDirection.COLUMN}>
-        Testing
-      </StackedItem>
-    )
-    expect(screen.getByTestId('stacked-content-item')).toHaveTextContent(
-      'Testing'
-    )
-  })
-
-  it.skip('changes the styles appropriately based upon "direction"', () => {
-    /*
-      This one's hard... `.toHaveStyle` doesn't work exactly as we'd like and
-      we'd need to do some spelunking. From what I've read, it's likely due
-      to the fact that the computed styles haven't been added to the DOM yet,
-      so we'd need to do that and then it can be applied/checked for.
-    */
   })
 })

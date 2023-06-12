@@ -1,6 +1,6 @@
 import { When } from 'react-if'
 import { useTranslation } from 'next-i18next'
-import type { ComponentType } from 'react'
+import type { ComponentProps, ComponentType } from 'react'
 
 import {
   BigDesc,
@@ -49,55 +49,6 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   } = page
 
   const { t } = useTranslation()
-
-  const renderGetHelpSection = (items: GetHelpBlockTypes[]) => {
-    return items.map((item: GetHelpBlockTypes, i: number) => {
-      const { type, value } = item
-
-      let Component = null
-      const computedKey = `${type}-${i}`
-
-      switch (type) {
-        case 'address':
-          Component = (
-            <StackedItem key={computedKey} icon={IconBuilding} title="Address">
-              <LocationBlock {...value} />
-            </StackedItem>
-          )
-          break
-        case 'title_and_text':
-          Component = (
-            <StackedItem
-              key={computedKey}
-              icon={IconCheck}
-              title="Additional Info"
-            >
-              <TitleAndText block={item} />
-            </StackedItem>
-          )
-          break
-        case 'email':
-          Component = (
-            <StackedItem key={computedKey} icon={IconMail} title="Email">
-              <EmailBlockLink {...value} />
-            </StackedItem>
-          )
-          break
-        case 'phone_number':
-          Component = (
-            <StackedItem key={computedKey} icon={IconPhone} title="Phone">
-              <PhoneNumberBlock {...value} />
-            </StackedItem>
-          )
-          break
-        /* istanbul ignore next */
-        default:
-          break
-      }
-
-      return Component
-    })
-  }
 
   return (
     <PageWrapper title={title}>
@@ -198,10 +149,49 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             <IconQuestion width={32} /> {t('Get Help')}
           </TitleLg>
           <StackedContainer className="mt-28">
-            {renderGetHelpSection(getHelp)}
+            {getHelp.map((item: GetHelpBlockTypes, i: number) => (
+              <GetHelpItem item={item} key={`${item.type}-${i}`} />
+            ))}
           </StackedContainer>
         </When>
       </Container>
     </PageWrapper>
   )
+}
+
+type GetHelpItemProps = ComponentProps<typeof StackedItem> & {
+  item: GetHelpBlockTypes
+}
+
+const GetHelpItem = ({ item, ...rest }: GetHelpItemProps) => {
+  const { type, value } = item
+  switch (type) {
+    case 'address':
+      return (
+        <StackedItem icon={IconBuilding} title="Address" {...rest}>
+          <LocationBlock {...value} />
+        </StackedItem>
+      )
+    case 'title_and_text':
+      return (
+        <StackedItem icon={IconCheck} title="Additional Info" {...rest}>
+          <TitleAndText block={item} />
+        </StackedItem>
+      )
+    case 'email':
+      return (
+        <StackedItem icon={IconMail} title="Email" {...rest}>
+          <EmailBlockLink {...value} />
+        </StackedItem>
+      )
+    case 'phone_number':
+      return (
+        <StackedItem icon={IconPhone} title="Phone" {...rest}>
+          <PhoneNumberBlock {...value} />
+        </StackedItem>
+      )
+    /* istanbul ignore next */
+    default:
+      return null
+  }
 }

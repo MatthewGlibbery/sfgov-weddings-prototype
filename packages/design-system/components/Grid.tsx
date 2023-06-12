@@ -1,8 +1,16 @@
-import React from 'react'
-import clsx from 'clsx'
+import { classed } from './utils'
+import type { AnyComponent, ComponentProps } from '../types'
 
-export type GridProps = JSX.IntrinsicElements['div']
+export const Grid = classed('div' as AnyComponent, {
+  variants: {
+    inline: {
+      false: 'grid',
+      true: 'inline-grid'
+    }
+  },
+  defaultVariants: {
+    inline: false
+  }
+})
 
-export const Grid = ({ className, ...rest }: GridProps) => (
-  <div className={clsx('grid', className)} {...rest} />
-)
+export type GridProps = ComponentProps<typeof Grid>

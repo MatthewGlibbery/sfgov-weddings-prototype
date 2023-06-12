@@ -1,29 +1,14 @@
-import React from 'react'
-import clsx from 'clsx'
 import { When } from 'react-if'
-import { BodyText, Label, TitleMd } from '@/design-system'
+import { BodyText, classed, classes, Label, TitleMd } from '@/design-system'
 import { PageLink } from './PageLink'
 import { CostBlockDisplay } from './CostBlockDisplay'
 import type { CostBlock, PageData, StepBlock } from '@/types'
+import { useTranslation } from 'next-i18next'
 
 type StepType = {
   step: StepBlock
   index: number
   last: boolean
-}
-
-const OptionalLabel = ({
-  className,
-  ...rest
-}: Omit<JSX.IntrinsicElements['div'], 'children'>) => {
-  return (
-    <div
-      className={clsx('inline-flex p-4 px-12 bg-grey200', className)}
-      {...rest}
-    >
-      OPTIONAL STEP
-    </div>
-  )
 }
 
 export const StepList = ({ steps }: { steps: StepBlock[] }) => {
@@ -41,37 +26,53 @@ export const StepList = ({ steps }: { steps: StepBlock[] }) => {
   )
 }
 
+const StepContainer = classed('div', {
+  base: 'flex justify-between pb-80 ml-24 border-solid border-l-[3px]',
+  variants: {
+    last: {
+      true: 'border-l-0'
+    }
+  }
+})
+
+const StepBadge = classed('div', {
+  base: classes(
+    'flex items-center justify-center',
+    'w-[50px] h-[50px]',
+    'br-[74px] ml-[-26px]'
+  ),
+  variants: {
+    isAndOr: {
+      true: 'bg-white text-slate400',
+      false: 'bg-slate400 text-white'
+    }
+  },
+  defaultVariants: {
+    isAndOr: false
+  }
+})
+
 export const Step = ({ step: { id, value: step }, index, last }: StepType) => {
+  const { t } = useTranslation()
   const isAndOr = step.step_type !== 'number'
 
   return (
-    <div
-      className={clsx(
-        'flex justify-between pb-80 ml-24 border-solid border-l-[3px]',
-        last && 'border-l-0'
-      )}
-      data-testid={`step-${id}`}
-    >
+    <StepContainer last={last} data-testid={`step-${id}`}>
       <div className="basis-[5%]">
-        <div
-          className={clsx(
-            `
-          flex items-center justify-center
-          w-[50px] h-[50px]
-          br-[74px] ml-[-26px]
-        `,
-            isAndOr ? 'bg-white text-slate400' : 'bg-slate400 text-white'
-          )}
-          data-testid="step-badge"
-        >
+        <StepBadge isAndOr={isAndOr} data-testid="step-badge">
           <TitleMd>{isAndOr ? step.step_type : index}</TitleMd>
-        </div>
+        </StepBadge>
       </div>
       <div className="flex justify-between basis-[90%] gap-y-16 md:flex-row">
         <div className="basis-1/3">
           <TitleMd className="mb-12">{step.title}</TitleMd>
           <When condition={step.optional}>
-            <OptionalLabel className="mb-12" data-testid="step-optional" />
+            <div
+              className="inline-flex p-4 px-12 bg-grey200 mb-12"
+              data-testid="step-optional"
+            >
+              {t('OPTIONAL STEP')}
+            </div>
           </When>
           <When condition={step.cost?.length}>
             <CostBlockDisplay
@@ -100,6 +101,6 @@ export const Step = ({ step: { id, value: step }, index, last }: StepType) => {
           </When>
         </div>
       </div>
-    </div>
+    </StepContainer>
   )
 }
