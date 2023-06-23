@@ -38,7 +38,8 @@ describe('getPageURL()', () => {
       getPageURL(
         PageFactory.make({
           meta: {
-            url_path: '/foo/bar'
+            url_path: '/foo/bar',
+            html_url: undefined
           }
         })
       )
@@ -47,7 +48,8 @@ describe('getPageURL()', () => {
       getPageURL(
         PageFactory.make({
           meta: {
-            url_path: '/'
+            url_path: '/',
+            html_url: undefined
           }
         })
       )

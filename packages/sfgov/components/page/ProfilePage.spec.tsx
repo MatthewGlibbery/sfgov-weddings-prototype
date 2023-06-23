@@ -1,0 +1,17 @@
+import { ProfilePageFactory } from '@/lib/factories'
+import { render, screen } from '@testing-library/react'
+import { ProfilePage } from './ProfilePage'
+
+describe('ProfilePage', () => {
+  const page = ProfilePageFactory.make()
+
+  it('renders a profile page with a title', () => {
+    render(<ProfilePage page={page} />)
+
+    const title = screen.getByRole('heading', {
+      level: 1
+    })
+    expect(title).toBeInTheDocument()
+    expect(title).toHaveTextContent(page.title)
+  })
+})

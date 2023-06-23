@@ -1,0 +1,73 @@
+import {
+  BodyText,
+  classed,
+  IconMail,
+  IconPhone,
+  Label,
+  TitleLg,
+  TitleMd
+} from '@/design-system'
+import { EmailBlockLink, Image, RichText, SocialMedia } from './'
+import type { SocialMediaBlockValues, WagtailImageData } from '@/types'
+import { When } from 'react-if'
+
+type HeroProfileProps = {
+  name: string
+  pronouns: string
+  jobTitle: string
+  jobTitleLine2: string
+  image: WagtailImageData
+  socialMedia: SocialMediaBlockValues[]
+  biography: string
+  email: string
+  phone: string
+}
+
+const FlexWithSpacing = classed('div', 'flex items-center space-x-8')
+
+export const HeroProfile = ({
+  name,
+  pronouns,
+  jobTitle,
+  jobTitleLine2,
+  image,
+  socialMedia,
+  biography,
+  email,
+  phone
+}: HeroProfileProps) => (
+  <div className="flex flex-col md:flex-row">
+    <Image
+      className="rounded-full"
+      imageRef={image}
+      baseUrl="http://localhost:8000"
+      alt={`Photo of ${name}`}
+    />
+    <div className="flex flex-col md:ml-28 gap-8">
+      <Label>{jobTitle}</Label>
+      <When condition={jobTitleLine2}>
+        <Label>{jobTitleLine2}</Label>
+      </When>
+      <div className="flex flex-col md:flex-row md:items-center space-y-8 md:space-y-0 md:space-x-8">
+        <TitleLg>{name}</TitleLg>
+        <TitleMd>({pronouns})</TitleMd>
+      </div>
+      <RichText html={biography} />
+      <FlexWithSpacing>
+        <IconMail width={40} />
+        <EmailBlockLink email={email} title={email} />
+      </FlexWithSpacing>
+      <FlexWithSpacing>
+        <IconPhone width={40} />
+        <a href={`tel:${phone}`}>{phone}</a>
+      </FlexWithSpacing>
+      <When condition={!!socialMedia.length}>
+        <FlexWithSpacing>
+          {socialMedia.map((props) => (
+            <SocialMedia key={props.id} {...props} />
+          ))}
+        </FlexWithSpacing>
+      </When>
+    </div>
+  </div>
+)

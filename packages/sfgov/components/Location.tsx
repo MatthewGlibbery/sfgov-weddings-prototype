@@ -4,7 +4,6 @@ import { BodyText, TitleSm } from '@/design-system'
 
 import type { LocationValues } from '@/types'
 
-/* eslint-disable camelcase */
 export const LocationBlock = (props: LocationValues) => {
   const {
     agency,
@@ -16,14 +15,14 @@ export const LocationBlock = (props: LocationValues) => {
     city,
     state,
     zip,
-    location_notes
+    location_notes: locationNotes
   } = props
 
   const boldedTitle =
     (agency && agency.title) || organization || addressee || locationName
 
   return (
-    <div>
+    <div className="flex flex-col gap-y-8">
       <When condition={!!boldedTitle}>
         <TitleSm as="h4" data-testid="title" className="font-bold">
           {boldedTitle}
@@ -50,7 +49,7 @@ export const LocationBlock = (props: LocationValues) => {
         </When>
         {city}, {state} {zip}
         <br />
-        <When condition={!!location_notes}>{location_notes}</When>
+        <When condition={!!locationNotes}>{locationNotes}</When>
       </BodyText>
     </div>
   )

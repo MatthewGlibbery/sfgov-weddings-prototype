@@ -14,7 +14,7 @@ describe('<CallToAction />', () => {
 
   it('renders the link with designated text', () => {
     render(<CallToAction {...ctaValues} />)
-    const link = screen.getByText(ctaValues.link.text)
+    const link = screen.getByText(ctaValues.link.link_text)
 
     expect(link).toBeInTheDocument()
   })
@@ -27,9 +27,18 @@ describe('<CallToAction />', () => {
   })
 
   it.each([
-    { title: ctaValues.title, link: { text: '', url: ctaValues.link.url } },
-    { title: ctaValues.title, link: { text: ctaValues.link.text, url: '' } },
-    { title: ctaValues.title, link: { text: '', url: '' } }
+    {
+      title: ctaValues.title,
+      link: { link_to: 'page', link_text: '', url: ctaValues.link.url }
+    },
+    {
+      title: ctaValues.title,
+      link: { link_to: 'page', link_text: ctaValues.link.link_text, url: '' }
+    },
+    {
+      title: ctaValues.title,
+      link: { link_to: 'page', link_text: '', url: '' }
+    }
   ])(
     'does not render the button when a link field is not present',
     (ctaValues) => {
@@ -41,7 +50,7 @@ describe('<CallToAction />', () => {
   it('renders a link button with an aria label of the title and the link text', () => {
     render(<CallToAction {...ctaValues} />)
     const link = screen.getByLabelText(
-      `${ctaValues.title} ${ctaValues.link.text}`
+      `${ctaValues.title} ${ctaValues.link.link_text}`
     )
 
     expect(link).toBeInTheDocument()

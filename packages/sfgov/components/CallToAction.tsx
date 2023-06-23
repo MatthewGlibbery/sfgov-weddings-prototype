@@ -12,9 +12,9 @@ export const CallToAction = ({ title, link }: CallToActionValues) => (
     <When condition={title}>
       <TitleMd>{title}</TitleMd>
     </When>
-    <When condition={!!(link.url && link.text)}>
-      <Button as="a" href={link.url} aria-label={`${title} ${link.text}`}>
-        {link.text}
+    <When condition={!!(link.url && link.link_text)}>
+      <Button as="a" href={link.url} aria-label={`${title} ${link.link_text}`}>
+        {link.link_text}
       </Button>
     </When>
   </div>

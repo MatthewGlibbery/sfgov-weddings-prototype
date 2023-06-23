@@ -9,4 +9,11 @@ export interface WagtailImageData extends PageData {
   title: string
   width: number
   height: number
+  original: {
+    url: string
+    full_url: string
+    width: number
+    height: number
+    alt: string
+  }
 }

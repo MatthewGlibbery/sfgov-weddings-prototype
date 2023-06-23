@@ -1,5 +1,10 @@
 import { WagtailImageData } from './images'
-import { AgencyPage, PageData, RelatedContentTransactionBlock } from './pages'
+import {
+  AgencyPage,
+  MinimalPageData,
+  PageData,
+  RelatedContentTransactionBlock
+} from './pages'
 
 export interface BlockType<T extends string = string, V = object> {
   type: T
@@ -22,8 +27,10 @@ interface RangeType {
 }
 
 export type LinkBlock = {
-  text: string
+  link_to: string
+  link_text: string
   url: string
+  page?: MinimalPageData
 }
 
 export type CostValues = {
@@ -39,16 +46,17 @@ export type TileBlock<T extends string = string> = BlockType<
   T,
   {
     title: string
-    internal_page?: number
-    external_url: string
     description: string
+    url: string
+    link_to: string
+    page: MinimalPageData
     event_type?: string
   }
 >
 
 export type NewsTileBlock = TileBlock<'news'>
 export type ContentTileBlock = TileBlock<'content'>
-export type QuickLinkBlock = TileBlock<'quick_links'>
+export type QuickLinkBlock = TileBlock<'quicklink'>
 export type EventTileBlock = TileBlock<'event'>
 
 export type StepBlock = BlockType<
@@ -150,3 +158,22 @@ export type WhatToDoBlock = BlockType<
   WhatToDoType,
   (CalloutBlock | WhatToDoStepBlock)[]
 >
+
+export type SocialMediaBlockValues = BlockType<
+  'facebook' | 'twitter' | 'instagram',
+  string
+>
+
+export type SocialMediaBlock = BlockType<
+  'social_media',
+  { social_media: SocialMediaBlockValues[] }
+>
+
+export type SpotlightValues = {
+  title: string
+  description: string
+  image: WagtailImageData
+  full_size_banner: boolean
+  button: LinkBlock
+}
+export type SpotlightBlock = BlockType<'spotlight', SpotlightValues>

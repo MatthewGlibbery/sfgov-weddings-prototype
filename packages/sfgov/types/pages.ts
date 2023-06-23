@@ -7,10 +7,14 @@ import {
   ImageBlock,
   LocationBlock,
   PhoneNumberBlockType,
+  QuickLinkBlock,
+  SocialMediaBlock,
+  SpotlightBlock,
   StepBlock,
   TitleAndTextBlock,
   WhatToDoBlock
 } from './blocks'
+import { WagtailImageData } from './images'
 
 type MinimalMeta = {
   type: string
@@ -26,7 +30,7 @@ type MinimalMeta = {
   alias_of?: object
 }
 
-type MinimalPageData = {
+export type MinimalPageData = {
   id: number
   meta: MinimalMeta
   title: string
@@ -88,7 +92,27 @@ export type AgencyPage = PageData & {
   description: string
 }
 
-export type GetHelpBlockTypes =
+export type ProfilePageData = PageData & {
+  first_name: string
+  last_name: string
+  pronouns: string
+  profile_type: string
+  primary_job_title: string
+  primary_job_title_line_2: string
+  related_content_agencies: RelatedContentData[]
+  show_contact: boolean
+  image: WagtailImageData
+  biography: string
+  email: string
+  phone: BlockType<'phone', string>[]
+  social_media: SocialMediaBlock[]
+  contact_address: LocationBlock[]
+  contact: (EmailBlock | PhoneNumberBlockType)[]
+  spotlight: SpotlightBlock[]
+  quick_links: QuickLinkBlock[]
+}
+
+export type ContactFooterBlockTypes =
   | EmailBlock
   | PhoneNumberBlockType
   | LocationBlock
@@ -101,7 +125,7 @@ export type TransactionPageData = PageData & {
   what_to_do: WhatToDoBlock[]
   special_cases: TitleAndTextBlock[]
   custom_section: TitleAndTextBlock[]
-  get_help: GetHelpBlockTypes[]
+  get_help: ContactFooterBlockTypes[]
   good_for_community: TitleAndTextBlock[]
   related_content_topics: RelatedContentData[]
   related_content_agencies: RelatedContentData[]

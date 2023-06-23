@@ -1,35 +1,27 @@
 import { When } from 'react-if'
 import { useTranslation } from 'next-i18next'
-import type { ComponentProps, ComponentType } from 'react'
+import type { ComponentType } from 'react'
 
 import {
   BigDesc,
   Container,
   DisplayLg,
-  IconMail,
   IconInfo,
-  IconPhone,
   IconQuestion,
-  StackedContainer,
-  StackedItem,
-  TitleLg,
-  IconBuilding,
-  IconCheck
+  TitleLg
 } from '@/design-system'
-import type { GetHelpBlockTypes, TransactionPageData } from '@/types'
+import type { TransactionPageData } from '@/types'
 
 import { PageWrapper } from './PageWrapper'
 import {
   Accordion,
+  ContactFooter,
   CostBlockDisplay,
-  EmailBlockLink,
-  PhoneNumberBlock,
   RelatedContentList,
   RichText,
   TitleAndText,
   WhatToDo
 } from '../'
-import { LocationBlock } from '../Location'
 
 export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   page
@@ -148,50 +140,9 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           <TitleLg as="h2">
             <IconQuestion width={32} /> {t('Get Help')}
           </TitleLg>
-          <StackedContainer className="mt-28">
-            {getHelp.map((item: GetHelpBlockTypes, i: number) => (
-              <GetHelpItem item={item} key={`${item.type}-${i}`} />
-            ))}
-          </StackedContainer>
+          <ContactFooter items={getHelp} />
         </When>
       </Container>
     </PageWrapper>
   )
-}
-
-type GetHelpItemProps = ComponentProps<typeof StackedItem> & {
-  item: GetHelpBlockTypes
-}
-
-const GetHelpItem = ({ item, ...rest }: GetHelpItemProps) => {
-  const { type, value } = item
-  switch (type) {
-    case 'address':
-      return (
-        <StackedItem icon={IconBuilding} title="Address" {...rest}>
-          <LocationBlock {...value} />
-        </StackedItem>
-      )
-    case 'title_and_text':
-      return (
-        <StackedItem icon={IconCheck} title="Additional Info" {...rest}>
-          <TitleAndText block={item} />
-        </StackedItem>
-      )
-    case 'email':
-      return (
-        <StackedItem icon={IconMail} title="Email" {...rest}>
-          <EmailBlockLink {...value} />
-        </StackedItem>
-      )
-    case 'phone_number':
-      return (
-        <StackedItem icon={IconPhone} title="Phone" {...rest}>
-          <PhoneNumberBlock {...value} />
-        </StackedItem>
-      )
-    /* istanbul ignore next */
-    default:
-      return null
-  }
 }

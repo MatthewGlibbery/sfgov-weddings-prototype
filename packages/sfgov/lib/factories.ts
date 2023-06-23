@@ -1,29 +1,38 @@
 /* istanbul ignore file */
 
 import { factory } from 'node-factory'
-import type {
+import {
   AgencyPage,
   BlockType,
   ButtonLinkBlock,
   CalloutBlock,
   CallToActionBlock,
+  ContentTileBlock,
   CostBlock,
   CostType,
   DateTimeBlock,
   EmailBlock,
   EventPageData,
+  EventTileBlock,
   ImageBlock,
   InfoPageData,
+  LinkBlock,
   LocationBlock,
+  NewsTileBlock,
   PageData,
   PageMeta,
   PhoneNumberBlockType,
+  ProfilePageData,
   QuickLinkBlock,
   RelatedContentData,
+  SocialMediaBlock,
+  SocialMediaBlockValues,
+  SpotlightBlock,
   StepBlock,
   StepByStepData,
   StepType,
   TextBlock,
+  TileBlock,
   TitleAndTextBlock,
   TransactionPageData,
   WagtailImageData,
@@ -34,13 +43,15 @@ import type {
 import {
   EVENT_PAGE_TYPE,
   INFO_PAGE_TYPE,
+  PROFILE_PAGE_TYPE,
   STEP_BY_STEP_PAGE_TYPE,
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
-  type: gen.lorem.word()
+  type: gen.lorem.word(),
+  html_url: gen.internet.url()
 }))
 
 export const EventPageFactory = factory<EventPageData>((gen) => ({
@@ -174,6 +185,41 @@ export const TransactionPageFactory = factory<TransactionPageData>((gen) => ({
   good_for_community: TitleAndTextFactory.make(2)
 }))
 
+export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: PROFILE_PAGE_TYPE
+  }),
+  title: 'James Smith',
+  pronouns: 'he/him/his',
+  first_name: 'James',
+  last_name: 'Smith',
+  profile_type: 'city_employee',
+  primary_job_title: 'Media Programming Man',
+  primary_job_title_line_2: 'I program the media',
+  related_content_agencies: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  show_contact: true,
+  image: ImageFactory.make(),
+  biography: '<p data-block-key="1jel0">Lorem Ipsum</p>',
+  email: gen.internet.email(),
+  phone: [
+    {
+      type: 'phone',
+      value: gen.phone.phoneNumber(),
+      id: gen.datatype.uuid()
+    }
+  ],
+  social_media: SocialMediaFactory.make(1),
+  contact_address: LocationBlockFactory.make(1),
+  contact: [PhoneNumberFactory.make(), EmailBlockFactory.make()],
+  spotlight: SpotlightFactory.make(1),
+  quick_links: QuickLinkFactory.make(3)
+}))
+
 export const StepBlockFactory = factory<StepBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'step',
@@ -226,14 +272,37 @@ export const CostBlockFactory = factory<CostBlock>((gen) => {
   }
 })
 
+export const TileValueFactory = factory((gen) => ({
+  link_to: 'page',
+  url: '',
+  title: gen.commerce.productName(),
+  description: gen.commerce.productDescription(),
+  page: PageFactory.make(),
+  event_type: 'music'
+}))
+
+export const NewsTileFactory = factory<NewsTileBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'news',
+  value: TileValueFactory.make()
+}))
+
+export const ContentTileFactory = factory<ContentTileBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'content',
+  value: TileValueFactory.make()
+}))
+
 export const QuickLinkFactory = factory<QuickLinkBlock>((gen) => ({
   id: gen.datatype.uuid(),
-  type: 'quick_links',
-  value: {
-    title: gen.commerce.productName(),
-    description: gen.commerce.productDescription(),
-    external_url: gen.internet.url()
-  }
+  type: 'quicklink',
+  value: TileValueFactory.make()
+}))
+
+export const EventTileFactory = factory<EventTileBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'event',
+  value: TileValueFactory.make()
 }))
 
 export const ImageMetaFactory = factory<WagtailImageData['meta']>((gen) => ({
@@ -249,7 +318,14 @@ export const ImageFactory = factory<WagtailImageData>((gen) => ({
     type: WAGTAIL_IMAGE_TYPE,
     download_url: gen.image.imageUrl(300, 300, 'city', false, true)
   },
-  id: gen.datatype.number()
+  id: gen.datatype.number(),
+  original: {
+    url: new URL(gen.internet.url()).pathname,
+    full_url: gen.internet.url(),
+    width: 300,
+    height: 300,
+    alt: gen.lorem.sentence()
+  }
 }))
 
 export const TitleAndTextFactory = factory<TitleAndTextBlock>((gen) => ({
@@ -267,7 +343,8 @@ export const PageFactory = factory<PageData>((gen) => ({
     type: `sfgov_${gen.lorem.word()}.${gen.lorem
       .sentence(1)
       .replace(/\.$/, '')}`,
-    url_path: new URL(gen.internet.url()).pathname
+    url_path: new URL(gen.internet.url()).pathname,
+    html_url: gen.internet.url()
   },
   title: gen.commerce.productName()
 }))
@@ -278,7 +355,8 @@ export const RelatedContentBlockFactory = factory<RelatedContentData>(
     meta: {
       type: `sfgov_${gen.lorem.word()}.${gen.lorem
         .sentence(1)
-        .replace(/\.$/, '')}`
+        .replace(/\.$/, '')}`,
+      html_url: gen.internet.url()
     },
     page_content: {
       id: gen.datatype.number(),
@@ -300,7 +378,8 @@ export const ImageBlockFactory = factory<ImageBlock>((gen) => ({
 export const RelatedContentFactory = factory<RelatedContentData>((gen) => ({
   id: gen.datatype.number(),
   meta: {
-    type: 'RelatedContent'
+    type: 'RelatedContent',
+    html_url: gen.internet.url()
   },
   page_content: PageFactory.make()
 }))
@@ -396,10 +475,7 @@ export const CallToActionFactory = factory<CallToActionBlock>((gen) => ({
   type: 'cta',
   value: {
     title: gen.commerce.productName(),
-    link: {
-      text: gen.lorem.word(),
-      url: gen.internet.url()
-    }
+    link: LinkFactory.make()
   }
 }))
 
@@ -415,13 +491,16 @@ export const TextBlockFactory = factory<TextBlock>((gen) => ({
   value: gen.lorem.sentence()
 }))
 
+export const LinkFactory = factory<LinkBlock>((gen) => ({
+  link_to: 'url',
+  link_text: gen.lorem.sentence(),
+  url: gen.internet.url()
+}))
+
 export const ButtonLinkFactory = factory<ButtonLinkBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'button_link',
-  value: {
-    text: gen.lorem.sentence(),
-    url: gen.internet.url()
-  }
+  value: LinkFactory.make()
 }))
 
 export const WhatToDoStepFactory = factory<WhatToDoStepBlock>((gen) => ({
@@ -450,4 +529,36 @@ export const WhatToDoFactory = factory<WhatToDoBlock>((gen) => ({
     'mail'
   ]),
   value: WhatToDoStepFactory.make(2)
+}))
+
+export const SpotlightFactory = factory<SpotlightBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'spotlight',
+  value: {
+    title: gen.lorem.word(),
+    description: gen.lorem.sentence(),
+    image: ImageFactory.make(),
+    full_size_banner: gen.random.boolean(),
+    button: LinkFactory.make()
+  }
+}))
+
+export const SocialMediaValuesFactory = factory<SocialMediaBlockValues>(
+  (gen) => ({
+    id: gen.datatype.uuid(),
+    type: gen.random.arrayElement(['facebook', 'twitter', 'instagram']),
+    value: gen.internet.url()
+  })
+)
+
+export const SocialMediaFactory = factory<SocialMediaBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'social_media',
+  value: {
+    social_media: [
+      SocialMediaValuesFactory.make({ type: 'facebook' }),
+      SocialMediaValuesFactory.make({ type: 'instagram' }),
+      SocialMediaValuesFactory.make({ type: 'twitter' })
+    ]
+  }
 }))
