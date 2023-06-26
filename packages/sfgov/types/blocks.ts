@@ -42,22 +42,23 @@ export type CostValues = {
 
 export type CostBlock = BlockType<'cost', CostValues>
 
-export type TileBlock<T extends string = string> = BlockType<
-  T,
-  {
-    title: string
-    description: string
-    url: string
-    link_to: string
-    page: MinimalPageData
-    event_type?: string
-  }
->
+export type TileBlockValues = MinimalPageData & {
+  title: string
+  description: string
+  url: string
+  link_to: string
+  page: MinimalPageData
+  event_type?: string
+}
+
+export type TileBlock<T extends string = string> = BlockType<T, TileBlockValues>
 
 export type NewsTileBlock = TileBlock<'news'>
 export type ContentTileBlock = TileBlock<'content'>
 export type QuickLinkBlock = TileBlock<'quicklink'>
 export type EventTileBlock = TileBlock<'event'>
+export type ServiceTileBlock = TileBlock<'service'>
+export type ResourceTileBlock = TileBlock<'page' | 'external_link'>
 
 export type StepBlock = BlockType<
   'step',
@@ -72,7 +73,7 @@ export type StepBlock = BlockType<
   }
 >
 
-export type ImageBlock = BlockType<'image', number | WagtailImageData>
+export type ImageBlock = WagtailImageData
 
 type TitleAndTextValues = {
   title: string
@@ -159,6 +160,34 @@ export type WhatToDoBlock = BlockType<
   (CalloutBlock | WhatToDoStepBlock)[]
 >
 
+export type ResourceBlockValue = PageData & {
+  title: string
+  url: string
+  description: string
+}
+export type ResourceBlock = BlockType<
+  'page' | 'external_link',
+  ResourceBlockValue
+>
+export type ResourceSectionValues = {
+  title: string
+  resources: ResourceBlock[]
+}
+export type ResourcesSectionBlock = BlockType<
+  'resource_section',
+  ResourceSectionValues
+>
+
+export type ServiceBlock = {
+  title: string
+  url: string
+  description: string
+}
+export type ServicesSectionValues = {
+  title: string
+  services: MinimalPageData[]
+}
+export type ServicesSectionBlock = BlockType<'services', ServicesSectionValues>
 export type SocialMediaBlockValues = BlockType<
   'facebook' | 'twitter' | 'instagram',
   string
@@ -177,3 +206,22 @@ export type SpotlightValues = {
   button: LinkBlock
 }
 export type SpotlightBlock = BlockType<'spotlight', SpotlightValues>
+
+export type TimelineValues = {
+  title: string
+  timeline_items: TitleAndTextValues[]
+}
+export type TimelineBlock = BlockType<'timeline', TimelineValues>
+
+export type ContentSectionTypes =
+  | ButtonLinkBlock
+  | PhoneNumberBlockType
+  | ResourcesSectionBlock
+  | SpotlightBlock
+  | TimelineBlock
+  | TextBlock
+export type ContentSectionValues = {
+  title: string
+  section_content: ContentSectionTypes[]
+}
+export type ContentSectionBlock = BlockType<'section', ContentSectionValues>

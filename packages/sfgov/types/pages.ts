@@ -9,10 +9,13 @@ import {
   PhoneNumberBlockType,
   QuickLinkBlock,
   SocialMediaBlock,
-  SpotlightBlock,
   StepBlock,
   TitleAndTextBlock,
-  WhatToDoBlock
+  WhatToDoBlock,
+  ContentSectionBlock,
+  ServicesSectionBlock,
+  SpotlightBlock,
+  ResourcesSectionBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -130,4 +133,15 @@ export type TransactionPageData = PageData & {
   related_content_topics: RelatedContentData[]
   related_content_agencies: RelatedContentData[]
   related_content_pages: RelatedContentData[]
+}
+
+export type TopicPageData = PageData & {
+  description: string
+  related_content_topics: RelatedContentData[]
+  content_top: ContentSectionBlock[]
+  services: ServicesSectionBlock[]
+  spotlight: SpotlightBlock[]
+  content: ContentSectionBlock[]
+  resources: ResourcesSectionBlock[]
+  related_content_agencies: RelatedContentData[]
 }

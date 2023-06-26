@@ -7,6 +7,7 @@ import {
   ButtonLinkBlock,
   CalloutBlock,
   CallToActionBlock,
+  ContentSectionBlock,
   ContentTileBlock,
   CostBlock,
   CostType,
@@ -25,6 +26,8 @@ import {
   ProfilePageData,
   QuickLinkBlock,
   RelatedContentData,
+  ServiceTileBlock,
+  ResourceTileBlock,
   SocialMediaBlock,
   SocialMediaBlockValues,
   SpotlightBlock,
@@ -34,6 +37,7 @@ import {
   TextBlock,
   TileBlock,
   TitleAndTextBlock,
+  TopicPageData,
   TransactionPageData,
   WagtailImageData,
   WhatToDoBlock,
@@ -45,6 +49,7 @@ import {
   INFO_PAGE_TYPE,
   PROFILE_PAGE_TYPE,
   STEP_BY_STEP_PAGE_TYPE,
+  TOPIC_PAGE_TYPE,
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
@@ -297,6 +302,18 @@ export const QuickLinkFactory = factory<QuickLinkBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'quicklink',
   value: TileValueFactory.make()
+}))
+
+export const ServiceTileFactory = factory<ServiceTileBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  meta: PageMetaFactory.make(),
+  title: gen.commerce.productName()
+}))
+
+export const ResourceTileFactory = factory<ResourceTileBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'external_link',
+  value: TileValueFactory.make({ url: 'https://sf.gov' })
 }))
 
 export const EventTileFactory = factory<EventTileBlock>((gen) => ({
@@ -559,6 +576,61 @@ export const SocialMediaFactory = factory<SocialMediaBlock>((gen) => ({
       SocialMediaValuesFactory.make({ type: 'facebook' }),
       SocialMediaValuesFactory.make({ type: 'instagram' }),
       SocialMediaValuesFactory.make({ type: 'twitter' })
+    ]
+  }
+}))
+
+export const TopicPageFactory = factory<TopicPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: TOPIC_PAGE_TYPE
+  }),
+  title: 'Topic',
+  description: 'Topic description',
+  related_content_topics: RelatedContentBlockFactory.make(2, {
+    meta: {
+      type: 'sf.RelatedContentTopic'
+    }
+  }),
+  content_top: [ContentSectionFactory.make()],
+  services: [
+    {
+      type: 'services',
+      value: {
+        title: 'Service section 1',
+        services: [ServiceTileFactory.make()]
+      },
+      id: '2eba82d8-17a3-4905-a510-b325c0cf23d4'
+    }
+  ],
+  spotlight: [],
+  content: [ContentSectionFactory.make()],
+  resources: [
+    {
+      type: 'resources',
+      value: {
+        title: 'Outer resource section 1',
+        resources: [ResourceTileFactory.make()]
+      }
+    }
+  ],
+  related_content_agencies: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sf.RelatedContentAgency'
+    }
+  })
+}))
+
+export const ContentSectionFactory = factory<ContentSectionBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'section',
+  value: {
+    title: gen.lorem.sentence(),
+    section_content: [
+      ButtonLinkFactory.make(),
+      PhoneNumberFactory.make(),
+      TextBlockFactory.make(),
+      EmailBlockFactory.make()
     ]
   }
 }))

@@ -8,13 +8,17 @@ import {
   QuickLink,
   QuickLinkList,
   EventTile,
-  EventTileList
+  EventTileList,
+  ServiceTile,
+  ResourceTile
 } from './Tile'
 import {
   ContentTileFactory,
   EventTileFactory,
   NewsTileFactory,
   QuickLinkFactory,
+  ResourceTileFactory,
+  ServiceTileFactory,
   TileValueFactory
 } from '@/lib/factories'
 
@@ -76,6 +80,30 @@ describe('Tile', () => {
     expect(eventTile).toContainElement(title)
     expect(eventTile).toContainElement(description)
     expect(eventTile).toContainElement(type)
+  })
+
+  it('renders a ServiceTile', () => {
+    const tile = ServiceTileFactory.make()
+    render(<ServiceTile link={tile} />)
+
+    const serviceTile = screen.getByRole('link')
+    const title = screen.getByText(tile.title)
+
+    expect(serviceTile).toBeInTheDocument()
+    expect(serviceTile).toContainElement(title)
+  })
+
+  it('renders a ResourceTile', () => {
+    const tile = ResourceTileFactory.make()
+    const tileValue = tile.value
+    render(<ResourceTile link={tileValue} />)
+    const resourceTile = screen.getByRole('link')
+    const title = screen.getByText(tileValue.title)
+    const description = screen.getByText(tileValue.description)
+
+    expect(resourceTile).toBeInTheDocument()
+    expect(resourceTile).toContainElement(title)
+    expect(resourceTile).toContainElement(description)
   })
 
   it('renders a list of news tiles inside a TileSection', () => {
