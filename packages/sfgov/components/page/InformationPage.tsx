@@ -9,7 +9,7 @@ import { RelatedContentList } from '../RelatedContentList'
 import { TitleAndText } from '../TitleAndText'
 import { Image } from '../Image'
 import { PageWrapper } from './PageWrapper'
-import type { InfoPageData, InfoPageSection, WagtailImageData } from '@/types'
+import type { InfoPageData, InfoPageSection } from '@/types'
 import type { ComponentType } from 'react'
 
 export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
@@ -87,16 +87,9 @@ type InfoSectionContentProps = {
 const InfoSectionContent = ({ block, ...rest }: InfoSectionContentProps) => {
   switch (block.type) {
     case 'image':
-      return (
-        <Image
-          as={NextImage}
-          alt=""
-          imageRef={block.value as WagtailImageData}
-          {...rest}
-        />
-      )
+      return <Image alt="" imageRef={block.value} {...rest} />
     case 'title_and_text':
-      return <TitleAndText block={block} {...rest} />
+      return <TitleAndText {...block.value} {...rest} />
   }
   return null
 }

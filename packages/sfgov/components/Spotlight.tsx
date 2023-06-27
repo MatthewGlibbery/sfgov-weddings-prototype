@@ -1,9 +1,9 @@
 import { When } from 'react-if'
-import { SpotlightBlock, SpotlightValues } from '@/types'
+import { TypeSpotlightBlock, TypeSpotlightBlockValues } from '@/types'
 import { BodyText, Button, TitleMd } from '@/design-system'
 import { Image } from './Image'
 
-export const Spotlight = ({ value }: SpotlightBlock) => {
+export const Spotlight = ({ value }: TypeSpotlightBlock) => {
   const {
     title,
     description,

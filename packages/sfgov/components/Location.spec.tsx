@@ -2,10 +2,10 @@ import { render, screen } from '@testing-library/react'
 
 import { LocationBlock } from './Location'
 
-import type { LocationValues } from '@/types'
+import type { TypeLocationValues } from '@/types'
 
 describe('<LocationBlock />', () => {
-  let baseTestData = {} as LocationValues
+  let baseTestData = {} as TypeLocationValues
   beforeAll(() => {
     baseTestData = {
       line1: '123 Sesame Street',
@@ -63,7 +63,7 @@ describe('<LocationBlock />', () => {
     const testData = {
       ...baseTestData,
       ...optData
-    } as LocationValues
+    } as TypeLocationValues
     render(<LocationBlock {...testData} />)
 
     // Because the state is 2 chars, it has a high frequency
@@ -114,7 +114,7 @@ describe('<LocationBlock />', () => {
     const testData = {
       ...baseTestData,
       ...optData
-    } as LocationValues
+    } as TypeLocationValues
     render(<LocationBlock {...testData} />)
 
     expect(screen.queryAllByText(Object.values(optData)[0]).length).toBe(1)
@@ -278,7 +278,7 @@ describe('<LocationBlock />', () => {
     const testData = {
       ...baseTestData,
       ...input
-    } as LocationValues
+    } as TypeLocationValues
     render(<LocationBlock {...testData} />)
     const boldedContainer = screen.queryByTestId('title')
     const fontweightProp = window

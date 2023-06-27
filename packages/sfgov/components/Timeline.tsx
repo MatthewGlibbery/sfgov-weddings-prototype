@@ -1,10 +1,10 @@
 import { TitleMd } from '@/design-system'
-import { TimelineValues } from '@/types'
+import { TypeTimelineBlockValues } from '@/types'
 
 export const Timeline = ({
   title,
   timeline_items: timelineItems
-}: TimelineValues) => {
+}: TypeTimelineBlockValues) => {
   return (
     <div>
       <TitleMd as="h3">{title}</TitleMd>

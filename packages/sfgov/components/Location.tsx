@@ -2,9 +2,10 @@ import { When } from 'react-if'
 
 import { BodyText, TitleSm } from '@/design-system'
 
-import type { LocationValues } from '@/types'
+import type { TypeLocationValues } from '@/types'
 
-export const LocationBlock = (props: LocationValues) => {
+/* eslint-disable camelcase */
+export const LocationBlock = (props: TypeLocationValues) => {
   const {
     agency,
     organization,

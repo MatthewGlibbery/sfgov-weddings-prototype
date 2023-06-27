@@ -1,21 +1,21 @@
 import {
   BlockType,
-  CallToActionBlock,
-  CostBlock,
-  DateTimeBlock,
-  EmailBlock,
-  ImageBlock,
-  LocationBlock,
-  PhoneNumberBlockType,
-  QuickLinkBlock,
-  SocialMediaBlock,
-  StepBlock,
-  TitleAndTextBlock,
-  WhatToDoBlock,
-  ContentSectionBlock,
-  ServicesSectionBlock,
-  SpotlightBlock,
-  ResourcesSectionBlock
+  TypeCallToActionBlock,
+  TypeCostBlock,
+  TypeDateTimeBlock,
+  TypeEmailBlock,
+  TypeImageBlock,
+  TypeLocationBlock,
+  TypePhoneNumberBlock,
+  TypeStepBlock,
+  TypeTitleAndTextBlock,
+  TypeWhatToDoBlock,
+  TypeQuickLinkBlock,
+  TypeSocialMediaBlock,
+  TypeContentSectionBlock,
+  TypeServicesSectionBlock,
+  TypeSpotlightBlock,
+  TypeResourcesSectionBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -61,18 +61,18 @@ export type RelatedContentTransactionBlock = BlockType<
 
 export type EventPageData = PageData & {
   description: string
-  date_time: DateTimeBlock[]
-  cost: CostBlock[]
-  location: LocationBlock[]
-  call_to_action: CallToActionBlock[]
-  image: ImageBlock
+  date_time: TypeDateTimeBlock[]
+  cost: TypeCostBlock[]
+  location: TypeLocationBlock[]
+  call_to_action: TypeCallToActionBlock[]
+  image: TypeImageBlock
   body: string
-  contact: (EmailBlock | PhoneNumberBlockType)[]
+  contact: (TypeEmailBlock | TypePhoneNumberBlock)[]
   related_content_agencies: RelatedContentData[]
   related_content_topics: RelatedContentData[]
 }
 
-export type InfoPageSection = ImageBlock | TitleAndTextBlock
+export type InfoPageSection = TypeImageBlock | TypeTitleAndTextBlock
 
 export type InfoPageData = PageData & {
   description: string
@@ -86,13 +86,33 @@ export type InfoPageData = PageData & {
 export type StepByStepData = PageData & {
   description: string
   intro: string
-  steps?: StepBlock[]
+  steps?: TypeStepBlock[]
   related_content_agencies: RelatedContentData[]
   related_content_topics: RelatedContentData[]
 }
 
 export type AgencyPage = PageData & {
   description: string
+}
+
+export type GetHelpBlockTypes =
+  | TypeEmailBlock
+  | TypePhoneNumberBlock
+  | TypeLocationBlock
+  | TypeTitleAndTextBlock
+
+export type TransactionPageData = PageData & {
+  description: string
+  cost: TypeCostBlock[]
+  things_to_know: TypeTitleAndTextBlock[]
+  what_to_do: TypeWhatToDoBlock[]
+  special_cases: TypeTitleAndTextBlock[]
+  custom_section: TypeTitleAndTextBlock[]
+  get_help: GetHelpBlockTypes[]
+  good_for_community: TypeTitleAndTextBlock[]
+  related_content_topics: RelatedContentData[]
+  related_content_agencies: RelatedContentData[]
+  related_content_pages: RelatedContentData[]
 }
 
 export type ProfilePageData = PageData & {
@@ -108,40 +128,26 @@ export type ProfilePageData = PageData & {
   biography: string
   email: string
   phone: BlockType<'phone', string>[]
-  social_media: SocialMediaBlock[]
-  contact_address: LocationBlock[]
-  contact: (EmailBlock | PhoneNumberBlockType)[]
-  spotlight: SpotlightBlock[]
-  quick_links: QuickLinkBlock[]
+  social_media: TypeSocialMediaBlock[]
+  contact_address: TypeLocationBlock[]
+  contact: (TypeEmailBlock | TypePhoneNumberBlock)[]
+  spotlight: TypeSpotlightBlock[]
+  quick_links: TypeQuickLinkBlock[]
 }
 
 export type ContactFooterBlockTypes =
-  | EmailBlock
-  | PhoneNumberBlockType
-  | LocationBlock
-  | TitleAndTextBlock
-
-export type TransactionPageData = PageData & {
-  description: string
-  cost: CostBlock[]
-  things_to_know: TitleAndTextBlock[]
-  what_to_do: WhatToDoBlock[]
-  special_cases: TitleAndTextBlock[]
-  custom_section: TitleAndTextBlock[]
-  get_help: ContactFooterBlockTypes[]
-  good_for_community: TitleAndTextBlock[]
-  related_content_topics: RelatedContentData[]
-  related_content_agencies: RelatedContentData[]
-  related_content_pages: RelatedContentData[]
-}
+  | TypeEmailBlock
+  | TypePhoneNumberBlock
+  | TypeLocationBlock
+  | TypeTitleAndTextBlock
 
 export type TopicPageData = PageData & {
   description: string
   related_content_topics: RelatedContentData[]
-  content_top: ContentSectionBlock[]
-  services: ServicesSectionBlock[]
-  spotlight: SpotlightBlock[]
-  content: ContentSectionBlock[]
-  resources: ResourcesSectionBlock[]
+  content_top: TypeContentSectionBlock[]
+  services: TypeServicesSectionBlock[]
+  spotlight: TypeSpotlightBlock[]
+  content: TypeContentSectionBlock[]
+  resources: TypeResourcesSectionBlock[]
   related_content_agencies: RelatedContentData[]
 }

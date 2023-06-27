@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import mockConsole from 'jest-mock-console'
 
-import type { DateTimeValues } from '@/types'
+import type { TypeDateTimeValues } from '@/types'
 import { DateTimeBlock, ComposedDate, ComposedTime } from './DateTime'
 
 describe('DateTime Component', () => {
@@ -197,7 +197,7 @@ describe('DateTime Component', () => {
   })
 
   describe('<DateTimeBlock />', () => {
-    let baseProps = {} as DateTimeValues
+    let baseProps = {} as TypeDateTimeValues
     beforeAll(() => {
       baseProps = {
         start_date: '2023-11-19',

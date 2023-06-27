@@ -3,22 +3,18 @@ import {
   TileSection,
   NewsTile,
   NewsTileList,
-  ContentTile,
-  ContentTileList,
   QuickLink,
   QuickLinkList,
   EventTile,
   EventTileList,
-  ServiceTile,
-  ResourceTile
+  ServiceAndResourceTile,
+  ServiceAndResourceTileList
 } from './Tile'
 import {
-  ContentTileFactory,
   EventTileFactory,
+  GenericTileFactory,
   NewsTileFactory,
   QuickLinkFactory,
-  ResourceTileFactory,
-  ServiceTileFactory,
   TileValueFactory
 } from '@/lib/factories'
 
@@ -44,16 +40,16 @@ describe('Tile', () => {
     expect(newsTile).toContainElement(description)
   })
 
-  it('renders a ContentTile', () => {
-    render(<ContentTile link={linkValue} />)
+  it('renders a ServiceAndResourceTile', () => {
+    render(<ServiceAndResourceTile link={linkValue} />)
 
-    const contentTile = screen.getByRole('link')
+    const serviceAndResourceTile = screen.getByRole('link')
     const title = screen.getByText(linkValue.title)
     const description = screen.getByText(linkValue.description)
 
-    expect(contentTile).toBeInTheDocument()
-    expect(contentTile).toContainElement(title)
-    expect(contentTile).toContainElement(description)
+    expect(serviceAndResourceTile).toBeInTheDocument()
+    expect(serviceAndResourceTile).toContainElement(title)
+    expect(serviceAndResourceTile).toContainElement(description)
   })
 
   it('renders a QuickLink', () => {
@@ -82,30 +78,6 @@ describe('Tile', () => {
     expect(eventTile).toContainElement(type)
   })
 
-  it('renders a ServiceTile', () => {
-    const tile = ServiceTileFactory.make()
-    render(<ServiceTile link={tile} />)
-
-    const serviceTile = screen.getByRole('link')
-    const title = screen.getByText(tile.title)
-
-    expect(serviceTile).toBeInTheDocument()
-    expect(serviceTile).toContainElement(title)
-  })
-
-  it('renders a ResourceTile', () => {
-    const tile = ResourceTileFactory.make()
-    const tileValue = tile.value
-    render(<ResourceTile link={tileValue} />)
-    const resourceTile = screen.getByRole('link')
-    const title = screen.getByText(tileValue.title)
-    const description = screen.getByText(tileValue.description)
-
-    expect(resourceTile).toBeInTheDocument()
-    expect(resourceTile).toContainElement(title)
-    expect(resourceTile).toContainElement(description)
-  })
-
   it('renders a list of news tiles inside a TileSection', () => {
     render(<NewsTileList links={NewsTileFactory.make(3)} />)
 
@@ -114,7 +86,7 @@ describe('Tile', () => {
   })
 
   it('renders a list of content tiles inside a TileSection', () => {
-    render(<ContentTileList links={ContentTileFactory.make(3)} />)
+    render(<ServiceAndResourceTileList links={GenericTileFactory.make(3)} />)
 
     const tileSection = screen.getByRole('list')
     expect(tileSection).toBeInTheDocument()

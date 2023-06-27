@@ -1,6 +1,6 @@
 import { When } from 'react-if'
 import { SmallText, TitleXs } from '@/design-system'
-import { PhoneNumberValues } from '@/types'
+import { TypePhoneNumberValues } from '@/types'
 
 /**
  * The PhoneNumberBlock is the visualization of a PhoneNumberBlock from the
@@ -14,7 +14,7 @@ export const PhoneNumberBlock = ({
   owner,
   phone_number: phoneNumber,
   details
-}: PhoneNumberValues) => (
+}: TypePhoneNumberValues) => (
   <div className="flex flex-col gap-y-12">
     <When condition={owner}>
       <TitleXs>{owner}</TitleXs>

@@ -20,7 +20,7 @@ describe('<TitleAndText>', () => {
         title: 'Title here'
       }
     })
-    render(<TitleAndText block={fixture} />)
+    render(<TitleAndText {...fixture.value} />)
     const title = screen.getByRole('heading')
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(fixture.value.title)
@@ -34,37 +34,12 @@ describe('<TitleAndText>', () => {
       }
     })
     expect(fixture.value.title).toBe('')
-    render(<TitleAndText block={fixture} />)
+    render(<TitleAndText {...fixture.value} />)
     expect(screen.queryByRole('heading')).not.toBeInTheDocument()
   })
 
-  it('renders the text as unsafe HTML', () => {
-    render(
-      <TitleAndText
-        block={TitleAndTextFactory.make({
-          value: {
-            text: '<div data-id=123>wut</div>'
-          }
-        })}
-      />
-    )
-    const text = screen.queryByText('wut') as HTMLElement
-    expect(text).toBeInTheDocument()
-    expect(text).toHaveTextContent('wut')
-    expect(text).toHaveAttribute('data-id', '123')
-  })
-
   it('does not render the text if empty', () => {
-    render(
-      <TitleAndText
-        block={TitleAndTextFactory.make({
-          value: {
-            title: 'Not empty',
-            text: ''
-          }
-        })}
-      />
-    )
+    render(<TitleAndText title="Not empty" text="" />)
     expect(screen.queryByTestId('text')).not.toBeInTheDocument()
   })
 
@@ -75,7 +50,7 @@ describe('<TitleAndText>', () => {
         text: 'What is up?'
       }
     })
-    render(<TitleAndText block={fixture} />)
+    render(<TitleAndText {...fixture.value} />)
     // NB: <section> has the "region" role:
     // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/region_role
     const section = screen.queryByRole('region') as HTMLElement
@@ -84,8 +59,10 @@ describe('<TitleAndText>', () => {
   })
 
   it('does not render if there is no title or text', () => {
-    // @ts-expect-error block may be null
-    expect(() => render(<TitleAndText block={null} />)).not.toThrow()
+    expect(() =>
+      // @ts-expect-error block may be null
+      render(<TitleAndText title={null} text={null} />)
+    ).not.toThrow()
     expect(screen.queryByRole('region')).not.toBeInTheDocument()
   })
 })

@@ -1,20 +1,20 @@
 import { When } from 'react-if'
 import { BodyText, classed, classes, Label, TitleMd } from '@/design-system'
 import { PageLink } from './PageLink'
-import { CostBlockDisplay } from './CostBlockDisplay'
-import type { CostBlock, PageData, StepBlock } from '@/types'
+import { CostBlock } from './CostBlock'
+import type { PageData, TypeStepBlock, TypeCostBlockValues } from '@/types'
 import { useTranslation } from 'next-i18next'
 
 type StepType = {
-  step: StepBlock
+  step: TypeStepBlock
   index: number
   last: boolean
 }
 
-export const StepList = ({ steps }: { steps: StepBlock[] }) => {
+export const StepList = ({ steps }: { steps: TypeStepBlock[] }) => {
   return (
     <>
-      {steps.map((step: StepBlock, i: number) => (
+      {steps.map((step: TypeStepBlock, i: number) => (
         <Step
           key={step.id}
           step={step}
@@ -75,10 +75,12 @@ export const Step = ({ step: { id, value: step }, index, last }: StepType) => {
             </div>
           </When>
           <When condition={step.cost?.length}>
-            <CostBlockDisplay
-              variant="step"
-              {...(step?.cost?.[0] as CostBlock)}
-            />
+            {() => (
+              <CostBlock
+                variant="step"
+                {...(step?.cost?.[0].value as TypeCostBlockValues)}
+              />
+            )}
           </When>
           <When condition={step.time}>
             <div className="flex" data-testid="step-time">

@@ -7,14 +7,14 @@ import {
   IconDocument
 } from '@/design-system'
 import type { ComponentType, ReactNode } from 'react'
-import type { TileBlock } from '@/types'
+import type { TypeTileBlock } from '@/types'
 
 export type TileSectionProps = {
-  links?: TileBlock[]
+  links?: TypeTileBlock[]
 }
 
 export type TileProps = {
-  link: TileBlock['value']
+  link: TypeTileBlock['value']
   role?: 'listitem'
 } & JSX.IntrinsicAttributes
 
@@ -57,22 +57,7 @@ export const NewsTile = ({ link }: TileProps) => (
   </BaseTile>
 )
 
-export const ContentTile = ({ link }: TileProps) => (
-  <BaseTile href={link.page.meta.html_url}>
-    <TileTitle>{link.title}</TileTitle>
-    <div>{link.description}</div>
-    <IconArrowRight />
-  </BaseTile>
-)
-
-export const ServiceTile = ({ link }: TileProps) => (
-  <BaseTile href={link.meta.html_url}>
-    <TitleMd className="m-0 mb-8">{link.title}</TitleMd>
-    <div>{link.meta.search_description}</div>
-  </BaseTile>
-)
-
-export const ResourceTile = ({ link }: TileProps) => {
+export const ServiceAndResourceTile = ({ link }: TileProps) => {
   return (
     <BaseTile href={link.url}>
       <TitleMd className="m-0 mb-8">{link.title}</TitleMd>
@@ -123,8 +108,6 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
 }
 
 export const NewsTileList = createTileList(NewsTile)
-export const ContentTileList = createTileList(ContentTile)
 export const QuickLinkList = createTileList(QuickLink)
 export const EventTileList = createTileList(EventTile)
-export const ServiceTileList = createTileList(ServiceTile)
-export const ResourceTileList = createTileList(ResourceTile)
+export const ServiceAndResourceTileList = createTileList(ServiceAndResourceTile)

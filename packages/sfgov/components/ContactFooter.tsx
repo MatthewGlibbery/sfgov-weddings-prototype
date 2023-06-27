@@ -8,12 +8,7 @@ import {
 } from '@/design-system'
 import { ContactFooterBlockTypes } from '@/types'
 import { ComponentProps } from 'react'
-import {
-  EmailBlockLink,
-  LocationBlock,
-  PhoneNumberBlock,
-  TitleAndText
-} from './'
+import { EmailBlock, LocationBlock, PhoneNumberBlock, TitleAndText } from './'
 
 type ContactFooterItemProps = ComponentProps<typeof StackedItem> & {
   item: ContactFooterBlockTypes
@@ -43,13 +38,13 @@ const ContactFooterItem = ({ item, ...rest }: ContactFooterItemProps) => {
     case 'title_and_text':
       return (
         <StackedItem icon={IconCheck} title="Additional Info" {...rest}>
-          <TitleAndText block={item} />
+          <TitleAndText {...item.value} />
         </StackedItem>
       )
     case 'email':
       return (
         <StackedItem icon={IconMail} title="Email" {...rest}>
-          <EmailBlockLink {...value} />
+          <EmailBlock {...value} />
         </StackedItem>
       )
     case 'phone_number':

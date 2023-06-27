@@ -1,7 +1,7 @@
 import { IconInfo } from '@/design-system'
-import { SocialMediaBlockValues } from '@/types'
+import { TypeSocialMediaBlockValues } from '@/types'
 
-export const SocialMedia = ({ type, value }: SocialMediaBlockValues) => {
+export const SocialMedia = ({ type, value }: TypeSocialMediaBlockValues) => {
   const Icon = IconInfo
   switch (type) {
     case 'facebook':

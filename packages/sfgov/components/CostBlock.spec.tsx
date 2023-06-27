@@ -1,6 +1,6 @@
 import { CostBlockFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
-import { CostBlockDisplay } from './CostBlockDisplay'
+import { CostBlock } from './CostBlock'
 
 describe('Cost', () => {
   const cost = CostBlockFactory.make({
@@ -11,14 +11,14 @@ describe('Cost', () => {
   })
 
   it('renders a cost block with cost "Free"', () => {
-    render(<CostBlockDisplay {...cost} />)
+    render(<CostBlock {...cost.value} />)
     const costValue = screen.getByText('Free')
 
     expect(costValue).toBeInTheDocument()
   })
 
   it('renders a cost block with a description field', () => {
-    render(<CostBlockDisplay {...cost} />)
+    render(<CostBlock {...cost.value} />)
     const description = screen.getByText(/This is the description/)
 
     expect(description).toBeInTheDocument()
@@ -32,7 +32,7 @@ describe('Cost', () => {
       }
     })
 
-    render(<CostBlockDisplay {...cost} />)
+    render(<CostBlock {...cost.value} />)
     const costValue = screen.getByText('$20')
 
     expect(costValue).toBeInTheDocument()
@@ -50,7 +50,7 @@ describe('Cost', () => {
       }
     })
 
-    render(<CostBlockDisplay {...cost} />)
+    render(<CostBlock {...cost.value} />)
     const costValue = screen.getByText('$2 to $20')
 
     expect(costValue).toBeInTheDocument()
@@ -67,14 +67,14 @@ describe('Cost', () => {
       }
     })
 
-    render(<CostBlockDisplay {...cost} />)
+    render(<CostBlock {...cost.value} />)
     const costValue = screen.getByText('$2 and up')
 
     expect(costValue).toBeInTheDocument()
   })
 
   it('renders a step variant cost block', () => {
-    render(<CostBlockDisplay variant="step" {...cost} />)
+    render(<CostBlock variant="step" {...cost.value} />)
 
     expect(screen.getByText(/:/)).toBeInTheDocument()
   })

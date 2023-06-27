@@ -1,15 +1,20 @@
 import { TitleMd, TitleXs } from '@/design-system'
 import { If, Then, Else, When } from 'react-if'
 import { useTranslation } from 'next-i18next'
-import type { CostBlock } from '@/types'
+import type { TypeCostBlockValues } from '@/types'
 import { RichText } from './RichText'
 
-type CostBlockProps = CostBlock & {
+type CostBlockProps = TypeCostBlockValues & {
   variant?: string
 }
 
-export const CostBlockDisplay = ({ value, variant }: CostBlockProps) => {
-  const { cost: costType, flat_fee: flatFee, range, description } = value
+export const CostBlock = ({
+  cost: costType,
+  flat_fee: flatFee,
+  range,
+  description,
+  variant
+}: CostBlockProps) => {
   const { t } = useTranslation()
 
   let cost = ''

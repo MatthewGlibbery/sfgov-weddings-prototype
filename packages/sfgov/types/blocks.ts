@@ -12,37 +12,37 @@ export interface BlockType<T extends string = string, V = object> {
   id: string
 }
 
-export type PageBlock<
+export type TypePageBlock<
   T extends string = string,
   P extends PageData = PageData
 > = BlockType<T, P>
 
-export type StepType = 'number' | 'and' | 'or'
+export type TypeStepVariant = 'number' | 'and' | 'or'
 
-export type CostType = 'free' | 'flat_fee' | 'range' | 'minimum'
+export type TypeCostVariant = 'free' | 'flat_fee' | 'range' | 'minimum'
 
 interface RangeType {
   minimum: number
   maximum: number
 }
 
-export type LinkBlock = {
+export type TypeLinkValues = {
   link_to: string
   link_text: string
   url: string
   page?: MinimalPageData
 }
 
-export type CostValues = {
-  cost: CostType
+export type TypeCostBlockValues = {
+  cost: TypeCostVariant
   flat_fee?: number
   range?: RangeType
   description: string
 }
 
-export type CostBlock = BlockType<'cost', CostValues>
+export type TypeCostBlock = BlockType<'cost', TypeCostBlockValues>
 
-export type TileBlockValues = MinimalPageData & {
+export type TypeTileBlockValues = MinimalPageData & {
   title: string
   description: string
   url: string
@@ -51,45 +51,51 @@ export type TileBlockValues = MinimalPageData & {
   event_type?: string
 }
 
-export type TileBlock<T extends string = string> = BlockType<T, TileBlockValues>
+export type TypeTileBlock<T extends string = string> = BlockType<
+  T,
+  TypeTileBlockValues
+>
 
-export type NewsTileBlock = TileBlock<'news'>
-export type ContentTileBlock = TileBlock<'content'>
-export type QuickLinkBlock = TileBlock<'quicklink'>
-export type EventTileBlock = TileBlock<'event'>
-export type ServiceTileBlock = TileBlock<'service'>
-export type ResourceTileBlock = TileBlock<'page' | 'external_link'>
+export type TypeNewsTileBlock = TypeTileBlock<'news'>
+export type TypeContentTileBlock = TypeTileBlock<
+  'content' | 'page' | 'external_link'
+>
+export type TypeQuickLinkBlock = TypeTileBlock<'quick_links'>
+export type TypeEventTileBlock = TypeTileBlock<'event'>
 
-export type StepBlock = BlockType<
+export type TypeStepBlock = BlockType<
   'step',
   {
     title: string
-    step_type: StepType
+    step_type: TypeStepVariant
     optional?: boolean
-    cost: CostBlock[]
+    cost: TypeCostBlock[]
     time?: string
     step_description?: string
     related_content_transactions?: RelatedContentTransactionBlock[]
   }
 >
 
-export type ImageBlock = WagtailImageData
+export type TypeImageBlock = BlockType<'image', WagtailImageData>
 
-type TitleAndTextValues = {
+export type TypeTitleAndTextValues = {
   title: string
   text: string
 }
 
-export type TitleAndTextBlock = BlockType<'title_and_text', TitleAndTextValues>
+export type TypeTitleAndTextBlock = BlockType<
+  'title_and_text',
+  TypeTitleAndTextValues
+>
 
-export type EmailValues = {
+export type TypeEmailValues = {
   title: string
   email: string
 }
 
-export type EmailBlock = BlockType<'email', EmailValues>
+export type TypeEmailBlock = BlockType<'email', TypeEmailValues>
 
-export type LocationValues = {
+export type TypeLocationValues = {
   agency?: AgencyPage
   organization?: string
   addressee?: string
@@ -102,17 +108,20 @@ export type LocationValues = {
   zip: string
 }
 
-export type LocationBlock = BlockType<'address', LocationValues>
+export type TypeLocationBlock = BlockType<'address', TypeLocationValues>
 
-export type PhoneNumberValues = {
+export type TypePhoneNumberValues = {
   owner: string
   phone_number: string
   details: string
 }
 
-export type PhoneNumberBlockType = BlockType<'phone_number', PhoneNumberValues>
+export type TypePhoneNumberBlock = BlockType<
+  'phone_number',
+  TypePhoneNumberValues
+>
 
-export type DateTimeValues = {
+export type TypeDateTimeValues = {
   start_date: string
   start_time: string
   end_date: string
@@ -120,108 +129,115 @@ export type DateTimeValues = {
   is_all_day: boolean
   include_end_date_time: string // TODO: convert to a Boolean later!
 }
-export type DateTimeBlock = BlockType<string, DateTimeValues>
+export type TypeDateTimeBlock = BlockType<string, TypeDateTimeValues>
 
-export type CallToActionValues = {
+export type TypeCallToActionValues = {
   title: string
-  link: LinkBlock
+  link: TypeLinkValues
 }
 
-export type CallToActionBlock = BlockType<string, CallToActionValues>
+export type TypeCallToActionBlock = BlockType<string, TypeCallToActionValues>
 
 /* Transaction Page */
 
-export type TextBlock = BlockType<'text', string>
+export type TypeTextBlock = BlockType<'text', string>
 
-export type ButtonLinkBlock = BlockType<'button_link', LinkBlock>
+export type TypeButtonLinkBlock = BlockType<'button_link', TypeLinkValues>
 
-export type WhatToDoType = 'online' | 'in_person' | 'phone' | 'email' | 'mail'
+export type TypeWhatToDoVariant =
+  | 'online'
+  | 'in_person'
+  | 'phone'
+  | 'email'
+  | 'mail'
 
-export type CalloutBlock = BlockType<'callout', string>
+export type TypeCalloutBlock = BlockType<'callout', string>
 
-export type StepSpecificsTypes =
-  | LocationBlock
-  | CalloutBlock
-  | EmailBlock
-  | ButtonLinkBlock
-  | PhoneNumberBlockType
-  | TextBlock // TODO: add document upload type once we handle uploads
+export type TypeStepSpecificsVariant =
+  | TypeLocationBlock
+  | TypeCalloutBlock
+  | TypeEmailBlock
+  | TypeButtonLinkBlock
+  | TypePhoneNumberBlock
+  | TypeTextBlock // TODO: add document upload type once we handle uploads
 
-export type WhatToDoStepBlock = BlockType<
+export type TypeWhatToDoStepBlock = BlockType<
   'what_to_do_step',
   {
     step_title: string
-    step_specifics: StepSpecificsTypes[]
+    step_specifics: TypeStepSpecificsVariant[]
   }
 >
 
-export type WhatToDoBlock = BlockType<
-  WhatToDoType,
-  (CalloutBlock | WhatToDoStepBlock)[]
+export type TypeWhatToDoBlock = BlockType<
+  TypeWhatToDoVariant,
+  (TypeCalloutBlock | TypeWhatToDoStepBlock)[]
 >
 
-export type ResourceBlockValue = PageData & {
+export type TypeResourcesSectionValues = {
+  resources: TypeContentTileBlock[]
   title: string
-  url: string
-  description: string
 }
-export type ResourceBlock = BlockType<
-  'page' | 'external_link',
-  ResourceBlockValue
->
-export type ResourceSectionValues = {
-  title: string
-  resources: ResourceBlock[]
-}
-export type ResourcesSectionBlock = BlockType<
-  'resource_section',
-  ResourceSectionValues
->
 
-export type ServiceBlock = {
+export type TypeServicesSectionValues = {
+  services: TypeContentTileBlock[]
   title: string
-  url: string
-  description: string
 }
-export type ServicesSectionValues = {
-  title: string
-  services: MinimalPageData[]
-}
-export type ServicesSectionBlock = BlockType<'services', ServicesSectionValues>
-export type SocialMediaBlockValues = BlockType<
+
+export type TypeSocialMediaBlockValues = BlockType<
   'facebook' | 'twitter' | 'instagram',
   string
 >
 
-export type SocialMediaBlock = BlockType<
+export type TypeSocialMediaBlock = BlockType<
   'social_media',
-  { social_media: SocialMediaBlockValues[] }
+  { social_media: TypeSocialMediaBlockValues[] }
 >
 
-export type SpotlightValues = {
+export type TypeSpotlightBlockValues = {
   title: string
   description: string
   image: WagtailImageData
   full_size_banner: boolean
-  button: LinkBlock
+  button: TypeLinkValues
 }
-export type SpotlightBlock = BlockType<'spotlight', SpotlightValues>
 
-export type TimelineValues = {
+export type TypeSpotlightBlock = BlockType<
+  'spotlight',
+  TypeSpotlightBlockValues
+>
+
+export type TypeTimelineBlockValues = {
   title: string
-  timeline_items: TitleAndTextValues[]
+  timeline_items: TypeTitleAndTextValues[]
 }
-export type TimelineBlock = BlockType<'timeline', TimelineValues>
+
+export type TypeResourcesSectionBlock = BlockType<
+  'resources',
+  TypeResourcesSectionValues
+>
+
+export type TypeServicesSectionBlock = BlockType<
+  'services',
+  TypeServicesSectionValues
+>
+
+export type TypeTimelineBlock = BlockType<'timeline', TypeTimelineBlockValues>
 
 export type ContentSectionTypes =
-  | ButtonLinkBlock
-  | PhoneNumberBlockType
-  | ResourcesSectionBlock
-  | SpotlightBlock
-  | TimelineBlock
-  | TextBlock
-export type ContentSectionValues = {
+  | TypeButtonLinkBlock
+  | TypePhoneNumberBlock
+  | TypeResourcesSectionBlock
+  | TypeSpotlightBlock
+  | TypeTimelineBlock
+  | TypeTextBlock
+
+export type TypeContentSectionBlockValues = {
   title: string
   section_content: ContentSectionTypes[]
 }
-export type ContentSectionBlock = BlockType<'section', ContentSectionValues>
+
+export type TypeContentSectionBlock = BlockType<
+  'section',
+  TypeContentSectionBlockValues
+>

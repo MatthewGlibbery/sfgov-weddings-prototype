@@ -15,8 +15,8 @@ import type { TransactionPageData } from '@/types'
 import { PageWrapper } from './PageWrapper'
 import {
   Accordion,
+  CostBlock,
   ContactFooter,
-  CostBlockDisplay,
   RelatedContentList,
   RichText,
   TitleAndText,
@@ -79,12 +79,12 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             <IconInfo width={40} />
             <TitleLg as="h2">{t('What to Know')}</TitleLg>
           </div>
-          <When condition={!!cost[0]}>
-            <CostBlockDisplay {...cost[0]} />
+          <When condition={!!cost?.[0]?.value}>
+            {() => <CostBlock {...cost[0].value} />}
           </When>
           {thingsToKnow.map((thing) => (
             <div key={thing.id} data-testid="things_to_know-section">
-              <TitleAndText block={thing} />
+              <TitleAndText {...thing.value} />
             </div>
           ))}
         </div>
@@ -100,7 +100,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             className="flex flex-col mb-40 gap-y-28"
             data-testid="custom_section-section"
           >
-            <TitleAndText block={block} />
+            <TitleAndText {...block.value} />
           </div>
         ))}
         <When condition={!!specialCases.length}>
@@ -126,7 +126,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             className="flex flex-col mb-40 gap-y-28"
             data-testid="good_for_community-section"
           >
-            <TitleAndText block={block} />
+            <TitleAndText {...block.value} />
           </div>
         ))}
         <When condition={!!relatedContentPages.length}>

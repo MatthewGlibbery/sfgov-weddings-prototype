@@ -1,5 +1,5 @@
 import { When } from 'react-if'
-import { CallToActionValues } from '@/types'
+import { TypeCallToActionValues } from '@/types'
 import { Button, TitleMd } from '@/design-system'
 
 /* FYI: In current sf.gov there are CTA variants that aren't accounted for
@@ -7,7 +7,7 @@ import { Button, TitleMd } from '@/design-system'
  * redesigned CTA, adding them should be a simple additional prop (I think)
  */
 
-export const CallToAction = ({ title, link }: CallToActionValues) => (
+export const CallToAction = ({ title, link }: TypeCallToActionValues) => (
   <div className="flex flex-col gap-y-20">
     <When condition={title}>
       <TitleMd>{title}</TitleMd>

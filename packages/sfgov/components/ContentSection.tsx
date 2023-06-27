@@ -1,15 +1,15 @@
 import { BodyText, Button, TitleMd } from '@/design-system'
-import { ContentSectionValues } from '@/types'
+import { TypeContentSectionBlockValues } from '@/types'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { Spotlight } from './Spotlight'
 import { RichText } from './RichText'
 import { Timeline } from './Timeline'
-import { ResourcesSection } from './ResourcesSection'
+import { ServicesAndResourcesSection } from './ServicesAndResourcesSection'
 
 export const ContentSection = ({
   title,
   section_content: sectionContent
-}: ContentSectionValues) => {
+}: TypeContentSectionBlockValues) => {
   return (
     <div>
       <TitleMd as="h3">{title}</TitleMd>
@@ -23,8 +23,13 @@ export const ContentSection = ({
             )
           case 'phone_number':
             return <PhoneNumberBlock {...block.value} />
-          case 'resource_section':
-            return <ResourcesSection {...block.value} />
+          case 'resources':
+            return (
+              <ServicesAndResourcesSection
+                title={block.value.title}
+                tiles={block.value.resources}
+              />
+            )
           case 'spotlight':
             return <Spotlight {...block} />
           case 'timeline':
@@ -35,6 +40,7 @@ export const ContentSection = ({
                 <RichText html={block.value} />
               </BodyText>
             )
+          /* istanbul ignore next */
           default:
             return <></>
         }

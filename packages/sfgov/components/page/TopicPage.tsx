@@ -6,10 +6,9 @@ import type { TopicPageData } from '@/types'
 import { PageWrapper } from './PageWrapper'
 import { Spotlight } from '../Spotlight'
 import { ContentSection } from '../ContentSection'
-import { ResourcesSection } from '../ResourcesSection'
+import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
 
 import { BigDesc, Container, DisplayLg, TitleXl } from '@/design-system'
-import { ServicesSection } from '../ServicesSection'
 
 export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -70,10 +69,10 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
             {t('Services')}
           </TitleXl>
           {services.map((serviceSection) => (
-            <ServicesSection
+            <ServicesAndResourcesSection
               key={serviceSection.id}
               title={serviceSection.value.title}
-              services={serviceSection.value.services}
+              tiles={serviceSection.value.services}
             />
           ))}
         </When>
@@ -97,10 +96,10 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
             {t('Resources')}
           </TitleXl>
           {resources.map((resourceSection) => (
-            <ResourcesSection
+            <ServicesAndResourcesSection
               key={resourceSection.id}
               title={resourceSection.value.title}
-              resources={resourceSection.value.resources}
+              tiles={resourceSection.value.resources}
             />
           ))}
         </When>

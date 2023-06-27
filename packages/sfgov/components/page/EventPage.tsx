@@ -7,17 +7,21 @@ import {
   TitleLg,
   TitleXs
 } from '@/design-system'
-import type { EmailBlock, EventPageData, PhoneNumberBlockType } from '@/types'
+import type {
+  TypeEmailBlock,
+  EventPageData,
+  TypePhoneNumberBlock
+} from '@/types'
 import { RelatedContentList } from '../RelatedContentList'
 // import { Image } from '../Image'
 import {
   PageWrapper,
-  CostBlockDisplay,
+  CostBlock,
   DateTimeBlock,
   LocationBlock,
   CallToAction,
   PhoneNumberBlock,
-  EmailBlockLink
+  EmailBlock
 } from '../'
 import { When } from 'react-if'
 import type { ComponentType } from 'react'
@@ -37,8 +41,8 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
     related_content_topics: topics
   } = page
 
-  const phoneNumbers: PhoneNumberBlockType[] = []
-  const emails: EmailBlock[] = []
+  const phoneNumbers: TypePhoneNumberBlock[] = []
+  const emails: TypeEmailBlock[] = []
   contact.forEach((item) =>
     item.type === 'email' ? emails.push(item) : phoneNumbers.push(item)
   )
@@ -60,9 +64,11 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
         </When>
         <div className="flex justify-evenly gap-x-20">
           <When condition={!!cost?.[0]?.value}>
-            <InfoWrapper>
-              <CostBlockDisplay {...cost[0]} />
-            </InfoWrapper>
+            {() => (
+              <InfoWrapper>
+                <CostBlock {...cost[0].value} />
+              </InfoWrapper>
+            )}
           </When>
           {/* TODO: Date Time looks to be required in Drupal. If
           so, remove conditional below after Wagtail is updated */}
@@ -112,7 +118,7 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
                   {emails.map((email) => (
                     <span key={email.id}>
                       <BodyText>{email.value.title}</BodyText>
-                      <EmailBlockLink key={email.id} {...email.value} />
+                      <EmailBlock key={email.id} {...email.value} />
                     </span>
                   ))}
                 </When>

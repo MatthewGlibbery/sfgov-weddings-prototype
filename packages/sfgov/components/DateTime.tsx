@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import { When } from 'react-if'
 
-import type { DateTimeValues } from '@/types'
+import type { TypeDateTimeValues } from '@/types'
 import { BodyText, TitleXs } from '@/design-system'
 
 type ComposedDateProps = {
@@ -199,7 +199,7 @@ export const DateTimeBlock = ({
   end_time,
   is_all_day,
   include_end_date_time
-}: DateTimeValues) => {
+}: TypeDateTimeValues) => {
   let composedTimeProps = {} as ComposedTimeProps
   if (!is_all_day && start_date && start_time) {
     let endDateTime = ''

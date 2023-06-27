@@ -1,5 +1,4 @@
 import {
-  BodyText,
   classed,
   IconMail,
   IconPhone,
@@ -7,8 +6,8 @@ import {
   TitleLg,
   TitleMd
 } from '@/design-system'
-import { EmailBlockLink, Image, RichText, SocialMedia } from './'
-import type { SocialMediaBlockValues, WagtailImageData } from '@/types'
+import { EmailBlock, Image, RichText, SocialMedia } from './'
+import type { TypeSocialMediaBlockValues, WagtailImageData } from '@/types'
 import { When } from 'react-if'
 
 type HeroProfileProps = {
@@ -17,7 +16,7 @@ type HeroProfileProps = {
   jobTitle: string
   jobTitleLine2: string
   image: WagtailImageData
-  socialMedia: SocialMediaBlockValues[]
+  socialMedia: TypeSocialMediaBlockValues[]
   biography: string
   email: string
   phone: string
@@ -55,7 +54,7 @@ export const HeroProfile = ({
       <RichText html={biography} />
       <FlexWithSpacing>
         <IconMail width={40} />
-        <EmailBlockLink email={email} title={email} />
+        <EmailBlock email={email} title={email} />
       </FlexWithSpacing>
       <FlexWithSpacing>
         <IconPhone width={40} />

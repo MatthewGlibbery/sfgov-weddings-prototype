@@ -1,12 +1,12 @@
 import { EmailBlockFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
-import { EmailBlockLink } from './EmailBlockLink'
+import { EmailBlock } from './EmailBlock'
 
 describe('EmailBlockLink', () => {
   const email = EmailBlockFactory.make()
 
   it('renders an email anchor tag', () => {
-    render(<EmailBlockLink {...email.value} />)
+    render(<EmailBlock {...email.value} />)
 
     const emailLink = screen.getByRole('link')
     expect(emailLink).toBeInTheDocument()
@@ -15,13 +15,13 @@ describe('EmailBlockLink', () => {
   it('does not render without value.email', () => {
     expect(
       // @ts-expect-error simulating bad data
-      render(<EmailBlockLink value={null} />).container
+      render(<EmailBlock value={null} />).container
     ).toBeEmptyDOMElement()
   })
 
   it('renders value.email if the title is falsy or empty', () => {
     const email = 'foo@bar.com'
-    render(<EmailBlockLink email={email} title="" />)
+    render(<EmailBlock email={email} title="" />)
 
     const link = screen.getByRole('link')
     expect(link).toBeInTheDocument()
