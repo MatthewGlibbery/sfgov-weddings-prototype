@@ -40,9 +40,11 @@ import {
   TopicPageData,
   TypeContentSectionBlock,
   TypeImageBlock,
-  NewsPageData
+  NewsPageData,
+  AboutPageData
 } from '@/types'
 import {
+  ABOUT_PAGE_TYPE,
   EVENT_PAGE_TYPE,
   INFO_PAGE_TYPE,
   PROFILE_PAGE_TYPE,
@@ -589,6 +591,40 @@ export const SocialMediaFactory = factory<TypeSocialMediaBlock>((gen) => ({
       SocialMediaValuesFactory.make({ type: 'twitter' })
     ]
   }
+}))
+
+export const AboutPageFactory = factory<AboutPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: ABOUT_PAGE_TYPE
+  }),
+  title: 'About',
+  description: 'About description',
+  agency: PageFactory.make(),
+  about_info: [
+    TitleAndTextFactory.make({
+      value: {
+        title: 'About info title and text 1',
+        text: 'About info title and text 1 text'
+      }
+    }),
+    TitleAndTextFactory.make({
+      value: {
+        title: 'About info title and text 2',
+        text: 'About info title and text 2 text'
+      }
+    })
+  ],
+  resources: [
+    {
+      type: 'resources',
+      value: {
+        title: 'Resource section 1',
+        resources: [GenericTileFactory.make()]
+      },
+      id: gen.datatype.uuid()
+    }
+  ]
 }))
 
 export const TopicPageFactory = factory<TopicPageData>((gen) => ({

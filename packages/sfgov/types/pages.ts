@@ -161,3 +161,10 @@ export type NewsPageData = PageData & {
   news_type: string
   related_content_agencies: RelatedContentData[]
 }
+
+export type AboutPageData = PageData & {
+  description: string
+  agency: RelatedContentData[]
+  about_info: TypeTitleAndTextBlock[]
+  resources: TypeResourcesSectionBlock[]
+}

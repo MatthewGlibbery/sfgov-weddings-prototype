@@ -1,3 +1,4 @@
+export * from './AboutPage'
 export * from './EventPage'
 export * from './InformationPage'
 export * from './NewsPage'
