@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import { When } from 'react-if'
 
 import type { TypeDateTimeValues } from '@/types'
-import { BodyText, TitleXs } from '@/design-system'
+import { BodyText, HeadingXs } from '@/design-system'
 
 type ComposedDateProps = {
   startDateInput: string
@@ -45,6 +45,7 @@ export const ComposedDate = ({
     const formatter = Intl.DateTimeFormat(locale, { dateStyle: 'full' })
     const startDate = new Date(`${startDateInput}T00:00:00`)
 
+    console.log(startDateInput)
     if (!endDateInput || startDateInput === endDateInput) {
       return (
         <time dateTime={startDateInput}>{formatter.format(startDate)}</time>
@@ -214,9 +215,9 @@ export const DateTimeBlock = ({
 
   return (
     <div>
-      <TitleXs as="h2" className="mb-20">
+      <HeadingXs as="h2" className="mb-20">
         Date
-      </TitleXs>
+      </HeadingXs>
       <BodyText>
         <ComposedDate startDateInput={start_date} endDateInput={end_date} />
         <When condition={!!Object.keys(composedTimeProps).length}>

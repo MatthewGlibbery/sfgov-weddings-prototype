@@ -53,12 +53,12 @@ module.exports = {
       path: ['red', '400']
     },
     500: {
-      value: '#8b8b8b',
+      value: '#667085',
       type: 'color',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#8b8b8b',
+        value: '#667085',
         type: 'color'
       },
       name: '500',
@@ -66,12 +66,12 @@ module.exports = {
       path: ['red', '500']
     },
     600: {
-      value: '#707070',
+      value: '#475467',
       type: 'color',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#707070',
+        value: '#475467',
         type: 'color'
       },
       name: '600',

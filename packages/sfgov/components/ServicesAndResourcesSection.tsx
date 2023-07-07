@@ -1,4 +1,4 @@
-import { TitleLg } from '@/design-system'
+import { HeadingXl } from '@/design-system'
 import { TypeContentTileBlock } from '@/types'
 import { ServiceAndResourceTileList } from './Tile'
 
@@ -21,9 +21,9 @@ export const ServicesAndResourcesSection = ({
 
   return (
     <div>
-      <TitleLg as="h3" className="m-0 mb-28">
+      <HeadingXl as="h3" className="m-0 mb-28">
         {title}
-      </TitleLg>
+      </HeadingXl>
       <ServiceAndResourceTileList links={items} />
     </div>
   )

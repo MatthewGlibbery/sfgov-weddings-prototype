@@ -1,6 +1,6 @@
 import { When } from 'react-if'
 import { TypeCallToActionValues } from '@/types'
-import { Button, TitleMd } from '@/design-system'
+import { Button, HeadingMd } from '@/design-system'
 
 /* FYI: In current sf.gov there are CTA variants that aren't accounted for
  * here nor in the Wagtail block type. Should we need them for the
@@ -10,7 +10,7 @@ import { Button, TitleMd } from '@/design-system'
 export const CallToAction = ({ title, link }: TypeCallToActionValues) => (
   <div className="flex flex-col gap-y-20">
     <When condition={title}>
-      <TitleMd>{title}</TitleMd>
+      <HeadingMd>{title}</HeadingMd>
     </When>
     <When condition={!!(link.url && link.link_text)}>
       <Button as="a" href={link.url} aria-label={`${title} ${link.link_text}`}>

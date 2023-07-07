@@ -5,13 +5,12 @@ import {
   BodyText,
   SmallText,
   BigDesc,
-  TitleXs,
-  TitleSm,
-  TitleMd,
-  TitleLg,
-  TitleXl,
-  DisplaySm,
+  HeadingXs,
+  HeadingSm,
+  HeadingMd,
+  HeadingXl,
   DisplayLg,
+  DisplayXXXl,
   Monospace
 } from './Text'
 
@@ -44,43 +43,36 @@ describe('Text', () => {
     expect(text).toBeInTheDocument()
   })
 
-  it('renders a styled TitleXs element', () => {
-    render(<TitleXs>Hi!</TitleXs>)
+  it('renders a styled HeadingXs element', () => {
+    render(<HeadingXs>Hi!</HeadingXs>)
 
     const text = screen.getByText('Hi!')
     expect(text).toBeInTheDocument()
   })
 
-  it('renders a styled TitleSm element', () => {
-    render(<TitleSm>Hi!</TitleSm>)
+  it('renders a styled HeadingSm element', () => {
+    render(<HeadingSm>Hi!</HeadingSm>)
 
     const text = screen.getByText('Hi!')
     expect(text).toBeInTheDocument()
   })
 
-  it('renders a styled TitleMd element', () => {
-    render(<TitleMd>Hi!</TitleMd>)
+  it('renders a styled HeadingMd element', () => {
+    render(<HeadingMd>Hi!</HeadingMd>)
 
     const text = screen.getByText('Hi!')
     expect(text).toBeInTheDocument()
   })
 
-  it('renders a styled TitleLg element', () => {
-    render(<TitleLg>Hi!</TitleLg>)
+  it('renders a styled HeadingXl element', () => {
+    render(<HeadingXl>Hi!</HeadingXl>)
 
     const text = screen.getByText('Hi!')
     expect(text).toBeInTheDocument()
   })
 
   it('renders a styled TitleXl element', () => {
-    render(<TitleXl>Hi!</TitleXl>)
-
-    const text = screen.getByText('Hi!')
-    expect(text).toBeInTheDocument()
-  })
-
-  it('renders a styled DisplaySm element', () => {
-    render(<DisplaySm>Hi!</DisplaySm>)
+    render(<HeadingXl>Hi!</HeadingXl>)
 
     const text = screen.getByText('Hi!')
     expect(text).toBeInTheDocument()
@@ -88,6 +80,13 @@ describe('Text', () => {
 
   it('renders a styled DisplayLg element', () => {
     render(<DisplayLg>Hi!</DisplayLg>)
+
+    const text = screen.getByText('Hi!')
+    expect(text).toBeInTheDocument()
+  })
+
+  it('renders a styled DisplayXXXl element', () => {
+    render(<DisplayXXXl>Hi!</DisplayXXXl>)
 
     const text = screen.getByText('Hi!')
     expect(text).toBeInTheDocument()

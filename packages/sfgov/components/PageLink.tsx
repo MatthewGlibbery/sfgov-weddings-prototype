@@ -26,6 +26,6 @@ const PageLinkImpl = (
   )
 }
 
-export const PageLink = classed(PageLinkImpl, 'text-action')
+export const PageLink = classed(PageLinkImpl, 'text-grey500')
 
 export type PageLinkProps = ComponentProps<typeof PageLink>

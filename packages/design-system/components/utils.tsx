@@ -1,6 +1,12 @@
 // eslint-disable-next-line import/no-internal-modules
 import { createClassed } from '@tw-classed/react'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
+
+const twMerge = extendTailwindMerge({
+  classGroups: {
+    'font-size': [{ text: ['heading-md', 'heading-xl'] }]
+  }
+})
 
 export const { classed } = createClassed({
   merger: twMerge

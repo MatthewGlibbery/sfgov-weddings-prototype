@@ -1,7 +1,7 @@
 import {
   classes,
   SmallText,
-  TitleMd,
+  HeadingMd,
   IconArrowRight,
   IconCalendar,
   IconDocument
@@ -60,7 +60,7 @@ export const NewsTile = ({ link }: TileProps) => (
 export const ServiceAndResourceTile = ({ link }: TileProps) => {
   return (
     <BaseTile href={link.url}>
-      <TitleMd className="m-0 mb-8">{link.title}</TitleMd>
+      <HeadingMd className="m-0 mb-8">{link.title}</HeadingMd>
       <div>{link.description}</div>
     </BaseTile>
   )
@@ -69,7 +69,7 @@ export const ServiceAndResourceTile = ({ link }: TileProps) => {
 export const QuickLink = ({ link }: TileProps) => (
   <BaseTile href={link.page.meta.html_url}>
     <IconDocument className="w-20 md:w-40" />
-    <TitleMd className="my-12">{link.title}</TitleMd>
+    <HeadingMd className="my-12">{link.title}</HeadingMd>
     <div>{link.description}</div>
     <IconArrowRight className="self-end" width={20} />
   </BaseTile>
@@ -83,7 +83,7 @@ export const EventTile = ({ link }: TileProps) => (
       <IconCalendar />
       <SmallText>{link.event_type}</SmallText>
     </div>
-    <TitleMd className="my-12">{link.title}</TitleMd>
+    <HeadingMd className="my-12">{link.title}</HeadingMd>
     <div>{link.description}</div>
   </BaseTile>
 )

@@ -1,4 +1,4 @@
-import { BigDesc, BodyText, Button, classed, TitleMd } from '@/design-system'
+import { BigDesc, BodyText, Button, classed, HeadingMd } from '@/design-system'
 import { When } from 'react-if'
 import { Callout } from './Callout'
 import { EmailBlock } from './EmailBlock'
@@ -82,9 +82,9 @@ export const WhatToDo = (props: Types.TypeWhatToDoBlock) => {
 
   return (
     <>
-      <TitleMd as="h3" data-testid="whatToDoSection">
+      <HeadingMd as="h3" data-testid="whatToDoSection">
         {type}
-      </TitleMd>
+      </HeadingMd>
       {value.map((block) => {
         if (block.type === 'what_to_do_step') i++
         return (

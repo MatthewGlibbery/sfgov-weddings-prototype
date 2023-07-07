@@ -8,7 +8,7 @@ import {
   DisplayLg,
   IconInfo,
   IconQuestion,
-  TitleLg
+  HeadingXl
 } from '@/design-system'
 import type { TransactionPageData } from '@/types'
 
@@ -77,7 +77,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
         >
           <div className="flex mb-28 gap-x-8">
             <IconInfo width={40} />
-            <TitleLg as="h2">{t('What to Know')}</TitleLg>
+            <HeadingXl as="h2">{t('What to Know')}</HeadingXl>
           </div>
           <When condition={!!cost?.[0]?.value}>
             {() => <CostBlock {...cost[0].value} />}
@@ -89,7 +89,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           ))}
         </div>
         <div className="flex flex-col my-40 gap-y-28">
-          <TitleLg as="h2">{t('What to Do')}</TitleLg>
+          <HeadingXl as="h2">{t('What to Do')}</HeadingXl>
           {whatToDo.map((what) => (
             <WhatToDo key={what.id} {...what} />
           ))}
@@ -105,9 +105,9 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
         ))}
         <When condition={!!specialCases.length}>
           <div className="mb-40" data-testid="special_cases-section">
-            <TitleLg as="h2" className="mb-20">
+            <HeadingXl as="h2" className="mb-20">
               {t('Special cases')}
-            </TitleLg>
+            </HeadingXl>
             {specialCases.map((item, i) => (
               <Accordion
                 key={item.value.title}
@@ -137,9 +137,9 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           />
         </When>
         <When condition={!!getHelp.length}>
-          <TitleLg as="h2">
+          <HeadingXl as="h2">
             <IconQuestion width={32} /> {t('Get Help')}
-          </TitleLg>
+          </HeadingXl>
           <ContactFooter items={getHelp} />
         </When>
       </Container>

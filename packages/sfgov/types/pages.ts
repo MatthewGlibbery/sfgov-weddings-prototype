@@ -151,3 +151,13 @@ export type TopicPageData = PageData & {
   resources: TypeResourcesSectionBlock[]
   related_content_agencies: RelatedContentData[]
 }
+
+export type NewsPageData = PageData & {
+  headline: string
+  date: string
+  image: WagtailImageData
+  abstract: string
+  body: string
+  news_type: string
+  related_content_agencies: RelatedContentData[]
+}

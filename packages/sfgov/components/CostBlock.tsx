@@ -1,4 +1,4 @@
-import { TitleMd, TitleXs } from '@/design-system'
+import { HeadingMd, HeadingXs } from '@/design-system'
 import { If, Then, Else, When } from 'react-if'
 import { useTranslation } from 'next-i18next'
 import type { TypeCostBlockValues } from '@/types'
@@ -36,19 +36,19 @@ export const CostBlock = ({
     <div data-testid="step-cost">
       <If condition={variant === 'step'}>
         <Then>
-          <TitleMd as="h3" className={classes}>
+          <HeadingMd as="h3" className={classes}>
             {t('Cost')}:
-          </TitleMd>
+          </HeadingMd>
           <span>{cost}</span>.
           <When condition={description}>
             <RichText html={description} />
           </When>
         </Then>
         <Else>
-          <TitleMd as="h3" className={classes}>
+          <HeadingMd as="h3" className={classes}>
             {t('Cost')}
-          </TitleMd>
-          <TitleXs className="mb-12">{cost}</TitleXs>
+          </HeadingMd>
+          <HeadingXs className="mb-12">{cost}</HeadingXs>
           <When condition={description}>
             <div>
               <RichText html={description} />

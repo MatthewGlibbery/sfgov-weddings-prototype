@@ -1,4 +1,4 @@
-import { TitleSm } from './Text'
+import { HeadingSm } from './Text'
 import { classed } from './utils'
 import type { ComponentProps, ComponentType } from '../types'
 
@@ -18,14 +18,14 @@ export const StackedItem = ({
   // TODO: handle icons as paths instead of assuming an Icon element
   return (
     <StyledItem data-testid="stacked-content-item" {...rest}>
-      <TitleSm className="flex items-center mb-20">
+      <HeadingSm className="flex items-center mb-20">
         {Icon ? (
           <div className="flex pr-8" data-testid="stacked-content-item-icon">
             <Icon width={24} />
           </div>
         ) : null}
         {title}
-      </TitleSm>
+      </HeadingSm>
       {children}
     </StyledItem>
   )

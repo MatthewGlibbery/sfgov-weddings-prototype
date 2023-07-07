@@ -1,6 +1,6 @@
 import { When } from 'react-if'
 import { TypeSpotlightBlock, TypeSpotlightBlockValues } from '@/types'
-import { BodyText, Button, TitleMd } from '@/design-system'
+import { BodyText, Button, HeadingMd } from '@/design-system'
 import { Image } from './Image'
 
 export const Spotlight = ({ value }: TypeSpotlightBlock) => {
@@ -15,7 +15,7 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
   return (
     <div className="flex flex-col gap-y-20">
       <When condition={title}>
-        <TitleMd>{title}</TitleMd>
+        <HeadingMd>{title}</HeadingMd>
       </When>
       <When condition={description}>
         <BodyText className="mb-12" data-testid="step-description">

@@ -1,4 +1,4 @@
-import { BodyText, Button, TitleMd } from '@/design-system'
+import { BodyText, Button, HeadingMd } from '@/design-system'
 import { TypeContentSectionBlockValues } from '@/types'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { Spotlight } from './Spotlight'
@@ -12,7 +12,7 @@ export const ContentSection = ({
 }: TypeContentSectionBlockValues) => {
   return (
     <div>
-      <TitleMd as="h3">{title}</TitleMd>
+      <HeadingMd as="h3">{title}</HeadingMd>
       {sectionContent.map((block) => {
         switch (block.type) {
           case 'button_link':

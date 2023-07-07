@@ -17,6 +17,8 @@ module.exports = {
     grey200: colorTokens.grey[200].value,
     grey300: colorTokens.grey[300].value,
     grey400: colorTokens.grey[400].value,
+    grey500: colorTokens.grey[500].value,
+    grey600: colorTokens.grey[600].value,
     grey700: colorTokens.grey[700].value,
     purple100: colorTokens.purple[100].value,
     purple200: colorTokens.purple[200].value,

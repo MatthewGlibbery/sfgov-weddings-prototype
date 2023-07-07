@@ -1,5 +1,5 @@
 import { When } from 'react-if'
-import { BodyText, classed, classes, Label, TitleMd } from '@/design-system'
+import { BodyText, classed, classes, Label, HeadingMd } from '@/design-system'
 import { PageLink } from './PageLink'
 import { CostBlock } from './CostBlock'
 import type { PageData, TypeStepBlock, TypeCostBlockValues } from '@/types'
@@ -60,12 +60,12 @@ export const Step = ({ step: { id, value: step }, index, last }: StepType) => {
     <StepContainer last={last} data-testid={`step-${id}`}>
       <div className="basis-[5%]">
         <StepBadge isAndOr={isAndOr} data-testid="step-badge">
-          <TitleMd>{isAndOr ? step.step_type : index}</TitleMd>
+          <HeadingMd>{isAndOr ? step.step_type : index}</HeadingMd>
         </StepBadge>
       </div>
       <div className="flex justify-between basis-[90%] gap-y-16 md:flex-row">
         <div className="basis-1/3">
-          <TitleMd className="mb-12">{step.title}</TitleMd>
+          <HeadingMd className="mb-12">{step.title}</HeadingMd>
           <When condition={step.optional}>
             <div
               className="inline-flex p-4 px-12 bg-grey200 mb-12"

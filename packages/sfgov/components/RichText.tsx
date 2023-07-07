@@ -59,7 +59,8 @@ export const RichText = (props: RichTextProps) => {
         return
       }
 
-      const { tagName, attribs } = node
+      const { tagName, attribs, next, prev } = node
+
       if (!isAllowedElement(tagName)) {
         console.warn(
           'skipping forbidden element "%s" with attributes:',
@@ -80,8 +81,30 @@ export const RichText = (props: RichTextProps) => {
         )
       )
 
-      // @ts-expect-error this is dumb
+      // The following two if statements are
+      // for creating the pull quote formatting
+      // for the News content type
+
+      if (next?.tagName === 'blockquote') {
+        return <></>
+      }
+
+      if (tagName === 'blockquote' && prev?.tagName === 'p') {
+        return (
+          <div className="flex flex-col lg:flex-row lg:w-[110%] lg:space-x-28">
+            <p className="mb-20 lg:mb-0 lg:w-1/2">
+              {domToReact(prev.children, options)}
+            </p>
+            {/* @ts-expect-error this is dumb */}
+            <Component {...props}>
+              {domToReact(node.children, options)}
+            </Component>
+          </div>
+        )
+      }
+
       return (
+        // @ts-expect-error this is dumb
         <Component {...props}>{domToReact(node.children, options)}</Component>
       )
     }

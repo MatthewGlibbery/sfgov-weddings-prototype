@@ -4,8 +4,8 @@ import {
   BodyText,
   Container,
   DisplayLg,
-  TitleLg,
-  TitleXs
+  HeadingXl,
+  HeadingXs
 } from '@/design-system'
 import type {
   TypeEmailBlock,
@@ -79,7 +79,7 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
           </When>
           <When condition={!!location?.[0]?.value?.agency?.title}>
             <InfoWrapper>
-              <TitleXs className="mb-20">Location</TitleXs>
+              <HeadingXs className="mb-20">Location</HeadingXs>
               <BodyText>{location[0]?.value?.agency?.title}</BodyText>
             </InfoWrapper>
           </When>
@@ -106,15 +106,15 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
             </When>
             <When condition={!!phoneNumbers.length || !!emails.length}>
               <SidebarItemWrapper>
-                <TitleLg>Contact</TitleLg>
+                <HeadingXl>Contact</HeadingXl>
                 <When condition={!!phoneNumbers.length}>
-                  <TitleXs>Phone</TitleXs>
+                  <HeadingXs>Phone</HeadingXs>
                   {phoneNumbers.map(({ id, value }) => (
                     <PhoneNumberBlock key={id} {...value} />
                   ))}
                 </When>
                 <When condition={!!emails.length}>
-                  <TitleXs>Email</TitleXs>
+                  <HeadingXs>Email</HeadingXs>
                   {emails.map((email) => (
                     <span key={email.id}>
                       <BodyText>{email.value.title}</BodyText>

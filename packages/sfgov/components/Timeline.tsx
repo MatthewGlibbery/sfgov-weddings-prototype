@@ -1,4 +1,4 @@
-import { TitleMd } from '@/design-system'
+import { HeadingMd } from '@/design-system'
 import { TypeTimelineBlockValues } from '@/types'
 
 export const Timeline = ({
@@ -7,7 +7,7 @@ export const Timeline = ({
 }: TypeTimelineBlockValues) => {
   return (
     <div>
-      <TitleMd as="h3">{title}</TitleMd>
+      <HeadingMd as="h3">{title}</HeadingMd>
       {timelineItems.map((timelineItem, i) => {
         return (
           <div key={i}>

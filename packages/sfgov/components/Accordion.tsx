@@ -1,5 +1,11 @@
 import { type ComponentProps, useState } from 'react'
-import { classed, TitleXs, IconMinus, IconPlus, classes } from '@/design-system'
+import {
+  classed,
+  HeadingXs,
+  IconMinus,
+  IconPlus,
+  classes
+} from '@/design-system'
 
 const StyledDetails = classed('details', 'block list-none')
 
@@ -35,7 +41,7 @@ export const Accordion = (props: AccordionProps) => {
   return (
     <StyledDetails open={isOpen} onToggle={toggleOpen} {...rest}>
       <StyledSummary data-testid="accordion-summary" open={isOpen}>
-        <TitleXs data-testid="accordion-title">{title}</TitleXs>
+        <HeadingXs data-testid="accordion-title">{title}</HeadingXs>
         <Icon data-testid={Icon.name} width={14} />
       </StyledSummary>
       <StyledContent data-testid="accordion-content">{children}</StyledContent>

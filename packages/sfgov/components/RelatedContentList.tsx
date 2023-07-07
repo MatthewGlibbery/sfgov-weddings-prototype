@@ -1,5 +1,5 @@
 import { PageLink } from './PageLink'
-import { Container, TitleMd, type ContainerProps } from '@/design-system'
+import { Container, HeadingMd, type ContainerProps } from '@/design-system'
 import { RelatedContentData } from '@/types'
 
 type RelatedContentProps = {
@@ -14,7 +14,7 @@ export const RelatedContentList = ({
   if (!content?.length) return null
   return (
     <Container {...rest}>
-      <TitleMd as="h2">{title}</TitleMd>
+      <HeadingMd as="h2">{title}</HeadingMd>
       <ul>
         {content.map((item: RelatedContentData, i: number) => (
           <li key={i}>

@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  ol {
+    list-style: decimal;
+    margin: 16px 0;
+    padding-left: 40px;
+  }
+  
+  ul {
+    list-style: disc;
+    margin: 16px 0;
+    padding-left: 40px;
+  }
+
+  a {
+    @apply underline
+  }
+}

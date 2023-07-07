@@ -1,5 +1,6 @@
 export * from './EventPage'
 export * from './InformationPage'
+export * from './NewsPage'
 export * from './PageWrapper'
 export * from './ProfilePage'
 export * from './StepByStepPage'

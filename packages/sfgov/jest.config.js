@@ -2,7 +2,7 @@
 const nextJest = require('next/jest')
 const tsConfig = require('./tsconfig.json')
 
-const moduleNameMapper = Object.fromEntries(
+const aliases = Object.fromEntries(
   Object.entries(tsConfig.compilerOptions.paths).map(([alias, [path]]) => [
     `^${alias.replace('*', '(.*)')}$`,
     path
@@ -37,7 +37,10 @@ const customJestConfig = {
     '!<rootDir>/**/ErrorBoundary.tsx',
     '!<rootDir>/**/GoogleFonts.tsx'
   ],
-  moduleNameMapper,
+  moduleNameMapper: {
+    ...aliases,
+    '^lodash-es$': 'lodash'
+  },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
   testPathIgnorePatterns: ['/browser/']

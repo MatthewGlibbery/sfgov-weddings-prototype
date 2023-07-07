@@ -1,6 +1,6 @@
 import { When } from 'react-if'
 
-import { BodyText, TitleSm } from '@/design-system'
+import { BodyText, HeadingSm } from '@/design-system'
 
 import type { TypeLocationValues } from '@/types'
 
@@ -25,9 +25,9 @@ export const LocationBlock = (props: TypeLocationValues) => {
   return (
     <div className="flex flex-col gap-y-8">
       <When condition={!!boldedTitle}>
-        <TitleSm as="h4" data-testid="title" className="font-bold">
+        <HeadingSm as="h4" data-testid="title" className="font-bold">
           {boldedTitle}
-        </TitleSm>
+        </HeadingSm>
       </When>
       <BodyText>
         <When condition={!!organization && organization !== boldedTitle}>

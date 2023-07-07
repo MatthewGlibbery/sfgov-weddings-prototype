@@ -1,4 +1,4 @@
-import { Container, Monospace, TitleMd } from '@/design-system'
+import { Container, Monospace, HeadingMd } from '@/design-system'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 
 export { ErrorBoundary }
@@ -7,7 +7,7 @@ export const ErrorFallbackReport = (props: FallbackProps) => {
   const { error } = props
   return (
     <Container>
-      <TitleMd as="h1">Error</TitleMd>
+      <HeadingMd as="h1">Error</HeadingMd>
       <Monospace as="p">{error.message}</Monospace>
       {error.stack ? (
         <details>

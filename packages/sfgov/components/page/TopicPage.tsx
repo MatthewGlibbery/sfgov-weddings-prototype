@@ -8,7 +8,7 @@ import { Spotlight } from '../Spotlight'
 import { ContentSection } from '../ContentSection'
 import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
 
-import { BigDesc, Container, DisplayLg, TitleXl } from '@/design-system'
+import { BigDesc, Container, DisplayLg, HeadingXl } from '@/design-system'
 
 export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -65,9 +65,9 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
         </When>
 
         <When condition={!!services.length}>
-          <TitleXl as="h2" className="mb-20">
+          <HeadingXl as="h2" className="mb-20">
             {t('Services')}
-          </TitleXl>
+          </HeadingXl>
           {services.map((serviceSection) => (
             <ServicesAndResourcesSection
               key={serviceSection.id}
@@ -92,9 +92,9 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
         </When>
 
         <When condition={!!resources.length}>
-          <TitleXl as="h2" className="m-0 mb-20">
+          <HeadingXl as="h2" className="m-0 mb-20">
             {t('Resources')}
-          </TitleXl>
+          </HeadingXl>
           {resources.map((resourceSection) => (
             <ServicesAndResourcesSection
               key={resourceSection.id}

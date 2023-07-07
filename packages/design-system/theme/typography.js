@@ -39,9 +39,9 @@ const fontSize = {
     }
   ],
   'desktop-display-lg': [
-    '16px',
+    '20px',
     {
-      lineHeight: lineHeight['24'],
+      lineHeight: lineHeight['28'],
       letterSpacing: '0px',
       fontWeight: fontWeight.normal
     }
@@ -65,7 +65,7 @@ const fontSize = {
   'desktop-heading-md': [
     '18px',
     {
-      lineHeight: lineHeight['20'],
+      lineHeight: lineHeight['24'],
       letterSpacing: '0px',
       fontWeight: fontWeight.bold
     }
@@ -103,15 +103,15 @@ const fontSize = {
     }
   ],
   'display-xxxl': [
-    '48px',
+    '32px',
     {
-      lineHeight: lineHeight['52'],
+      lineHeight: lineHeight['42'],
       letterSpacing: '0px',
       fontWeight: fontWeight.semibold
     }
   ],
   'display-lg': [
-    '16px',
+    '20px',
     {
       lineHeight: lineHeight['24'],
       letterSpacing: '0px',
@@ -137,7 +137,7 @@ const fontSize = {
   'heading-md': [
     '18px',
     {
-      lineHeight: lineHeight['20'],
+      lineHeight: lineHeight['24'],
       letterSpacing: '0px',
       fontWeight: fontWeight.bold
     }

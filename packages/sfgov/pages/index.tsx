@@ -1,4 +1,4 @@
-import { Container, TitleSm } from '@/design-system'
+import { Container, HeadingSm } from '@/design-system'
 import { PageLink, PageWrapper } from '@/components'
 import { ContentAPI } from '@/lib/api'
 import type { PageData } from '@/types'
@@ -46,7 +46,7 @@ const Home = ({ pages }: { pages: PageData[] }) => {
   return (
     <PageWrapper>
       <Container className="py-8 mb-20">
-        <TitleSm as="h1">{t('pages')}</TitleSm>
+        <HeadingSm as="h1">{t('pages')}</HeadingSm>
         {pages.length ? (
           <ul>
             {pages.map((page) => (

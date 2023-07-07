@@ -7,15 +7,19 @@ export const Text = classed('span' as AnyComponent, {
       body: 'font-body text-body',
       small: 'font-body text-small',
       bigDesc: 'font-body font-bold text-h4 lg:text-h3',
-      titleXs: 'font-body text-heading-xs',
-      titleSm: 'font-body text-heading-sm',
-      titleMd: 'font-body text-heading-md',
-      titleLg: 'font-slab text-heading-xl',
-      titleXl: 'font-slab text-heading-xxl',
-      displaySm: 'font-body text-display-lg',
-      displayLg: 'font-slab text-display-xxxl',
+      headingXs: 'font-body text-heading-xs',
+      headingSm: 'font-body text-heading-sm',
+      headingMd: 'font-body text-heading-md',
+      headingXl: 'font-slab text-heading-xl',
+      headingXXl: 'font-slab text-heading-xxl',
+      displayLg: 'font-body text-display-lg lg:text-desktop-display-lg',
+      displayXXXl: 'font-slab text-display-xxxl lg:text-desktop-display-xxxl',
       mono: 'font-monospace text-body',
       label: 'font-body text-label'
+    },
+    romanType: {
+      serif: 'font-slab',
+      sans: 'font-body'
     }
   }
 })
@@ -34,12 +38,11 @@ function createVariant(variant: TextVariant) {
 export const BodyText = createVariant('body')
 export const SmallText = createVariant('small')
 export const BigDesc = createVariant('bigDesc')
-export const TitleXs = createVariant('titleXs')
-export const TitleSm = createVariant('titleSm')
-export const TitleMd = createVariant('titleMd')
-export const TitleLg = createVariant('titleLg')
-export const TitleXl = createVariant('titleXl')
-export const DisplaySm = createVariant('displaySm')
+export const HeadingXs = createVariant('headingXs')
+export const HeadingSm = createVariant('headingSm')
+export const HeadingMd = createVariant('headingMd')
+export const HeadingXl = createVariant('headingXl')
 export const DisplayLg = createVariant('displayLg')
+export const DisplayXXXl = createVariant('displayXXXl')
 export const Monospace = createVariant('mono')
 export const Label = createVariant('label')

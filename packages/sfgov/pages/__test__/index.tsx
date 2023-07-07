@@ -1,4 +1,4 @@
-import { classed, Container, Monospace, TitleLg } from '@/design-system'
+import { classed, Container, Monospace, HeadingXl } from '@/design-system'
 import { PageLink } from '@/components'
 import { pages } from '@/__fixtures__'
 import type { GetServerSideProps } from 'next'
@@ -24,9 +24,9 @@ const TH = classed('th', 'p-4')
 const TestIndex = ({ pages }: TestIndexProps) => {
   return (
     <Container className="my-60">
-      <TitleLg as="h1" className="mb-20">
+      <HeadingXl as="h1" className="mb-20">
         Test page fixtures
-      </TitleLg>
+      </HeadingXl>
       <table>
         <thead>
           <tr>

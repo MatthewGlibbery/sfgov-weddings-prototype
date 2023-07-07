@@ -3,8 +3,8 @@ import {
   IconMail,
   IconPhone,
   Label,
-  TitleLg,
-  TitleMd
+  HeadingXl,
+  HeadingMd
 } from '@/design-system'
 import { EmailBlock, Image, RichText, SocialMedia } from './'
 import type { TypeSocialMediaBlockValues, WagtailImageData } from '@/types'
@@ -48,8 +48,8 @@ export const HeroProfile = ({
         <Label>{jobTitleLine2}</Label>
       </When>
       <div className="flex flex-col md:flex-row md:items-center space-y-8 md:space-y-0 md:space-x-8">
-        <TitleLg>{name}</TitleLg>
-        <TitleMd>({pronouns})</TitleMd>
+        <HeadingXl>{name}</HeadingXl>
+        <HeadingMd>({pronouns})</HeadingMd>
       </div>
       <RichText html={biography} />
       <FlexWithSpacing>

@@ -39,7 +39,8 @@ import {
   TypeSocialMediaBlock,
   TopicPageData,
   TypeContentSectionBlock,
-  TypeImageBlock
+  TypeImageBlock,
+  NewsPageData
 } from '@/types'
 import {
   EVENT_PAGE_TYPE,
@@ -220,6 +221,25 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
   contact: [PhoneNumberFactory.make(), EmailBlockFactory.make()],
   spotlight: SpotlightFactory.make(1),
   quick_links: QuickLinkFactory.make(3)
+}))
+
+export const NewsPageFactory = factory<NewsPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: PROFILE_PAGE_TYPE
+  }),
+  title: 'This should be headline',
+  headline: 'This should be headline',
+  date: gen.date.soon().toString().split('T')[0],
+  image: ImageFactory.make(),
+  abstract: gen.lorem.sentence(),
+  body: '<p>some rich text</p><blockquote>rich text</blockquote>',
+  news_type: gen.random.arrayElement<string>(['news', 'press_release']),
+  related_content_agencies: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  })
 }))
 
 export const StepBlockFactory = factory<TypeStepBlock>((gen) => ({
