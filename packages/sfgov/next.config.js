@@ -5,6 +5,8 @@ module.exports = {
   i18n,
   images: {
     domains: ['sf.gov', 'localhost', 'via.placeholder.com'],
+    loader: 'custom',
+    loaderFile: './lib/imageLoader.ts',
     remotePatterns: [
       {
         hostname: 'sf.gov',

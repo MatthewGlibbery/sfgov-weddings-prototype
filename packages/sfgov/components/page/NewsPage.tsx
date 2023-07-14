@@ -8,6 +8,7 @@ import {
 } from '@/design-system'
 import { NewsPageData } from '@/types'
 import { ComponentType, ReactNode } from 'react'
+import { When } from 'react-if'
 import {
   ComposedDate,
   Image,
@@ -62,11 +63,9 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
           <HeadingXl as="p" className="text-grey600">
             {abstract}
           </HeadingXl>
-          <Image
-            imageRef={image}
-            baseUrl="http://localhost:8000"
-            alt={`Photo related to ${abstract}`}
-          />
+          <When condition={!!image}>
+            <Image imageRef={image} alt={`Photo related to ${abstract}`} />
+          </When>
           <div>
             <HeadingMd as="p" className="mb-12 lg:mb-16">
               <ComposedDate startDateInput={date} />

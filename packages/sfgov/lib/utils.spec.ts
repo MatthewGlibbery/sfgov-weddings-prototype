@@ -1,6 +1,6 @@
 import { IContentAPI } from '@/types'
-import { ImageFactory, PageFactory } from './factories'
-import { getPageURL, resolvePage, resolveImage, getImageURL } from './utils'
+import { PageFactory } from './factories'
+import { getPageURL, resolvePage, resolveImage } from './utils'
 
 describe('getPageURL()', () => {
   it('returns meta.html_url without the hostname', () => {
@@ -54,38 +54,6 @@ describe('getPageURL()', () => {
         })
       )
     ).toBe('/')
-  })
-})
-
-describe('getImageURL()', () => {
-  it('returns the meta.download_url', () => {
-    const url = 'https://example.com/cool.gif'
-    const image = ImageFactory.make({
-      meta: {
-        download_url: url
-      }
-    })
-    expect(getImageURL(image)).toBe(url)
-  })
-
-  it('resolves meta.download_url relative to a given base URL', () => {
-    const url = '/images/cool.gif'
-    const image = ImageFactory.make({
-      meta: {
-        download_url: url
-      }
-    })
-    expect(getImageURL(image, 'https://example.com')).toBe(
-      'https://example.com/images/cool.gif'
-    )
-  })
-
-  it('returns undefined if there is no meta.download_url', () => {
-    const fixtures = [{ meta: { download_url: '' } }, { meta: {} }, {}]
-    for (const img of fixtures) {
-      // @ts-expect-error img is intentionally malformed
-      expect(getImageURL(img)).toBe(undefined)
-    }
   })
 })
 

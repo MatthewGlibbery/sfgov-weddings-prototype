@@ -13,7 +13,13 @@ import { BigDesc, Container, DisplayLg, HeadingXl } from '@/design-system'
 export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
   const { t } = useTranslation()
   const { title, description, agency, about_info: aboutInfo, resources } = page
-  const partOf = [{ page_content: agency }]
+  const partOf = [
+    {
+      id: agency.id,
+      meta: { type: 'sf.RelatedContentAgency' },
+      page_content: agency
+    }
+  ]
 
   return (
     <PageWrapper title={title}>

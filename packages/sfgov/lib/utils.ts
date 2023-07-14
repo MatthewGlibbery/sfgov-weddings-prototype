@@ -35,33 +35,3 @@ export function resolvePage<T extends PageData = PageData>(
     return idOrObj as T
   }
 }
-
-export function getImageURL(
-  image: WagtailImageData,
-  baseURL?: string
-): string | undefined {
-  const url = image?.meta?.download_url
-  if (url && baseURL) {
-    return new URL(url, baseURL).toString()
-  }
-  return url || undefined
-}
-
-type PrimitiveImageProps = {
-  src: string | undefined
-  alt: string | undefined
-  width?: number
-  height?: number
-}
-
-export function getImageProps(
-  image: WagtailImageData,
-  baseURL?: string
-): PrimitiveImageProps {
-  return {
-    src: getImageURL(image, baseURL),
-    width: image.width,
-    height: image.height,
-    alt: image.title
-  }
-}

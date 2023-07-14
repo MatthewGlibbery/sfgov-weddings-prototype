@@ -36,12 +36,13 @@ export const HeroProfile = ({
   phone
 }: HeroProfileProps) => (
   <div className="flex flex-col md:flex-row">
-    <Image
-      className="rounded-full"
-      imageRef={image}
-      baseUrl="http://localhost:8000"
-      alt={`Photo of ${name}`}
-    />
+    <When condition={!!image}>
+      <Image
+        className="rounded-full"
+        imageRef={image}
+        alt={`Photo of ${name}`}
+      />
+    </When>
     <div className="flex flex-col md:ml-28 gap-8">
       <Label>{jobTitle}</Label>
       <When condition={jobTitleLine2}>
