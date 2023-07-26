@@ -1,10 +1,10 @@
 import { type ComponentProps, useState } from 'react'
 import {
   classed,
-  HeadingXs,
   IconMinus,
   IconPlus,
-  classes
+  classes,
+  HeadingXl
 } from '@/design-system'
 
 const StyledDetails = classed('details', 'block list-none')
@@ -12,15 +12,10 @@ const StyledDetails = classed('details', 'block list-none')
 const StyledSummary = classed('summary', {
   base: classes(
     'cursor-pointer',
-    'flex items-center content-between',
+    'flex justify-between',
     'pb-12',
     'border-solid border-b-1 border-[#707070]'
-  ),
-  variants: {
-    open: {
-      true: 'bg-blue200'
-    }
-  }
+  )
 })
 
 const StyledContent = classed('div', 'bg-[#F2F4F7] p-[32px]')
@@ -40,8 +35,10 @@ export const Accordion = (props: AccordionProps) => {
 
   return (
     <StyledDetails open={isOpen} onToggle={toggleOpen} {...rest}>
-      <StyledSummary data-testid="accordion-summary" open={isOpen}>
-        <HeadingXs data-testid="accordion-title">{title}</HeadingXs>
+      <StyledSummary data-testid="accordion-summary">
+        <HeadingXl romanType="sans" data-testid="accordion-title">
+          {title}
+        </HeadingXl>
         <Icon data-testid={Icon.name} width={14} />
       </StyledSummary>
       <StyledContent data-testid="accordion-content">{children}</StyledContent>

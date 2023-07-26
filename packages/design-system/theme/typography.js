@@ -47,9 +47,9 @@ const fontSize = {
     }
   ],
   'desktop-heading-xxl': [
-    '28px',
+    '36px',
     {
-      lineHeight: lineHeight['36'],
+      lineHeight: lineHeight['40'],
       letterSpacing: '0px',
       fontWeight: fontWeight.medium
     }
@@ -119,9 +119,9 @@ const fontSize = {
     }
   ],
   'heading-xxl': [
-    '28px',
+    '24px',
     {
-      lineHeight: lineHeight['36'],
+      lineHeight: lineHeight['28'],
       letterSpacing: '0px',
       fontWeight: fontWeight.medium
     }

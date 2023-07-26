@@ -24,7 +24,6 @@ build/
 
 # env files
 .env
-.env.local
 .env.*.local
 
 # build artifacts

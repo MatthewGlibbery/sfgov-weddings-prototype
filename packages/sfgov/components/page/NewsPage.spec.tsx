@@ -5,7 +5,7 @@ import { NewsPage } from './NewsPage'
 describe('NewsPage', () => {
   const page = NewsPageFactory.make()
 
-  it('', () => {
+  it('renders a news page', () => {
     render(<NewsPage page={page} />)
 
     const title = screen.getByRole('heading', {

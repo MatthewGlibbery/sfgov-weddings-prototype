@@ -1,4 +1,5 @@
 export * from './Accordion'
+export * from './Alert'
 export * from './Callout'
 export * from './CallToAction'
 export * from './ContactFooter'
@@ -24,6 +25,7 @@ export * from './Step'
 export * from './Tile'
 export * from './TitleAndText'
 export * from './WhatToDo'
+export * from './ZebraStripeSection'
 
 export * from './page'
 export * from './server'

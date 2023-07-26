@@ -29,10 +29,11 @@ export const Button = classed('button' as AnyComponent, {
   variants: {
     variant: {
       primary: classes(
-        'text-white',
-        'bg-action',
-        'hover:bg-blue400',
-        'focus:bg-blue400'
+        'border-current',
+        'hover:bg-grey400',
+        'hover:text-white',
+        'focus:bg-grey400',
+        'focus:text-white'
       ),
       secondary: classes(inverseButtonClasses, 'border-current'),
       link: classes(

@@ -1,4 +1,3 @@
-import NextImage from 'next/image'
 import {
   BigDesc,
   Container,

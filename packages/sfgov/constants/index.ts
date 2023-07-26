@@ -4,6 +4,7 @@ import {
   AboutPage,
   EventPage,
   InformationPage,
+  LocationPage,
   NewsPage,
   ProfilePage,
   StepByStepPage,
@@ -15,6 +16,7 @@ import { IPageTemplate, WagtailPageTemplate } from '@/lib/controller'
 export const ABOUT_PAGE_TYPE = 'sf.About'
 export const EVENT_PAGE_TYPE = 'sf.Event'
 export const INFO_PAGE_TYPE = 'sf.Information'
+export const LOCATION_PAGE_TYPE = 'sf.LocationPage'
 export const NEWS_PAGE_TYPE = 'sf.News'
 export const PROFILE_PAGE_TYPE = 'sf.Profile'
 export const STEP_BY_STEP_PAGE_TYPE = 'sf.StepByStep'
@@ -26,6 +28,7 @@ export const DEFAULT_PAGE_TEMPLATES: IPageTemplate[] = [
   new WagtailPageTemplate(AboutPage, ABOUT_PAGE_TYPE),
   new WagtailPageTemplate(EventPage, EVENT_PAGE_TYPE),
   new WagtailPageTemplate(InformationPage, INFO_PAGE_TYPE),
+  new WagtailPageTemplate(LocationPage, LOCATION_PAGE_TYPE),
   new WagtailPageTemplate(NewsPage, NEWS_PAGE_TYPE),
   new WagtailPageTemplate(ProfilePage, PROFILE_PAGE_TYPE),
   new WagtailPageTemplate(StepByStepPage, STEP_BY_STEP_PAGE_TYPE),

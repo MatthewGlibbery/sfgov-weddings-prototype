@@ -11,7 +11,7 @@ export const Text = classed('span' as AnyComponent, {
       headingSm: 'font-body text-heading-sm',
       headingMd: 'font-body text-heading-md',
       headingXl: 'font-slab text-heading-xl',
-      headingXXl: 'font-slab text-heading-xxl',
+      headingXXl: 'font-slab text-heading-xxl lg:text-desktop-heading-xxl',
       displayLg: 'font-body text-display-lg lg:text-desktop-display-lg',
       displayXXXl: 'font-slab text-display-xxxl lg:text-desktop-display-xxxl',
       mono: 'font-monospace text-body',
@@ -42,6 +42,7 @@ export const HeadingXs = createVariant('headingXs')
 export const HeadingSm = createVariant('headingSm')
 export const HeadingMd = createVariant('headingMd')
 export const HeadingXl = createVariant('headingXl')
+export const HeadingXXl = createVariant('headingXXl')
 export const DisplayLg = createVariant('displayLg')
 export const DisplayXXXl = createVariant('displayXXXl')
 export const Monospace = createVariant('mono')

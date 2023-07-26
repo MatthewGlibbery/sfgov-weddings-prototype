@@ -2,7 +2,10 @@ import { HeadingSm } from './Text'
 import { classed } from './utils'
 import type { ComponentProps, ComponentType } from '../types'
 
-const StyledItem = classed('div', 'w-full pl-12 border-l-1 border-l-[#D6D3D3]')
+const StyledItem = classed(
+  'div',
+  'w-full pb-12 md:pl-12 md:pb-0 border-b-1 border-b-[#D6D3D3] md:border-b-0 md:border-b-current md:border-l-1 md:border-l-[#D6D3D3]'
+)
 
 export type StackedItemProps = ComponentProps<typeof StyledItem> & {
   icon?: ComponentType<{ width?: string | number }> | null

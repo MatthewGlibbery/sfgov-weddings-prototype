@@ -47,7 +47,6 @@ export type TypeTileBlockValues = MinimalPageData & {
   description: string
   url: string
   link_to: string
-  page: MinimalPageData
   event_type?: string
 }
 
@@ -241,3 +240,10 @@ export type TypeContentSectionBlock = BlockType<
   'section',
   TypeContentSectionBlockValues
 >
+
+export type TypeAlertBlockValues = {
+  description: string
+  expiration_date: string
+}
+
+export type TypeAlertBlock = BlockType<'alert', TypeAlertBlockValues>

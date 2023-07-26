@@ -4,10 +4,12 @@ import {
   HeadingMd,
   IconArrowRight,
   IconCalendar,
-  IconDocument
+  IconDocument,
+  IconChevronRight
 } from '@/design-system'
 import type { ComponentType, ReactNode } from 'react'
 import type { TypeTileBlock } from '@/types'
+import { getPageURL } from '@/lib/utils'
 
 export type TileSectionProps = {
   links?: TypeTileBlock[]
@@ -30,7 +32,10 @@ export const TileSection = ({
 
 const TileContainer = ({ className, ...rest }: JSX.IntrinsicElements['a']) => (
   <a
-    className={classes('block overflow-hidden text-black', className)}
+    className={classes(
+      'block overflow-hidden text-black no-underline',
+      className
+    )}
     {...rest}
   />
 )
@@ -51,7 +56,7 @@ const BaseTile = ({ href, children }: BaseTileProps) => (
 )
 
 export const NewsTile = ({ link }: TileProps) => (
-  <BaseTile href={link.page.meta.html_url}>
+  <BaseTile href={link.url}>
     <TileTitle>{link.title}</TileTitle>
     <div>{link.description}</div>
   </BaseTile>
@@ -59,15 +64,18 @@ export const NewsTile = ({ link }: TileProps) => (
 
 export const ServiceAndResourceTile = ({ link }: TileProps) => {
   return (
-    <BaseTile href={link.url}>
-      <HeadingMd className="m-0 mb-8">{link.title}</HeadingMd>
-      <div>{link.description}</div>
-    </BaseTile>
+    <div className="flex items-start">
+      <BaseTile href={link.url}>
+        <HeadingMd className="m-0 mb-8">{link.title}</HeadingMd>
+        <div>{link.description}</div>
+      </BaseTile>
+      <IconChevronRight className="mt-20" width={20} />
+    </div>
   )
 }
 
 export const QuickLink = ({ link }: TileProps) => (
-  <BaseTile href={link.page.meta.html_url}>
+  <BaseTile href={link.url}>
     <IconDocument className="w-20 md:w-40" />
     <HeadingMd className="my-12">{link.title}</HeadingMd>
     <div>{link.description}</div>
@@ -76,7 +84,7 @@ export const QuickLink = ({ link }: TileProps) => (
 )
 
 export const EventTile = ({ link }: TileProps) => (
-  <BaseTile href={link.page.meta.html_url}>
+  <BaseTile href={link.url}>
     {/* <img src={imgSrc ? imgSrc : placeholder} /> */}
     <div>an image will go here</div>
     <div className="flex">
@@ -93,14 +101,17 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
   return function TileList(props: TileSectionProps) {
     const { links, ...rest } = props
     if (!links?.length) return null
+    const items = links.map((item) => {
+      const title = item.value.title
+      const description =
+        item.value.meta?.search_description || item.value.description
+      const url = item.type === 'page' ? getPageURL(item.value) : item.value.url
+      return { ...item, title, description, url }
+    })
     return (
       <TileSection role="list" {...rest}>
-        {links.map((link) => (
-          <TileComponent
-            key={link.id}
-            role="listitem"
-            link={link?.value || link}
-          />
+        {items.map((link) => (
+          <TileComponent key={link.id} role="listitem" link={link} />
         ))}
       </TileSection>
     )

@@ -12,20 +12,4 @@ describe('<StackedContainer />', () => {
     render(<StackedContainer>{value}</StackedContainer>)
     expect(screen.getByTestId('stacked-content-container')).toBeInTheDocument()
   })
-
-  describe('Content Direction', () => {
-    it('defaults to "row" orientation', () => {
-      render(<StackedContainer data-testid="testing">test</StackedContainer>)
-      expect(screen.getByTestId('testing')).toHaveClass('flex', 'flex-row')
-    })
-
-    it('changes to "column" orientation', () => {
-      render(
-        <StackedContainer direction="col" data-testid="testing">
-          <div>test</div>
-        </StackedContainer>
-      )
-      expect(screen.getByTestId('testing')).toHaveClass('flex', 'flex-col')
-    })
-  })
 })

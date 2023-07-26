@@ -15,7 +15,8 @@ import {
   TypeContentSectionBlock,
   TypeServicesSectionBlock,
   TypeSpotlightBlock,
-  TypeResourcesSectionBlock
+  TypeResourcesSectionBlock,
+  TypeAlertBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -167,4 +168,24 @@ export type AboutPageData = PageData & {
   agency: PageData
   about_info: TypeTitleAndTextBlock[]
   resources: TypeResourcesSectionBlock[]
+}
+
+export type LocationPageData = PageData & {
+  location_name: string
+  description: string
+  alert: TypeAlertBlock[]
+  location_address: TypeLocationBlock[]
+  contact: (TypeEmailBlock | TypePhoneNumberBlock)[]
+  image: WagtailImageData
+  body: string
+  intro: string
+  accordions: TypeTitleAndTextBlock[]
+  parking: TypeTitleAndTextBlock[]
+  accessibility: TypeTitleAndTextBlock[]
+  public_transportation: TypeTitleAndTextBlock[]
+  services: TypeServicesSectionBlock[]
+  related_content_part_of: RelatedContentData[]
+  related_content_pages: RelatedContentData[]
+  related_content_agencies: RelatedContentData[]
+  about_location: string
 }

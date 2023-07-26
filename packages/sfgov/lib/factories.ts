@@ -41,12 +41,16 @@ import {
   TypeContentSectionBlock,
   TypeImageBlock,
   NewsPageData,
-  AboutPageData
+  AboutPageData,
+  LocationPageData,
+  TypeAlertBlock
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
   EVENT_PAGE_TYPE,
   INFO_PAGE_TYPE,
+  LOCATION_PAGE_TYPE,
+  NEWS_PAGE_TYPE,
   PROFILE_PAGE_TYPE,
   STEP_BY_STEP_PAGE_TYPE,
   TOPIC_PAGE_TYPE,
@@ -228,7 +232,7 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
 export const NewsPageFactory = factory<NewsPageData>((gen) => ({
   id: gen.datatype.number(),
   meta: PageMetaFactory.make({
-    type: PROFILE_PAGE_TYPE
+    type: NEWS_PAGE_TYPE
   }),
   title: 'This should be headline',
   headline: 'This should be headline',
@@ -242,6 +246,82 @@ export const NewsPageFactory = factory<NewsPageData>((gen) => ({
       type: 'sfgov_base.RelatedContentAgency'
     }
   })
+}))
+
+export const LocationPageFactory = factory<LocationPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: LOCATION_PAGE_TYPE
+  }),
+  title: 'This should be location_name',
+  location_name: 'This should be location_name',
+  description: 'Location description',
+  alert: AlertBlockFactory.make(1),
+  location_address: LocationBlockFactory.make(1),
+  contact: [PhoneNumberFactory.make(), EmailBlockFactory.make()],
+  image: ImageFactory.make(),
+  body: '<p>some rich text</p><blockquote>rich text</blockquote>',
+  intro: '<p>some rich text</p><blockquote>rich text</blockquote>',
+  accordions: TitleAndTextFactory.make(2),
+  parking: [
+    TitleAndTextFactory.make({
+      value: {
+        title: 'Parking',
+        text: '<p>some rich text</p>'
+      }
+    })
+  ],
+  accessibility: [
+    TitleAndTextFactory.make({
+      value: {
+        title: 'Accessibility',
+        text: '<p>some rich text</p>'
+      }
+    })
+  ],
+  public_transportation: [
+    TitleAndTextFactory.make({
+      value: {
+        title: 'Public transportation',
+        text: '<p>some rich text</p>'
+      }
+    })
+  ],
+  services: [
+    {
+      type: 'services',
+      value: {
+        title: 'Service section 1',
+        services: [GenericTileFactory.make()]
+      },
+      id: gen.datatype.uuid()
+    }
+  ],
+  related_content_part_of: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentPartOf'
+    }
+  }),
+  related_content_pages: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentPage'
+    }
+  }),
+  related_content_agencies: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  about_location: 'blah'
+}))
+
+export const AlertBlockFactory = factory<TypeAlertBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'alert',
+  value: {
+    description: '<p>some rich text</p>',
+    expiration_date: gen.date.soon().toString().split('T')[0]
+  }
 }))
 
 export const StepBlockFactory = factory<TypeStepBlock>((gen) => ({
@@ -307,7 +387,6 @@ export const TileValueFactory = factory((gen) => ({
   url: '',
   title: gen.commerce.productName(),
   description: gen.commerce.productDescription(),
-  page: PageFactory.make(),
   event_type: 'music'
 }))
 

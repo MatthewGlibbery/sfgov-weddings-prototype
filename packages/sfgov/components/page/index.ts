@@ -1,6 +1,7 @@
 export * from './AboutPage'
 export * from './EventPage'
 export * from './InformationPage'
+export * from './LocationPage'
 export * from './NewsPage'
 export * from './PageWrapper'
 export * from './ProfilePage'
