@@ -55,7 +55,9 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
 
   return (
     <PageWrapper title={locationName}>
-      <Alert {...alert[0].value} />
+      <When condition={!!alert?.[0]?.value}>
+        {() => <Alert {...alert[0].value} />}
+      </When>
       <ZebraStripedSection>
         <div>
           <Container className="mb-20 pb-40">
