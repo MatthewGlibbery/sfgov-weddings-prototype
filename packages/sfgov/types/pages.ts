@@ -16,6 +16,10 @@ import {
   TypeServicesSectionBlock,
   TypeSpotlightBlock,
   TypeResourcesSectionBlock,
+  TypeOnlineEventBlock,
+  TypeAgendaItemBlock,
+  TypeVideoBlock,
+  TypeDownloadableFilesBlock,
   TypeAlertBlock
 } from './blocks'
 import { WagtailImageData } from './images'
@@ -188,4 +192,16 @@ export type LocationPageData = PageData & {
   related_content_pages: RelatedContentData[]
   related_content_agencies: RelatedContentData[]
   about_location: string
+}
+
+export type MeetingPageData = PageData & {
+  related_content_agencies: RelatedContentData[]
+  cancelled: boolean
+  date: TypeDateTimeBlock[]
+  meeting_location: (TypeLocationBlock | TypeOnlineEventBlock)[]
+  overview: string
+  agenda: TypeAgendaItemBlock[]
+  videos: TypeVideoBlock[]
+  notices: TypeTitleAndTextBlock[]
+  meeting_documents: TypeDownloadableFilesBlock[]
 }

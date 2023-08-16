@@ -247,3 +247,48 @@ export type TypeAlertBlockValues = {
 }
 
 export type TypeAlertBlock = BlockType<'alert', TypeAlertBlockValues>
+
+export type TypeOnlineEventBlockValues = {
+  description: string
+  link: TypeLinkValues
+  phone: TypePhoneNumberBlock[]
+}
+
+export type TypeOnlineEventBlock = BlockType<
+  'online',
+  TypeOnlineEventBlockValues
+>
+
+export type TypeAgendaItemBlockValues = {
+  index: number
+  title_and_text: TypeTitleAndTextValues
+  documents: [] // TODO: expand this when documents are fully serialized
+}
+
+export type TypeAgendaItemBlock = BlockType<
+  'agenda_item',
+  TypeAgendaItemBlockValues
+>
+
+export type TypeVideoEmbedValues = {
+  embed_url: string
+  video_transcript: string
+}
+
+export type TypeVideoBlockValues = {
+  title: string
+  description: string
+  video_type: (TypeVideoEmbedValues | TypeLinkValues)[]
+}
+
+export type TypeVideoBlock = BlockType<'video', TypeVideoBlockValues>
+
+export type TypeDownloadableFilesBlockValues = {
+  title: string
+  // TODO: add documents
+}
+
+export type TypeDownloadableFilesBlock = BlockType<
+  'downloadable_files',
+  TypeDownloadableFilesBlockValues
+>

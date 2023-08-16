@@ -43,13 +43,18 @@ import {
   NewsPageData,
   AboutPageData,
   LocationPageData,
-  TypeAlertBlock
+  TypeAlertBlock,
+  MeetingPageData,
+  TypeAgendaItemBlock,
+  TypeOnlineEventBlock,
+  TypeVideoBlock
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
   EVENT_PAGE_TYPE,
   INFO_PAGE_TYPE,
   LOCATION_PAGE_TYPE,
+  MEETING_PAGE_TYPE,
   NEWS_PAGE_TYPE,
   PROFILE_PAGE_TYPE,
   STEP_BY_STEP_PAGE_TYPE,
@@ -762,3 +767,95 @@ export const ContentSectionFactory = factory<TypeContentSectionBlock>(
     }
   })
 )
+
+export const OnlineEventFactory = factory<TypeOnlineEventBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'online',
+  value: {
+    description: gen.lorem.sentence(),
+    link: LinkFactory.make(),
+    phone: [PhoneNumberFactory.make()]
+  }
+}))
+
+export const AgendaItemBlockFactory = factory<TypeAgendaItemBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'agenda_item',
+  value: {
+    index: 0,
+    title_and_text: {
+      title: 'Agenda title and text 1 title',
+      text: 'Agenda title and text 1 text'
+    },
+    documents: []
+  }
+}))
+
+export const VideoFactory = factory<TypeVideoBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'video',
+  value: {
+    title: 'Video title',
+    description: 'Video description',
+    video_type: [
+      gen.random.arrayElement<any>([
+        {
+          type: 'embed',
+          value: {
+            embed_url: 'https://www.youtube.com/watch?v=rS00xWnqwvI',
+            video_transcript: 'Video transcript'
+          }
+        },
+        {
+          type: 'external_link',
+          value: {
+            link_to: 'url',
+            url: 'https://www.youtube.com/watch?v=vsUmiB30Q8A',
+            page: {},
+            link_text: 'Video external link text'
+          }
+        }
+      ])
+    ]
+  }
+}))
+
+export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: MEETING_PAGE_TYPE
+  }),
+  title: 'Meeting page title',
+  related_content_agencies: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  cancelled: false,
+  date: '',
+  meeting_location: [LocationBlockFactory.make(), OnlineEventFactory.make()],
+  overview: '',
+  agenda: [AgendaItemBlockFactory.make()],
+  videos: [],
+  notices: [
+    TitleAndTextFactory.make({
+      value: {
+        title: 'Notice 1 title',
+        text: 'Notice 1 text'
+      }
+    }),
+    TitleAndTextFactory.make({
+      value: {
+        title: 'Notice 2 title',
+        text: 'Notice 2 text'
+      }
+    }),
+    TitleAndTextFactory.make({
+      value: {
+        title: 'Notice 2 title',
+        text: 'Notice 2 text'
+      }
+    })
+  ],
+  meeting_documents: []
+}))
