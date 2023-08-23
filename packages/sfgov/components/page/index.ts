@@ -1,4 +1,5 @@
 export * from './AboutPage'
+export * from './CampaignPage'
 export * from './EventPage'
 export * from './InformationPage'
 export * from './LocationPage'

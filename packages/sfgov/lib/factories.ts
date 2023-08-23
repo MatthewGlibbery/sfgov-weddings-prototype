@@ -44,6 +44,8 @@ import {
   AboutPageData,
   LocationPageData,
   TypeAlertBlock,
+  CampaignPageData,
+  TypeAccordionItemBlock,
   MeetingPageData,
   TypeAgendaItemBlock,
   TypeOnlineEventBlock,
@@ -51,6 +53,7 @@ import {
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
+  CAMPAIGN_PAGE_TYPE,
   EVENT_PAGE_TYPE,
   INFO_PAGE_TYPE,
   LOCATION_PAGE_TYPE,
@@ -318,6 +321,83 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
     }
   }),
   about_location: 'blah'
+}))
+
+export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: CAMPAIGN_PAGE_TYPE
+  }),
+  title: 'campaign',
+  logo: ImageFactory.make(),
+  // theme: ''
+  header_spotlight: SpotlightFactory.make(1),
+  facts_title: 'Some facts',
+  fact_items: [ImageBlockFactory.make(), TitleAndTextFactory.make()],
+  additional_content: [
+    {
+      type: 'image_with_text',
+      value: {
+        image: ImageFactory.make(),
+        title: "here's some more info",
+        description:
+          '<p data-block-key="k04ld">here&#x27;s some more info description</p>'
+      },
+      id: gen.datatype.uuid()
+    },
+    {
+      type: 'resources',
+      value: {
+        title: 'Resource section 1',
+        resources: [GenericTileFactory.make()]
+      },
+      id: gen.datatype.uuid()
+    },
+    {
+      type: 'accordion_section',
+      value: {
+        title: 'Accordion section',
+        accordion_sidebar:
+          '<p data-block-key="srigv">these are things about the accordion section</p>',
+        accordion_items: AccordionItemFactory.make(1)
+      },
+      id: gen.datatype.uuid()
+    }
+  ],
+  spotlight: SpotlightFactory.make(1),
+  about_campaign: 'about it',
+  related_content_agencies: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  related_links: [
+    {
+      type: 'page',
+      value: {
+        link_to: 'page',
+        url: '',
+        page: PageFactory.make(),
+        link_text: 'another link'
+      },
+      id: '1d3ca768-e94b-4f8b-bfae-0c7d52e047b3'
+    }
+  ]
+}))
+
+export const AccordionItemFactory = factory<TypeAccordionItemBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'accordion_item',
+  value: {
+    title: 'An item',
+    body: [
+      TextBlockFactory.make(),
+      LocationBlockFactory.make(),
+      PhoneNumberFactory.make(),
+      // @ts-expect-error Should not render anything other than the above
+      TitleAndTextFactory.make()
+    ]
+  }
 }))
 
 export const AlertBlockFactory = factory<TypeAlertBlock>((gen) => ({
@@ -652,7 +732,8 @@ export const SpotlightFactory = factory<TypeSpotlightBlock>((gen) => ({
     title: gen.lorem.word(),
     description: gen.lorem.sentence(),
     image: ImageFactory.make(),
-    full_size_banner: gen.random.boolean(),
+    banner_size: 'half',
+    orientation: 'right',
     button: LinkFactory.make()
   }
 }))
@@ -832,7 +913,7 @@ export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
     }
   }),
   cancelled: false,
-  date: '',
+  date: DateTimeBlockFactory.make(1),
   meeting_location: [LocationBlockFactory.make(), OnlineEventFactory.make()],
   overview: '',
   agenda: [AgendaItemBlockFactory.make()],

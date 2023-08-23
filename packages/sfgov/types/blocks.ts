@@ -197,7 +197,8 @@ export type TypeSpotlightBlockValues = {
   title: string
   description: string
   image: WagtailImageData
-  full_size_banner: boolean
+  banner_size: string
+  orientation: string
   button: TypeLinkValues
 }
 
@@ -247,6 +248,38 @@ export type TypeAlertBlockValues = {
 }
 
 export type TypeAlertBlock = BlockType<'alert', TypeAlertBlockValues>
+
+export type TypeImageWithTextBlockValues = {
+  image: WagtailImageData
+  title: string
+  description: string
+}
+
+export type TypeImageWithTextBlock = BlockType<
+  'image_with_text',
+  TypeImageWithTextBlockValues
+>
+
+export type TypeAccordionItemBlockValues = {
+  title: string
+  body: (TypeTextBlock | TypeLocationBlock | TypePhoneNumberBlock)[]
+}
+
+export type TypeAccordionItemBlock = BlockType<
+  'accordion_item',
+  TypeAccordionItemBlockValues
+>
+
+export type TypeAccordionSectionBlockValues = {
+  title: string
+  accordion_sidebar: string
+  accordion_items: TypeAccordionItemBlock[]
+}
+
+export type TypeAccordionSectionBlock = BlockType<
+  'accordion_section',
+  TypeAccordionSectionBlockValues
+>
 
 export type TypeOnlineEventBlockValues = {
   description: string

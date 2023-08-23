@@ -19,7 +19,7 @@ const fontWeight = {
   medium: 500,
   semibold: 600,
   bold: 700,
-  extrabold: 700,
+  extrabold: 800,
   boldChinese: 500
 }
 

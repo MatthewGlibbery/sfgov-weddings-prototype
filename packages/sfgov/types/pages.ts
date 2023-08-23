@@ -2,6 +2,7 @@ import {
   BlockType,
   TypeCallToActionBlock,
   TypeCostBlock,
+  TypeContentTileBlock,
   TypeDateTimeBlock,
   TypeEmailBlock,
   TypeImageBlock,
@@ -16,11 +17,13 @@ import {
   TypeServicesSectionBlock,
   TypeSpotlightBlock,
   TypeResourcesSectionBlock,
+  TypeAlertBlock,
+  TypeImageWithTextBlock,
+  TypeAccordionSectionBlock,
   TypeOnlineEventBlock,
   TypeAgendaItemBlock,
   TypeVideoBlock,
-  TypeDownloadableFilesBlock,
-  TypeAlertBlock
+  TypeDownloadableFilesBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -192,6 +195,23 @@ export type LocationPageData = PageData & {
   related_content_pages: RelatedContentData[]
   related_content_agencies: RelatedContentData[]
   about_location: string
+}
+
+export type CampaignPageData = PageData & {
+  logo: WagtailImageData
+  theme: string
+  header_spotlight: TypeSpotlightBlock[]
+  facts_title: string
+  fact_items: (BlockType<'image', WagtailImageData> | TypeTitleAndTextBlock)[]
+  additional_content: (
+    | TypeImageWithTextBlock
+    | TypeResourcesSectionBlock
+    | TypeAccordionSectionBlock
+  )[]
+  spotlight: TypeSpotlightBlock[]
+  about_campaign: string
+  related_content_agencies: RelatedContentData[]
+  related_links: TypeContentTileBlock[]
 }
 
 export type MeetingPageData = PageData & {
