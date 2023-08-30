@@ -40,7 +40,7 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
   return (
     <SpotlightContainer
       full={bannerSize === 'full'}
-      isReversed={orientation === 'left'}
+      isReversed={bannerSize !== 'full' && orientation === 'left'}
     >
       <div className="basis-0 grow">
         <When condition={!!image}>
