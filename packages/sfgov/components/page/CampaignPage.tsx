@@ -50,7 +50,9 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       case 'image_with_text':
         return (
           <div className="border-2 border-grey300 rounded px-12 space-y-20">
-            <Image imageRef={content.value.image} />
+            <When condition={!!content.value.image}>
+              <Image imageRef={content.value.image} />
+            </When>
             <TitleAndText
               title={content.value.title}
               text={content.value.description}
@@ -67,8 +69,12 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       case 'accordion_section':
         return (
           <div className="space-y-20">
-            <HeadingXXl as="h2">{content.value.title}</HeadingXXl>
-            <RichText html={content.value.accordion_sidebar} />
+            <When condition={content.value.title}>
+              <HeadingXXl as="h2">{content.value.title}</HeadingXXl>
+            </When>
+            <When condition={content.value.accordion_sidebar}>
+              <RichText html={content.value.accordion_sidebar} />
+            </When>
             {content.value.accordion_items.map((item) => (
               <Accordion key={item.id} title={item.value.title}>
                 {item.value.body.map((content) => {
