@@ -18,7 +18,7 @@ import {
   Alert,
   ContactFooter,
   Image,
-  LocationBlock,
+  Location,
   PageLabel,
   PageWrapper,
   RelatedAgenciesList,
@@ -82,7 +82,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
               <When condition={!!image}>
                 <Image imageRef={image} alt={`Photo of ${locationName}`} />
               </When>
-              <LocationBlock {...address[0]?.value} />
+              <Location {...address[0]?.value} />
               <Button>
                 <IconPhone width={16} />
                 {t('View full contact information')}

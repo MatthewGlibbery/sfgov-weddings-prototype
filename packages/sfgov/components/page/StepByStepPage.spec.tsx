@@ -54,4 +54,14 @@ describe('StepByStepPage', () => {
 
     expect(screen.getByTestId(`step-${step.id}`)).toBeInTheDocument()
   })
+
+  it('renders without steps', () => {
+    render(<StepByStepPage page={{ ...fixture, steps: undefined }} />)
+
+    const title = screen.getByRole('heading', {
+      level: 1
+    })
+    expect(title).toBeInTheDocument()
+    expect(title).toHaveTextContent(fixture.title)
+  })
 })

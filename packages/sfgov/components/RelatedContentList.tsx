@@ -1,5 +1,5 @@
 import { PageLink } from './PageLink'
-import { Container, HeadingXXl, type ContainerProps } from '@/design-system'
+import { Grid, HeadingXXl, type ContainerProps } from '@/design-system'
 import { RelatedContentData } from '@/types'
 
 type RelatedContentProps = {
@@ -13,15 +13,18 @@ export const RelatedContentList = ({
 }: RelatedContentProps) => {
   if (!content?.length) return null
   return (
-    <Container {...rest}>
+    <div {...rest}>
       <HeadingXXl as="h2">{title}</HeadingXXl>
-      <ul>
+      <Grid className="grid-cols-2 gap-x-28">
         {content.map((item: RelatedContentData, i: number) => (
-          <li key={i}>
+          <div
+            key={i}
+            className="my-20 even:pl-12 md:even:border-l-1 md:even:border-l-grey300"
+          >
             <PageLink page={item.page_content} />
-          </li>
+          </div>
         ))}
-      </ul>
-    </Container>
+      </Grid>
+    </div>
   )
 }

@@ -11,9 +11,10 @@ import {
 import { Image } from './Image'
 import { useTranslation } from 'react-i18next'
 import { getPageURL } from '@/lib/utils'
+import { IndicatorWithTitle } from './Indicator'
 
 const SpotlightContainer = classed('div' as AnyComponent, {
-  base: 'flex flex-col p-20 md:rounded-4 md:flex-row md:py-28 md:px-16 lg:p-28 gap-x-28 gap-y-20 bg-grey100',
+  base: 'flex flex-col md:rounded-4 md:flex-row md:py-28 gap-x-28 gap-y-20 bg-grey100',
   variants: {
     full: {
       true: 'md:flex-col',
@@ -48,10 +49,7 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
         </When>
       </div>
       <div className="flex flex-col gap-y-20 basis-0 grow">
-        <div className="flex items-center">
-          <div className="w-20 h-20 rounded-2 bg-grey700 mr-8" />
-          <HeadingSm className="text-grey700">{t('SPOTLIGHT')}</HeadingSm>
-        </div>
+        <IndicatorWithTitle title={t('SPOTLIGHT')} />
         <When condition={title}>
           <HeadingXXl>{title}</HeadingXXl>
         </When>

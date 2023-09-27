@@ -3,12 +3,19 @@ import {
   IconCheck,
   IconMail,
   IconPhone,
+  IconWIP,
   StackedContainer,
   StackedItem
 } from '@/design-system'
 import { ContactFooterBlockTypes } from '@/types'
 import { ComponentProps } from 'react'
-import { EmailBlock, LocationBlock, PhoneNumberBlock, TitleAndText } from './'
+import {
+  EmailBlock,
+  Location,
+  PhoneNumberBlock,
+  SocialMedia,
+  TitleAndText
+} from './'
 
 type ContactFooterItemProps = ComponentProps<typeof StackedItem> & {
   item: ContactFooterBlockTypes
@@ -32,7 +39,7 @@ const ContactFooterItem = ({ item, ...rest }: ContactFooterItemProps) => {
     case 'address':
       return (
         <StackedItem icon={IconBuilding} title="Address" {...rest}>
-          <LocationBlock {...value} />
+          <Location {...value} />
         </StackedItem>
       )
     case 'title_and_text':
@@ -51,6 +58,14 @@ const ContactFooterItem = ({ item, ...rest }: ContactFooterItemProps) => {
       return (
         <StackedItem icon={IconPhone} title="Phone" {...rest}>
           <PhoneNumberBlock {...value} />
+        </StackedItem>
+      )
+    case 'social_media':
+      return (
+        <StackedItem icon={IconWIP} title="Phone" {...rest}>
+          {value.social_media.map((item) => (
+            <SocialMedia key={item.id} {...item} />
+          ))}
         </StackedItem>
       )
     /* istanbul ignore next */

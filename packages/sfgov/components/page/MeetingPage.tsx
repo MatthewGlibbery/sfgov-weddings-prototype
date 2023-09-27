@@ -4,7 +4,6 @@ import { useTranslation } from 'next-i18next'
 
 import type { MeetingPageData } from '@/types'
 
-import { TitleAndText } from '../TitleAndText'
 import { PageWrapper } from './PageWrapper'
 import {
   BodyText,
@@ -18,7 +17,7 @@ import {
 import { RelatedAgenciesList } from '../RelatedAgenciesList'
 import { Callout } from '../Callout'
 import { DateTimeBlock } from '../DateTime'
-import { LocationBlock } from '../Location'
+import { Location } from '../Location'
 import { OnlineEventBlock } from '../OnlineEventBlock'
 import { Accordion } from '../Accordion'
 import { RichText } from '../RichText'
@@ -33,7 +32,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
     title,
     related_content_agencies: agencies,
     cancelled,
-    date,
+    date_time: date,
     meeting_location: meetingLocation,
     overview,
     agenda,
@@ -89,7 +88,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                 <HeadingMd as="h4" className="mb-12">
                   {t('In-person')}
                 </HeadingMd>
-                <LocationBlock {...location.value} key={location.id} />
+                <Location {...location.value} key={location.id} />
               </div>
             )
           }

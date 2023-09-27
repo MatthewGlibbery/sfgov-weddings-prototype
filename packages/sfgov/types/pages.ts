@@ -27,7 +27,7 @@ import {
 } from './blocks'
 import { WagtailImageData } from './images'
 
-type MinimalMeta = {
+export type MinimalMeta = {
   type: string
   locale?: string
   url_path?: string
@@ -143,12 +143,6 @@ export type ProfilePageData = PageData & {
   quick_links: TypeQuickLinkBlock[]
 }
 
-export type ContactFooterBlockTypes =
-  | TypeEmailBlock
-  | TypePhoneNumberBlock
-  | TypeLocationBlock
-  | TypeTitleAndTextBlock
-
 export type TopicPageData = PageData & {
   description: string
   related_content_topics: RelatedContentData[]
@@ -197,6 +191,45 @@ export type LocationPageData = PageData & {
   about_location: string
 }
 
+type TypeEventsAndMeetingsByDate = {
+  upcoming?: RelatedContentData[]
+  past?: RelatedContentData[]
+}
+
+export type AgencyPageData = PageData & {
+  description: string
+  logo?: WagtailImageData
+  main_image?: WagtailImageData
+  alert: TypeAlertBlock[]
+  spotlight_primary: TypeSpotlightBlock[]
+  quicklinks: TypeQuickLinkBlock[]
+  meetings: (TypeLocationBlock | TypeTitleAndTextBlock)[]
+  meeting_archive_date: string
+  meeting_archive_url: string
+  services: TypeServicesSectionBlock[]
+  spotlight_secondary: TypeSpotlightBlock[]
+  resources: TypeResourcesSectionBlock[]
+  about_description: string
+  child_agency_section_title: string
+  part_of: RelatedContentData[]
+  related_child_agencies: RelatedContentData[]
+  related_content_agencies: RelatedContentData[]
+  call_to_action: TypeCallToActionBlock[]
+  social_media: TypeSocialMediaBlock[]
+  contact: (TypeLocationBlock | TypeEmailBlock | TypePhoneNumberBlock)[]
+  public_records: (
+    | BlockType<'link', string>
+    | BlockType<'email', string>
+    | BlockType<'phone', string>
+  )[]
+  archive_url: string
+  archive_date: string
+  agency_redirect: string
+  related_content_topics: RelatedContentData[]
+  related_events: TypeEventsAndMeetingsByDate
+  related_news: RelatedContentData[]
+}
+
 export type CampaignPageData = PageData & {
   logo: WagtailImageData
   theme: string
@@ -217,7 +250,7 @@ export type CampaignPageData = PageData & {
 export type MeetingPageData = PageData & {
   related_content_agencies: RelatedContentData[]
   cancelled: boolean
-  date: TypeDateTimeBlock[]
+  date_time: TypeDateTimeBlock[]
   meeting_location: (TypeLocationBlock | TypeOnlineEventBlock)[]
   overview: string
   agenda: TypeAgendaItemBlock[]

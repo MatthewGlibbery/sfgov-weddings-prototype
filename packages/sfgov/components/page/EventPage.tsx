@@ -18,7 +18,7 @@ import {
   PageWrapper,
   CostBlock,
   DateTimeBlock,
-  LocationBlock,
+  Location,
   CallToAction,
   PhoneNumberBlock,
   EmailBlock
@@ -101,7 +101,7 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
             </When>
             <When condition={!!location?.[0]?.value}>
               <SidebarItemWrapper>
-                <LocationBlock {...location[0]?.value} />
+                <Location {...location[0]?.value} />
               </SidebarItemWrapper>
             </When>
             <When condition={!!phoneNumbers.length || !!emails.length}>

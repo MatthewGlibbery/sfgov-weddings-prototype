@@ -5,10 +5,14 @@ const Wrapper = classed('div', 'even:bg-grey100 py-40')
 
 type ZebraStripedSectionProps = {
   children: ReactNode[]
+  className?: string
 }
 
-export const ZebraStripedSection = ({ children }: ZebraStripedSectionProps) => (
-  <>
+export const ZebraStripedSection = ({
+  children,
+  className = ''
+}: ZebraStripedSectionProps) => (
+  <div className={className}>
     {children.map((child: ReactNode, i: number) => {
       if (i % 2 !== 0) {
         return <Wrapper key={i}>{child}</Wrapper>
@@ -16,5 +20,5 @@ export const ZebraStripedSection = ({ children }: ZebraStripedSectionProps) => (
         return <span key={i}>{child}</span>
       }
     })}
-  </>
+  </div>
 )

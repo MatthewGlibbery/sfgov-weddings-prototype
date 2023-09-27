@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 
-import { LocationBlock } from './Location'
+import { Location } from './Location'
 
 import type { TypeLocationValues } from '@/types'
 
@@ -64,7 +64,7 @@ describe('<LocationBlock />', () => {
       ...baseTestData,
       ...optData
     } as TypeLocationValues
-    render(<LocationBlock {...testData} />)
+    render(<Location {...testData} />)
 
     // Because the state is 2 chars, it has a high frequency
     // of matching strings when we do { exact: false }
@@ -97,7 +97,7 @@ describe('<LocationBlock />', () => {
   })
 
   it("it doesn't bold anything when there isn't anything to be bolded", () => {
-    render(<LocationBlock {...baseTestData} />)
+    render(<Location {...baseTestData} />)
     const fontweightProp = window
       .getComputedStyle(screen.getByText(baseTestData.line1, { exact: false }))
       .getPropertyValue('font-weight')
@@ -115,7 +115,7 @@ describe('<LocationBlock />', () => {
       ...baseTestData,
       ...optData
     } as TypeLocationValues
-    render(<LocationBlock {...testData} />)
+    render(<Location {...testData} />)
 
     expect(screen.queryAllByText(Object.values(optData)[0]).length).toBe(1)
   })
@@ -279,7 +279,7 @@ describe('<LocationBlock />', () => {
       ...baseTestData,
       ...input
     } as TypeLocationValues
-    render(<LocationBlock {...testData} />)
+    render(<Location {...testData} />)
     const boldedContainer = screen.queryByTestId('title')
     const fontweightProp = window
       .getComputedStyle(boldedContainer)

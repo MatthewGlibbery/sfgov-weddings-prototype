@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { When } from 'react-if'
 import { Accordion } from '../Accordion'
 import { Image } from '../Image'
-import { LocationBlock } from '../Location'
+import { Location } from '../Location'
 import { PageLabel } from '../PageLabel'
 import { PhoneNumberBlock } from '../PhoneNumberBlock'
 import { RelatedContentList } from '../RelatedContentList'
@@ -82,7 +82,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                     case 'text':
                       return <RichText html={content.value} />
                     case 'address':
-                      return <LocationBlock {...content.value} />
+                      return <Location {...content.value} />
                     case 'phone_number':
                       return <PhoneNumberBlock {...content.value} />
                     default:

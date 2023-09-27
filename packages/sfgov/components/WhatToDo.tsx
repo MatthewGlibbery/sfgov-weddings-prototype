@@ -2,7 +2,7 @@ import { BigDesc, BodyText, Button, classed, HeadingMd } from '@/design-system'
 import { When } from 'react-if'
 import { Callout } from './Callout'
 import { EmailBlock } from './EmailBlock'
-import { LocationBlock } from './Location'
+import { Location } from './Location'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { RichText } from './RichText'
 import type * as Types from '@/types'
@@ -28,7 +28,7 @@ const StepContent = (block: Types.TypeStepSpecificsVariant) => {
     case 'callout':
       return <Callout html={block.value} />
     case 'address':
-      return <LocationBlock {...block.value} />
+      return <Location {...block.value} />
     case 'email':
       return <EmailBlock {...block.value} />
     case 'button_link':

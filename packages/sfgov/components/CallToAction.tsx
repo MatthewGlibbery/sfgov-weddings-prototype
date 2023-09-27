@@ -13,7 +13,12 @@ export const CallToAction = ({ title, link }: TypeCallToActionValues) => (
       <HeadingMd>{title}</HeadingMd>
     </When>
     <When condition={!!(link.url && link.link_text)}>
-      <Button as="a" href={link.url} aria-label={`${title} ${link.link_text}`}>
+      <Button
+        className="w-fit"
+        as="a"
+        href={link.url}
+        aria-label={`${title} ${link.link_text}`}
+      >
         {link.link_text}
       </Button>
     </When>

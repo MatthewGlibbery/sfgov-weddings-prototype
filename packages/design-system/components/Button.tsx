@@ -30,9 +30,11 @@ export const Button = classed('button' as AnyComponent, {
     variant: {
       primary: classes(
         'border-current',
-        'hover:bg-grey400',
+        'text-white',
+        'bg-blueBright',
+        'hover:bg-blue200',
         'hover:text-white',
-        'focus:bg-grey400',
+        'focus:bg-blue200',
         'focus:text-white'
       ),
       secondary: classes(inverseButtonClasses, 'border-current'),

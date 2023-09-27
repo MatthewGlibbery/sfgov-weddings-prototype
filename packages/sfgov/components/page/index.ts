@@ -1,3 +1,4 @@
+export * from './AgencyPage'
 export * from './AboutPage'
 export * from './CampaignPage'
 export * from './EventPage'

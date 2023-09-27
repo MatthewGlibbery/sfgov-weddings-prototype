@@ -8,13 +8,15 @@ import {
   EventTile,
   EventTileList,
   ServiceAndResourceTile,
-  ServiceAndResourceTileList
+  ServiceAndResourceTileList,
+  MeetingTile
 } from './Tile'
 import {
   EventTileFactory,
   GenericTileFactory,
   NewsTileFactory,
   QuickLinkFactory,
+  RelatedContentBlockFactory,
   TileValueFactory
 } from '@/lib/factories'
 
@@ -33,11 +35,9 @@ describe('Tile', () => {
 
     const newsTile = screen.getByRole('link')
     const title = screen.getByText(linkValue.title)
-    const description = screen.getByText(linkValue.description)
 
     expect(newsTile).toBeInTheDocument()
     expect(newsTile).toContainElement(title)
-    expect(newsTile).toContainElement(description)
   })
 
   it('renders a ServiceAndResourceTile', () => {
@@ -76,6 +76,29 @@ describe('Tile', () => {
     expect(eventTile).toContainElement(title)
     expect(eventTile).toContainElement(description)
     expect(eventTile).toContainElement(type)
+  })
+
+  it('renders an MeetingTile', () => {
+    const [meetingLink] = RelatedContentBlockFactory.make(1, {
+      page_content: {
+        meta: {
+          type: 'sf.Meeting'
+        }
+      }
+    }).map((item) => ({
+      ...item.page_content,
+      url: item.page_content.meta.html_url
+    }))
+    console.log(meetingLink)
+    render(<MeetingTile link={meetingLink} />)
+
+    const meetingTile = screen.getByRole('link')
+    const title = screen.getByText(meetingLink.title)
+    const type = screen.getByText('Meeting')
+
+    expect(meetingTile).toBeInTheDocument()
+    expect(meetingTile).toContainElement(title)
+    expect(meetingTile).toContainElement(type)
   })
 
   it('renders a list of news tiles inside a TileSection', () => {

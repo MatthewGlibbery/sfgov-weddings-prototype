@@ -62,6 +62,14 @@ const fontSize = {
       fontWeight: fontWeight.semibold
     }
   ],
+  'desktop-heading-lg': [
+    '24px',
+    {
+      lineHeight: lineHeight['32'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.medium
+    }
+  ],
   'desktop-heading-md': [
     '18px',
     {
@@ -134,8 +142,16 @@ const fontSize = {
       fontWeight: fontWeight.semibold
     }
   ],
+  'heading-lg': [
+    '20px',
+    {
+      lineHeight: lineHeight['28'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.medium
+    }
+  ],
   'heading-md': [
-    '18px',
+    '16px',
     {
       lineHeight: lineHeight['24'],
       letterSpacing: '0px',

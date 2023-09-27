@@ -2,7 +2,6 @@
 
 import { factory } from 'node-factory'
 import {
-  AgencyPage,
   BlockType,
   TypeButtonLinkBlock,
   TypeCalloutBlock,
@@ -44,6 +43,7 @@ import {
   AboutPageData,
   LocationPageData,
   TypeAlertBlock,
+  AgencyPageData,
   CampaignPageData,
   TypeAccordionItemBlock,
   MeetingPageData,
@@ -53,6 +53,7 @@ import {
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
+  AGENCY_PAGE_TYPE,
   CAMPAIGN_PAGE_TYPE,
   EVENT_PAGE_TYPE,
   INFO_PAGE_TYPE,
@@ -315,12 +316,110 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
       type: 'sfgov_base.RelatedContentPage'
     }
   }),
-  related_content_agencies: RelatedContentBlockFactory.make(1, {
+  related_content_agencies: RelatedContentBlockFactory.make(2, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
   }),
   about_location: 'blah'
+}))
+
+export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: AGENCY_PAGE_TYPE
+  }),
+  title: 'This is an agency',
+  description: 'description',
+  logo: ImageFactory.make(),
+  main_image: ImageFactory.make(),
+  alert: AlertBlockFactory.make(1),
+  spotlight_primary: SpotlightFactory.make(1),
+  quicklinks: QuickLinkFactory.make(3),
+  meetings: [LocationBlockFactory.make(), TitleAndTextFactory.make()],
+  meeting_archive_date: '',
+  meeting_archive_url: '',
+  services: [
+    {
+      type: 'services',
+      value: {
+        title: 'Service section 1',
+        services: [GenericTileFactory.make()]
+      },
+      id: gen.datatype.uuid()
+    }
+  ],
+  spotlight_secondary: SpotlightFactory.make(1),
+  resources: [
+    {
+      type: 'resources',
+      value: {
+        title: 'Resource section 1',
+        resources: [GenericTileFactory.make()]
+      },
+      id: gen.datatype.uuid()
+    }
+  ],
+  about_description: '',
+  child_agency_section_title: '',
+  part_of: RelatedContentBlockFactory.make(2, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  related_child_agencies: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  related_content_agencies: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  call_to_action: CallToActionFactory.make(1),
+  social_media: SocialMediaFactory.make(1),
+  contact: [
+    LocationBlockFactory.make(),
+    PhoneNumberFactory.make(),
+    EmailBlockFactory.make()
+  ],
+  public_records: [
+    {
+      type: 'link',
+      value: 'www.link.com',
+      id: gen.datatype.uuid()
+    }
+  ],
+  archive_url: 'www.farm.com',
+  archive_date: '2023-08-01',
+  agency_redirect: '',
+  related_content_topics: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  related_events: {
+    upcoming: RelatedContentBlockFactory.make(4, {
+      page_content: {
+        meta: {
+          type: 'sf.Meeting'
+        }
+      }
+    }),
+    past: RelatedContentBlockFactory.make(3, {
+      page_content: {
+        meta: {
+          type: 'sf.Event'
+        }
+      }
+    })
+  },
+  related_news: RelatedContentBlockFactory.make(1, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  })
 }))
 
 export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({
@@ -394,7 +493,6 @@ export const AccordionItemFactory = factory<TypeAccordionItemBlock>((gen) => ({
       TextBlockFactory.make(),
       LocationBlockFactory.make(),
       PhoneNumberFactory.make(),
-      // @ts-expect-error Should not render anything other than the above
       TitleAndTextFactory.make()
     ]
   }
@@ -472,7 +570,10 @@ export const TileValueFactory = factory((gen) => ({
   url: '',
   title: gen.commerce.productName(),
   description: gen.commerce.productDescription(),
-  event_type: 'music'
+  event_type: 'music',
+  date: '2023-09-19',
+  date_time: DateTimeBlockFactory.make(1),
+  cancelled: false
 }))
 
 export const NewsTileFactory = factory<TypeNewsTileBlock>((gen) => ({
@@ -549,8 +650,16 @@ export const PageFactory = factory<PageData>((gen) => ({
   title: gen.commerce.productName()
 }))
 
-export const RelatedContentBlockFactory = factory<RelatedContentData>(
-  (gen) => ({
+export const RelatedContentBlockFactory = factory<RelatedContentData>((gen) => {
+  const laterDate = '2028-09-11'
+  const pastDate = '2022-09-11'
+  const date = Math.floor(Math.random() * 2) ? laterDate : pastDate
+  const [futureDate, futureTime] = gen.date
+    .future(5, new Date(date))
+    .toString()
+    .split('T')
+
+  return {
     id: gen.datatype.number(),
     meta: {
       type: `sfgov_${gen.lorem.word()}.${gen.lorem
@@ -564,10 +673,22 @@ export const RelatedContentBlockFactory = factory<RelatedContentData>(
         type: 'wagtailcore.Page',
         html_url: gen.internet.url()
       },
-      title: gen.commerce.productName()
+      title: gen.commerce.productName(),
+      date_time: DateTimeBlockFactory.make(1, {
+        value: {
+          start_date: date,
+          start_time: '16:00:00',
+          end_date: futureDate,
+          end_time: futureTime,
+          is_all_day: gen.datatype.boolean(),
+          include_end_date_time: gen.datatype.boolean() ? 'yes' : 'no'
+        }
+      }),
+      date: gen.date.recent(),
+      cancelled: false
     }
-  })
-)
+  }
+})
 
 export const RelatedContentFactory = factory<RelatedContentData>((gen) => ({
   id: gen.datatype.number(),
@@ -631,26 +752,22 @@ export const DateTimeBlockFactory = factory<TypeDateTimeBlock>((gen) => {
   }
 })
 
-export const AgencyPageFactory = factory<AgencyPage>((gen) => {
-  return {
-    id: gen.datatype.number(),
-    description: gen.lorem.word(),
-    title: gen.lorem.words(),
-    meta: {
-      type: `sfgov_${gen.lorem.word()}.${gen.lorem
-        .sentence(1)
-        .replace(/\.$/, '')}`,
-      html_url: gen.internet.url()
-    }
-  }
-})
-
 export const LocationBlockFactory = factory<TypeLocationBlock>((gen) => {
   return {
     id: gen.datatype.uuid(),
     type: 'address',
     value: {
-      agency: AgencyPageFactory.make(),
+      agency: {
+        id: gen.datatype.number(),
+        description: gen.lorem.word(),
+        title: gen.lorem.words(),
+        meta: {
+          type: `sfgov_${gen.lorem.word()}.${gen.lorem
+            .sentence(1)
+            .replace(/\.$/, '')}`,
+          html_url: gen.internet.url()
+        }
+      },
       organization: gen.name.jobTitle(),
       addressee: `${gen.name.firstName()} ${gen.name.lastName()}`,
       location_name: gen.lorem.word(),
@@ -913,7 +1030,7 @@ export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
     }
   }),
   cancelled: false,
-  date: DateTimeBlockFactory.make(1),
+  date_time: DateTimeBlockFactory.make(1),
   meeting_location: [LocationBlockFactory.make(), OnlineEventFactory.make()],
   overview: '',
   agenda: [AgendaItemBlockFactory.make()],

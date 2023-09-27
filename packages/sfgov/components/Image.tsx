@@ -19,8 +19,8 @@ export const Image = ({ imageRef, ...rest }: ImageOwnProps) => {
     <ImageBase
       src={imageRef.meta.download_url}
       layout="responsive"
-      width={imageRef.original.width}
-      height={imageRef.original.height}
+      width={imageRef.original?.width || 50}
+      height={imageRef.original?.height || 50}
       alt={imageRef.title}
       {...rest}
     />

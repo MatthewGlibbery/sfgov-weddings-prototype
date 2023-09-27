@@ -5,7 +5,7 @@ import { BodyText, HeadingSm } from '@/design-system'
 import type { TypeLocationValues } from '@/types'
 
 /* eslint-disable camelcase */
-export const LocationBlock = (props: TypeLocationValues) => {
+export const Location = (props: TypeLocationValues) => {
   const {
     agency,
     organization,

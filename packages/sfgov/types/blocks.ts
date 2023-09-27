@@ -1,6 +1,7 @@
 import { WagtailImageData } from './images'
 import {
   AgencyPage,
+  MinimalMeta,
   MinimalPageData,
   PageData,
   RelatedContentTransactionBlock
@@ -41,26 +42,6 @@ export type TypeCostBlockValues = {
 }
 
 export type TypeCostBlock = BlockType<'cost', TypeCostBlockValues>
-
-export type TypeTileBlockValues = MinimalPageData & {
-  title: string
-  description: string
-  url: string
-  link_to: string
-  event_type?: string
-}
-
-export type TypeTileBlock<T extends string = string> = BlockType<
-  T,
-  TypeTileBlockValues
->
-
-export type TypeNewsTileBlock = TypeTileBlock<'news'>
-export type TypeContentTileBlock = TypeTileBlock<
-  'content' | 'page' | 'external_link'
->
-export type TypeQuickLinkBlock = TypeTileBlock<'quick_links'>
-export type TypeEventTileBlock = TypeTileBlock<'event'>
 
 export type TypeStepBlock = BlockType<
   'step',
@@ -130,6 +111,30 @@ export type TypeDateTimeValues = {
 }
 export type TypeDateTimeBlock = BlockType<string, TypeDateTimeValues>
 
+export type TypeTileBlockValues = MinimalPageData & {
+  title: string
+  description: string
+  url: string
+  link_to: string
+  event_type?: string
+  meta?: MinimalMeta
+  date?: string
+  date_time?: TypeDateTimeBlock[]
+  cancelled?: boolean
+}
+
+export type TypeTileBlock<T extends string = string> = BlockType<
+  T,
+  TypeTileBlockValues
+>
+
+export type TypeNewsTileBlock = TypeTileBlock<'news'>
+export type TypeContentTileBlock = TypeTileBlock<
+  'content' | 'page' | 'external_link'
+>
+export type TypeQuickLinkBlock = TypeTileBlock<'quick_links'>
+export type TypeEventTileBlock = TypeTileBlock<'event'>
+
 export type TypeCallToActionValues = {
   title: string
   link: TypeLinkValues
@@ -192,6 +197,13 @@ export type TypeSocialMediaBlock = BlockType<
   'social_media',
   { social_media: TypeSocialMediaBlockValues[] }
 >
+
+export type ContactFooterBlockTypes =
+  | TypeEmailBlock
+  | TypePhoneNumberBlock
+  | TypeLocationBlock
+  | TypeTitleAndTextBlock
+  | TypeSocialMediaBlock
 
 export type TypeSpotlightBlockValues = {
   title: string
