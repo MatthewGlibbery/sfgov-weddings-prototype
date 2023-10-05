@@ -28,7 +28,7 @@
     "@types/safe-json-stringify": "^1.1.2",
     "autoprefixer": "^10.4.14",
     "lodash-es": "^4.17.21",
-    "postcss": "^8.4.23",
+    "postcss": "^8.4.31",
     "tailwindcss": "^3.3.2"
   }
 }
