@@ -21,14 +21,17 @@ export const StackedItem = ({
   // TODO: handle icons as paths instead of assuming an Icon element
   return (
     <StyledItem data-testid="stacked-content-item" {...rest}>
-      <HeadingSm className="flex items-center mb-20">
-        {Icon ? (
-          <div className="flex pr-8" data-testid="stacked-content-item-icon">
-            <Icon width={24} />
-          </div>
-        ) : null}
-        {title}
-      </HeadingSm>
+      {Icon ? (
+        <Icon
+          // @ts-expect-error erg
+          className="mb-12"
+          width={24}
+          data-testid="stacked-content-item-icon"
+        />
+      ) : null}
+      {title ? (
+        <HeadingSm className="flex items-center mb-20">{title}</HeadingSm>
+      ) : null}
       {children}
     </StyledItem>
   )

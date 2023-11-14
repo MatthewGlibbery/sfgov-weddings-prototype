@@ -12,7 +12,7 @@ export const ServicesAndResourcesSection = ({
   tiles
 }: ServicesAndResourcesSectionProps) => {
   return (
-    <div>
+    <div className="mb-20">
       <HeadingXl romanType="sans" as="h3" className="m-0 mb-28 text-grey700">
         {title}
       </HeadingXl>

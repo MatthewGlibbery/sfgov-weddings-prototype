@@ -2,6 +2,17 @@ import { TitleAndTextFactory, TransactionPageFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
 import { TransactionPage } from './TransactionPage'
 
+const observe = jest.fn()
+const unobserve = jest.fn()
+const disconnect = jest.fn()
+
+// @ts-expect-error erg
+window.IntersectionObserver = jest.fn(() => ({
+  observe,
+  unobserve,
+  disconnect
+}))
+
 describe('TransactionPage', () => {
   const fixture = TransactionPageFactory.make()
 
@@ -37,7 +48,6 @@ describe('TransactionPage', () => {
       input: fixture.related_content_agencies[0].page_content.title
     },
     { what: 'things_to_know', input: fixture.things_to_know[0].value.title },
-    { what: 'what_to_do', input: fixture.what_to_do[0].type },
     { what: 'custom_section', input: fixture.custom_section[0].value.title },
     { what: 'special_cases', input: fixture.special_cases[0].value.title },
     {

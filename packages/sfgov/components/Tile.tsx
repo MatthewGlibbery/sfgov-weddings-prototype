@@ -85,12 +85,14 @@ export const NewsTile = ({ link }: TileProps) =>
 
 export const ServiceAndResourceTile = ({ link }: TileProps) => {
   return (
-    <div className="flex items-start">
+    <div className="flex items-center">
       <BaseTile href={link.url}>
         <HeadingMd className="m-0 mb-8">{link.title}</HeadingMd>
-        <div>{link.description}</div>
+        <When condition={!!link.description}>
+          <div>{link.description}</div>
+        </When>
       </BaseTile>
-      <IconChevronRight className="mt-20" width={20} />
+      <IconChevronRight className="ml-16" width={20} />
     </div>
   )
 }

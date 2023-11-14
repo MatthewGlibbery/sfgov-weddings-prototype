@@ -95,7 +95,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
       </When>
       <Container className="bg-white relative p-20 top-[100px] xl:top-[250px] xs:mx-0">
         <PageLabel label={t('Agency')} />
-        <div className="xl:flex xl:flex-row-reverse xl:justify-between mb-40">
+        <div className="xl:flex xl:flex-row-reverse xl:justify-end mb-40">
           <When condition={!!logo}>
             {() => (
               <Image
@@ -226,22 +226,22 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
         >
           <Container className="mt-40">
             <When condition={!!resources.length}>
-              <HeadingXXl as="h2" className="my-12 md:my-20">
-                {t('Resources')}
-              </HeadingXXl>
-              {resources.map((resource) => (
-                <ServicesAndResourcesSection
-                  key={resource.id}
-                  title={resource.value.title}
-                  tiles={resource.value.resources}
-                />
-              ))}
+              <div className="mb-40">
+                <HeadingXXl as="h2" className="my-12 md:my-20">
+                  {t('Resources')}
+                </HeadingXXl>
+                {resources.map((resource) => (
+                  <ServicesAndResourcesSection
+                    key={resource.id}
+                    title={resource.value.title}
+                    tiles={resource.value.resources}
+                  />
+                ))}
+              </div>
             </When>
             <When condition={aboutDescription || !!callToAction.length}>
-              <div className="flex flex-col space-y-12">
-                <HeadingXXl as="h2" className="mt-40">
-                  {t('About')}
-                </HeadingXXl>
+              <div className="flex flex-col space-y-12 mb-40">
+                <HeadingXXl as="h2">{t('About')}</HeadingXXl>
                 <When condition={aboutDescription}>
                   <RichText html={aboutDescription} />
                 </When>

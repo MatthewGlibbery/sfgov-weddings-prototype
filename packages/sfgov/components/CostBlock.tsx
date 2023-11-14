@@ -36,7 +36,7 @@ export const CostBlock = ({
     <div data-testid="step-cost">
       <If condition={variant === 'step'}>
         <Then>
-          <HeadingMd as="h3" className={classes}>
+          <HeadingMd as="h3" className={classes} id="costBlock">
             {t('Cost')}:
           </HeadingMd>
           <span>{cost}</span>.

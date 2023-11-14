@@ -1,4 +1,4 @@
-import { BigDesc, BodyText, Button, classed, HeadingMd } from '@/design-system'
+import { BodyText, Button, classed, HeadingXl } from '@/design-system'
 import { When } from 'react-if'
 import { Callout } from './Callout'
 import { EmailBlock } from './EmailBlock'
@@ -6,6 +6,7 @@ import { Location } from './Location'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { RichText } from './RichText'
 import type * as Types from '@/types'
+import { camelCase } from 'lodash-es'
 
 type WhatToDoStepBlockProps = Types.TypeWhatToDoStepBlock & {
   index: number
@@ -33,8 +34,8 @@ const StepContent = (block: Types.TypeStepSpecificsVariant) => {
       return <EmailBlock {...block.value} />
     case 'button_link':
       return (
-        <Button as="a" href={block.value.url}>
-          {block.value.text}
+        <Button as="a" href={block.value.url} variant="secondary">
+          {block.value.link_text}
         </Button>
       )
     case 'phone_number':
@@ -59,7 +60,12 @@ const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
   } = props
   return (
     <>
-      <BigDesc>{`${index}. ${stepTitle}`}</BigDesc>
+      <When condition={stepTitle}>
+        <HeadingXl
+          as="h3"
+          id={camelCase(stepTitle)}
+        >{`${index}. ${stepTitle}`}</HeadingXl>
+      </When>
       {stepSpecifics.map((block: Types.TypeStepSpecificsVariant) => {
         return (
           <StyledStep
@@ -82,9 +88,6 @@ export const WhatToDo = (props: Types.TypeWhatToDoBlock) => {
 
   return (
     <>
-      <HeadingMd as="h3" data-testid="whatToDoSection">
-        {type}
-      </HeadingMd>
       {value.map((block) => {
         if (block.type === 'what_to_do_step') i++
         return (

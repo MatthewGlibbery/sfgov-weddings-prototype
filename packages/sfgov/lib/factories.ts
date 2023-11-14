@@ -818,7 +818,7 @@ export const WhatToDoStepFactory = factory<TypeWhatToDoStepBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'what_to_do_step',
   value: {
-    step_title: gen.lorem.sentence(),
+    step_title: 'Step',
     step_specifics: [
       TextBlockFactory.make(),
       PhoneNumberFactory.make(),
@@ -833,11 +833,12 @@ export const WhatToDoStepFactory = factory<TypeWhatToDoStepBlock>((gen) => ({
 export const WhatToDoFactory = factory<TypeWhatToDoBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: gen.random.arrayElement<TypeWhatToDoVariant>([
-    'online',
-    'in_person',
-    'phone',
-    'email',
-    'mail'
+    'callout',
+    'address',
+    'button_link',
+    'text',
+    'phone_number',
+    'email'
   ]),
   value: WhatToDoStepFactory.make(2)
 }))

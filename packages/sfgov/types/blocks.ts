@@ -61,6 +61,8 @@ export type TypeImageBlock = BlockType<'image', WagtailImageData>
 export type TypeTitleAndTextValues = {
   title: string
   text: string
+  h2?: boolean
+  id?: string
 }
 
 export type TypeTitleAndTextBlock = BlockType<
@@ -149,11 +151,12 @@ export type TypeTextBlock = BlockType<'text', string>
 export type TypeButtonLinkBlock = BlockType<'button_link', TypeLinkValues>
 
 export type TypeWhatToDoVariant =
-  | 'online'
-  | 'in_person'
-  | 'phone'
+  | 'callout'
+  | 'address'
+  | 'phone_number'
   | 'email'
-  | 'mail'
+  | 'button_link'
+  | 'text'
 
 export type TypeCalloutBlock = BlockType<'callout', string>
 
