@@ -9,6 +9,7 @@ import { ContentSection } from '../ContentSection'
 import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
 
 import { BigDesc, Container, DisplayLg, HeadingXl } from '@/design-system'
+import { RelatedAgenciesList } from '../RelatedAgenciesList'
 
 export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -106,17 +107,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
 
         <When condition={!!agencies}>
           {/* Related Agencies list */}
-          {agencies.map((agency, i) => (
-            <span
-              key={agency.page_content.id}
-              data-testid="related_content_agencies-section"
-            >
-              {i > 0 && ', '}
-              <a href={agency.page_content.meta.html_url}>
-                {agency.page_content.title}
-              </a>
-            </span>
-          ))}
+          <RelatedAgenciesList agencies={agencies} />
         </When>
       </Container>
     </PageWrapper>

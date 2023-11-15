@@ -26,6 +26,7 @@ import {
   PageLabel,
   PageWrapper,
   QuickLinkList,
+  RelatedAgenciesList,
   RelatedContentList,
   RichText,
   Spotlight,
@@ -110,19 +111,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               {title}
             </DisplayXXXl>
             <BodyText>{description}</BodyText>
-            <div>
-              {partOf.map((agency, i) => (
-                <span key={agency.page_content.id}>
-                  {i > 0 && ', '}
-                  <a
-                    className="text-grey500"
-                    href={new URL(agency.page_content.meta.html_url).pathname}
-                  >
-                    {agency.page_content.title}
-                  </a>
-                </span>
-              ))}
-            </div>
+            <RelatedAgenciesList agencies={partOf} />
           </div>
         </div>
         <div className="mb-40">This is where the TOC will go :)</div>

@@ -258,3 +258,9 @@ export type MeetingPageData = PageData & {
   notices: TypeTitleAndTextBlock[]
   meeting_documents: TypeDownloadableFilesBlock[]
 }
+
+export type DataStoryPageData = PageData & {
+  description: string
+  content: TypeContentSectionBlock[]
+  related_content_agencies: RelatedContentData[]
+}

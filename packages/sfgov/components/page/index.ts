@@ -1,6 +1,7 @@
 export * from './AgencyPage'
 export * from './AboutPage'
 export * from './CampaignPage'
+export * from './DataStoryPage'
 export * from './EventPage'
 export * from './InformationPage'
 export * from './LocationPage'

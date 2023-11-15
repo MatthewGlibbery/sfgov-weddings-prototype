@@ -124,7 +124,11 @@ const useIntersectionObserver = (setActiveId) => {
         if (headingElement.isIntersecting) visibleHeadings.push(headingElement)
       })
 
-      setActiveId(visibleHeadings[0].target.id)
+      // If there is only one visible heading, this is our "active" heading
+      // otherwise, the heading closest to the top of the page is active
+      if (visibleHeadings.length >= 1) {
+        setActiveId(visibleHeadings[0].target.id)
+      }
     }
 
     const observer = new IntersectionObserver(callback, {

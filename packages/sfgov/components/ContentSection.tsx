@@ -1,5 +1,8 @@
-import { BodyText, Button, HeadingMd } from '@/design-system'
+import { BodyText, Button, HeadingXXl } from '@/design-system'
 import { TypeContentSectionBlockValues } from '@/types'
+import { Callout } from './Callout'
+import { EmbeddedContentBlock } from './EmbeddedContentBlock'
+import { Image } from './Image'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { Spotlight } from './Spotlight'
 import { RichText } from './RichText'
@@ -11,8 +14,10 @@ export const ContentSection = ({
   section_content: sectionContent
 }: TypeContentSectionBlockValues) => {
   return (
-    <div>
-      <HeadingMd as="h3">{title}</HeadingMd>
+    <div className="space-y-20">
+      <HeadingXXl as="h2" id={title}>
+        {title}
+      </HeadingXXl>
       {sectionContent.map((block) => {
         switch (block.type) {
           case 'button_link':
@@ -36,10 +41,18 @@ export const ContentSection = ({
             return <Timeline {...block.value} />
           case 'text':
             return (
-              <BodyText>
-                <RichText html={block.value} />
-              </BodyText>
+              <div>
+                <BodyText>
+                  <RichText html={block.value} />{' '}
+                </BodyText>
+              </div>
             )
+          case 'callout':
+            return <Callout html={block.value} />
+          case 'image':
+            return <Image imageRef={block.value} alt="image alt" />
+          case 'powerbi_embed':
+            return <EmbeddedContentBlock {...block.value} />
           /* istanbul ignore next */
           default:
             return <></>

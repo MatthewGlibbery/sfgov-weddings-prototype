@@ -239,24 +239,6 @@ export type TypeServicesSectionBlock = BlockType<
 
 export type TypeTimelineBlock = BlockType<'timeline', TypeTimelineBlockValues>
 
-export type ContentSectionTypes =
-  | TypeButtonLinkBlock
-  | TypePhoneNumberBlock
-  | TypeResourcesSectionBlock
-  | TypeSpotlightBlock
-  | TypeTimelineBlock
-  | TypeTextBlock
-
-export type TypeContentSectionBlockValues = {
-  title: string
-  section_content: ContentSectionTypes[]
-}
-
-export type TypeContentSectionBlock = BlockType<
-  'section',
-  TypeContentSectionBlockValues
->
-
 export type TypeAlertBlockValues = {
   description: string
   expiration_date: string
@@ -339,4 +321,42 @@ export type TypeDownloadableFilesBlockValues = {
 export type TypeDownloadableFilesBlock = BlockType<
   'downloadable_files',
   TypeDownloadableFilesBlockValues
+>
+
+export type TypeEmbeddedContentBlockValues = {
+  desktop_embed_url: string
+  mobile_embed_url: string
+  aspect_ratios: {
+    desktop: { width: string; height: string }
+    mobile: { width: string; height: string }
+  }
+  alt_text: string
+  source_data: string
+  data_notes: string
+}
+
+export type TypeEmbeddedContentBlock = BlockType<
+  'powerbi_embed',
+  TypeEmbeddedContentBlockValues
+>
+
+export type ContentSectionTypes =
+  | TypeButtonLinkBlock
+  | TypeCalloutBlock
+  | TypeEmbeddedContentBlock
+  | TypeImageBlock
+  | TypePhoneNumberBlock
+  | TypeResourcesSectionBlock
+  | TypeSpotlightBlock
+  | TypeTimelineBlock
+  | TypeTextBlock
+
+export type TypeContentSectionBlockValues = {
+  title: string
+  section_content: ContentSectionTypes[]
+}
+
+export type TypeContentSectionBlock = BlockType<
+  'section',
+  TypeContentSectionBlockValues
 >

@@ -4,6 +4,7 @@ import {
   AboutPage,
   AgencyPage,
   CampaignPage,
+  DataStoryPage,
   EventPage,
   InformationPage,
   LocationPage,
@@ -19,6 +20,7 @@ import { IPageTemplate, WagtailPageTemplate } from '@/lib/controller'
 export const ABOUT_PAGE_TYPE = 'sf.About'
 export const AGENCY_PAGE_TYPE = 'sf.Agency'
 export const CAMPAIGN_PAGE_TYPE = 'sf.Campaign'
+export const DATA_STORY_PAGE_TYPE = 'sf.DataStory'
 export const EVENT_PAGE_TYPE = 'sf.Event'
 export const INFO_PAGE_TYPE = 'sf.Information'
 export const LOCATION_PAGE_TYPE = 'sf.LocationPage'
@@ -35,6 +37,7 @@ export const DEFAULT_PAGE_TEMPLATES: IPageTemplate[] = [
   new WagtailPageTemplate(AboutPage, ABOUT_PAGE_TYPE),
   new WagtailPageTemplate(AgencyPage, AGENCY_PAGE_TYPE),
   new WagtailPageTemplate(CampaignPage, CAMPAIGN_PAGE_TYPE),
+  new WagtailPageTemplate(DataStoryPage, DATA_STORY_PAGE_TYPE),
   new WagtailPageTemplate(EventPage, EVENT_PAGE_TYPE),
   new WagtailPageTemplate(InformationPage, INFO_PAGE_TYPE),
   new WagtailPageTemplate(LocationPage, LOCATION_PAGE_TYPE),

@@ -49,12 +49,15 @@ import {
   MeetingPageData,
   TypeAgendaItemBlock,
   TypeOnlineEventBlock,
-  TypeVideoBlock
+  TypeVideoBlock,
+  TypeEmbeddedContentBlock,
+  DataStoryPageData
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
   AGENCY_PAGE_TYPE,
   CAMPAIGN_PAGE_TYPE,
+  DATA_STORY_PAGE_TYPE,
   EVENT_PAGE_TYPE,
   INFO_PAGE_TYPE,
   LOCATION_PAGE_TYPE,
@@ -977,6 +980,32 @@ export const OnlineEventFactory = factory<TypeOnlineEventBlock>((gen) => ({
   }
 }))
 
+export const EmbeddedContentFactory = factory<TypeEmbeddedContentBlock>(
+  (gen) => ({
+    id: gen.datatype.uuid(),
+    type: 'embed',
+    value: {
+      desktop_embed_url:
+        'https://app.powerbigov.us/view?r=eyJrIjoiOWM4ZDgxNWQtYzMzMS00ZWNhLTg1MTAtYzdlODgwMGYzZWZhIiwidCI6IjIyZDVjMmNmLWNlM2UtNDQzZC05YTdmLWRmY2MwMjMxZjczZiJ9',
+      mobile_embed_url:
+        'https://app.powerbigov.us/view?r=eyJrIjoiOWM4ZDgxNWQtYzMzMS00ZWNhLTg1MTAtYzdlODgwMGYzZWZhIiwidCI6IjIyZDVjMmNmLWNlM2UtNDQzZC05YTdmLWRmY2MwMjMxZjczZiJ9&pageName=ReportSection573a64b720809c160482',
+      aspect_ratios: {
+        desktop: {
+          width: '700',
+          height: '750'
+        },
+        mobile: {
+          width: '360',
+          height: '750'
+        }
+      },
+      alt_text: gen.lorem.sentence(),
+      source_data: '',
+      data_notes: gen.lorem.sentence()
+    }
+  })
+)
+
 export const AgendaItemBlockFactory = factory<TypeAgendaItemBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'agenda_item',
@@ -1057,4 +1086,19 @@ export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
     })
   ],
   meeting_documents: []
+}))
+
+export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: DATA_STORY_PAGE_TYPE
+  }),
+  title: 'Data story page title',
+  description: 'Data story page description',
+  content: [ContentSectionFactory.make()],
+  related_content_agencies: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sf.RelatedContentAgency'
+    }
+  })
 }))
