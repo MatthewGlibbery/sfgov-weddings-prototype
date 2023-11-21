@@ -10,6 +10,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.19.2",
     "html-react-parser": "^3.0.16",
     "i18next": "^22.4.14",
     "micromatch": "^4.0.5",
@@ -18,6 +19,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-error-boundary": "^3.1.4",
+    "react-geocode": "^1.0.0-alpha.1",
     "react-i18next": "^12.2.0",
     "react-if": "^4.1.4",
     "safe-json-stringify": "^1.2.0"

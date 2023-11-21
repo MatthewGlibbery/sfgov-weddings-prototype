@@ -24,7 +24,9 @@ build/
 
 # env files
 .env
-.env.*.local
+.env.development
+.env.local
+.env.production
 
 # build artifacts
 dist/

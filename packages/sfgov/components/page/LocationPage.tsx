@@ -1,12 +1,10 @@
 import {
   BigDesc,
   BodyText,
-  Button,
   Container,
   DisplayXXXl,
   HeadingSm,
   HeadingXXl,
-  IconPhone,
   IconWIP
 } from '@/design-system'
 import { LocationPageData } from '@/types'
@@ -17,8 +15,7 @@ import {
   Accordion,
   Alert,
   ContactFooter,
-  Image,
-  Location,
+  Map,
   PageLabel,
   PageWrapper,
   RelatedAgenciesList,
@@ -75,18 +72,12 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
               </BigDesc>
             </When>
             <RelatedAgenciesList agencies={agencies} />
-          </Container>
-          <div className="bg-grey100">Map Placeholder</div>
-          <Container className="mb-20 pb-40">
-            <div className="flex flex-col space-y-40 mt-40">
-              <When condition={!!image}>
-                <Image imageRef={image} alt={`Photo of ${locationName}`} />
-              </When>
-              <Location {...address[0]?.value} />
-              <Button>
-                <IconPhone width={16} />
-                {t('View full contact information')}
-              </Button>
+            <Map
+              address={address[0]}
+              image={image}
+              locationName={locationName}
+            />
+            <div className="mt-40">
               <RichText html={body} />
             </div>
           </Container>

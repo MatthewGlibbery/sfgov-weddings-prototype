@@ -37,6 +37,15 @@ const customJestConfig = {
     '!<rootDir>/**/ErrorBoundary.tsx',
     '!<rootDir>/**/GoogleFonts.tsx'
   ],
+  globals: {
+    google: {
+      maps: {
+        MapTypeId: {
+          ROADMAP: 'roadmap'
+        }
+      }
+    }
+  },
   moduleNameMapper: {
     ...aliases,
     '^lodash-es$': 'lodash'
