@@ -81,6 +81,15 @@ export const RichText = (props: RichTextProps) => {
         )
       )
 
+      // I'm not sure why this works, but if we don't
+      // short-circuit here, next/react throws a bunch of errors
+      // about not liking self-closing tags. We can be more
+      // rigorous about transforming <br/>'s if we like, but
+      // this is an easy workaround for now
+      if (tagName === 'br') {
+        return
+      }
+
       // The following two if statements are
       // for creating the pull quote formatting
       // for the News content type
