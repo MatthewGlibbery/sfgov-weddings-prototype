@@ -3,9 +3,9 @@ import { render, screen } from '@testing-library/react'
 import { EmbeddedContentBlock } from './EmbeddedContentBlock'
 
 describe('EmbeddedContentBlock', () => {
-  it('renders the embedded content block', () => {
+  it('renders the embedded content block', async () => {
     const fixture = EmbeddedContentFactory.make()
     render(<EmbeddedContentBlock {...fixture.value} />)
-    expect(screen.getByTitle(fixture.value.alt_text)).toBeInTheDocument()
+    expect(await screen.getAllByTitle(fixture.value.alt_text).length).toBe(2)
   })
 })

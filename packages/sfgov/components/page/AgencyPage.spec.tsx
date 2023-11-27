@@ -6,7 +6,6 @@ describe('AgencyPage', () => {
   const page = AgencyPageFactory.make()
 
   it('renders a full agency page', () => {
-    console.log('_+_+_+_', page.related_events)
     render(<AgencyPage page={page} />)
 
     const title = screen.getByRole('heading', {
