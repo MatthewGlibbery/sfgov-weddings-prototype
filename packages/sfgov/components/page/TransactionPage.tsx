@@ -41,8 +41,8 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
     custom_section: customSection,
     get_help: getHelp,
     good_for_community: goodForCommunity,
-    related_content_agencies: agencies,
-    related_content_pages: relatedContentPages
+    partner_agencies: agencies,
+    related_pages: relatedContentPages
   } = page
 
   const { t } = useTranslation()
@@ -67,15 +67,12 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           {/* Related Agencies list */}
           {agencies.map((agency, i) => (
             <span
-              key={agency.page_content.id}
+              key={agency.id}
               data-testid="related_content_agencies-section"
             >
               {i > 0 && ', '}
-              <a
-                className="text-grey500"
-                href={agency.page_content.meta.html_url}
-              >
-                {agency.page_content.title}
+              <a className="text-grey500" href={agency.meta.html_url}>
+                {agency.title}
               </a>
             </span>
           ))}

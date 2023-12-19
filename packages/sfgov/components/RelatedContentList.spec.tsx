@@ -4,22 +4,16 @@ import { RelatedContentList } from './RelatedContentList'
 describe('RelatedContentList', () => {
   const content = [
     {
-      id: 1,
+      id: 2,
       meta: {
-        type: 'sfgov_base.RelatedContentTopic'
+        type: 'wagtailcore.Page',
+        detail_url: 'http://localhost:8000/api/v2/pages/2/',
+        html_url: 'http://localhost/',
+        slug: 'home',
+        seo_title: '',
+        search_description: ''
       },
-      page_content: {
-        id: 2,
-        meta: {
-          type: 'wagtailcore.Page',
-          detail_url: 'http://localhost:8000/api/v2/pages/2/',
-          html_url: 'http://localhost/',
-          slug: 'home',
-          seo_title: '',
-          search_description: ''
-        },
-        title: 'Hello there'
-      }
+      title: 'Hello there'
     }
   ]
 

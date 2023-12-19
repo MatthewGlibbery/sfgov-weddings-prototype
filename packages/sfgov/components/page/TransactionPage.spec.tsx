@@ -44,8 +44,8 @@ describe('TransactionPage', () => {
 
   it.each([
     {
-      what: 'related_content_agencies',
-      input: fixture.related_content_agencies[0].page_content.title
+      what: 'partner_agencies',
+      input: fixture.partner_agencies[0].title
     },
     { what: 'things_to_know', input: fixture.things_to_know[0].value.title },
     { what: 'custom_section', input: fixture.custom_section[0].value.title },
@@ -62,11 +62,12 @@ describe('TransactionPage', () => {
     render(<TransactionPage page={fixture} />)
 
     const section = screen.getByText(input)
+
     expect(section).toBeInTheDocument()
   })
 
   it.each([
-    { what: 'related_content_agencies' },
+    { what: 'partner_agencies' },
     { what: 'things_to_know' },
     { what: 'what_to_do' },
     { what: 'custom_section' },

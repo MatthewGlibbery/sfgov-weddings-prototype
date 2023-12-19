@@ -131,12 +131,12 @@ export const StepByStepPageFactory = factory<StepByStepData>((gen) => ({
   description: 'Step by step description',
   intro: '<h2>intro</h2',
   steps: StepBlockFactory.make(3),
-  related_content_agencies: RelatedContentBlockFactory.make(3, {
+  partner_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
   }),
-  related_content_topics: RelatedContentBlockFactory.make(3, {
+  topics: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentTopic'
     }
@@ -188,17 +188,13 @@ export const TransactionPageFactory = factory<TransactionPageData>((gen) => ({
     LocationBlockFactory.make(),
     TitleAndTextFactory.make()
   ],
-  related_content_agencies: RelatedContentBlockFactory.make(3, {
-    meta: {
-      type: 'sfgov_base.RelatedContentAgency'
-    }
-  }),
-  related_content_topics: RelatedContentBlockFactory.make(3, {
+  partner_agencies: [PageFactory.make()],
+  topics: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentTopic'
     }
   }),
-  related_content_pages: RelatedContentBlockFactory.make(3, {
+  related_pages: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentPage'
     }
@@ -218,7 +214,7 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
   profile_type: 'city_employee',
   primary_job_title: 'Media Programming Man',
   primary_job_title_line_2: 'I program the media',
-  related_content_agencies: RelatedContentBlockFactory.make(1, {
+  partner_agencies: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
@@ -253,7 +249,7 @@ export const NewsPageFactory = factory<NewsPageData>((gen) => ({
   abstract: gen.lorem.sentence(),
   body: '<p>some rich text</p><blockquote>rich text</blockquote>',
   news_type: gen.random.arrayElement<string>(['news', 'press_release']),
-  related_content_agencies: RelatedContentBlockFactory.make(1, {
+  partner_agencies: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
@@ -309,17 +305,17 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
       id: gen.datatype.uuid()
     }
   ],
-  related_content_part_of: RelatedContentBlockFactory.make(1, {
+  part_of: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentPartOf'
     }
   }),
-  related_content_pages: RelatedContentBlockFactory.make(1, {
+  related_pages: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentPage'
     }
   }),
-  related_content_agencies: RelatedContentBlockFactory.make(2, {
+  partner_agencies: RelatedContentBlockFactory.make(2, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
@@ -886,7 +882,7 @@ export const AboutPageFactory = factory<AboutPageData>((gen) => ({
   }),
   title: 'About',
   description: 'About description',
-  agency: PageFactory.make(),
+  about_agency: PageFactory.make(),
   about_info: [
     TitleAndTextFactory.make({
       value: {
@@ -920,7 +916,7 @@ export const TopicPageFactory = factory<TopicPageData>((gen) => ({
   }),
   title: 'Topic',
   description: 'Topic description',
-  related_content_topics: RelatedContentBlockFactory.make(2, {
+  topics: RelatedContentBlockFactory.make(2, {
     meta: {
       type: 'sf.RelatedContentTopic'
     }
@@ -948,7 +944,7 @@ export const TopicPageFactory = factory<TopicPageData>((gen) => ({
       id: gen.datatype.uuid()
     }
   ],
-  related_content_agencies: RelatedContentBlockFactory.make(3, {
+  partner_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sf.RelatedContentAgency'
     }
@@ -1054,7 +1050,7 @@ export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
     type: MEETING_PAGE_TYPE
   }),
   title: 'Meeting page title',
-  related_content_agencies: RelatedContentBlockFactory.make(1, {
+  partner_agencies: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
@@ -1096,7 +1092,7 @@ export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
   title: 'Data story page title',
   description: 'Data story page description',
   content: [ContentSectionFactory.make()],
-  related_content_agencies: RelatedContentBlockFactory.make(3, {
+  partner_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sf.RelatedContentAgency'
     }

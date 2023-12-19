@@ -21,7 +21,7 @@ export const RelatedContentList = ({
             key={i}
             className="my-20 even:pl-12 md:even:border-l-1 md:even:border-l-grey300"
           >
-            <PageLink page={item.page_content} />
+            <PageLink page={item} />
           </div>
         ))}
       </Grid>

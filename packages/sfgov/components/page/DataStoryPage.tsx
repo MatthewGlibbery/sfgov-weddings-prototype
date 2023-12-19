@@ -14,12 +14,7 @@ import {
 export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
   page
 }) => {
-  const {
-    title,
-    description,
-    content,
-    related_content_agencies: agencies
-  } = page
+  const { title, description, content, partner_agencies: agencies } = page
 
   const { t } = useTranslation()
 

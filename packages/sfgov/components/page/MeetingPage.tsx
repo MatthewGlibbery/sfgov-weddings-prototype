@@ -30,7 +30,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   const { t } = useTranslation()
   const {
     title,
-    related_content_agencies: agencies,
+    partner_agencies: agencies,
     cancelled,
     date_time: date,
     meeting_location: meetingLocation,

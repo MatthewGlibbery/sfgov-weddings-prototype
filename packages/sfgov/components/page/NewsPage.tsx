@@ -48,7 +48,7 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
     abstract,
     body,
     news_type: type,
-    related_content_agencies: agencies
+    partner_agencies: agencies
   } = page
 
   return (

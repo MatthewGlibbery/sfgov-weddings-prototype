@@ -16,7 +16,7 @@ window.IntersectionObserver = jest.fn(() => ({
 describe('DataStoryPage', () => {
   const page = DataStoryPageFactory.make()
 
-  it('renders a meeting page', () => {
+  it('renders a data story page', () => {
     render(<DataStoryPage page={page} />)
 
     const title = screen.getByRole('heading', {

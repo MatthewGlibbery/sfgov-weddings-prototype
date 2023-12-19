@@ -14,8 +14,8 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
     description,
     intro,
     steps = [],
-    related_content_agencies: agencies,
-    related_content_topics: topics
+    partner_agencies: agencies,
+    topics
   } = page
 
   return (

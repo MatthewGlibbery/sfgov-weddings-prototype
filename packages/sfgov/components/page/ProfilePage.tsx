@@ -22,7 +22,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
     pronouns,
     primary_job_title: primaryJobTitle,
     primary_job_title_line_2: primaryJobTitleLine2,
-    related_content_agencies: relatedContentAgencies,
+    partner_agencies: agencies,
     image,
     biography,
     email,
@@ -55,10 +55,10 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
         />
         <Spotlight {...spotlight[0]} />
         <QuickLinkList links={quickLinks} />
-        <When condition={!!relatedContentAgencies.length}>
+        <When condition={!!agencies.length}>
           <RelatedContentList
             className="my-40"
-            content={relatedContentAgencies}
+            content={agencies}
             title={t('Additional city roles') as string}
           />
         </When>

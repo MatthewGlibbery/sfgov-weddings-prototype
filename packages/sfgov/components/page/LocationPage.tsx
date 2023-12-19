@@ -42,9 +42,9 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
     accessibility,
     public_transportation: publicTransportion,
     services,
-    related_content_part_of: partOf,
-    related_content_pages: relatedLocations,
-    related_content_agencies: agencies,
+    part_of: partOf,
+    related_pages: relatedLocations,
+    partner_agencies: agencies,
     about_location: about
   } = page
 

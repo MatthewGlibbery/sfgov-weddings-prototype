@@ -17,11 +17,11 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
   const {
     title,
     description,
-    related_content_part_of: partOf,
+    part_of: partOf,
     information_section: infoSections,
-    related_content_agencies: agencies,
-    related_content_topics: topics,
-    related_content_pages: pages
+    partner_agencies: agencies,
+    topics,
+    related_pages: pages
   } = page
 
   return (

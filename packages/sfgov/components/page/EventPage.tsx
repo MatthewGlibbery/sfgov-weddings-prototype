@@ -13,7 +13,6 @@ import type {
   TypePhoneNumberBlock
 } from '@/types'
 import { RelatedContentList } from '../RelatedContentList'
-// import { Image } from '../Image'
 import {
   PageWrapper,
   CostBlock,
@@ -37,8 +36,8 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
     // image,
     body,
     contact,
-    related_content_agencies: agencies,
-    related_content_topics: topics
+    partner_agencies: agencies,
+    topics
   } = page
 
   const phoneNumbers: TypePhoneNumberBlock[] = []

@@ -23,11 +23,7 @@ describe('<InformationPage>', () => {
     const fixture = InfoPageFactory.make({
       title: 'Information page title',
       description: 'Information page description',
-      related_content_agencies: [
-        RelatedContentFactory.make({
-          page_content: dept1
-        })
-      ]
+      partner_agencies: [dept1]
     })
 
     it('renders the page title', () => {
@@ -134,25 +130,18 @@ describe('<InformationPage>', () => {
             <InformationPage
               page={{
                 ...fixture,
-                related_content_part_of: [
+                part_of: [
                   {
                     id: 4,
                     meta: {
-                      type: 'sfgov_information_page.RelatedContentPartOf'
+                      type: 'sfgov_information_page.InformationPage',
+                      detail_url: 'http://localhost:8000/api/v2/pages/4/',
+                      html_url: 'http://localhost/some-other-information-page/',
+                      slug: 'some-other-information-page',
+                      seo_title: 'meta title tag',
+                      search_description: 'meta description'
                     },
-                    page_content: {
-                      id: 4,
-                      meta: {
-                        type: 'sfgov_information_page.InformationPage',
-                        detail_url: 'http://localhost:8000/api/v2/pages/4/',
-                        html_url:
-                          'http://localhost/some-other-information-page/',
-                        slug: 'some-other-information-page',
-                        seo_title: 'meta title tag',
-                        search_description: 'meta description'
-                      },
-                      title: 'Some other information page'
-                    }
+                    title: 'Some other information page'
                   }
                 ]
               }}

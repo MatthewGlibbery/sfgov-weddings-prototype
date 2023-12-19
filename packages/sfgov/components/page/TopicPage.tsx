@@ -16,13 +16,13 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const {
     title,
     description,
-    related_content_topics: topics, // not displayed
+    topics, // not displayed
     content_top: contentTop,
     services,
     spotlight,
     content,
     resources,
-    related_content_agencies: agencies
+    partner_agencies: agencies
   } = page
   return (
     <PageWrapper title={title}>
@@ -43,14 +43,9 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
 
         <When condition={!!topics}>
           {topics.map((topic, i) => (
-            <span
-              key={topic.page_content.id}
-              data-testid="related_content_topics-section"
-            >
+            <span key={topic.id} data-testid="related_content_topics-section">
               {i > 0 && ', '}
-              <a href={topic.page_content.meta.html_url}>
-                {topic.page_content.title}
-              </a>
+              <a href={topic.meta.html_url}>{topic.title}</a>
             </span>
           ))}
         </When>

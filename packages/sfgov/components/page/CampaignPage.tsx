@@ -34,7 +34,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
     additional_content: additionalContent,
     spotlight,
     about_campaign: about,
-    related_content_agencies: agencies,
+    partner_agencies: agencies,
     related_links: links
   } = page
 

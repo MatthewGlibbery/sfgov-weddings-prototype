@@ -60,9 +60,6 @@ const Home = ({ pages }: { pages: PageData[] }) => {
             No pages found?
           </div>
         )}
-        <div>
-          <Link href="/__test__">{t('testPages')}</Link>
-        </div>
       </Container>
     </PageWrapper>
   )
