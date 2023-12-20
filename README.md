@@ -12,6 +12,12 @@ This is the future [SF.gov] front end, built with the [SF.gov design system] and
 
 1. `npm install` to install required dependencies
 
+2. Copy the local dev config:
+
+    ```sh
+   cp ./sfgov/.env.development.example ./sfgov/.env.development
+   ```
+
 ### Development server
 
 #### From the Console
