@@ -20,7 +20,7 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
 
   return (
     <PageWrapper title={title}>
-      <Grid className="grid grid-cols-12">
+      <Grid>
         <Container className="mb-20 pb-40 col-span-8">
           <PageLabel label={t('Data Story')} />
           <DisplayXXXl as="h1" className="my-12 md:my-20">

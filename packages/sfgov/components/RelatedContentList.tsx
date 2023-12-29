@@ -15,7 +15,7 @@ export const RelatedContentList = ({
   return (
     <div {...rest}>
       <HeadingXXl as="h2">{title}</HeadingXXl>
-      <Grid className="grid-cols-2 gap-x-28">
+      <div>
         {content.map((item: RelatedContentData, i: number) => (
           <div
             key={i}
@@ -24,7 +24,7 @@ export const RelatedContentList = ({
             <PageLink page={item} />
           </div>
         ))}
-      </Grid>
+      </div>
     </div>
   )
 }
