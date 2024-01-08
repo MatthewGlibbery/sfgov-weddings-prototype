@@ -15,7 +15,7 @@ This is the future [SF.gov] front end, built with the [SF.gov design system] and
 2. Copy the local dev config:
 
     ```sh
-   cp ./sfgov/.env.development.example ./sfgov/.env.development
+   cp ./packages/sfgov/.env.development.example ./packages/sfgov/.env.development
    ```
 
 ### Development server
