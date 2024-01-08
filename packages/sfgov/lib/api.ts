@@ -13,6 +13,7 @@ const DEFAULT_LOCALE = i18n.defaultLocale
 export type ContentAPIOptions = {
   fetch?: typeof fetch
   baseURL?: string | null
+  previewURL?: string | null
   apiHeaders?: Record<string, string>
 }
 
@@ -25,17 +26,28 @@ type ListData<T> = {
 
 export class ContentAPI implements IContentAPI {
   baseURL: string
+  previewURL: string
   options: ContentAPIOptions
 
   constructor(options?: ContentAPIOptions) {
+    // TODO: baseURL will probably be replaced by
+    // NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL at some point
     const baseURL =
       options?.baseURL || process.env.NEXT_PUBLIC_CONTENT_API_BASE_URL
+    const previewURL =
+      options?.previewURL || process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL
+    if (!previewURL) {
+      throw new Error(
+        `The previewURL argument is required; got ${JSON.stringify(previewURL)}`
+      )
+    }
     if (!baseURL) {
       throw new Error(
         `The baseURL argument is required; got ${JSON.stringify(baseURL)}`
       )
     }
     this.baseURL = baseURL
+    this.previewURL = previewURL
     this.options = options || {}
   }
 
@@ -49,6 +61,20 @@ export class ContentAPI implements IContentAPI {
     params?: QueryParams,
     options?: RequestInit
   ) {
+    if (params?.preview) {
+      const english = await this.getPreviewData<T>(
+        'pages/by-url/preview',
+        {
+          path,
+          locale: params?.locale,
+          preview: true
+        },
+        options
+      )
+
+      return english
+    }
+
     const english = await this.getData<T>(
       'pages/find/',
       {
@@ -81,6 +107,60 @@ export class ContentAPI implements IContentAPI {
     return english
   }
 
+  async getPreviewData<T = unknown>(
+    path: string, // cms api path
+    params?: QueryParams, // contains path of page to request
+    options?: RequestInit
+  ) {
+    const res = await this.loadPreview(path, params, options)
+    const previewData = await res.json().catch(() => {
+      return {}
+    })
+
+    if (res.status === 404) {
+      throw new Error(previewData?.message || 'not found')
+    } else if (!res.ok) {
+      let error = `${res.status} ${res.statusText}`
+      if (previewData?.message) {
+        error = `${error}: ${previewData.message}`
+      }
+      throw new Error(error)
+    }
+
+    previewData.data.meta = previewData.meta
+    previewData.data = await this.getRelatedData(path, previewData.data)
+    return previewData.data as T
+  }
+
+  async getRelatedData<T = unknown>(path: string, data: object) {
+    const relatedData = {
+      part_of: [],
+      topics: [],
+      partner_agencies: [],
+      related_pages: []
+    }
+    for (const key of Object.keys(relatedData)) {
+      if (data[key]) {
+        for (const url of data[key]) {
+          try {
+            const res = await this.fetch(url)
+            const data = await res.json()
+
+            relatedData[key].push({
+              title: data.title,
+              meta: { html_url: data.html_path }
+            })
+          } catch (error) {
+            // log error
+          }
+        }
+        data[key] = relatedData[key]
+      }
+    }
+
+    return data
+  }
+
   async getData<T = unknown>(
     path: string,
     params?: QueryParams,
@@ -89,7 +169,6 @@ export class ContentAPI implements IContentAPI {
     const res = await this.load(path, params, options)
     // eslint-disable-next-line n/handle-callback-err
     const data = await res.json().catch(() => {
-      // console.error(error)
       return {}
     })
     if (res.status === 404) {
@@ -106,8 +185,18 @@ export class ContentAPI implements IContentAPI {
 
   load(path: string, params?: QueryParams, options?: RequestInit) {
     const url = this.getURL(path, params).toString()
-    // console.info('[load]', url)
     return this.fetch(url, options)
+  }
+
+  loadPreview(path: string, params?: QueryParams, options?: RequestInit) {
+    const url = new URL(this.previewURL)
+    let pagePath = String(params?.path)
+    url.pathname = join(url.pathname, path)
+    if (pagePath) {
+      pagePath = pagePath.substring(0, pagePath.indexOf('?'))
+      url.searchParams.set('path', pagePath)
+    }
+    return this.fetch(url.toString(), options)
   }
 
   getURL(path?: string, params?: QueryParams): URL {

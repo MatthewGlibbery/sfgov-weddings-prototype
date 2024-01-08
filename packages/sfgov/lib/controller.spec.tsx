@@ -173,6 +173,9 @@ function stubContext(
     defaultLocale: 'en',
     query: c.query || {},
     params: {},
+    req: {
+      headers: {}
+    },
     ...c
   } as unknown as GetServerSidePropsContext
 }

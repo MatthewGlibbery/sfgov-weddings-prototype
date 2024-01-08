@@ -3,7 +3,10 @@ import mockEnv from 'mocked-env'
 import fetchMock from 'jest-fetch-mock'
 
 describe('ContentAPI', () => {
-  const example = new ContentAPI({ baseURL: 'https://api.example.com/api/v3' })
+  const example = new ContentAPI({
+    baseURL: 'https://api.example.com/api/v3',
+    previewURL: 'https://api.example.com/api/cms'
+  })
 
   beforeEach(() => {
     fetchMock.resetMocks()
@@ -11,16 +14,37 @@ describe('ContentAPI', () => {
 
   describe('constructor', () => {
     mockEnv({
-      NEXT_PUBLIC_CONTENT_API_BASE_URL: undefined
+      NEXT_PUBLIC_CONTENT_API_BASE_URL: undefined,
+      NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL: undefined
     })
 
     it('throws if baseURL is falsy', () => {
-      expect(() => new ContentAPI({ baseURL: '' })).toThrow(/baseURL.+required/)
+      expect(
+        () =>
+          new ContentAPI({
+            baseURL: '',
+            previewURL: 'http://localhost/api/cms'
+          })
+      ).toThrow(/baseURL.+required/)
+    })
+
+    it('throws if previewURL is falsy', () => {
+      expect(
+        () =>
+          new ContentAPI({
+            baseURL: 'http://localhost',
+            previewURL: ''
+          })
+      ).toThrow(/previewURL.+required/)
     })
 
     it('allows baseURL path to be empty', () => {
       expect(
-        () => new ContentAPI({ baseURL: 'http://localhost' })
+        () =>
+          new ContentAPI({
+            baseURL: 'http://localhost',
+            previewURL: 'http://localhost'
+          })
       ).not.toThrow()
     })
   })
@@ -100,6 +124,31 @@ describe('ContentAPI', () => {
       )
       expect(res).toEqual(spanish)
     })
+
+    it('gets preview data if preview is in params', async () => {
+      const data = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        data: { title: 'some page' }
+      }
+      const expectedData = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        title: 'some page'
+      }
+      fetchMock.mockResponseOnce(JSON.stringify(data))
+      const res = await example.getPageByPath('foo?preview=true', {
+        preview: true
+      })
+      expect(res).toEqual(expectedData)
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(fetchMock).toHaveBeenLastCalledWith(
+        'https://api.example.com/api/cms/pages/by-url/preview?path=foo',
+        undefined
+      )
+    })
   })
 
   describe('load()', () => {
@@ -115,6 +164,22 @@ describe('ContentAPI', () => {
       const mock = jest.fn()
       const api = new ContentAPI({ ...example.options, fetch: mock })
       await api.load('foo')
+      expect(mock).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('loadPreview()', () => {
+    it('uses the global fetch implementation by default', async () => {
+      fetchMock.mockResponseOnce('derp')
+      const api = example
+      const res = await api.loadPreview('test')
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      await expect(res.text()).resolves.toEqual('derp')
+    })
+    it('respects the provided fetch implementation', async () => {
+      const mock = jest.fn()
+      const api = new ContentAPI({ ...example.options, fetch: mock })
+      await api.loadPreview('foo')
       expect(mock).toHaveBeenCalledTimes(1)
     })
   })
@@ -195,6 +260,123 @@ describe('ContentAPI', () => {
     })
   })
 
+  describe('getPreviewData()', () => {
+    it('fetches json', async () => {
+      const data = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        data: { title: 'some page' }
+      }
+      const expectedData = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        title: 'some page'
+      }
+      fetchMock.mockResponseOnce(JSON.stringify(data))
+      const res = await example.getPreviewData<typeof data>('foo')
+      expect(res).toEqual(expectedData)
+    })
+
+    it('rejects on 4xx statuses', async () => {
+      fetchMock.mockResponseOnce(() =>
+        Promise.resolve({
+          body: JSON.stringify({
+            message: 'not found'
+          }),
+          init: {
+            status: 404
+          }
+        })
+      )
+      await expect(example.getPreviewData('derp')).rejects.toThrow('not found')
+    })
+
+    it('rejects on 4xx statuses with "not found" if no message is provided', async () => {
+      fetchMock.mockResponseOnce(() =>
+        Promise.resolve({
+          body: JSON.stringify({}),
+          init: {
+            status: 404
+          }
+        })
+      )
+      await expect(example.getPreviewData('derp')).rejects.toThrow('not found')
+    })
+
+    it('rejects on other non-200 statuses', async () => {
+      const statuses = {
+        400: 'Bad request',
+        401: 'Unauthorized',
+        403: 'Forbidden',
+        500: 'Server error'
+      }
+      for (const [status, statusText] of Object.entries(statuses)) {
+        fetchMock.mockResponseOnce(() =>
+          Promise.resolve({
+            body: '',
+            init: {
+              status: Number(status),
+              statusText
+            }
+          })
+        )
+        await expect(example.getPreviewData('derp')).rejects.toThrow(
+          `${status} ${statusText}`
+        )
+      }
+    })
+
+    it('includes the JSON data "message" in the error', async () => {
+      const message = 'invalid query parameter: derp'
+      fetchMock.mockResponseOnce(() =>
+        Promise.resolve({
+          body: JSON.stringify({ message }),
+          init: {
+            status: 400,
+            statusText: 'Bad Request'
+          }
+        })
+      )
+      await expect(example.getPreviewData('derp')).rejects.toThrow(
+        `400 Bad Request: ${message}`
+      )
+    })
+  })
+
+  describe('getRelatedData()', () => {
+    it('fetches data', async () => {
+      const data = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        part_of: ['https://part.of.url']
+      }
+      const partOfData = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        title: 'some related page',
+        html_path: 'http://some.page/path'
+      }
+      const expectedData = {
+        meta: { type: 'foo.Bar' },
+        part_of: [
+          {
+            title: 'some related page',
+            meta: { html_url: 'http://some.page/path' }
+          }
+        ]
+      }
+      fetchMock.mockResponseOnce(JSON.stringify(partOfData))
+      const res = await example.getRelatedData('foo', data)
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(fetchMock).toHaveBeenLastCalledWith('https://part.of.url')
+      expect(res).toEqual(expectedData)
+    })
+  })
+
   describe('getURL()', () => {
     it('respects the provided options', () => {
       const api = example
@@ -207,7 +389,8 @@ describe('ContentAPI', () => {
 
     it('defaults to $NEXT_PUBLIC_CONTENT_API_BASE_URL and $NEXT_PUBLIC_CONTENT_API_BASE_PATH', () => {
       mockEnv({
-        NEXT_PUBLIC_CONTENT_API_BASE_URL: 'https://content.sf.gov/api'
+        NEXT_PUBLIC_CONTENT_API_BASE_URL: 'https://content.sf.gov/api',
+        NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL: 'http://content.sf.gov/api/cms'
       })
       const api = new ContentAPI()
       expect(api.getURL()).toStringifyTo('https://content.sf.gov/api')
@@ -226,7 +409,8 @@ describe('ContentAPI', () => {
 
     it('ignores apiBasePath if empty', () => {
       const api = new ContentAPI({
-        baseURL: 'http://localhost:8000'
+        baseURL: 'http://localhost:8000',
+        previewURL: 'https://localhost:8000'
       })
       expect(api.getURL('foo')).toStringifyTo('http://localhost:8000/foo')
     })

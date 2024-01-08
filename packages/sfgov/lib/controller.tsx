@@ -85,9 +85,23 @@ export class Controller {
   }
 
   makeGetServerSideProps(): GetServerSideProps<UnknownPageProps> {
-    return async ({ resolvedUrl, locale }) => {
+    return async ({ resolvedUrl, locale, query, req }) => {
+      const { cookie } = req.headers
+      const options = {
+        headers: {
+          Cookie: cookie
+        }
+      }
+
       try {
-        const page = await this.api.getPageByPath(resolvedUrl, { locale })
+        const page = await this.api.getPageByPath(
+          resolvedUrl,
+          {
+            locale,
+            preview: query.preview === 'true'
+          },
+          options
+        )
         return {
           props: { page }
         }

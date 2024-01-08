@@ -89,7 +89,6 @@ describe('Tile', () => {
       ...item.page_content,
       url: item.page_content.meta.html_url
     }))
-    console.log(meetingLink)
     render(<MeetingTile link={meetingLink} />)
 
     const meetingTile = screen.getByRole('link')

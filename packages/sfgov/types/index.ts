@@ -5,9 +5,10 @@ export * from './blocks'
 export * from './images'
 
 export type QueryParams = {
-  locale?: string | undefined
+  locale?: string
   translation_of?: number
-} & Record<string, string | number | undefined>
+  preview?: boolean
+} & Record<string, string | number | boolean | undefined>
 
 /**
  * The Content API interface implements the bare minimum of methods necessary to
