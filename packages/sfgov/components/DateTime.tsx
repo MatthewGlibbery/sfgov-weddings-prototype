@@ -91,7 +91,7 @@ export const ComposedDate = ({
         // need to translate the 'to' string here
         // Also, fyi, not a hyphen, but an "en dash"
         if (isBetweenRange) {
-          output.push(part.value === ' – ' ? ' to ' : part.value)
+          output.push(part.value === ' – ' ? ' to ' : part.value)
 
           // notice we're pushing to the tmp array here..
           // that's because even though these elements

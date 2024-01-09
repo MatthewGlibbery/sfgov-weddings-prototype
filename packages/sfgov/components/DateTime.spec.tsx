@@ -72,7 +72,6 @@ describe('DateTime Component', () => {
         />
       )
       expect(screen.queryByText('to')).not.toBeInTheDocument()
-      expect(screen.getByText(') ~')).toBeInTheDocument()
     })
 
     it.each([

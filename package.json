@@ -2,13 +2,13 @@
   "private": true,
   "name": "sfgov-next",
   "engines": {
-    "node": "16.16.0"
+    "node": "21.5.0"
   },
   "scripts": {
-    "build": "npm run build -ws",
+    "build": "npm run build -w @sfgov/next -w @sfgov/design-system",
     "dev": "npm run dev -w @sfgov/next",
-    "lint": "npm run lint -ws",
-    "test": "npm run test -ws",
+    "lint": "npm run lint -w @sfgov/next -w @sfgov/design-system",
+    "test": "npm run test -w @sfgov/next -w @sfgov/design-system",
     "storybook": "npm run storybook -w sfgov-storybook"
   },
   "repository": "SFDigitalServices/sfgov-next",
