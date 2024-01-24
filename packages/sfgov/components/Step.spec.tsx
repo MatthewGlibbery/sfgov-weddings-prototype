@@ -9,14 +9,14 @@ describe('Step', () => {
     }
   })
 
-  it('renders the step badge as a number', () => {
+  it('renders the step badge as a number', async () => {
     render(<Step step={step} index={1} last />)
-    const badge = screen.getByTestId('step-badge')
-    expect(badge).toBeInTheDocument()
-    expect(badge).toHaveTextContent('1')
+    const badge = await screen.findAllByTestId('step-badge')
+    expect(badge[0]).toBeInTheDocument()
+    expect(badge[0]).toHaveTextContent('1')
   })
 
-  it('renders the step badge as the word And', () => {
+  it('renders the step badge as the word And', async () => {
     render(
       <Step
         step={{ ...step, value: { ...step.value, step_type: 'and' } }}
@@ -24,8 +24,8 @@ describe('Step', () => {
         last
       />
     )
-    const badge = screen.getByTestId('step-badge')
-    expect(badge).toHaveTextContent('and')
+    const badge = await screen.findAllByTestId('step-badge')
+    expect(badge[0]).toHaveTextContent('and')
   })
 
   it('renders the cost field when present', () => {

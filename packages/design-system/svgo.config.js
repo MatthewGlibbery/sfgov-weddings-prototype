@@ -20,7 +20,7 @@ module.exports = {
     {
       name: 'addAttributesToSVGElement',
       params: {
-        attributes: ['fill="currentcolor"']
+        attributes: ['fill="none" stroke="currentcolor"']
       }
     }
   ]

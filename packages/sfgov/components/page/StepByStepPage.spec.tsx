@@ -41,7 +41,7 @@ describe('StepByStepPage', () => {
   it('renders the intro', () => {
     render(<StepByStepPage page={fixture} />)
     const intro = screen.getByText(fixture.intro, {
-      selector: 'p'
+      selector: 'div'
     })
     expect(intro).toBeInTheDocument()
   })

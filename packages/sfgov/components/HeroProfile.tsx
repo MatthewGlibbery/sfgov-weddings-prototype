@@ -1,6 +1,6 @@
 import {
   classed,
-  IconMail,
+  IconEnvelope,
   IconPhone,
   Label,
   HeadingXl,
@@ -54,7 +54,7 @@ export const HeroProfile = ({
       </div>
       <RichText html={biography} />
       <FlexWithSpacing>
-        <IconMail width={40} />
+        <IconEnvelope width={40} />
         <EmailBlock email={email} title={email} />
       </FlexWithSpacing>
       <FlexWithSpacing>

@@ -1,0 +1,5 @@
+<svg viewBox="0 0 20 20" fill="none" stroke="currentcolor">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M5 8H15V11.8887H5V8ZM3 6H5H15H17V8V11.8887V13.8887H15H14V12H6V13.8887H5H3V11.8887V8V6Z"/>
+  <rect x="7" y="11" width="6" height="5" stroke-width="2"/>
+  <rect x="7" y="4" width="6" height="3" stroke-width="2"/>
+</svg>

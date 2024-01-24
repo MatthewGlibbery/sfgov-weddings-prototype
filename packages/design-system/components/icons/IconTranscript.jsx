@@ -1,0 +1,3 @@
+import * as React from "react";
+const IconTranscript = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M11 6H16V14H11V16H16H18V14V6V4H16H11V6Z" /><rect x={5} y={5} width={2} height={4} rx={1} strokeWidth={2} /><path d="M9 10C9 11.6569 7.65685 13 6 13C4.34315 13 3 11.6569 3 10" strokeWidth={2} /><path d="M6 16L6 13" strokeWidth={2} /><path d="M11 8L13 8L15 8" strokeWidth={2} /><path d="M11 11L12.5 11L14 11" strokeWidth={2} /></svg>;
+export default IconTranscript;

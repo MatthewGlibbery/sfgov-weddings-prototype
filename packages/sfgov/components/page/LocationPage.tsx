@@ -5,7 +5,7 @@ import {
   DisplayXXXl,
   HeadingSm,
   HeadingXXl,
-  IconWIP
+  IconTrafficCone
 } from '@/design-system'
 import { LocationPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
@@ -90,17 +90,17 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
             <RichText html={intro} />
             <div className="space-y-28">
               <div className="flex items-center space-x-8 mb-12">
-                <IconWIP width={20} />
+                <IconTrafficCone width={20} />
                 <HeadingSm as="h3">{parking[0].value.title}</HeadingSm>
               </div>
               <RichText html={parking[0].value.text} />
               <div className="flex items-center space-x-8 mb-12">
-                <IconWIP width={20} />
+                <IconTrafficCone width={20} />
                 <HeadingSm as="h3">{accessibility[0].value.title}</HeadingSm>
               </div>
               <RichText html={accessibility[0].value.text} />
               <div className="flex items-center space-x-8 mb-12">
-                <IconWIP width={20} />
+                <IconTrafficCone width={20} />
                 <HeadingSm as="h3">
                   {publicTransportion[0].value.title}
                 </HeadingSm>

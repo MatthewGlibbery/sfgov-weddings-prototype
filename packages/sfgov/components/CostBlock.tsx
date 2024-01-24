@@ -1,4 +1,4 @@
-import { HeadingMd, HeadingXs } from '@/design-system'
+import { BodyText, classed, HeadingXs, IconCash } from '@/design-system'
 import { If, Then, Else, When } from 'react-if'
 import { useTranslation } from 'next-i18next'
 import type { TypeCostBlockValues } from '@/types'
@@ -29,25 +29,32 @@ export const CostBlock = ({
     cost = `$${range?.minimum} and up`
   }
 
-  const classes =
-    variant === 'step' ? 'block pr-8 mb-20' : 'inline-block pr-8 mb-0'
+  const CostText = classed(BodyText, {
+    variants: {
+      step: {
+        true: 'font-bold',
+        false: 'inline-block mb-0'
+      }
+    }
+  })
 
   return (
-    <div data-testid="step-cost">
+    <div className="flex gap-4 items-start" data-testid="step-cost">
       <If condition={variant === 'step'}>
         <Then>
-          <HeadingMd as="h3" className={classes} id="costBlock">
+          <IconCash className="text-neutral400 min-w-[20px]" height={20} />
+          <CostText as="h3" id="costBlock" step={!!variant}>
             {t('Cost')}:
-          </HeadingMd>
-          <span>{cost}</span>.
+          </CostText>
+          <span>{cost}.</span>
           <When condition={description}>
             <RichText html={description} />
           </When>
         </Then>
         <Else>
-          <HeadingMd as="h3" className={classes}>
+          <CostText as="h3" step={!!variant}>
             {t('Cost')}
-          </HeadingMd>
+          </CostText>
           <HeadingXs className="mb-12">{cost}</HeadingXs>
           <When condition={description}>
             <div>

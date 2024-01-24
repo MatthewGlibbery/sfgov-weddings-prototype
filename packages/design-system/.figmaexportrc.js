@@ -1,7 +1,6 @@
 const transformSVGO = require('@figma-export/transform-svg-with-svgo')
 const outputAsSVG = require('@figma-export/output-components-as-svg')
 const outputAsReact = require('@figma-export/output-components-as-svgr')
-const dedent = require('dedent')
 const svgoConfig = require('./svgo.config')
 const { writeFile } = require('node:fs/promises')
 
@@ -23,7 +22,7 @@ module.exports = {
       'components',
       {
         fileId,
-        onlyFromPages: ['Icons'],
+        onlyFromPages: ['UI'],
         transformers: [transformSVGO(svgoConfig)],
         outputters: [
           outputAsSVG({
@@ -62,8 +61,11 @@ function normalizeIconName(name) {
 
 function normalizeComponentName(name) {
   return `Icon${name
-    .replace(/(^[a-z])|( [a-z])/g, (substr) => substr.toUpperCase())
-    .replace(/ /g, '')}`
+    .replace(/icon/g, '')
+    .replace(/(^[a-z])|( [a-z])|-([a-z])|_([a-z])|\.[a-z]/g, (substr) =>
+      substr.toUpperCase()
+    )
+    .replace(/[.]|Ui|\d|-|_/g, '')}`
 }
 
 /**
@@ -120,7 +122,12 @@ function outputReactIndex({ output }) {
  */
 function gatherComponents(pages) {
   return pages.flatMap((page) =>
-    page.components.map((component) => ({ component, page }))
+    page.components
+      .filter((component) => {
+        console.log(component, component.name.includes('20'))
+        return component.name.includes('20')
+      })
+      .map((component) => ({ component, page }))
   )
 }
 

@@ -1,0 +1,3 @@
+import * as React from "react";
+const IconAccount = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={3} y={5} width={14} height={10} strokeWidth={2} /><circle cx={7} cy={12} r={1} /><circle cx={10} cy={12} r={1} /><circle cx={13} cy={12} r={1} /><circle cx={10} cy={8} r={1} /><path fillRule="evenodd" clipRule="evenodd" d="M10 9C10.7403 9 11.3866 9.4022 11.7324 10H8.26756C8.61337 9.4022 9.25972 9 10 9Z" /></svg>;
+export default IconAccount;

@@ -15,11 +15,15 @@ export const RelatedContentList = ({
   return (
     <div {...rest}>
       <HeadingXXl as="h2">{title}</HeadingXXl>
-      <div>
+      <div className="md:grid md:grid-cols-3">
         {content.map((item: RelatedContentData, i: number) => (
           <div
             key={i}
-            className="my-20 even:pl-12 md:even:border-l-1 md:even:border-l-grey300"
+            className="
+              py-20 md:[&:nth-child(3n+1)]:border-r-1 
+              md:[&:nth-child(3n)]:border-l-1 
+              md:border-neutral200 md:[&:not(:nth-child(3n+1))]:pl-28 
+            "
           >
             <PageLink page={item} />
           </div>

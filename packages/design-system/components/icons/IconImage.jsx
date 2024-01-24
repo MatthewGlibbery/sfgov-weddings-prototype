@@ -1,0 +1,3 @@
+import * as React from "react";
+const IconImage = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={3} y={5} width={14} height={10} strokeWidth={2} /><path d="M14 9C14 10.6569 12.2091 12.5 10 12.5C7.79086 12.5 6 10.6569 6 9" strokeWidth={2} /><path d="M6 8V15M14 8V15" strokeWidth={2} /><path d="M6 8V15M10 12.7895V15" strokeWidth={2} /><path d="M14 9L17 11" strokeWidth={2} /><path d="M6 9L3 11" strokeWidth={2} /></svg>;
+export default IconImage;

@@ -1,11 +1,12 @@
 import { classed, classes } from './utils'
 import type { AnyComponent, ComponentProps } from '../types'
 
+const focusDropShadow = 'focus:shadow-[0_0_0_4px_#C9CACA]'
 const inverseButtonClasses = classes(`
-  text-action
-  bg-white
-  hover:text-blue400 hover:bg-white
-  focus:text-blue400 focus:bg-white
+  text-primary900
+  bg-primary100
+  hover:text-white hover:bg-primary500
+  focus:text-white focus:bg-primary500 ${focusDropShadow}
 `)
 
 export const Button = classed('button' as AnyComponent, {
@@ -31,11 +32,12 @@ export const Button = classed('button' as AnyComponent, {
       primary: classes(
         'border-current',
         'text-white',
-        'bg-blueBright',
-        'hover:bg-blue200',
-        'hover:text-white',
-        'focus:bg-blue200',
-        'focus:text-white'
+        'bg-primary500',
+        'hover:bg-primary100',
+        'hover:text-primary700',
+        'focus:bg-primary100',
+        'focus:text-primary700',
+        focusDropShadow
       ),
       secondary: classes(inverseButtonClasses, 'border-current'),
       link: classes(

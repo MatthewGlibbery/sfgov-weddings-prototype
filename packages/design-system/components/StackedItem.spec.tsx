@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { IconAlert } from './icons'
+import { IconWarning } from './icons'
 import { StackedItem } from './StackedItem'
 
 describe('<StackedItem />', () => {
@@ -28,7 +28,7 @@ describe('<StackedItem />', () => {
   })
 
   it('renders an icon when provided', () => {
-    render(<StackedItem icon={IconAlert}>Testing</StackedItem>)
+    render(<StackedItem icon={IconWarning}>Testing</StackedItem>)
     expect(screen.getByTestId('stacked-content-item-icon')).toBeInTheDocument()
   })
 

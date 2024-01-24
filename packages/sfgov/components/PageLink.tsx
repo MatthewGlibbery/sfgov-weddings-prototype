@@ -26,6 +26,6 @@ const PageLinkImpl = (
   )
 }
 
-export const PageLink = classed(PageLinkImpl, 'text-grey500')
+export const PageLink = classed(PageLinkImpl, 'text-primary500')
 
 export type PageLinkProps = ComponentProps<typeof PageLink>

@@ -1,0 +1,3 @@
+import * as React from "react";
+const IconProfile = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><circle cx={10} cy={7} r={3} strokeWidth={2} /><path fillRule="evenodd" clipRule="evenodd" d="M14.4722 17C13.3736 15.7725 11.777 15 10 15C8.223 15 6.62643 15.7725 5.52779 17H3.07026C4.4535 14.6088 7.03887 13 10 13C12.9611 13 15.5465 14.6088 16.9297 17H14.4722Z" /></svg>;
+export default IconProfile;

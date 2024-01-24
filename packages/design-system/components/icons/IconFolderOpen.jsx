@@ -1,0 +1,3 @@
+import * as React from "react";
+const IconFolderOpen = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path d="M10 6L9 4H3L2 6V16L4 11V6H8L9 8H17V6H10Z" /><path d="M3.4 15L5.11429 10H16.6743L15.2457 15H3.4Z" strokeWidth={2} /></svg>;
+export default IconFolderOpen;

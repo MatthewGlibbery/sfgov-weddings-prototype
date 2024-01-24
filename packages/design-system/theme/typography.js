@@ -113,7 +113,7 @@ const fontSize = {
   'display-xxxl': [
     '32px',
     {
-      lineHeight: lineHeight['42'],
+      lineHeight: lineHeight['40'],
       letterSpacing: '0px',
       fontWeight: fontWeight.semibold
     }

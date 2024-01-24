@@ -1,0 +1,3 @@
+import * as React from "react";
+const IconKeyboard = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={3} y={5} width={14} height={10} strokeWidth={2} /><path d="M7 14L13 14" strokeWidth={2} /><rect x={5} y={7} width={2} height={2} /><rect x={5} y={10} width={2} height={2} /><rect x={9} y={7} width={2} height={2} /><rect x={13} y={7} width={2} height={2} /><rect x={13} y={10} width={2} height={2} /><rect x={9} y={10} width={2} height={2} /></svg>;
+export default IconKeyboard;

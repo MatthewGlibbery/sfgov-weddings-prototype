@@ -1,0 +1,3 @@
+import * as React from "react";
+const IconLock = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={5} y={10} width={10} height={7} strokeWidth={2} /><path d="M14 9V7C14 4.51472 12.2091 3 10 3C7.79086 3 6 4.51472 6 7V9" strokeWidth={2} /><path d="M9 9V8.00014C9 6.75768 9.44772 6 10 6C10.5523 6 11 6.75768 11 8.00014V9" strokeWidth={2} /></svg>;
+export default IconLock;

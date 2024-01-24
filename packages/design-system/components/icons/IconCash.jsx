@@ -1,0 +1,3 @@
+import * as React from "react";
+const IconCash = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path d="M11 9.5C11 10.3284 10.1046 11 9 11C7.89543 11 7 10.3284 7 9.5C7 8.67157 7.89543 8 9 8C10.1046 8 11 8.67157 11 9.5Z" /><path d="M3 7L5 7" strokeWidth={2} /><path d="M15 12L13 12" strokeWidth={2} /><rect x={3} y={6} width={12} height={7} strokeWidth={2} /><path d="M4 16H18V7" strokeWidth={2} /></svg>;
+export default IconCash;

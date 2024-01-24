@@ -1,861 +1,1382 @@
 module.exports = {
-  red: {
+  Primary: {
     100: {
-      value: '#f5f5f5',
+      value: '#dfebfd',
       type: 'color',
+      description: 'Shade color with 93.6% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#f5f5f5',
-        type: 'color'
+        value: '#dfebfd',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
       },
       name: '100',
       attributes: {},
-      path: ['red', '100']
+      path: ['Primary', '100']
     },
     200: {
-      value: '#dadada',
+      value: '#afccf7',
       type: 'color',
+      description: 'Shade color with 83.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#dadada',
-        type: 'color'
+        value: '#afccf7',
+        type: 'color',
+        description: 'Shade color with 83.9% of lightness'
       },
       name: '200',
       attributes: {},
-      path: ['red', '200']
+      path: ['Primary', '200']
     },
     300: {
-      value: '#c0c0c0',
+      value: '#83aceb',
       type: 'color',
+      description: 'Shade color with 74% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#c0c0c0',
-        type: 'color'
+        value: '#83aceb',
+        type: 'color',
+        description: 'Shade color with 74% of lightness'
       },
       name: '300',
       attributes: {},
-      path: ['red', '300']
+      path: ['Primary', '300']
     },
     400: {
-      value: '#a5a5a5',
+      value: '#5a8dd9',
       type: 'color',
+      description: 'Shade color with 64.1% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#a5a5a5',
-        type: 'color'
+        value: '#5a8dd9',
+        type: 'color',
+        description: 'Shade color with 64.1% of lightness'
       },
       name: '400',
       attributes: {},
-      path: ['red', '400']
+      path: ['Primary', '400']
     },
     500: {
-      value: '#667085',
+      value: '#386ebf',
       type: 'color',
+      description: 'Shade color with 54.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#667085',
-        type: 'color'
+        value: '#386ebf',
+        type: 'color',
+        description: 'Shade color with 54.3% of lightness'
       },
       name: '500',
       attributes: {},
-      path: ['red', '500']
+      path: ['Primary', '500']
     },
     600: {
-      value: '#475467',
+      value: '#1b519e',
       type: 'color',
+      description: 'Shade color with 44.4% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#475467',
-        type: 'color'
+        value: '#1b519e',
+        type: 'color',
+        description: 'Shade color with 44.4% of lightness'
       },
       name: '600',
       attributes: {},
-      path: ['red', '600']
+      path: ['Primary', '600']
     },
     700: {
-      value: '#555555',
+      value: '#043578',
       type: 'color',
+      description: 'Shade color with 34.5% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#555555',
-        type: 'color'
+        value: '#043578',
+        type: 'color',
+        description: 'Shade color with 34.5% of lightness'
       },
       name: '700',
       attributes: {},
-      path: ['red', '700']
+      path: ['Primary', '700']
     },
     800: {
-      value: '#3b3b3b',
+      value: '#001d4e',
       type: 'color',
+      description: 'Shade color with 24.7% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#3b3b3b',
-        type: 'color'
+        value: '#001d4e',
+        type: 'color',
+        description: 'Shade color with 24.7% of lightness'
       },
       name: '800',
       attributes: {},
-      path: ['red', '800']
+      path: ['Primary', '800']
     },
     900: {
-      value: '#202020',
+      value: '#000925',
       type: 'color',
+      description: 'Shade color with 14.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#202020',
-        type: 'color'
+        value: '#000925',
+        type: 'color',
+        description: 'Shade color with 14.9% of lightness'
       },
       name: '900',
       attributes: {},
-      path: ['red', '900']
-    }
-  },
-  orange: {
-    100: {
-      value: '#f5f5f5',
+      path: ['Primary', '900']
+    },
+    source: {
+      value: '#1b52a1',
       type: 'color',
+      description: 'Source color',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#f5f5f5',
-        type: 'color'
+        value: '#1b52a1',
+        type: 'color',
+        description: 'Source color'
+      },
+      name: 'source',
+      attributes: {},
+      path: ['Primary', 'source']
+    }
+  },
+  Secondary: {
+    100: {
+      value: '#daeff0',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#daeff0',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
       },
       name: '100',
       attributes: {},
-      path: ['orange', '100']
+      path: ['Secondary', '100']
     },
     200: {
-      value: '#dadada',
+      value: '#a2d5d8',
       type: 'color',
+      description: 'Shade color with 83.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#dadada',
-        type: 'color'
+        value: '#a2d5d8',
+        type: 'color',
+        description: 'Shade color with 83.9% of lightness'
       },
       name: '200',
       attributes: {},
-      path: ['orange', '200']
+      path: ['Secondary', '200']
     },
     300: {
-      value: '#c0c0c0',
+      value: '#6ababf',
       type: 'color',
+      description: 'Shade color with 74% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#c0c0c0',
-        type: 'color'
+        value: '#6ababf',
+        type: 'color',
+        description: 'Shade color with 74% of lightness'
       },
       name: '300',
       attributes: {},
-      path: ['orange', '300']
+      path: ['Secondary', '300']
     },
     400: {
-      value: '#a5a5a5',
+      value: '#2b9ea5',
       type: 'color',
+      description: 'Shade color with 64.1% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#a5a5a5',
-        type: 'color'
+        value: '#2b9ea5',
+        type: 'color',
+        description: 'Shade color with 64.1% of lightness'
       },
       name: '400',
       attributes: {},
-      path: ['orange', '400']
+      path: ['Secondary', '400']
     },
     500: {
-      value: '#8b8b8b',
+      value: '#008189',
       type: 'color',
+      description: 'Shade color with 54.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#8b8b8b',
-        type: 'color'
+        value: '#008189',
+        type: 'color',
+        description: 'Shade color with 54.3% of lightness'
       },
       name: '500',
       attributes: {},
-      path: ['orange', '500']
+      path: ['Secondary', '500']
     },
     600: {
-      value: '#707070',
+      value: '#00646c',
       type: 'color',
+      description: 'Shade color with 44.4% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#707070',
-        type: 'color'
+        value: '#00646c',
+        type: 'color',
+        description: 'Shade color with 44.4% of lightness'
       },
       name: '600',
       attributes: {},
-      path: ['orange', '600']
+      path: ['Secondary', '600']
     },
     700: {
-      value: '#555555',
+      value: '#00464e',
       type: 'color',
+      description: 'Shade color with 34.5% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#555555',
-        type: 'color'
+        value: '#00464e',
+        type: 'color',
+        description: 'Shade color with 34.5% of lightness'
       },
       name: '700',
       attributes: {},
-      path: ['orange', '700']
+      path: ['Secondary', '700']
     },
     800: {
-      value: '#3b3b3b',
+      value: '#002a30',
       type: 'color',
+      description: 'Shade color with 24.7% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#3b3b3b',
-        type: 'color'
+        value: '#002a30',
+        type: 'color',
+        description: 'Shade color with 24.7% of lightness'
       },
       name: '800',
       attributes: {},
-      path: ['orange', '800']
+      path: ['Secondary', '800']
     },
     900: {
-      value: '#202020',
+      value: '#001013',
       type: 'color',
+      description: 'Shade color with 14.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#202020',
-        type: 'color'
+        value: '#001013',
+        type: 'color',
+        description: 'Shade color with 14.9% of lightness'
       },
       name: '900',
       attributes: {},
-      path: ['orange', '900']
-    }
-  },
-  yellow: {
-    100: {
-      value: '#f5f5f5',
+      path: ['Secondary', '900']
+    },
+    source: {
+      value: '#15a5ad',
       type: 'color',
+      description: 'Source color',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#f5f5f5',
-        type: 'color'
+        value: '#15a5ad',
+        type: 'color',
+        description: 'Source color'
+      },
+      name: 'source',
+      attributes: {},
+      path: ['Secondary', 'source']
+    }
+  },
+  Accent: {
+    100: {
+      value: '#fde4d7',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#fde4d7',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
       },
       name: '100',
       attributes: {},
-      path: ['yellow', '100']
+      path: ['Accent', '100']
     },
     200: {
-      value: '#dadada',
+      value: '#f6bc9b',
       type: 'color',
+      description: 'Shade color with 83.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#dadada',
-        type: 'color'
+        value: '#f6bc9b',
+        type: 'color',
+        description: 'Shade color with 83.9% of lightness'
       },
       name: '200',
       attributes: {},
-      path: ['yellow', '200']
+      path: ['Accent', '200']
     },
     300: {
-      value: '#c0c0c0',
+      value: '#e79362',
       type: 'color',
+      description: 'Shade color with 74% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#c0c0c0',
-        type: 'color'
+        value: '#e79362',
+        type: 'color',
+        description: 'Shade color with 74% of lightness'
       },
       name: '300',
       attributes: {},
-      path: ['yellow', '300']
+      path: ['Accent', '300']
     },
     400: {
-      value: '#a5a5a5',
+      value: '#d26d28',
       type: 'color',
+      description: 'Shade color with 64.1% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#a5a5a5',
-        type: 'color'
+        value: '#d26d28',
+        type: 'color',
+        description: 'Shade color with 64.1% of lightness'
       },
       name: '400',
       attributes: {},
-      path: ['yellow', '400']
+      path: ['Accent', '400']
     },
     500: {
-      value: '#8b8b8b',
+      value: '#b64a00',
       type: 'color',
+      description: 'Shade color with 54.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#8b8b8b',
-        type: 'color'
+        value: '#b64a00',
+        type: 'color',
+        description: 'Shade color with 54.3% of lightness'
       },
       name: '500',
       attributes: {},
-      path: ['yellow', '500']
+      path: ['Accent', '500']
     },
     600: {
-      value: '#707070',
+      value: '#942a00',
       type: 'color',
+      description: 'Shade color with 44.4% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#707070',
-        type: 'color'
+        value: '#942a00',
+        type: 'color',
+        description: 'Shade color with 44.4% of lightness'
       },
       name: '600',
       attributes: {},
-      path: ['yellow', '600']
+      path: ['Accent', '600']
     },
     700: {
-      value: '#555555',
+      value: '#6f0f00',
       type: 'color',
+      description: 'Shade color with 34.5% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#555555',
-        type: 'color'
+        value: '#6f0f00',
+        type: 'color',
+        description: 'Shade color with 34.5% of lightness'
       },
       name: '700',
       attributes: {},
-      path: ['yellow', '700']
+      path: ['Accent', '700']
     },
     800: {
-      value: '#3b3b3b',
+      value: '#470000',
       type: 'color',
+      description: 'Shade color with 24.7% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#3b3b3b',
-        type: 'color'
+        value: '#470000',
+        type: 'color',
+        description: 'Shade color with 24.7% of lightness'
       },
       name: '800',
       attributes: {},
-      path: ['yellow', '800']
+      path: ['Accent', '800']
     },
     900: {
-      value: '#202020',
+      value: '#200000',
       type: 'color',
+      description: 'Shade color with 14.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#202020',
-        type: 'color'
+        value: '#200000',
+        type: 'color',
+        description: 'Shade color with 14.9% of lightness'
       },
       name: '900',
       attributes: {},
-      path: ['yellow', '900']
-    }
-  },
-  green: {
-    100: {
-      value: '#f5f5f5',
+      path: ['Accent', '900']
+    },
+    source: {
+      value: '#e97727',
       type: 'color',
+      description: 'Source color',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#f5f5f5',
-        type: 'color'
+        value: '#e97727',
+        type: 'color',
+        description: 'Source color'
+      },
+      name: 'source',
+      attributes: {},
+      path: ['Accent', 'source']
+    }
+  },
+  Information: {
+    100: {
+      value: '#daebff',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#daebff',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
       },
       name: '100',
       attributes: {},
-      path: ['green', '100']
+      path: ['Information', '100']
     },
     200: {
-      value: '#dadada',
+      value: '#a3ccff',
       type: 'color',
+      description: 'Shade color with 83.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#dadada',
-        type: 'color'
+        value: '#a3ccff',
+        type: 'color',
+        description: 'Shade color with 83.9% of lightness'
       },
       name: '200',
       attributes: {},
-      path: ['green', '200']
+      path: ['Information', '200']
     },
     300: {
-      value: '#c0c0c0',
+      value: '#6faaff',
       type: 'color',
+      description: 'Shade color with 74% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#c0c0c0',
-        type: 'color'
+        value: '#6faaff',
+        type: 'color',
+        description: 'Shade color with 74% of lightness'
       },
       name: '300',
       attributes: {},
-      path: ['green', '300']
+      path: ['Information', '300']
     },
     400: {
-      value: '#a5a5a5',
+      value: '#4088fd',
       type: 'color',
+      description: 'Shade color with 64.1% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#a5a5a5',
-        type: 'color'
+        value: '#4088fd',
+        type: 'color',
+        description: 'Shade color with 64.1% of lightness'
       },
       name: '400',
       attributes: {},
-      path: ['green', '400']
+      path: ['Information', '400']
     },
     500: {
-      value: '#8b8b8b',
+      value: '#1066e5',
       type: 'color',
+      description: 'Shade color with 54.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#8b8b8b',
-        type: 'color'
+        value: '#1066e5',
+        type: 'color',
+        description: 'Shade color with 54.3% of lightness'
       },
       name: '500',
       attributes: {},
-      path: ['green', '500']
+      path: ['Information', '500']
     },
     600: {
-      value: '#707070',
+      value: '#0046c2',
       type: 'color',
+      description: 'Shade color with 44.4% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#707070',
-        type: 'color'
+        value: '#0046c2',
+        type: 'color',
+        description: 'Shade color with 44.4% of lightness'
       },
       name: '600',
       attributes: {},
-      path: ['green', '600']
+      path: ['Information', '600']
     },
     700: {
-      value: '#555555',
+      value: '#002996',
       type: 'color',
+      description: 'Shade color with 34.5% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#555555',
-        type: 'color'
+        value: '#002996',
+        type: 'color',
+        description: 'Shade color with 34.5% of lightness'
       },
       name: '700',
       attributes: {},
-      path: ['green', '700']
+      path: ['Information', '700']
     },
     800: {
-      value: '#3b3b3b',
+      value: '#001264',
       type: 'color',
+      description: 'Shade color with 24.7% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#3b3b3b',
-        type: 'color'
+        value: '#001264',
+        type: 'color',
+        description: 'Shade color with 24.7% of lightness'
       },
       name: '800',
       attributes: {},
-      path: ['green', '800']
+      path: ['Information', '800']
     },
     900: {
-      value: '#202020',
+      value: '#000331',
       type: 'color',
+      description: 'Shade color with 14.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#202020',
-        type: 'color'
+        value: '#000331',
+        type: 'color',
+        description: 'Shade color with 14.9% of lightness'
       },
       name: '900',
       attributes: {},
-      path: ['green', '900']
-    }
-  },
-  blue: {
-    100: {
-      value: '#f5f5f5',
+      path: ['Information', '900']
+    },
+    source: {
+      value: '#1168e8',
       type: 'color',
+      description: 'Source color',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#f5f5f5',
-        type: 'color'
+        value: '#1168e8',
+        type: 'color',
+        description: 'Source color'
+      },
+      name: 'source',
+      attributes: {},
+      path: ['Information', 'source']
+    }
+  },
+  Success: {
+    100: {
+      value: '#def1d6',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#def1d6',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
       },
       name: '100',
       attributes: {},
-      path: ['blue', '100']
+      path: ['Success', '100']
     },
     200: {
-      value: '#dadada',
+      value: '#aed998',
       type: 'color',
+      description: 'Shade color with 83.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#dadada',
-        type: 'color'
+        value: '#aed998',
+        type: 'color',
+        description: 'Shade color with 83.9% of lightness'
       },
       name: '200',
       attributes: {},
-      path: ['blue', '200']
+      path: ['Success', '200']
     },
     300: {
-      value: '#c0c0c0',
+      value: '#80bf5b',
       type: 'color',
+      description: 'Shade color with 74% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#c0c0c0',
-        type: 'color'
+        value: '#80bf5b',
+        type: 'color',
+        description: 'Shade color with 74% of lightness'
       },
       name: '300',
       attributes: {},
-      path: ['blue', '300']
+      path: ['Success', '300']
     },
     400: {
-      value: '#a5a5a5',
+      value: '#55a30f',
       type: 'color',
+      description: 'Shade color with 64.1% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#a5a5a5',
-        type: 'color'
+        value: '#55a30f',
+        type: 'color',
+        description: 'Shade color with 64.1% of lightness'
       },
       name: '400',
       attributes: {},
-      path: ['blue', '400']
+      path: ['Success', '400']
     },
     500: {
-      value: '#8b8b8b',
+      value: '#2d8600',
       type: 'color',
+      description: 'Shade color with 54.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#8b8b8b',
-        type: 'color'
+        value: '#2d8600',
+        type: 'color',
+        description: 'Shade color with 54.3% of lightness'
       },
       name: '500',
       attributes: {},
-      path: ['blue', '500']
+      path: ['Success', '500']
     },
     600: {
-      value: '#707070',
+      value: '#026800',
       type: 'color',
+      description: 'Shade color with 44.4% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#707070',
-        type: 'color'
+        value: '#026800',
+        type: 'color',
+        description: 'Shade color with 44.4% of lightness'
       },
       name: '600',
       attributes: {},
-      path: ['blue', '600']
+      path: ['Success', '600']
     },
     700: {
-      value: '#555555',
+      value: '#004a00',
       type: 'color',
+      description: 'Shade color with 34.5% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#555555',
-        type: 'color'
+        value: '#004a00',
+        type: 'color',
+        description: 'Shade color with 34.5% of lightness'
       },
       name: '700',
       attributes: {},
-      path: ['blue', '700']
+      path: ['Success', '700']
     },
     800: {
-      value: '#3b3b3b',
+      value: '#002c00',
       type: 'color',
+      description: 'Shade color with 24.7% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#3b3b3b',
-        type: 'color'
+        value: '#002c00',
+        type: 'color',
+        description: 'Shade color with 24.7% of lightness'
       },
       name: '800',
       attributes: {},
-      path: ['blue', '800']
+      path: ['Success', '800']
     },
     900: {
-      value: '#202020',
+      value: '#001100',
       type: 'color',
+      description: 'Shade color with 14.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#202020',
-        type: 'color'
+        value: '#001100',
+        type: 'color',
+        description: 'Shade color with 14.9% of lightness'
       },
       name: '900',
       attributes: {},
-      path: ['blue', '900']
-    }
-  },
-  purple: {
-    100: {
-      value: '#f5f5f5',
+      path: ['Success', '900']
+    },
+    source: {
+      value: '#6cc627',
       type: 'color',
+      description: 'Source color',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#f5f5f5',
-        type: 'color'
+        value: '#6cc627',
+        type: 'color',
+        description: 'Source color'
+      },
+      name: 'source',
+      attributes: {},
+      path: ['Success', 'source']
+    }
+  },
+  Warning: {
+    100: {
+      value: '#f7e7d3',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#f7e7d3',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
       },
       name: '100',
       attributes: {},
-      path: ['purple', '100']
+      path: ['Warning', '100']
     },
     200: {
-      value: '#dadada',
+      value: '#e8c492',
       type: 'color',
+      description: 'Shade color with 83.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#dadada',
-        type: 'color'
+        value: '#e8c492',
+        type: 'color',
+        description: 'Shade color with 83.9% of lightness'
       },
       name: '200',
       attributes: {},
-      path: ['purple', '200']
+      path: ['Warning', '200']
     },
     300: {
-      value: '#c0c0c0',
+      value: '#d69f50',
       type: 'color',
+      description: 'Shade color with 74% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#c0c0c0',
-        type: 'color'
+        value: '#d69f50',
+        type: 'color',
+        description: 'Shade color with 74% of lightness'
       },
       name: '300',
       attributes: {},
-      path: ['purple', '300']
+      path: ['Warning', '300']
     },
     400: {
-      value: '#a5a5a5',
+      value: '#bf7d00',
       type: 'color',
+      description: 'Shade color with 64.1% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#a5a5a5',
-        type: 'color'
+        value: '#bf7d00',
+        type: 'color',
+        description: 'Shade color with 64.1% of lightness'
       },
       name: '400',
       attributes: {},
-      path: ['purple', '400']
+      path: ['Warning', '400']
     },
     500: {
-      value: '#8b8b8b',
+      value: '#a35d00',
       type: 'color',
+      description: 'Shade color with 54.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#8b8b8b',
-        type: 'color'
+        value: '#a35d00',
+        type: 'color',
+        description: 'Shade color with 54.3% of lightness'
       },
       name: '500',
       attributes: {},
-      path: ['purple', '500']
+      path: ['Warning', '500']
     },
     600: {
-      value: '#707070',
+      value: '#843f00',
       type: 'color',
+      description: 'Shade color with 44.4% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#707070',
-        type: 'color'
+        value: '#843f00',
+        type: 'color',
+        description: 'Shade color with 44.4% of lightness'
       },
       name: '600',
       attributes: {},
-      path: ['purple', '600']
+      path: ['Warning', '600']
     },
     700: {
-      value: '#555555',
+      value: '#612600',
       type: 'color',
+      description: 'Shade color with 34.5% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#555555',
-        type: 'color'
+        value: '#612600',
+        type: 'color',
+        description: 'Shade color with 34.5% of lightness'
       },
       name: '700',
       attributes: {},
-      path: ['purple', '700']
+      path: ['Warning', '700']
     },
     800: {
-      value: '#3b3b3b',
+      value: '#3e1200',
       type: 'color',
+      description: 'Shade color with 24.7% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#3b3b3b',
-        type: 'color'
+        value: '#3e1200',
+        type: 'color',
+        description: 'Shade color with 24.7% of lightness'
       },
       name: '800',
       attributes: {},
-      path: ['purple', '800']
+      path: ['Warning', '800']
     },
     900: {
-      value: '#202020',
+      value: '#1b0400',
       type: 'color',
+      description: 'Shade color with 14.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#202020',
-        type: 'color'
+        value: '#1b0400',
+        type: 'color',
+        description: 'Shade color with 14.9% of lightness'
       },
       name: '900',
       attributes: {},
-      path: ['purple', '900']
-    }
-  },
-  grey: {
-    100: {
-      value: '#f5f5f5',
+      path: ['Warning', '900']
+    },
+    source: {
+      value: '#efa315',
       type: 'color',
+      description: 'Source color',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#f5f5f5',
-        type: 'color'
+        value: '#efa315',
+        type: 'color',
+        description: 'Source color'
+      },
+      name: 'source',
+      attributes: {},
+      path: ['Warning', 'source']
+    }
+  },
+  Danger: {
+    100: {
+      value: '#ffe0d9',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#ffe0d9',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
       },
       name: '100',
       attributes: {},
-      path: ['grey', '100']
+      path: ['Danger', '100']
     },
     200: {
-      value: '#dadada',
+      value: '#ffb0a2',
       type: 'color',
+      description: 'Shade color with 83.9% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#dadada',
-        type: 'color'
+        value: '#ffb0a2',
+        type: 'color',
+        description: 'Shade color with 83.9% of lightness'
       },
       name: '200',
       attributes: {},
-      path: ['grey', '200']
+      path: ['Danger', '200']
     },
     300: {
-      value: '#c0c0c0',
+      value: '#ff7f6e',
       type: 'color',
+      description: 'Shade color with 74% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#c0c0c0',
-        type: 'color'
+        value: '#ff7f6e',
+        type: 'color',
+        description: 'Shade color with 74% of lightness'
       },
       name: '300',
       attributes: {},
-      path: ['grey', '300']
+      path: ['Danger', '300']
     },
     400: {
-      value: '#a5a5a5',
+      value: '#ec4e3e',
       type: 'color',
+      description: 'Shade color with 64.1% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#a5a5a5',
-        type: 'color'
+        value: '#ec4e3e',
+        type: 'color',
+        description: 'Shade color with 64.1% of lightness'
       },
       name: '400',
       attributes: {},
-      path: ['grey', '400']
+      path: ['Danger', '400']
     },
     500: {
-      value: '#8b8b8b',
+      value: '#d0110b',
       type: 'color',
+      description: 'Shade color with 54.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#8b8b8b',
-        type: 'color'
+        value: '#d0110b',
+        type: 'color',
+        description: 'Shade color with 54.3% of lightness'
       },
       name: '500',
       attributes: {},
-      path: ['grey', '500']
+      path: ['Danger', '500']
     },
     600: {
-      value: '#707070',
+      value: '#ac0000',
       type: 'color',
+      description: 'Shade color with 44.4% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#707070',
-        type: 'color'
+        value: '#ac0000',
+        type: 'color',
+        description: 'Shade color with 44.4% of lightness'
       },
       name: '600',
       attributes: {},
-      path: ['grey', '600']
+      path: ['Danger', '600']
     },
     700: {
-      value: '#555555',
+      value: '#810000',
       type: 'color',
+      description: 'Shade color with 34.5% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#555555',
-        type: 'color'
+        value: '#810000',
+        type: 'color',
+        description: 'Shade color with 34.5% of lightness'
       },
       name: '700',
       attributes: {},
-      path: ['grey', '700']
+      path: ['Danger', '700']
     },
     800: {
-      value: '#3b3b3b',
+      value: '#550000',
       type: 'color',
+      description: 'Shade color with 24.7% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#3b3b3b',
-        type: 'color'
+        value: '#550000',
+        type: 'color',
+        description: 'Shade color with 24.7% of lightness'
       },
       name: '800',
       attributes: {},
-      path: ['grey', '800']
+      path: ['Danger', '800']
     },
     900: {
-      value: '#202020',
+      value: '#280000',
+      type: 'color',
+      description: 'Shade color with 14.9% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#280000',
+        type: 'color',
+        description: 'Shade color with 14.9% of lightness'
+      },
+      name: '900',
+      attributes: {},
+      path: ['Danger', '900']
+    },
+    source: {
+      value: '#d81c14',
+      type: 'color',
+      description: 'Source color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#d81c14',
+        type: 'color',
+        description: 'Source color'
+      },
+      name: 'source',
+      attributes: {},
+      path: ['Danger', 'source']
+    }
+  },
+  Neutral: {
+    10: {
+      value: '#f7f8f8',
+      type: 'color',
+      description: 'This is used exclusively for zebra-striping lists.',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#f7f8f8',
+        type: 'color',
+        description: 'This is used exclusively for zebra-striping lists.'
+      },
+      name: '10',
+      attributes: {},
+      path: ['Neutral', '10']
+    },
+    50: {
+      value: '#eff0f0',
+      type: 'color',
+      description: 'This color is the background color for containers only',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#eff0f0',
+        type: 'color',
+        description: 'This color is the background color for containers only'
+      },
+      name: '50',
+      attributes: {},
+      path: ['Neutral', '50']
+    },
+    100: {
+      value: '#e9eaea',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#e9eaea',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
+      },
+      name: '100',
+      attributes: {},
+      path: ['Neutral', '100']
+    },
+    200: {
+      value: '#c9caca',
+      type: 'color',
+      description: 'Shade color with 83.9% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#c9caca',
+        type: 'color',
+        description: 'Shade color with 83.9% of lightness'
+      },
+      name: '200',
+      attributes: {},
+      path: ['Neutral', '200']
+    },
+    300: {
+      value: '#aaabab',
+      type: 'color',
+      description: 'Shade color with 74% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#aaabab',
+        type: 'color',
+        description: 'Shade color with 74% of lightness'
+      },
+      name: '300',
+      attributes: {},
+      path: ['Neutral', '300']
+    },
+    400: {
+      value: '#8b8d8d',
+      type: 'color',
+      description: 'Shade color with 64.1% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#8b8d8d',
+        type: 'color',
+        description: 'Shade color with 64.1% of lightness'
+      },
+      name: '400',
+      attributes: {},
+      path: ['Neutral', '400']
+    },
+    500: {
+      value: '#6e7070',
+      type: 'color',
+      description: 'Shade color with 54.3% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#6e7070',
+        type: 'color',
+        description: 'Shade color with 54.3% of lightness'
+      },
+      name: '500',
+      attributes: {},
+      path: ['Neutral', '500']
+    },
+    600: {
+      value: '#535454',
+      type: 'color',
+      description: 'Shade color with 44.4% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#535454',
+        type: 'color',
+        description: 'Shade color with 44.4% of lightness'
+      },
+      name: '600',
+      attributes: {},
+      path: ['Neutral', '600']
+    },
+    700: {
+      value: '#383939',
+      type: 'color',
+      description: 'Shade color with 34.5% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#383939',
+        type: 'color',
+        description: 'Shade color with 34.5% of lightness'
+      },
+      name: '700',
+      attributes: {},
+      path: ['Neutral', '700']
+    },
+    800: {
+      value: '#202121',
+      type: 'color',
+      description: 'Shade color with 24.7% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#202121',
+        type: 'color',
+        description: 'Shade color with 24.7% of lightness'
+      },
+      name: '800',
+      attributes: {},
+      path: ['Neutral', '800']
+    },
+    900: {
+      value: '#0b0b0b',
+      type: 'color',
+      description: 'Shade color with 14.9% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#0b0b0b',
+        type: 'color',
+        description: 'Shade color with 14.9% of lightness'
+      },
+      name: '900',
+      attributes: {},
+      path: ['Neutral', '900']
+    },
+    source: {
+      value: '#0b0c0c',
+      type: 'color',
+      description: 'Source color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#0b0c0c',
+        type: 'color',
+        description: 'Source color'
+      },
+      name: 'source',
+      attributes: {},
+      path: ['Neutral', 'source']
+    }
+  },
+  'Black-White': {
+    White: {
+      value: '#fcfcfc',
       type: 'color',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#202020',
+        value: '#fcfcfc',
         type: 'color'
       },
-      name: '900',
+      name: 'White',
       attributes: {},
-      path: ['grey', '900']
+      path: ['Black-White', 'White']
+    },
+    Black: {
+      value: '#0b0c0c',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#0b0c0c',
+        type: 'color'
+      },
+      name: 'Black',
+      attributes: {},
+      path: ['Black-White', 'Black']
     }
   },
-  white: {
-    value: '#ffffff',
-    type: 'color',
-    filePath: 'tokens/base.json',
-    isSource: true,
-    original: {
-      value: '#ffffff',
-      type: 'color'
+  'External Brands': {
+    'X-Twitter': {
+      value: '#000000',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#000000',
+        type: 'color'
+      },
+      name: 'X-Twitter',
+      attributes: {},
+      path: ['External Brands', 'X-Twitter']
     },
-    name: 'white',
-    attributes: {},
-    path: ['white']
-  },
-  black: {
-    value: '#090909',
-    type: 'color',
-    filePath: 'tokens/base.json',
-    isSource: true,
-    original: {
-      value: '#090909',
-      type: 'color'
+    Mastodon: {
+      value: '#6364ff',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#6364ff',
+        type: 'color'
+      },
+      name: 'Mastodon',
+      attributes: {},
+      path: ['External Brands', 'Mastodon']
     },
-    name: 'black',
-    attributes: {},
-    path: ['black']
+    Facebook: {
+      value: '#1877f2',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#1877f2',
+        type: 'color'
+      },
+      name: 'Facebook',
+      attributes: {},
+      path: ['External Brands', 'Facebook']
+    },
+    Instagram: {
+      value: '#ff0076',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#ff0076',
+        type: 'color'
+      },
+      name: 'Instagram',
+      attributes: {},
+      path: ['External Brands', 'Instagram']
+    },
+    Threads: {
+      value: '#000000',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#000000',
+        type: 'color'
+      },
+      name: 'Threads',
+      attributes: {},
+      path: ['External Brands', 'Threads']
+    },
+    Linkedin: {
+      value: '#0077b5',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#0077b5',
+        type: 'color'
+      },
+      name: 'Linkedin',
+      attributes: {},
+      path: ['External Brands', 'Linkedin']
+    },
+    Tiktok: {
+      value: '#000000',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#000000',
+        type: 'color'
+      },
+      name: 'Tiktok',
+      attributes: {},
+      path: ['External Brands', 'Tiktok']
+    },
+    YouTube: {
+      value: '#ff0000',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#ff0000',
+        type: 'color'
+      },
+      name: 'YouTube',
+      attributes: {},
+      path: ['External Brands', 'YouTube']
+    }
   }
 }

@@ -7,14 +7,18 @@ export const Text = classed('span' as AnyComponent, {
       body: 'font-body text-body',
       small: 'font-body text-small',
       bigDesc: 'font-body font-bold text-h4 lg:text-h3',
-      headingXs: 'font-body text-heading-xs',
-      headingSm: 'font-body text-heading-sm',
-      headingMd: 'font-body text-heading-md lg:text-desktop-heading-md',
-      headingLg: 'font-slab text-heading-lg lg:text-desktop-heading-lg',
-      headingXl: 'font-slab text-heading-xl',
-      headingXXl: 'font-slab text-heading-xxl lg:text-desktop-heading-xxl',
+      headingXs: 'font-body text-heading-xs text-neutral900',
+      headingSm: 'font-body text-heading-sm text-neutral900',
+      headingMd:
+        'font-body text-heading-md lg:text-desktop-heading-md text-neutral900',
+      headingLg:
+        'font-slab text-heading-lg lg:text-desktop-heading-lg text-neutral900',
+      headingXl: 'font-slab text-heading-xl text-neutral900',
+      headingXXl:
+        'font-slab text-heading-xxl lg:text-desktop-heading-xxl text-neutral900',
       displayLg: 'font-body text-display-lg lg:text-desktop-display-lg',
-      displayXXXl: 'font-slab text-display-xxxl lg:text-desktop-display-xxxl',
+      displayXXXl:
+        'font-slab text-display-xxxl lg:text-desktop-display-xxxl text-neutral900',
       mono: 'font-monospace text-body',
       label: 'font-body text-label'
     },
