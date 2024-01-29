@@ -45,8 +45,8 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
         <div className="my-60 lg:w-1/2" data-testid="step-by-step-intro">
           <RichText html={intro} />
         </div>
-        <StepList steps={steps} />
       </Container>
+      <StepList steps={steps} />
       <Container>
         <RelatedContentList title={t('Partner agencies')} content={agencies} />
       </Container>

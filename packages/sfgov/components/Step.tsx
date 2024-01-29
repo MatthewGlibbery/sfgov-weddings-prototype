@@ -14,17 +14,19 @@ import type { PageData, TypeStepBlock, TypeCostBlockValues } from '@/types'
 import { useTranslation } from 'next-i18next'
 import { RichText } from './RichText'
 import React from 'react'
+import { ZebraStripedSection } from './ZebraStripeSection'
 
 type StepType = {
   step: TypeStepBlock
   index: number
+  first: boolean
   last: boolean
 }
 
 export const StepList = ({ steps }: { steps: TypeStepBlock[] }) => {
   let index = 0
   return (
-    <>
+    <ZebraStripedSection noPadding>
       {steps.map((step: TypeStepBlock, i: number) => {
         if (step.value.step_type === 'number') {
           index++
@@ -34,22 +36,31 @@ export const StepList = ({ steps }: { steps: TypeStepBlock[] }) => {
             key={step.id}
             step={step}
             index={index}
+            first={i === 0}
             last={i === steps.length - 1}
           />
         )
       })}
-    </>
+    </ZebraStripedSection>
   )
 }
 
 const StepContainer = classed('div', {
   base: classes(
-    'flex pb-40 md:ml-28 md:border-dashed',
+    'flex py-20 md:mb-2 md:ml-28 md:border-dashed',
+    'mx-20 max-w-[859px] md:mx-[45px] lg:mx-[121px] xl:mx-auto', // hack: we add 25px for tablet and up to account for the hack to get the badge alignment correct
     'md:border-l-2 md:border-neutral200'
   ),
   variants: {
+    first: {
+      true: 'pt-0'
+    },
     last: {
-      true: 'md:border-l-0'
+      true: classes(
+        'md:border-l-0 md:before:relative',
+        'md:before:top-[-20px] md:before:h-20',
+        'md:before:border-dashed md:before:border-l-2 md:before:border-neutral200'
+      )
     }
   }
 })
@@ -71,7 +82,12 @@ const StepBadge = classed('div', {
   }
 })
 
-export const Step = ({ step: { id, value: step }, index, last }: StepType) => {
+export const Step = ({
+  step: { id, value: step },
+  index,
+  first,
+  last
+}: StepType) => {
   const { t } = useTranslation()
   const isAndOr = step.step_type !== 'number'
 
@@ -88,7 +104,7 @@ export const Step = ({ step: { id, value: step }, index, last }: StepType) => {
   )
 
   return (
-    <StepContainer last={last} data-testid={`step-${id}`}>
+    <StepContainer first={first} last={last} data-testid={`step-${id}`}>
       <div className="hidden md:block">
         <BadgeComponent />
       </div>
