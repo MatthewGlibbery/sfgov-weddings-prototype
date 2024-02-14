@@ -9,18 +9,17 @@ export type TitleAndTextProps = JSX.IntrinsicElements['section'] &
 export const TitleAndText = ({
   title,
   text,
-  h2 = false,
+  as = 'h3',
   id,
   ...rest
 }: TitleAndTextProps) => {
   if (!title && !text) return null
-  const TitleComponent = h2 ? HeadingXXl : HeadingXl
   return (
     <section className="flex flex-col gap-y-12" {...rest}>
       <When condition={!!title}>
-        <TitleComponent as={h2 ? 'h2' : 'h3'} id={id || ''}>
+        <HeadingXl as={as} id={id || ''}>
           {title}
-        </TitleComponent>
+        </HeadingXl>
       </When>
       <When condition={!!text}>
         <RichText html={text} />

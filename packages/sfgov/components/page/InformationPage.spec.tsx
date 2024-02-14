@@ -121,6 +121,19 @@ describe('<InformationPage>', () => {
           screen.queryByTestId(`block-${mysteryBlock.id}`)
         ).not.toBeInTheDocument()
       })
+
+      it('renders without info section content', () => {
+        expect(() =>
+          render(
+            <InformationPage
+              page={{
+                ...fixture,
+                information_section: []
+              }}
+            />
+          )
+        ).not.toThrow()
+      })
     })
 
     describe('related content part of', () => {

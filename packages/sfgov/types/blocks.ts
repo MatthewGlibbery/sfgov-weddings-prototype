@@ -61,7 +61,7 @@ export type TypeImageBlock = BlockType<'image', WagtailImageData>
 export type TypeTitleAndTextValues = {
   title: string
   text: string
-  h2?: boolean
+  as?: string
   id?: string
 }
 

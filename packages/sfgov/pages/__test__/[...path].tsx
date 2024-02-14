@@ -1,4 +1,4 @@
-import { DEFAULT_PAGE_TEMPLATES } from '@/constants'
+import { DEFAULT_PAGE_TEMPLATES } from '@/constants/templates'
 import { FixtureAPI } from '@/lib/api'
 import { Controller } from '@/lib/controller'
 import { pages } from '@/__fixtures__'

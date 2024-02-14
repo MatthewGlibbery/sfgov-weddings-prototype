@@ -47,12 +47,11 @@ const customJestConfig = {
     }
   },
   moduleNameMapper: {
-    ...aliases,
-    '^lodash-es$': 'lodash'
+    ...aliases
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
-  testPathIgnorePatterns: ['/browser/']
+  testPathIgnorePatterns: ['/browser/', '/playwright/']
 }
 
 // createJestConfig is exported this way to ensure

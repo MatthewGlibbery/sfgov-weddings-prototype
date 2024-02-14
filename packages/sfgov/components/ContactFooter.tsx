@@ -1,9 +1,7 @@
 import {
-  IconBuilding,
   IconCheck,
-  IconMail,
   IconPhone,
-  IconWIP,
+  IconWarning,
   StackedContainer,
   StackedItem
 } from '@/design-system'
@@ -38,7 +36,7 @@ const ContactFooterItem = ({ item, ...rest }: ContactFooterItemProps) => {
   switch (type) {
     case 'address':
       return (
-        <StackedItem icon={IconBuilding} title="Address" {...rest}>
+        <StackedItem icon={IconWarning} title="Address" {...rest}>
           <Location {...value} />
         </StackedItem>
       )
@@ -50,7 +48,7 @@ const ContactFooterItem = ({ item, ...rest }: ContactFooterItemProps) => {
       )
     case 'email':
       return (
-        <StackedItem icon={IconMail} title="Email" {...rest}>
+        <StackedItem icon={IconWarning} title="Email" {...rest}>
           <EmailBlock {...value} />
         </StackedItem>
       )
@@ -62,7 +60,7 @@ const ContactFooterItem = ({ item, ...rest }: ContactFooterItemProps) => {
       )
     case 'social_media':
       return (
-        <StackedItem icon={IconWIP} title="Phone" {...rest}>
+        <StackedItem icon={IconWarning} title="Phone" {...rest}>
           {value.social_media.map((item) => (
             <SocialMedia key={item.id} {...item} />
           ))}

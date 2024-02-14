@@ -6,7 +6,7 @@ import { Location } from './Location'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { RichText } from './RichText'
 import type * as Types from '@/types'
-import { camelCase } from 'lodash-es'
+import { camelCase } from '@/lib/utils'
 
 type WhatToDoStepBlockProps = Types.TypeWhatToDoStepBlock & {
   index: number

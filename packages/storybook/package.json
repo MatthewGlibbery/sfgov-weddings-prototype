@@ -1,9 +1,6 @@
 {
     "private": true,
     "name": "sfgov-storybook",
-    "engines": {
-        "node": "16.16.0"
-    },
     "scripts": {
         "storybook": "storybook dev -c src -p 6006",
         "build-storybook": "storybook build -c src"

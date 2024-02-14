@@ -1,7 +1,7 @@
 import { When } from 'react-if'
 import { useTranslation } from 'next-i18next'
 import type { ComponentType } from 'react'
-import { camelCase } from 'lodash-es'
+import { camelCase } from '@/lib/utils'
 
 import {
   Container,

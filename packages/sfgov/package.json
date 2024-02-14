@@ -7,7 +7,8 @@
     "lint": "eslint . *.js __*",
     "prestart": "npm run build",
     "start": "next start",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test-ct": "playwright test -c playwright-ct.config.ts"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.19.2",
@@ -25,11 +26,13 @@
     "safe-json-stringify": "^1.2.0"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.7",
+    "@axe-core/playwright": "^4.7.3",
+    "@playwright/experimental-ct-react": "^1.41.2",
+    "@playwright/test": "^1.41.2",
     "@types/micromatch": "^4.0.2",
+    "@types/node": "^20.9.0",
     "@types/safe-json-stringify": "^1.1.2",
     "autoprefixer": "^10.4.14",
-    "lodash-es": "^4.17.21",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.2"
   }

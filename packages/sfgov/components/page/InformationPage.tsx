@@ -1,7 +1,7 @@
 import {
-  BigDesc,
   Container,
   DisplayLg,
+  DisplayXXXl,
   type ContainerProps
 } from '@/design-system'
 import { RelatedContentList } from '../RelatedContentList'
@@ -27,13 +27,13 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
   return (
     <PageWrapper title={title}>
       <Container className="mb-20">
-        <DisplayLg as="h1" className="my-40" data-testid="info-page-title">
+        <DisplayXXXl as="h1" className="my-40" data-testid="info-page-title">
           {title}
-        </DisplayLg>
+        </DisplayXXXl>
         {description ? (
-          <BigDesc as="p" data-testid="info-page-description">
+          <DisplayLg as="p" data-testid="info-page-description">
             {description}
-          </BigDesc>
+          </DisplayLg>
         ) : null}
       </Container>
       <RelatedContentList
@@ -88,7 +88,7 @@ const InfoSectionContent = ({ block, ...rest }: InfoSectionContentProps) => {
     case 'image':
       return <Image alt="" imageRef={block.value} {...rest} />
     case 'title_and_text':
-      return <TitleAndText {...block.value} {...rest} />
+      return <TitleAndText {...block.value} as="h2" {...rest} />
   }
   return null
 }

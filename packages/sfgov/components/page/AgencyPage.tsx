@@ -9,7 +9,6 @@ import {
   Label
 } from '@/design-system'
 import { AgencyPageData } from '@/types'
-import { startCase } from 'lodash-es'
 import { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { When } from 'react-if'
@@ -240,7 +239,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               </div>
             </When>
             <RelatedContentList
-              title={t(`${startCase(childAgencySectionTitle)}`)}
+              title={t(`${childAgencySectionTitle}`)}
               content={relatedChildAgencies}
               className="mt-12"
             />

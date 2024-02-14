@@ -28,5 +28,5 @@ module.exports = {
   },
   poweredByHeader: false,
   experimental: {},
-  transpilePackages: ['../design-system']
+  transpilePackages: ['../design-system, ../../node_modules/lodash/index.js']
 }

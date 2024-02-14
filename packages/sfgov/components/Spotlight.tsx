@@ -51,7 +51,7 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
       <div className="flex flex-col gap-y-20 basis-0 grow">
         <IndicatorWithTitle title={t('SPOTLIGHT')} />
         <When condition={title}>
-          <HeadingXXl>{title}</HeadingXXl>
+          <HeadingXXl as="h2">{title}</HeadingXXl>
         </When>
         <When condition={description}>
           <BodyText className="mb-12" data-testid="step-description">
