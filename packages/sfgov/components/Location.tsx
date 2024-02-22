@@ -1,8 +1,9 @@
 import { When } from 'react-if'
 
-import { BodyText, HeadingSm } from '@/design-system'
+import { BodyText, HeadingSm, IconLocation, Link } from '@/design-system'
 
 import type { TypeLocationValues } from '@/types'
+import { useTranslation } from 'react-i18next'
 
 /* eslint-disable camelcase */
 export const Location = (props: TypeLocationValues) => {
@@ -19,9 +20,12 @@ export const Location = (props: TypeLocationValues) => {
     location_notes: locationNotes
   } = props
 
+  const { t } = useTranslation()
+
   const boldedTitle =
     (agency && agency.title) || organization || addressee || locationName
 
+  const addressQuery = `https://maps.google.com/?q=${locationName}+${line1}+${line2}+${city}+${state}+${zip}}`
   return (
     <div className="flex flex-col gap-y-8">
       <When condition={!!boldedTitle}>
@@ -51,6 +55,14 @@ export const Location = (props: TypeLocationValues) => {
         {city}, {state} {zip}
         <br />
         <When condition={!!locationNotes}>{locationNotes}</When>
+        <Link
+          href={addressQuery}
+          className="flex gap-4"
+          aria-label={`${t('Get directions to')} ${locationName}`}
+        >
+          <IconLocation width={20} />
+          {t('Get directions')}
+        </Link>
       </BodyText>
     </div>
   )

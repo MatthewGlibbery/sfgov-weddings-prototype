@@ -14,7 +14,9 @@ export const RelatedContentList = ({
   if (!content?.length) return null
   return (
     <div {...rest}>
-      <HeadingXXl as="h2">{title}</HeadingXXl>
+      <HeadingXXl as="h2" className="mb-20">
+        {title}
+      </HeadingXXl>
       <div className="md:grid md:grid-cols-3">
         {content.map((item: RelatedContentData, i: number) => (
           <div

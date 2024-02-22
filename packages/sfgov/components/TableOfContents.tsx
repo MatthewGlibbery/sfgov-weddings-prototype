@@ -1,16 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react'
-import { classed } from '@/design-system'
+import { classed, Link } from '@/design-system'
 
-const TOCWrapper = classed('ul', 'list-none ps-0')
+const TOCWrapper = classed('ul', 'list-none my-0 ps-0')
 
 const ListItem = classed('li', 'mb-16')
 
-const TopLevelTOC = classed('a', 'block text-grey700 font-bold no-underline', {
+const TopLevelTOC = classed(Link, 'block font-bold no-underline', {
   variants: {
     isactive: {
-      true: 'text-white bg-grey700 rounded-[40px] px-12 py-8'
+      true: 'text-white bg-primary500 rounded-[40px] px-12 py-8'
     }
   }
 })
@@ -26,7 +26,7 @@ const Headings = ({ headings, activeId }) => (
   <TOCWrapper>
     {headings.map((heading) => (
       <span key={heading.id}>
-        <ListItem isActive={heading.id === activeId}>
+        <ListItem isactive={heading.id === activeId}>
           <TopLevelTOC
             href={`#${heading.id}`}
             onClick={(e) => {
@@ -43,7 +43,7 @@ const Headings = ({ headings, activeId }) => (
         </ListItem>
         {!!heading.items.length &&
           heading.items.map((child) => (
-            <ListItem key={child.id} isActive={child.id === activeId}>
+            <ListItem key={child.id} isactive={child.id === activeId}>
               <LowerLevelTOC
                 href={`#${child.id}`}
                 onClick={(e) => {
@@ -76,8 +76,14 @@ const useHeadingsData = () => {
       document.querySelectorAll('h2[id], h3[id]:not([id=""]')
     )
 
+    const deduplicatedHeadings = headingElements.reduce((unique, o) => {
+      if (!unique.some((el) => el.id === o.id)) {
+        unique.push(o)
+      }
+      return unique
+    }, [])
     // Created a list of headings, with H3s nested
-    const newNestedHeadings = getNestedHeadings(headingElements)
+    const newNestedHeadings = getNestedHeadings(deduplicatedHeadings)
     setNestedHeadings(newNestedHeadings)
   }, [])
 
@@ -139,7 +145,14 @@ const useIntersectionObserver = (setActiveId) => {
       document.querySelectorAll('h2[id], h3[id]:not([id=""]')
     )
 
-    headingElements.forEach((element) => observer.observe(element))
+    const deduplicatedHeadings = headingElements.reduce((unique, o) => {
+      if (!unique.some((el) => el.id === o.id)) {
+        unique.push(o)
+      }
+      return unique
+    }, [])
+
+    deduplicatedHeadings.forEach((element) => observer.observe(element))
 
     return () => observer.disconnect()
   }, [setActiveId])

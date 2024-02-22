@@ -201,7 +201,7 @@ export type AgencyPageData = PageData & {
   alert: TypeAlertBlock[]
   spotlight_primary: TypeSpotlightBlock[]
   quicklinks: TypeQuickLinkBlock[]
-  meetings: (TypeLocationBlock | TypeTitleAndTextBlock)[]
+  meeting_information: (TypeLocationBlock | TypeTitleAndTextBlock)[]
   meeting_archive_date: string
   meeting_archive_url: string
   services: TypeServicesSectionBlock[]
@@ -211,7 +211,7 @@ export type AgencyPageData = PageData & {
   child_agency_section_title: string
   part_of: RelatedContentData[]
   related_child_agencies: RelatedContentData[]
-  related_content_agencies: RelatedContentData[]
+  partner_agencies: RelatedContentData[]
   call_to_action: TypeCallToActionBlock[]
   social_media: TypeSocialMediaBlock[]
   contact: (TypeLocationBlock | TypeEmailBlock | TypePhoneNumberBlock)[]
@@ -223,7 +223,7 @@ export type AgencyPageData = PageData & {
   archive_url: string
   archive_date: string
   agency_redirect: string
-  related_content_topics: RelatedContentData[]
+  related_topics: RelatedContentData[]
   related_events: TypeEventsAndMeetingsByDate
   related_news: RelatedContentData[]
 }
@@ -246,6 +246,7 @@ export type CampaignPageData = PageData & {
 }
 
 export type MeetingPageData = PageData & {
+  primary_agency: RelatedContentData
   partner_agencies: RelatedContentData[]
   cancelled: boolean
   date_time: TypeDateTimeBlock[]
@@ -254,7 +255,7 @@ export type MeetingPageData = PageData & {
   agenda: TypeAgendaItemBlock[]
   videos: TypeVideoBlock[]
   notices: TypeTitleAndTextBlock[]
-  meeting_documents: TypeDownloadableFilesBlock[]
+  related_documents: TypeDownloadableFilesBlock[]
 }
 
 export type DataStoryPageData = PageData & {

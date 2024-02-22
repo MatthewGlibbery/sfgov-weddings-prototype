@@ -2,6 +2,7 @@ import type { ComponentType } from 'react'
 import type { PageData, PageProps, IContentAPI } from '@/types'
 import type { GetServerSideProps } from 'next'
 import safeJsonStringify from 'safe-json-stringify'
+import { ErrorBoundary, ErrorFallbackReport } from '@/components'
 
 // "unknown" page props literally have { page: unknown }
 type UnknownPageProps = PageProps<unknown>
@@ -141,7 +142,11 @@ export class Controller {
     // eslint-disable-next-line react/function-component-definition
     return function ControllerView(props) {
       const Component = getViewComponent(props)
-      return <Component {...props} />
+      return (
+        <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
+          <Component {...props} />
+        </ErrorBoundary>
+      )
     }
   }
 }

@@ -309,9 +309,12 @@ export type TypeVideoBlockValues = {
   title: string
   description: string
   video_type: (TypeVideoEmbedValues | TypeLinkValues)[]
+  showTitle?: boolean
 }
 
 export type TypeVideoBlock = BlockType<'video', TypeVideoBlockValues>
+
+export type TypeDocumentBlock = BlockType<'document', number>
 
 export type TypeDownloadableFilesBlockValues = {
   title: string

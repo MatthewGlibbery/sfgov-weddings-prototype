@@ -1,7 +1,11 @@
 import Head from 'next/head'
 import type { ReactNode } from 'react'
-import { SiteFooter } from '../SiteFooter'
-import { SiteHeader } from '../SiteHeader'
+import {
+  ErrorBoundary,
+  ErrorFallbackReport,
+  SiteFooter,
+  SiteHeader
+} from '@/components'
 
 export type PageWrapperProps = {
   title?: string
@@ -16,7 +20,9 @@ export const PageWrapper = ({ children, title }: PageWrapperProps) => {
         <title>{title ? `${title} | SF.gov` : 'SF.gov'}</title>
       </Head>
       <SiteHeader />
-      {children}
+      <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
+        {children}
+      </ErrorBoundary>
       <SiteFooter />
     </>
   )

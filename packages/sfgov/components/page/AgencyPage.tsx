@@ -44,7 +44,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     alert,
     spotlight_primary: spotlightPrimary,
     quicklinks,
-    meetings,
+    meeting_information: meetingInformation,
     services,
     spotlight_secondary: spotlightSecondary,
     resources,
@@ -52,7 +52,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     child_agency_section_title: childAgencySectionTitle,
     part_of: partOf,
     related_child_agencies: relatedChildAgencies,
-    related_content_agencies: relatedContentAgencies,
+    partner_agencies: relatedContentAgencies,
     call_to_action: callToAction,
     social_media: socialMedia,
     contact,
@@ -130,18 +130,22 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                 <IconArrowRight width={16} />
               </Button>
             </div>
-            <div className="space-y-28 md:flex md:space-x-28">
-              {meetings.map((section) =>
-                section.type === 'title_and_text' ? (
-                  <div key={section.id} className="md:w-1/2">
-                    <HeadingMd as="h3">{section.value.title}</HeadingMd>
-                    <RichText html={section.value.text} />
-                  </div>
-                ) : (
-                  <Location key={section.id} {...section.value} />
-                )
+            <When condition={!!meetingInformation?.length}>
+              {() => (
+                <div className="space-y-28 md:flex md:space-x-28">
+                  {meetingInformation?.map((section) =>
+                    section.type === 'title_and_text' ? (
+                      <div key={section.id} className="md:w-1/2">
+                        <HeadingMd as="h3">{section.value.title}</HeadingMd>
+                        <RichText html={section.value.text} />
+                      </div>
+                    ) : (
+                      <Location key={section.id} {...section.value} />
+                    )
+                  )}
+                </div>
               )}
-            </div>
+            </When>
             <When condition={!!upcomingEvents}>
               {() => (
                 <>
@@ -170,7 +174,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             <HeadingXXl as="h2" className="my-12 md:my-20">
               {t('Services')}
             </HeadingXXl>
-            {services.map((service) => (
+            {services?.map((service) => (
               <ServicesAndResourcesSection
                 key={service.id}
                 title={service.value.title}
@@ -189,7 +193,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               </Button>
             </div>
             <NewsTileList
-              links={news.map((item) => ({
+              links={news?.map((item) => ({
                 id: item.page_content.id,
                 type: 'page',
                 value: { ...item.page_content }
@@ -218,7 +222,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                 <HeadingXXl as="h2" className="my-12 md:my-20">
                   {t('Resources')}
                 </HeadingXXl>
-                {resources.map((resource) => (
+                {resources?.map((resource) => (
                   <ServicesAndResourcesSection
                     key={resource.id}
                     title={resource.value.title}

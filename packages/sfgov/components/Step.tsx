@@ -65,7 +65,7 @@ const StepContainer = classed('div', {
   }
 })
 
-const StepBadge = classed('div', {
+export const StepBadge = classed('div', {
   base: classes(
     'flex items-center justify-center',
     'w-[50px] h-[50px] mr-20',

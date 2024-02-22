@@ -4,10 +4,10 @@ import {
   IconMinus,
   IconPlus,
   classes,
-  HeadingXl,
   IconChevronUp,
   IconChevronDown,
-  HeadingXs
+  HeadingXs,
+  HeadingMd
 } from '@/design-system'
 import { When } from 'react-if'
 
@@ -18,19 +18,19 @@ const StyledSummary = classed('summary', {
     'cursor-pointer',
     'flex justify-between',
     'pb-12',
-    'border-solid border-b-1 border-[#707070]'
+    'border-solid border-b-1 border-neutral300'
   ),
   variants: {
-    dataStory: {
+    datastory: {
       true: 'justify-center space-x-4 py-12 border-solid border-b-1 border-grey300'
     }
   }
 })
 
 const StyledContent = classed('div', {
-  base: 'bg-[#F2F4F7] p-[32px]',
+  base: 'bg-neutral50 p-20 border-b-1 border-l-1 border-r-1 border-neutral300',
   variants: {
-    dataStory: {
+    datastory: {
       true: 'bg-white text-grey500'
     }
   }
@@ -60,11 +60,15 @@ export const Accordion = (props: AccordionProps) => {
 
   return (
     <StyledDetails open={isOpen} onToggle={toggleOpen} {...rest}>
-      <StyledSummary data-testid="accordion-summary" dataStory={dataStory}>
+      <StyledSummary data-testid="accordion-summary" datastory={dataStory}>
         <When condition={!dataStory}>
-          <HeadingXl romanType="sans" data-testid="accordion-title">
+          <HeadingMd
+            romanType="sans"
+            className="text-primary500"
+            data-testid="accordion-title"
+          >
             {title}
-          </HeadingXl>
+          </HeadingMd>
         </When>
         <When condition={dataStory}>
           <HeadingXs className="text-grey500" data-testid="accordion-title">
@@ -72,12 +76,12 @@ export const Accordion = (props: AccordionProps) => {
           </HeadingXs>
         </When>
         <Icon
-          className={dataStory ? 'text-grey500' : ''}
+          className={dataStory ? 'text-grey500' : 'text-primary500'}
           data-testid={Icon.name}
-          width={14}
+          width={24}
         />
       </StyledSummary>
-      <StyledContent data-testid="accordion-content" dataStory={dataStory}>
+      <StyledContent data-testid="accordion-content" datastory={dataStory}>
         {children}
       </StyledContent>
     </StyledDetails>

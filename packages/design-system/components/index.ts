@@ -1,6 +1,7 @@
 export * from './Button'
 export * from './Container'
 export * from './Grid'
+export * from './Link'
 export * from './StackedContainer'
 export * from './StackedItem'
 export * from './Text'

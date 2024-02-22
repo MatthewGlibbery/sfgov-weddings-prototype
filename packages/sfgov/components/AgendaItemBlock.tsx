@@ -1,18 +1,35 @@
-import { HeadingXl } from '@/design-system'
+import { HeadingXl, IconDownload, Link } from '@/design-system'
 import { TypeAgendaItemBlockValues } from '@/types'
+import { When } from 'react-if'
 import { RichText } from './RichText'
+import { StepBadge } from './Step'
 
 export const AgendaItemBlock = (props: TypeAgendaItemBlockValues) => {
   const { index, title_and_text: titleAndText, documents } = props
   return (
-    <div>
-      <div className="float-left rounded-full text-heading-xxl bg-blue200 py-8 px-16 block">
-        {index + 1}
+    <div className="flex flex-col gap-12">
+      <div className="flex items-center">
+        <div>
+          <StepBadge className="md:ml-0">
+            <HeadingXl className="text-secondary600">{index + 1}</HeadingXl>
+          </StepBadge>
+        </div>
+        <When condition={titleAndText.title}>
+          <HeadingXl romanType="sans" as="h3" id={`agenda-${index}`}>
+            {titleAndText.title}
+          </HeadingXl>
+        </When>
       </div>
-      <HeadingXl className="block">{titleAndText.title}</HeadingXl>
       <RichText html={titleAndText.text} />
       {/* TODO: update when documents are fully serialized */}
-      <div>{documents}</div>
+      <When condition={!!documents.length}>
+        {documents.map((document) => (
+          <Link href="#" className="flex gap-4" key={document.id}>
+            <IconDownload width={20} />
+            document placeholder
+          </Link>
+        ))}
+      </When>
     </div>
   )
 }

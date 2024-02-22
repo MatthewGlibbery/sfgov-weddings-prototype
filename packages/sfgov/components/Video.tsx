@@ -7,7 +7,7 @@ import { When } from 'react-if'
 import { useRouter } from 'next/router'
 
 export const Video = (props: TypeVideoBlockValues) => {
-  const { title, description, video_type: video } = props
+  const { title, description, video_type: video, showTitle = true } = props
   const [showTranscript, setShowTrancscript] = useState(false)
 
   const videoType = video[0].type
@@ -94,7 +94,9 @@ export const Video = (props: TypeVideoBlockValues) => {
 
   return (
     <div>
-      <HeadingXl>{title}</HeadingXl>
+      <When condition={showTitle}>
+        <HeadingXl>{title}</HeadingXl>
+      </When>
       <RichText html={description} />
       {block}
     </div>

@@ -47,9 +47,9 @@ const fontSize = {
     }
   ],
   'desktop-heading-xxl': [
-    '36px',
+    '40px',
     {
-      lineHeight: lineHeight['40'],
+      lineHeight: lineHeight['52'],
       letterSpacing: '0px',
       fontWeight: fontWeight.medium
     }
@@ -57,7 +57,7 @@ const fontSize = {
   'desktop-heading-xl': [
     '24px',
     {
-      lineHeight: lineHeight['24'],
+      lineHeight: lineHeight['44'],
       letterSpacing: '0px',
       fontWeight: fontWeight.semibold
     }
@@ -129,7 +129,7 @@ const fontSize = {
   'heading-xxl': [
     '24px',
     {
-      lineHeight: lineHeight['28'],
+      lineHeight: lineHeight['32'],
       letterSpacing: '0px',
       fontWeight: fontWeight.medium
     }
@@ -137,7 +137,7 @@ const fontSize = {
   'heading-xl': [
     '24px',
     {
-      lineHeight: lineHeight['24'],
+      lineHeight: lineHeight['28'],
       letterSpacing: '0px',
       fontWeight: fontWeight.semibold
     }
@@ -151,9 +151,9 @@ const fontSize = {
     }
   ],
   'heading-md': [
-    '16px',
+    '20px',
     {
-      lineHeight: lineHeight['24'],
+      lineHeight: lineHeight['28'],
       letterSpacing: '0px',
       fontWeight: fontWeight.bold
     }

@@ -51,7 +51,9 @@ import {
   TypeOnlineEventBlock,
   TypeVideoBlock,
   TypeEmbeddedContentBlock,
-  DataStoryPageData
+  DataStoryPageData,
+  TypeDownloadableFilesBlock,
+  TypeDocumentBlock
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -224,7 +226,23 @@ export const StepByStepPageFactory = factory<StepByStepData>((gen) => ({
   title: 'Step by step',
   description: 'Step by step description',
   intro: '<h2>intro</h2',
-  steps: StepBlockFactory.make(3),
+  steps: [
+    StepBlockFactory.make({
+      value: {
+        step_type: 'number'
+      }
+    }),
+    StepBlockFactory.make({
+      value: {
+        step_type: 'and'
+      }
+    }),
+    StepBlockFactory.make({
+      value: {
+        step_type: 'or'
+      }
+    })
+  ],
   partner_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
@@ -429,7 +447,10 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   alert: AlertBlockFactory.make(1),
   spotlight_primary: SpotlightFactory.make(1),
   quicklinks: QuickLinkFactory.make(3),
-  meetings: [LocationBlockFactory.make(), TitleAndTextFactory.make()],
+  meeting_information: [
+    LocationBlockFactory.make(),
+    TitleAndTextFactory.make()
+  ],
   meeting_archive_date: '',
   meeting_archive_url: '',
   services: [
@@ -465,7 +486,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
       type: 'sfgov_base.RelatedContentAgency'
     }
   }),
-  related_content_agencies: RelatedContentBlockFactory.make(1, {
+  partner_agencies: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
@@ -487,7 +508,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   archive_url: 'www.farm.com',
   archive_date: '2023-08-01',
   agency_redirect: '',
-  related_content_topics: RelatedContentBlockFactory.make(1, {
+  related_topics: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
@@ -716,6 +737,22 @@ export const ImageFactory = factory<WagtailImageData>((gen) => ({
   }
 }))
 
+export const DocumentBlockFactory = factory<TypeDocumentBlock>((gen) => ({
+  type: 'document',
+  value: gen.datatype.number(),
+  id: gen.datatype.uuid()
+}))
+
+export const DownloadableFilesBlockFactory =
+  factory<TypeDownloadableFilesBlock>((gen) => ({
+    id: gen.datatype.uuid(),
+    type: 'downloadable_files',
+    value: {
+      title: gen.lorem.word(),
+      documents: DocumentBlockFactory.make(1)
+    }
+  }))
+
 export const ImageBlockFactory = factory<TypeImageBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'image',
@@ -823,27 +860,18 @@ export const PhoneNumberFactory = factory<TypePhoneNumberBlock>((gen) => ({
   }
 }))
 
-export const DateTimeBlockFactory = factory<TypeDateTimeBlock>((gen) => {
-  const soonDateObj = gen.date.soon()
-  const [soonDate, soonTime] = soonDateObj.toString().split('T')
-  const [futureDate, futureTime] = gen.date
-    .future(5, soonDateObj)
-    .toString()
-    .split('T')
-
-  return {
-    id: gen.datatype.uuid(),
-    type: gen.lorem.word(),
-    value: {
-      start_date: soonDate,
-      start_time: soonTime,
-      end_date: futureDate,
-      end_time: futureTime,
-      is_all_day: gen.datatype.boolean(),
-      include_end_date_time: gen.datatype.boolean() ? 'yes' : 'no'
-    }
+export const DateTimeBlockFactory = factory<TypeDateTimeBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: gen.lorem.word(),
+  value: {
+    start_date: '2020-05-28',
+    start_time: '12:00:00',
+    end_date: '2058-05-28',
+    end_time: '23:59:59',
+    is_all_day: gen.datatype.boolean(),
+    include_end_date_time: gen.datatype.boolean() ? 'yes' : 'no'
   }
-})
+}))
 
 export const LocationBlockFactory = factory<TypeLocationBlock>((gen) => {
   return {
@@ -1105,7 +1133,7 @@ export const AgendaItemBlockFactory = factory<TypeAgendaItemBlock>((gen) => ({
       title: 'Agenda title and text 1 title',
       text: 'Agenda title and text 1 text'
     },
-    documents: []
+    documents: DocumentBlockFactory.make(3)
   }
 }))
 
@@ -1144,6 +1172,11 @@ export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
     type: MEETING_PAGE_TYPE
   }),
   title: 'Meeting page title',
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
+    }
+  }),
   partner_agencies: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
@@ -1153,7 +1186,7 @@ export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
   date_time: DateTimeBlockFactory.make(1),
   meeting_location: [LocationBlockFactory.make(), OnlineEventFactory.make()],
   overview: '',
-  agenda: [AgendaItemBlockFactory.make()],
+  agenda: AgendaItemBlockFactory.make(1),
   videos: [],
   notices: [
     TitleAndTextFactory.make({
@@ -1175,7 +1208,7 @@ export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
       }
     })
   ],
-  meeting_documents: []
+  related_documents: DownloadableFilesBlockFactory.make(2)
 }))
 
 export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
