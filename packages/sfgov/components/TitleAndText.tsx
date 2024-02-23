@@ -1,5 +1,5 @@
 import { TypeTitleAndTextValues } from '@/types'
-import { HeadingXl, HeadingXXl } from '@/design-system'
+import { HeadingSm } from '@/design-system'
 import { RichText } from './RichText'
 import { When } from 'react-if'
 
@@ -11,15 +11,17 @@ export const TitleAndText = ({
   text,
   as = 'h3',
   id,
+  heading,
   ...rest
 }: TitleAndTextProps) => {
   if (!title && !text) return null
+  const TitleComponent = heading ?? HeadingSm
   return (
     <section className="flex flex-col gap-y-12" {...rest}>
       <When condition={!!title}>
-        <HeadingXl as={as} id={id || ''}>
+        <TitleComponent as={as} id={id || ''}>
           {title}
-        </HeadingXl>
+        </TitleComponent>
       </When>
       <When condition={!!text}>
         <RichText html={text} />

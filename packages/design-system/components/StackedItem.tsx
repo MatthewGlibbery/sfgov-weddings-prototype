@@ -1,10 +1,10 @@
-import { HeadingSm } from './Text'
+import { HeadingLg } from './Text'
 import { classed } from './utils'
 import type { ComponentProps, ComponentType } from '../types'
 
 const StyledItem = classed(
   'div',
-  'w-full pb-12 md:pl-12 md:pb-0 border-b-1 border-b-[#D6D3D3] md:border-b-0 md:border-b-current md:border-l-1 md:border-l-[#D6D3D3]'
+  'w-full pb-12 md:pl-12 md:pb-0 border-b-1 border-b-[#D6D3D3] md:border-b-0 md:border-b-current md:border-l-1 md:border-l-[#D6D3D3] md:first-of-type:border-l-0'
 )
 
 export type StackedItemProps = ComponentProps<typeof StyledItem> & {
@@ -30,7 +30,7 @@ export const StackedItem = ({
         />
       ) : null}
       {title ? (
-        <HeadingSm className="flex items-center mb-20">{title}</HeadingSm>
+        <HeadingLg className="flex items-center mb-20">{title}</HeadingLg>
       ) : null}
       {children}
     </StyledItem>

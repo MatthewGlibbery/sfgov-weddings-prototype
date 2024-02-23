@@ -63,6 +63,7 @@ export type TypeTitleAndTextValues = {
   text: string
   as?: string
   id?: string
+  heading: React.ElementType
 }
 
 export type TypeTitleAndTextBlock = BlockType<
@@ -150,13 +151,7 @@ export type TypeTextBlock = BlockType<'text', string>
 
 export type TypeButtonLinkBlock = BlockType<'button_link', TypeLinkValues>
 
-export type TypeWhatToDoVariant =
-  | 'callout'
-  | 'address'
-  | 'phone_number'
-  | 'email'
-  | 'button_link'
-  | 'text'
+export type TypeWhatToDoVariant = 'callout' | 'what_to_do_step'
 
 export type TypeCalloutBlock = BlockType<'callout', string>
 
@@ -171,8 +166,8 @@ export type TypeStepSpecificsVariant =
 export type TypeWhatToDoStepBlock = BlockType<
   'what_to_do_step',
   {
-    step_title: string
-    step_specifics: TypeStepSpecificsVariant[]
+    section_title: string
+    section_specifics: TypeStepSpecificsVariant[]
   }
 >
 

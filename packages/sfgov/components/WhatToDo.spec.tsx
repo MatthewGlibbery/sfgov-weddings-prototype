@@ -12,16 +12,11 @@ import { render, screen } from '@testing-library/react'
 import { WhatToDo } from './WhatToDo'
 
 describe('WhatToDo', () => {
-  const fixture = WhatToDoFactory.make()
-
   it('renders a callout field', () => {
-    const props = {
-      ...fixture,
-      value: [CalloutFactory.make()]
-    }
+    const props = CalloutFactory.make()
     render(<WhatToDo {...props} />)
 
-    const text = screen.queryByText(props.value[0].value)
+    const text = screen.queryByText(props.value)
     expect(text).toBeInTheDocument()
   })
 
@@ -29,48 +24,44 @@ describe('WhatToDo', () => {
     {
       what: 'callout',
       input: WhatToDoStepFactory.make({
-        value: { step_specifics: [CalloutFactory.make()] }
+        value: { section_specifics: [CalloutFactory.make()] }
       })
     },
     {
       what: 'address',
       input: WhatToDoStepFactory.make({
-        value: { step_specifics: [LocationBlockFactory.make()] }
+        value: { section_specifics: [LocationBlockFactory.make()] }
       })
     },
     {
       what: 'email',
       input: WhatToDoStepFactory.make({
-        value: { step_specifics: [EmailBlockFactory.make()] }
+        value: { section_specifics: [EmailBlockFactory.make()] }
       })
     },
     {
       what: 'button_link',
       input: WhatToDoStepFactory.make({
-        value: { step_specifics: [ButtonLinkFactory.make()] }
+        value: { section_specifics: [ButtonLinkFactory.make()] }
       })
     },
     {
       what: 'phone_number',
       input: WhatToDoStepFactory.make({
-        value: { step_specifics: [PhoneNumberFactory.make()] }
+        value: { section_specifics: [PhoneNumberFactory.make()] }
       })
     },
     {
       what: 'text',
       input: WhatToDoStepFactory.make({
-        value: { step_specifics: [TextBlockFactory.make()] }
+        value: { section_specifics: [TextBlockFactory.make()] }
       })
     }
   ])('renders a $what field in a What to Do step', ({ input, what }) => {
     const props = {
-      ...fixture,
-      value: [
-        {
-          ...input
-        }
-      ]
+      ...input
     }
+
     render(<WhatToDo {...props} />)
 
     expect(screen.getByTestId(`${what}-field`)).toBeInTheDocument()

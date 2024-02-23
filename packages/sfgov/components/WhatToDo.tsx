@@ -13,7 +13,7 @@ type WhatToDoStepBlockProps = Types.TypeWhatToDoStepBlock & {
 }
 
 type BlockType =
-  Types.TypeWhatToDoStepBlock['value']['step_specifics'][number]['type']
+  Types.TypeWhatToDoStepBlock['value']['section_specifics'][number]['type']
 
 const StyledStep = classed('div', {
   base: 'flex',
@@ -34,7 +34,7 @@ const StepContent = (block: Types.TypeStepSpecificsVariant) => {
       return <EmailBlock {...block.value} />
     case 'button_link':
       return (
-        <Button as="a" href={block.value.url} variant="secondary">
+        <Button as="a" href={block.value.url} variant="primary">
           {block.value.link_text}
         </Button>
       )
@@ -54,19 +54,16 @@ const StepContent = (block: Types.TypeStepSpecificsVariant) => {
 }
 
 const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
-  const {
-    value: { step_title: stepTitle, step_specifics: stepSpecifics },
-    index
-  } = props
+  const { section_title: sectionTitle, section_specifics: sectionSpecifics } =
+    props
   return (
     <>
-      <When condition={stepTitle}>
-        <HeadingXl
-          as="h3"
-          id={camelCase(stepTitle)}
-        >{`${index}. ${stepTitle}`}</HeadingXl>
+      <When condition={sectionTitle}>
+        <HeadingXl as="h3" id={camelCase(sectionTitle)}>
+          {sectionTitle}
+        </HeadingXl>
       </When>
-      {stepSpecifics.map((block: Types.TypeStepSpecificsVariant) => {
+      {sectionSpecifics.map((block: Types.TypeStepSpecificsVariant) => {
         return (
           <StyledStep
             key={block.id}
@@ -82,28 +79,15 @@ const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
 }
 
 export const WhatToDo = (props: Types.TypeWhatToDoBlock) => {
-  const { type, value } = props
-
-  let i = 0
-
+  const { id, type, value } = props
   return (
-    <>
-      {value.map((block) => {
-        if (block.type === 'what_to_do_step') i++
-        return (
-          <div className="flex flex-col gap-y-28" key={block.id}>
-            <When condition={block.type === 'callout'}>
-              <Callout html={block.value as string} />
-            </When>
-            <When condition={block.type === 'what_to_do_step'}>
-              <WhatToDoStep
-                index={i}
-                {...(block as Types.TypeWhatToDoStepBlock)}
-              />
-            </When>
-          </div>
-        )
-      })}
-    </>
+    <div className="flex flex-col gap-y-28" key={id}>
+      <When condition={type === 'callout'}>
+        <Callout html={value as string} />
+      </When>
+      <When condition={type === 'what_to_do_step'}>
+        <WhatToDoStep {...value} />
+      </When>
+    </div>
   )
 }

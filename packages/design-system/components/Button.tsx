@@ -39,7 +39,12 @@ export const Button = classed('button' as AnyComponent, {
         'focus:text-primary700',
         focusDropShadow
       ),
-      secondary: classes(inverseButtonClasses, 'border-current'),
+      secondary: classes(
+        inverseButtonClasses,
+        'border-1',
+        'border-primary100',
+        'rounded-[4px]'
+      ),
       link: classes(
         inverseButtonClasses,
         'bg-[transparent]', // FIXME: need transparent in theme.colors

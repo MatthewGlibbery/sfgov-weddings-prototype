@@ -49,7 +49,10 @@ describe('TransactionPage', () => {
     },
     { what: 'things_to_know', input: fixture.things_to_know[0].value.title },
     { what: 'custom_section', input: fixture.custom_section[0].value.title },
-    { what: 'special_cases', input: fixture.special_cases[0].value.title },
+    {
+      what: 'supporting_information',
+      input: fixture.supporting_information[0].value.title
+    },
     {
       what: 'good_for_community',
       input: fixture.good_for_community[0].value.title
@@ -71,7 +74,7 @@ describe('TransactionPage', () => {
     { what: 'things_to_know' },
     { what: 'what_to_do' },
     { what: 'custom_section' },
-    { what: 'special_cases' },
+    { what: 'supporting_information' },
     { what: 'good_for_community' },
     { what: 'get_help' }
   ])('does not render the $what section when not present', ({ what }) => {
@@ -102,7 +105,7 @@ describe('TransactionPage', () => {
     })
 
     const page = TransactionPageFactory.make({
-      special_cases: [case1, case2]
+      supporting_information: [case1, case2]
     })
 
     it('renders HTML as rich text', () => {

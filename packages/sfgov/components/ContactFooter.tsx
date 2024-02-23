@@ -1,5 +1,7 @@
 import {
-  IconCheck,
+  IconAdditional,
+  IconEmail,
+  IconHome,
   IconPhone,
   IconWarning,
   StackedContainer,
@@ -7,6 +9,7 @@ import {
 } from '@/design-system'
 import { ContactFooterBlockTypes } from '@/types'
 import { ComponentProps } from 'react'
+import { When } from 'react-if'
 import {
   EmailBlock,
   Location,
@@ -15,59 +18,63 @@ import {
   TitleAndText
 } from './'
 
-type ContactFooterItemProps = ComponentProps<typeof StackedItem> & {
-  item: ContactFooterBlockTypes
-}
-
 type ContactFooterProps = {
   items: ContactFooterBlockTypes[]
 }
 
-export const ContactFooter = ({ items }: ContactFooterProps) => (
-  <StackedContainer className="mt-28">
-    {items.map((item: ContactFooterBlockTypes) => (
-      <ContactFooterItem item={item} key={item.id} />
-    ))}
-  </StackedContainer>
-)
+export const ContactFooter = ({ items }: ContactFooterProps) => {
+  // collect the different contact methods
+  const footerSections = {
+    address: [],
+    email: [],
+    phone_number: [],
+    social_media: [],
+    title_and_text: []
+  }
 
-const ContactFooterItem = ({ item, ...rest }: ContactFooterItemProps) => {
-  const { type, value } = item
-  switch (type) {
-    case 'address':
-      return (
-        <StackedItem icon={IconWarning} title="Address" {...rest}>
-          <Location {...value} />
-        </StackedItem>
-      )
-    case 'title_and_text':
-      return (
-        <StackedItem icon={IconCheck} title="Additional Info" {...rest}>
-          <TitleAndText {...item.value} />
-        </StackedItem>
-      )
-    case 'email':
-      return (
-        <StackedItem icon={IconWarning} title="Email" {...rest}>
-          <EmailBlock {...value} />
-        </StackedItem>
-      )
-    case 'phone_number':
-      return (
-        <StackedItem icon={IconPhone} title="Phone" {...rest}>
-          <PhoneNumberBlock {...value} />
-        </StackedItem>
-      )
-    case 'social_media':
-      return (
-        <StackedItem icon={IconWarning} title="Phone" {...rest}>
-          {value.social_media.map((item) => (
-            <SocialMedia key={item.id} {...item} />
+  for (const item of items) {
+    footerSections[item.type].push(item)
+  }
+
+  return (
+    <StackedContainer className="ant-stacked">
+      <When condition={!!footerSections.address.length}>
+        <StackedItem icon={IconHome} title="Address">
+          {footerSections.address.map((address) => (
+            <div className="mb-20" key={address.id}>
+              <Location {...address.value} />
+            </div>
           ))}
         </StackedItem>
-      )
-    /* istanbul ignore next */
-    default:
-      return null
-  }
+      </When>
+      <When condition={!!footerSections.phone_number.length}>
+        <StackedItem icon={IconPhone} title="Phone">
+          {footerSections.phone_number.map((phone) => (
+            <PhoneNumberBlock {...phone.value} key={phone.id} />
+          ))}
+        </StackedItem>
+      </When>
+      <When condition={!!footerSections.email.length}>
+        <StackedItem icon={IconEmail} title="Email">
+          {footerSections.email.map((email) => (
+            <EmailBlock {...email.value} key={email.id} />
+          ))}
+        </StackedItem>
+      </When>
+      <When condition={!!footerSections.title_and_text.length}>
+        <StackedItem icon={IconAdditional} title="Additional Info">
+          {footerSections.title_and_text.map((extra) => (
+            <TitleAndText {...extra.value} key={extra.id} />
+          ))}
+        </StackedItem>
+      </When>
+      <When condition={!!footerSections.social_media.length}>
+        <StackedItem icon={IconWarning} title="Social Media">
+          {footerSections.social_media.map((item) => (
+            <SocialMedia {...item.value} key={item.id} />
+          ))}
+        </StackedItem>
+      </When>
+    </StackedContainer>
+  )
 }

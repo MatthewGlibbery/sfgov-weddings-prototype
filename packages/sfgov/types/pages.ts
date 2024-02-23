@@ -112,7 +112,7 @@ export type TransactionPageData = PageData & {
   cost: TypeCostBlock[]
   things_to_know: TypeTitleAndTextBlock[]
   what_to_do: TypeWhatToDoBlock[]
-  special_cases: TypeTitleAndTextBlock[]
+  supporting_information: TypeTitleAndTextBlock[]
   custom_section: TypeTitleAndTextBlock[]
   get_help: GetHelpBlockTypes[]
   good_for_community: TypeTitleAndTextBlock[]

@@ -27,7 +27,6 @@ import {
   WagtailImageData,
   TypeWhatToDoBlock,
   TypeWhatToDoStepBlock,
-  TypeWhatToDoVariant,
   ProfilePageData,
   TypeNewsTileBlock,
   TypeContentTileBlock,
@@ -277,8 +276,8 @@ export const TransactionPageFactory = factory<TransactionPageData>((gen) => ({
       }
     })
   ],
-  what_to_do: WhatToDoFactory.make(1),
-  special_cases: [
+  what_to_do: WhatToDoFactory.make(),
+  supporting_information: [
     TitleAndTextFactory.make({
       value: {
         title: 'special case',
@@ -830,13 +829,11 @@ export const RelatedContentFactory = factory<RelatedContentData>((gen) => ({
 }))
 
 export const EmailBlockFactory = factory<TypeEmailBlock>((gen) => {
-  const email = gen.internet.email()
-
   return {
     id: gen.datatype.uuid(),
     value: {
-      title: email,
-      email
+      title: gen.lorem.sentence(),
+      email: gen.internet.email()
     },
     type: 'email'
   }
@@ -939,8 +936,8 @@ export const WhatToDoStepFactory = factory<TypeWhatToDoStepBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'what_to_do_step',
   value: {
-    step_title: 'Step',
-    step_specifics: [
+    section_title: gen.lorem.sentence(),
+    section_specifics: [
       TextBlockFactory.make(),
       PhoneNumberFactory.make(),
       LocationBlockFactory.make(),
@@ -951,18 +948,9 @@ export const WhatToDoStepFactory = factory<TypeWhatToDoStepBlock>((gen) => ({
   }
 }))
 
-export const WhatToDoFactory = factory<TypeWhatToDoBlock>((gen) => ({
-  id: gen.datatype.uuid(),
-  type: gen.random.arrayElement<TypeWhatToDoVariant>([
-    'callout',
-    'address',
-    'button_link',
-    'text',
-    'phone_number',
-    'email'
-  ]),
-  value: WhatToDoStepFactory.make(2)
-}))
+export const WhatToDoFactory = factory<TypeWhatToDoBlock>(() =>
+  [CalloutFactory.make()].concat(WhatToDoStepFactory.make(2))
+)
 
 export const SpotlightFactory = factory<TypeSpotlightBlock>((gen) => ({
   id: gen.datatype.uuid(),

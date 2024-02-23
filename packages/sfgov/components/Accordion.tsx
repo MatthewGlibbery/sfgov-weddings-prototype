@@ -7,7 +7,7 @@ import {
   IconChevronUp,
   IconChevronDown,
   HeadingXs,
-  HeadingMd
+  DisplayLg
 } from '@/design-system'
 import { When } from 'react-if'
 
@@ -17,8 +17,8 @@ const StyledSummary = classed('summary', {
   base: classes(
     'cursor-pointer',
     'flex justify-between',
-    'pb-12',
-    'border-solid border-b-1 border-neutral300'
+    'py-12',
+    'border-solid border-b-1 border-[#707070]'
   ),
   variants: {
     datastory: {
@@ -28,7 +28,7 @@ const StyledSummary = classed('summary', {
 })
 
 const StyledContent = classed('div', {
-  base: 'bg-neutral50 p-20 border-b-1 border-l-1 border-r-1 border-neutral300',
+  base: 'bg-neutral50 p-20',
   variants: {
     datastory: {
       true: 'bg-white text-grey500'
@@ -62,13 +62,14 @@ export const Accordion = (props: AccordionProps) => {
     <StyledDetails open={isOpen} onToggle={toggleOpen} {...rest}>
       <StyledSummary data-testid="accordion-summary" datastory={dataStory}>
         <When condition={!dataStory}>
-          <HeadingMd
+          {/* TODO: Change DisplayLg to Label */}
+          <DisplayLg
             romanType="sans"
-            className="text-primary500"
             data-testid="accordion-title"
+            className="text-primary500 font-bold"
           >
             {title}
-          </HeadingMd>
+          </DisplayLg>
         </When>
         <When condition={dataStory}>
           <HeadingXs className="text-grey500" data-testid="accordion-title">

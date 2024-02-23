@@ -1,5 +1,11 @@
-import { BodyText, classed, HeadingXs, IconCash } from '@/design-system'
-import { If, Then, Else, When } from 'react-if'
+import {
+  BodyText,
+  classed,
+  HeadingXs,
+  IconCash,
+  HeadingLg
+} from '@/design-system'
+import { If, Then, Else, When, Switch, Case, Default } from 'react-if'
 import { useTranslation } from 'next-i18next'
 import type { TypeCostBlockValues } from '@/types'
 import { RichText } from './RichText'
@@ -34,14 +40,18 @@ export const CostBlock = ({
       step: {
         true: 'font-bold',
         false: 'inline-block mb-0'
+      },
+      transaction: {
+        true: 'font-bold',
+        false: ''
       }
     }
   })
 
   return (
-    <div className="flex gap-4 items-start" data-testid="step-cost">
-      <If condition={variant === 'step'}>
-        <Then>
+    <Switch>
+      <Case condition={variant === 'step'}>
+        <div className="flex gap-4 items-start" data-testid="step-cost">
           <IconCash className="text-neutral400 min-w-[20px]" height={20} />
           <CostText as="h3" id="costBlock" step={!!variant}>
             {t('Cost')}:
@@ -50,8 +60,26 @@ export const CostBlock = ({
           <When condition={description}>
             <RichText html={description} />
           </When>
-        </Then>
-        <Else>
+        </div>
+      </Case>
+      <Case condition={variant === 'transaction'}>
+        <div data-testid="transaction-cost">
+          <HeadingLg
+            as="h3"
+            id="costBlock"
+            transaction={!!variant}
+            className="mb-12"
+          >
+            {t('Cost')}
+          </HeadingLg>
+          <span className="block font-bold mb-12">{cost}</span>
+          <When condition={description}>
+            <RichText html={description} />
+          </When>
+        </div>
+      </Case>
+      <Default>
+        <div>
           <CostText as="h3" step={!!variant}>
             {t('Cost')}
           </CostText>
@@ -61,8 +89,8 @@ export const CostBlock = ({
               <RichText html={description} />
             </div>
           </When>
-        </Else>
-      </If>
-    </div>
+        </div>
+      </Default>
+    </Switch>
   )
 }

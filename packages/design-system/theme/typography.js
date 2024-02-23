@@ -127,17 +127,17 @@ const fontSize = {
     }
   ],
   'heading-xxl': [
-    '24px',
+    '40px',
     {
-      lineHeight: lineHeight['32'],
+      lineHeight: lineHeight['52'],
       letterSpacing: '0px',
       fontWeight: fontWeight.medium
     }
   ],
   'heading-xl': [
-    '24px',
+    '32px',
     {
-      lineHeight: lineHeight['28'],
+      lineHeight: lineHeight['44'],
       letterSpacing: '0px',
       fontWeight: fontWeight.semibold
     }
