@@ -38,6 +38,11 @@ dist/
 .docusaurus/
 .cache-loader/
 /test-results/
+
+# playwright
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Storybook
+storybook-static/
