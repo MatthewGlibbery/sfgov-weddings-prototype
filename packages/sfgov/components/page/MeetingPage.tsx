@@ -121,7 +121,9 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
         <DisplayXXXl as="h1" className="my-12 md:my-20">
           {title}
         </DisplayXXXl>
-        <RelatedAgenciesList agencies={[primaryAgency]} />
+        <When condition={!!primaryAgency}>
+          <RelatedAgenciesList agencies={[primaryAgency]} />
+        </When>
       </Container>
       <Grid>
         <div className="col-span-8 space-y-40">

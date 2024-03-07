@@ -345,7 +345,7 @@ describe('ContentAPI', () => {
     })
   })
 
-  describe('getRelatedData()', () => {
+  describe('getPreviewRelatedData()', () => {
     it('fetches data', async () => {
       const data = {
         meta: {
@@ -370,9 +370,53 @@ describe('ContentAPI', () => {
         ]
       }
       fetchMock.mockResponseOnce(JSON.stringify(partOfData))
-      const res = await example.getRelatedData('foo', data)
+      const res = await example.getPreviewRelatedData('foo', data)
       expect(fetchMock).toHaveBeenCalledTimes(1)
       expect(fetchMock).toHaveBeenLastCalledWith('https://part.of.url')
+      expect(res).toEqual(expectedData)
+    })
+
+    it('deals with non-Array related data', async () => {
+      const data = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        primary_agency: 'https://part.of.url'
+      }
+      const primaryAgencyData = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        title: 'some related page',
+        html_path: 'http://some.page/path'
+      }
+      const expectedData = {
+        meta: { type: 'foo.Bar' },
+        primary_agency: {
+          title: 'some related page',
+          meta: { html_url: 'http://some.page/path' }
+        }
+      }
+      fetchMock.mockResponseOnce(JSON.stringify(primaryAgencyData))
+      const res = await example.getPreviewRelatedData('foo', data)
+      expect(res).toEqual(expectedData)
+    })
+
+    it('returns null on fetch error', async () => {
+      const data = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        primary_agency: 'not a url'
+      }
+      const expectedData = {
+        meta: { type: 'foo.Bar' },
+        primary_agency: null
+      }
+      fetchMock.mockResponseOnce(() => {
+        throw new Error('wrong!')
+      })
+      const res = await example.getPreviewRelatedData('foo', data)
       expect(res).toEqual(expectedData)
     })
   })

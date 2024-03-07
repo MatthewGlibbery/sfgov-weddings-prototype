@@ -128,36 +128,45 @@ export class ContentAPI implements IContentAPI {
     }
 
     previewData.data.meta = previewData.meta
-    previewData.data = await this.getRelatedData(path, previewData.data)
+    previewData.data = await this.getPreviewRelatedData(path, previewData.data)
     return previewData.data as T
   }
 
-  async getRelatedData<T = unknown>(path: string, data: object) {
+  async getPreviewRelatedData<T = unknown>(path: string, data: object) {
+    const getRelatedData = async (url) => {
+      try {
+        const res = await this.fetch(url)
+        const data = await res.json()
+
+        return {
+          title: data.title,
+          meta: { html_url: data.html_path }
+        }
+      } catch (error) {
+        return null
+      }
+    }
+
     const relatedData = {
       part_of: [],
       topics: [],
       partner_agencies: [],
-      related_pages: []
+      related_pages: [],
+      primary_agency: {}
     }
+
     for (const key of Object.keys(relatedData)) {
       if (data[key]) {
-        for (const url of data[key]) {
-          try {
-            const res = await this.fetch(url)
-            const data = await res.json()
-
-            relatedData[key].push({
-              title: data.title,
-              meta: { html_url: data.html_path }
-            })
-          } catch (error) {
-            // log error
+        if (Array.isArray(data[key])) {
+          for (const url of data[key]) {
+            relatedData[key].push(await getRelatedData(url))
           }
+        } else {
+          relatedData[key] = await getRelatedData(data[key])
         }
         data[key] = relatedData[key]
       }
     }
-
     return data
   }
 
