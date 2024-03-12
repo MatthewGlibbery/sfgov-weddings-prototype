@@ -28,7 +28,7 @@ import { AgendaItemBlock } from '../AgendaItemBlock'
 import { PageLabel } from '../PageLabel'
 import { RelatedContentList } from '../RelatedContentList'
 import { RelatedAgenciesList } from '../RelatedAgenciesList'
-import { TableOfContents } from '../TableOfContents'
+import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
 
 export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   page
@@ -48,9 +48,96 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
     related_documents: relatedDocuments
   } = page
 
-  const MeetingDetails = () => (
+  const MeetingContent = ({ screen = '' }) => (
+    <span className="flex flex-col gap-16 mx-20 md:mx-28 lg:mx-0">
+      <When condition={!!overview}>
+        <HeadingXXl as="h2" className="my-12 md:my-20" id={`overview${screen}`}>
+          {t('Overview')}
+        </HeadingXXl>
+        <RichText html={overview} />
+      </When>
+      <When condition={!!agenda.length}>
+        <HeadingXXl as="h2" className="my-12 md:my-20" id={`agenda${screen}`}>
+          {t('Agenda')}
+        </HeadingXXl>
+        <div className="flex flex-col gap-28">
+          {agenda.map((item, i) => (
+            <AgendaItemBlock
+              key={item.id}
+              index={i}
+              title_and_text={item.value?.title_and_text}
+              documents={item.value?.documents}
+            />
+          ))}
+        </div>
+      </When>
+      <When condition={!!videos.length || !!relatedDocuments.length}>
+        <div className="flex flex-col gap-40">
+          <HeadingXXl
+            as="h2"
+            className="my-12 md:mt-60"
+            id={`meetingResources${screen}`}
+          >
+            {t('Meeting resources')}
+          </HeadingXXl>
+          <When condition={!!videos.length}>
+            <div className="space-y-20">
+              <HeadingXl
+                as="h3"
+                romanType="sans"
+                id={`videoRecording${screen}`}
+              >
+                {t('Video recording')}
+              </HeadingXl>
+
+              <Video {...videos[0]?.value} showTitle={false} />
+            </div>
+          </When>
+          <When condition={!!relatedDocuments.length}>
+            <div className="space-y-20">
+              <HeadingXl
+                as="h3"
+                romanType="sans"
+                id={`relatedDocuments${screen}`}
+              >
+                {t('Related documents')}
+              </HeadingXl>
+              {relatedDocuments.map((document) => (
+                <Link href="#" className="flex gap-4" key={document.id}>
+                  <IconDownload width={20} />
+                  document placeholder
+                </Link>
+              ))}
+            </div>
+          </When>
+        </div>
+      </When>
+      <When condition={!!notices.length}>
+        <div className="flex flex-col gap-40">
+          <HeadingXXl as="h2" className="my-12 md:mt-60">
+            {t('Notices')}
+          </HeadingXXl>
+          {notices.map((notice) => (
+            <Accordion key={notice.id} title={notice.value.title}>
+              <RichText html={notice.value.text} />
+            </Accordion>
+          ))}
+        </div>
+      </When>
+      <When condition={!!agencies.length}>
+        <div className="md:mt-60">
+          <RelatedContentList
+            title={t('Partner agencies')}
+            content={agencies}
+          />
+        </div>
+      </When>
+    </span>
+  )
+
+  const MeetingDetails = ({ screen = '' }) => (
     <div className="bg-neutral50 flex flex-col space-y-20 p-28 md:rounded-4">
-      <HeadingXXl as="h2" className="flex gap-4" id="meetingDetails">
+      <HeadingXXl as="h2" className="flex gap-4" id={`meetingDetails${screen}`}>
         <IconInfo
           aria-hidden="true"
           width={24}
@@ -59,7 +146,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
         />
         {t('Meeting details')}
       </HeadingXXl>
-      <HeadingLg as="h3" id="dateTime">
+      <HeadingLg as="h3" id={`dateTime${screen}`}>
         {t('Date and time')}
       </HeadingLg>
       <div className="flex flex-col">
@@ -80,7 +167,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           />
         </When>
       </div>
-      <HeadingLg as="h3" id="howToParticipate">
+      <HeadingLg as="h3" id={`howToParticipate${screen}`}>
         {t('How to participate')}
       </HeadingLg>
 
@@ -116,104 +203,39 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       <When condition={!!cancelled}>
         <Callout html="This meeting has been cancelled."></Callout>
       </When>
-      <Container className="mb-20 pb-40 flex flex-col space-y-40">
-        <PageLabel label={t('Meeting')} />
-        <DisplayXXXl as="h1" className="my-12 md:my-20">
-          {title}
-        </DisplayXXXl>
-        <When condition={!!primaryAgency}>
+      <Container className="flex flex-col gap-y-60">
+        <div className="mb-20 pb-40 flex flex-col space-y-40">
+          <PageLabel label={t('Meeting')} />
+          <DisplayXXXl as="h1" className="my-12 md:my-20">
+            {title}
+          </DisplayXXXl>
           <RelatedAgenciesList agencies={[primaryAgency]} />
-        </When>
+        </div>
       </Container>
-      <Grid>
-        <div className="col-span-8 space-y-40">
-          <Container className="hidden md:block">
+      <span className="md:hidden">
+        <Grid>
+          <div className={tocWrapperClasses}>
+            <TableOfContents />
+          </div>
+          <div className="flex flex-col gap-y-60 col-span-full">
             <MeetingDetails />
-          </Container>
-          <span className="md:hidden">
-            <MeetingDetails />
-          </span>
-          <Container className="flex flex-col gap-16">
-            <When condition={!!overview}>
-              <HeadingXXl as="h2" className="my-12 md:my-20" id="overview">
-                {t('Overview')}
-              </HeadingXXl>
-              <RichText html={overview} />
-            </When>
-            <When condition={!!agenda.length}>
-              <HeadingXXl as="h2" className="my-12 md:my-20" id="agenda">
-                {t('Agenda')}
-              </HeadingXXl>
-              <div className="flex flex-col gap-28">
-                {agenda.map((item, i) => (
-                  <AgendaItemBlock
-                    key={item.id}
-                    index={i}
-                    title_and_text={item.value?.title_and_text}
-                    documents={item.value?.documents}
-                  />
-                ))}
-              </div>
-            </When>
-            <When condition={!!videos.length || !!relatedDocuments.length}>
-              <div className="flex flex-col gap-40">
-                <HeadingXXl
-                  as="h2"
-                  className="my-12 md:mt-60"
-                  id="meetingResources"
-                >
-                  {t('Meeting resources')}
-                </HeadingXXl>
-                <When condition={!!videos.length}>
-                  <div className="space-y-20">
-                    <HeadingXl as="h3" romanType="sans" id="meetingResources">
-                      {t('Video recording')}
-                    </HeadingXl>
-
-                    <Video {...videos[0]?.value} showTitle={false} />
-                  </div>
-                </When>
-                <When condition={!!relatedDocuments.length}>
-                  <div className="space-y-20">
-                    <HeadingXl as="h3" romanType="sans" id="relatedDocuments">
-                      {t('Related documents')}
-                    </HeadingXl>
-                    {relatedDocuments.map((document) => (
-                      <Link href="#" className="flex gap-4" key={document.id}>
-                        <IconDownload width={20} />
-                        document placeholder
-                      </Link>
-                    ))}
-                  </div>
-                </When>
-              </div>
-            </When>
-            <When condition={!!notices.length}>
-              <div className="flex flex-col gap-40">
-                <HeadingXXl as="h2" className="my-12 md:mt-60">
-                  {t('Notices')}
-                </HeadingXXl>
-                {notices.map((notice) => (
-                  <Accordion key={notice.id} title={notice.value.title}>
-                    <RichText html={notice.value.text} />
-                  </Accordion>
-                ))}
-              </div>
-            </When>
-            <When condition={!!agencies.length}>
-              <div className="md:mt-60">
-                <RelatedContentList
-                  title={t('Partner agencies')}
-                  content={agencies}
-                />
-              </div>
-            </When>
-          </Container>
-        </div>
-        <div className="mr-28 mb-20 pb-40 col-span-4 h-fit sticky top-40">
-          <TableOfContents />
-        </div>
-      </Grid>
+            <MeetingContent />
+          </div>
+        </Grid>
+      </span>
+      <span className="hidden md:block">
+        <Container>
+          <Grid>
+            <div className={tocWrapperClasses}>
+              <TableOfContents screen="Large" />
+            </div>
+            <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
+              <MeetingDetails screen="Large" />
+              <MeetingContent screen="Large" />
+            </div>
+          </Grid>
+        </Container>
+      </span>
     </PageWrapper>
   )
 }

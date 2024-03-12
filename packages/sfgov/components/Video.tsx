@@ -1,4 +1,10 @@
-import { Button, classed, HeadingXl, IconChevronRight } from '@/design-system'
+import {
+  classed,
+  HeadingXl,
+  IconExternalLink,
+  IconTranscript,
+  Link
+} from '@/design-system'
 import { TypeVideoBlockValues } from '@/types'
 import { RichText } from './RichText'
 import { useState } from 'react'
@@ -56,20 +62,17 @@ export const Video = (props: TypeVideoBlockValues) => {
           </IFrameWrapper>
           <div className="flex py-12">
             <div className="flex items-center pr-20">
-              <IconChevronRight width={20} />
-              <Button
-                className="p-0"
-                variant="link"
+              <Link
+                className="flex gap-8"
                 onClick={() => setShowTrancscript(!showTranscript)}
               >
-                {t('Show transcript')}
-              </Button>
+                <IconTranscript className="text-primary500" width={20} />
+                {t(`${showTranscript ? 'Hide' : 'Show'} transcript`)}
+              </Link>
             </div>
-            <div className="flex items-center pl-20 border-l-1 border-grey300">
-              <IconChevronRight width={20} />
-              <Button
-                className="p-0"
-                variant="link"
+            <div className="flex items-center pl-20 border-l-1 border-neutral200">
+              <Link
+                className="flex gap-8"
                 onClick={() => {
                   localStorage.setItem(
                     'transcript',
@@ -80,8 +83,9 @@ export const Video = (props: TypeVideoBlockValues) => {
                   })
                 }}
               >
+                <IconExternalLink className="text-primary500" width={20} />
                 {t('View full transcript')}
-              </Button>
+              </Link>
             </div>
           </div>
         </VideoContainer>

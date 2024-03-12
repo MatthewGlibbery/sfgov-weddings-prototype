@@ -10,7 +10,7 @@ export const AgendaItemBlock = (props: TypeAgendaItemBlockValues) => {
     <div className="flex flex-col gap-12">
       <div className="flex items-center">
         <div>
-          <StepBadge className="md:ml-0">
+          <StepBadge className="md:ml-0" isAgenda={true}>
             <HeadingXl className="text-secondary600">{index + 1}</HeadingXl>
           </StepBadge>
         </div>

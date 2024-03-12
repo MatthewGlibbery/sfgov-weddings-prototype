@@ -30,12 +30,14 @@ export const Button = classed('button' as AnyComponent, {
   variants: {
     variant: {
       primary: classes(
-        'border-current',
+        'border-current border-1',
         'text-white',
         'bg-primary500',
         'hover:bg-primary100',
+        'hover:border-primary100',
         'hover:text-primary700',
         'focus:bg-primary100',
+        'focus:border-primary100',
         'focus:text-primary700',
         focusDropShadow
       ),

@@ -68,13 +68,17 @@ const StepContainer = classed('div', {
 export const StepBadge = classed('div', {
   base: classes(
     'flex items-center justify-center',
-    'w-[50px] h-[50px] mr-20',
-    'rounded-full md:ml-[-26px]'
+    'w-40 h-40 mr-20',
+    'lg:w-60 lg:h-60',
+    'rounded-full md:ml-[-21px] lg:ml-[-31px]'
   ),
   variants: {
     isAndOr: {
       true: 'bg-neutral10 border-solid border-2 border-secondary300',
       false: 'bg-secondary100'
+    },
+    isAgenda: {
+      true: 'w-[32px] h-[32px] lg:w-40 lg:h-40 ml-0 lg:ml-0'
     }
   },
   defaultVariants: {

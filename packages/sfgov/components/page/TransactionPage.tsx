@@ -26,7 +26,8 @@ import {
   TitleAndText,
   WhatToDo,
   PageLabel,
-  TableOfContents
+  TableOfContents,
+  tocWrapperClasses
 } from '../'
 
 export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
@@ -67,10 +68,10 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           </When>
         </div>
         <Grid>
-          <div className="m-0 mr-28 mb-20 pb-40 h-fit col-span-4 sticky top-40 md:order-2">
+          <div className={tocWrapperClasses}>
             <TableOfContents />
           </div>
-          <div className="flex flex-col gap-y-60 col-span-8 md:order-1">
+          <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
             <When condition={!!cost.length || !!thingsToKnow.length}>
               <div className="flex flex-col gap-y-28 p-28 bg-neutral50 rounded-[8px]">
                 <div className="flex gap-x-8">

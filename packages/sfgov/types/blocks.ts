@@ -63,7 +63,7 @@ export type TypeTitleAndTextValues = {
   text: string
   as?: string
   id?: string
-  heading: React.ElementType
+  heading: React.FC
 }
 
 export type TypeTitleAndTextBlock = BlockType<

@@ -13,16 +13,20 @@ window.IntersectionObserver = jest.fn(() => ({
   disconnect
 }))
 
+window.scrollTo = jest.fn()
+
 /**
  * We mock the following because the
  * underlying browser functionality makes
  * a call to `scrollIntoView` when we fire
  * the click event on a ToC entry
  */
-const scrollIntoView = jest.fn()
+const getBoundingClientRect = jest.fn(() => ({
+  top: jest.fn()
+}))
 // eslint-disable-next-line testing-library/no-node-access
 document.querySelector = jest.fn(() => ({
-  scrollIntoView
+  getBoundingClientRect
 }))
 
 describe('TableOfContents', () => {

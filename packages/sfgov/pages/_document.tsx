@@ -5,7 +5,7 @@ import { classed } from '@/design-system'
 
 const StyledBody = classed(
   'body',
-  'font-body text-body text-black m-0 p-0',
+  'font-body text-body text-black bg-white m-0 p-0',
   ALL_FONTS.map((font) => font.variable).join(' ')
 )
 

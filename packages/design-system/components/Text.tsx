@@ -13,7 +13,8 @@ export const Text = classed('span' as AnyComponent, {
         'font-body text-heading-md lg:text-desktop-heading-md text-neutral900',
       headingLg:
         'font-slab text-heading-lg lg:text-desktop-heading-lg text-neutral900',
-      headingXl: 'font-slab text-heading-xl text-neutral900',
+      headingXl:
+        'font-slab text-heading-xl lg:text-desktop-heading-xl text-neutral900',
       headingXXl:
         'font-slab text-heading-xxl lg:text-desktop-heading-xxl text-neutral900',
       displayLg: 'font-body text-display-lg lg:text-desktop-display-lg',

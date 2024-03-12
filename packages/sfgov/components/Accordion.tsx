@@ -11,7 +11,7 @@ import {
 } from '@/design-system'
 import { When } from 'react-if'
 
-const StyledDetails = classed('details', 'block list-none')
+export const StyledDetails = classed('details', 'block list-none')
 
 const StyledSummary = classed('summary', {
   base: classes(
@@ -78,7 +78,9 @@ export const Accordion = (props: AccordionProps) => {
           </HeadingXs>
         </When>
         <Icon
-          className={dataStory ? 'text-grey500' : 'text-primary500'}
+          className={
+            dataStory ? 'text-grey500' : 'text-primary500 min-w-[24px]'
+          }
           data-testid={Icon.name}
           width={24}
         />

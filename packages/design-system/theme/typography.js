@@ -135,9 +135,9 @@ const fontSize = {
     }
   ],
   'heading-xl': [
-    '32px',
+    '20px',
     {
-      lineHeight: lineHeight['44'],
+      lineHeight: lineHeight['28'],
       letterSpacing: '0px',
       fontWeight: fontWeight.semibold
     }
