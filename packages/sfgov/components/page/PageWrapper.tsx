@@ -1,5 +1,7 @@
+'use client'
+
 import Head from 'next/head'
-import type { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import {
   ErrorBoundary,
   ErrorFallbackReport,

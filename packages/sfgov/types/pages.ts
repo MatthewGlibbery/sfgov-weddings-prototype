@@ -44,6 +44,7 @@ export type MinimalMeta = {
 export type MinimalPageData = {
   id: number
   meta: MinimalMeta
+  page_content?: MinimalPageData
   title: string
   // should we add description here?
 }

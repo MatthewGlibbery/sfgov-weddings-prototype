@@ -64,13 +64,13 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   } = page
 
   const upcomingEvents = events?.upcoming?.map((item) => ({
-    id: item.page_content.id,
+    id: item?.page_content?.id,
     type: 'page',
     value: { ...item.page_content }
   }))
 
   const pastEvents = events?.past?.map((item) => ({
-    id: item.page_content.id,
+    id: item?.page_content?.id,
     type: 'page',
     value: { ...item.page_content }
   }))
@@ -194,7 +194,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             </div>
             <NewsTileList
               links={news?.map((item) => ({
-                id: item.page_content.id,
+                id: item?.page_content?.id,
                 type: 'page',
                 value: { ...item.page_content }
               }))}
@@ -243,7 +243,9 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               </div>
             </When>
             <RelatedContentList
-              title={t(`${childAgencySectionTitle}`)}
+              title={
+                childAgencySectionTitle ? t(`${childAgencySectionTitle}`) : ''
+              }
               content={relatedChildAgencies}
               className="mt-12"
             />

@@ -19,9 +19,13 @@ describe('Video', () => {
     })
     render(<Video {...fixture[0].value}></Video>)
     const iframe = screen.getByTitle(fixture[0].value.title)
+    const matcher = fixture[0].value.video_type[0].value.embed_url.match(
+      /https:\/\/www\.youtube\.com\/watch\?v=([\w-]{11})/
+    )
+    const videoId = matcher[1]
     expect(iframe).toHaveAttribute(
       'src',
-      fixture[0].value.video_type[0].value.embed_url
+      `https://www.youtube.com/embed/${videoId}`
     )
   })
 

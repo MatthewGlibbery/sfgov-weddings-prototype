@@ -38,13 +38,17 @@ export const Video = (props: TypeVideoBlockValues) => {
 
   /* istanbul ignore next */
   if (videoType === 'embed') {
+    const matcher = videoInfo.embed_url.match(
+      /https:\/\/www\.youtube\.com\/watch\?v=([\w-]{11})/
+    )
+    const videoId = matcher.length ? matcher[1] : ''
     block = (
       <div className="bg-grey100 p-12 flex flex-col lg:flex-row lg:space-x-28">
         <VideoContainer isTranscriptVisible={showTranscript}>
           <IFrameWrapper isTranscriptVisible={showTranscript}>
             <iframe
               className="w-full h-full absolute top-0 left-0"
-              src={videoInfo.embed_url}
+              src={`https://www.youtube.com/embed/${videoId}`}
               title={title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen

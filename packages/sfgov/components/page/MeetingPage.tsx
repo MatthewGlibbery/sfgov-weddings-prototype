@@ -166,7 +166,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                 </HeadingXXl>
                 <When condition={!!videos.length}>
                   <div className="space-y-20">
-                    <HeadingXl as="h2" romanType="sans" id="meetingResources">
+                    <HeadingXl as="h3" romanType="sans" id="meetingResources">
                       {t('Video recording')}
                     </HeadingXl>
 
@@ -175,7 +175,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                 </When>
                 <When condition={!!relatedDocuments.length}>
                   <div className="space-y-20">
-                    <HeadingXl as="h2" romanType="sans" id="relatedDocuments">
+                    <HeadingXl as="h3" romanType="sans" id="relatedDocuments">
                       {t('Related documents')}
                     </HeadingXl>
                     {relatedDocuments.map((document) => (

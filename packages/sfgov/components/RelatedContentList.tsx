@@ -1,5 +1,5 @@
 import { PageLink } from './PageLink'
-import { Grid, HeadingXXl, type ContainerProps } from '@/design-system'
+import { HeadingXXl, type ContainerProps } from '@/design-system'
 import { RelatedContentData } from '@/types'
 
 type RelatedContentProps = {

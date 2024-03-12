@@ -1,12 +1,16 @@
 import { IContentAPI, PageData, WagtailImageData } from '@/types'
 
 export function getPageURL(page: PageData) {
-  if (page?.meta?.html_url) {
-    return page.meta.html_url.includes('://')
-      ? new URL(page.meta.html_url).pathname
-      : page.meta.html_url
+  let meta = page?.meta
+  if (page?.page_content?.meta) {
+    meta = page.page_content.meta
+  }
+  if (meta?.html_url) {
+    return meta.html_url.includes('://')
+      ? new URL(meta.html_url).pathname
+      : meta.html_url
   } else {
-    return page?.meta?.url_path
+    return meta?.url_path
   }
 }
 

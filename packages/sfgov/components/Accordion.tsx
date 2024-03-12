@@ -64,6 +64,7 @@ export const Accordion = (props: AccordionProps) => {
         <When condition={!dataStory}>
           {/* TODO: Change DisplayLg to Label */}
           <DisplayLg
+            as="h3"
             romanType="sans"
             data-testid="accordion-title"
             className="text-primary500 font-bold"
