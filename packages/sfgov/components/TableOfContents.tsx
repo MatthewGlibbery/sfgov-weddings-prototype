@@ -11,6 +11,7 @@ import {
 import { StyledDetails } from './Accordion'
 
 export const tocWrapperClasses = classes(
+  'z-50',
   'bg-white col-span-full lg:col-start-9 h-fit sticky top-0 lg:top-40',
   'px-20 py-28 md:px-28 mb-20',
   'lg:mr-28 lg:pt-0 lg:pb-40 lg:order-2'
@@ -177,7 +178,7 @@ const getNestedHeadings = (headingElements) => {
   return nestedHeadings
 }
 
-const useIntersectionObserver = (setActiveNode, screen) => {
+const useIntersectionObserver = (activeNode, setActiveNode, screen) => {
   const headingElementsRef = useRef({})
   useEffect(() => {
     // istanbul ignore next
@@ -198,7 +199,7 @@ const useIntersectionObserver = (setActiveNode, screen) => {
       // otherwise, the heading closest to the top of the page is active
       if (visibleHeadings.length >= 1) {
         setActiveNode(visibleHeadings[0].target)
-      } else {
+      } else if (!activeNode) {
         setActiveNode(headingElements[0])
       }
     }
@@ -218,7 +219,7 @@ const useIntersectionObserver = (setActiveNode, screen) => {
     headingElements.forEach((element) => observer.observe(element))
 
     return () => observer.disconnect()
-  }, [setActiveNode, screen])
+  }, [activeNode, setActiveNode, screen])
 }
 
 /**
@@ -227,7 +228,7 @@ const useIntersectionObserver = (setActiveNode, screen) => {
 export const TableOfContents = ({ screen = '' }) => {
   const [activeNode, setActiveNode] = useState()
   const { nestedHeadings } = useHeadingsData(screen)
-  useIntersectionObserver(setActiveNode, screen)
+  useIntersectionObserver(activeNode, setActiveNode, screen)
 
   // istanbul ignore next
   const activeId = activeNode ? activeNode.id : ''

@@ -5,7 +5,7 @@ import { RichText } from './RichText'
 import { StepBadge } from './Step'
 
 export const AgendaItemBlock = (props: TypeAgendaItemBlockValues) => {
-  const { index, title_and_text: titleAndText, documents } = props
+  const { id, index, title_and_text: titleAndText, documents } = props
   return (
     <div className="flex flex-col gap-12">
       <div className="flex items-center">
@@ -15,7 +15,7 @@ export const AgendaItemBlock = (props: TypeAgendaItemBlockValues) => {
           </StepBadge>
         </div>
         <When condition={titleAndText.title}>
-          <HeadingXl romanType="sans" as="h3" id={`agenda-${index}`}>
+          <HeadingXl romanType="sans" as="h3" id={id}>
             {titleAndText.title}
           </HeadingXl>
         </When>

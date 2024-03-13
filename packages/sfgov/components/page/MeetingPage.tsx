@@ -64,6 +64,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           {agenda.map((item, i) => (
             <AgendaItemBlock
               key={item.id}
+              id={`agenda-${i}${screen}`}
               index={i}
               title_and_text={item.value?.title_and_text}
               documents={item.value?.documents}

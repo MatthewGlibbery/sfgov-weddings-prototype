@@ -285,6 +285,7 @@ export type TypeOnlineEventBlock = BlockType<
 >
 
 export type TypeAgendaItemBlockValues = {
+  id: string
   index: number
   title_and_text: TypeTitleAndTextValues
   documents: [] // TODO: expand this when documents are fully serialized
