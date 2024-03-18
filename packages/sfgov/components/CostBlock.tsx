@@ -52,8 +52,12 @@ export const CostBlock = ({
     <Switch>
       <Case condition={variant === 'step'}>
         <div className="flex gap-4 items-start" data-testid="step-cost">
-          <IconCash className="text-neutral400 min-w-[20px]" height={20} />
-          <CostText as="h3" id="costBlock" step={!!variant}>
+          <IconCash
+            className="text-neutral400 min-w-[20px]"
+            height={20}
+            alt=""
+          />
+          <CostText id="costBlock" step={!!variant}>
             {t('Cost')}:
           </CostText>
           <span>{cost}.</span>

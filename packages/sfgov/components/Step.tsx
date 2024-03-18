@@ -98,7 +98,12 @@ export const Step = ({
   const BadgeComponent = () => (
     <StepBadge isAndOr={isAndOr} data-testid="step-badge">
       {isAndOr ? (
-        <BodyText className="text-secondary500 font-bold">
+        <BodyText
+          className="text-secondary500 font-bold"
+          ariaLabel={
+            step.step_type === 'and' ? 'additional step' : 'optional step'
+          }
+        >
           {step.step_type}
         </BodyText>
       ) : (
@@ -119,7 +124,7 @@ export const Step = ({
               <BadgeComponent />
             </div>
             <div className="flex flex-col-reverse gap-4 md:gap-8 md:flex-row md:items-baseline">
-              <HeadingLg>{step.title}</HeadingLg>
+              <HeadingLg as="h2">{step.title}</HeadingLg>
               <When condition={step.optional}>
                 <div
                   className="bg-accent100 w-fit border-solid border-1 rounded-[14px] border-accent100 text-accent600 py-4 px-12 bg-grey200 mb-12"
@@ -145,6 +150,7 @@ export const Step = ({
                   <IconClock
                     className="text-neutral400 min-w-[20px]"
                     width={20}
+                    alt=""
                   />
                   <BodyText className="font-bold">Time:</BodyText>
                   <span>{step.time}</span>
@@ -159,7 +165,7 @@ export const Step = ({
           </When>
           <When condition={!!step.related_content_transactions?.[0]?.value}>
             <div className="flex items-center gap-4">
-              <IconPencil className="text-primary500" width={20} />
+              <IconPencil className="text-primary500" width={20} alt="" />
               <PageLink
                 page={step.related_content_transactions?.[0]?.value as PageData}
                 data-testid="step-transaction-link"
