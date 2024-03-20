@@ -52,7 +52,8 @@ import {
   TypeEmbeddedContentBlock,
   DataStoryPageData,
   TypeDownloadableFilesBlock,
-  TypeDocumentBlock
+  TypeDocumentBlock,
+  ReportPageData
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -65,11 +66,13 @@ import {
   MEETING_PAGE_TYPE,
   NEWS_PAGE_TYPE,
   PROFILE_PAGE_TYPE,
+  REPORT_PAGE_TYPE,
   STEP_BY_STEP_PAGE_TYPE,
   TOPIC_PAGE_TYPE,
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
+import { RichText } from '@/components'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
@@ -1212,4 +1215,25 @@ export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
       type: 'sf.RelatedContentAgency'
     }
   })
+}))
+
+export const ReportPageFactory = factory<ReportPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: REPORT_PAGE_TYPE
+  }),
+  title: 'Report page title',
+  date: gen.date.soon().toString().split('T')[0],
+  body: TextBlockFactory.make().value,
+  spotlight: [],
+  print_version: {
+    id: gen.datatype.number(),
+    meta: {
+      type: 'cms.BaseDocument',
+      detail_url: gen.internet.url(),
+      download_url: gen.internet.url()
+    },
+    title: gen.lorem.sentence()
+  },
+  partner_agencies: []
 }))

@@ -23,7 +23,9 @@ import {
   TypeOnlineEventBlock,
   TypeAgendaItemBlock,
   TypeVideoBlock,
-  TypeDownloadableFilesBlock
+  TypeDownloadableFilesBlock,
+  TypeTextBlock,
+  TypeDocumentBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -262,5 +264,13 @@ export type MeetingPageData = PageData & {
 export type DataStoryPageData = PageData & {
   description: string
   content: TypeContentSectionBlock[]
+  partner_agencies: RelatedContentData[]
+}
+
+export type ReportPageData = PageData & {
+  date: string
+  print_version: object
+  spotlight: TypeSpotlightBlock[]
+  body: string
   partner_agencies: RelatedContentData[]
 }
