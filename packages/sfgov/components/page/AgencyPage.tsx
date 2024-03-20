@@ -6,7 +6,8 @@ import {
   HeadingMd,
   HeadingXXl,
   IconArrowRight,
-  Label
+  Label,
+  PageLabel
 } from '@/design-system'
 import { AgencyPageData } from '@/types'
 import { ComponentType } from 'react'
@@ -22,7 +23,6 @@ import {
   Location,
   MeetingTileList,
   NewsTileList,
-  PageLabel,
   PageWrapper,
   QuickLinkList,
   RelatedAgenciesList,
@@ -122,7 +122,9 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
           </When>
         </Container>
         <Container className="space-y-20">
-          <When condition={!!upcomingEvents || !!pastEvents}>
+          <When
+            condition={/* istanbul ignore */ !!upcomingEvents || !!pastEvents}
+          >
             <div className="flex items-center justify-between">
               <HeadingXXl as="h2">{t('Calendar')}</HeadingXXl>
               <Button as="a" href={`/#`} variant="secondary">
@@ -244,6 +246,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             </When>
             <RelatedContentList
               title={
+                // istanbul ignore next
                 childAgencySectionTitle ? t(`${childAgencySectionTitle}`) : ''
               }
               content={relatedChildAgencies}

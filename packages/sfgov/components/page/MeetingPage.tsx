@@ -1,13 +1,14 @@
-import type { ComponentType } from 'react'
+import { ComponentType, useEffect, useState } from 'react'
 import { When } from 'react-if'
 import { useTranslation } from 'next-i18next'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../tailwind.config.js'
 
 import type { MeetingPageData } from '@/types'
 
 import { PageWrapper } from './PageWrapper'
 import {
   Container,
-  DisplayXXXl,
   Grid,
   HeadingLg,
   HeadingMd,
@@ -15,7 +16,9 @@ import {
   HeadingXXl,
   IconDownload,
   IconInfo,
-  Link
+  Link,
+  MainContent,
+  PageTitleSection
 } from '@/design-system'
 import { Callout } from '../Callout'
 import { ComposedDate, ComposedTime } from '../DateTime'
@@ -25,7 +28,6 @@ import { Accordion } from '../Accordion'
 import { RichText } from '../RichText'
 import { Video } from '../Video'
 import { AgendaItemBlock } from '../AgendaItemBlock'
-import { PageLabel } from '../PageLabel'
 import { RelatedContentList } from '../RelatedContentList'
 import { RelatedAgenciesList } from '../RelatedAgenciesList'
 import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
@@ -153,8 +155,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       <div className="flex flex-col">
         <ComposedDate
           startDateInput={date[0].value.start_date}
-          /* istanbul ignore next */
-          endDateInput={date[0].value.end_date || ''}
+          endDateInput={/* istanbul ignore */ date[0].value.end_date || ''}
         />
         <When condition={date[0].value.start_time}>
           <ComposedTime
@@ -199,6 +200,26 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
     </div>
   )
 
+  const fullConfig = resolveConfig(tailwindConfig)
+  const [isSm, setIsSm] = useState(true)
+
+  useEffect(() => {
+    // istanbul ignore next
+    const handleResize = () => {
+      // @ts-expect-error erg
+      if (window.innerWidth < parseInt(fullConfig.theme?.screens?.md, 10)) {
+        setIsSm(true)
+      } else {
+        setIsSm(false)
+      }
+    }
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize, false)
+    }
+    // @ts-expect-error erg
+  }, [fullConfig.theme?.screens?.md])
+
   return (
     <PageWrapper title={title}>
       <When condition={!!cancelled}>
@@ -206,14 +227,15 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       </When>
       <Container className="flex flex-col gap-y-60">
         <div className="mb-20 pb-40 flex flex-col space-y-40">
-          <PageLabel label={t('Meeting')} />
-          <DisplayXXXl as="h1" className="my-12 md:my-20">
-            {title}
-          </DisplayXXXl>
-          <RelatedAgenciesList agencies={[primaryAgency]} />
+          <PageTitleSection title={title} label={t('Meeting')}>
+            <RelatedAgenciesList agencies={[primaryAgency]} />
+          </PageTitleSection>
         </div>
       </Container>
-      <span className="md:hidden">
+      <MainContent
+        className="md:hidden"
+        id={/* istanbul ignore */ isSm ? 'main-content' : 'hidden'}
+      >
         <Grid>
           <div className={tocWrapperClasses}>
             <TableOfContents />
@@ -223,8 +245,11 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
             <MeetingContent />
           </div>
         </Grid>
-      </span>
-      <span className="hidden md:block">
+      </MainContent>
+      <MainContent
+        className="hidden md:block"
+        id={/* istanbul ignore */ isSm ? 'hidden' : 'main-content'}
+      >
         <Container>
           <Grid>
             <div className={tocWrapperClasses}>
@@ -236,7 +261,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
             </div>
           </Grid>
         </Container>
-      </span>
+      </MainContent>
     </PageWrapper>
   )
 }

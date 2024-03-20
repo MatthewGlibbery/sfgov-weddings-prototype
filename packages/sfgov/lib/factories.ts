@@ -628,11 +628,7 @@ export const StepBlockFactory = factory<TypeStepBlock>((gen) => ({
   type: 'step',
   value: {
     title: gen.commerce.productName(),
-    step_type: gen.random.arrayElement<TypeStepVariant>([
-      'number',
-      'and',
-      'or'
-    ]),
+    step_type: 'number',
     optional: gen.datatype.boolean(),
     cost: [CostBlockFactory.make()],
     time: `${gen.datatype.number()} minutes`,

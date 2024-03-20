@@ -1,4 +1,4 @@
-import { Container, DisplayXXXl, HeadingXXl } from '@/design-system'
+import { Container, DisplayXXXl, HeadingXXl, PageLabel } from '@/design-system'
 import { getPageURL } from '@/lib/utils'
 import {
   CampaignPageData,
@@ -12,7 +12,6 @@ import { When } from 'react-if'
 import { Accordion } from '../Accordion'
 import { Image } from '../Image'
 import { Location } from '../Location'
-import { PageLabel } from '../PageLabel'
 import { PhoneNumberBlock } from '../PhoneNumberBlock'
 import { RelatedContentList } from '../RelatedContentList'
 import { RichText } from '../RichText'

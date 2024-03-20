@@ -16,6 +16,9 @@ const Document = (props: DocumentProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <StyledBody>
+        <a href="#main-content" className="sr-only">
+          Skip to main content
+        </a>
         <Main />
         <NextScript />
         {props.isDevelopment ? (

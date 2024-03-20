@@ -1,4 +1,4 @@
-import { HeadingMd } from '@/design-system'
+import { HeadingMd } from './Text'
 
 type PageLabelProps = {
   label: string

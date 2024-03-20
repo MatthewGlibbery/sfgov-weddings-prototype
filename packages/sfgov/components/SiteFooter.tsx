@@ -6,7 +6,7 @@ export type SiteFooterProps = ComponentProps<typeof StyledFooter>
 
 export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
   return (
-    <StyledFooter {...rest}>
+    <StyledFooter role="contentinfo" {...rest}>
       <Container>{children}</Container>
     </StyledFooter>
   )

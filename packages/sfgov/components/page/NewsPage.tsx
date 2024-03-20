@@ -1,10 +1,10 @@
 import {
   Container,
-  DisplayXXXl,
   HeadingMd,
   HeadingXl,
   IconCloseQuote,
-  IconOpenQuote
+  IconOpenQuote,
+  PageTitleSection
 } from '@/design-system'
 import { NewsPageData } from '@/types'
 import { ComponentType, ReactNode } from 'react'
@@ -12,7 +12,6 @@ import { When } from 'react-if'
 import {
   ComposedDate,
   Image,
-  PageLabel,
   PageWrapper,
   RelatedAgenciesList,
   RichText
@@ -54,11 +53,9 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
   return (
     <PageWrapper title={headline}>
       <Container className="mb-20 pb-40">
-        <PageLabel label={type} />
-        <DisplayXXXl as="h1" className="my-12 md:my-20">
-          {headline}
-        </DisplayXXXl>
-        <RelatedAgenciesList agencies={agencies} />
+        <PageTitleSection label={type} title={headline}>
+          <RelatedAgenciesList agencies={agencies} />
+        </PageTitleSection>
         <div className="flex flex-col space-y-40 mt-40">
           <HeadingXl as="p" className="text-grey600">
             {abstract}

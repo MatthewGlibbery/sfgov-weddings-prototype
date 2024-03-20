@@ -2,10 +2,10 @@ import {
   BigDesc,
   BodyText,
   Container,
-  DisplayXXXl,
   HeadingSm,
   HeadingXXl,
-  IconTrafficCone
+  IconTrafficCone,
+  PageTitleSection
 } from '@/design-system'
 import { LocationPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
@@ -16,7 +16,6 @@ import {
   Alert,
   ContactFooter,
   Map,
-  PageLabel,
   PageWrapper,
   RelatedAgenciesList,
   RelatedContentList,
@@ -58,28 +57,26 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
       <ZebraStripedSection>
         <div>
           <Container className="mb-20 pb-40">
-            <PageLabel label={t('Location')} />
-            <DisplayXXXl as="h1" className="my-12 md:my-20">
-              {locationName}
-            </DisplayXXXl>
-            <When condition={!!description}>
-              <BigDesc
-                as="p"
-                className="my-20"
-                data-testid="step-by-step-description"
-              >
-                {description}
-              </BigDesc>
-            </When>
-            <RelatedAgenciesList agencies={agencies} />
-            <Map
-              address={address[0]}
-              image={image}
-              locationName={locationName}
-            />
-            <div className="mt-40">
-              <RichText html={body} />
-            </div>
+            <PageTitleSection label={t('Location')} title={locationName}>
+              <When condition={!!description}>
+                <BigDesc
+                  as="p"
+                  className="my-20"
+                  data-testid="step-by-step-description"
+                >
+                  {description}
+                </BigDesc>
+              </When>
+              <RelatedAgenciesList agencies={agencies} />
+              <Map
+                address={address[0]}
+                image={image}
+                locationName={locationName}
+              />
+              <div className="mt-40">
+                <RichText html={body} />
+              </div>
+            </PageTitleSection>
           </Container>
         </div>
         <Container>

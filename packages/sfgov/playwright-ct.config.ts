@@ -53,6 +53,10 @@ export default defineConfig({
           'next/font/google': path.resolve(
             __dirname,
             './__mocks__/next/font/google/index.ts'
+          ),
+          '../../tailwind.config.js': path.resolve(
+            __dirname,
+            './__mocks__/tailwind.config.ts'
           )
         }
       }

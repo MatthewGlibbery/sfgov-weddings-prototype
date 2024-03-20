@@ -10,9 +10,10 @@ import {
   IconInfo,
   IconQuestion,
   HeadingXl,
-  DisplayXXXl,
   HeadingXXl,
-  HeadingLg
+  HeadingLg,
+  PageTitleSection,
+  MainContent
 } from '@/design-system'
 import type { TransactionPageData } from '@/types'
 
@@ -25,7 +26,6 @@ import {
   RichText,
   TitleAndText,
   WhatToDo,
-  PageLabel,
   TableOfContents,
   tocWrapperClasses
 } from '../'
@@ -53,121 +53,123 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
     <PageWrapper title={title}>
       <Container className="flex flex-col gap-y-60">
         <div className="flex flex-col">
-          <PageLabel label={t('Service')} />
-          <DisplayXXXl as="h1" className="my-12 md:my-20 xl:mr-28">
-            {title}
-          </DisplayXXXl>
-          <When condition={description}>
-            <DisplayLg
-              as="p"
-              className="mb-16"
-              data-testid="transaction-page-description"
-            >
-              {description}
-            </DisplayLg>
-          </When>
+          <PageTitleSection title={title} label={t('Service')}>
+            <When condition={description}>
+              <DisplayLg
+                as="p"
+                className="mb-16"
+                data-testid="transaction-page-description"
+              >
+                {description}
+              </DisplayLg>
+            </When>
+          </PageTitleSection>
         </div>
-        <Grid>
-          <div className={tocWrapperClasses}>
-            <TableOfContents />
-          </div>
-          <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
-            <When condition={!!cost.length || !!thingsToKnow.length}>
-              <div className="flex flex-col gap-y-28 p-28 bg-neutral50 rounded-[8px]">
-                <div className="flex gap-x-8">
-                  <IconInfo width={40} />
-                  <HeadingXXl as="h2" id="whatToKnow">
-                    {t('What to Know')}
-                  </HeadingXXl>
-                </div>
-                <When condition={!!cost?.[0]?.value}>
-                  {() => <CostBlock {...cost[0].value} variant="transaction" />}
-                </When>
-                {thingsToKnow.map((thing) => (
-                  <div key={thing.id} data-testid="things_to_know-section">
-                    <TitleAndText
-                      {...thing.value}
-                      id={camelCase(thing.value.title)}
-                      heading={HeadingLg}
-                    />
-                  </div>
-                ))}
-              </div>
-            </When>
-            <div className="flex flex-col gap-y-28">
-              <HeadingXXl as="h2" id="whatToDo">
-                {t('What to Do')}
-              </HeadingXXl>
-              {whatToDo.map((what) => (
-                <WhatToDo key={what.id} {...what} />
-              ))}
+        <MainContent>
+          <Grid>
+            <div className={tocWrapperClasses}>
+              <TableOfContents />
             </div>
-            <When condition={!!supporingInformation.length}>
-              <div data-testid="special_cases-section">
-                <HeadingXXl
-                  as="h2"
-                  className="mb-20"
-                  id="supportingInformation"
-                >
-                  {t('Supporting information')}
+            <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
+              <When condition={!!cost.length || !!thingsToKnow.length}>
+                <div className="flex flex-col gap-y-28 p-28 bg-neutral50 rounded-[8px]">
+                  <div className="flex gap-x-8">
+                    <IconInfo width={40} />
+                    <HeadingXXl as="h2" id="whatToKnow">
+                      {t('What to Know')}
+                    </HeadingXXl>
+                  </div>
+                  <When condition={!!cost?.[0]?.value}>
+                    {() => (
+                      <CostBlock {...cost[0].value} variant="transaction" />
+                    )}
+                  </When>
+                  {thingsToKnow.map((thing) => (
+                    <div key={thing.id} data-testid="things_to_know-section">
+                      <TitleAndText
+                        {...thing.value}
+                        id={camelCase(thing.value.title)}
+                        heading={HeadingLg}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </When>
+              <div className="flex flex-col gap-y-28">
+                <HeadingXXl as="h2" id="whatToDo">
+                  {t('What to Do')}
                 </HeadingXXl>
-                <HeadingXl as="h3" id="specialCases" className="mb-20">
-                  {t('Special cases')}
-                </HeadingXl>
-                {supporingInformation.map((item, i) => (
-                  <Accordion
-                    key={item.value.title}
-                    title={item.value.title}
-                    data-testid={`special-case-${item.id}`}
-                    open={i === 0}
-                  >
-                    <RichText html={item.value.text} />
-                  </Accordion>
+                {whatToDo.map((what) => (
+                  <WhatToDo key={what.id} {...what} />
                 ))}
               </div>
-            </When>
-            {customSection.map((block) => (
-              <div key={block.id} data-testid="custom_section-section">
-                <TitleAndText
-                  {...block.value}
-                  id={camelCase(block.value.title)}
-                  heading={HeadingXl}
+              <When condition={!!supporingInformation.length}>
+                <div data-testid="special_cases-section">
+                  <HeadingXXl
+                    as="h2"
+                    className="mb-20"
+                    id="supportingInformation"
+                  >
+                    {t('Supporting information')}
+                  </HeadingXXl>
+                  <HeadingXl as="h3" id="specialCases" className="mb-20">
+                    {t('Special cases')}
+                  </HeadingXl>
+                  {supporingInformation.map((item, i) => (
+                    <Accordion
+                      key={item.value.title}
+                      title={item.value.title}
+                      data-testid={`special-case-${item.id}`}
+                      open={i === 0}
+                    >
+                      <RichText html={item.value.text} />
+                    </Accordion>
+                  ))}
+                </div>
+              </When>
+              {customSection.map((block) => (
+                <div key={block.id} data-testid="custom_section-section">
+                  <TitleAndText
+                    {...block.value}
+                    id={camelCase(block.value.title)}
+                    heading={HeadingXl}
+                  />
+                </div>
+              ))}
+              {goodForCommunity.map((block) => (
+                <div key={block.id} data-testid="good_for_community-section">
+                  <TitleAndText
+                    {...block.value}
+                    heading={HeadingXXl}
+                    id={block.id}
+                  />
+                </div>
+              ))}
+              <When condition={!!relatedContentPages.length}>
+                <RelatedContentList
+                  content={relatedContentPages}
+                  title={t('Related') as string}
                 />
-              </div>
-            ))}
-            {goodForCommunity.map((block) => (
-              <div key={block.id} data-testid="good_for_community-section">
-                <TitleAndText
-                  {...block.value}
-                  heading={HeadingXXl}
-                  id={block.id}
-                />
-              </div>
-            ))}
-            <When condition={!!relatedContentPages.length}>
-              <RelatedContentList
-                content={relatedContentPages}
-                title={t('Related') as string}
-              />
-            </When>
-          </div>
-        </Grid>
-        <When condition={!!getHelp.length}>
-          <div className="flex flex-col items-start gap-20">
-            <HeadingXXl as="h2" className="flex flex-row gap-8">
-              <IconQuestion width={32} />
-              {t('Get Help')}
-            </HeadingXXl>
-            <ContactFooter items={getHelp} />
-          </div>
-        </When>
-        <When condition={!!agencies.length}>
-          {/* Partner Agencies list */}
-          <RelatedContentList
-            content={agencies}
-            title={t('Partner agencies') as string}
-          />
-        </When>
+              </When>
+            </div>
+          </Grid>
+          <When condition={!!getHelp.length}>
+            <div className="flex flex-col items-start gap-20">
+              <HeadingXXl as="h2" className="flex flex-row gap-8">
+                <IconQuestion width={32} />
+                {t('Get Help')}
+              </HeadingXXl>
+              <ContactFooter items={getHelp} />
+            </div>
+          </When>
+          <When condition={!!agencies.length}>
+            {/* Partner Agencies list */}
+            <RelatedContentList
+              content={agencies}
+              title={t('Partner agencies') as string}
+            />
+          </When>
+        </MainContent>
       </Container>
     </PageWrapper>
   )

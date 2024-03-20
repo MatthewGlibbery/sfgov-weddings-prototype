@@ -7,13 +7,12 @@ import type { ReportPageData } from '@/types'
 import { PageWrapper } from './PageWrapper'
 import {
   Container,
-  DisplayXXXl,
   Grid,
   HeadingXl,
   IconDocument,
-  Link
+  Link,
+  PageTitleSection
 } from '@/design-system'
-import { PageLabel } from '../PageLabel'
 import { RichText } from '../RichText'
 import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
 import { ComposedDate } from '../DateTime'
@@ -36,18 +35,14 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
   return (
     <PageWrapper title={title}>
       <Container className="flex flex-col gap-y-60">
-        <div className="flex flex-col">
-          <PageLabel label={t('Report')} />
-          <DisplayXXXl as="h1" className="my-12 md:my-20 xl:mr-28">
-            {title}
-          </DisplayXXXl>
+        <PageTitleSection label={t('Report')} title={title}>
           <ComposedDate startDateInput={date} />
           <When condition={!!spotlight.length}>
             <div className="md:mx-16 mb-80">
               <Spotlight {...spotlight[0]} />
             </div>
           </When>
-        </div>
+        </PageTitleSection>
         <Grid>
           <div className={tocWrapperClasses}>
             <TableOfContents />

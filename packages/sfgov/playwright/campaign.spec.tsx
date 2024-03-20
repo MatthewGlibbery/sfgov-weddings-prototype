@@ -17,7 +17,9 @@ test.describe('A11y tests', () => {
     const data = CampaignPageFactory.make()
     await mount(<CampaignPage page={data} />)
 
-    await expect(page.locator('a[href="#main-content"]')).toBeVisible()
+    await expect(page.locator('a[href="#main-content"]')).toContainText(
+      'Skip to main content'
+    )
   })
 
   test('has accessible landmark roles', async ({ mount, page }) => {

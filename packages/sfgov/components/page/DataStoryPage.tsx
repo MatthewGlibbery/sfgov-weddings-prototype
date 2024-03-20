@@ -1,11 +1,10 @@
-import { Container, Grid, DisplayLg, DisplayXXXl } from '@/design-system'
+import { Container, Grid, DisplayLg, PageTitleSection } from '@/design-system'
 import { DataStoryPageData } from '@/types'
 import { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { When } from 'react-if'
 import {
   ContentSection,
-  PageLabel,
   PageWrapper,
   RelatedAgenciesList,
   TableOfContents
@@ -22,16 +21,14 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
     <PageWrapper title={title}>
       <Grid>
         <Container className="mb-20 pb-40 col-span-8">
-          <PageLabel label={t('Data Story')} />
-          <DisplayXXXl as="h1" className="my-12 md:my-20">
-            {title}
-          </DisplayXXXl>
-          <When condition={description}>
-            <DisplayLg className="mb-20" as="p">
-              {description}
-            </DisplayLg>
-          </When>
-          <RelatedAgenciesList agencies={agencies} />
+          <PageTitleSection label={t('Data Story')} title={title}>
+            <When condition={description}>
+              <DisplayLg className="mb-20" as="p">
+                {description}
+              </DisplayLg>
+            </When>
+            <RelatedAgenciesList agencies={agencies} />
+          </PageTitleSection>
           <When condition={!!content.length}>
             <div className="mt-28">
               {content.map((section) => (
