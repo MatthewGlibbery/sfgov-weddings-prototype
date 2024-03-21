@@ -81,7 +81,7 @@ const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
 export const WhatToDo = (props: Types.TypeWhatToDoBlock) => {
   const { id, type, value } = props
   return (
-    <div className="flex flex-col gap-y-28" key={id}>
+    <div className="flex flex-col gap-y-20" key={id}>
       <When condition={type === 'callout'}>
         <Callout html={value as string} />
       </When>

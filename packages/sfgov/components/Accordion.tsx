@@ -7,7 +7,7 @@ import {
   IconChevronUp,
   IconChevronDown,
   HeadingXs,
-  DisplayLg
+  Label
 } from '@/design-system'
 import { When } from 'react-if'
 
@@ -62,15 +62,14 @@ export const Accordion = (props: AccordionProps) => {
     <StyledDetails open={isOpen} onToggle={toggleOpen} {...rest}>
       <StyledSummary data-testid="accordion-summary" datastory={dataStory}>
         <When condition={!dataStory}>
-          {/* TODO: Change DisplayLg to Label */}
-          <DisplayLg
+          <Label
             as="h3"
             romanType="sans"
             data-testid="accordion-title"
-            className="text-primary500 font-bold"
+            className="text-primary500 font-bold text-heading-md"
           >
             {title}
-          </DisplayLg>
+          </Label>
         </When>
         <When condition={dataStory}>
           <HeadingXs className="text-grey500" data-testid="accordion-title">

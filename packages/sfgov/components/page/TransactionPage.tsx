@@ -4,6 +4,7 @@ import type { ComponentType } from 'react'
 import { camelCase } from '@/lib/utils'
 
 import {
+  classes,
   Container,
   DisplayLg,
   Grid,
@@ -67,16 +68,13 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
         </div>
         <MainContent>
           <Grid>
-            <div className={tocWrapperClasses}>
-              <TableOfContents />
-            </div>
-            <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
+            <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1 order-2">
               <When condition={!!cost.length || !!thingsToKnow.length}>
                 <div className="flex flex-col gap-y-28 p-28 bg-neutral50 rounded-[8px]">
                   <div className="flex gap-x-8">
                     <IconInfo width={40} />
                     <HeadingXXl as="h2" id="whatToKnow">
-                      {t('What to Know')}
+                      {t('What to know')}
                     </HeadingXXl>
                   </div>
                   <When condition={!!cost?.[0]?.value}>
@@ -97,45 +95,49 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               </When>
               <div className="flex flex-col gap-y-28">
                 <HeadingXXl as="h2" id="whatToDo">
-                  {t('What to Do')}
+                  {t('What to do')}
                 </HeadingXXl>
                 {whatToDo.map((what) => (
                   <WhatToDo key={what.id} {...what} />
                 ))}
               </div>
-              <When condition={!!supporingInformation.length}>
-                <div data-testid="special_cases-section">
-                  <HeadingXXl
-                    as="h2"
-                    className="mb-20"
-                    id="supportingInformation"
-                  >
-                    {t('Supporting information')}
-                  </HeadingXXl>
-                  <HeadingXl as="h3" id="specialCases" className="mb-20">
-                    {t('Special cases')}
-                  </HeadingXl>
-                  {supporingInformation.map((item, i) => (
-                    <Accordion
-                      key={item.value.title}
-                      title={item.value.title}
-                      data-testid={`special-case-${item.id}`}
-                      open={i === 0}
-                    >
-                      <RichText html={item.value.text} />
-                    </Accordion>
+              <When
+                condition={
+                  !!supporingInformation.length || !!customSection.length
+                }
+              >
+                <HeadingXXl as="h2" id="supportingInformation">
+                  {t('Supporting information')}
+                </HeadingXXl>
+                <When condition={!!supporingInformation.length}>
+                  <div data-testid="special_cases-section">
+                    <HeadingXl as="h3" id="specialCases" className="mb-20">
+                      {t('Special cases')}
+                    </HeadingXl>
+                    {supporingInformation.map((item, i) => (
+                      <Accordion
+                        key={item.value.title}
+                        title={item.value.title}
+                        data-testid={`special-case-${item.id}`}
+                        open={i === 0}
+                      >
+                        <RichText html={item.value.text} />
+                      </Accordion>
+                    ))}
+                  </div>
+                </When>
+                <When condition={!!customSection.length}>
+                  {customSection.map((block) => (
+                    <div key={block.id} data-testid="custom_section-section">
+                      <TitleAndText
+                        {...block.value}
+                        id={camelCase(block.value.title)}
+                        heading={HeadingXl}
+                      />
+                    </div>
                   ))}
-                </div>
+                </When>
               </When>
-              {customSection.map((block) => (
-                <div key={block.id} data-testid="custom_section-section">
-                  <TitleAndText
-                    {...block.value}
-                    id={camelCase(block.value.title)}
-                    heading={HeadingXl}
-                  />
-                </div>
-              ))}
               {goodForCommunity.map((block) => (
                 <div key={block.id} data-testid="good_for_community-section">
                   <TitleAndText
@@ -152,12 +154,15 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
                 />
               </When>
             </div>
+            <div className={classes(tocWrapperClasses, 'order-1')}>
+              <TableOfContents />
+            </div>
           </Grid>
           <When condition={!!getHelp.length}>
             <div className="flex flex-col items-start gap-20">
               <HeadingXXl as="h2" className="flex flex-row gap-8">
                 <IconQuestion width={32} />
-                {t('Get Help')}
+                {t('Get help')}
               </HeadingXXl>
               <ContactFooter items={getHelp} />
             </div>

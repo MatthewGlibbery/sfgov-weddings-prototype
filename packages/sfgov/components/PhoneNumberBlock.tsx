@@ -15,7 +15,7 @@ export const PhoneNumberBlock = ({
   phone_number: phoneNumber,
   details
 }: TypePhoneNumberValues) => (
-  <div className="flex flex-col gap-y-12">
+  <div className="flex flex-col gap-y-8">
     <When condition={owner}>
       <HeadingMd>{owner}</HeadingMd>
     </When>

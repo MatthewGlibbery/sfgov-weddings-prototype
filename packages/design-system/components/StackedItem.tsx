@@ -30,7 +30,9 @@ export const StackedItem = ({
         />
       ) : null}
       {title ? (
-        <HeadingLg className="flex items-center mb-20">{title}</HeadingLg>
+        <HeadingLg as="h3" className="flex items-center mb-20">
+          {title}
+        </HeadingLg>
       ) : null}
       {children}
     </StyledItem>

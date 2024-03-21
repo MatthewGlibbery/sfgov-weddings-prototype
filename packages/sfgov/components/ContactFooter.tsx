@@ -62,14 +62,14 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
         </StackedItem>
       </When>
       <When condition={!!footerSections.title_and_text.length}>
-        <StackedItem icon={IconAdditional} title="Additional Info">
+        <StackedItem icon={IconAdditional} title="Additional info">
           {footerSections.title_and_text.map((extra) => (
             <TitleAndText {...extra.value} key={extra.id} />
           ))}
         </StackedItem>
       </When>
       <When condition={!!footerSections.social_media.length}>
-        <StackedItem icon={IconWarning} title="Social Media">
+        <StackedItem icon={IconWarning} title="Social media">
           {footerSections.social_media.map((item) => (
             <SocialMedia {...item.value} key={item.id} />
           ))}
