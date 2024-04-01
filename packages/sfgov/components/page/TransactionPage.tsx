@@ -66,7 +66,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             </When>
           </PageTitleSection>
         </div>
-        <MainContent>
+        <MainContent className="grid gap-y-60">
           <Grid>
             <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1 order-2">
               <When condition={!!cost.length || !!thingsToKnow.length}>
@@ -120,6 +120,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
                         title={item.value.title}
                         data-testid={`special-case-${item.id}`}
                         open={i === 0}
+                        as="h4"
                       >
                         <RichText html={item.value.text} />
                       </Accordion>
@@ -142,6 +143,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
                 <div key={block.id} data-testid="good_for_community-section">
                   <TitleAndText
                     {...block.value}
+                    as="h2"
                     heading={HeadingXXl}
                     id={block.id}
                   />

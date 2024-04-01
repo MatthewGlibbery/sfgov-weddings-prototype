@@ -127,7 +127,7 @@ const fontSize = {
     }
   ],
   'heading-xxl': [
-    '40px',
+    '24px',
     {
       lineHeight: lineHeight['52'],
       letterSpacing: '0px',

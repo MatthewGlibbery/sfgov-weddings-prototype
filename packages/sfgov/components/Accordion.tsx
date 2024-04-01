@@ -39,10 +39,11 @@ const StyledContent = classed('div', {
 export type AccordionProps = ComponentProps<typeof StyledDetails> & {
   title: string
   dataStory?: boolean
+  as: string
 }
 
 export const Accordion = (props: AccordionProps) => {
-  const { title, open, children, dataStory, ...rest } = props
+  const { title, open, children, dataStory, as = 'h3', ...rest } = props
 
   let OpenedIcon = IconMinus
   let ClosedIcon = IconPlus
@@ -63,7 +64,7 @@ export const Accordion = (props: AccordionProps) => {
       <StyledSummary data-testid="accordion-summary" datastory={dataStory}>
         <When condition={!dataStory}>
           <Label
-            as="h3"
+            as={as}
             romanType="sans"
             data-testid="accordion-title"
             className="text-primary500 font-bold text-heading-md"
