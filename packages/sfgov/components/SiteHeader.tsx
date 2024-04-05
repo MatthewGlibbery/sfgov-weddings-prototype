@@ -8,7 +8,9 @@ export const SiteHeader = (props: SiteHeaderProps) => {
     <header className="mb-40" role="banner" {...props}>
       <div className="bg-grey100 py-12">
         <Container>
-          <LanguageSelector />
+          <nav role="navigation" aria-label="Primary Header Navigation">
+            <LanguageSelector />
+          </nav>
         </Container>
       </div>
     </header>

@@ -16,7 +16,7 @@ const Document = (props: DocumentProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <StyledBody>
-        <a href="#main-content" className="sr-only">
+        <a href="#main-content" className="sr-only focus:not-sr-only">
           Skip to main content
         </a>
         <Main />

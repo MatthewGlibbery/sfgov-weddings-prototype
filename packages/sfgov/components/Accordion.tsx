@@ -39,7 +39,7 @@ const StyledContent = classed('div', {
 export type AccordionProps = ComponentProps<typeof StyledDetails> & {
   title: string
   dataStory?: boolean
-  as: string
+  as?: string
 }
 
 export const Accordion = (props: AccordionProps) => {

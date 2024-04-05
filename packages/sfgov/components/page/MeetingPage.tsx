@@ -1,8 +1,6 @@
-import { ComponentType, useEffect, useState } from 'react'
+import { ComponentType } from 'react'
 import { When } from 'react-if'
 import { useTranslation } from 'next-i18next'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../tailwind.config.js'
 
 import type { MeetingPageData } from '@/types'
 
@@ -17,7 +15,6 @@ import {
   IconDownload,
   IconInfo,
   Link,
-  MainContent,
   PageTitleSection
 } from '@/design-system'
 import { Callout } from '../Callout'
@@ -200,26 +197,6 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
     </div>
   )
 
-  const fullConfig = resolveConfig(tailwindConfig)
-  const [isSm, setIsSm] = useState(true)
-
-  useEffect(() => {
-    // istanbul ignore next
-    const handleResize = () => {
-      // @ts-expect-error erg
-      if (window.innerWidth < parseInt(fullConfig.theme?.screens?.md, 10)) {
-        setIsSm(true)
-      } else {
-        setIsSm(false)
-      }
-    }
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize, false)
-    }
-    // @ts-expect-error erg
-  }, [fullConfig.theme?.screens?.md])
-
   return (
     <PageWrapper title={title}>
       <When condition={!!cancelled}>
@@ -232,10 +209,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           </PageTitleSection>
         </div>
       </Container>
-      <MainContent
-        className="md:hidden"
-        id={/* istanbul ignore */ isSm ? 'main-content' : 'hidden'}
-      >
+      <span className="md:hidden">
         <Grid>
           <div className={tocWrapperClasses}>
             <TableOfContents />
@@ -245,11 +219,8 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
             <MeetingContent />
           </div>
         </Grid>
-      </MainContent>
-      <MainContent
-        className="hidden md:block"
-        id={/* istanbul ignore */ isSm ? 'hidden' : 'main-content'}
-      >
+      </span>
+      <span className="hidden md:block">
         <Container>
           <Grid>
             <div className={tocWrapperClasses}>
@@ -261,7 +232,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
             </div>
           </Grid>
         </Container>
-      </MainContent>
+      </span>
     </PageWrapper>
   )
 }

@@ -9,7 +9,8 @@ import type { AnyComponent, ComponentProps } from '../types'
 
 const MainContent = classed('main' as AnyComponent)
 MainContent.defaultProps = {
-  id: 'main-content'
+  id: 'main-content',
+  role: 'main'
 }
 
 type MainContentProps = ComponentProps<typeof MainContent>

@@ -234,7 +234,7 @@ export const TableOfContents = ({ screen = '' }) => {
   const activeId = activeNode ? activeNode.id : ''
 
   return (
-    <nav aria-label="Table of contents">
+    <nav role="navigation" aria-label="Table of contents">
       <span className="hidden lg:block">
         <TOCDesktop headings={nestedHeadings} activeId={activeId} />
       </span>

@@ -8,6 +8,7 @@ import {
   SiteFooter,
   SiteHeader
 } from '@/components'
+import { MainContent } from '@/design-system'
 
 export type PageWrapperProps = {
   title?: string
@@ -22,9 +23,11 @@ export const PageWrapper = ({ children, title }: PageWrapperProps) => {
         <title>{title ? `${title} | SF.gov` : 'SF.gov'}</title>
       </Head>
       <SiteHeader />
-      <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
-        {children}
-      </ErrorBoundary>
+      <MainContent>
+        <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
+          {children}
+        </ErrorBoundary>
+      </MainContent>
       <SiteFooter />
     </>
   )
