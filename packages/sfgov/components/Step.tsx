@@ -100,7 +100,7 @@ export const Step = ({
       {isAndOr ? (
         <BodyText
           className="text-secondary500 font-bold"
-          ariaLabel={
+          aria-label={
             // istanbul ignore next
             step.step_type === 'and' ? 'additional step' : 'optional step'
           }
