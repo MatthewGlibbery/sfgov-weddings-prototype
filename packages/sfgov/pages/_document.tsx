@@ -2,6 +2,10 @@ import { ALL_FONTS } from '@/components/server/GoogleFonts'
 import { PropsDebug } from '@/components/server/PropsDebug'
 import { Html, Head, Main, NextScript, DocumentProps } from 'next/document'
 import { classed } from '@/design-system'
+import packages from '../package.json'
+import Script from 'next/script'
+
+const { dependencies } = packages
 
 const StyledBody = classed(
   'body',
@@ -14,6 +18,14 @@ const Document = (props: DocumentProps) => {
     <Html>
       <Head>
         <link rel="icon" href="/favicon.ico" />
+        <Script
+          src={`https://unpkg.com/formiojs@${dependencies.formiojs}/dist/formio.full.min.js`}
+          strategy="beforeInteractive"
+        />
+        <Script
+          src={`https://unpkg.com/formio-sfds@${dependencies['formio-sfds']}/dist/formio-sfds.standalone.js`}
+          strategy="beforeInteractive"
+        />
       </Head>
       <StyledBody>
         <a href="#main-content" className="sr-only focus:not-sr-only">

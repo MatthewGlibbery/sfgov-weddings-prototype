@@ -54,6 +54,7 @@ import {
   TypeDownloadableFilesBlock,
   TypeDocumentBlock,
   ReportPageData,
+  FormPageData,
   TypeDocumentSectionBlock,
   ResourceCollectionPageData
 } from '@/types'
@@ -63,6 +64,7 @@ import {
   CAMPAIGN_PAGE_TYPE,
   DATA_STORY_PAGE_TYPE,
   EVENT_PAGE_TYPE,
+  FORM_PAGE_TYPE,
   INFO_PAGE_TYPE,
   LOCATION_PAGE_TYPE,
   MEETING_PAGE_TYPE,
@@ -106,6 +108,28 @@ export const EventPageFactory = factory<EventPageData>((gen) => ({
       type: 'sfgov_base.RelatedContentTopic'
     }
   })
+}))
+
+export const FormPageFactory = factory<FormPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: FORM_PAGE_TYPE
+  }),
+  title: 'This is a form',
+  form_schema_url:
+    'https://sfds.form.io/testclosethestreettotraffictemporarily',
+  confirmation_title: 'confirmation of form',
+  confirmation_body: [
+    TextBlockFactory.make(),
+    CalloutFactory.make(),
+    ButtonLinkFactory.make()
+  ],
+  get_help: [
+    EmailBlockFactory.make(),
+    PhoneNumberFactory.make(),
+    LocationBlockFactory.make(),
+    TitleAndTextFactory.make()
+  ]
 }))
 
 export const InfoPageFactory = factory<InfoPageData>((gen) => ({

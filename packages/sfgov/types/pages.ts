@@ -24,8 +24,7 @@ import {
   TypeAgendaItemBlock,
   TypeVideoBlock,
   TypeDownloadableFilesBlock,
-  TypeTextBlock,
-  TypeDocumentBlock,
+  TypeConfirmationBodyTypes,
   TypeEmbeddedContentBlock,
   TypeDataStoriesSectionBlock
 } from './blocks'
@@ -275,6 +274,13 @@ export type ReportPageData = PageData & {
   spotlight: TypeSpotlightBlock[]
   body: string
   partner_agencies: RelatedContentData[]
+}
+
+export type FormPageData = PageData & {
+  form_schema_url: string
+  confirmation_title: string
+  confirmation_body: TypeConfirmationBodyTypes[]
+  get_help: GetHelpBlockTypes[]
 }
 
 export type ResourceCollectionPageData = PageData & {

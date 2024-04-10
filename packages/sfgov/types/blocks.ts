@@ -380,6 +380,11 @@ export type TypeContentSectionBlock = BlockType<
   TypeContentSectionBlockValues
 >
 
+export type TypeConfirmationBodyTypes =
+  | TypeTextBlock
+  | TypeCalloutBlock
+  | TypeButtonLinkBlock
+
 export type TypeDocumentSectionBlockValues = {
   title: string
   content: (TypeDocumentBlock | TypeTextBlock)[]
