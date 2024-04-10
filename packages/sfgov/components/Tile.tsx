@@ -17,6 +17,7 @@ import { getPageURL } from '@/lib/utils'
 import { ComposedDate, ComposedTime } from './DateTime'
 import { useTranslation } from 'react-i18next'
 import { When } from 'react-if'
+import { RichText } from './RichText'
 
 export type TileSectionProps = {
   links?: TypeTileBlock[]
@@ -119,6 +120,24 @@ export const EventTile = ({ link }: TileProps) => (
   </BaseTile>
 )
 
+export const DocumentTile = ({ link }: TileProps) => (
+  <div className="flex relative">
+    <BaseTile href={link.url}>
+      <HeadingMd className="m-0 mb-8 text-primary500">{link.title}</HeadingMd>
+      <When condition={!!link.description}>
+        <RichText html={link.description} />
+      </When>
+      <When condition={!!link.publishedDate}>
+        <div>{link.publishedDate}</div>
+      </When>
+    </BaseTile>
+    <IconChevronRight
+      className="ml-16 text-primary500 absolute top-0 right-0"
+      width={20}
+    />
+  </div>
+)
+
 export const MeetingTile = ({ link }: TileProps) => {
   const { t } = useTranslation()
 
@@ -197,6 +216,7 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
       // eslint-disable-next-line camelcase
       const date_time = item.value.date_time
       const cancelled = item.value.cancelled
+      const publishedDate = item.value.published_date
 
       return {
         ...item,
@@ -207,11 +227,12 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
         date,
         // eslint-disable-next-line camelcase
         date_time,
-        cancelled
+        cancelled,
+        publishedDate
       }
     })
     return (
-      <TileSection role="list" {...rest}>
+      <TileSection role="list" className="gap-x-28 gap-y-16" {...rest}>
         {items.map((link) => (
           <TileComponent key={link.id} role="listitem" link={link} />
         ))}
@@ -225,3 +246,4 @@ export const QuickLinkList = createTileList(QuickLink)
 export const EventTileList = createTileList(EventTile)
 export const MeetingTileList = createTileList(MeetingTile)
 export const ServiceAndResourceTileList = createTileList(ServiceAndResourceTile)
+export const DocumentTileList = createTileList(DocumentTile)

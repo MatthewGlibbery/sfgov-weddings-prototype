@@ -26,7 +26,7 @@ import { RichText } from '../RichText'
 import { Video } from '../Video'
 import { AgendaItemBlock } from '../AgendaItemBlock'
 import { RelatedContentList } from '../RelatedContentList'
-import { RelatedAgenciesList } from '../RelatedAgenciesList'
+import { PageLinksList } from '../PageLinksList'
 import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
 
 export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
@@ -205,7 +205,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       <Container className="flex flex-col gap-y-60">
         <div className="mb-20 pb-40 flex flex-col space-y-40">
           <PageTitleSection title={title} label={t('Meeting')}>
-            <RelatedAgenciesList agencies={[primaryAgency]} />
+            <PageLinksList pageLinks={[primaryAgency]} />
           </PageTitleSection>
         </div>
       </Container>

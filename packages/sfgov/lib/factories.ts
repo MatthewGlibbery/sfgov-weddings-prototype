@@ -53,7 +53,9 @@ import {
   DataStoryPageData,
   TypeDownloadableFilesBlock,
   TypeDocumentBlock,
-  ReportPageData
+  ReportPageData,
+  TypeDocumentSectionBlock,
+  ResourceCollectionPageData
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -67,6 +69,7 @@ import {
   NEWS_PAGE_TYPE,
   PROFILE_PAGE_TYPE,
   REPORT_PAGE_TYPE,
+  RESOURCE_COLLECTION_PAGE_TYPE,
   STEP_BY_STEP_PAGE_TYPE,
   TOPIC_PAGE_TYPE,
   TRANSACTION_PAGE_TYPE,
@@ -737,7 +740,13 @@ export const ImageFactory = factory<WagtailImageData>((gen) => ({
 
 export const DocumentBlockFactory = factory<TypeDocumentBlock>((gen) => ({
   type: 'document',
-  value: gen.datatype.number(),
+  value: {
+    id: gen.datatype.number(),
+    title: gen.lorem.sentence(),
+    file: gen.internet.url(),
+    description: gen.lorem.sentence(),
+    published_date: gen.date.past().toDateString()
+  },
   id: gen.datatype.uuid()
 }))
 
@@ -756,6 +765,23 @@ export const ImageBlockFactory = factory<TypeImageBlock>((gen) => ({
   type: 'image',
   value: ImageFactory.make()
 }))
+
+export const DocumentSectionBlockFactory = factory<TypeDocumentSectionBlock>(
+  (gen) => ({
+    id: gen.datatype.uuid(),
+    type: 'document_section',
+    value: {
+      title: gen.lorem.sentence(),
+      content: [
+        TextBlockFactory.make(),
+        {
+          type: 'documents',
+          value: DocumentBlockFactory.make(2)
+        }
+      ]
+    }
+  })
+)
 
 export const TitleAndTextFactory = factory<TypeTitleAndTextBlock>((gen) => ({
   id: gen.datatype.uuid(),
@@ -1233,3 +1259,56 @@ export const ReportPageFactory = factory<ReportPageData>((gen) => ({
   },
   partner_agencies: []
 }))
+
+export const ResourceCollectionPageFactory =
+  factory<ResourceCollectionPageData>((gen) => ({
+    id: gen.datatype.number(),
+    meta: PageMetaFactory.make({
+      type: RESOURCE_COLLECTION_PAGE_TYPE
+    }),
+    title: 'Resource collection page title',
+    description: 'Resource collection page description',
+    data_dashboard: [EmbeddedContentFactory.make()],
+    introductory_text: [TitleAndTextFactory.make()],
+    body: [
+      { type: 'documents', value: [DocumentSectionBlockFactory.make()] },
+      {
+        type: 'resources',
+        value: [
+          {
+            type: 'resource_section',
+            value: {
+              title: 'Resource section',
+              resources: [GenericTileFactory.make()]
+            },
+            id: gen.datatype.uuid()
+          }
+        ]
+      },
+      {
+        type: 'data_stories',
+        value: [
+          {
+            type: 'data_story_section',
+            value: {
+              title: 'Data story section',
+              content: [TextBlockFactory.make(), GenericTileFactory.make()]
+            },
+            id: gen.datatype.uuid()
+          }
+        ]
+      },
+      { type: 'some_unexpected_type', value: [] }
+    ],
+    custom_section: [TitleAndTextFactory.make()],
+    related_topics: RelatedContentBlockFactory.make(1, {
+      meta: {
+        type: 'sfgov_base.RelatedContentAgency'
+      }
+    }),
+    partner_agencies: RelatedContentBlockFactory.make(3, {
+      meta: {
+        type: 'sf.RelatedContentAgency'
+      }
+    })
+  }))

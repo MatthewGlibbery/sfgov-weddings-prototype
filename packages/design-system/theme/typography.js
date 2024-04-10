@@ -55,7 +55,7 @@ const fontSize = {
     }
   ],
   'desktop-heading-xl': [
-    '24px',
+    '32px',
     {
       lineHeight: lineHeight['44'],
       letterSpacing: '0px',
@@ -67,7 +67,7 @@ const fontSize = {
     {
       lineHeight: lineHeight['32'],
       letterSpacing: '0px',
-      fontWeight: fontWeight.medium
+      fontWeight: fontWeight.semibold
     }
   ],
   'desktop-heading-md': [

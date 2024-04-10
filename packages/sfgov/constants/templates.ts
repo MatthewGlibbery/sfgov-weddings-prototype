@@ -9,11 +9,12 @@ import {
   MeetingPage,
   NewsPage,
   ProfilePage,
+  ReportPage,
+  ResourceCollectionPage,
   StepByStepPage,
   TransactionPage,
   TopicPage
 } from '@/components'
-import { ReportPage } from '@/components/page/ReportPage'
 import { IPageTemplate, WagtailPageTemplate } from '@/lib/controller'
 
 import {
@@ -28,6 +29,7 @@ import {
   NEWS_PAGE_TYPE,
   PROFILE_PAGE_TYPE,
   REPORT_PAGE_TYPE,
+  RESOURCE_COLLECTION_PAGE_TYPE,
   STEP_BY_STEP_PAGE_TYPE,
   TOPIC_PAGE_TYPE,
   TRANSACTION_PAGE_TYPE
@@ -44,6 +46,10 @@ export const DEFAULT_PAGE_TEMPLATES: IPageTemplate[] = [
   new WagtailPageTemplate(MeetingPage, MEETING_PAGE_TYPE),
   new WagtailPageTemplate(NewsPage, NEWS_PAGE_TYPE),
   new WagtailPageTemplate(ProfilePage, PROFILE_PAGE_TYPE),
+  new WagtailPageTemplate(
+    ResourceCollectionPage,
+    RESOURCE_COLLECTION_PAGE_TYPE
+  ),
   new WagtailPageTemplate(ReportPage, REPORT_PAGE_TYPE),
   new WagtailPageTemplate(StepByStepPage, STEP_BY_STEP_PAGE_TYPE),
   new WagtailPageTemplate(TopicPage, TOPIC_PAGE_TYPE),

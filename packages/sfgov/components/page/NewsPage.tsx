@@ -9,13 +9,7 @@ import {
 import { NewsPageData } from '@/types'
 import { ComponentType, ReactNode } from 'react'
 import { When } from 'react-if'
-import {
-  ComposedDate,
-  Image,
-  PageWrapper,
-  RelatedAgenciesList,
-  RichText
-} from '..'
+import { ComposedDate, Image, PageWrapper, PageLinksList, RichText } from '..'
 
 type PullQuoteProps = {
   children: ReactNode
@@ -54,7 +48,7 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
     <PageWrapper title={headline}>
       <Container className="mb-20 pb-40">
         <PageTitleSection label={type} title={headline}>
-          <RelatedAgenciesList agencies={agencies} />
+          <PageLinksList pageLinks={agencies} />
         </PageTitleSection>
         <div className="flex flex-col space-y-40 mt-40">
           <HeadingXl as="p" className="text-grey600">

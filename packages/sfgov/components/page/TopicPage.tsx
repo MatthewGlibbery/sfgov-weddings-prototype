@@ -9,7 +9,7 @@ import { ContentSection } from '../ContentSection'
 import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
 
 import { BigDesc, Container, DisplayLg, HeadingXl } from '@/design-system'
-import { RelatedAgenciesList } from '../RelatedAgenciesList'
+import { PageLinksList } from '../PageLinksList'
 
 export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -102,7 +102,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
 
         <When condition={!!agencies}>
           {/* Related Agencies list */}
-          <RelatedAgenciesList agencies={agencies} />
+          <PageLinksList pageLinks={agencies} />
         </When>
       </Container>
     </PageWrapper>

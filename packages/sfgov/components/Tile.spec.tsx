@@ -9,7 +9,8 @@ import {
   EventTileList,
   ServiceAndResourceTile,
   ServiceAndResourceTileList,
-  MeetingTile
+  MeetingTile,
+  DocumentTile
 } from './Tile'
 import {
   EventTileFactory,
@@ -98,6 +99,16 @@ describe('Tile', () => {
     expect(meetingTile).toBeInTheDocument()
     expect(meetingTile).toContainElement(title)
     expect(meetingTile).toContainElement(type)
+  })
+
+  it('renders a DocumentTile', () => {
+    render(<DocumentTile link={linkValue} />)
+
+    const docTile = screen.getByRole('link')
+    const title = screen.getByText(linkValue.title)
+
+    expect(docTile).toBeInTheDocument()
+    expect(docTile).toContainElement(title)
   })
 
   it('renders a list of news tiles inside a TileSection', () => {

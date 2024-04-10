@@ -17,7 +17,7 @@ import {
   ContactFooter,
   Map,
   PageWrapper,
-  RelatedAgenciesList,
+  PageLinksList,
   RelatedContentList,
   RichText,
   ZebraStripedSection
@@ -67,7 +67,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
                   {description}
                 </BigDesc>
               </When>
-              <RelatedAgenciesList agencies={agencies} />
+              <PageLinksList pageLinks={agencies} />
               <Map
                 address={address[0]}
                 image={image}

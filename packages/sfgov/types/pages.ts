@@ -25,7 +25,9 @@ import {
   TypeVideoBlock,
   TypeDownloadableFilesBlock,
   TypeTextBlock,
-  TypeDocumentBlock
+  TypeDocumentBlock,
+  TypeEmbeddedContentBlock,
+  TypeDataStoriesSectionBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -272,5 +274,15 @@ export type ReportPageData = PageData & {
   print_version: object
   spotlight: TypeSpotlightBlock[]
   body: string
+  partner_agencies: RelatedContentData[]
+}
+
+export type ResourceCollectionPageData = PageData & {
+  description: string
+  data_dashboard: TypeEmbeddedContentBlock[]
+  introductory_text: TypeTitleAndTextBlock[]
+  body: [(TypeDataStoriesSectionBlock | TypeResourcesSectionBlock)[]]
+  custom_section: TypeTitleAndTextBlock[]
+  related_topics: RelatedContentData[]
   partner_agencies: RelatedContentData[]
 }

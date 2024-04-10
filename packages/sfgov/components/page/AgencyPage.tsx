@@ -25,7 +25,7 @@ import {
   NewsTileList,
   PageWrapper,
   QuickLinkList,
-  RelatedAgenciesList,
+  PageLinksList,
   RelatedContentList,
   RichText,
   Spotlight,
@@ -110,7 +110,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               {title}
             </DisplayXXXl>
             <BodyText>{description}</BodyText>
-            <RelatedAgenciesList agencies={partOf} />
+            <PageLinksList pageLinks={partOf} />
           </div>
         </div>
         <div className="mb-40">This is where the TOC will go :)</div>

@@ -3,12 +3,7 @@ import { DataStoryPageData } from '@/types'
 import { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { When } from 'react-if'
-import {
-  ContentSection,
-  PageWrapper,
-  RelatedAgenciesList,
-  TableOfContents
-} from '..'
+import { ContentSection, PageWrapper, PageLinksList, TableOfContents } from '..'
 
 export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
   page
@@ -27,7 +22,7 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
                 {description}
               </DisplayLg>
             </When>
-            <RelatedAgenciesList agencies={agencies} />
+            <PageLinksList pageLinks={agencies} />
           </PageTitleSection>
           <When condition={!!content.length}>
             <div className="mt-28">

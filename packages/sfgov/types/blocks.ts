@@ -124,6 +124,7 @@ export type TypeTileBlockValues = MinimalPageData & {
   date?: string
   date_time?: TypeDateTimeBlock[]
   cancelled?: boolean
+  publishedDate?: TypeDateTimeBlock
 }
 
 export type TypeTileBlock<T extends string = string> = BlockType<
@@ -186,6 +187,11 @@ export type TypeServicesSectionValues = {
   title: string
 }
 
+export type TypeDataStorySectionValues = {
+  data_stories: TypeContentTileBlock[]
+  title: string
+}
+
 export type TypeSocialMediaBlockValues = BlockType<
   'facebook' | 'twitter' | 'instagram',
   string
@@ -230,6 +236,11 @@ export type TypeResourcesSectionBlock = BlockType<
 export type TypeServicesSectionBlock = BlockType<
   'services',
   TypeServicesSectionValues
+>
+
+export type TypeDataStoriesSectionBlock = BlockType<
+  'data_story_section',
+  TypeDataStorySectionValues
 >
 
 export type TypeTimelineBlock = BlockType<'timeline', TypeTimelineBlockValues>
@@ -310,7 +321,16 @@ export type TypeVideoBlockValues = {
 
 export type TypeVideoBlock = BlockType<'video', TypeVideoBlockValues>
 
-export type TypeDocumentBlock = BlockType<'document', number>
+export type TypeDocumentBlockValues = {
+  id: number
+  title: string
+  file: string
+  description?: string
+  published_date?: string
+  collection?: number
+}
+
+export type TypeDocumentBlock = BlockType<'document', TypeDocumentBlockValues>
 
 export type TypeDownloadableFilesBlockValues = {
   title: string
@@ -358,4 +378,14 @@ export type TypeContentSectionBlockValues = {
 export type TypeContentSectionBlock = BlockType<
   'section',
   TypeContentSectionBlockValues
+>
+
+export type TypeDocumentSectionBlockValues = {
+  title: string
+  content: (TypeDocumentBlock | TypeTextBlock)[]
+}
+
+export type TypeDocumentSectionBlock = BlockType<
+  'document_section',
+  TypeDocumentSectionBlockValues
 >
