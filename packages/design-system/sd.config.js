@@ -27,6 +27,11 @@ module.exports = {
           destination: 'colors.js',
           format: 'javascript/module',
           filter: { type: 'color' }
+        },
+        {
+          destination: 'spacing.js',
+          format: 'javascript/module',
+          filter: { type: 'spacing' }
         }
       ]
     }

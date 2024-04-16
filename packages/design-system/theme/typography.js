@@ -1,4 +1,4 @@
-const pxMap = require('./utils')
+const { pxMap } = require('./utils')
 
 const fontFamily = {
   body: 'var(--font-sans)',

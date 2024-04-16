@@ -148,6 +148,12 @@
   --primary-300: #83aceb;
   --primary-200: #afccf7;
   --primary-100: #dfebfd;
+  --desktop-xxl: var(--primitive-15);
+  --desktop-xl: var(--primitive-11);
+  --desktop-lg: var(--primitive-8);
+  --desktop-md: var(--primitive-6);
+  --tablet-xxl: var(--primitive-10);
+  --label: var(--primitive-1);
   --medium: var(--primitive-2);
   --default: var(--primitive-1);
   --label-xs-mono: [object Object];
@@ -209,11 +215,12 @@
   --inset-square-narrow: var(--primitive-3) var(--primitive-3);
   --inset-square-default: var(--primitive-5) var(--primitive-5);
   --spacing-3xl: var(--primitive-7);
-  --spacing-2xl: var(--primitive-6);
-  --spacing-xl: var(--primitive-5);
-  --spacing-lg: var(--primitive-4);
-  --spacing-md: var(--primitive-3);
-  --spacing-s: var(--primitive-2);
-  --spacing-xs: var(--primitive-1);
-  --spacing-none: var(--primitive-0);
+  --xxl: var(--primitive-8);
+  --xl: var(--primitive-8);
+  --lg: var(--primitive-7);
+  --md: var(--primitive-5);
+  --s: var(--primitive-4);
+  --xs: var(--primitive-3);
+  --none: var(--primitive-0);
+  --body: var(--xs);
 }

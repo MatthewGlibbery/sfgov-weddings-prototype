@@ -3,7 +3,7 @@ const { breakpoints } = require('./breakpoints')
 const { ...typography } = require('./typography')
 const { spacing } = require('./space')
 const widths = require('./widths')
-const pxMap = require('./utils')
+const { pxMap } = require('./utils')
 
 // available column grid templates
 const gridColumns = [1, 2, 3, 6, 12]

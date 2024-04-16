@@ -535,32 +535,32 @@
       "type": "number"
     }
   },
-  "spacing-none": {
+  "none": {
     "value": "{Primitive.0}",
     "type": "spacing"
   },
-  "spacing-xs": {
-    "value": "{Primitive.1}",
-    "type": "spacing"
-  },
-  "spacing-s": {
-    "value": "{Primitive.2}",
-    "type": "spacing"
-  },
-  "spacing-md": {
+  "space-xs": {
     "value": "{Primitive.3}",
     "type": "spacing"
   },
-  "spacing-lg": {
+  "space-sm": {
     "value": "{Primitive.4}",
     "type": "spacing"
   },
-  "spacing-xl": {
+  "space-md": {
     "value": "{Primitive.5}",
     "type": "spacing"
   },
-  "spacing-2xl": {
-    "value": "{Primitive.6}",
+  "space-lg": {
+    "value": "{Primitive.7}",
+    "type": "spacing"
+  },
+  "space-xl": {
+    "value": "{Primitive.8}",
+    "type": "spacing"
+  },
+  "space-xxl": {
+    "value": "{Primitive.9}",
     "type": "spacing"
   },
   "spacing-3xl": {
@@ -1557,5 +1557,33 @@
   "medium": {
     "value": "{Primitive.2}",
     "type": "borderRadius"
+  },
+  "space-body": {
+    "value": "{space-xs}",
+    "type": "spacing"
+  },
+  "space-label": {
+    "value": "{Primitive.1}",
+    "type": "spacing"
+  },
+  "space-tablet-xxl": {
+    "value": "{Primitive.10}",
+    "type": "spacing"
+  },
+  "space-desktop-md": {
+    "value": "{Primitive.6}",
+    "type": "spacing"
+  },
+  "space-desktop-lg": {
+    "value": "{Primitive.8}",
+    "type": "spacing"
+  },
+  "space-desktop-xl": {
+    "value": "{Primitive.11}",
+    "type": "spacing"
+  },
+  "space-desktop-xxl": {
+    "value": "{Primitive.15}",
+    "type": "spacing"
   }
 }

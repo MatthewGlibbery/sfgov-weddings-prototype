@@ -7,19 +7,20 @@ export const Text = classed('span' as AnyComponent, {
       body: 'font-body text-body',
       small: 'font-body text-small',
       bigDesc: 'font-body font-bold text-h4 lg:text-h3',
-      headingXs: 'font-body text-heading-xs text-neutral900',
-      headingSm: 'font-body text-heading-sm text-neutral900',
+      headingXs: 'font-body text-heading-xs text-neutral900 mb-space-label',
+      headingSm:
+        'font-body text-heading-sm text-neutral900 mb-space-body lg:mb-8',
       headingMd:
-        'font-body text-heading-md lg:text-desktop-heading-md text-neutral900',
+        'font-body text-heading-md lg:text-desktop-heading-md text-neutral900 mb-space-body',
       headingLg:
-        'font-slab text-heading-lg lg:text-desktop-heading-lg text-neutral900',
+        'font-slab text-heading-lg lg:text-desktop-heading-lg text-neutral900 mb-space-body',
       headingXl:
-        'font-slab text-heading-xl md:text-desktop-heading-lg lg:text-desktop-heading-xl text-neutral900',
+        'font-slab text-heading-xl md:text-desktop-heading-lg lg:text-desktop-heading-xl text-neutral900 mb-space-body',
       headingXXl:
-        'font-slab text-heading-xxl lg:text-desktop-heading-xxl text-neutral900',
+        'font-slab text-heading-xxl lg:text-desktop-heading-xxl text-neutral900 mb-space-body',
       displayLg: 'font-body text-display-lg lg:text-desktop-display-lg',
       displayXXXl:
-        'font-slab text-display-xxxl lg:text-desktop-display-xxxl text-neutral900',
+        'font-slab text-display-xxxl lg:text-desktop-display-xxxl text-neutral900 mb-space-body lg:mb-16',
       mono: 'font-monospace text-body',
       label: 'font-body text-label'
     },
