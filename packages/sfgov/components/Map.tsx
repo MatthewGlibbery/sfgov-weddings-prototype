@@ -67,7 +67,9 @@ export const Map: ComponentType<{
         <Location {...address?.value} />
         <Button variant="secondary">
           <IconPhone width={16} />
-          {t('View full contact information')}
+          {t('view-full-contact-information', {
+            defaultValue: 'View full contact information'
+          })}
         </Button>
       </div>
     </div>

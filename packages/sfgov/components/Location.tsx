@@ -3,7 +3,7 @@ import { When } from 'react-if'
 import { BodyText, HeadingSm, IconLocation, Link } from '@/design-system'
 
 import type { TypeLocationValues } from '@/types'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 /* eslint-disable camelcase */
 export const Location = (props: TypeLocationValues) => {
@@ -58,10 +58,12 @@ export const Location = (props: TypeLocationValues) => {
         <Link
           href={addressQuery}
           className="flex gap-4"
-          aria-label={`${t('Get directions to')} ${locationName}`}
+          aria-label={`${t('get-directions-to', {
+            defaultValue: 'Get directions to'
+          })} ${locationName}`}
         >
           <IconLocation width={20} />
-          {t('Get directions')}
+          {t('get-directions', { defaultValue: 'Get directions' })}
         </Link>
       </BodyText>
     </div>

@@ -11,7 +11,7 @@ import {
 } from '@/design-system'
 import { AgencyPageData } from '@/types'
 import { ComponentType } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { When } from 'react-if'
 import {
   Alert,
@@ -94,7 +94,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
         )}
       </When>
       <Container className="bg-white relative p-20 top-[100px] xl:top-[250px] xs:mx-0">
-        <PageLabel label={t('Agency')} />
+        <PageLabel label={t('agency', { defaultValue: 'Agency' })} />
         <div className="xl:flex xl:flex-row-reverse xl:justify-end mb-40">
           <When condition={!!logo}>
             {() => (
@@ -126,9 +126,13 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             condition={/* istanbul ignore */ !!upcomingEvents || !!pastEvents}
           >
             <div className="flex items-center justify-between">
-              <HeadingXXl as="h2">{t('Calendar')}</HeadingXXl>
+              <HeadingXXl as="h2">
+                {t('calendar', { defaultValue: 'Calendar' })}
+              </HeadingXXl>
               <Button as="a" href={`/#`} variant="secondary">
-                <Label className="hidden md:block">{t('Full calendar')}</Label>
+                <Label className="hidden md:block">
+                  {t('full-calendar', { defaultValue: 'Full calendar' })}
+                </Label>
                 <IconArrowRight width={16} />
               </Button>
             </div>
@@ -151,7 +155,11 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             <When condition={!!upcomingEvents}>
               {() => (
                 <>
-                  <IndicatorWithTitle title={t('Upcoming Calendar')} />
+                  <IndicatorWithTitle
+                    title={t('upcoming-calendar', {
+                      defaultValue: 'Upcoming Calendar'
+                    })}
+                  />
                   <MeetingTileList links={upcomingEvents} />
                 </>
               )}
@@ -159,7 +167,11 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             <When condition={!!pastEvents}>
               {() => (
                 <>
-                  <IndicatorWithTitle title={t('Past Calendar')} />
+                  <IndicatorWithTitle
+                    title={t('past-calendar', {
+                      defaultValue: 'Past Calendar'
+                    })}
+                  />
                   <MeetingTileList links={pastEvents} />
                 </>
               )}
@@ -174,7 +186,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
         <When condition={!!services.length}>
           <Container>
             <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('Services')}
+              {t('services', { defaultValue: 'Services' })}
             </HeadingXXl>
             {services?.map((service) => (
               <ServicesAndResourcesSection
@@ -188,9 +200,13 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
         <When condition={!!news.length}>
           <Container className="space-y-20">
             <div className="flex items-center justify-between">
-              <HeadingXXl as="h2">{t('News')}</HeadingXXl>
+              <HeadingXXl as="h2">
+                {t('news', { defaultValue: 'News' })}
+              </HeadingXXl>
               <Button as="a" href={`/#`} variant="secondary">
-                <Label className="hidden md:block">{t('Full calendar')}</Label>
+                <Label className="hidden md:block">
+                  {t('full-calendar', { defaultValue: 'Full calendar' })}
+                </Label>
                 <IconArrowRight width={16} />
               </Button>
             </div>
@@ -222,7 +238,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             <When condition={!!resources.length}>
               <div className="mb-40">
                 <HeadingXXl as="h2" className="my-12 md:my-20">
-                  {t('Resources')}
+                  {t('resources', { defaultValue: 'Resources' })}
                 </HeadingXXl>
                 {resources?.map((resource) => (
                   <ServicesAndResourcesSection
@@ -235,7 +251,9 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             </When>
             <When condition={aboutDescription || !!callToAction.length}>
               <div className="flex flex-col space-y-12 mb-40">
-                <HeadingXXl as="h2">{t('About')}</HeadingXXl>
+                <HeadingXXl as="h2">
+                  {t('about', { defaultValue: 'About' })}
+                </HeadingXXl>
                 <When condition={aboutDescription}>
                   <RichText html={aboutDescription} />
                 </When>
@@ -253,7 +271,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               className="mt-12"
             />
             <RelatedContentList
-              title={t('Related')}
+              title={t('related', { defaultValue: 'Related' })}
               content={relatedContentAgencies}
               className="mt-12"
             />
@@ -262,7 +280,9 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
         <When condition={!!contact.length || !!socialMedia.length}>
           <Container>
             <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('Contact information')}
+              {t('contact-information', {
+                defaultValue: 'Contact information'
+              })}
             </HeadingXXl>
             <ContactFooter items={[...contact, ...socialMedia]} />
           </Container>
@@ -280,21 +300,35 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               <Container className="my-20 xs:mx-0 space-y-28 md:flex md:justify-between md:space-y-0 md:space-x-28 p-20 md:rounded-4 bg-grey100">
                 <When condition={link}>
                   <div>
-                    <HeadingMd as="h3">{t('Request public records')}</HeadingMd>
+                    <HeadingMd as="h3">
+                      {t('request-public-records', {
+                        defaultValue: 'Request public records'
+                      })}
+                    </HeadingMd>
                     <BodyText>
                       <a href={link} data-testid="public-records-link">
-                        {t('Submit requests')}
+                        {t('submit-requests', {
+                          defaultValue: 'Submit requests'
+                        })}
                       </a>
-                      {t(' for the')} {title}.
+                      {t('for-the', { defaultValue: 'for the' })} {title}.
                     </BodyText>
                   </div>
                 </When>
                 <When condition={archiveUrl}>
                   <div>
-                    <HeadingMd as="h3">{t('Archived website')}</HeadingMd>
+                    <HeadingMd as="h3">
+                      {t('archived-website', {
+                        defaultValue: 'Archived website'
+                      })}
+                    </HeadingMd>
                     <BodyText>
-                      <a href={archiveUrl}>{t('See previous website')}</a>
-                      {t(' archived on')}{' '}
+                      <a href={archiveUrl}>
+                        {t('see-previous-website', {
+                          defaultValue: 'See previous website'
+                        })}
+                      </a>
+                      {t('archived-on', { defaultValue: 'archived on' })}{' '}
                       <ComposedDate startDateInput={archiveDate} />.
                     </BodyText>
                   </div>

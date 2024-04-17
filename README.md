@@ -14,7 +14,7 @@ This is the future [SF.gov] front end, built with the [SF.gov design system] and
 
 2. Copy the local dev config:
 
-    ```sh
+   ```sh
    cp ./packages/sfgov/.env.development.example ./packages/sfgov/.env.development
    ```
 
@@ -50,3 +50,24 @@ filling it with an access token [from Figma][figma access token].
 [figma access token]: https://help.figma.com/hc/en-us/articles/8085703771159-Manage-personal-access-tokens
 [next.js]: https://nextjs.org/
 [next dev]: https://nextjs.org/docs/api-reference/cli#development
+
+### Translations
+
+```sh
+npm run translations-gather
+```
+
+Parse out strings for translations in t function calls and store them in locales/en/translation.json. Config for the parser is in i18next-parser.config.mjs.
+
+```sh
+npm run translations-upload
+```
+
+Upload the key/value pairs in translation.json to the translation service.
+This functionality requires the environment variable TRANSLATIONS_API_TOKEN to be set. The token can be assigned in the platform Django admin.
+
+```sh
+npm run translate
+```
+
+Run translations-gather followed by translations-upload.

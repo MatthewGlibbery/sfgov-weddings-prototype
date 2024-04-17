@@ -51,13 +51,13 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
     <span className="flex flex-col gap-16 mx-20 md:mx-28 lg:mx-0">
       <When condition={!!overview}>
         <HeadingXXl as="h2" className="my-12 md:my-20" id={`overview${screen}`}>
-          {t('Overview')}
+          {t('overview', { defaultValue: 'Overview' })}
         </HeadingXXl>
         <RichText html={overview} />
       </When>
       <When condition={!!agenda.length}>
         <HeadingXXl as="h2" className="my-12 md:my-20" id={`agenda${screen}`}>
-          {t('Agenda')}
+          {t('agenda', { defaultValue: 'Agenda' })}
         </HeadingXXl>
         <div className="flex flex-col gap-28">
           {agenda.map((item, i) => (
@@ -78,7 +78,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
             className="my-12 md:mt-60"
             id={`meetingResources${screen}`}
           >
-            {t('Meeting resources')}
+            {t('meeting-resources', { defaultValue: 'Meeting resources' })}
           </HeadingXXl>
           <When condition={!!videos.length}>
             <div className="space-y-20">
@@ -87,7 +87,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                 romanType="sans"
                 id={`videoRecording${screen}`}
               >
-                {t('Video recording')}
+                {t('video-recording', { defaultValue: 'Video recording' })}
               </HeadingXl>
 
               <Video {...videos[0]?.value} showTitle={false} />
@@ -100,7 +100,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                 romanType="sans"
                 id={`relatedDocuments${screen}`}
               >
-                {t('Related documents')}
+                {t('related-documents', { defaultValue: 'Related documents' })}
               </HeadingXl>
               {relatedDocuments.map((document) => (
                 <Link href="#" className="flex gap-4" key={document.id}>
@@ -115,7 +115,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       <When condition={!!notices.length}>
         <div className="flex flex-col gap-40">
           <HeadingXXl as="h2" className="my-12 md:mt-60">
-            {t('Notices')}
+            {t('notices', { defaultValue: 'Notices' })}
           </HeadingXXl>
           {notices.map((notice) => (
             <Accordion key={notice.id} title={notice.value.title}>
@@ -127,7 +127,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       <When condition={!!agencies.length}>
         <div className="md:mt-60">
           <RelatedContentList
-            title={t('Partner agencies')}
+            title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
             content={agencies}
           />
         </div>
@@ -144,10 +144,10 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           data-testid="info-icon"
           className="inline md:w-40"
         />
-        {t('Meeting details')}
+        {t('meeting-details', { defaultValue: 'Meeting details' })}
       </HeadingXXl>
       <HeadingLg as="h3" id={`dateTime${screen}`}>
-        {t('Date and time')}
+        {t('date-and-time', { defaultValue: 'Date and time' })}
       </HeadingLg>
       <div className="flex flex-col">
         <ComposedDate
@@ -167,7 +167,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
         </When>
       </div>
       <HeadingLg as="h3" id={`howToParticipate${screen}`}>
-        {t('How to participate')}
+        {t('how-to-participate', { defaultValue: 'How to participate' })}
       </HeadingLg>
 
       {meetingLocation.map((location) => {
@@ -176,7 +176,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           block = (
             <div key={location.id} className="mb-20">
               <HeadingMd as="h4" className="mb-12">
-                {t('Online')}
+                {t('online', { defaultValue: 'Online' })}
               </HeadingMd>
               <OnlineEventBlock {...location.value} key={location.id} />
             </div>
@@ -186,7 +186,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           block = (
             <div key={location.id} className="mb-20">
               <HeadingMd as="h4" className="mb-12">
-                {t('In-person')}
+                {t('in-person', { defaultValue: 'In-person' })}
               </HeadingMd>
               <Location {...location.value} />
             </div>
@@ -204,7 +204,10 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       </When>
       <Container className="flex flex-col gap-y-60">
         <div className="mb-20 pb-40 flex flex-col space-y-40">
-          <PageTitleSection title={title} label={t('Meeting')}>
+          <PageTitleSection
+            title={title}
+            label={t('meeting', { defaultValue: 'Meeting' })}
+          >
             <PageLinksList pageLinks={[primaryAgency]} />
           </PageTitleSection>
         </div>

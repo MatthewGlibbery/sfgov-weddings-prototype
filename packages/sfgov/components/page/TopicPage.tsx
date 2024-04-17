@@ -62,7 +62,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
 
         <When condition={!!services.length}>
           <HeadingXl as="h2" className="mb-20">
-            {t('Services')}
+            {t('services', { defaultValue: 'Services' })}
           </HeadingXl>
           {services.map((serviceSection) => (
             <ServicesAndResourcesSection
@@ -89,7 +89,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
 
         <When condition={!!resources.length}>
           <HeadingXl as="h2" className="m-0 mb-20">
-            {t('Resources')}
+            {t('resources', { defaultValue: 'Resources' })}
           </HeadingXl>
           {resources.map((resourceSection) => (
             <ServicesAndResourcesSection

@@ -58,7 +58,7 @@ export const CostBlock = ({
             alt=""
           />
           <CostText id="costBlock" step={!!variant}>
-            {t('Cost')}:
+            {t('cost', { defaultValue: 'Cost' })}:
           </CostText>
           <span>{cost}.</span>
           <When condition={description}>
@@ -74,7 +74,7 @@ export const CostBlock = ({
             transaction={!!variant}
             className="mb-12"
           >
-            {t('Cost')}
+            {t('cost', { defaultValue: 'Cost' })}
           </HeadingLg>
           <span className="block font-bold mb-12">{cost}</span>
           <When condition={description}>
@@ -85,7 +85,7 @@ export const CostBlock = ({
       <Default>
         <div>
           <CostText as="h3" step={!!variant}>
-            {t('Cost')}
+            {t('cost', { defaultValue: 'Cost' })}
           </CostText>
           <HeadingXs className="mb-12">{cost}</HeadingXs>
           <When condition={description}>

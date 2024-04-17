@@ -131,7 +131,7 @@ export const Step = ({
                   className="bg-accent100 w-fit border-solid border-1 rounded-[14px] border-accent100 text-accent600 py-4 px-12 bg-grey200 mb-12"
                   data-testid="step-optional"
                 >
-                  {t('Optional')}
+                  {t('optional', { defaultValue: 'Optional' })}
                 </div>
               </When>
             </div>

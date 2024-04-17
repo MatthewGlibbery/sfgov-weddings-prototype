@@ -9,7 +9,7 @@ import {
   HeadingXXl
 } from '@/design-system'
 import { Image } from './Image'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { getPageURL } from '@/lib/utils'
 import { IndicatorWithTitle } from './Indicator'
 
@@ -49,7 +49,9 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
         </When>
       </div>
       <div className="flex flex-col gap-y-20 basis-0 grow">
-        <IndicatorWithTitle title={t('SPOTLIGHT')} />
+        <IndicatorWithTitle
+          title={t('spotlight', { defaultValue: 'SPOTLIGHT' })}
+        />
         <When condition={title}>
           <HeadingXXl as="h2">{title}</HeadingXXl>
         </When>

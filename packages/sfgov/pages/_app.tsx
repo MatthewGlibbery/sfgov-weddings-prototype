@@ -4,6 +4,8 @@ import { ALL_FONTS } from '@/components/server/GoogleFonts'
 import '../../design-system/css/main.css'
 import { ErrorBoundary, ErrorFallbackReport } from '@/components'
 
+import nextI18nextConfig from '../next-i18next.config'
+
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
     <Component {...pageProps} />
@@ -14,4 +16,4 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
   </ErrorBoundary>
 )
 
-export default appWithTranslation(MyApp)
+export default appWithTranslation(MyApp, nextI18nextConfig)

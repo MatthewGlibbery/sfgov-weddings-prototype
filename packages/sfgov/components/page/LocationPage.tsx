@@ -57,7 +57,10 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
       <ZebraStripedSection>
         <div>
           <Container className="mb-20 pb-40">
-            <PageTitleSection label={t('Location')} title={locationName}>
+            <PageTitleSection
+              label={t('location', { defaultValue: 'Location' })}
+              title={locationName}
+            >
               <When condition={!!description}>
                 <BigDesc
                   as="p"
@@ -82,7 +85,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
         <Container>
           <div className="flex flex-col space-y-40">
             <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('Getting here')}
+              {t('getting-here', { defaultValue: 'Getting here' })}
             </HeadingXXl>
             <RichText html={intro} />
             <div className="space-y-28">
@@ -109,21 +112,25 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
         <When condition={!!address.length || !!contact.length}>
           <Container className="my-40">
             <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('Contact information')}
+              {t('contact-information', {
+                defaultValue: 'Contact information'
+              })}
             </HeadingXXl>
             <ContactFooter items={[...address, ...contact]} />
           </Container>
         </When>
         <Container>
           <HeadingXXl as="h2" className="my-12 md:my-20">
-            {t('About')}
+            {t('about', { defaultValue: 'About' })}
           </HeadingXXl>
           <BodyText>{about}</BodyText>
         </Container>
         <When condition={!!accordions.length}>
           <Container className="my-40 space-y-20">
             <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('Additional location info')}
+              {t('additional-location-info', {
+                defaultValue: 'Additional location info'
+              })}
             </HeadingXXl>
             {accordions.map((accordion) => (
               <Accordion key={accordion.id} title={accordion.value.title}>
@@ -135,7 +142,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
         <When condition={!!services.length}>
           <Container>
             <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('Services')}
+              {t('services', { defaultValue: 'Services' })}
             </HeadingXXl>
             {services.map((service) => (
               <ServicesAndResourcesSection
@@ -148,11 +155,13 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
         </When>
         <Container>
           <RelatedContentList
-            title={`${t('At')} ${locationName}`}
+            title={`${t('at', { defaultValue: 'At' })} ${locationName}`}
             content={partOf}
           />
           <RelatedContentList
-            title={t('Related locations')}
+            title={t('related-locations', {
+              defaultValue: 'Related locations'
+            })}
             content={relatedLocations}
           />
         </Container>

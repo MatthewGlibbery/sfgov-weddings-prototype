@@ -15,7 +15,7 @@ import type { ComponentType, ReactNode } from 'react'
 import type { TypeTileBlock } from '@/types'
 import { getPageURL } from '@/lib/utils'
 import { ComposedDate, ComposedTime } from './DateTime'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { When } from 'react-if'
 import { RichText } from './RichText'
 
@@ -166,11 +166,13 @@ export const MeetingTile = ({ link }: TileProps) => {
         <div className="flex flex-col space-y-8 p-8">
           <div className="flex space-x-16 items-center">
             <Label>
-              {type.includes('Meeting') ? t('Meeting') : t('Event')}
+              {type.includes('Meeting')
+                ? t('meeting', { defaultValue: 'Meeting' })
+                : t('event', { defaultValue: 'Event' })}
             </Label>
             <When condition={cancelled}>
               <div className="py-8 px-12 text-center rounded-[20px] bg-grey700 text-white">
-                {t('Cancelled')}
+                {t('cancelled', { defaultValue: 'Cancelled' })}
               </div>
             </When>
           </div>

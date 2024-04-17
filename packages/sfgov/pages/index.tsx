@@ -46,7 +46,7 @@ const Home = ({ pages }: { pages: PageData[] }) => {
   return (
     <PageWrapper>
       <Container className="py-8 mb-20">
-        <HeadingSm as="h1">{t('pages')}</HeadingSm>
+        <HeadingSm as="h1">{t('pages', { defaultValue: 'pages' })}</HeadingSm>
         {pages.length ? (
           <ul>
             {pages.map((page) => (

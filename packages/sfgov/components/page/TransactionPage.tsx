@@ -53,7 +53,10 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
     <PageWrapper title={title}>
       <Container className="flex flex-col gap-y-60">
         <div className="flex flex-col">
-          <PageTitleSection title={title} label={t('Service')}>
+          <PageTitleSection
+            title={title}
+            label={t('service', { defaultValue: 'Service' })}
+          >
             <When condition={description}>
               <DisplayLg
                 as="p"
@@ -72,7 +75,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
                 <div className="flex gap-x-8">
                   <IconInfo width={40} />
                   <HeadingXXl as="h2" id="whatToKnow">
-                    {t('What to know')}
+                    {t('what-to-know', { defaultValue: 'What to know' })}
                   </HeadingXXl>
                 </div>
                 <When condition={!!cost?.[0]?.value}>
@@ -91,7 +94,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             </When>
             <div className="flex flex-col gap-y-28">
               <HeadingXXl as="h2" id="whatToDo">
-                {t('What to do')}
+                {t('what-to-do', { defaultValue: 'What to do' })}
               </HeadingXXl>
               {whatToDo.map((what) => (
                 <WhatToDo key={what.id} {...what} />
@@ -103,12 +106,14 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               }
             >
               <HeadingXXl as="h2" id="supportingInformation">
-                {t('Supporting information')}
+                {t('supporting-information', {
+                  defaultValue: 'Supporting information'
+                })}
               </HeadingXXl>
               <When condition={!!supporingInformation.length}>
                 <div data-testid="special_cases-section">
                   <HeadingXl as="h3" id="specialCases" className="mb-20">
-                    {t('Special cases')}
+                    {t('special-cases', { defaultValue: 'Special cases' })}
                   </HeadingXl>
                   {supporingInformation.map((item, i) => (
                     <Accordion
@@ -148,7 +153,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             <When condition={!!relatedContentPages.length}>
               <RelatedContentList
                 content={relatedContentPages}
-                title={t('Related') as string}
+                title={t('related', { defaultValue: 'Related' }) as string}
               />
             </When>
           </div>
@@ -160,7 +165,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           <div className="flex flex-col items-start gap-20">
             <HeadingXXl as="h2" className="flex flex-row gap-8">
               <IconQuestion width={32} />
-              {t('Get help')}
+              {t('get-help', { defaultValue: 'Get help' })}
             </HeadingXXl>
             <ContactFooter items={getHelp} />
           </div>
@@ -169,7 +174,11 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           {/* Partner Agencies list */}
           <RelatedContentList
             content={agencies}
-            title={t('Partner agencies') as string}
+            title={
+              t('partner-agencies', {
+                defaultValue: 'Partner agencies'
+              }) as string
+            }
           />
         </When>
       </Container>

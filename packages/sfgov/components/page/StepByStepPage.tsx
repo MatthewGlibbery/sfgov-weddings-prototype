@@ -5,7 +5,7 @@ import { RelatedContentList } from '../RelatedContentList'
 import type { StepByStepData } from '@/types'
 import type { ComponentType } from 'react'
 import { RichText } from '../RichText'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { When } from 'react-if'
 
 export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
@@ -24,7 +24,10 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
   return (
     <PageWrapper title={title}>
       <Container className="mb-20 pb-40">
-        <PageTitleSection title={title} label={t('Step-by-step')}>
+        <PageTitleSection
+          title={title}
+          label={t('step-by-step', { defaultValue: 'Step-by-step' })}
+        >
           <When condition={description}>
             <DisplayLg
               as="p"
@@ -41,7 +44,10 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
       </Container>
       <StepList steps={steps} />
       <Container>
-        <RelatedContentList title={t('Partner agencies')} content={agencies} />
+        <RelatedContentList
+          title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
+          content={agencies}
+        />
       </Container>
     </PageWrapper>
   )

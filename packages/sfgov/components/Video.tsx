@@ -8,7 +8,7 @@ import {
 import { TypeVideoBlockValues } from '@/types'
 import { RichText } from './RichText'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { When } from 'react-if'
 import { useRouter } from 'next/router'
 
@@ -48,6 +48,10 @@ export const Video = (props: TypeVideoBlockValues) => {
       /https:\/\/www\.youtube\.com\/watch\?v=([\w-]{11})/
     )
     const videoId = matcher.length ? matcher[1] : ''
+    const showOrHide = showTranscript
+      ? t('hide', { defaultValue: 'Hide' })
+      : t('show', { defaultValue: 'Show' })
+
     block = (
       <div className="bg-grey100 p-12 flex flex-col lg:flex-row lg:space-x-28">
         <VideoContainer isTranscriptVisible={showTranscript}>
@@ -67,7 +71,10 @@ export const Video = (props: TypeVideoBlockValues) => {
                 onClick={() => setShowTrancscript(!showTranscript)}
               >
                 <IconTranscript className="text-primary500" width={20} />
-                {t(`${showTranscript ? 'Hide' : 'Show'} transcript`)}
+                {t('show-or-hide-transcript', {
+                  defaultValue: `{{showOrHide}} transcript`,
+                  showOrHide
+                })}
               </Link>
             </div>
             <div className="flex items-center pl-20 border-l-1 border-neutral200">
@@ -84,7 +91,9 @@ export const Video = (props: TypeVideoBlockValues) => {
                 }}
               >
                 <IconExternalLink className="text-primary500" width={20} />
-                {t('View full transcript')}
+                {t('view-full-transcript', {
+                  defaultValue: 'View full transcript'
+                })}
               </Link>
             </div>
           </div>

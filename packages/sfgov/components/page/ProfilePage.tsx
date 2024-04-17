@@ -59,7 +59,11 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
           <RelatedContentList
             className="my-40"
             content={agencies}
-            title={t('Additional city roles') as string}
+            title={
+              t('additional-city-roles', {
+                defaultValue: 'Additional city roles'
+              }) as string
+            }
           />
         </When>
         <When condition={!!contactAddress.length || !!contact.length}>

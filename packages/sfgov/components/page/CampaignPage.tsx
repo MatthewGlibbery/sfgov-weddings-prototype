@@ -7,7 +7,7 @@ import {
   TypeResourcesSectionBlock
 } from '@/types'
 import { ComponentType } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { When } from 'react-if'
 import { Accordion } from '../Accordion'
 import { Image } from '../Image'
@@ -97,7 +97,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   return (
     <PageWrapper title={title}>
       <Container className="mb-20 pb-40">
-        <PageLabel label={t('Campaign')} />
+        <PageLabel label={t('campaign', { defaultValue: 'Campaign' })} />
         <div className="flex flex-col xl:flex-row-reverse xl:justify-end">
           <When condition={!!logo}>
             {() => (
@@ -144,13 +144,20 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           </div>
         ))}
         <When condition={about}>
-          <HeadingXXl as="h2">{t('About')}</HeadingXXl>
+          <HeadingXXl as="h2">
+            {t('about', { defaultValue: 'About' })}
+          </HeadingXXl>
           <RichText html={about} />
         </When>
-        <RelatedContentList title={t('Agencies')} content={agencies} />
+        <RelatedContentList
+          title={t('agencies', { defaultValue: 'Agencies' })}
+          content={agencies}
+        />
         <When condition={!!links.length}>
           <Container>
-            <HeadingXXl as="h2">{t('Related')}</HeadingXXl>
+            <HeadingXXl as="h2">
+              {t('related', { defaultValue: 'Related' })}
+            </HeadingXXl>
             <ul>
               {links.map((link) => (
                 <li key={link.id}>

@@ -1,7 +1,7 @@
 import { Container, Grid, DisplayLg, PageTitleSection } from '@/design-system'
 import { DataStoryPageData } from '@/types'
 import { ComponentType } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { When } from 'react-if'
 import { ContentSection, PageWrapper, PageLinksList, TableOfContents } from '..'
 
@@ -16,7 +16,10 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
     <PageWrapper title={title}>
       <Grid>
         <Container className="mb-20 pb-40 col-span-8">
-          <PageTitleSection label={t('Data Story')} title={title}>
+          <PageTitleSection
+            label={t('data-story', { defaultValue: 'Data Story' })}
+            title={title}
+          >
             <When condition={description}>
               <DisplayLg className="mb-20" as="p">
                 {description}

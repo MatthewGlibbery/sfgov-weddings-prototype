@@ -24,9 +24,12 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
   return (
     <PageWrapper title={title}>
       <Container className="mb-20 pb-40">
-        <RelatedContentList title={t('Part of')} content={partOf} />
+        <RelatedContentList
+          title={t('part-of', { defaultValue: 'Part of' })}
+          content={partOf}
+        />
         <DisplayLg as="h1" className="my-40">
-          {t('About Us')}
+          {t('about-us', { defaultValue: 'About Us' })}
         </DisplayLg>
         <When condition={description}>
           <BigDesc
@@ -44,7 +47,7 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
         </When>
         <When condition={!!resources.length}>
           <HeadingXl as="h2" className="m-0 mb-20">
-            {t('Resources')}
+            {t('resources', { defaultValue: 'Resources' })}
           </HeadingXl>
           {resources.map((resourceSection) => (
             <ServicesAndResourcesSection
