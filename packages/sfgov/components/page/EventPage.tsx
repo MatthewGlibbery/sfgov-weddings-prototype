@@ -1,11 +1,11 @@
 // import NextImage from 'next/image'
 import {
-  BigDesc,
   BodyText,
   Container,
   DisplayLg,
   HeadingXl,
-  HeadingXs
+  HeadingXs,
+  PageTitleSection
 } from '@/design-system'
 import type {
   TypeEmailBlock,
@@ -24,6 +24,7 @@ import {
 } from '../'
 import { When } from 'react-if'
 import type { ComponentType } from 'react'
+import { useTranslation } from 'next-i18next'
 
 export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
   const {
@@ -46,21 +47,22 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
     item.type === 'email' ? emails.push(item) : phoneNumbers.push(item)
   )
 
+  const { t } = useTranslation()
+
   return (
     <PageWrapper title={title}>
       <Container className="mb-20 border-b-solid border-b-1 border-grey200 pb-40">
-        <DisplayLg as="h1" className="my-40">
-          {title}
-        </DisplayLg>
-        <When condition={description}>
-          <BigDesc
-            className="mb-20"
-            as="p"
-            data-testid="event-page-description"
-          >
-            {description}
-          </BigDesc>
-        </When>
+        <PageTitleSection label={t('Event')} title={title}>
+          <When condition={description}>
+            <DisplayLg
+              className="mb-20"
+              as="p"
+              data-testid="event-page-description"
+            >
+              {description}
+            </DisplayLg>
+          </When>
+        </PageTitleSection>
         <div className="flex justify-evenly gap-x-20">
           <When condition={!!cost?.[0]?.value}>
             {() => (

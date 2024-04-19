@@ -8,17 +8,11 @@ import { RelatedContentList } from '../RelatedContentList'
 import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
 import { TitleAndText } from '../TitleAndText'
 import { PageWrapper } from './PageWrapper'
-import { BigDesc, Container, DisplayLg, HeadingXl } from '@/design-system'
+import { Container, HeadingXl, PageTitleSection } from '@/design-system'
 
 export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
   const { t } = useTranslation()
-  const {
-    title,
-    description,
-    about_agency: agency,
-    about_info: aboutInfo,
-    resources
-  } = page
+  const { title, about_agency: agency, about_info: aboutInfo, resources } = page
   const partOf = [agency]
 
   return (
@@ -28,18 +22,10 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
           title={t('part-of', { defaultValue: 'Part of' })}
           content={partOf}
         />
-        <DisplayLg as="h1" className="my-40">
-          {t('about-us', { defaultValue: 'About Us' })}
-        </DisplayLg>
-        <When condition={description}>
-          <BigDesc
-            className="mb-20"
-            as="p"
-            data-testid="about-page-description"
-          >
-            {description}
-          </BigDesc>
-        </When>
+        <PageTitleSection
+          label={t('about-us', { defaultValue: 'About Us' })}
+          title={title}
+        />
         <When condition={!!aboutInfo.length}>
           {aboutInfo.map((item) => (
             <TitleAndText key={item.id} {...item.value} />

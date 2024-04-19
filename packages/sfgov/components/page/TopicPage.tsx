@@ -8,7 +8,12 @@ import { Spotlight } from '../Spotlight'
 import { ContentSection } from '../ContentSection'
 import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
 
-import { BigDesc, Container, DisplayLg, HeadingXl } from '@/design-system'
+import {
+  Container,
+  DisplayLg,
+  HeadingXl,
+  PageTitleSection
+} from '@/design-system'
 import { PageLinksList } from '../PageLinksList'
 
 export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
@@ -27,19 +32,17 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   return (
     <PageWrapper title={title}>
       <Container className="mb-20 pb-40">
-        <DisplayLg as="h1" className="my-40">
-          {title}
-        </DisplayLg>
-
-        <When condition={description}>
-          <BigDesc
-            className="mb-20"
-            as="p"
-            data-testid="topic-page-description"
-          >
-            {description}
-          </BigDesc>
-        </When>
+        <PageTitleSection label={t('Topic')} title={title}>
+          <When condition={description}>
+            <DisplayLg
+              className="mb-20"
+              as="p"
+              data-testid="topic-page-description"
+            >
+              {description}
+            </DisplayLg>
+          </When>
+        </PageTitleSection>
 
         <When condition={!!topics}>
           {topics.map((topic, i) => (

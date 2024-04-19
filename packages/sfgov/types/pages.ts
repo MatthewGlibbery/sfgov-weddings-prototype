@@ -167,7 +167,6 @@ export type NewsPageData = PageData & {
 }
 
 export type AboutPageData = PageData & {
-  description: string
   about_agency: PageData
   about_info: TypeTitleAndTextBlock[]
   resources: TypeResourcesSectionBlock[]

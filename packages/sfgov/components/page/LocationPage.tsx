@@ -1,7 +1,7 @@
 import {
-  BigDesc,
   BodyText,
   Container,
+  DisplayLg,
   HeadingSm,
   HeadingXXl,
   IconTrafficCone,
@@ -62,13 +62,13 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
               title={locationName}
             >
               <When condition={!!description}>
-                <BigDesc
+                <DisplayLg
                   as="p"
                   className="my-20"
                   data-testid="step-by-step-description"
                 >
                   {description}
-                </BigDesc>
+                </DisplayLg>
               </When>
               <PageLinksList pageLinks={agencies} />
               <Map

@@ -10,7 +10,7 @@ const fontFamily = {
 
 const lineHeight = {
   auto: 'AUTO',
-  ...pxMap([52, 44, 40, 36, 32, 28, 24, 20, 16])
+  ...pxMap([56, 52, 48, 44, 40, 36, 32, 28, 24, 20, 16])
 }
 
 const fontWeight = {
@@ -31,17 +31,17 @@ const fontSize = {
   h4: ['20px', '24px'],
   h6: ['16px', '24px'],
   'desktop-display-xxxl': [
-    '48px',
+    '46px',
     {
-      lineHeight: lineHeight['52'],
+      lineHeight: lineHeight['56'],
       letterSpacing: '0px',
       fontWeight: fontWeight.semibold
     }
   ],
   'desktop-display-lg': [
-    '20px',
+    '24px',
     {
-      lineHeight: lineHeight['28'],
+      lineHeight: lineHeight['32'],
       letterSpacing: '0px',
       fontWeight: fontWeight.normal
     }
@@ -70,10 +70,18 @@ const fontSize = {
       fontWeight: fontWeight.semibold
     }
   ],
-  'desktop-heading-md': [
-    '18px',
+  'desktop-heading-lg-li': [
+    '24px',
     {
-      lineHeight: lineHeight['24'],
+      lineHeight: lineHeight['32'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.semibold
+    }
+  ],
+  'desktop-heading-md': [
+    '20px',
+    {
+      lineHeight: lineHeight['28'],
       letterSpacing: '0px',
       fontWeight: fontWeight.bold
     }
@@ -81,7 +89,7 @@ const fontSize = {
   'desktop-heading-sm': [
     '16px',
     {
-      lineHeight: lineHeight['16'],
+      lineHeight: lineHeight['24'],
       letterSpacing: '0px',
       fontWeight: fontWeight.extrabold
     }
@@ -89,25 +97,81 @@ const fontSize = {
   'desktop-heading-xs': [
     '14px',
     {
-      lineHeight: lineHeight['16'],
+      lineHeight: lineHeight['20'],
       letterSpacing: '0px',
       fontWeight: fontWeight.light
     }
   ],
-  'desktop-body': [
-    '16px',
+  'tablet-display-xxxl': [
+    '40px',
+    {
+      lineHeight: lineHeight['48'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.semibold
+    }
+  ],
+  'tablet-display-lg': [
+    '20px',
     {
       lineHeight: lineHeight['24'],
       letterSpacing: '0px',
       fontWeight: fontWeight.normal
     }
   ],
-  'desktop-label': [
+  'tablet-heading-xxl': [
+    '32px',
+    {
+      lineHeight: lineHeight['44'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.medium
+    }
+  ],
+  'tablet-heading-xl': [
+    '24px',
+    {
+      lineHeight: lineHeight['32'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.semibold
+    }
+  ],
+  'tablet-heading-lg': [
+    '20px',
+    {
+      lineHeight: lineHeight['28'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.medium
+    }
+  ],
+  'tablet-heading-lg-li': [
+    '20px',
+    {
+      lineHeight: lineHeight['28'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.semibold
+    }
+  ],
+  'tablet-heading-md': [
+    '20px',
+    {
+      lineHeight: lineHeight['28'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.bold
+    }
+  ],
+  'tablet-heading-sm': [
+    '16px',
+    {
+      lineHeight: lineHeight['24'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.extrabold
+    }
+  ],
+  'tablet-heading-xs': [
     '14px',
     {
-      lineHeight: lineHeight.auto,
+      lineHeight: lineHeight['20'],
       letterSpacing: '0px',
-      fontWeight: fontWeight.normal
+      fontWeight: fontWeight.light
     }
   ],
   'display-xxxl': [
@@ -150,10 +214,18 @@ const fontSize = {
       fontWeight: fontWeight.medium
     }
   ],
-  'heading-md': [
+  'heading-lg-li': [
     '20px',
     {
       lineHeight: lineHeight['28'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.semibold
+    }
+  ],
+  'heading-md': [
+    '16px',
+    {
+      lineHeight: lineHeight['24'],
       letterSpacing: '0px',
       fontWeight: fontWeight.bold
     }
@@ -161,7 +233,7 @@ const fontSize = {
   'heading-sm': [
     '16px',
     {
-      lineHeight: lineHeight['16'],
+      lineHeight: lineHeight['24'],
       letterSpacing: '0px',
       fontWeight: fontWeight.extrabold
     }
@@ -169,7 +241,7 @@ const fontSize = {
   'heading-xs': [
     '14px',
     {
-      lineHeight: lineHeight['16'],
+      lineHeight: lineHeight['20'],
       letterSpacing: '0px',
       fontWeight: fontWeight.light
     }
@@ -182,10 +254,26 @@ const fontSize = {
       fontWeight: fontWeight.normal
     }
   ],
-  label: [
-    '14px',
+  'label-md': [
+    '20px',
+    {
+      lineHeight: lineHeight['28'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.normal
+    }
+  ],
+  'label-sm': [
+    '16px',
     {
       lineHeight: lineHeight['24'],
+      letterSpacing: '0px',
+      fontWeight: fontWeight.normal
+    }
+  ],
+  'label-xs': [
+    '14px',
+    {
+      lineHeight: lineHeight['20'],
       letterSpacing: '0px',
       fontWeight: fontWeight.normal
     }

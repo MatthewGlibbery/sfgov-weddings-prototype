@@ -4,7 +4,6 @@ import {
   Text,
   BodyText,
   SmallText,
-  BigDesc,
   HeadingXs,
   HeadingSm,
   HeadingMd,
@@ -31,13 +30,6 @@ describe('Text', () => {
 
   it('renders a styled SmallText element', () => {
     render(<SmallText>Hi!</SmallText>)
-
-    const text = screen.getByText('Hi!')
-    expect(text).toBeInTheDocument()
-  })
-
-  it('renders a styled BigDesc element', () => {
-    render(<BigDesc>Hi!</BigDesc>)
 
     const text = screen.getByText('Hi!')
     expect(text).toBeInTheDocument()
