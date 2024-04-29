@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconSearch = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><circle cx={8.5} cy={8.5} r={4.5} strokeWidth={2} /><path d="M17 17L12 12" strokeWidth={2} /></svg>;
+const IconSearch = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M10 15C12.7614 15 15 12.7614 15 10C15 7.23858 12.7614 5 10 5C7.23858 5 5 7.23858 5 10C5 12.7614 7.23858 15 10 15ZM10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17Z" /><path fillRule="evenodd" clipRule="evenodd" d="M14.7071 13.2929L21.7071 20.2929L20.2929 21.7071L13.2929 14.7071L14.7071 13.2929Z" /></svg>;
 export default IconSearch;

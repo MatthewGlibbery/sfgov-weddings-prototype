@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconPencil = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path d="M4 16L4 13.4142L10 7.41421L12.5858 10L6.58579 16L4 16Z" strokeWidth={2} /><path d="M10.4116 6.99737L12.9704 4.41836L15.5823 7.00375L13.0001 9.58592L10.4116 6.99737Z" strokeWidth={2} /></svg>;
+const IconPencil = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M5.30363 17.5248L5.21175 18.8357L6.45481 18.7168L15.156 10.0156L13.9844 8.84404L5.30363 17.5248ZM7.36079 20.6392L3.05154 21.0515L3.36079 16.6392L13.9844 6.01561L17.9844 10.0156L7.36079 20.6392Z" /><path fillRule="evenodd" clipRule="evenodd" d="M18.1716 7L17 5.82843L15.8284 7L17 8.17157L18.1716 7ZM17 11L13 7L17 3L21 7L17 11Z" /></svg>;
 export default IconPencil;

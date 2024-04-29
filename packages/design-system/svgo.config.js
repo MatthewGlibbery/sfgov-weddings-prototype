@@ -11,7 +11,7 @@ module.exports = {
     {
       name: 'removeAttrs',
       params: {
-        attrs: ['fill', 'stroke', 'id', 'clipPath', 'clip-path', 'clipRule']
+        attrs: ['fill', 'id', 'clipPath', 'clip-path', 'clipRule']
       }
     },
     'removeUselessDefs',
@@ -20,7 +20,7 @@ module.exports = {
     {
       name: 'addAttributesToSVGElement',
       params: {
-        attributes: ['fill="none" stroke="currentcolor"']
+        attributes: ['fill="currentcolor"']
       }
     }
   ]

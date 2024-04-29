@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconCalendar = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={4} y={6} width={12} height={10} strokeWidth={2} /><path d="M4 9H16M7 5V3M13 5V3" strokeWidth={2} /></svg>;
+const IconCalendar = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M19 8H5V19H19V8ZM3 6V21H21V6H3Z" /><path fillRule="evenodd" clipRule="evenodd" d="M20 12H4V10H20V12Z" /><path fillRule="evenodd" clipRule="evenodd" d="M9 3L9 6L7 6L7 3L9 3Z" /><path fillRule="evenodd" clipRule="evenodd" d="M17 3L17 6L15 6L15 3L17 3Z" /></svg>;
 export default IconCalendar;

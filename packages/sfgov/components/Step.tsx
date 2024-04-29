@@ -21,6 +21,7 @@ type StepType = {
   index: number
   first: boolean
   last: boolean
+  only: boolean
 }
 
 export const StepList = ({ steps }: { steps: TypeStepBlock[] }) => {
@@ -38,6 +39,7 @@ export const StepList = ({ steps }: { steps: TypeStepBlock[] }) => {
             index={index}
             first={i === 0}
             last={i === steps.length - 1}
+            only={i === 0 && steps.length === 1}
           />
         )
       })}
@@ -61,6 +63,9 @@ const StepContainer = classed('div', {
         'md:before:top-[-20px] md:before:h-20',
         'md:before:border-dashed md:before:border-l-2 md:before:border-neutral200'
       )
+    },
+    only: {
+      true: classes('md:before:border-none')
     }
   }
 })
@@ -90,7 +95,8 @@ export const Step = ({
   step: { id, value: step },
   index,
   first,
-  last
+  last,
+  only
 }: StepType) => {
   const { t } = useTranslation()
   const isAndOr = step.step_type !== 'number'
@@ -114,7 +120,12 @@ export const Step = ({
   )
 
   return (
-    <StepContainer first={first} last={last} data-testid={`step-${id}`}>
+    <StepContainer
+      first={first}
+      last={last}
+      only={only}
+      data-testid={`step-${id}`}
+    >
       <div className="hidden md:block">
         <BadgeComponent />
       </div>

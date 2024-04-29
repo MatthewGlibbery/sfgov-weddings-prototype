@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconForm = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={5} y={3} width={10} height={14} strokeWidth={2} /><path d="M7 6H9" strokeWidth={2} /><path d="M7 8H13" strokeWidth={2} /><path d="M7 12H9" strokeWidth={2} /><path d="M7 14H13" strokeWidth={2} /></svg>;
+const IconForm = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M18 4H6V20H18V4ZM4 2V22H20V2H4Z" /><path fillRule="evenodd" clipRule="evenodd" d="M11 8H8V6H11V8Z" /><path fillRule="evenodd" clipRule="evenodd" d="M11 15H8V13H11V15Z" /><path fillRule="evenodd" clipRule="evenodd" d="M8 9V11H16V9H8Z" /><path fillRule="evenodd" clipRule="evenodd" d="M8 16V18H16V16H8Z" /></svg>;
 export default IconForm;

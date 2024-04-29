@@ -124,7 +124,6 @@ function gatherComponents(pages) {
   return pages.flatMap((page) =>
     page.components
       .filter((component) => {
-        console.log(component, component.name.includes('20'))
         return component.name.includes('20')
       })
       .map((component) => ({ component, page }))

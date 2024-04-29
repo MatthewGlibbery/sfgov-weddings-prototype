@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconDocument = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={5} y={3} width={10} height={14} strokeWidth={2} /><circle cx={8} cy={7} r={1} /><path d="M7 13H12" strokeWidth={2} /><path d="M7 10H12" strokeWidth={2} /></svg>;
+const IconDocument = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M18 4H6V20H18V4ZM4 2V22H20V2H4Z" /><path fillRule="evenodd" clipRule="evenodd" d="M16 13H8V11H16V13Z" /><path fillRule="evenodd" clipRule="evenodd" d="M16 17H8V15H16V17Z" /><path fillRule="evenodd" clipRule="evenodd" d="M10 9C11.1046 9 12 8.10457 12 7C12 5.89543 11.1046 5 10 5C8.89543 5 8 5.89543 8 7C8 8.10457 8.89543 9 10 9Z" /></svg>;
 export default IconDocument;

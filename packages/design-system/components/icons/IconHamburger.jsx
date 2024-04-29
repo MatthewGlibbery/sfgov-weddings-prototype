@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconHamburger = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><line x1={2} y1={5} x2={18} y2={5} strokeWidth={2} /><line x1={2} y1={15} x2={18} y2={15} strokeWidth={2} /><line x1={2} y1={10} x2={18} y2={10} strokeWidth={2} /></svg>;
+const IconHamburger = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M22 6L2 6L2 4L22 4V6Z" /><path fillRule="evenodd" clipRule="evenodd" d="M22 20L2 20L2 18L22 18V20Z" /><path fillRule="evenodd" clipRule="evenodd" d="M22 13L2 13L2 11L22 11V13Z" /></svg>;
 export default IconHamburger;

@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconHome = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path d="M8 12H12V16H8V12Z" strokeWidth={2} /><path d="M4 9.41935L10 4L16 9.41935V16H4V9.41935Z" strokeWidth={2} /></svg>;
+const IconHome = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M13 16H11V19H13V16ZM9 14V21H15V14H9Z" /><path fillRule="evenodd" clipRule="evenodd" d="M12 3.17123L21 11.0462V21H3V11.0462L12 3.17123ZM5 11.9538V19H19V11.9538L12 5.82877L5 11.9538Z" /></svg>;
 export default IconHome;

@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconFloppy = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path d="M16 6.86992V16H4V4H13.5401L16 6.86992Z" strokeWidth={2} /><rect x={7} y={11} width={6} height={5} strokeWidth={2} /><path d="M8 4H12V6H8V4Z" strokeWidth={2} /></svg>;
+const IconFloppy = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M5 19H19V8.82843L15.1716 5H5V19ZM16 3L21 8V21H3V3H16Z" /><path fillRule="evenodd" clipRule="evenodd" d="M16 14H8V19H16V14ZM6 12V21H18V12H6Z" /><path fillRule="evenodd" clipRule="evenodd" d="M13 5H10V7H13V5ZM8 3V9H15V3H8Z" /></svg>;
 export default IconFloppy;

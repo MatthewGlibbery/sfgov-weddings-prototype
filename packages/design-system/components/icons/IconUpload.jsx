@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconUpload = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path d="M4 13L4 16H16V13" strokeWidth={2} /><path d="M14 7L10 3L6 7" strokeWidth={2} /><path d="M10 13L10 4" strokeWidth={2} /></svg>;
+const IconUpload = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M3 16H5V19H19V16H21V21H3L3 16Z" /><path fillRule="evenodd" clipRule="evenodd" d="M16.7071 7.29289L15.2929 8.70711L12 5.41421L8.70709 8.70711L7.29288 7.29289L12 2.58579L16.7071 7.29289Z" /><path fillRule="evenodd" clipRule="evenodd" d="M13 4L13 16L11 16L11 4L13 4Z" /></svg>;
 export default IconUpload;

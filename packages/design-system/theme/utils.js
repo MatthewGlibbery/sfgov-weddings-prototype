@@ -7,7 +7,6 @@ const tokenMap = (tokens) =>
   Object.keys(tokens).reduce((obj, rule) => {
     const int = parseInt(tokens[rule].value, 10)
     obj[rule] = px(int)
-    console.log(obj)
     return obj
   }, {})
 

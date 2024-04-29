@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconCheck = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={3} y={6} width={14} height={8} strokeWidth={2} /><path d="M6 9L6 8" strokeWidth={2} /><path d="M5 11L15 11" strokeWidth={2} /></svg>;
+const IconCheck = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M20 8H4V16H20V8ZM2 6V18H22V6H2Z" /><path fillRule="evenodd" clipRule="evenodd" d="M9 11H5V9H9V11Z" /><path fillRule="evenodd" clipRule="evenodd" d="M19 14H5V12H19V14Z" /></svg>;
 export default IconCheck;

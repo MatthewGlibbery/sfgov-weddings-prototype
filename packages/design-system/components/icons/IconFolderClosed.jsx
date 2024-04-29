@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconFolderClosed = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path d="M3 7H16V15H3V7Z" strokeWidth={2} /><path d="M2.88889 4V2H1.58914L1.06127 3.18772L2.88889 4ZM9 4L10.7889 3.10557L10.2361 2H9V4ZM10 6V8H13.2361L11.7889 5.10557L10 6ZM2 6L0.172377 5.18772L-1.07752 8H2V6ZM2.88889 6H9V2H2.88889V6ZM10 4H2V8H10V4ZM7.21115 4.89443L8.21115 6.89443L11.7889 5.10557L10.7889 3.10557L7.21115 4.89443ZM3.82762 6.81228L4.71651 4.81228L1.06127 3.18772L0.172377 5.18772L3.82762 6.81228Z" mask="url(#path-2-inside-1_1566_9487)" /></svg>;
+const IconFolderClosed = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M20 9H4V18H20V9ZM2 7V20H22V7H2Z" /><path fillRule="evenodd" clipRule="evenodd" d="M4.44152 6L4.10819 7H8.89182L8.55848 6H4.44152ZM10 4H3L2 7V9H11V7L10 4Z" /></svg>;
 export default IconFolderClosed;

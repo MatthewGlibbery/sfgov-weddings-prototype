@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconDashboard = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={3} y={5} width={14} height={3} strokeWidth={2} /><rect x={3} y={12} width={4} height={3} strokeWidth={2} /><rect x={11} y={12} width={6} height={3} strokeWidth={2} /></svg>;
+const IconDashboard = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M20 6H4V9H20V6ZM2 4V11H22V4H2Z" /><path fillRule="evenodd" clipRule="evenodd" d="M8 15H4V18H8V15ZM2 13V20H10V13H2Z" /><path fillRule="evenodd" clipRule="evenodd" d="M20 15H14V18H20V15ZM12 13V20H22V13H12Z" /></svg>;
 export default IconDashboard;

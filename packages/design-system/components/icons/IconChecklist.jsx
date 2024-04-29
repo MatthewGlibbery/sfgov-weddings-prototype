@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconChecklist = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><rect x={3} y={13} width={2} height={2} strokeWidth={2} /><path d="M9 14L18 14" strokeWidth={2} /><path d="M9 6L18 6" strokeWidth={2} /><path d="M2 5L3.5 6.5L7 4" strokeWidth={2} /></svg>;
+const IconChecklist = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M2 15V19H6V15H2Z" /><path fillRule="evenodd" clipRule="evenodd" d="M22 18L9 18L9 16L22 16L22 18Z" /><path fillRule="evenodd" clipRule="evenodd" d="M22 9L9 9L9 7L22 7L22 9Z" /><path fillRule="evenodd" clipRule="evenodd" d="M7.70712 6.70712L3.50001 10.9142L1.29291 8.70712L2.70712 7.29291L3.50001 8.0858L6.29291 5.29291L7.70712 6.70712Z" /></svg>;
 export default IconChecklist;

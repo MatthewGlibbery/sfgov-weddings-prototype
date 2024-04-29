@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconClock = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><circle cx={10} cy={10} r={7} strokeWidth={2} /><path d="M10 7L10 10L7 13" strokeWidth={2} /></svg>;
+const IconClock = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" /><path fillRule="evenodd" clipRule="evenodd" d="M13 12.4142L8.70711 16.7071L7.29289 15.2929L11 11.5858L11 7L13 7L13 12.4142Z" /></svg>;
 export default IconClock;

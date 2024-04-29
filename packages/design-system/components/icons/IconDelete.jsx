@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconDelete = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path d="M6.90499 17L6.10499 9H13.895L13.095 17H6.90499Z" strokeWidth={2} /><rect x={5} y={6} width={10} height={3} strokeWidth={2} /><path d="M10 15L10 11" strokeWidth={2} /><path d="M8 5V3H12V5" strokeWidth={2} /></svg>;
+const IconDelete = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M5 8L6 22H18L19 8H5ZM7.14795 10L7.86224 20H16.1378L16.852 10H7.14795Z" /><path fillRule="evenodd" clipRule="evenodd" d="M18 7H6V8H18V7ZM4 5V10H20V5H4Z" /><path fillRule="evenodd" clipRule="evenodd" d="M13 12L13 18L11 18L11 12L13 12Z" /><path fillRule="evenodd" clipRule="evenodd" d="M8 2H16V5H14V4H10V5H8V2Z" /></svg>;
 export default IconDelete;

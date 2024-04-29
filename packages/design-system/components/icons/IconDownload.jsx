@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconDownload = props => <svg viewBox="0 0 20 20" fill="none" stroke="currentcolor" {...props}><path d="M4 13V16H16V13" strokeWidth={2} /><path d="M6 9L10 13L14 9" strokeWidth={2} /><path d="M10 3L10 12" strokeWidth={2} /></svg>;
+const IconDownload = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M3 16H5V19H19V16H21V21H3V16Z" /><path fillRule="evenodd" clipRule="evenodd" d="M7.29291 11.7071L8.70712 10.2929L12 13.5858L15.2929 10.2929L16.7071 11.7071L12 16.4142L7.29291 11.7071Z" /><path fillRule="evenodd" clipRule="evenodd" d="M11 15V3H13V15H11Z" /></svg>;
 export default IconDownload;
