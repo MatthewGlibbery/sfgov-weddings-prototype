@@ -1,7 +1,7 @@
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
   extends: ['next/core-web-vitals'],
-  ignorePatterns: ['**/playwright/*.spec.ts'],
+  ignorePatterns: ['**/playwright/*.spec.ts', '**/playwright/*.spec.tsx'],
   rules: {
     'react/no-danger': 'error',
     'import/no-internal-modules': [
