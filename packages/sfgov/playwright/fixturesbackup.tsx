@@ -124,8 +124,9 @@ export const expect = baseExpect.extend({
     let pass: boolean
     let matcherResult: any
     try {
-    baseExpect(await page.locator('header').isVisible()).toBeTruthy();    
-    baseExpect(await page.locator('main').isVisible()).toBeTruthy();     
+    baseExpect(await page.locator('header').isVisible()).toBeTruthy();
+    baseExpect(await page.locator('nav').isVisible()).toBeTruthy(); 
+    baseExpect(await page.locator('main').isVisible()).toBeTruthy();
     baseExpect(await page.locator('footer').isVisible()).toBeTruthy();
   
       pass = true
@@ -167,6 +168,7 @@ export const expect = baseExpect.extend({
     let pass: boolean
     let matcherResult: any
     try {     
+      baseExpect(await page.locator('[role="navigation"]').isVisible()).toBeTruthy();   
       baseExpect(await page.locator('[role="banner"]').isVisible()).toBeTruthy();
       baseExpect(await page.locator('[role="main"]').isVisible()).toBeTruthy();
       baseExpect(await page.locator('[role="contentinfo"]').isVisible()).toBeTruthy();
@@ -1720,7 +1722,7 @@ if (isTocPresent && isGetHelpPresent) {
     let pass: boolean
     let matcherResult: any
     try {
-   // Check if the page contains a <p> element with the text "MEETING"
+   // Check if the page contains a <p> element with the text "SERVICE"
   const serviceParagraphExists = await page.locator('p').filter({ hasText: 'MEETING' }).count() > 0;
 
   if (serviceParagraphExists) {
@@ -1784,32 +1786,25 @@ if (isTocPresent && isGetHelpPresent) {
     let matcherResult: any
     try {
    // Find the <h2> element with the text "Get Help"
-const getHelpH2 = await page.locator('h2', { hasText: 'Get help' });
+  const getHelpH2 = await page.locator('h2', { hasText: 'Get Help' });
 
-// Check if 'Get Help' heading is visible
-const isVisible = await getHelpH2.isVisible();
+  // Ensure the element exists
+  await expect(getHelpH2).toBeVisible();
 
-if (isVisible) {
-    // Since the heading is visible, perform the additional checks
+  // Get all following siblings until another h2 or the end of the container
+  const followingElements = await getHelpH2.locator('>> following-sibling::*');
 
-    // Get all following siblings until another h2 or the end of the container
-    const followingElements = await getHelpH2.locator('>> following-sibling::*');
-
-    // Check each sibling if it is a heading and if it is, assert it's an h3
-    await followingElements.evaluateAll((elements) => {
-        for (const element of elements) {
-            // If the element is a heading, check its level
-            if (element.tagName.startsWith('h')) {
-                if (element.tagName !== 'h3') {
-                    throw new Error(`Expected h3, but found ${element.tagName}`);
-                }
-            }
-        }
-    });
-} else {
-    // If the 'Get Help' heading is not visible, pass the test
-    console.log("'Get help' heading is not present. Passing the test.");
-}
+  // Check each sibling if it is a heading and if it is, assert it's an h3
+  await followingElements.evaluateAll((elements) => {
+      for (const element of elements) {
+          // If the element is a heading, check its level
+          if (element.tagName.startsWith('h')) {
+              if (element.tagName !== 'h3') {
+                  throw new Error(`Expected h3, but found ${element.tagName}`);
+              }
+          }
+      }
+  });
     pass = true
   } catch (e: any) {
     matcherResult = e.matcherResult
@@ -1842,7 +1837,7 @@ if (isVisible) {
     name: assertionName,
     actual: matcherResult?.actual
   }
-  },  
+  },
   
   async toPassA11yScan(page: Page) {
     const assertionName = 'toPassA11yScan'
