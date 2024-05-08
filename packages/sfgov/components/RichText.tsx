@@ -1,9 +1,11 @@
 import React, { ComponentType } from 'react'
 import parse, {
+  attributesToProps,
   domToReact,
   Element,
   type HTMLReactParserOptions
 } from 'html-react-parser'
+import { HeadingMd, HeadingSm } from '@/design-system'
 
 export type Matcher = string | RegExp
 export type ComponentMap = Record<string, ComponentType | string>
@@ -32,6 +34,7 @@ const ALWAYS_FORBID_ATTR_VALUES: Matcher[] = [/javascript:/]
 export type RichTextProps = {
   html: string
   components?: ComponentMap
+  isNews?: boolean
   'data-testid'?: never
 }
 
@@ -51,7 +54,7 @@ export type RichTextProps = {
  * ```
  */
 export const RichText = (props: RichTextProps) => {
-  const { html, components = {} } = props
+  const { html, components = {}, isNews } = props
 
   const options: HTMLReactParserOptions = {
     replace(node) {
@@ -91,26 +94,58 @@ export const RichText = (props: RichTextProps) => {
         return
       }
 
-      // The following two if statements are
-      // for creating the pull quote formatting
-      // for the News content type
-
-      if (next?.tagName === 'blockquote') {
-        return <></>
+      if (tagName === 'blockquote') {
+        if (isNews && prev?.tagName === 'p') {
+          // news content type is special
+          return (
+            <div className="flex flex-col lg:flex-row lg:w-[110%] lg:space-x-28">
+              <p className="mb-20 lg:mb-0 lg:w-1/2">
+                {domToReact(prev.children, options)}
+              </p>
+              {/* @ts-expect-error this is dumb */}
+              <Component {...props}>
+                {domToReact(node.children, options)}
+              </Component>
+            </div>
+          )
+        }
+        return (
+          <blockquote className="p-8 border-l-neutral500 border-solid border-l-3">
+            {domToReact(node.children, options)}
+          </blockquote>
+        )
       }
 
-      if (tagName === 'blockquote' && prev?.tagName === 'p') {
+      if (tagName === 'p') {
         return (
-          <div className="flex flex-col lg:flex-row lg:w-[110%] lg:space-x-28">
-            <p className="mb-20 lg:mb-0 lg:w-1/2">
-              {domToReact(prev.children, options)}
-            </p>
-            {/* @ts-expect-error this is dumb */}
-            <Component {...props}>
-              {domToReact(node.children, options)}
-            </Component>
-          </div>
+          <p className="my-8" {...props}>
+            {domToReact(node.children, options)}
+          </p>
         )
+      }
+
+      if (tagName === 'h3') {
+        return (
+          <HeadingMd as="h3" {...props}>
+            {domToReact(node.children, options)}
+          </HeadingMd>
+        )
+      }
+
+      if (tagName === 'h4') {
+        return (
+          <HeadingSm as="h4" {...props}>
+            {domToReact(node.children, options)}
+          </HeadingSm>
+        )
+      }
+
+      if (tagName === 'ul') {
+        return <ul className="m-0">{domToReact(node.children, options)}</ul>
+      }
+
+      if (tagName === 'ol') {
+        return <ol className="m-0">{domToReact(node.children, options)}</ol>
       }
 
       return (

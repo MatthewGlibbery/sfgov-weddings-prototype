@@ -92,7 +92,7 @@ export const ResourceCollectionPage: ComponentType<{
                     case 'resources':
                       return (
                         <div>
-                          <HeadingXXl as="h2" className="mb-20">
+                          <HeadingXXl as="h2" className="mb-20" id="resources">
                             {t('Resources')}
                           </HeadingXXl>
                           {item.value.map((resourceSection) => (
@@ -107,7 +107,7 @@ export const ResourceCollectionPage: ComponentType<{
                     case 'data_stories':
                       return (
                         <div>
-                          <HeadingXXl as="h2" className="mb-20">
+                          <HeadingXXl as="h2" className="mb-20" id="data">
                             {t('Data')}
                           </HeadingXXl>
                           {item.value.map((dataStorySection) => (
@@ -122,7 +122,9 @@ export const ResourceCollectionPage: ComponentType<{
                     case 'documents':
                       return (
                         <div className="grid gap-y-20">
-                          <HeadingXXl as="h2">{t('Documents')}</HeadingXXl>
+                          <HeadingXXl as="h2" id="documents">
+                            {t('Documents')}
+                          </HeadingXXl>
                           {item.value.map((documentSection) => (
                             <DocumentSectionBlock
                               key={documentSection.id}
