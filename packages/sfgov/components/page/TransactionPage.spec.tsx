@@ -64,9 +64,9 @@ describe('TransactionPage', () => {
   ])('renders the $what section when present', ({ input }) => {
     render(<TransactionPage page={fixture} />)
 
-    const section = screen.getByText(input)
+    const section = screen.getAllByText(input)
 
-    expect(section).toBeInTheDocument()
+    expect(section[0]).toBeInTheDocument()
   })
 
   it.each([
@@ -111,7 +111,7 @@ describe('TransactionPage', () => {
     it('renders HTML as rich text', () => {
       render(<TransactionPage page={page} />)
 
-      const details = screen.getByTestId(`special-case-${case1.id}`)
+      const details = screen.getAllByTestId(`special-case-${case1.id}`)[0]
       expect(details).toBeInTheDocument()
       expect(details).toHaveTextContent(/Special case one/)
       expect(details).not.toHaveTextContent(/<p>/)
@@ -120,7 +120,7 @@ describe('TransactionPage', () => {
     it('renders the first accordion open', () => {
       render(<TransactionPage page={page} />)
 
-      const para = screen.getByText('Special case one')
+      const para = screen.getAllByText('Special case one')[0]
       expect(para).toBeInTheDocument()
       expect(para).toBeVisible()
     })
@@ -128,7 +128,7 @@ describe('TransactionPage', () => {
     it('renders the second accordion closed', () => {
       render(<TransactionPage page={page} />)
 
-      const para = screen.getByText('Special case two')
+      const para = screen.getAllByText('Special case two')[0]
       expect(para).toBeInTheDocument()
       expect(para).not.toBeVisible()
     })

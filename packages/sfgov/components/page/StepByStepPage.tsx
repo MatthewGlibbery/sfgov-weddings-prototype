@@ -1,4 +1,4 @@
-import { Container, DisplayLg, PageTitleSection } from '@/design-system'
+import { Container, DisplayLg, Grid, PageTitleSection } from '@/design-system'
 import { PageWrapper } from './PageWrapper'
 import { StepList } from '../Step'
 import { RelatedContentList } from '../RelatedContentList'
@@ -42,13 +42,19 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
           </div>
         </PageTitleSection>
       </Container>
-      <StepList steps={steps} />
-      <Container>
-        <RelatedContentList
-          title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
-          content={agencies}
-        />
-      </Container>
+      <Grid>
+        <div className="col-span-full">
+          <StepList steps={steps} />
+          <Container>
+            <RelatedContentList
+              title={t('partner-agencies', {
+                defaultValue: 'Partner agencies'
+              })}
+              content={agencies}
+            />
+          </Container>
+        </div>
+      </Grid>
     </PageWrapper>
   )
 }

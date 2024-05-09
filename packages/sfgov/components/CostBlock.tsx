@@ -12,6 +12,7 @@ import { RichText } from './RichText'
 
 type CostBlockProps = TypeCostBlockValues & {
   variant?: string
+  id?: string
 }
 
 export const CostBlock = ({
@@ -19,7 +20,8 @@ export const CostBlock = ({
   flat_fee: flatFee,
   range,
   description,
-  variant
+  variant,
+  id = 'costBlock'
 }: CostBlockProps) => {
   const { t } = useTranslation()
 
@@ -68,12 +70,7 @@ export const CostBlock = ({
       </Case>
       <Case condition={variant === 'transaction'}>
         <div data-testid="transaction-cost">
-          <HeadingLg
-            as="h3"
-            id="costBlock"
-            transaction={!!variant}
-            className="mb-12"
-          >
+          <HeadingLg as="h3" id={id} transaction={!!variant} className="mb-12">
             {t('cost', { defaultValue: 'Cost' })}
           </HeadingLg>
           <span className="block font-bold mb-12">{cost}</span>

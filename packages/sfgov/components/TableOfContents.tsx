@@ -13,7 +13,7 @@ import { StyledDetails } from './Accordion'
 export const tocWrapperClasses = classes(
   'z-50',
   'bg-white col-span-full lg:col-start-9 h-fit sticky top-0 lg:top-40',
-  'px-20 py-28 md:px-28 mb-20',
+  'px-20 py-28 md:px-0 mb-20',
   'lg:pt-0 lg:pb-40 lg:order-2'
 )
 const TOCWrapper = classed('ul', 'list-none my-0 ps-0')

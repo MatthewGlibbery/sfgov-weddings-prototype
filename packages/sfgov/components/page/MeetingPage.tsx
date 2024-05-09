@@ -48,7 +48,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   } = page
 
   const MeetingContent = ({ screen = '' }) => (
-    <span className="flex flex-col gap-16 mx-20 md:mx-28 lg:mx-0">
+    <span className="flex flex-col gap-16 mx-20 md:mx-0 lg:mx-0">
       <When condition={!!overview}>
         <HeadingXXl as="h2" className="my-12 md:my-20" id={`overview${screen}`}>
           {t('overview', { defaultValue: 'Overview' })}
@@ -215,11 +215,11 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       <span className="md:hidden">
         <Grid>
           <div className={tocWrapperClasses}>
-            <TableOfContents />
+            <TableOfContents screen="Small" />
           </div>
           <div className="flex flex-col gap-y-60 col-span-full">
-            <MeetingDetails />
-            <MeetingContent />
+            <MeetingDetails screen="Small" />
+            <MeetingContent screen="Small" />
           </div>
         </Grid>
       </span>
