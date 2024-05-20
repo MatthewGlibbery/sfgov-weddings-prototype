@@ -110,7 +110,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               {title}
             </DisplayXXXl>
             <BodyText>{description}</BodyText>
-            <PageLinksList pageLinks={partOf} />
+            <PageLinksList pageLinks={partOf || []} />
           </div>
         </div>
         <div className="mb-40">This is where the TOC will go :)</div>
@@ -197,7 +197,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             ))}
           </Container>
         </When>
-        <When condition={!!news.length}>
+        <When condition={!!news?.length}>
           <Container className="space-y-20">
             <div className="flex items-center justify-between">
               <HeadingXXl as="h2">

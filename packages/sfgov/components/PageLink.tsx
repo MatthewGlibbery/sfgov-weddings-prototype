@@ -16,7 +16,7 @@ const PageLinkImpl = (
     as: Component = NextLink,
     page,
     children = page?.title || page?.page_content?.title,
-    href = getPageURL(page),
+    href = getPageURL(page) || '',
     ...rest
   } = props
   return (

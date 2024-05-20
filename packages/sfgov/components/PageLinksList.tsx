@@ -12,20 +12,22 @@ export const PageLinksList = ({ pageLinks, label }: PageLinksListProps) => {
       <When condition={label}>
         <span>{label}</span>
       </When>
-      <ul className="list-none inline-block m-0 p-0">
-        {pageLinks.map((pageLink, i) => (
-          <span
-            key={pageLink.id}
-            data-testid="related_content_agencies-section"
-          >
-            {i > 0 && ', '}
-            <PageLink
-              page={pageLink}
-              aria-label={`View the page for ${pageLink.title}`}
-            />
-          </span>
-        ))}
-      </ul>
+      <When condition={!!pageLinks.length}>
+        <ul className="list-none inline-block m-0 p-0">
+          {pageLinks.map((pageLink, i) => (
+            <span
+              key={pageLink.id}
+              data-testid="related_content_agencies-section"
+            >
+              {i > 0 && ', '}
+              <PageLink
+                page={pageLink}
+                aria-label={`View the page for ${pageLink.title}`}
+              />
+            </span>
+          ))}
+        </ul>
+      </When>
     </div>
   )
 }

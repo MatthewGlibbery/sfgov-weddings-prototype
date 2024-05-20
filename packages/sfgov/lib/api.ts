@@ -133,7 +133,7 @@ export class ContentAPI implements IContentAPI {
   }
 
   async getPreviewRelatedData<T = unknown>(path: string, data: object) {
-    const getRelatedData = async (url) => {
+    const getRelatedData = async (url: string) => {
       try {
         const res = await this.fetch(url)
         const data = await res.json()
@@ -151,8 +151,12 @@ export class ContentAPI implements IContentAPI {
       part_of: [],
       topics: [],
       partner_agencies: [],
+      related_child_agencies: [],
       related_pages: [],
-      primary_agency: {}
+      primary_agency: {},
+      logo: null,
+      image: null,
+      main_image: null
     }
 
     for (const key of Object.keys(relatedData)) {
@@ -167,6 +171,7 @@ export class ContentAPI implements IContentAPI {
         data[key] = relatedData[key]
       }
     }
+
     return data
   }
 
