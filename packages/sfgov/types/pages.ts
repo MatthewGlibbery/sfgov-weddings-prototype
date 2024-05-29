@@ -26,7 +26,8 @@ import {
   TypeDownloadableFilesBlock,
   TypeConfirmationBodyTypes,
   TypeEmbeddedContentBlock,
-  TypeDataStoriesSectionBlock
+  TypeDataStoriesSectionBlock,
+  TypeCalloutBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -82,10 +83,14 @@ export type EventPageData = PageData & {
   topics: RelatedContentData[]
 }
 
-export type InfoPageSection = TypeImageBlock | TypeTitleAndTextBlock
+export type InfoPageSection =
+  | TypeImageBlock
+  | TypeTitleAndTextBlock
+  | TypeCalloutBlock
 
 export type InfoPageData = PageData & {
   description: string
+  primary_agency: RelatedContentData
   information_section?: InfoPageSection[]
   part_of: RelatedContentData[]
   partner_agencies: RelatedContentData[]

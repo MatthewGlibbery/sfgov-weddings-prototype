@@ -20,7 +20,6 @@ import {
   RelatedContentData,
   TypeStepBlock,
   StepByStepData,
-  TypeStepVariant,
   TypeTextBlock,
   TypeTitleAndTextBlock,
   TransactionPageData,
@@ -77,7 +76,6 @@ import {
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
-import { RichText } from '@/components'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
@@ -135,28 +133,16 @@ export const FormPageFactory = factory<FormPageData>((gen) => ({
 export const InfoPageFactory = factory<InfoPageData>((gen) => ({
   id: 3,
   meta: PageMetaFactory.make({
-    type: INFO_PAGE_TYPE,
-    detail_url: `http://${process.env.API_HOSTNAME}/api/v2/pages/3/`,
-    html_url: `http://${process.env.API_HOSTNAME}/healthcare-worker-vaccination/`,
-    slug: 'healthcare-worker-vaccination',
-    show_in_menus: false,
-    seo_title: '',
-    search_description: '',
-    first_published_at: '2023-09-27T11:58:05.807000-07:00',
-    parent: {
-      id: 2,
-      meta: {
-        type: 'wagtailcore.Page',
-        detail_url: 'http://localhost:8000/api/v2/pages/2/',
-        html_url: 'http://localhost/'
-      },
-      title: 'Welcome to your new Wagtail site!'
-    },
-    locale: 'en'
+    type: INFO_PAGE_TYPE
   }),
   title: 'Healthcare worker vaccination in San Francisco',
   description:
     'Where to get your COVID-19 vaccine in SF. Healthcare workers and caregivers are eligible if they live or work',
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
+    }
+  }),
   information_section: [
     TitleAndTextFactory.make({
       value: {
@@ -175,76 +161,26 @@ export const InfoPageFactory = factory<InfoPageData>((gen) => ({
         title: 'Nursing and elderly care facilities',
         text: '<p data-block-key="wgoz9">These facilities include:</p><ul><li data-block-key="f4fdv">Skilled nursing facilities</li><li data-block-key="7t5d3">Long-term care facilities</li><li data-block-key="el5eg">Assisted living facilities</li><li data-block-key="b4oak">Residential care facilities for the elderly</li></ul><p data-block-key="1eeog">Vaccination is provided on-site at work by the Federal Pharmacy Partnership with Walgreens and CVS, or through alternate arrangements made by your employer.</p><p data-block-key="77q9v">Contact your employer for specifics.</p>'
       }
-    })
+    }),
+    ImageBlockFactory.make(),
+    CalloutFactory.make()
   ],
-  related_content_pages: RelatedContentBlockFactory.make(1, {
+  part_of: RelatedContentBlockFactory.make(3, {
     meta: {
-      type: 'sf.RelatedContentTopic'
-    },
-    page_content: {
-      id: 2,
-      meta: {
-        type: 'wagtailcore.Page',
-        detail_url: `http://l${process.env.API_HOSTNAME}/api/v2/pages/2/`,
-        html_url: `http://${process.env.API_HOSTNAME}/`,
-        slug: 'home',
-        seo_title: '',
-        search_description: ''
-      },
-      title: 'Welcome to your new Wagtail site!'
+      type: 'sf.Transaction'
     }
   }),
-  related_content_part_of: RelatedContentBlockFactory.make(1, {
+  partner_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
-      type: 'sf.RelatedContentPartOf'
-    },
-    page_content: {
-      id: 4,
-      meta: {
-        type: 'sf.Topic',
-        detail_url: `http://${process.env.API_HOSTNAME}/api/v2/pages/4/`,
-        html_url: `http://${process.env.API_HOSTNAME}/coronavirus-covid-19/`,
-        slug: 'coronavirus-covid-19',
-        seo_title: '',
-        search_description: ''
-      },
-      title: 'Coronavirus (COVID-19)'
+      type: 'sf.Agency'
     }
   }),
-  related_content_agencies: RelatedContentBlockFactory.make(1, {
+  topics: RelatedContentBlockFactory.make(3, {
     meta: {
-      type: 'sf.RelatedContentAgency'
-    },
-    page_content: {
-      id: 2,
-      meta: {
-        type: 'wagtailcore.Page',
-        detail_url: `http://l${process.env.API_HOSTNAME}/api/v2/pages/2/`,
-        html_url: `http://${process.env.API_HOSTNAME}/`,
-        slug: 'home',
-        seo_title: '',
-        search_description: ''
-      },
-      title: 'Welcome to your new Wagtail site!'
+      type: 'sf.Topic'
     }
   }),
-  related_content_topics: RelatedContentBlockFactory.make(1, {
-    meta: {
-      type: 'sf.RelatedContentTopic'
-    },
-    page_content: {
-      id: 4,
-      meta: {
-        type: 'sf.Topic',
-        detail_url: `http://${process.env.API_HOSTNAME}/api/v2/pages/4/`,
-        html_url: `http://${process.env.API_HOSTNAME}/coronavirus-covid-19/`,
-        slug: 'coronavirus-covid-19',
-        seo_title: '',
-        search_description: ''
-      },
-      title: 'Coronavirus (COVID-19)'
-    }
-  })
+  related_pages: RelatedContentBlockFactory.make(3)
 }))
 
 export const StepByStepPageFactory = factory<StepByStepData>((gen) => ({

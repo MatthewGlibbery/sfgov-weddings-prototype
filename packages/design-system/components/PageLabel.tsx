@@ -1,4 +1,4 @@
-import { HeadingMd } from './Text'
+import { HeadingSm } from './Text'
 
 type PageLabelProps = {
   label: string
@@ -6,9 +6,9 @@ type PageLabelProps = {
 
 export const PageLabel = ({ label }: PageLabelProps) => (
   <span className="space-y-0">
-    <HeadingMd as="p" className="text-accent500">
+    <HeadingSm as="p" className="text-accent500 !mb-0">
       {label.toUpperCase()}
-    </HeadingMd>
-    <div className="w-12 h-4 bg-accent500 mt-8" />
+    </HeadingSm>
+    <div className="w-12 h-4 bg-accent500" />
   </span>
 )

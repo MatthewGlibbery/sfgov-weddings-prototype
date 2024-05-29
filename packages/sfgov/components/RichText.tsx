@@ -116,14 +116,6 @@ export const RichText = (props: RichTextProps) => {
         )
       }
 
-      if (tagName === 'p') {
-        return (
-          <p className="my-8" {...props}>
-            {domToReact(node.children, options)}
-          </p>
-        )
-      }
-
       if (tagName === 'h3') {
         return (
           <HeadingMd as="h3" {...props}>

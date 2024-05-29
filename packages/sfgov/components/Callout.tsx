@@ -6,7 +6,7 @@ type CalloutProps = {
 }
 
 export const Callout = ({ html }: CalloutProps) => (
-  <div className="flex items-start border-solid border-information300 border-1 px-28 py-20 gap-x-20 bg-information100">
+  <div className="flex flex-col md:flex-row gap-space-xs items-start border-solid border-information300 border-1 px-28 py-20 gap-x-20 bg-information100">
     <IconInfo
       aria-hidden="true"
       width={24}

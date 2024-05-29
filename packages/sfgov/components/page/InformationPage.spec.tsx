@@ -4,7 +4,6 @@ import {
   InfoPageFactory,
   MysteryBlockFactory,
   PageFactory,
-  RelatedContentFactory,
   TitleAndTextFactory
 } from '@/lib/factories'
 import { InformationPage } from './InformationPage'
