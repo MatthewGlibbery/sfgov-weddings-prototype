@@ -28,6 +28,7 @@ export * from './Step'
 export * from './TableOfContents'
 export * from './Tile'
 export * from './TitleAndText'
+export * from './Video'
 export * from './WhatToDo'
 export * from './ZebraStripeSection'
 

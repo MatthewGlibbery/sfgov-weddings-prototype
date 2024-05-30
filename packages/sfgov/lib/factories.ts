@@ -93,9 +93,20 @@ export const EventPageFactory = factory<EventPageData>((gen) => ({
   cost: CostBlockFactory.make(1),
   location: [LocationBlockFactory.make()],
   call_to_action: CallToActionFactory.make(1),
-  image: ImageBlockFactory.make(),
   body: gen.lorem.paragraph(),
-  contact: [PhoneNumberFactory.make(), EmailBlockFactory.make()],
+  contact: [
+    {
+      type: 'contact',
+      value: {
+        address: [],
+        phone: [PhoneNumberFactory.make()],
+        email: [EmailBlockFactory.make()],
+        social_media_other: [SocialMediaFactory.make()]
+      }
+    }
+  ],
+  video: VideoFactory.make(),
+  image: ImageFactory.make(),
   related_content_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
@@ -286,8 +297,6 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
   }),
   title: 'James Smith',
   pronouns: 'he/him/his',
-  first_name: 'James',
-  last_name: 'Smith',
   profile_type: 'city_employee',
   primary_job_title: 'Media Programming Man',
   primary_job_title_line_2: 'I program the media',
@@ -307,7 +316,7 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
       id: gen.datatype.uuid()
     }
   ],
-  social_media: SocialMediaFactory.make(1),
+  social_media: [SocialMediaFactory.make()],
   contact_address: LocationBlockFactory.make(1),
   contact: [PhoneNumberFactory.make(), EmailBlockFactory.make()],
   spotlight: SpotlightFactory.make(1),
@@ -959,15 +968,13 @@ export const SocialMediaValuesFactory = factory<TypeSocialMediaBlockValues>(
 )
 
 export const SocialMediaFactory = factory<TypeSocialMediaBlock>((gen) => ({
-  id: gen.datatype.uuid(),
   type: 'social_media',
   value: {
-    social_media: [
-      SocialMediaValuesFactory.make({ type: 'facebook' }),
-      SocialMediaValuesFactory.make({ type: 'instagram' }),
-      SocialMediaValuesFactory.make({ type: 'twitter' })
-    ]
-  }
+    facebook: gen.internet.url(),
+    x: gen.internet.url(),
+    instagram: gen.internet.url()
+  },
+  id: gen.datatype.uuid()
 }))
 
 export const AboutPageFactory = factory<AboutPageData>((gen) => ({

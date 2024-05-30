@@ -32,6 +32,7 @@ export type TypeLinkValues = {
   link_text: string
   url: string
   page?: MinimalPageData
+  aria_label?: string
 }
 
 export type TypeCostBlockValues = {
@@ -79,6 +80,7 @@ export type TypeEmailValues = {
 export type TypeEmailBlock = BlockType<'email', TypeEmailValues>
 
 export type TypeLocationValues = {
+  address_title: string
   agency?: AgencyPage
   organization?: string
   addressee?: string
@@ -89,6 +91,7 @@ export type TypeLocationValues = {
   city: string
   state: string
   zip: string
+  variant?: string
 }
 
 export type TypeLocationBlock = BlockType<'address', TypeLocationValues>
@@ -141,6 +144,7 @@ export type TypeEventTileBlock = TypeTileBlock<'event'>
 
 export type TypeCallToActionValues = {
   title: string
+  description: string
   link: TypeLinkValues
 }
 

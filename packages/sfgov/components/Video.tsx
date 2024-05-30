@@ -47,6 +47,7 @@ export const Video = (props: TypeVideoBlockValues) => {
     const matcher = videoInfo.embed_url.match(
       /https:\/\/www\.youtube\.com\/watch\?v=([\w-]{11})/
     )
+    if (!matcher) return <></>
     const videoId = matcher.length ? matcher[1] : ''
     const showOrHide = showTranscript
       ? t('hide', { defaultValue: 'Hide' })

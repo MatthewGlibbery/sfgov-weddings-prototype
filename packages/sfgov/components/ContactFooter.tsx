@@ -3,12 +3,11 @@ import {
   IconEmail,
   IconHome,
   IconPhone,
-  IconWarning,
+  IconShare,
   StackedContainer,
   StackedItem
 } from '@/design-system'
 import { ContactFooterBlockTypes } from '@/types'
-import { ComponentProps } from 'react'
 import { When } from 'react-if'
 import {
   EmailBlock,
@@ -32,8 +31,29 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
     title_and_text: []
   }
 
-  for (const item of items) {
-    footerSections[item.type].push(item)
+  // TODO: the new contact component from the api has been
+  // changed to reflect a single contact component.
+  // These conditional statements are temporary until the backend
+  // models have all been updated accordingly
+  if (items.type === 'contact') {
+    footerSections.address = items.value.address
+    footerSections.email = items.value.email
+    footerSections.phone_number = items.value.phone
+    const socialMediaOther = items.value.social_media_other
+
+    for (let i = 0; i < socialMediaOther.length; i++) {
+      const otherItem = socialMediaOther[i]
+      if (otherItem.type === 'social_media') {
+        footerSections.social_media.push(otherItem)
+      }
+      if (otherItem.type === 'title_and_text') {
+        footerSections.title_and_text.push(otherItem)
+      }
+    }
+  } else {
+    for (const item of items) {
+      footerSections[item.type].push(item)
+    }
   }
 
   return (
@@ -69,9 +89,9 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
         </StackedItem>
       </When>
       <When condition={!!footerSections.social_media.length}>
-        <StackedItem icon={IconWarning} title="Social media">
+        <StackedItem icon={IconShare} title="Social media">
           {footerSections.social_media.map((item) => (
-            <SocialMedia {...item.value} key={item.id} />
+            <SocialMedia items={item.value} key={item.id} />
           ))}
         </StackedItem>
       </When>

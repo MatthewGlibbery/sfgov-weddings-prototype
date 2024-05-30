@@ -11,7 +11,8 @@ describe('<LocationBlock />', () => {
       line1: '123 Sesame Street',
       city: 'San Francisco',
       state: 'CA',
-      zip: '94103'
+      zip: '94103',
+      variant: 'full'
     }
   })
 
@@ -22,8 +23,7 @@ describe('<LocationBlock />', () => {
     { addressee: 'Addresee value' },
     { location_name: 'Location name value' },
     {
-      location_notes:
-        '<p data-block-key="m135x">Digital services location notes english</p>'
+      location_notes: 'Digital services location notes english'
     },
     {
       agency: {
@@ -49,8 +49,7 @@ describe('<LocationBlock />', () => {
       organization: 'Organization value',
       addressee: 'Addresee value',
       location_name: 'Location name value',
-      location_notes:
-        '<p data-block-key="m135x">Digital services location notes english</p>',
+      location_notes: 'Digital services location notes english',
       agency: {
         meta: {
           html_url: 'http://localhost/information-page-1/',

@@ -2,7 +2,9 @@ import { ReactElement } from 'react'
 import { When } from 'react-if'
 
 import type { TypeDateTimeValues } from '@/types'
-import { BodyText, HeadingXs } from '@/design-system'
+import { BodyText, HeadingLg } from '@/design-system'
+
+import { useTranslation } from 'next-i18next'
 
 type ComposedDateProps = {
   startDateInput: string
@@ -212,11 +214,13 @@ export const DateTimeBlock = ({
     }
   }
 
+  const { t } = useTranslation()
+
   return (
     <div>
-      <HeadingXs as="h2" className="mb-20">
-        Date
-      </HeadingXs>
+      <HeadingLg as="h3" className="mb-20">
+        {t('date_and_time', { defaultValue: 'Date and time' })}
+      </HeadingLg>
       <BodyText>
         <ComposedDate startDateInput={start_date} endDateInput={end_date} />
         <When condition={!!Object.keys(composedTimeProps).length}>

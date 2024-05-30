@@ -63,9 +63,7 @@ export const HeroProfile = ({
       </FlexWithSpacing>
       <When condition={!!socialMedia.length}>
         <FlexWithSpacing>
-          {socialMedia.map((props) => (
-            <SocialMedia key={props.id} {...props} />
-          ))}
+          <SocialMedia key={socialMedia[0].id} items={socialMedia[0].value} />
         </FlexWithSpacing>
       </When>
     </div>

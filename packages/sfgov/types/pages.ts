@@ -131,8 +131,7 @@ export type TransactionPageData = PageData & {
 }
 
 export type ProfilePageData = PageData & {
-  first_name: string
-  last_name: string
+  title: string
   pronouns: string
   profile_type: string
   primary_job_title: string

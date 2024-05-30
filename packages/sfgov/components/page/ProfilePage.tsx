@@ -48,12 +48,14 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
           jobTitle={primaryJobTitle}
           jobTitleLine2={primaryJobTitleLine2}
           image={image}
-          socialMedia={socialMedia[0].value.social_media}
+          socialMedia={socialMedia}
           biography={biography}
           email={email}
           phone={phone[0].value}
         />
-        <Spotlight {...spotlight[0]} />
+        <When condition={!!spotlight.length}>
+          <Spotlight {...spotlight[0]} />
+        </When>
         <QuickLinkList links={quickLinks} />
         <When condition={!!agencies.length}>
           <RelatedContentList

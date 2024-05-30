@@ -3,8 +3,11 @@ import {
   BodyText,
   Container,
   DisplayLg,
-  HeadingXl,
-  HeadingXs,
+  Grid,
+  HeadingLg,
+  HeadingSm,
+  HeadingXXl,
+  IconInfo,
   PageTitleSection
 } from '@/design-system'
 import type {
@@ -19,8 +22,10 @@ import {
   DateTimeBlock,
   Location,
   CallToAction,
-  PhoneNumberBlock,
-  EmailBlock
+  Image,
+  Video,
+  RichText,
+  ContactFooter
 } from '../'
 import { When } from 'react-if'
 import type { ComponentType } from 'react'
@@ -34,7 +39,7 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
     cost,
     location,
     call_to_action: callToAction,
-    // image,
+    image,
     body,
     contact,
     partner_agencies: agencies,
@@ -51,104 +56,114 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
 
   return (
     <PageWrapper title={title}>
-      <Container className="mb-20 border-b-solid border-b-1 border-grey200 pb-40">
-        <PageTitleSection label={t('Event')} title={title}>
-          <When condition={description}>
-            <DisplayLg
-              className="mb-20"
-              as="p"
-              data-testid="event-page-description"
-            >
-              {description}
-            </DisplayLg>
-          </When>
-        </PageTitleSection>
-        <div className="flex justify-evenly gap-x-20">
-          <When condition={!!cost?.[0]?.value}>
-            {() => (
-              <InfoWrapper>
-                <CostBlock {...cost[0].value} />
-              </InfoWrapper>
-            )}
-          </When>
-          {/* TODO: Date Time looks to be required in Drupal. If
-          so, remove conditional below after Wagtail is updated */}
-          <When condition={!!dateTime?.[0]?.value}>
-            <InfoWrapper>
-              <DateTimeBlock {...dateTime[0]?.value} />
-            </InfoWrapper>
-          </When>
-          <When condition={!!location?.[0]?.value?.agency?.title}>
-            <InfoWrapper>
-              <HeadingXs className="mb-20">Location</HeadingXs>
-              <BodyText>{location[0]?.value?.agency?.title}</BodyText>
-            </InfoWrapper>
-          </When>
+      <Container className="flex flex-col gap-y-60">
+        <div className="flex flex-col">
+          <PageTitleSection
+            label={t('event', { defaultValue: 'Event' })}
+            title={title}
+          >
+            <When condition={description}>
+              <DisplayLg
+                className="mb-16"
+                as="p"
+                data-testid="event-page-description"
+              >
+                {description}
+              </DisplayLg>
+            </When>
+          </PageTitleSection>
         </div>
-      </Container>
-      <Container>
-        <div className="flex gap-x-20">
-          <div>
-            {/* TODO: add image component */}
-            <When condition={body}>
-              <div>{body}</div>
+        <Grid className="grid gap-y-60">
+          <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1 order-2">
+            <When condition={!!image}>
+              <Image imageRef={image} className="rounded-4" alt="image alt" />
+            </When>
+            <When condition={!!body}>
+              <div>
+                <RichText html={body} />
+              </div>
             </When>
           </div>
-          <div>
-            <When condition={!!callToAction?.[0]?.value}>
-              <SidebarItemWrapper>
-                <CallToAction {...callToAction[0]?.value} />
-              </SidebarItemWrapper>
-            </When>
-            <When condition={!!location?.[0]?.value}>
-              <SidebarItemWrapper>
-                <Location {...location[0]?.value} />
-              </SidebarItemWrapper>
-            </When>
-            <When condition={!!phoneNumbers.length || !!emails.length}>
-              <SidebarItemWrapper>
-                <HeadingXl>Contact</HeadingXl>
-                <When condition={!!phoneNumbers.length}>
-                  <HeadingXs>Phone</HeadingXs>
-                  {phoneNumbers.map(({ id, value }) => (
-                    <PhoneNumberBlock key={id} {...value} />
-                  ))}
-                </When>
-                <When condition={!!emails.length}>
-                  <HeadingXs>Email</HeadingXs>
-                  {emails.map((email) => (
-                    <span key={email.id}>
-                      <BodyText>{email.value.title}</BodyText>
-                      <EmailBlock key={email.id} {...email.value} />
-                    </span>
-                  ))}
-                </When>
-              </SidebarItemWrapper>
-            </When>
+          <div className="col-span-full lg:col-start-9 order-1 lg:order-2">
+            <SidebarWrapper>
+              <HeadingXXl as="h2" className="flex gap-8">
+                <IconInfo
+                  aria-hidden="true"
+                  width={24}
+                  data-testid="info-icon"
+                  className="inline md:w-40"
+                />
+                {t('details', { defaultValue: 'Details' })}
+              </HeadingXXl>
+              <div className="flex flex-col gap-y-20">
+                <div>
+                  <When condition={!!callToAction?.[0]?.value}>
+                    <CallToAction {...callToAction[0]?.value} />
+                  </When>
+                </div>
+                <div>
+                  <When condition={!!dateTime?.[0]?.value}>
+                    <DateTimeBlock {...dateTime[0]?.value} />
+                  </When>
+                </div>
+                <div>
+                  <When condition={!!cost.length}>
+                    <CostBlock {...cost[0]?.value} variant="transaction" />
+                  </When>
+                </div>
+                <div>
+                  <When condition={!!location.length}>
+                    <HeadingLg as="h3">
+                      {t('location', { defaultValue: 'Location' })}
+                    </HeadingLg>
+                    {location.map((locationItem) => (
+                      <div key={locationItem.id}>
+                        <When condition={locationItem.type === 'address'}>
+                          <div className="mb-space-body">
+                            <Location
+                              {...location[0]?.value}
+                              className="mb-space-body"
+                              variant="full"
+                            />
+                          </div>
+                        </When>
+                        <When condition={locationItem.type === 'online'}>
+                          <HeadingSm as="p" className="mt-8">
+                            {t('online', { defaultValue: 'Online' })}
+                          </HeadingSm>
+                          <BodyText>
+                            This event will also be available online
+                          </BodyText>
+                        </When>
+                      </div>
+                    ))}
+                  </When>
+                </div>
+              </div>
+            </SidebarWrapper>
           </div>
-        </div>
+        </Grid>
+        <RelatedContentList
+          id="divisions"
+          title="Partners" /* FIXME: translate */
+          content={agencies}
+        />
+        <When condition={!!contact.length}>
+          <div>
+            <HeadingXXl as="h2" className="mb-space-lg">
+              {t('contact_us', { defaultValue: 'Contact us' })}
+            </HeadingXXl>
+            <ContactFooter items={contact[0]} />
+          </div>
+        </When>
       </Container>
-      <RelatedContentList
-        id="divisions"
-        title="Departments" /* FIXME: translate */
-        content={agencies}
-      />
-      <RelatedContentList
-        id="topics"
-        title="Topics" /* FIXME: translate */
-        content={topics}
-      />
     </PageWrapper>
   )
 }
 
-const InfoWrapper = (props: JSX.IntrinsicElements['div']) => (
-  <div className="basis-1/3" {...props} />
-)
-
-const SidebarItemWrapper = (props: JSX.IntrinsicElements['div']) => (
+const SidebarWrapper = (props: JSX.IntrinsicElements['div']) => (
   <div
-    className="flex flex-col bg-grey100 p-40 mb-20 gap-y-20 rounded-[8px]"
+    className="flex flex-col bg-neutral50 p-28 gap-y-28 rounded-4"
     {...props}
   />
 )

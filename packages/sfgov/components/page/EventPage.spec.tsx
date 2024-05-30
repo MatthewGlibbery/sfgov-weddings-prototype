@@ -37,10 +37,7 @@ describe('EventPage', () => {
     { what: 'body', input: fixture.body },
     { what: 'call_to_action', input: fixture.call_to_action[0].value.title },
     { what: 'location', input: fixture.location[0].value.line1 },
-    // @ts-expect-error 'blegh
-    { what: 'contact', input: fixture.contact[0].value.owner },
-    // @ts-expect-error 'blegh
-    { what: 'contact', input: fixture.contact[1].value.title }
+    { what: 'contact', input: fixture.contact[0].value.phone[0].value.owner }
   ])('renders the $what section when present', ({ what, input }) => {
     if (what === 'date_time') {
       fixture.date_time = [
@@ -69,10 +66,7 @@ describe('EventPage', () => {
     { what: 'body', input: fixture.body },
     { what: 'call_to_action', input: fixture.call_to_action[0].value.title },
     { what: 'location', input: fixture.location[0].value.line1 },
-    // @ts-expect-error 'blegh
-    { what: 'contact', input: fixture.contact[0].value.owner },
-    // @ts-expect-error 'blegh
-    { what: 'contact', input: fixture.contact[1].value.title }
+    { what: 'contact', input: fixture.contact[0].value.phone[0].value.owner }
   ])(
     'does not render the $what section when not present',
     ({ what, input }) => {

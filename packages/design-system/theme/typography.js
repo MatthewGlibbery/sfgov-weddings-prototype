@@ -67,7 +67,7 @@ const fontSize = {
     {
       lineHeight: lineHeight['32'],
       letterSpacing: '0px',
-      fontWeight: fontWeight.semibold
+      fontWeight: fontWeight.medium
     }
   ],
   'desktop-heading-lg-li': [

@@ -4,10 +4,16 @@ import { BodyText, HeadingSm, IconLocation, Link } from '@/design-system'
 
 import type { TypeLocationValues } from '@/types'
 import { useTranslation } from 'next-i18next'
+import { RichText } from './RichText'
+
+type LocationBlockProps = TypeLocationValues & {
+  variant?: string
+}
 
 /* eslint-disable camelcase */
-export const Location = (props: TypeLocationValues) => {
+export const Location = (props: LocationBlockProps) => {
   const {
+    address_title: addressTitle, // the computed title from the api
     agency,
     organization,
     addressee,
@@ -17,13 +23,15 @@ export const Location = (props: TypeLocationValues) => {
     city,
     state,
     zip,
-    location_notes: locationNotes
+    location_notes: locationNotes,
+    variant
   } = props
 
   const { t } = useTranslation()
 
   const boldedTitle =
-    (agency && agency.title) || organization || addressee || locationName
+    addressTitle ??
+    ((agency && agency.title) || organization || addressee || locationName)
 
   const addressQuery = `https://maps.google.com/?q=${locationName}+${line1}+${line2}+${city}+${state}+${zip}}`
   return (
@@ -34,17 +42,19 @@ export const Location = (props: TypeLocationValues) => {
         </HeadingSm>
       </When>
       <BodyText>
-        <When condition={!!organization && organization !== boldedTitle}>
-          {organization}
-          <br />
-        </When>
-        <When condition={!!addressee && addressee !== boldedTitle}>
-          {addressee}
-          <br />
-        </When>
-        <When condition={!!locationName && locationName !== boldedTitle}>
-          {locationName}
-          <br />
+        <When condition={variant === 'full'}>
+          <When condition={!!organization && organization !== boldedTitle}>
+            {organization}
+            <br />
+          </When>
+          <When condition={!!addressee && addressee !== boldedTitle}>
+            {addressee}
+            <br />
+          </When>
+          <When condition={!!locationName && locationName !== boldedTitle}>
+            {locationName}
+            <br />
+          </When>
         </When>
         {line1}
         <br />
@@ -54,7 +64,9 @@ export const Location = (props: TypeLocationValues) => {
         </When>
         {city}, {state} {zip}
         <br />
-        <When condition={!!locationNotes}>{locationNotes}</When>
+        <When condition={!!locationNotes && variant === 'full'}>
+          <RichText html={locationNotes} />
+        </When>
         <Link
           href={addressQuery}
           className="flex gap-4"
