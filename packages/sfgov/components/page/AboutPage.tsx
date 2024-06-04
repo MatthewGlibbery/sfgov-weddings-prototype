@@ -4,45 +4,79 @@ import { useTranslation } from 'next-i18next'
 
 import type { AboutPageData } from '@/types'
 
-import { RelatedContentList } from '../RelatedContentList'
-import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
 import { TitleAndText } from '../TitleAndText'
 import { PageWrapper } from './PageWrapper'
-import { Container, HeadingXl, PageTitleSection } from '@/design-system'
+import {
+  Container,
+  Grid,
+  HeadingXXl,
+  IconArrowLeft,
+  PageTitleSection
+} from '@/design-system'
+import { PageLink, ServicesAndResourcesSection } from '../'
 
 export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
   const { t } = useTranslation()
-  const { title, about_agency: agency, about_info: aboutInfo, resources } = page
-  const partOf = [agency]
+  const {
+    title,
+    primary_agency: primaryAgency,
+    about_info: aboutInfo,
+    resources
+  } = page
 
   return (
     <PageWrapper title={title}>
-      <Container className="mb-20 pb-40">
-        <RelatedContentList
-          title={t('part-of', { defaultValue: 'Part of' })}
-          content={partOf}
-        />
-        <PageTitleSection
-          label={t('about-us', { defaultValue: 'About Us' })}
-          title={title}
-        />
-        <When condition={!!aboutInfo.length}>
-          {aboutInfo.map((item) => (
-            <TitleAndText key={item.id} {...item.value} />
-          ))}
-        </When>
-        <When condition={!!resources.length}>
-          <HeadingXl as="h2" className="m-0 mb-20">
-            {t('resources', { defaultValue: 'Resources' })}
-          </HeadingXl>
-          {resources.map((resourceSection) => (
-            <ServicesAndResourcesSection
-              key={resourceSection.id}
-              title={resourceSection.value.title}
-              tiles={resourceSection.value.resources}
-            />
-          ))}
-        </When>
+      <Container>
+        <Grid>
+          <div className="col-span-full">
+            <div className="flex flex-col gap-y-40 md:gap-y-60">
+              <div>
+                <PageTitleSection
+                  label={t('about-us', { defaultValue: 'About Us' })}
+                  title={title}
+                >
+                  <div className="flex gap-4">
+                    <IconArrowLeft className="text-primary600" width={20} />
+                    <PageLink page={primaryAgency}>
+                      {t('back to main page', {
+                        defaultValue: 'Back to main page'
+                      })}
+                    </PageLink>
+                  </div>
+                </PageTitleSection>
+              </div>
+              <When condition={!!aboutInfo.length}>
+                {aboutInfo.map((item) => (
+                  <TitleAndText
+                    key={item.id}
+                    as="h2"
+                    heading={HeadingXXl}
+                    {...item.value}
+                  />
+                ))}
+              </When>
+              <When condition={!!resources.length}>
+                <div>
+                  <HeadingXXl as="h2">
+                    {t('resources', { defaultValue: 'Resources' })}
+                  </HeadingXXl>
+                  {resources.map((section) => (
+                    <ServicesAndResourcesSection
+                      key={section.id}
+                      title={section.value.title}
+                      tiles={
+                        section.type === 'resources'
+                          ? section.value.resources
+                          : section.value.documents
+                      }
+                      type={section.type}
+                    />
+                  ))}
+                </div>
+              </When>
+            </div>
+          </div>
+        </Grid>
       </Container>
     </PageWrapper>
   )

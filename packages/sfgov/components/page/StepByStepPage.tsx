@@ -31,7 +31,7 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
           <When condition={description}>
             <DisplayLg
               as="p"
-              className="my-20 text-neutral700"
+              className="mb-16 text-neutral700"
               data-testid="step-by-step-description"
             >
               {description}

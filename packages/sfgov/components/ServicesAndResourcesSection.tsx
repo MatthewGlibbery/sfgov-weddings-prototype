@@ -1,22 +1,35 @@
-import { HeadingXl } from '@/design-system'
+import { HeadingXl, IconDocument, Link } from '@/design-system'
 import { TypeContentTileBlock } from '@/types'
+import { When } from 'react-if'
 import { ServiceAndResourceTileList } from './Tile'
 
 type ServicesAndResourcesSectionProps = {
   title: string
   tiles: TypeContentTileBlock[]
+  type?: string
 }
 
 export const ServicesAndResourcesSection = ({
   title,
-  tiles
+  tiles,
+  type = 'resources'
 }: ServicesAndResourcesSectionProps) => {
   return (
     <div className="mb-20">
-      <HeadingXl romanType="sans" as="h3" className="m-0 mb-28 text-grey700">
+      <HeadingXl romanType="sans" as="h3" className="text-grey700">
         {title}
       </HeadingXl>
-      <ServiceAndResourceTileList links={tiles} />
+      <When condition={type === 'resources'}>
+        <ServiceAndResourceTileList links={tiles} />
+      </When>
+      <When condition={type === 'downloadable_files'}>
+        {tiles.map((tile) => (
+          <Link href="#" className="flex gap-4" key={tile.id}>
+            <IconDocument width={20} />
+            document placeholder
+          </Link>
+        ))}
+      </When>
     </div>
   )
 }

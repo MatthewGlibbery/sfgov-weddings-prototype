@@ -62,9 +62,6 @@ export type TypeImageBlock = BlockType<'image', WagtailImageData>
 export type TypeTitleAndTextValues = {
   title: string
   text: string
-  as?: string
-  id?: string
-  heading: React.FC
 }
 
 export type TypeTitleAndTextBlock = BlockType<
@@ -338,7 +335,7 @@ export type TypeDocumentBlock = BlockType<'document', TypeDocumentBlockValues>
 
 export type TypeDownloadableFilesBlockValues = {
   title: string
-  // TODO: add documents
+  documents: BlockType<'document', number>[]
 }
 
 export type TypeDownloadableFilesBlock = BlockType<
@@ -366,6 +363,7 @@ export type TypeEmbeddedContentBlock = BlockType<
 export type ContentSectionTypes =
   | TypeButtonLinkBlock
   | TypeCalloutBlock
+  | TypeDocumentBlock
   | TypeEmbeddedContentBlock
   | TypeImageBlock
   | TypePhoneNumberBlock

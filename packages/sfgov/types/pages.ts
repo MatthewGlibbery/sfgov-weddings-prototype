@@ -171,9 +171,9 @@ export type NewsPageData = PageData & {
 }
 
 export type AboutPageData = PageData & {
-  about_agency: PageData
+  primary_agency: RelatedContentData
   about_info: TypeTitleAndTextBlock[]
-  resources: TypeResourcesSectionBlock[]
+  resources: (TypeDownloadableFilesBlock | TypeResourcesSectionBlock)[]
 }
 
 export type LocationPageData = PageData & {

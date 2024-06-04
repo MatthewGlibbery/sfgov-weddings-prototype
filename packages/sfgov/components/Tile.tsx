@@ -59,9 +59,7 @@ type BaseTileProps = {
 
 const BaseTile = ({ href, children }: BaseTileProps) => (
   <TileContainer href={href}>
-    <div className="flex flex-col space-y-8 xs:px-12 xs:py-8 md:p-0">
-      {children}
-    </div>
+    <div className="flex flex-col space-y-8">{children}</div>
   </TileContainer>
 )
 
@@ -86,14 +84,16 @@ export const NewsTile = ({ link }: TileProps) =>
 
 export const ServiceAndResourceTile = ({ link }: TileProps) => {
   return (
-    <div className="flex items-center">
-      <BaseTile href={link.url}>
-        <HeadingMd className="m-0 mb-8">{link.title}</HeadingMd>
-        <When condition={!!link.description}>
-          <div>{link.description}</div>
-        </When>
-      </BaseTile>
-      <IconChevronRight className="ml-16" width={20} />
+    <div className="p-12">
+      <div className="flex items-start">
+        <BaseTile href={link.url}>
+          <HeadingMd className="m-0 mb-12 text-primary600">
+            {link.title}
+          </HeadingMd>
+        </BaseTile>
+        <IconChevronRight className="ml-16 text-primary600" width={20} />
+      </div>
+      <p>{link.description}</p>
     </div>
   )
 }

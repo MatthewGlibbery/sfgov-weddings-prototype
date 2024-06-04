@@ -4,7 +4,11 @@ import { RichText } from './RichText'
 import { When } from 'react-if'
 
 export type TitleAndTextProps = JSX.IntrinsicElements['section'] &
-  TypeTitleAndTextValues
+  TypeTitleAndTextValues & {
+    as?: string
+    id?: string
+    heading?: React.FC
+  }
 
 export const TitleAndText = ({
   title,

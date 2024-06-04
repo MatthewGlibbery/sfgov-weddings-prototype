@@ -50,7 +50,7 @@ describe('Tile', () => {
 
     expect(serviceAndResourceTile).toBeInTheDocument()
     expect(serviceAndResourceTile).toContainElement(title)
-    expect(serviceAndResourceTile).toContainElement(description)
+    expect(description).toBeInTheDocument()
   })
 
   it('renders a QuickLink', () => {
