@@ -15,4 +15,28 @@ describe('Alert', () => {
 
     expect(screen.queryByText(alert.value.description)).not.toBeInTheDocument()
   })
+
+  it('does not render an alert if no expiration date', () => {
+    const alert = AlertBlockFactory.make({
+      value: {
+        description: 'alert description'
+      }
+    })
+    render(<Alert {...alert.value} />)
+
+    expect(screen.queryByText(alert.value.description)).not.toBeInTheDocument()
+  })
+
+  it('renders preview banner', () => {
+    const alert = AlertBlockFactory.make({
+      value: {
+        description: 'preview',
+        variant: 'preview'
+      }
+    })
+
+    render(<Alert {...alert.value} />)
+
+    expect(screen.getByText(alert.value.description)).toBeInTheDocument()
+  })
 })

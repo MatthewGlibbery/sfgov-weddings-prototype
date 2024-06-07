@@ -248,7 +248,8 @@ export type TypeTimelineBlock = BlockType<'timeline', TypeTimelineBlockValues>
 
 export type TypeAlertBlockValues = {
   description: string
-  expiration_date: string
+  expiration_date?: string
+  variant?: string
 }
 
 export type TypeAlertBlock = BlockType<'alert', TypeAlertBlockValues>
