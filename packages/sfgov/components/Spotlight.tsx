@@ -5,12 +5,10 @@ import {
   BodyText,
   Button,
   classed,
-  HeadingSm,
   HeadingXXl
 } from '@/design-system'
 import { Image } from './Image'
 import { useTranslation } from 'next-i18next'
-import { getPageURL } from '@/lib/utils'
 import { IndicatorWithTitle } from './Indicator'
 
 const SpotlightContainer = classed('div' as AnyComponent, {
@@ -33,8 +31,13 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
     image,
     banner_size: bannerSize,
     orientation,
-    button
+    button_link: buttonLink
   } = value
+
+  const button = buttonLink[0]?.value?.button
+  const ariaLabel =
+    buttonLink[0]?.value?.screenreader_label ?? `${title} ${button.link_text}`
+  const url = button.page ? button.page.meta.html_url : button.url
 
   const { t } = useTranslation()
 
@@ -60,17 +63,8 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
             {description}
           </BodyText>
         </When>
-        <When
-          condition={
-            !!((button.url || getPageURL(button.page)) && button.link_text)
-          }
-        >
-          <Button
-            as="a"
-            href={button.url || getPageURL(button.page)}
-            className="w-1/2"
-            aria-label={`${title} ${button.link_text}`}
-          >
+        <When condition={!!(url && button.link_text)}>
+          <Button as="a" href={url} className="w-1/2" aria-label={ariaLabel}>
             {button.link_text}
           </Button>
         </When>

@@ -76,7 +76,7 @@ export type EventPageData = PageData & {
   cost: TypeCostBlock[]
   location: TypeLocationBlock[]
   call_to_action: TypeCallToActionBlock[]
-  image: TypeImageBlock
+  image: WagtailImageData
   body: string
   contact: (TypeEmailBlock | TypePhoneNumberBlock)[]
   partner_agencies: RelatedContentData[]

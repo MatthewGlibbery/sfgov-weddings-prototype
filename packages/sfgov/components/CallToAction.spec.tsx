@@ -14,7 +14,7 @@ describe('<CallToAction />', () => {
 
   it('renders the link with designated text', () => {
     render(<CallToAction {...ctaValues} />)
-    const link = screen.getByText(ctaValues.link.link_text)
+    const link = screen.getByText(ctaValues.button_link.button.link_text)
 
     expect(link).toBeInTheDocument()
   })
@@ -23,21 +23,36 @@ describe('<CallToAction />', () => {
     render(<CallToAction {...ctaValues} />)
     const link = screen.getByRole('link')
 
-    expect(link).toHaveAttribute('href', ctaValues.link.url)
+    expect(link).toHaveAttribute('href', ctaValues.button_link.button.url)
   })
 
   it.each([
     {
       title: ctaValues.title,
-      link: { link_to: 'page', link_text: '', url: ctaValues.link.url }
+      description: '',
+      button_link: {
+        button: {
+          link_to: 'page',
+          link_text: '',
+          url: ctaValues.button_link.button.url
+        }
+      }
     },
     {
       title: ctaValues.title,
-      link: { link_to: 'page', link_text: ctaValues.link.link_text, url: '' }
+      description: '',
+      button_link: {
+        button: {
+          link_to: 'page',
+          link_text: ctaValues.button_link.button.link_text,
+          url: ''
+        }
+      }
     },
     {
       title: ctaValues.title,
-      link: { link_to: 'page', link_text: '', url: '' }
+      description: '',
+      button_link: { button: { link_to: 'page', link_text: '', url: '' } }
     }
   ])(
     'does not render the button when a link field is not present',
@@ -47,10 +62,11 @@ describe('<CallToAction />', () => {
     }
   )
 
-  it('renders a link button with an aria label of the title and the link text', () => {
+  it('renders a link button with an aria label', () => {
     render(<CallToAction {...ctaValues} />)
     const link = screen.getByLabelText(
-      `${ctaValues.title} ${ctaValues.link.link_text}`
+      ctaValues.button_link.screenreader_label ||
+        `${ctaValues.title} ${ctaValues.button_link.button.link_text}`
     )
 
     expect(link).toBeInTheDocument()

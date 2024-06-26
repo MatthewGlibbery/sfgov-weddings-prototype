@@ -55,7 +55,8 @@ import {
   ReportPageData,
   FormPageData,
   TypeDocumentSectionBlock,
-  ResourceCollectionPageData
+  ResourceCollectionPageData,
+  TypeButtonLinkValues
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -895,10 +896,11 @@ export const LocationBlockFactory = factory<TypeLocationBlock>((gen) => {
 
 export const CallToActionFactory = factory<TypeCallToActionBlock>((gen) => ({
   id: gen.datatype.uuid(),
-  type: 'cta',
+  type: 'call_to_action',
   value: {
     title: gen.commerce.productName(),
-    link: LinkFactory.make()
+    description: '',
+    button_link: AriaButtonLinkFactory.make()
   }
 }))
 
@@ -924,6 +926,11 @@ export const ButtonLinkFactory = factory<TypeButtonLinkBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'button_link',
   value: LinkFactory.make()
+}))
+
+export const AriaButtonLinkFactory = factory<TypeButtonLinkValues>((gen) => ({
+  button: LinkFactory.make(),
+  screenreader_label: gen.lorem.sentence()
 }))
 
 export const WhatToDoStepFactory = factory<TypeWhatToDoStepBlock>((gen) => ({
@@ -955,7 +962,13 @@ export const SpotlightFactory = factory<TypeSpotlightBlock>((gen) => ({
     image: ImageFactory.make(),
     banner_size: 'half',
     orientation: 'right',
-    button: LinkFactory.make()
+    button_link: [
+      {
+        id: gen.datatype.uuid(),
+        type: 'button',
+        value: AriaButtonLinkFactory.make()
+      }
+    ]
   }
 }))
 

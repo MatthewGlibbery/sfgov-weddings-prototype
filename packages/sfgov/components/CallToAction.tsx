@@ -10,10 +10,13 @@ import { BodyText, Button, HeadingLg } from '@/design-system'
 export const CallToAction = ({
   title,
   description,
-  link
+  button_link: buttonLink
 }: TypeCallToActionValues) => {
-  const ariaLabel = link.aria_label ?? `${title} ${link.link_text}`
-  const url = link.page ? link.page.meta.html_url : link.url
+  const ariaLabel =
+    buttonLink.screenreader_label ?? `${title} ${buttonLink.button.link_text}`
+  const url = buttonLink.button.page
+    ? buttonLink.button.page.meta.html_url
+    : buttonLink.button.url
   return (
     <div className="flex flex-col gap-y-8">
       <When condition={title}>
@@ -24,9 +27,9 @@ export const CallToAction = ({
       <When condition={description}>
         <BodyText>{description}</BodyText>
       </When>
-      <When condition={!!(url && link.link_text)}>
+      <When condition={!!(url && buttonLink.button.link_text)}>
         <Button className="w-fit" as="a" href={url} aria-label={ariaLabel}>
-          {link.link_text}
+          {buttonLink.button.link_text}
         </Button>
       </When>
     </div>

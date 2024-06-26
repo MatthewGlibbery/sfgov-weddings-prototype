@@ -139,10 +139,15 @@ export type TypeContentTileBlock = TypeTileBlock<
 export type TypeQuickLinkBlock = TypeTileBlock<'quick_links'>
 export type TypeEventTileBlock = TypeTileBlock<'event'>
 
+export type TypeButtonLinkValues = {
+  button: TypeLinkValues
+  screenreader_label?: string
+}
+
 export type TypeCallToActionValues = {
   title: string
   description: string
-  link: TypeLinkValues
+  button_link: TypeButtonLinkValues
 }
 
 export type TypeCallToActionBlock = BlockType<string, TypeCallToActionValues>
@@ -216,7 +221,7 @@ export type TypeSpotlightBlockValues = {
   image: WagtailImageData
   banner_size: string
   orientation: string
-  button: TypeLinkValues
+  button_link: BlockType<'button', TypeButtonLinkValues>[]
 }
 
 export type TypeSpotlightBlock = BlockType<
