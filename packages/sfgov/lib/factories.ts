@@ -519,9 +519,18 @@ export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({
   title: 'campaign',
   logo: ImageFactory.make(),
   // theme: ''
-  header_spotlight: SpotlightFactory.make(1),
+  spotlight_1: [SpotlightFactory.make()],
   facts_title: 'Some facts',
-  fact_items: [ImageBlockFactory.make(), TitleAndTextFactory.make()],
+  fact_items: [
+    {
+      type: 'fact_item',
+      value: {
+        title_and_text: TitleAndTextFactory.make().value,
+        image: ImageFactory.make()
+      },
+      id: gen.datatype.uuid()
+    }
+  ],
   additional_content: [
     {
       type: 'image_with_text',
@@ -536,8 +545,31 @@ export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({
     {
       type: 'resources',
       value: {
-        title: 'Resource section 1',
-        resources: [GenericTileFactory.make()]
+        title: 'Outside resource section',
+        resource_sections: [
+          {
+            type: 'resource_section',
+            value: {
+              resource_sections: {
+                title: 'Campaign resource section 1 title',
+                resources: [GenericTileFactory.make()]
+              },
+              downloadable_resources: []
+            },
+            id: gen.datatype.uuid()
+          },
+          {
+            type: 'resource_section',
+            value: {
+              resource_sections: {
+                title: 'Campaign resource section 2 title',
+                resources: [GenericTileFactory.make()]
+              },
+              downloadable_resources: []
+            },
+            id: gen.datatype.uuid()
+          }
+        ]
       },
       id: gen.datatype.uuid()
     },
@@ -552,7 +584,7 @@ export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({
       id: gen.datatype.uuid()
     }
   ],
-  spotlight: SpotlightFactory.make(1),
+  spotlight_2: [SpotlightFactory.make()],
   about_campaign: 'about it',
   related_content_agencies: RelatedContentBlockFactory.make(1, {
     meta: {
@@ -960,8 +992,8 @@ export const SpotlightFactory = factory<TypeSpotlightBlock>((gen) => ({
     title: gen.lorem.word(),
     description: gen.lorem.sentence(),
     image: ImageFactory.make(),
-    banner_size: 'half',
-    orientation: 'right',
+    image_alignment: 'half',
+    image_position: 'right',
     button_link: [
       {
         id: gen.datatype.uuid(),

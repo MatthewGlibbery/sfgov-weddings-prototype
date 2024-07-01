@@ -22,14 +22,14 @@ export const ServicesAndResourcesSection = ({
       <When condition={type === 'resources'}>
         <ServiceAndResourceTileList links={tiles} />
       </When>
-      <When condition={type === 'downloadable_files'}>
+      {/* <When condition={type === 'downloadable_files'}>
         {tiles.map((tile) => (
           <Link href="#" className="flex gap-4" key={tile.id}>
             <IconDocument width={20} />
             document placeholder
           </Link>
         ))}
-      </When>
+      </When> */}
     </div>
   )
 }

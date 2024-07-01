@@ -8,7 +8,7 @@ import {
 } from '@/types'
 import { ComponentType } from 'react'
 import { useTranslation } from 'next-i18next'
-import { When } from 'react-if'
+import { When, If } from 'react-if'
 import { Accordion } from '../Accordion'
 import { Image } from '../Image'
 import { Location } from '../Location'
@@ -27,11 +27,11 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
     title,
     logo,
     // theme,
-    header_spotlight: headerSpotlight,
+    spotlight_1: spotlight1,
     facts_title: factsTitle,
     fact_items: factItems,
     additional_content: additionalContent,
-    spotlight,
+    spotlight_2: spotlight2,
     about_campaign: about,
     partner_agencies: agencies,
     related_links: links
@@ -58,13 +58,25 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
             />
           </div>
         )
-      case 'resources':
-        return (
-          <ServicesAndResourcesSection
-            title={content.value.title}
-            tiles={content.value.resources}
-          />
+      case 'resources': {
+        const resourceSections = content.value.resource_sections.map(
+          (resourceSection) => {
+            return (
+              <ServicesAndResourcesSection
+                key={resourceSection.id}
+                title={resourceSection.value.resource_sections.title}
+                tiles={resourceSection.value.resource_sections.resources}
+              />
+            )
+          }
         )
+        return (
+          <div>
+            <div>{content.value.title}</div>
+            <div>{resourceSections}</div>
+          </div>
+        )
+      }
       case 'accordion_section':
         return (
           <div className="space-y-20">
@@ -113,30 +125,41 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           </DisplayXXXl>
         </div>
       </Container>
-      <When condition={!!headerSpotlight.length}>
-        <div className="md:mx-16 mb-80">
-          <Spotlight {...headerSpotlight[0]} />
-        </div>
-      </When>
       <Container className="mb-80">
+        <When condition={!!spotlight1.length}>
+          <div className="p-20 lg:p-28 mb-80 bg-primary100">
+            <Spotlight {...spotlight1[0]} />
+          </div>
+        </When>
         <HeadingXXl as="h2">{factsTitle}</HeadingXXl>
-        {factItems.map((item) =>
-          item.type === 'title_and_text' ? (
-            <TitleAndText
-              key={item.id}
-              title={item.value.title}
-              text={item.value.text}
-            />
-          ) : (
-            <Image key={item.id} imageRef={item.value} />
-          )
-        )}
+        <When condition={!!factItems.length}>
+          <div className="flex gap-28">
+            {factItems.map((item) => {
+              const image = item.value.image
+              const titleAndText = item.value.title_and_text
+              return (
+                <div key={item.id} className="w-1/3">
+                  <When condition={image}>
+                    <Image key={image?.id} imageRef={image} className="mb-20" />
+                  </When>
+                  <When condition={!!titleAndText}>
+                    <TitleAndText
+                      key={item.id}
+                      title={titleAndText.title}
+                      text={titleAndText.text}
+                    />
+                  </When>
+                </div>
+              )
+            })}
+          </div>
+        </When>
+        <When condition={!!spotlight2.length}>
+          <div className="p-20 lg:p-28 mb-80 bg-primary700">
+            <Spotlight {...spotlight2[0]} />
+          </div>
+        </When>
       </Container>
-      <When condition={!!spotlight.length}>
-        <div className="md:mx-16 mb-80">
-          <Spotlight {...spotlight[0]} />
-        </div>
-      </When>
       <Container>
         {additionalContent.map((content) => (
           <div key={content.id} className="mb-80">

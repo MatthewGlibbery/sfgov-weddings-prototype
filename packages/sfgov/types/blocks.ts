@@ -219,9 +219,9 @@ export type TypeSpotlightBlockValues = {
   title: string
   description: string
   image: WagtailImageData
-  banner_size: string
-  orientation: string
-  button_link: BlockType<'button', TypeButtonLinkValues>[]
+  image_alignment: string
+  image_position: string
+  button_link: TypeLinkValues
 }
 
 export type TypeSpotlightBlock = BlockType<
