@@ -39,9 +39,9 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
   let ariaLabel = ''
   if (buttonLink) {
     ariaLabel =
-      buttonLink[0].value.screenreader_label.length > 0
-        ? buttonLink[0].value.screenreader_label
-        : `${title} ${button.link_text}`
+      buttonLink[0]?.value.screenreader_label.length > 0
+        ? buttonLink[0]?.value.screenreader_label
+        : `${title} ${button?.link_text}`
   }
 
   const url = button?.page ? button.page.meta.html_url : button?.url

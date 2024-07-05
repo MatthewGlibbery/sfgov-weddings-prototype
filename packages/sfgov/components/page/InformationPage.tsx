@@ -53,7 +53,9 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
                       {description}
                     </DisplayLg>
                   ) : null}
-                  <PageLinksList pageLinks={[primaryAgency]} />
+                  <When condition={!!primaryAgency}>
+                    <PageLinksList pageLinks={[primaryAgency]} />
+                  </When>
                   <When condition={!!partOf.length}>
                     <div className="my-space-xxl">
                       <PageLinksList
