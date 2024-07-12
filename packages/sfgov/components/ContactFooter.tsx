@@ -7,7 +7,7 @@ import {
   StackedContainer,
   StackedItem
 } from '@/design-system'
-import { ContactFooterBlockTypes } from '@/types'
+import { TypeContactFooterBlockValues } from '@/types'
 import { When } from 'react-if'
 import {
   EmailBlock,
@@ -18,7 +18,7 @@ import {
 } from './'
 
 type ContactFooterProps = {
-  items: ContactFooterBlockTypes[]
+  items: TypeContactFooterBlockValues[]
 }
 
 export const ContactFooter = ({ items }: ContactFooterProps) => {

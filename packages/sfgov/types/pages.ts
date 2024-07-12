@@ -27,7 +27,8 @@ import {
   TypeConfirmationBodyTypes,
   TypeEmbeddedContentBlock,
   TypeDataStoriesSectionBlock,
-  TypeCalloutBlock
+  TypeCalloutBlock,
+  TypeContactFooterBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -181,7 +182,7 @@ export type LocationPageData = PageData & {
   description: string
   alert: TypeAlertBlock[]
   location_address: TypeLocationBlock[]
-  contact: (TypeEmailBlock | TypePhoneNumberBlock)[]
+  contact: TypeContactFooterBlock[]
   image: WagtailImageData
   body: string
   intro: string
@@ -190,8 +191,7 @@ export type LocationPageData = PageData & {
   accessibility: TypeTitleAndTextBlock[]
   public_transportation: TypeTitleAndTextBlock[]
   services: TypeServicesSectionBlock[]
-  part_of: RelatedContentData[]
-  related_pages: RelatedContentData[]
+  related_locations: RelatedContentData[]
   partner_agencies: RelatedContentData[]
   about_location: string
 }

@@ -28,10 +28,9 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
   page
 }) => {
   const {
-    location_name: locationName,
+    title,
     description,
     alert,
-    location_address: address,
     contact,
     image,
     body,
@@ -41,16 +40,17 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
     accessibility,
     public_transportation: publicTransportion,
     services,
-    part_of: partOf,
-    related_pages: relatedLocations,
+    related_locations: relatedLocations,
     partner_agencies: agencies,
     about_location: about
   } = page
 
   const { t } = useTranslation()
 
+  const address = contact[0].value.address[0]
+
   return (
-    <PageWrapper title={locationName}>
+    <PageWrapper title={title}>
       <When condition={!!alert?.[0]?.value}>
         {() => <Alert {...alert[0].value} />}
       </When>
@@ -59,7 +59,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
           <Container className="mb-20 pb-40">
             <PageTitleSection
               label={t('location', { defaultValue: 'Location' })}
-              title={locationName}
+              title={title}
             >
               <When condition={!!description}>
                 <DisplayLg
@@ -71,52 +71,79 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
                 </DisplayLg>
               </When>
               <PageLinksList pageLinks={agencies} />
-              <Map
-                address={address[0]}
-                image={image}
-                locationName={locationName}
-              />
+              <When condition={address}>
+                <Map address={address} image={image} locationName={title} />
+              </When>
               <div className="mt-40">
                 <RichText html={body} />
               </div>
             </PageTitleSection>
           </Container>
         </div>
-        <Container>
-          <div className="flex flex-col space-y-40">
-            <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('getting-here', { defaultValue: 'Getting here' })}
-            </HeadingXXl>
-            <RichText html={intro} />
-            <div className="space-y-28">
-              <div className="flex items-center space-x-8 mb-12">
-                <IconTrafficCone width={20} />
-                <HeadingSm as="h3">{parking[0].value.title}</HeadingSm>
+        <When
+          condition={
+            intro ||
+            !!parking.length ||
+            !!accessibility.length ||
+            !!publicTransportion.length
+          }
+        >
+          <Container>
+            <div className="flex flex-col space-y-40">
+              <HeadingXXl as="h2" className="my-12 md:my-20">
+                {t('getting-here', { defaultValue: 'Getting here' })}
+              </HeadingXXl>
+              <RichText html={intro} />
+              <div className="space-y-28">
+                <When condition={!!parking.length}>
+                  {() => (
+                    <>
+                      <div className="flex items-center space-x-8 mb-12">
+                        <IconTrafficCone width={20} />
+                        <HeadingSm as="h3">{parking[0].value.title}</HeadingSm>
+                      </div>
+                      <RichText html={parking[0].value.text} />
+                    </>
+                  )}
+                </When>
+                <When condition={!!accessibility.length}>
+                  {() => (
+                    <>
+                      <div className="flex items-center space-x-8 mb-12">
+                        <IconTrafficCone width={20} />
+                        <HeadingSm as="h3">
+                          {accessibility[0].value.title}
+                        </HeadingSm>
+                      </div>
+                      <RichText html={accessibility[0].value.text} />
+                    </>
+                  )}
+                </When>
+                <When condition={!!publicTransportion.length}>
+                  {() => (
+                    <>
+                      <div className="flex items-center space-x-8 mb-12">
+                        <IconTrafficCone width={20} />
+                        <HeadingSm as="h3">
+                          {publicTransportion[0].value.title}
+                        </HeadingSm>
+                      </div>
+                      <RichText html={publicTransportion[0].value.text} />
+                    </>
+                  )}
+                </When>
               </div>
-              <RichText html={parking[0].value.text} />
-              <div className="flex items-center space-x-8 mb-12">
-                <IconTrafficCone width={20} />
-                <HeadingSm as="h3">{accessibility[0].value.title}</HeadingSm>
-              </div>
-              <RichText html={accessibility[0].value.text} />
-              <div className="flex items-center space-x-8 mb-12">
-                <IconTrafficCone width={20} />
-                <HeadingSm as="h3">
-                  {publicTransportion[0].value.title}
-                </HeadingSm>
-              </div>
-              <RichText html={publicTransportion[0].value.text} />
             </div>
-          </div>
-        </Container>
-        <When condition={!!address.length || !!contact.length}>
+          </Container>
+        </When>
+        <When condition={!!contact.length}>
           <Container className="my-40">
             <HeadingXXl as="h2" className="my-12 md:my-20">
               {t('contact-information', {
                 defaultValue: 'Contact information'
               })}
             </HeadingXXl>
-            <ContactFooter items={[...address, ...contact]} />
+            <ContactFooter items={contact[0]} />
           </Container>
         </When>
         <Container>
@@ -154,10 +181,6 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
           </Container>
         </When>
         <Container>
-          <RelatedContentList
-            title={`${t('at', { defaultValue: 'At' })} ${locationName}`}
-            content={partOf}
-          />
           <RelatedContentList
             title={t('related-locations', {
               defaultValue: 'Related locations'

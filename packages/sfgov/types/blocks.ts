@@ -208,12 +208,17 @@ export type TypeSocialMediaBlock = BlockType<
   { social_media: TypeSocialMediaBlockValues[] }
 >
 
-export type ContactFooterBlockTypes =
-  | TypeEmailBlock
-  | TypePhoneNumberBlock
-  | TypeLocationBlock
-  | TypeTitleAndTextBlock
-  | TypeSocialMediaBlock
+export type TypeContactFooterBlockValues = {
+  address: TypeLocationBlock[]
+  phone: TypePhoneNumberBlock[]
+  email: TypeEmailBlock[]
+  social_media_other: TypeSocialMediaBlock[]
+}
+
+export type TypeContactFooterBlock = BlockType<
+  'contact',
+  TypeContactFooterBlockValues[]
+>
 
 export type TypeSpotlightBlockValues = {
   title: string

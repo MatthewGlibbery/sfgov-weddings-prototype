@@ -348,12 +348,20 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
   meta: PageMetaFactory.make({
     type: LOCATION_PAGE_TYPE
   }),
-  title: 'This should be location_name',
-  location_name: 'This should be location_name',
+  title: 'location',
   description: 'Location description',
   alert: AlertBlockFactory.make(1),
-  location_address: LocationBlockFactory.make(1),
-  contact: [PhoneNumberFactory.make(), EmailBlockFactory.make()],
+  contact: [
+    {
+      type: 'contact',
+      value: {
+        address: [],
+        phone: [PhoneNumberFactory.make()],
+        email: [EmailBlockFactory.make()],
+        social_media_other: [SocialMediaFactory.make()]
+      }
+    }
+  ],
   image: ImageFactory.make(),
   body: '<p>some rich text</p><blockquote>rich text</blockquote>',
   intro: '<p>some rich text</p><blockquote>rich text</blockquote>',
@@ -392,12 +400,7 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
       id: gen.datatype.uuid()
     }
   ],
-  part_of: RelatedContentBlockFactory.make(1, {
-    meta: {
-      type: 'sfgov_base.RelatedContentPartOf'
-    }
-  }),
-  related_pages: RelatedContentBlockFactory.make(1, {
+  related_locations: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentPage'
     }
