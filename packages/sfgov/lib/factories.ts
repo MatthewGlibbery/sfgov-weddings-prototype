@@ -1066,30 +1066,69 @@ export const TopicPageFactory = factory<TopicPageData>((gen) => ({
   }),
   title: 'Topic',
   description: 'Topic description',
-  topics: RelatedContentBlockFactory.make(2, {
-    meta: {
-      type: 'sf.RelatedContentTopic'
-    }
-  }),
-  content_top: [ContentSectionFactory.make()],
-  services: [
+  top_level_topic: false,
+  fields: [
+    {
+      type: 'child_topics',
+      value: {
+        page_content: RelatedContentBlockFactory.make(2, {
+          meta: {
+            type: 'sf.RelatedContentTopic'
+          }
+        })
+      },
+      id: gen.datatype.uuid()
+    },
+    {
+      type: 'content_top',
+      value: {
+        section: [ContentSectionFactory.make()]
+      },
+      id: gen.datatype.uuid()
+    },
     {
       type: 'services',
       value: {
-        title: 'Service section 1',
-        services: [GenericTileFactory.make()]
+        services: [
+          {
+            type: 'services',
+            value: {
+              title: 'Service section 1',
+              services: [GenericTileFactory.make()]
+            },
+            id: gen.datatype.uuid()
+          }
+        ]
       },
       id: gen.datatype.uuid()
-    }
-  ],
-  spotlight: [],
-  content: [ContentSectionFactory.make()],
-  resources: [
+    },
+    {
+      type: 'spotlight',
+      value: {
+        spotlight: []
+      },
+      id: gen.datatype.uuid()
+    },
+    {
+      type: 'content',
+      value: {
+        content: [ContentSectionFactory.make()]
+      },
+      id: gen.datatype.uuid()
+    },
     {
       type: 'resources',
       value: {
-        title: 'Outer resource section 1',
-        resources: [GenericTileFactory.make()]
+        resources: [
+          {
+            type: 'resources',
+            value: {
+              title: 'Outer resource section 1',
+              resources: [GenericTileFactory.make()]
+            },
+            id: gen.datatype.uuid()
+          }
+        ]
       },
       id: gen.datatype.uuid()
     }

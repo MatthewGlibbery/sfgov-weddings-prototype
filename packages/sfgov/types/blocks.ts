@@ -4,6 +4,7 @@ import {
   MinimalMeta,
   MinimalPageData,
   PageData,
+  RelatedContentData,
   RelatedContentTransactionBlock
 } from './pages'
 
@@ -407,3 +408,35 @@ export type TypeDocumentSectionBlock = BlockType<
   'document_section',
   TypeDocumentSectionBlockValues
 >
+
+type TypeChildTopicsBlockValues = {
+  page_content: RelatedContentData[]
+}
+
+type TypeContentTopBlockValues = {
+  section: TypeContentSectionBlock[]
+}
+
+type TypeTopicServicesBlockValues = {
+  services: TypeServicesSectionBlock[]
+}
+
+type TypeTopicSpotlightBlockValues = {
+  spotlight: TypeSpotlightBlock[]
+}
+
+type TypeTopicResourcesBlockValues = {
+  resources: TypeResourcesSectionBlock[]
+}
+
+type TypeTopicContentBlockValues = {
+  content: BlockType<'content', TypeContentSectionBlockValues>[]
+}
+
+export type TopicFieldTypes =
+  | BlockType<'child_topics', TypeChildTopicsBlockValues>
+  | BlockType<'content_top', TypeContentTopBlockValues>
+  | BlockType<'services', TypeTopicServicesBlockValues>
+  | BlockType<'spotlight', TypeTopicSpotlightBlockValues>
+  | BlockType<'resources', TypeTopicResourcesBlockValues>
+  | BlockType<'content', TypeTopicContentBlockValues>

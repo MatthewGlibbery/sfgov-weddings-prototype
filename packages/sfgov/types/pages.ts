@@ -28,7 +28,8 @@ import {
   TypeEmbeddedContentBlock,
   TypeDataStoriesSectionBlock,
   TypeCalloutBlock,
-  TypeContactFooterBlock
+  TypeContactFooterBlock,
+  TopicFieldTypes
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -152,12 +153,8 @@ export type ProfilePageData = PageData & {
 
 export type TopicPageData = PageData & {
   description: string
-  topics: RelatedContentData[]
-  content_top: TypeContentSectionBlock[]
-  services: TypeServicesSectionBlock[]
-  spotlight: TypeSpotlightBlock[]
-  content: TypeContentSectionBlock[]
-  resources: TypeResourcesSectionBlock[]
+  top_level_topic: boolean
+  fields: TopicFieldTypes[]
   partner_agencies: RelatedContentData[]
 }
 
