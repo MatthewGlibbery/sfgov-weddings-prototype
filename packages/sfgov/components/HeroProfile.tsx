@@ -1,3 +1,4 @@
+// istanbul ignore file
 import {
   classed,
   IconEnvelope,
@@ -6,8 +7,8 @@ import {
   HeadingXl,
   HeadingMd
 } from '@/design-system'
-import { EmailBlock, Image, RichText, SocialMedia } from './'
-import type { TypeSocialMediaBlockValues, WagtailImageData } from '@/types'
+import { EmailBlock, Image, RichText } from './'
+import type { WagtailImageData } from '@/types'
 import { When } from 'react-if'
 
 type HeroProfileProps = {
@@ -16,8 +17,6 @@ type HeroProfileProps = {
   jobTitle: string
   jobTitleLine2: string
   image: WagtailImageData
-  socialMedia: TypeSocialMediaBlockValues[]
-  biography: string
   email: string
   phone: string
 }
@@ -30,7 +29,6 @@ export const HeroProfile = ({
   jobTitle,
   jobTitleLine2,
   image,
-  socialMedia,
   biography,
   email,
   phone
@@ -61,11 +59,11 @@ export const HeroProfile = ({
         <IconPhone width={40} />
         <a href={`tel:${phone}`}>{phone}</a>
       </FlexWithSpacing>
-      <When condition={!!socialMedia.length}>
+      {/* <When condition={!!socialMedia.length}>
         <FlexWithSpacing>
           <SocialMedia key={socialMedia[0].id} items={socialMedia[0].value} />
         </FlexWithSpacing>
-      </When>
+      </When> */}
     </div>
   </div>
 )

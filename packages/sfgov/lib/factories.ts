@@ -319,7 +319,17 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
   ],
   social_media: [SocialMediaFactory.make()],
   contact_address: LocationBlockFactory.make(1),
-  contact: [PhoneNumberFactory.make(), EmailBlockFactory.make()],
+  contact: [
+    {
+      type: 'contact',
+      value: {
+        address: [],
+        phone: [PhoneNumberFactory.make()],
+        email: [EmailBlockFactory.make()],
+        social_media_other: [SocialMediaFactory.make()]
+      }
+    }
+  ],
   spotlight: SpotlightFactory.make(1),
   quick_links: QuickLinkFactory.make(3)
 }))

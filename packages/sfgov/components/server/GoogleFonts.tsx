@@ -8,14 +8,14 @@ import {
 
 export const SansFont = Roboto_Flex({
   subsets: ['latin'],
-  weight: ['300', '400', '700'],
+  weight: ['300', '400', '500', '600', '700', '800'],
   fallback: ['ui-sans-serif', 'sans-serif'],
   variable: '--font-sans'
 })
 
 export const SlabFont = Roboto_Slab({
   subsets: ['latin'],
-  weight: ['300', '400', '700'],
+  weight: ['300', '400', '500', '600', '700'],
   fallback: ['ui-serif', 'serif'],
   variable: '--font-slab'
 })

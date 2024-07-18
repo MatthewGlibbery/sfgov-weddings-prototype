@@ -6,13 +6,7 @@ import { Container, DisplayLg } from '@/design-system'
 import type { ProfilePageData } from '@/types'
 
 import { PageWrapper } from './PageWrapper'
-import {
-  ContactFooter,
-  HeroProfile,
-  QuickLinkList,
-  RelatedContentList,
-  Spotlight
-} from '../'
+import { ContactFooter, HeroProfile, QuickLinkList, Spotlight } from '../'
 
 export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
   page
@@ -22,13 +16,11 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
     pronouns,
     primary_job_title: primaryJobTitle,
     primary_job_title_line_2: primaryJobTitleLine2,
-    partner_agencies: agencies,
     image,
     biography,
     email,
     phone,
     social_media: socialMedia,
-    contact_address: contactAddress,
     contact,
     spotlight,
     quick_links: quickLinks
@@ -42,35 +34,21 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
         <DisplayLg as="h1" className="my-40">
           {title}
         </DisplayLg>
-        <HeroProfile
+        {/* <HeroProfile
           name={title}
           pronouns={pronouns}
           jobTitle={primaryJobTitle}
           jobTitleLine2={primaryJobTitleLine2}
           image={image}
-          socialMedia={socialMedia}
           biography={biography}
           email={email}
           phone={phone[0].value}
-        />
+        /> */}
         <When condition={!!spotlight.length}>
           <Spotlight {...spotlight[0]} />
         </When>
         <QuickLinkList links={quickLinks} />
-        <When condition={!!agencies.length}>
-          <RelatedContentList
-            className="my-40"
-            content={agencies}
-            title={
-              t('additional-city-roles', {
-                defaultValue: 'Additional city roles'
-              }) as string
-            }
-          />
-        </When>
-        <When condition={!!contactAddress.length || !!contact.length}>
-          <ContactFooter items={[...contactAddress, ...contact]} />
-        </When>
+        <ContactFooter items={contact[0]} />
       </Container>
     </PageWrapper>
   )

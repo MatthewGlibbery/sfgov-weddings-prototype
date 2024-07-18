@@ -67,6 +67,10 @@ export type PageData = object &
 
 export type RelatedContentData = MinimalPageData
 
+export type PrimaryAgencyData = {
+  primary_agency: RelatedContentData
+}
+
 export type RelatedContentTransactionBlock = BlockType<
   'transaction',
   MinimalPageData
@@ -80,7 +84,7 @@ export type EventPageData = PageData & {
   call_to_action: TypeCallToActionBlock[]
   image: WagtailImageData
   body: string
-  contact: (TypeEmailBlock | TypePhoneNumberBlock)[]
+  contact: TypeContactFooterBlock[]
   partner_agencies: RelatedContentData[]
   topics: RelatedContentData[]
 }
@@ -90,15 +94,15 @@ export type InfoPageSection =
   | TypeTitleAndTextBlock
   | TypeCalloutBlock
 
-export type InfoPageData = PageData & {
-  description: string
-  primary_agency: RelatedContentData
-  information_section?: InfoPageSection[]
-  part_of: RelatedContentData[]
-  partner_agencies: RelatedContentData[]
-  topics: RelatedContentData[]
-  related_pages: RelatedContentData[]
-}
+export type InfoPageData = PageData &
+  PrimaryAgencyData & {
+    description: string
+    information_section?: InfoPageSection[]
+    part_of: RelatedContentData[]
+    partner_agencies: RelatedContentData[]
+    topics: RelatedContentData[]
+    related_pages: RelatedContentData[]
+  }
 
 export type StepByStepData = PageData & {
   description: string
@@ -132,24 +136,23 @@ export type TransactionPageData = PageData & {
   related_pages: RelatedContentData[]
 }
 
-export type ProfilePageData = PageData & {
-  title: string
-  pronouns: string
-  profile_type: string
-  primary_job_title: string
-  primary_job_title_line_2: string
-  partner_agencies: RelatedContentData[]
-  show_contact: boolean
-  image: WagtailImageData
-  biography: string
-  email: string
-  phone: BlockType<'phone', string>[]
-  social_media: TypeSocialMediaBlock[]
-  contact_address: TypeLocationBlock[]
-  contact: (TypeEmailBlock | TypePhoneNumberBlock)[]
-  spotlight: TypeSpotlightBlock[]
-  quick_links: TypeQuickLinkBlock[]
-}
+export type ProfilePageData = PageData &
+  PrimaryAgencyData & {
+    title: string
+    pronouns: string
+    profile_type: string
+    primary_job_title: string
+    primary_job_title_line_2: string
+    partner_agencies: RelatedContentData[]
+    image: WagtailImageData
+    biography: string
+    email: string
+    phone: BlockType<'phone', string>[]
+    social_media: TypeSocialMediaBlock[]
+    contact: TypeContactFooterBlock[]
+    spotlight: TypeSpotlightBlock[]
+    quick_links: TypeQuickLinkBlock[]
+  }
 
 export type TopicPageData = PageData & {
   description: string
@@ -168,11 +171,11 @@ export type NewsPageData = PageData & {
   partner_agencies: RelatedContentData[]
 }
 
-export type AboutPageData = PageData & {
-  primary_agency: RelatedContentData
-  about_info: TypeTitleAndTextBlock[]
-  resources: (TypeDownloadableFilesBlock | TypeResourcesSectionBlock)[]
-}
+export type AboutPageData = PageData &
+  PrimaryAgencyData & {
+    about_info: TypeTitleAndTextBlock[]
+    resources: (TypeDownloadableFilesBlock | TypeResourcesSectionBlock)[]
+  }
 
 export type LocationPageData = PageData & {
   location_name: string
@@ -218,7 +221,7 @@ export type AgencyPageData = PageData & {
   partner_agencies: RelatedContentData[]
   call_to_action: TypeCallToActionBlock[]
   social_media: TypeSocialMediaBlock[]
-  contact: (TypeLocationBlock | TypeEmailBlock | TypePhoneNumberBlock)[]
+  contact: TypeContactFooterBlock[]
   public_records: (
     | BlockType<'link', string>
     | BlockType<'email', string>
@@ -249,18 +252,18 @@ export type CampaignPageData = PageData & {
   related_links: TypeContentTileBlock[]
 }
 
-export type MeetingPageData = PageData & {
-  primary_agency: RelatedContentData
-  partner_agencies: RelatedContentData[]
-  cancelled: boolean
-  date_time: TypeDateTimeBlock[]
-  meeting_location: (TypeLocationBlock | TypeOnlineEventBlock)[]
-  overview: string
-  agenda: TypeAgendaItemBlock[]
-  videos: TypeVideoBlock[]
-  notices: TypeTitleAndTextBlock[]
-  related_documents: TypeDownloadableFilesBlock[]
-}
+export type MeetingPageData = PageData &
+  PrimaryAgencyData & {
+    partner_agencies: RelatedContentData[]
+    cancelled: boolean
+    date_time: TypeDateTimeBlock[]
+    meeting_location: (TypeLocationBlock | TypeOnlineEventBlock)[]
+    overview: string
+    agenda: TypeAgendaItemBlock[]
+    videos: TypeVideoBlock[]
+    notices: TypeTitleAndTextBlock[]
+    related_documents: TypeDownloadableFilesBlock[]
+  }
 
 export type DataStoryPageData = PageData & {
   description: string
