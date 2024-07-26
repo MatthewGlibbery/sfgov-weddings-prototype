@@ -50,11 +50,10 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   } catch (error) {
     console.error(
-      'No page found for path: "%s", locale: "%s", query: "%s", headers: "%s"',
+      'No page found for path: "%s", locale: "%s", query: "%s"',
       resolvedUrl,
       locale,
-      query,
-      req.headers
+      query
     )
   }
   return {

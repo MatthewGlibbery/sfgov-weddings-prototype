@@ -210,8 +210,6 @@ export class ContentAPI implements IContentAPI {
       pagePath = pagePath.substring(0, pagePath.indexOf('?'))
       url.searchParams.set('path', pagePath)
     }
-    console.info(`loadPreview:${url.toString()}`)
-    console.info(options)
     return this.fetch(url.toString(), options)
   }
 
