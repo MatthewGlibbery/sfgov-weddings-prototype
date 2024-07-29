@@ -4,7 +4,6 @@ import type { ComponentType } from 'react'
 import { camelCase } from '@/lib/utils'
 
 import {
-  classes,
   Container,
   DisplayLg,
   Grid,

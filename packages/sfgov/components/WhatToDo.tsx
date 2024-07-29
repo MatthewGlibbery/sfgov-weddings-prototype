@@ -1,4 +1,11 @@
-import { BodyText, Button, classed, HeadingXl } from '@/design-system'
+import {
+  BodyText,
+  Button,
+  classed,
+  HeadingXl,
+  IconDocument,
+  Link
+} from '@/design-system'
 import { When } from 'react-if'
 import { Callout } from './Callout'
 import { EmailBlock } from './EmailBlock'
@@ -7,6 +14,7 @@ import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { RichText } from './RichText'
 import type * as Types from '@/types'
 import { camelCase } from '@/lib/utils'
+import { DocumentLink } from './DocumentLink'
 
 type WhatToDoStepBlockProps = Types.TypeWhatToDoStepBlock & {
   index: number
@@ -46,10 +54,8 @@ const StepContent = (block: Types.TypeStepSpecificsVariant) => {
           <RichText html={block.value} />
         </BodyText>
       )
-    /* TODO: document upload component
     case 'document':
-      content = <BodyText>{block.value}</BodyText>
-    */
+      return <DocumentLink document={block.value} />
   }
 }
 

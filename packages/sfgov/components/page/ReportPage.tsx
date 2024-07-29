@@ -18,6 +18,7 @@ import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
 import { ComposedDate } from '../DateTime'
 import { Spotlight } from '../Spotlight'
 import { RelatedContentList } from '../RelatedContentList'
+import { DocumentLink } from '../DocumentLink'
 
 export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
   page
@@ -55,14 +56,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
               <HeadingXl as="h3" className="mb-20">
                 {t('Print version')}
               </HeadingXl>
-              <Link
-                href={printVersion.meta.download_url}
-                className="flex gap-4"
-                key={printVersion.id}
-              >
-                <IconDocument width={20} />
-                {printVersion.title}
-              </Link>
+              <DocumentLink document={printVersion} />
             </When>
           </div>
         </Grid>

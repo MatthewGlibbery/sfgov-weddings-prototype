@@ -56,7 +56,8 @@ import {
   FormPageData,
   TypeDocumentSectionBlock,
   ResourceCollectionPageData,
-  TypeButtonLinkValues
+  TypeButtonLinkValues,
+  TypeDocumentBlockValues
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -753,15 +754,17 @@ export const ImageFactory = factory<WagtailImageData>((gen) => ({
   }
 }))
 
+export const DocumentValueFactory = factory<TypeDocumentBlockValues>((gen) => ({
+  id: gen.datatype.number(),
+  title: gen.lorem.sentence(),
+  file: gen.internet.url(),
+  description: gen.lorem.sentence(),
+  published_date: gen.date.past().toDateString()
+}))
+
 export const DocumentBlockFactory = factory<TypeDocumentBlock>((gen) => ({
   type: 'document',
-  value: {
-    id: gen.datatype.number(),
-    title: gen.lorem.sentence(),
-    file: gen.internet.url(),
-    description: gen.lorem.sentence(),
-    published_date: gen.date.past().toDateString()
-  },
+  value: DocumentValueFactory.make(),
   id: gen.datatype.uuid()
 }))
 
@@ -1312,15 +1315,7 @@ export const ReportPageFactory = factory<ReportPageData>((gen) => ({
   date: gen.date.soon().toString().split('T')[0],
   body: TextBlockFactory.make().value,
   spotlight: [],
-  print_version: {
-    id: gen.datatype.number(),
-    meta: {
-      type: 'cms.BaseDocument',
-      detail_url: gen.internet.url(),
-      download_url: gen.internet.url()
-    },
-    title: gen.lorem.sentence()
-  },
+  print_version: DocumentValueFactory.make(),
   partner_agencies: []
 }))
 

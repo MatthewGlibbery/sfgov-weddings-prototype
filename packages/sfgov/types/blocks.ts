@@ -151,6 +151,17 @@ export type TypeCallToActionValues = {
   button_link: TypeButtonLinkValues
 }
 
+export type TypeDocumentBlockValues = {
+  id: number
+  title: string
+  file: string
+  description?: string
+  published_date?: string
+  collection?: number
+}
+
+export type TypeDocumentBlock = BlockType<'document', TypeDocumentBlockValues>
+
 export type TypeCallToActionBlock = BlockType<string, TypeCallToActionValues>
 
 /* Transaction Page */
@@ -169,7 +180,8 @@ export type TypeStepSpecificsVariant =
   | TypeEmailBlock
   | TypeButtonLinkBlock
   | TypePhoneNumberBlock
-  | TypeTextBlock // TODO: add document upload type once we handle uploads
+  | TypeTextBlock
+  | TypeDocumentBlock
 
 export type TypeWhatToDoStepBlock = BlockType<
   'what_to_do_step',
@@ -333,17 +345,6 @@ export type TypeVideoBlockValues = {
 }
 
 export type TypeVideoBlock = BlockType<'video', TypeVideoBlockValues>
-
-export type TypeDocumentBlockValues = {
-  id: number
-  title: string
-  file: string
-  description?: string
-  published_date?: string
-  collection?: number
-}
-
-export type TypeDocumentBlock = BlockType<'document', TypeDocumentBlockValues>
 
 export type TypeDownloadableFilesBlockValues = {
   title: string
