@@ -376,6 +376,34 @@ describe('ContentAPI', () => {
       expect(res).toEqual(expectedData)
     })
 
+    it('fetches related image data', async () => {
+      const data = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        logo: 'https://some/images/detail.path'
+      }
+      const imageData = {
+        id: 4456,
+        meta: {
+          download_url: '/media/original_images/download_2_FPWtavT.jpeg',
+          type: 'cms.BaseImage'
+        },
+        title: 'asdf'
+      }
+      const expectedData = {
+        meta: { type: 'foo.Bar' },
+        logo: imageData
+      }
+      fetchMock.mockResponseOnce(JSON.stringify(imageData))
+      const res = await example.getPreviewRelatedData('foo', data)
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(fetchMock).toHaveBeenLastCalledWith(
+        'https://some/images/detail.path'
+      )
+      expect(res).toEqual(expectedData)
+    })
+
     it('deals with non-Array related data', async () => {
       const data = {
         meta: {

@@ -133,18 +133,24 @@ export class ContentAPI implements IContentAPI {
   }
 
   async getPreviewRelatedData<T = unknown>(path: string, data: object) {
+    // the current cms api responds with detail urls for related data
+    // so we have to make an additional fetch to retrieve the related object's
+    // fully serialized details.  the related object can be another page,
+    // an image, a document, or anything, really
     const getRelatedData = async (url: string) => {
+      let data = null
       try {
         const res = await this.fetch(url)
-        const data = await res.json()
-
-        return {
-          title: data.title,
-          meta: { html_url: data.html_path }
-        }
+        data = await res.json()
       } catch (error) {
         return null
       }
+      return url.match(/\/images\//) // the related data is an image
+        ? data
+        : {
+            title: data.title,
+            meta: { html_url: data.html_path }
+          }
     }
 
     const relatedData = {
@@ -155,6 +161,7 @@ export class ContentAPI implements IContentAPI {
       related_pages: [],
       primary_agency: {},
       logo: null,
+      background_header_image: null,
       image: null,
       main_image: null
     }
