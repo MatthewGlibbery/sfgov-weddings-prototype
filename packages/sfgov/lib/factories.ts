@@ -434,7 +434,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   logo: ImageFactory.make(),
   main_image: ImageFactory.make(),
   alert: AlertBlockFactory.make(1),
-  spotlight_primary: SpotlightFactory.make(1),
+  spotlight_1: SpotlightFactory.make(1),
   quicklinks: QuickLinkFactory.make(3),
   meeting_information: [
     LocationBlockFactory.make(),
@@ -452,7 +452,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
       id: gen.datatype.uuid()
     }
   ],
-  spotlight_secondary: SpotlightFactory.make(1),
+  spotlight_2: SpotlightFactory.make(1),
   resources: [
     {
       type: 'resources',
@@ -483,9 +483,15 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   call_to_action: CallToActionFactory.make(1),
   social_media: SocialMediaFactory.make(1),
   contact: [
-    LocationBlockFactory.make(),
-    PhoneNumberFactory.make(),
-    EmailBlockFactory.make()
+    {
+      type: 'contact',
+      value: {
+        address: [],
+        phone: [PhoneNumberFactory.make()],
+        email: [EmailBlockFactory.make()],
+        social_media_other: [SocialMediaFactory.make()]
+      }
+    }
   ],
   public_records: [
     {

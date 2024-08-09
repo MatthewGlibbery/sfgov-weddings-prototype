@@ -42,11 +42,11 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     description,
     main_image: mainImage,
     alert,
-    spotlight_primary: spotlightPrimary,
+    spotlight_1: spotlight1,
     quicklinks,
     meeting_information: meetingInformation,
     services,
-    spotlight_secondary: spotlightSecondary,
+    spotlight_2: spotlight2,
     resources,
     about_description: aboutDescription,
     child_agency_section_title: childAgencySectionTitle,
@@ -177,9 +177,9 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               )}
             </When>
           </When>
-          <When condition={!!spotlightPrimary.length}>
+          <When condition={!!spotlight1.length}>
             <div className="mb-80">
-              <Spotlight {...spotlightPrimary[0]} />
+              <Spotlight {...spotlight1[0]} />
             </div>
           </When>
         </Container>
@@ -218,20 +218,16 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               }))}
             />
             {/* <BragBar /> */}
-            <When condition={!!spotlightSecondary.length}>
+            <When condition={!!spotlight2.length}>
               <div className="mb-80">
-                <Spotlight {...spotlightSecondary[0]} />
+                <Spotlight {...spotlight2[0]} />
               </div>
             </When>
           </Container>
         </When>
         <When
           condition={
-            !!resources.length ||
-            aboutDescription ||
-            !!callToAction.length ||
-            !!relatedChildAgencies.length ||
-            !!relatedContentAgencies.length
+            !!resources.length || aboutDescription || !!callToAction.length
           }
         >
           <Container className="mt-40">
@@ -262,29 +258,16 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                 </When>
               </div>
             </When>
-            <RelatedContentList
-              title={
-                // istanbul ignore next
-                childAgencySectionTitle ? t(`${childAgencySectionTitle}`) : ''
-              }
-              content={relatedChildAgencies}
-              className="mt-12"
-            />
-            <RelatedContentList
-              title={t('related', { defaultValue: 'Related' })}
-              content={relatedContentAgencies}
-              className="mt-12"
-            />
           </Container>
         </When>
-        <When condition={!!contact.length || !!socialMedia.length}>
+        <When condition={!!contact.length}>
           <Container>
             <HeadingXXl as="h2" className="my-12 md:my-20">
               {t('contact-information', {
                 defaultValue: 'Contact information'
               })}
             </HeadingXXl>
-            <ContactFooter items={[...contact, ...socialMedia]} />
+            <ContactFooter items={contact[0]} />
           </Container>
         </When>
         <When condition={!!publicRecords.length || archiveUrl}>

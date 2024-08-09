@@ -206,13 +206,13 @@ export type AgencyPageData = PageData & {
   logo?: WagtailImageData
   main_image?: WagtailImageData
   alert: TypeAlertBlock[]
-  spotlight_primary: TypeSpotlightBlock[]
+  spotlight_1: TypeSpotlightBlock[]
   quicklinks: TypeQuickLinkBlock[]
   meeting_information: (TypeLocationBlock | TypeTitleAndTextBlock)[]
   meeting_archive_date: string
   meeting_archive_url: string
   services: TypeServicesSectionBlock[]
-  spotlight_secondary: TypeSpotlightBlock[]
+  spotlight_2: TypeSpotlightBlock[]
   resources: TypeResourcesSectionBlock[]
   about_description: string
   child_agency_section_title: string
