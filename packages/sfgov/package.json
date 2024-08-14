@@ -30,13 +30,15 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.7.3",
-    "@playwright/experimental-ct-react": "^1.44.1",
-    "@playwright/test": "^1.41.2",
+    "@playwright/experimental-ct-react": "^1.46.0",
+    "@playwright/test": "^1.46.0",
     "@types/micromatch": "^4.0.2",
     "@types/node": "^20.9.0",
     "@types/safe-json-stringify": "^1.1.2",
+    "@types/tinycolor2": "^1.4.6",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.2"
+    "tailwindcss": "^3.3.2",
+    "tinycolor2": "^1.6.0"
   }
 }

@@ -1,70 +1,71 @@
-import { AgencyPage } from '@/components'
-import { AgencyPageFactory } from '@/lib/factories'
+import { AboutPage } from '../components/page/AboutPage'
+import { AboutPageFactory } from '../lib/factories'
 import { test, expect } from './fixtures'
+import React from 'react'
 
 test.describe('A11y tests', () => {
   test('headings are rendered in a logical reading order', async ({
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrder()
   })
 
   test('has accessible landmarks', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLandmarks()
   })
 
   test('has accessible landmark roles', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLandmarkRoles()
   })
 
   test('has search landmarks plus aria', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveSearchLandmarksPlusAria()
   })
 
   test('has prefers reduced motion', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHavePrefersReducedMotion()
   })
 
   test('has language access', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLanguageAccess()
   })
 
   test('has language interaction', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLanguageInteraction()
   })
 
   test('has language access in dropdown menu', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLanguageAccessInDropdownmenu()
   })
 
   test('is keyboard accessible', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toBeKeyboardAccessible()
   })
@@ -73,15 +74,15 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveColorContrast()
   })
 
   test('do links have descriptive aria label text', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveDescriptiveLinkText()
   })
@@ -90,8 +91,8 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveRequiredAttributes()
   })
@@ -100,15 +101,15 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveRequiredFormAttributes()
   })
 
   test('has inline error messaage', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveErrorMessage()
   })
@@ -117,22 +118,22 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toNotHaveDashesAndParentheses()
   })
 
   test('keyboard access to date picker', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toAccessDatePicker()
   })
 
   test('keyboard access to date picker input', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toAccessDatePickerInput()
   })
@@ -141,8 +142,8 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toAssociateFormInstructionsWithFormControl()
   })
@@ -151,22 +152,22 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toAssociateSpecificFormInstructionsWithFormControl()
   })
 
   test('Power BI Dashboard is accessible', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toMakePowerBiDashboardAccessible()
   })
 
   test('delete items in multiselect combobox', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toDeleteItemsInMultiselectCombobox()
   })
@@ -175,8 +176,8 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toIncludeFieldsetandLegend()
   })
@@ -185,15 +186,15 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveStepbyStepLogicalReadingOrder()
   })
 
   test('correct tab order in main landmark', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).CorrectTabOrderInMainContentArea()
   })
@@ -202,8 +203,8 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderonTransactionCT()
   })
@@ -212,25 +213,18 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderonMeetingCT()
-  })
-
-  test('logical reading order in get help section', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderGetHelp()
   })
 
   test('logical reading order in contact information section', async ({
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderContactInfo()
   })
@@ -239,8 +233,8 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderMeetingResources()
   })
@@ -249,8 +243,8 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveAndOrAriaLabels()
   })
@@ -259,28 +253,18 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveInformationLogicalReadingOrder()
-  })
-
-  test('logical reading order in the what to know section', async ({
-    mount,
-    page
-  }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderWhatToKnow()
   })
 
   test('logical reading order in the contact us section', async ({
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderContactUs()
   })
@@ -289,8 +273,8 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderEventDetails()
   })
@@ -299,22 +283,22 @@ test.describe('A11y tests', () => {
     mount,
     page
   }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderAboutUs()
   })
 
   test('no URL in link text', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toHaveURLInLinkText()
   })
 
   test('has no accessibility violations', async ({ mount, page }) => {
-    const data = AgencyPageFactory.make()
-    await mount(<AgencyPage page={data} />)
+    const data = AboutPageFactory.make()
+    await mount(<AboutPage page={data} />)
 
     await expect(page).toPassA11yScan()
   })

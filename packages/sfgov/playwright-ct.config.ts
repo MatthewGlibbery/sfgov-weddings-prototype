@@ -27,9 +27,6 @@ export default defineConfig({
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    launchOptions: {
-      slowMo: 2000
-    },
 
     /* Port to use for Playwright component endpoint. */
     ctPort: 3100,
@@ -46,6 +43,7 @@ export default defineConfig({
             '../../packages/design-system/index.ts'
           ),
           '@/components': path.resolve(__dirname, './components/index.ts'),
+          '@/lib/factories': path.resolve(__dirname, './lib/factories.ts'),
           '@/lib/utils': path.resolve(__dirname, './lib/utils.ts'),
           '@/types': path.resolve(__dirname, './types/index.ts'),
           'next/router': path.resolve(__dirname, './__mocks__/next/router.ts'),

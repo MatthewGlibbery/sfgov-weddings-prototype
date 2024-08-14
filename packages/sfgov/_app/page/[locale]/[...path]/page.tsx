@@ -26,7 +26,7 @@ const componentsByPageType = new Map([
   ]
 ])
 
-export default async function Page({ params }: PageComponentProps) {
+export const Page = async ({ params }: PageComponentProps) => {
   const path = params.path.join('/')
   const { locale } = params
   const page = await api.getPageByPath(path, { locale })
@@ -34,3 +34,5 @@ export default async function Page({ params }: PageComponentProps) {
   const Component = componentsByPageType.get(pageType) as PageComponent
   return <Component page={page} />
 }
+
+export default Page

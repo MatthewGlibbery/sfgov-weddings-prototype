@@ -5,12 +5,14 @@ import type { PageParams } from './page'
 
 const api = new ContentAPI()
 
-export default async function PageLayout({
+export const PageLayout = ({
   params,
   children
-}: AppRouterPageProps<PageParams>) {
+}: AppRouterPageProps<PageParams>) => {
   const path = params.path.join('/')
   const locale = params.locale
   const page = await api.getPageByPath(path, { locale })
   return <PageWrapper title={page.title}>{children}</PageWrapper>
 }
+
+export default PageLayout
