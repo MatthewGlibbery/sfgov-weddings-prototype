@@ -128,8 +128,59 @@ export class ContentAPI implements IContentAPI {
     }
 
     previewData.data.meta = previewData.meta
-    previewData.data = await this.getPreviewRelatedData(path, previewData.data)
+    await this.getPreviewRelatedData(path, previewData.data)
+    await this.massageData(previewData.data)
     return previewData.data as T
+  }
+
+  async massageData(obj: any) {
+    if (!obj || typeof obj !== 'object' || !Object.keys(obj).length) return
+
+    for (const key of Object.keys(obj)) {
+      let fetchUrl = null
+      const value = obj[key]
+
+      if (typeof value === 'number') {
+        // we've encountered a numerical value for a key
+        // inspect the key
+        let fetchEndpoint = null
+        if (key.includes('page')) {
+          fetchEndpoint = 'pages'
+        } else if (key.includes('image')) {
+          fetchEndpoint = 'images'
+        } else if (key.includes('document')) {
+          fetchEndpoint = 'documents'
+        }
+
+        if (fetchEndpoint) {
+          fetchUrl = `${process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL}/${fetchEndpoint}/${value}`
+        }
+      } else if (
+        typeof value === 'string' &&
+        value.includes('/api/cms') &&
+        key !== 'detail_url'
+      ) {
+        fetchUrl = value
+      }
+
+      if (fetchUrl) {
+        try {
+          const res = await this.fetch(fetchUrl)
+          const data = await res.json().catch(() => {
+            return value
+          })
+          obj[key] = data
+        } catch (error) {
+          console.error(
+            `Could not fetch data at ${fetchUrl} for key: ${key} with value ${value}. ${error}`
+          )
+          throw error
+        }
+      }
+
+      await this.massageData(value)
+    }
+    return obj
   }
 
   async getPreviewRelatedData<T = unknown>(path: string, data: object) {

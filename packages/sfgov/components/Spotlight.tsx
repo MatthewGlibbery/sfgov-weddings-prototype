@@ -34,17 +34,25 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
     button_link: buttonLink
   } = value
 
-  const button = buttonLink ? buttonLink[0]?.value?.button : null
-
   let ariaLabel = ''
-  if (buttonLink) {
-    ariaLabel =
-      buttonLink[0]?.value.screenreader_label.length > 0
-        ? buttonLink[0]?.value.screenreader_label
-        : `${title} ${button?.link_text}`
-  }
+  let url = ''
+  let linkText = ''
+  if (buttonLink && buttonLink[0]) {
+    const btnLink = buttonLink[0].value
+    const button = btnLink.button
 
-  const url = button?.page ? button.page.meta.html_url : button?.url
+    linkText = button?.link_text
+    ariaLabel =
+      btnLink.screenreader_label.length > 0
+        ? btnLink.screenreader_label
+        : `${title} ${linkText}`
+
+    if (button.link_to === 'url') {
+      url = button.url
+    } else if (button.link_to === 'page') {
+      url = button.page.meta?.html_url || button.page.html_path
+    }
+  }
 
   const { t } = useTranslation()
 
@@ -74,9 +82,9 @@ export const Spotlight = ({ value }: TypeSpotlightBlock) => {
             {description}
           </BodyText>
         </When>
-        <When condition={!!(url && button?.link_text)}>
+        <When condition={!!(url && linkText)}>
           <Button as="a" href={url} className="w-1/2" aria-label={ariaLabel}>
-            {button?.link_text}
+            {linkText}
           </Button>
         </When>
       </div>

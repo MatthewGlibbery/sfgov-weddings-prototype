@@ -345,6 +345,59 @@ describe('ContentAPI', () => {
     })
   })
 
+  describe('massageData()', () => {
+    it('fetches data when necessary', async () => {
+      const data = {
+        page_obj_url: 'http://api/cms/pages/url',
+        key: 'some value',
+        nested_obj: {
+          page: 123,
+          component: {
+            image: 456
+          },
+          document: 789
+        },
+        some_key: '/api/cms/0'
+      }
+      const pageUrlData = {
+        title: 'some title'
+      }
+      const nestedPageData = {
+        title: 'some nested page title'
+      }
+      const imageData = {
+        title: 'some image title',
+        file_path: 'some/file/path'
+      }
+      const documentData = {
+        title: 'some document title',
+        file_path: 'some/document/path'
+      }
+      const someKeyData = undefined
+      fetchMock
+        .once(JSON.stringify(pageUrlData))
+        .once(JSON.stringify(nestedPageData))
+        .once(JSON.stringify(imageData))
+        .once(JSON.stringify(documentData))
+        .once(JSON.stringify(someKeyData))
+
+      await example.massageData(data)
+      expect(fetchMock).toHaveBeenCalledTimes(5)
+      expect(data.page_obj_url).toEqual(pageUrlData)
+      expect(data.nested_obj.page).toEqual(nestedPageData)
+      expect(data.nested_obj.component.image).toEqual(imageData)
+      expect(data.nested_obj.document).toEqual(documentData)
+    })
+
+    it('throws on error', async () => {
+      const data = { page: 123 }
+      fetchMock.mockResponseOnce(() => {
+        throw new Error('sad face!')
+      })
+      await expect(example.massageData(data)).rejects.toThrow(/sad face/)
+    })
+  })
+
   describe('getPreviewRelatedData()', () => {
     it('fetches data', async () => {
       const data = {

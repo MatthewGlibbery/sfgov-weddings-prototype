@@ -9,18 +9,29 @@ describe('Spotlight', () => {
 
     const link = screen.getByRole('link')
     expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute(
+      'aria-label',
+      spotlight.value.button_link[0].value.screenreader_label
+    )
   })
 
-  it('renders a spotlight with an external link', () => {
-    spotlight.value.button = {
-      link_to: 'page',
-      url: '',
-      page: PageFactory.make(),
-      link_text: 'website'
+  it('renders a spotlight with an internal page link', () => {
+    spotlight.value.button_link[0].value = {
+      button: {
+        link_to: 'page',
+        url: '',
+        page: PageFactory.make(),
+        link_text: 'website'
+      },
+      screenreader_label: ''
     }
     render(<Spotlight {...spotlight} />)
 
     const link = screen.getByRole('link')
     expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute(
+      'aria-label',
+      `${spotlight.value.title} ${spotlight.value.button_link[0].value.button.link_text}`
+    )
   })
 })
