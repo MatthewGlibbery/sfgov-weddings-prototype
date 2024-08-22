@@ -46,7 +46,7 @@ describe('<RichText>', () => {
       screen.getByText('This is a paragraph.', {
         selector: 'p'
       })
-    ).toHaveAttribute('data-id', '123')
+    ).toBeInTheDocument()
   })
 
   it('renders unwrapped text nodes', () => {
@@ -75,7 +75,6 @@ describe('<RichText>', () => {
     expect(link).toBeInTheDocument()
     expect(link).toHaveTextContent('a link')
     expect(link).toHaveAttribute('href', '#hi')
-    expect(screen.getByRole('paragraph')).toHaveAttribute('data-id', '123')
     expect(screen.getByText('bold text', { selector: 'b' })).toBeInTheDocument()
   })
 

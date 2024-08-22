@@ -94,21 +94,32 @@ export const RichText = (props: RichTextProps) => {
         return
       }
 
-      if (tagName === 'blockquote') {
-        if (isNews && prev?.tagName === 'p') {
-          // news content type is special
+      if (isNews) {
+        // news content type is special
+        if (tagName === 'blockquote') {
           return (
-            <div className="flex flex-col lg:flex-row lg:w-[110%] lg:space-x-28">
-              <p className="mb-20 lg:mb-0 lg:w-1/2">
-                {domToReact(prev.children, options)}
-              </p>
+            <>
               {/* @ts-expect-error this is dumb */}
-              <Component {...props}>
+              <Component aria-hidden="true" {...props}>
                 {domToReact(node.children, options)}
               </Component>
-            </div>
+              <p className="mb-20 lg:mb-0 md:w-1/2">
+                {domToReact(node.children, options)}
+              </p>
+            </>
           )
         }
+
+        if (tagName === 'p') {
+          return (
+            <p className="md:w-[90%] lg:w-3/4 my-28">
+              {domToReact(node.children, options)}
+            </p>
+          )
+        }
+      }
+
+      if (tagName === 'blockquote') {
         return (
           <blockquote className="p-8 border-l-neutral500 border-solid border-l-3">
             {domToReact(node.children, options)}
@@ -138,6 +149,10 @@ export const RichText = (props: RichTextProps) => {
 
       if (tagName === 'ol') {
         return <ol className="m-0">{domToReact(node.children, options)}</ol>
+      }
+
+      if (tagName === 'p') {
+        return <p className="my-28">{domToReact(node.children, options)}</p>
       }
 
       return (

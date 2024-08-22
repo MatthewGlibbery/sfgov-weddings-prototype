@@ -10,6 +10,7 @@ type ComposedDateProps = {
   startDateInput: string
   endDateInput?: string
   locale?: string
+  dateStyle?: 'full' | 'long' | 'medium' | 'short' | undefined
 }
 
 /**
@@ -33,7 +34,8 @@ type ComposedDateProps = {
 export const ComposedDate = ({
   startDateInput,
   endDateInput = '',
-  locale = 'en-US'
+  locale = 'en-US',
+  dateStyle = 'full'
 }: ComposedDateProps) => {
   if (typeof startDateInput !== 'string' || typeof endDateInput !== 'string') {
     console.warn(
@@ -44,7 +46,7 @@ export const ComposedDate = ({
   }
 
   try {
-    const formatter = Intl.DateTimeFormat(locale, { dateStyle: 'full' })
+    const formatter = Intl.DateTimeFormat(locale, { dateStyle })
     const startDate = new Date(`${startDateInput}T00:00:00`)
 
     if (!endDateInput || startDateInput === endDateInput) {
