@@ -30,8 +30,8 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.7.3",
-    "@playwright/experimental-ct-react": "^1.46.0",
-    "@playwright/test": "^1.46.0",
+    "@playwright/experimental-ct-react": "^1.46.1",
+    "@playwright/test": "^1.46.1",
     "@types/micromatch": "^4.0.2",
     "@types/node": "^20.9.0",
     "@types/safe-json-stringify": "^1.1.2",

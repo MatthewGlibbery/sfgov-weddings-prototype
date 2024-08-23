@@ -13,7 +13,7 @@ export const PageLinksList = ({ pageLinks, label }: PageLinksListProps) => {
         <span>{label}</span>
       </When>
       <When condition={!!pageLinks.length}>
-        <ul className="list-none inline-block m-0 p-0">
+        <div>
           {pageLinks.map((pageLink, i) => (
             <span
               key={pageLink.id}
@@ -26,7 +26,7 @@ export const PageLinksList = ({ pageLinks, label }: PageLinksListProps) => {
               />
             </span>
           ))}
-        </ul>
+        </div>
       </When>
     </div>
   )

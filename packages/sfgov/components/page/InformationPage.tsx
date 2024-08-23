@@ -32,7 +32,6 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
   } = page
 
   const { t } = useTranslation()
-  console.log(primaryAgency, partOf, agencies, topics, pages)
 
   return (
     <PageWrapper title={title}>
