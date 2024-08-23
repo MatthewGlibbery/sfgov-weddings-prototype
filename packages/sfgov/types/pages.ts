@@ -237,7 +237,8 @@ export type AgencyPageData = PageData & {
 
 export type CampaignPageData = PageData & {
   logo: WagtailImageData
-  theme: string
+  background_header_image: WagtailImageData
+  theme: 'blue' | 'black' | 'green' | 'orange' | ''
   spotlight_1: TypeSpotlightBlock[]
   facts_title: string
   fact_items: (BlockType<'image', WagtailImageData> | TypeTitleAndTextBlock)[]
@@ -249,7 +250,7 @@ export type CampaignPageData = PageData & {
   spotlight_2: TypeSpotlightBlock[]
   about_campaign: string
   partner_agencies: RelatedContentData[]
-  related_links: TypeContentTileBlock[]
+  related_links: RelatedContentData[]
 }
 
 export type MeetingPageData = PageData &

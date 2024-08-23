@@ -16,7 +16,7 @@ export const ServicesAndResourcesSection = ({
 }: ServicesAndResourcesSectionProps) => {
   return (
     <div className="mb-20">
-      <HeadingXl romanType="sans" as="h3" className="text-grey700">
+      <HeadingXl romanType="sans" as="p" className="text-neutral700">
         {title}
       </HeadingXl>
       <When condition={type === 'resources'}>

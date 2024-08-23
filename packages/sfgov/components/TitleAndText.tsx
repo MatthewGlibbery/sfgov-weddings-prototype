@@ -8,6 +8,7 @@ export type TitleAndTextProps = JSX.IntrinsicElements['section'] &
     as?: string
     id?: string
     heading?: React.FC
+    headingClasses?: string
   }
 
 export const TitleAndText = ({
@@ -16,6 +17,7 @@ export const TitleAndText = ({
   as = 'h3',
   id,
   heading,
+  headingClasses,
   ...rest
 }: TitleAndTextProps) => {
   if (!title && !text) return null
@@ -23,7 +25,7 @@ export const TitleAndText = ({
   return (
     <section className="flex flex-col gap-y-12" {...rest}>
       <When condition={!!title}>
-        <TitleComponent as={as} id={id || ''}>
+        <TitleComponent as={as} id={id || ''} className={headingClasses}>
           {title}
         </TitleComponent>
       </When>

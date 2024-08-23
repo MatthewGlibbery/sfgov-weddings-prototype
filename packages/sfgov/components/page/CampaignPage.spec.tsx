@@ -8,10 +8,7 @@ describe('CampaignPage', () => {
   it('renders a campaign page', () => {
     render(<CampaignPage page={page} />)
 
-    const title = screen.getByRole('heading', {
-      level: 1
-    })
-    expect(title).toBeInTheDocument()
-    expect(title).toHaveTextContent(page.title)
+    const title = screen.getAllByText(page.title)
+    expect(title[0]).toBeInTheDocument()
   })
 })

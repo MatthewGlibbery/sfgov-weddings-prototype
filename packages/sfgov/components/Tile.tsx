@@ -91,7 +91,7 @@ export const ServiceAndResourceTile = ({ link }: TileProps) => {
             {link.title}
           </HeadingMd>
         </BaseTile>
-        <IconChevronRight className="ml-16 text-primary600" width={20} />
+        <IconChevronRight className="ml-16 mt-2 text-primary600" width={20} />
       </div>
       <p>{link.description}</p>
     </div>
@@ -234,9 +234,13 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
       }
     })
     return (
-      <TileSection role="list" className="gap-x-28 gap-y-16" {...rest}>
+      <TileSection
+        className="gap-x-28 gap-y-16"
+        data-testid="tile-section"
+        {...rest}
+      >
         {items.map((link) => (
-          <TileComponent key={link.id} role="listitem" link={link} />
+          <TileComponent key={link.id} link={link} />
         ))}
       </TileSection>
     )

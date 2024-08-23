@@ -26,7 +26,6 @@ import {
   PageWrapper,
   QuickLinkList,
   PageLinksList,
-  RelatedContentList,
   RichText,
   Spotlight,
   ZebraStripedSection

@@ -28,7 +28,7 @@ const StyledSummary = classed('summary', {
 })
 
 const StyledContent = classed('div', {
-  base: 'bg-neutral50 p-20',
+  base: 'bg-neutral50 rounded-b-4 border-x-1 border-b-1 border-neutral200 p-20',
   variants: {
     datastory: {
       true: 'bg-white text-grey500'
@@ -40,10 +40,19 @@ export type AccordionProps = ComponentProps<typeof StyledDetails> & {
   title: string
   dataStory?: boolean
   as?: string
+  classes?: string
 }
 
 export const Accordion = (props: AccordionProps) => {
-  const { title, open, children, dataStory, as = 'h3', ...rest } = props
+  const {
+    title,
+    open,
+    children,
+    dataStory,
+    as = 'h3',
+    classes,
+    ...rest
+  } = props
 
   let OpenedIcon = IconMinus
   let ClosedIcon = IconPlus
@@ -85,7 +94,11 @@ export const Accordion = (props: AccordionProps) => {
           width={24}
         />
       </StyledSummary>
-      <StyledContent data-testid="accordion-content" datastory={dataStory}>
+      <StyledContent
+        className={classes}
+        data-testid="accordion-content"
+        datastory={dataStory}
+      >
         {children}
       </StyledContent>
     </StyledDetails>

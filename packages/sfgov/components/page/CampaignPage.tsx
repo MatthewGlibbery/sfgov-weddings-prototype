@@ -1,14 +1,26 @@
-import { Container, DisplayXXXl, HeadingXXl, PageLabel } from '@/design-system'
+import {
+  classes,
+  Container,
+  DisplayXXXl,
+  Grid,
+  HeadingLg,
+  HeadingXXl,
+  Link,
+  PageLabel,
+  PageTitleSection
+} from '@/design-system'
 import { getPageURL } from '@/lib/utils'
 import {
   CampaignPageData,
   TypeAccordionSectionBlock,
   TypeImageWithTextBlock,
-  TypeResourcesSectionBlock
+  TypeResourcesSectionBlock,
+  TypeVideoBlock,
+  WagtailImageData
 } from '@/types'
 import { ComponentType } from 'react'
 import { useTranslation } from 'next-i18next'
-import { When, If } from 'react-if'
+import { When } from 'react-if'
 import { Accordion } from '../Accordion'
 import { Image } from '../Image'
 import { Location } from '../Location'
@@ -19,6 +31,7 @@ import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
 import { Spotlight } from '../Spotlight'
 import { TitleAndText } from '../TitleAndText'
 import { PageWrapper } from './PageWrapper'
+import { Video } from '../Video'
 
 export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   page
@@ -26,7 +39,8 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   const {
     title,
     logo,
-    // theme,
+    background_header_image: headerImage,
+    theme,
     spotlight_1: spotlight1,
     facts_title: factsTitle,
     fact_items: factItems,
@@ -39,23 +53,80 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
 
   const { t } = useTranslation()
 
+  const themeBackground = {
+    spotlight1: 'bg-primary50',
+    spotlight2: 'bg-primary700',
+    accordion: '',
+    video: 'bg-primary10'
+  }
+  const themeText = {
+    spotlight1: 'text-primary800',
+    spotlight2: 'text-white'
+  }
+  const themeButton = {
+    spotlight1: '',
+    spotlight2: 'bg-white text-primary600'
+  }
+  switch (theme) {
+    case 'black':
+      themeBackground.spotlight1 = 'bg-neutral800'
+      themeBackground.spotlight2 = 'bg-neutral800'
+      themeBackground.video = 'bg-neutral10'
+      themeText.spotlight1 = 'text-white'
+      themeText.spotlight2 = 'text-white'
+      themeButton.spotlight1 = 'bg-white text-primary600'
+      break
+    // istanbul ignore next
+    case 'green':
+      themeBackground.spotlight1 = 'bg-secondary50'
+      themeBackground.spotlight2 = 'bg-secondary600'
+      themeBackground.accordion = 'bg-secondary10 border-secondary200'
+      themeBackground.video = 'bg-secondary10'
+      themeText.spotlight1 = 'text-secondary800'
+      themeText.spotlight2 = 'text-white'
+      break
+    // istanbul ignore next
+    case 'orange':
+      themeBackground.spotlight1 = 'bg-accent50'
+      themeBackground.spotlight2 = 'bg-accent600'
+      themeBackground.accordion = 'bg-accent10 border-accent200'
+      themeBackground.video = 'bg-accent10'
+      themeText.spotlight1 = 'text-accent800'
+      themeText.spotlight2 = 'text-white'
+      break
+    // istanbul ignore next
+    default:
+      break
+  }
+
   const getAdditionalContentComponent = (
     content:
       | TypeImageWithTextBlock
       | TypeResourcesSectionBlock
       | TypeAccordionSectionBlock
+      | TypeVideoBlock
   ) => {
     switch (content.type) {
       case 'image_with_text':
         return (
-          <div className="border-2 border-grey300 rounded px-12 space-y-20">
-            <When condition={!!content.value.image}>
-              <Image imageRef={content.value.image} />
-            </When>
-            <TitleAndText
-              title={content.value.title}
-              text={content.value.description}
-            />
+          <div
+            className={classes(
+              themeBackground.spotlight2,
+              'text-white py-28 md:rounded-4'
+            )}
+          >
+            <div className="flex flex-col mx-20">
+              <When condition={!!content.value.image}>
+                <Image className="mb-16" imageRef={content.value.image} />
+              </When>
+              <TitleAndText
+                title={content.value.title}
+                heading={HeadingXXl}
+                as="h2"
+                headingClasses="text-white"
+                text={content.value.description}
+              />
+            </div>
           </div>
         )
       case 'resources': {
@@ -71,15 +142,15 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           }
         )
         return (
-          <div>
-            <div>{content.value.title}</div>
+          <div className="mx-20 md:mx-0">
+            <HeadingXXl as="h2">{content.value.title}</HeadingXXl>
             <div>{resourceSections}</div>
           </div>
         )
       }
       case 'accordion_section':
         return (
-          <div className="space-y-20">
+          <div className="mx-20 md:mx-0 space-y-20">
             <When condition={content.value.title}>
               <HeadingXXl as="h2">{content.value.title}</HeadingXXl>
             </When>
@@ -87,7 +158,12 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
               <RichText html={content.value.accordion_sidebar} />
             </When>
             {content.value.accordion_items.map((item) => (
-              <Accordion key={item.id} title={item.value.title}>
+              <Accordion
+                key={item.id}
+                as="p"
+                title={item.value.title}
+                classes={themeBackground.accordion}
+              >
                 {item.value.body.map((content) => {
                   switch (content.type) {
                     case 'text':
@@ -104,95 +180,148 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
             ))}
           </div>
         )
+      case 'video':
+        return (
+          <div
+            className={classes(themeBackground.video, 'py-40 px-20 xl:px-40')}
+          >
+            <Video {...content.value} />
+          </div>
+        )
     }
   }
+
+  const LogoComponent = ({ logo }: { logo: WagtailImageData }) => (
+    <Image className="max-w-[33%] mt-20 xl:mt-0" imageRef={logo} />
+  )
+
+  const label = t('campaign', { defaultValue: 'Campaign' })
+
   return (
     <PageWrapper title={title}>
-      <Container className="mb-20 pb-40">
-        <PageLabel label={t('campaign', { defaultValue: 'Campaign' })} />
-        <div className="flex flex-col xl:flex-row-reverse xl:justify-end">
-          <When condition={!!logo}>
-            {() => (
-              <Image
-                className="max-w-[50%] mt-20 xl:mt-0"
-                imageRef={logo}
-                alt={logo.title}
-              />
-            )}
-          </When>
-          <DisplayXXXl as="h1" className="my-12 md:my-20 xl:mr-28">
+      <When condition={!!headerImage}>
+        {() => (
+          <div className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0">
+            <Image
+              imageRef={headerImage}
+              className="object-cover w-1/1"
+              alt={headerImage?.title}
+            />
+          </div>
+        )}
+      </When>
+      <Container className="bg-white relative p-20 top-[100px] xl:top-[250px] mx-0 md:mx-16 lg:mx-auto">
+        <div className="hidden xl:flex xl:justify-between">
+          <div>
+            <PageTitleSection title={title} label={label} />
+          </div>
+          <When condition={!!logo}>{() => <LogoComponent logo={logo} />}</When>
+        </div>
+        <div className="xl:hidden flex flex-col">
+          <PageLabel label={label} />
+          <When condition={!!logo}>{() => <LogoComponent logo={logo} />}</When>
+          <DisplayXXXl as="h1" className="my-12 md:my-20">
             {title}
           </DisplayXXXl>
         </div>
       </Container>
-      <Container className="mb-80">
+      <div className="relative top-[100px] xl:top-[250px] mb-[200px] xl:mb-[400px] max-w-lg md:mx-16 lg:mx-auto">
         <When condition={!!spotlight1.length}>
-          <div className="p-20 lg:p-28 mb-80 bg-primary100">
-            <Spotlight {...spotlight1[0]} />
+          <div
+            className={classes(
+              themeBackground.spotlight1,
+              'px-20 py-28 md:py-0 mb-80 md:rounded-4'
+            )}
+          >
+            <Spotlight
+              themeClasses={themeText.spotlight1}
+              buttonClasses={themeButton.spotlight1}
+              {...spotlight1[0]}
+            />
           </div>
         </When>
-        <HeadingXXl as="h2">{factsTitle}</HeadingXXl>
-        <When condition={!!factItems.length}>
-          <div className="flex gap-28">
-            {factItems.map((item) => {
-              const image = item.value.image
-              const titleAndText = item.value.title_and_text
-              return (
-                <div key={item.id} className="w-1/3">
-                  <When condition={image}>
-                    <Image key={image?.id} imageRef={image} className="mb-20" />
-                  </When>
-                  <When condition={!!titleAndText}>
-                    <TitleAndText
-                      key={item.id}
-                      title={titleAndText.title}
-                      text={titleAndText.text}
-                    />
-                  </When>
-                </div>
-              )
-            })}
-          </div>
-        </When>
+        <Container className="mb-20">
+          <HeadingXXl as="h2">{factsTitle}</HeadingXXl>
+          <When condition={!!factItems.length}>
+            <Grid className="gap-28">
+              {factItems.map((item) => {
+                const image = item.value.image
+                const titleAndText = item.value.title_and_text
+                return (
+                  <div
+                    className="flex flex-col col-span-6 lg:col-span-4"
+                    key={item.id}
+                  >
+                    <When condition={image}>
+                      <Image
+                        key={image?.id}
+                        imageRef={image}
+                        className="mb-20"
+                      />
+                    </When>
+                    <When condition={!!titleAndText}>
+                      <TitleAndText
+                        key={item.id}
+                        as="p"
+                        heading={HeadingLg}
+                        title={titleAndText.title}
+                        text={titleAndText.text}
+                      />
+                    </When>
+                  </div>
+                )
+              })}
+            </Grid>
+          </When>
+        </Container>
         <When condition={!!spotlight2.length}>
-          <div className="p-20 lg:p-28 mb-80 bg-primary700">
-            <Spotlight {...spotlight2[0]} />
+          <div
+            className={classes(
+              themeBackground.spotlight2,
+              'px-20 py-28 md:py-0 mb-80 md:rounded-4'
+            )}
+          >
+            <Spotlight
+              themeClasses={themeText.spotlight2}
+              buttonClasses={themeButton.spotlight2}
+              {...spotlight2[0]}
+            />
           </div>
         </When>
-      </Container>
-      <Container>
         {additionalContent.map((content) => (
-          <div key={content.id} className="mb-80">
+          <div key={content.id} className="mb-20 md:mb-40 lg:mb-60">
             {getAdditionalContentComponent(content)}
           </div>
         ))}
-        <When condition={about}>
-          <HeadingXXl as="h2">
-            {t('about', { defaultValue: 'About' })}
-          </HeadingXXl>
-          <RichText html={about} />
-        </When>
-        <RelatedContentList
-          title={t('agencies', { defaultValue: 'Agencies' })}
-          content={agencies}
-        />
-        <When condition={!!links.length}>
-          <Container>
-            <HeadingXXl as="h2">
-              {t('related', { defaultValue: 'Related' })}
-            </HeadingXXl>
-            <ul>
+        <Container className="flex flex-col md:gap-40 lg:gap-60">
+          <When condition={about}>
+            <div>
+              <HeadingXXl as="h2" className="mb-[20px]">
+                {t('about', { defaultValue: 'About' })}
+              </HeadingXXl>
+              <RichText html={about} />
+            </div>
+          </When>
+          <RelatedContentList
+            title={t('partner-agencies', { defaultValue: 'Partner Agencies' })}
+            content={agencies}
+          />
+          <When condition={!!links.length}>
+            <div>
+              <HeadingXXl as="h2" className="mb-[20px]">
+                {t('related', { defaultValue: 'Related' })}
+              </HeadingXXl>
               {links.map((link) => (
-                <li key={link.id}>
-                  <a href={link.value.url || getPageURL(link.value.page)}>
+                <div key={link.id}>
+                  <Link href={link.value.url || getPageURL(link.value.page)}>
                     {link.value.link_text}
-                  </a>
-                </li>
+                  </Link>
+                </div>
               ))}
-            </ul>
-          </Container>
-        </When>
-      </Container>
+            </div>
+          </When>
+        </Container>
+      </div>
     </PageWrapper>
   )
 }

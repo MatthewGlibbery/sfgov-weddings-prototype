@@ -21,7 +21,7 @@ export const Image = ({ imageRef, ...rest }: ImageOwnProps) => {
       className="w-full h-auto"
       width={imageRef?.original?.width || 50}
       height={imageRef?.original?.height || 50}
-      alt={imageRef?.title}
+      alt={imageRef?.alt_text}
       {...rest}
     />
   )

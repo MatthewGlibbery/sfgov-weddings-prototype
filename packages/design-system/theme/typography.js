@@ -193,15 +193,15 @@ const fontSize = {
   'heading-xxl': [
     '24px',
     {
-      lineHeight: lineHeight['52'],
+      lineHeight: lineHeight['32'],
       letterSpacing: '0px',
       fontWeight: fontWeight.medium
     }
   ],
   'heading-xl': [
-    '20px',
+    '24px',
     {
-      lineHeight: lineHeight['28'],
+      lineHeight: lineHeight['32'],
       letterSpacing: '0px',
       fontWeight: fontWeight.semibold
     }

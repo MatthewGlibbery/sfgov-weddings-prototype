@@ -14,7 +14,7 @@ export const RelatedContentList = ({
   if (!content?.length) return null
   return (
     <div {...rest}>
-      <HeadingXXl as="h2" className="mb-20">
+      <HeadingXXl as="h2" className="mb-[20px]">
         {title}
       </HeadingXXl>
       <div className="md:grid md:grid-cols-3">
@@ -22,7 +22,7 @@ export const RelatedContentList = ({
           <div
             key={i}
             className="
-              pb-20
+              pb-20 pl-20
               md:[&:nth-child(3n+1)]:border-r-1 
               md:[&:nth-child(3n)]:border-l-1 
               md:border-neutral200 md:[&:not(:nth-child(3n+1))]:pl-28 

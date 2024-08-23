@@ -114,35 +114,35 @@ describe('Tile', () => {
   it('renders a list of news tiles inside a TileSection', () => {
     render(<NewsTileList links={NewsTileFactory.make(3)} />)
 
-    const tileSection = screen.getByRole('list')
+    const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()
   })
 
   it('renders a list of content tiles inside a TileSection', () => {
     render(<ServiceAndResourceTileList links={GenericTileFactory.make(3)} />)
 
-    const tileSection = screen.getByRole('list')
+    const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()
   })
 
   it('renders a list of quick link tiles inside a TileSection', () => {
     render(<QuickLinkList links={QuickLinkFactory.make(3)} />)
 
-    const tileSection = screen.getByRole('list')
+    const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()
   })
 
   it('renders a list of event tiles inside a TileSection', () => {
     render(<EventTileList links={EventTileFactory.make(3)} />)
 
-    const tileSection = screen.getByRole('list')
+    const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()
   })
 
   it('does not render a NewsTileList if there are no links', () => {
     render(<NewsTileList />)
 
-    const tileSection = screen.queryByRole('list')
+    const tileSection = screen.queryByTestId('tile-section')
     expect(tileSection).not.toBeInTheDocument()
   })
 })

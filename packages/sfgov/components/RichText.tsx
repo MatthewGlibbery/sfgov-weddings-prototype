@@ -5,7 +5,7 @@ import parse, {
   Element,
   type HTMLReactParserOptions
 } from 'html-react-parser'
-import { HeadingMd, HeadingSm } from '@/design-system'
+import { HeadingMd, HeadingSm, Link } from '@/design-system'
 
 export type Matcher = string | RegExp
 export type ComponentMap = Record<string, ComponentType | string>
@@ -78,6 +78,7 @@ export const RichText = (props: RichTextProps) => {
         return <></>
       }
 
+      console.log(attribs)
       const props = Object.fromEntries(
         Object.entries(attribs).filter(([attr, value]) =>
           isAllowedAttr(attr, value)
@@ -152,7 +153,15 @@ export const RichText = (props: RichTextProps) => {
       }
 
       if (tagName === 'p') {
-        return <p className="my-28">{domToReact(node.children, options)}</p>
+        return <p className="mb-16">{domToReact(node.children, options)}</p>
+      }
+
+      if (tagName === 'a') {
+        return (
+          <Link {...attributesToProps(props)}>
+            {domToReact(node.children, options)}
+          </Link>
+        )
       }
 
       return (

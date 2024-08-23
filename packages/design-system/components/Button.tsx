@@ -32,7 +32,7 @@ export const Button = classed('button' as AnyComponent, {
       primary: classes(
         'border-current border-1',
         'text-white',
-        'bg-primary500',
+        'bg-primary600',
         'hover:bg-primary100',
         'hover:border-primary100',
         'hover:text-primary700',

@@ -1,6 +1,6 @@
 import {
   classed,
-  HeadingXl,
+  HeadingXXl,
   IconExternalLink,
   IconTranscript,
   Link
@@ -54,7 +54,7 @@ export const Video = (props: TypeVideoBlockValues) => {
       : t('show', { defaultValue: 'Show' })
 
     block = (
-      <div className="bg-grey100 p-12 flex flex-col lg:flex-row lg:space-x-28">
+      <div className="bg-grey100 py-12 flex flex-col lg:flex-row lg:space-x-28">
         <VideoContainer isTranscriptVisible={showTranscript}>
           <IFrameWrapper isTranscriptVisible={showTranscript}>
             <iframe
@@ -113,7 +113,9 @@ export const Video = (props: TypeVideoBlockValues) => {
   return (
     <div>
       <When condition={showTitle}>
-        <HeadingXl>{title}</HeadingXl>
+        <HeadingXXl className="mb-[28px]" as="p">
+          {title}
+        </HeadingXXl>
       </When>
       <RichText html={description} />
       {block}

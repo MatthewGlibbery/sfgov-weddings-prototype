@@ -538,7 +538,7 @@ export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({
   }),
   title: 'campaign',
   logo: ImageFactory.make(),
-  // theme: ''
+  theme: 'black',
   spotlight_1: [SpotlightFactory.make()],
   facts_title: 'Some facts',
   fact_items: [
@@ -746,6 +746,7 @@ export const ImageFactory = factory<WagtailImageData>((gen) => ({
   width: 300,
   height: 300,
   title: gen.lorem.sentence(5),
+  alt_text: gen.lorem.words(5),
   meta: {
     type: WAGTAIL_IMAGE_TYPE,
     download_url: gen.image.imageUrl(300, 300, 'city', false, true)

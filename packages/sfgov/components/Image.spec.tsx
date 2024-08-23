@@ -11,9 +11,8 @@ describe('<Image>', () => {
 
   const src =
     'https://sf.gov/sites/default/files/styles/836x484/public/2022-03/Civic%20Center.jpg?itok=MoJOWKv1'
-  const alt = 'Alt text'
   const data = ImageFactory.make({
-    title: alt,
+    title: 'title',
     width: 500,
     height: 500,
     meta: {
@@ -33,7 +32,7 @@ describe('<Image>', () => {
     const img = (await screen.findByRole('img')) as HTMLImageElement
     expect(img).toBeInTheDocument()
     expect(img.src).toContain(encodeURIComponent(src))
-    expect(img).toHaveAttribute('alt', alt)
+    expect(img).toHaveAttribute('alt', data.alt_text)
   })
 
   it('works with NextImage', async () => {
@@ -43,7 +42,7 @@ describe('<Image>', () => {
     const img = (await screen.findByRole('img')) as HTMLImageElement
     expect(img).toBeInTheDocument()
     expect(img.src).toContain(encodeURIComponent(src))
-    expect(img).toHaveAttribute('alt', alt)
+    expect(img).toHaveAttribute('alt', data.alt_text)
     expect(img).toHaveAttribute('srcset')
   })
 })

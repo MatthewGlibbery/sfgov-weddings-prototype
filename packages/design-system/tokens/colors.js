@@ -1,5 +1,31 @@
 module.exports = {
   Primary: {
+    10: {
+      value: '#F3F8FE',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#F3F8FE',
+        type: 'color'
+      },
+      name: '10',
+      attributes: {},
+      path: ['Primary', '10']
+    },
+    50: {
+      value: '#e9f1fe',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#e9f1fe',
+        type: 'color'
+      },
+      name: '50',
+      attributes: {},
+      path: ['Primary', '50']
+    },
     100: {
       value: '#dfebfd',
       type: 'color',
@@ -152,6 +178,32 @@ module.exports = {
     }
   },
   Secondary: {
+    10: {
+      value: '#F2F9FA',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#F2F9FA',
+        type: 'color'
+      },
+      name: '10',
+      attributes: {},
+      path: ['Secondary', '10']
+    },
+    50: {
+      value: '#E6F4F5',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#E6F4F5',
+        type: 'color'
+      },
+      name: '50',
+      attributes: {},
+      path: ['Secondary', '50']
+    },
     100: {
       value: '#daeff0',
       type: 'color',
@@ -304,6 +356,32 @@ module.exports = {
     }
   },
   Accent: {
+    10: {
+      value: '#FFF5F0',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#FFF5F0',
+        type: 'color'
+      },
+      name: '10',
+      attributes: {},
+      path: ['Accent', '10']
+    },
+    50: {
+      value: '#FEEDE3',
+      type: 'color',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#FEEDE3',
+        type: 'color'
+      },
+      name: '50',
+      attributes: {},
+      path: ['Accent', '50']
+    },
     100: {
       value: '#fde4d7',
       type: 'color',

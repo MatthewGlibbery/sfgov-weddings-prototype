@@ -7,6 +7,7 @@ export interface WagtailImageData extends PageData {
     download_url: string
   }
   title: string
+  alt_text: string
   width: number
   height: number
   original: {
