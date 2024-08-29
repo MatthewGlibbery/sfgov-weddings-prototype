@@ -280,11 +280,7 @@ describe('<LocationBlock />', () => {
     } as TypeLocationValues
     render(<Location {...testData} />)
     const boldedContainer = screen.queryByTestId('title')
-    const fontweightProp = window
-      .getComputedStyle(boldedContainer)
-      .getPropertyValue('font-weight')
-
-    expect(fontweightProp).toBe('bold')
+    expect(boldedContainer).toHaveClass('font-bold')
     expect(boldedContainer).toHaveTextContent(expected)
   })
 })

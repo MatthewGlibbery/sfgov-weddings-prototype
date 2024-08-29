@@ -47,6 +47,13 @@ export const Button = classed('button' as AnyComponent, {
         'border-primary100',
         'rounded-[4px]'
       ),
+      tertiary: classes(
+        'border-1',
+        'border-primary600',
+        'text-primary600',
+        'bg-white',
+        'rounded-4'
+      ),
       link: classes(
         inverseButtonClasses,
         'bg-[transparent]', // FIXME: need transparent in theme.colors

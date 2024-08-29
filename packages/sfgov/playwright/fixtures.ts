@@ -2763,7 +2763,12 @@ export const expect = baseExpect.extend({
         // Get the text content of the link
         const text = await link.innerText()
 
-        if (href) {
+        if (
+          href &&
+          !href.includes('#') &&
+          !href.includes('tel:') &&
+          !href.includes('mailto:')
+        ) {
           // Normalize the href to remove the protocol and other components
           const url = new URL(href, page.url())
           const normalizedHref = url.hostname + url.pathname
@@ -2915,7 +2920,9 @@ export const expect = baseExpect.extend({
       for (const href of links) {
         // Navigate to the link element
         const link = await page.$(`a[href="${href}"]`)
-        if (link) {
+        // bounding box returns null if the element is not visible
+        const box = await link?.boundingBox()
+        if (link && box) {
           // Focus the link
           await link.focus()
 

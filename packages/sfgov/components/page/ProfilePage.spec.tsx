@@ -14,4 +14,25 @@ describe('ProfilePage', () => {
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(page.title)
   })
+
+  it('renders an anchor for direct contact', () => {
+    render(<ProfilePage page={page} />)
+
+    expect(screen.getByRole('link', { name: 'Contact' })).toHaveAttribute(
+      'href',
+      '#direct-contact'
+    )
+  })
+
+  it('renders an anchor for contact if direct contact does not exist', () => {
+    page.email = []
+    page.phone = []
+    page.social_media = []
+    render(<ProfilePage page={page} />)
+
+    expect(screen.getByRole('link', { name: 'Contact' })).toHaveAttribute(
+      'href',
+      '#agency-contact'
+    )
+  })
 })

@@ -33,7 +33,10 @@ export const TileSection = ({
   ...rest
 }: JSX.IntrinsicElements['div']) => (
   <div
-    className={classes('grid grid-cols-1 md:grid-cols-2', className)}
+    className={classes(
+      'grid grid-cols-1 gap-y-20 md:grid-cols-2 md:gap-y-28',
+      className
+    )}
     {...rest}
   />
 )
@@ -53,12 +56,13 @@ const TileTitle = (props: JSX.IntrinsicElements['div']) => (
 )
 
 type BaseTileProps = {
+  className?: string
   href?: string
   children: ReactNode
 }
 
-const BaseTile = ({ href, children }: BaseTileProps) => (
-  <TileContainer href={href}>
+const BaseTile = ({ className, href, children }: BaseTileProps) => (
+  <TileContainer href={href} className={className}>
     <div className="flex flex-col space-y-8">{children}</div>
   </TileContainer>
 )
@@ -99,11 +103,10 @@ export const ServiceAndResourceTile = ({ link }: TileProps) => {
 }
 
 export const QuickLink = ({ link }: TileProps) => (
-  <BaseTile href={link.url}>
-    <IconDocument className="w-20 md:w-40" />
-    <HeadingMd className="my-12">{link.title}</HeadingMd>
+  <BaseTile href={link.url} className="p-12 relative">
+    <HeadingLg className="my-12 text-primary600">{link.title}</HeadingLg>
     <div>{link.description}</div>
-    <IconArrowRight className="self-end" width={20} />
+    <IconArrowRight className="text-primary600 self-end" width={20} />
   </BaseTile>
 )
 

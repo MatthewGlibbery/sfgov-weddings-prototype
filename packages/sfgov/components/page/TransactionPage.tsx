@@ -47,7 +47,6 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   } = page
 
   const { t } = useTranslation()
-  console.log(supporingInformation)
 
   const TransactionContent = ({ screen = '' }) => (
     <div className="flex flex-col gap-y-60 mx-20 md:mx-0 col-span-full lg:col-span-7">

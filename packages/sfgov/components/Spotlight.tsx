@@ -76,7 +76,7 @@ export const Spotlight = ({
           <Image imageRef={image} className="rounded-4 w-100 aspect-[4/3]" />
         </When>
       </div>
-      <div className="flex flex-col basis-0 grow">
+      <div className="flex flex-col gap-y-20 basis-0 grow">
         <When condition={title}>
           <HeadingXXl as="h2" className={classes('mb-12', themeClasses)}>
             {title}

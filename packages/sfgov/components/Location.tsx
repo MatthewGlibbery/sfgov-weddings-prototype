@@ -37,9 +37,9 @@ export const Location = (props: LocationBlockProps) => {
   return (
     <div className="flex flex-col gap-y-8">
       <When condition={!!boldedTitle}>
-        <HeadingSm as="h4" data-testid="title" className="font-bold">
+        <BodyText data-testid="title" className="font-bold lg:mb-0">
           {boldedTitle}
-        </HeadingSm>
+        </BodyText>
       </When>
       <BodyText>
         <When condition={variant === 'full'}>

@@ -11,12 +11,14 @@ export const SocialMedia = ({ type, items }: TypeSocialMediaBlockValues) => {
 
   for (const [key, value] of Object.entries(items)) {
     blocks.push(
-      <div className="flex gap-x-4 mb-space-md">
+      <div key={`data-${key}`} className="flex gap-x-4">
         {icons[key]}
-        <a href="{value}">{value}</a>
+        <a href={value} className="capitalize text-primary500">
+          {key}
+        </a>
       </div>
     )
   }
 
-  return <div key={items.id}>{blocks}</div>
+  return <div className="flex flex-col gap-y-28">{blocks}</div>
 }

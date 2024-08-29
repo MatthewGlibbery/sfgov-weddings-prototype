@@ -152,6 +152,7 @@ export type ProfilePageData = PageData &
     contact: TypeContactFooterBlock[]
     spotlight: TypeSpotlightBlock[]
     quick_links: TypeQuickLinkBlock[]
+    additional_roles: []
   }
 
 export type TopicPageData = PageData & {

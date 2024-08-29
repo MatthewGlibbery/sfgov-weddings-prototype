@@ -148,12 +148,12 @@
   --primary-300: #83aceb;
   --primary-200: #afccf7;
   --primary-100: #dfebfd;
-  --desktop-xxl: var(--primitive-15);
-  --desktop-xl: var(--primitive-11);
-  --desktop-lg: var(--primitive-8);
-  --desktop-md: var(--primitive-6);
-  --tablet-xxl: var(--primitive-10);
-  --label: var(--primitive-1);
+  --space-desktop-xxl: var(--primitive-15);
+  --space-desktop-xl: var(--primitive-11);
+  --space-desktop-lg: var(--primitive-8);
+  --space-desktop-md: var(--primitive-6);
+  --space-tablet-xxl: var(--primitive-10);
+  --space-label: var(--primitive-1);
   --medium: var(--primitive-2);
   --default: var(--primitive-1);
   --label-xs-mono: [object Object];
@@ -215,12 +215,12 @@
   --inset-square-narrow: var(--primitive-3) var(--primitive-3);
   --inset-square-default: var(--primitive-5) var(--primitive-5);
   --spacing-3xl: var(--primitive-7);
-  --xxl: var(--primitive-8);
-  --xl: var(--primitive-8);
-  --lg: var(--primitive-7);
-  --md: var(--primitive-5);
-  --s: var(--primitive-4);
-  --xs: var(--primitive-3);
+  --space-xxl: var(--primitive-9);
+  --space-xl: var(--primitive-8);
+  --space-lg: var(--primitive-7);
+  --space-md: var(--primitive-5);
+  --space-sm: var(--primitive-4);
+  --space-xs: var(--primitive-3);
   --none: var(--primitive-0);
-  --body: var(--xs);
+  --space-body: var(--space-xs);
 }

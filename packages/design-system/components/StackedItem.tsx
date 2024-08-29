@@ -4,7 +4,7 @@ import type { ComponentProps, ComponentType } from '../types'
 
 const StyledItem = classed(
   'div',
-  'w-full pb-12 md:pl-12 md:pb-0 border-b-1 border-b-[#D6D3D3] md:border-b-0 md:border-b-current md:border-l-1 md:border-l-[#D6D3D3] md:first-of-type:border-l-0'
+  'w-full border-neutral200 border-b-1 pb-16 last-of-type:border-0 md:border-r-1 md:border-b-0 md:last-of-type:pr-0 md:pr-12 lg:pr-20'
 )
 
 export type StackedItemProps = ComponentProps<typeof StyledItem> & {
@@ -30,9 +30,7 @@ export const StackedItem = ({
         />
       ) : null}
       {title ? (
-        <HeadingLg as="h3" className="flex items-center mb-20">
-          {title}
-        </HeadingLg>
+        <HeadingLg className="flex items-center mb-28">{title}</HeadingLg>
       ) : null}
       {children}
     </StyledItem>

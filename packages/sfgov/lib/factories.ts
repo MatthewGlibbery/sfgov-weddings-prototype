@@ -319,12 +319,11 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
     }
   ],
   social_media: [SocialMediaFactory.make()],
-  contact_address: LocationBlockFactory.make(1),
   contact: [
     {
       type: 'contact',
       value: {
-        address: [],
+        address: [LocationBlockFactory.make(1)],
         phone: [PhoneNumberFactory.make()],
         email: [EmailBlockFactory.make()],
         social_media_other: [SocialMediaFactory.make()]
@@ -332,7 +331,17 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
     }
   ],
   spotlight: SpotlightFactory.make(1),
-  quick_links: QuickLinkFactory.make(3)
+  quick_links: QuickLinkFactory.make(3),
+  additional_roles: [
+    {
+      role: 'Commissioner',
+      referenced_by: {
+        content_type: 'Location Page',
+        title: 'Whangdoodleland',
+        id: 35
+      }
+    }
+  ]
 }))
 
 export const NewsPageFactory = factory<NewsPageData>((gen) => ({

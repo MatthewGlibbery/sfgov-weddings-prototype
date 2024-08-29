@@ -1,5 +1,10 @@
 {
   "Primary": {
+    "50": {
+      "value": "#e9f1fe",
+      "type": "color",
+      "description": "some shade of color with some percentage of lightness"
+    },
     "100": {
       "value": "#dfebfd",
       "type": "color",

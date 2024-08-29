@@ -57,28 +57,32 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
   }
 
   return (
-    <StackedContainer className="ant-stacked">
+    <StackedContainer className="gap-28">
       <When condition={!!footerSections.address.length}>
         <StackedItem icon={IconHome} title="Address">
-          {footerSections.address.map((address) => (
-            <div className="mb-20" key={address.id}>
-              <Location {...address.value} />
-            </div>
-          ))}
+          <div className="flex flex-col gap-y-28">
+            {footerSections.address.map((address) => (
+              <Location {...address.value} key={address.id} />
+            ))}
+          </div>
         </StackedItem>
       </When>
       <When condition={!!footerSections.phone_number.length}>
         <StackedItem icon={IconPhone} title="Phone">
-          {footerSections.phone_number.map((phone) => (
-            <PhoneNumberBlock {...phone.value} key={phone.id} />
-          ))}
+          <div className="flex flex-col gap-y-28">
+            {footerSections.phone_number.map((phone) => (
+              <PhoneNumberBlock {...phone.value} key={phone.id} />
+            ))}
+          </div>
         </StackedItem>
       </When>
       <When condition={!!footerSections.email.length}>
         <StackedItem icon={IconEmail} title="Email">
-          {footerSections.email.map((email) => (
-            <EmailBlock {...email.value} key={email.id} />
-          ))}
+          <div className="flex flex-col gap-y-28">
+            {footerSections.email.map((email) => (
+              <EmailBlock {...email.value} key={email.id} />
+            ))}
+          </div>
         </StackedItem>
       </When>
       <When condition={!!footerSections.title_and_text.length}>
