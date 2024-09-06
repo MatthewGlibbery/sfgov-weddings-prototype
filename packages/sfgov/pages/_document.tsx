@@ -18,14 +18,6 @@ const Document = (props: DocumentProps) => {
     <Html>
       <Head>
         <link rel="icon" href="/favicon.ico" />
-        <Script
-          src={`https://unpkg.com/formiojs@${dependencies.formiojs}/dist/formio.full.min.js`}
-          strategy="beforeInteractive"
-        />
-        <Script
-          src={`https://unpkg.com/formio-sfds@${dependencies['formio-sfds']}/dist/formio-sfds.standalone.js`}
-          strategy="beforeInteractive"
-        />
       </Head>
       <StyledBody>
         <a href="#main-content" className="sr-only focus:not-sr-only">

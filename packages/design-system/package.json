@@ -14,7 +14,9 @@
   },
   "repository": "SFDigitalServices/sfgov-next",
   "dependencies": {
+    "@formio/react": "5.3.0",
     "@tw-classed/react": "^1.5.0",
+    "formiojs": "^4.15.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwind-merge": "^1.13.0",

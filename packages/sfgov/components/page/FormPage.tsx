@@ -1,19 +1,30 @@
+import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import {
   Button,
   Container,
   HeadingXXl,
-  MainContent,
   PageTitleSection
 } from '@/design-system'
-import { FormPageData, TypeConfirmationBodyTypes } from '@/types'
 import { getPageURL } from '@/lib/utils'
-import { ComponentType, useEffect, useRef, useState } from 'react'
+import type { FormPageData, PageData, TypeConfirmationBodyTypes } from '@/types'
+import { type ComponentType, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { When } from 'react-if'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
 import { RichText } from '../RichText'
 import { PageWrapper } from './PageWrapper'
+
+// istanbul ignore next
+const FormioForm = dynamic(
+  () => import('../../../design-system/components/FormioForm'),
+  {
+    ssr: false,
+    loading: (props: DynamicOptionsLoadingProps) => {
+      return <div>Loading...</div>
+    }
+  }
+)
 
 export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
   const {
@@ -25,26 +36,7 @@ export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
   } = page
 
   const { t } = useTranslation()
-
   const [submitted, setSubmitted] = useState(false)
-  const ref = useRef()
-
-  useEffect(() => {
-    async function loadForm() {
-      if (ref.current) {
-        // @ts-expect-error erg
-        window?.Formio?.createForm(ref.current, formSchemaUrl).then((form) => {
-          // istanbul ignore next
-          form.on('submitDone', () => {
-            setSubmitted(true)
-            ref?.current?.remove()
-          })
-          return form
-        })
-      }
-    }
-    loadForm()
-  }, [formSchemaUrl, ref, setSubmitted])
 
   return (
     <PageWrapper title={title}>
@@ -55,8 +47,10 @@ export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
             label={submitted ? t('Form confirmation') : t('Form')}
           ></PageTitleSection>
         </div>
-        {/* @ts-expect-error erg */}
-        <div ref={ref}></div>
+        <FormioForm
+          src={formSchemaUrl}
+          onSubmitDone={() => setSubmitted(true)}
+        />
         <When condition={submitted}>
           <div className="space-y-40">
             {confirmationBody.map((block) => (
@@ -86,7 +80,10 @@ const ConfirmationContent = ({ block }: ConfirmationContentProps) => {
       return <Callout html={block.value} />
     case 'button_link':
       return (
-        <Button as="a" href={block.value.url || getPageURL(block.value.page)}>
+        <Button
+          as="a"
+          href={block.value.url || getPageURL(block.value.page as PageData)}
+        >
           {block.value.link_text}
         </Button>
       )

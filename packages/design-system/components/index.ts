@@ -1,5 +1,7 @@
 export * from './Button'
 export * from './Container'
+// only export types from FormioForm because the component is client-side only
+export type { FormioFormProps } from './FormioForm'
 export * from './Grid'
 export * from './Link'
 export * from './MainContent'
