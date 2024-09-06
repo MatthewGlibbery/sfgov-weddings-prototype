@@ -149,6 +149,7 @@ export const MeetingTile = ({ link }: TileProps) => {
     date_time: date,
     cancelled
   } = link
+
   if (date?.length) {
     const dateObj = new Date(
       date[0]?.value.start_date.replace(/-/g, '/').replace(/T.+/, '')

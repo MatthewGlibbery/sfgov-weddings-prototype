@@ -179,21 +179,27 @@ export const InfoPageFactory = factory<InfoPageData>((gen) => ({
     CalloutFactory.make()
   ],
   part_of: RelatedContentBlockFactory.make(3, {
-    meta: {
-      type: 'sf.Transaction'
+    value: {
+      meta: {
+        type: 'sf.Transaction'
+      }
     }
   }),
   partner_agencies: RelatedContentBlockFactory.make(3, {
-    meta: {
-      type: 'sf.Agency'
+    value: {
+      meta: {
+        type: 'sf.Agency'
+      }
     }
   }),
   topics: RelatedContentBlockFactory.make(3, {
-    meta: {
-      type: 'sf.Topic'
+    value: {
+      meta: {
+        type: 'sf.Topic'
+      }
     }
   }),
-  related_pages: RelatedContentBlockFactory.make(3)
+  related: RelatedContentBlockFactory.make(3)
 }))
 
 export const StepByStepPageFactory = factory<StepByStepData>((gen) => ({
@@ -278,13 +284,15 @@ export const TransactionPageFactory = factory<TransactionPageData>((gen) => ({
     LocationBlockFactory.make(),
     TitleAndTextFactory.make()
   ],
-  partner_agencies: [PageFactory.make()],
+  partner_agencies: [PageFactory.make()].map((item) => {
+    return { type: 'agency', value: item }
+  }),
   topics: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentTopic'
     }
   }),
-  related_pages: RelatedContentBlockFactory.make(3, {
+  related: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentPage'
     }
@@ -848,33 +856,38 @@ export const RelatedContentBlockFactory = factory<RelatedContentData>((gen) => {
     .split('T')
 
   return {
-    id: gen.datatype.number(),
-    meta: {
-      type: `sfgov_${gen.lorem.word()}.${gen.lorem
-        .sentence(1)
-        .replace(/\.$/, '')}`,
-      html_url: gen.internet.url()
-    },
-    page_content: {
+    type: 'some-type',
+    value: {
       id: gen.datatype.number(),
       meta: {
-        type: 'wagtailcore.Page',
+        type: `sfgov_${gen.lorem.word()}.${gen.lorem
+          .sentence(1)
+          .replace(/\.$/, '')}`,
         html_url: gen.internet.url()
       },
       title: gen.commerce.productName(),
-      date_time: DateTimeBlockFactory.make(1, {
-        value: {
-          start_date: date,
-          start_time: '16:00:00',
-          end_date: futureDate,
-          end_time: futureTime,
-          is_all_day: gen.datatype.boolean(),
-          include_end_date_time: gen.datatype.boolean() ? 'yes' : 'no'
-        }
-      }),
-      date: gen.date.recent(),
-      cancelled: false
-    }
+      page_content: {
+        id: gen.datatype.number(),
+        meta: {
+          type: 'wagtailcore.Page',
+          html_url: gen.internet.url()
+        },
+        title: gen.commerce.productName(),
+        date_time: DateTimeBlockFactory.make(1, {
+          value: {
+            start_date: date,
+            start_time: '16:00:00',
+            end_date: futureDate,
+            end_time: futureTime,
+            is_all_day: gen.datatype.boolean(),
+            include_end_date_time: gen.datatype.boolean() ? 'yes' : 'no'
+          }
+        }),
+        date: gen.date.recent(),
+        cancelled: false
+      }
+    },
+    id: gen.datatype.number
   }
 })
 
@@ -1268,16 +1281,8 @@ export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
     type: MEETING_PAGE_TYPE
   }),
   title: 'Meeting page title',
-  primary_agency: PageFactory.make({
-    meta: {
-      type: 'sf.Agency'
-    }
-  }),
-  partner_agencies: RelatedContentBlockFactory.make(1, {
-    meta: {
-      type: 'sfgov_base.RelatedContentAgency'
-    }
-  }),
+  primary_agencies: RelatedContentBlockFactory.make(1),
+  partner_agencies: RelatedContentBlockFactory.make(1),
   cancelled: false,
   date_time: DateTimeBlockFactory.make(1),
   meeting_location: [LocationBlockFactory.make(), OnlineEventFactory.make()],
@@ -1376,7 +1381,7 @@ export const ResourceCollectionPageFactory =
       { type: 'some_unexpected_type', value: [] }
     ],
     custom_section: [TitleAndTextFactory.make()],
-    related_topics: RelatedContentBlockFactory.make(1, {
+    topics: RelatedContentBlockFactory.make(1, {
       meta: {
         type: 'sfgov_base.RelatedContentAgency'
       }

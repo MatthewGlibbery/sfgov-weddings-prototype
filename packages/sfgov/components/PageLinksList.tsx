@@ -22,7 +22,7 @@ export const PageLinksList = ({ pageLinks, label }: PageLinksListProps) => {
               {i > 0 && ', '}
               <PageLink
                 page={pageLink}
-                aria-label={`View the page for ${pageLink.title}`}
+                aria-label={`View the page for ${pageLink?.value?.title}`}
               />
             </span>
           ))}

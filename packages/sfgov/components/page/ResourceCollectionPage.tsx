@@ -41,7 +41,7 @@ export const ResourceCollectionPage: ComponentType<{
     introductory_text: introductoryText,
     body,
     custom_section: customSection,
-    related_topics: relatedTopics,
+    topics: relatedTopics,
     partner_agencies: agencies
   } = page
 
@@ -61,7 +61,10 @@ export const ResourceCollectionPage: ComponentType<{
                 {description}
               </DisplayLg>
             </When>
-            <PageLinksList pageLinks={relatedTopics} label={t('Part of: ')} />
+            <PageLinksList
+              pageLinks={relatedTopics}
+              label={t('Part of: ', { defaultValue: 'Part of: ' })}
+            />
           </PageTitleSection>
         </div>
         <div className="flex flex-col gap-y-60">

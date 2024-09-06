@@ -45,7 +45,7 @@ describe('TransactionPage', () => {
   it.each([
     {
       what: 'partner_agencies',
-      input: fixture.partner_agencies[0].title
+      input: fixture.partner_agencies[0].value.title
     },
     { what: 'things_to_know', input: fixture.things_to_know[0].value.title },
     { what: 'custom_section', input: fixture.custom_section[0].value.title },

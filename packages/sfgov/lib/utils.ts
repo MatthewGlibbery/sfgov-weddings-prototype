@@ -2,8 +2,8 @@ import { IContentAPI, PageData, WagtailImageData } from '@/types'
 
 export function getPageURL(page: PageData) {
   let meta = page?.meta
-  if (page?.page_content?.meta) {
-    meta = page.page_content.meta
+  if (page?.value?.meta) {
+    meta = page.value.meta
   }
   if (meta?.html_url) {
     return meta.html_url.includes('://')

@@ -101,7 +101,7 @@ export type InfoPageData = PageData &
     part_of: RelatedContentData[]
     partner_agencies: RelatedContentData[]
     topics: RelatedContentData[]
-    related_pages: RelatedContentData[]
+    related: RelatedContentData[]
   }
 
 export type StepByStepData = PageData & {
@@ -254,18 +254,18 @@ export type CampaignPageData = PageData & {
   related_links: RelatedContentData[]
 }
 
-export type MeetingPageData = PageData &
-  PrimaryAgencyData & {
-    partner_agencies: RelatedContentData[]
-    cancelled: boolean
-    date_time: TypeDateTimeBlock[]
-    meeting_location: (TypeLocationBlock | TypeOnlineEventBlock)[]
-    overview: string
-    agenda: TypeAgendaItemBlock[]
-    videos: TypeVideoBlock[]
-    notices: TypeTitleAndTextBlock[]
-    related_documents: TypeDownloadableFilesBlock[]
-  }
+export type MeetingPageData = PageData & {
+  primary_agencies: RelatedContentData[]
+  partner_agencies: RelatedContentData[]
+  cancelled: boolean
+  date_time: TypeDateTimeBlock[]
+  meeting_location: (TypeLocationBlock | TypeOnlineEventBlock)[]
+  overview: string
+  agenda: TypeAgendaItemBlock[]
+  videos: TypeVideoBlock[]
+  notices: TypeTitleAndTextBlock[]
+  related_documents: TypeDownloadableFilesBlock[]
+}
 
 export type DataStoryPageData = PageData & {
   description: string

@@ -12,17 +12,10 @@ jest.mock('next/router')
 
 describe('<InformationPage>', () => {
   describe('text content', () => {
-    const dept1 = PageFactory.make({
-      title: 'Department 1',
-      meta: {
-        url_path: '/departments/one'
-      }
-    })
-
     const fixture = InfoPageFactory.make({
       title: 'Information page title',
       description: 'Information page description',
-      partner_agencies: [dept1]
+      partner_agencies: [{ type: 'agency', value: PageFactory.make() }]
     })
 
     it('renders the page title', () => {
@@ -144,16 +137,20 @@ describe('<InformationPage>', () => {
                 ...fixture,
                 part_of: [
                   {
-                    id: 4,
-                    meta: {
-                      type: 'sfgov_information_page.InformationPage',
-                      detail_url: 'http://localhost:8000/api/v2/pages/4/',
-                      html_url: 'http://localhost/some-other-information-page/',
-                      slug: 'some-other-information-page',
-                      seo_title: 'meta title tag',
-                      search_description: 'meta description'
-                    },
-                    title: 'Some other information page'
+                    type: 'agency',
+                    value: {
+                      id: 4,
+                      meta: {
+                        type: 'sfgov_information_page.InformationPage',
+                        detail_url: 'http://localhost:8000/api/v2/pages/4/',
+                        html_url:
+                          'http://localhost/some-other-information-page/',
+                        slug: 'some-other-information-page',
+                        seo_title: 'meta title tag',
+                        search_description: 'meta description'
+                      },
+                      title: 'Some other information page'
+                    }
                   }
                 ]
               }}

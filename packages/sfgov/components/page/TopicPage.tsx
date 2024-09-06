@@ -40,11 +40,13 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
                 <When condition={!!section.value.page_content.length}>
                   {section.value.page_content.map((topic, i) => (
                     <span
-                      key={topic.id}
+                      key={topic?.value?.id}
                       data-testid="related_content_topics-section"
                     >
                       {i > 0 && ', '}
-                      <a href={topic.meta.html_url}>{topic.title}</a>
+                      <a href={topic?.value?.meta.html_url}>
+                        {topic?.value?.title}
+                      </a>
                     </span>
                   ))}
                 </When>

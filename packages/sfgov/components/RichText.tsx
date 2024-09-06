@@ -78,7 +78,6 @@ export const RichText = (props: RichTextProps) => {
         return <></>
       }
 
-      console.log(attribs)
       const props = Object.fromEntries(
         Object.entries(attribs).filter(([attr, value]) =>
           isAllowedAttr(attr, value)
@@ -91,7 +90,7 @@ export const RichText = (props: RichTextProps) => {
       // rigorous about transforming <br/>'s if we like, but
       // this is an easy workaround for now
       /* istanbul ignore next */
-      if (tagName === 'br') {
+      if (tagName === 'br' || tagName === 'hr') {
         return
       }
 

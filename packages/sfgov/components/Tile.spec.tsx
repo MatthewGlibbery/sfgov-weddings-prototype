@@ -81,15 +81,18 @@ describe('Tile', () => {
 
   it('renders an MeetingTile', () => {
     const [meetingLink] = RelatedContentBlockFactory.make(1, {
-      page_content: {
-        meta: {
-          type: 'sf.Meeting'
+      value: {
+        page_content: {
+          meta: {
+            type: 'sf.Meeting'
+          }
         }
       }
     }).map((item) => ({
-      ...item.page_content,
-      url: item.page_content.meta.html_url
+      ...item.value.page_content,
+      url: item.value.page_content.meta.html_url
     }))
+
     render(<MeetingTile link={meetingLink} />)
 
     const meetingTile = screen.getByRole('link')

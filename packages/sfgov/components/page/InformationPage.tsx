@@ -28,7 +28,7 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
     information_section: infoSections,
     partner_agencies: agencies,
     topics,
-    related_pages: pages
+    related: pages
   } = page
 
   const { t } = useTranslation()

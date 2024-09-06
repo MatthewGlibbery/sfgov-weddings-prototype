@@ -43,7 +43,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
     get_help: getHelp,
     good_for_community: goodForCommunity,
     partner_agencies: agencies,
-    related_pages: relatedContentPages
+    related: relatedContentPages
   } = page
 
   const { t } = useTranslation()
