@@ -7,14 +7,11 @@
       "@/design-system": [
         "../design-system"
       ],
-      "@/sfgov": [
-        "../sfgov/components"
+      "@/design-system/*": [
+        "../design-system/*"
       ],
-      "@/lib/*": [
-        "../sfgov/lib/*"
-      ],
-      "@/*": [
-        "./*"
+      "@/sfgov/*": [
+        "../sfgov/*"
       ]
     },
     "lib": [
@@ -39,6 +36,5 @@
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": [
-  ]
+  "exclude": []
 }
