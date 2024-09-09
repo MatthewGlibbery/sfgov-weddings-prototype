@@ -28,5 +28,12 @@ module.exports = {
   },
   poweredByHeader: false,
   experimental: {},
-  transpilePackages: ['../design-system, ../../node_modules/lodash/index.js']
+  transpilePackages: ['../design-system, ../../node_modules/lodash/index.js'],
+  redirects: async () => [
+    {
+      source: '/storybook',
+      destination: '/storybook/index.html',
+      permanent: true
+    }
+  ]
 }
