@@ -1,7 +1,7 @@
 import React from 'react'
-import FormioForm from '@/../design-system/components/FormioForm'
+import FormioForm from '@/design-system/components/FormioForm'
 import { Meta, StoryObj } from '@storybook/react'
-import { FormSchema } from '@/../design-system/formio'
+import type { FormSchema } from '@/design-system/formio'
 
 const meta: Meta<typeof FormioForm> = {
   title: 'formio / Form',

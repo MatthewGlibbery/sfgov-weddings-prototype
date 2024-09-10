@@ -1,7 +1,4 @@
-import type {
-  ComponentSchema,
-  FormSchema
-} from '@/../design-system/formio/types'
+import type { ComponentSchema, FormSchema } from '@/design-system/formio/types'
 
 export function singleFieldSchema(
   component: Partial<ComponentSchema>,

@@ -1,4 +1,4 @@
-import FormioForm from '@/../design-system/components/FormioForm'
+import FormioForm from '@/design-system/components/FormioForm'
 import { singleFieldSchema as singleFieldFormSchema } from './utils'
 import type { Meta, StoryObj } from '@storybook/react'
 

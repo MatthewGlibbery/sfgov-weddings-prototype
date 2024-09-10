@@ -29,10 +29,16 @@ module.exports = {
   poweredByHeader: false,
   experimental: {},
   transpilePackages: ['../design-system, ../../node_modules/lodash/index.js'],
+  // storybook redirects
   redirects: async () => [
     {
       source: '/storybook',
       destination: '/storybook/index.html',
+      permanent: true
+    },
+    {
+      source: '/iframe.html',
+      destination: '/storybook/iframe.html',
       permanent: true
     }
   ]
