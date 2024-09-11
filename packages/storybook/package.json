@@ -3,7 +3,7 @@
   "name": "sfgov-storybook",
   "scripts": {
     "storybook": "storybook dev -c src -p 6006",
-    "build": "storybook build -c src --preview-url=/storybook/iframe.html --force-build-preview",
+    "build": "storybook build -c src",
     "chromatic": "chromatic --exit-zero-on-changes"
   },
   "repository": {
