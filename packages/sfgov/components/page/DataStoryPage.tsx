@@ -3,7 +3,13 @@ import { DataStoryPageData } from '@/types'
 import { ComponentType } from 'react'
 import { useTranslation } from 'next-i18next'
 import { When } from 'react-if'
-import { ContentSection, PageWrapper, PageLinksList, TableOfContents } from '..'
+import {
+  ContentSection,
+  PageWrapper,
+  PageLinksList,
+  TableOfContents,
+  RelatedContentList
+} from '..'
 
 export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
   page
@@ -25,10 +31,9 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
                 {description}
               </DisplayLg>
             </When>
-            <PageLinksList pageLinks={agencies} />
           </PageTitleSection>
           <When condition={!!content.length}>
-            <div className="mt-28">
+            <div className="mt-28 mb-20 flex flex-col gap-28">
               {content.map((section) => (
                 <ContentSection
                   key={section.id}
@@ -38,10 +43,11 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
               ))}
             </div>
           </When>
+          <RelatedContentList
+            title={t('partner-agencies', { defaultValue: 'Partner Agencies' })}
+            content={agencies}
+          />
         </Container>
-        <div className="mt-40 mr-28 mb-20 pb-40 col-span-4 h-fit sticky top-40">
-          <TableOfContents />
-        </div>
       </Grid>
     </PageWrapper>
   )

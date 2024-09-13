@@ -22,13 +22,13 @@ const StyledSummary = classed('summary', {
   ),
   variants: {
     datastory: {
-      true: 'justify-center space-x-4 py-12 border-solid border-b-1 border-grey300'
+      true: 'justify-center space-x-4 py-12 border-solid border-b-1 border-neutral300'
     }
   }
 })
 
 const StyledContent = classed('div', {
-  base: 'bg-neutral50 rounded-b-4 border-x-1 border-b-1 border-neutral200 p-20',
+  base: 'bg-neutral50 border-neutral200 p-20',
   variants: {
     datastory: {
       true: 'bg-white text-grey500'
@@ -82,13 +82,16 @@ export const Accordion = (props: AccordionProps) => {
           </Label>
         </When>
         <When condition={dataStory}>
-          <HeadingXs className="text-grey500" data-testid="accordion-title">
+          <Label
+            className="text-primary600 font-medium"
+            data-testid="accordion-title"
+          >
             {title}
-          </HeadingXs>
+          </Label>
         </When>
         <Icon
           className={
-            dataStory ? 'text-grey500' : 'text-primary500 min-w-[24px]'
+            dataStory ? 'text-primary600' : 'text-primary500 min-w-[24px]'
           }
           data-testid={Icon.name}
           width={24}

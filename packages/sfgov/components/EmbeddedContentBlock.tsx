@@ -40,12 +40,12 @@ export const EmbeddedContentBlock = (props: TypeEmbeddedContentBlockValues) => {
       </div>
       <When condition={!!dataNotes}>
         <Accordion title="Data notes and sources" dataStory>
-          <div className="mb-12">
-            <Link href={sourceData}>
-              {t('view-source-data', { defaultValue: 'View source data' })}
-            </Link>
+          <div className="mb-12 text-neutral500">
+            <RichText html={dataNotes} />
           </div>
-          <RichText html={dataNotes} />
+          <Link href={sourceData} className="text-neutral500">
+            {t('view-source-data', { defaultValue: 'View source data' })}
+          </Link>
         </Accordion>
       </When>
     </div>

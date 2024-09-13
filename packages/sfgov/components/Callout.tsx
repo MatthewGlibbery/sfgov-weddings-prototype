@@ -11,9 +11,9 @@ export const Callout = ({ html }: CalloutProps) => (
       aria-hidden="true"
       width={24}
       data-testid="info-icon"
-      className="min-w-[24px]  text-information700"
+      className="min-w-[24px] text-information600"
     />
-    <BodyText className="text-primary700">
+    <BodyText>
       <RichText html={html} />
     </BodyText>
   </div>

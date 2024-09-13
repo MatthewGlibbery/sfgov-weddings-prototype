@@ -14,7 +14,7 @@ export const ContentSection = ({
   section_content: sectionContent
 }: TypeContentSectionBlockValues) => {
   return (
-    <div className="space-y-20">
+    <div className="space-y-28">
       <HeadingXXl as="h2" id={title}>
         {title}
       </HeadingXXl>
