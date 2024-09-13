@@ -145,7 +145,7 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
         </Grid>
         <RelatedContentList
           id="divisions"
-          title="Partners" /* FIXME: translate */
+          title={t('partner_agencies', { defaultValue: 'Partner agencies' })}
           content={agencies}
         />
         <When condition={!!contact.length}>

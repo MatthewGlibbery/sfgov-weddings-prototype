@@ -149,23 +149,25 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       <HeadingLg as="h3" id={`dateTime${screen}`}>
         {t('date-and-time', { defaultValue: 'Date and time' })}
       </HeadingLg>
-      <div className="flex flex-col">
-        <ComposedDate
-          startDateInput={date[0].value.start_date}
-          endDateInput={/* istanbul ignore */ date[0].value.end_date || ''}
-        />
-        <When condition={date[0].value.start_time}>
-          <ComposedTime
-            startDateTimeInput={`1969-01-01T${date[0].value.start_time}`}
-            endDateTimeInput={
-              /* istanbul ignore next */
-              date[0].value.end_time
-                ? `1969-01-01T${date[0].value.end_time}`
-                : ''
-            }
+      <When condition={!!date.length}>
+        <div className="flex flex-col">
+          <ComposedDate
+            startDateInput={date[0]?.value.start_date}
+            endDateInput={/* istanbul ignore */ date[0]?.value.end_date || ''}
           />
-        </When>
-      </div>
+          <When condition={date[0]?.value.start_time}>
+            <ComposedTime
+              startDateTimeInput={`1969-01-01T${date[0]?.value.start_time}`}
+              endDateTimeInput={
+                /* istanbul ignore next */
+                date[0]?.value.end_time
+                  ? `1969-01-01T${date[0].value.end_time}`
+                  : ''
+              }
+            />
+          </When>
+        </div>
+      </When>
       <HeadingLg as="h3" id={`howToParticipate${screen}`}>
         {t('how-to-participate', { defaultValue: 'How to participate' })}
       </HeadingLg>
@@ -208,7 +210,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
             title={title}
             label={t('meeting', { defaultValue: 'Meeting' })}
           >
-            <PageLinksList pageLinks={primaryAgencies} />
+            <PageLinksList pageLinks={[primaryAgencies[0]]} />
           </PageTitleSection>
         </div>
       </Container>
