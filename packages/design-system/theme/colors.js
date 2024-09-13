@@ -37,6 +37,7 @@ module.exports = {
     accent700: colorTokens.Accent[700].value,
     accent800: colorTokens.Accent[800].value,
     accent900: colorTokens.Accent[900].value,
+    information10: colorTokens.Information[10].value,
     information100: colorTokens.Information[100].value,
     information200: colorTokens.Information[200].value,
     information300: colorTokens.Information[300].value,

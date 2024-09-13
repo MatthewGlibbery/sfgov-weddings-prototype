@@ -6,6 +6,7 @@ describe('NewsPage', () => {
   const page = NewsPageFactory.make()
 
   it('renders a news page', () => {
+    console.log(page)
     render(<NewsPage page={page} />)
 
     const title = screen.getByRole('heading', {

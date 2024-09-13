@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconGrid = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M9 5H5V9H9V5ZM3 3V11H11V3H3Z" /><path fillRule="evenodd" clipRule="evenodd" d="M9 15H5V19H9V15ZM3 13V21H11V13H3Z" /><path fillRule="evenodd" clipRule="evenodd" d="M19 5H15V9H19V5ZM13 3V11H21V3H13Z" /><path fillRule="evenodd" clipRule="evenodd" d="M19 15H15V19H19V15ZM13 13V21H21V13H13Z" /></svg>;
+const IconGrid = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M3 11V3H11V11H3ZM5 5H9V9H5V5Z" /><path fillRule="evenodd" clipRule="evenodd" d="M3 21V13H11V21H3ZM5 15H9V19H5V15Z" /><path fillRule="evenodd" clipRule="evenodd" d="M13 3V11H21V3H13ZM19 5H15V9H19V5Z" /><path fillRule="evenodd" clipRule="evenodd" d="M13 21V13H21V21H13ZM15 15H19V19H15V15Z" /></svg>;
 export default IconGrid;

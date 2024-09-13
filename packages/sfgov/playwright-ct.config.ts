@@ -9,7 +9,7 @@ export default defineConfig({
   /* The base directory, relative to
   the config file, for snapshot files
   created with toMatchSnapshot and toHaveScreenshot. */
-  testMatch: /(campaign|information|profile).spec.tsx/,
+  testMatch: /(campaign|information|location|profile).spec.tsx/,
   snapshotDir: './__snapshots__',
   /* Maximum time one test can run for. */
   timeout: 10 * 1000,

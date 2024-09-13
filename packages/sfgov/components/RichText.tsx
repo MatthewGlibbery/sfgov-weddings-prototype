@@ -143,16 +143,12 @@ export const RichText = (props: RichTextProps) => {
         )
       }
 
-      if (tagName === 'ul') {
-        return <ul className="m-0">{domToReact(node.children, options)}</ul>
-      }
-
-      if (tagName === 'ol') {
-        return <ol className="m-0">{domToReact(node.children, options)}</ol>
-      }
-
       if (tagName === 'p') {
-        return <p className="mb-16">{domToReact(node.children, options)}</p>
+        return (
+          <p className={next ? 'mb-16' : ''}>
+            {domToReact(node.children, options)}
+          </p>
+        )
       }
 
       if (tagName === 'a') {

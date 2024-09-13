@@ -441,3 +441,22 @@ export type TopicFieldTypes =
   | BlockType<'spotlight', TypeTopicSpotlightBlockValues>
   | BlockType<'resources', TypeTopicResourcesBlockValues>
   | BlockType<'content', TypeTopicContentBlockValues>
+
+export type TypeProfilePageBlock = BlockType<
+  'profile_page',
+  {
+    profile_page: PageData & {
+      pronouns: string
+      image: WagtailImageData
+    }
+  }
+>
+
+export type TypeProfileGroupBlock = BlockType<
+  'profile_group',
+  {
+    title: string
+    description: string
+    profiles: TypeProfilePageBlock[]
+  }
+>

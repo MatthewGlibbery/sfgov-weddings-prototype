@@ -534,6 +534,21 @@ module.exports = {
     }
   },
   Information: {
+    10: {
+      value: '#F2F8FF',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#F2F8FF',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
+      },
+      name: '10',
+      attributes: {},
+      path: ['Information', '10']
+    },
     100: {
       value: '#daebff',
       type: 'color',

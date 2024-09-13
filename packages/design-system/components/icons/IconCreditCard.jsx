@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconCreditCard = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M20 7H4V17H20V7ZM2 5V19H22V5H2Z" /><path fillRule="evenodd" clipRule="evenodd" d="M7 15H5V14H7V15Z" /><path fillRule="evenodd" clipRule="evenodd" d="M11 15H9V14H11V15Z" /><path fillRule="evenodd" clipRule="evenodd" d="M15 15H13V14H15V15Z" /><path fillRule="evenodd" clipRule="evenodd" d="M19 15H17V14H19V15Z" /><path fillRule="evenodd" clipRule="evenodd" d="M21 10.5H3V8.5H21V10.5Z" /></svg>;
+const IconCreditCard = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path d="M7 15H5V14H7V15Z" /><path d="M9 15H11V14H9V15Z" /><path d="M15 15H13V14H15V15Z" /><path d="M17 15H19V14H17V15Z" /><path fillRule="evenodd" clipRule="evenodd" d="M2 19V5H22V19H2ZM4 7H20V8.5H4V7ZM4 10.5V17H20V10.5H4Z" /></svg>;
 export default IconCreditCard;

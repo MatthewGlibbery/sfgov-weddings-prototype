@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconTrafficCone = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M20 22H4V20H20V22Z" /><path fillRule="evenodd" clipRule="evenodd" d="M10.1978 2H13.8021L18.2466 22H5.75336L10.1978 2ZM11.8021 4L8.24659 20H15.7534L12.1978 4H11.8021Z" /><path fillRule="evenodd" clipRule="evenodd" d="M14 11L10 11L10 9L14 9L14 11Z" /><path fillRule="evenodd" clipRule="evenodd" d="M15 16L9 16L9 14L15 14L15 16Z" /></svg>;
+const IconTrafficCone = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M10.1978 2L6.19783 20H4V22H20V20H17.8022L13.8022 2H10.1978ZM14.4201 14L13.7534 11H10.2466L9.57995 14L14.4201 14ZM14.8645 16L9.13551 16L8.24662 20H15.7534L14.8645 16ZM12.1978 4L13.3089 9L10.6911 9L11.8022 4H12.1978Z" /></svg>;
 export default IconTrafficCone;

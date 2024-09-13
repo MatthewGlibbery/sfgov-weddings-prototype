@@ -1,3 +1,3 @@
 import * as React from "react";
-const IconData = props => <svg viewBox="0 0 24 24" fill="currentcolor" {...props}><path fillRule="evenodd" clipRule="evenodd" d="M18 22L18 6L20 6L20 22L18 22Z" /><path fillRule="evenodd" clipRule="evenodd" d="M4 22L4 12L6 12L6 22L4 22Z" /><path fillRule="evenodd" clipRule="evenodd" d="M11 22L11 2L13 2L13 22L11 22Z" /></svg>;
+const IconData = props => <svg viewBox="0 0 36 40" fill="currentcolor" {...props}><path d="M20 22L20 6H22V22H20Z" /><path d="M14 2L14 22H16V2H14Z" /><path d="M4 12L4 22H2V12H4Z" /><path d="M8 8L8 22H10V8H8Z" /></svg>;
 export default IconData;

@@ -2,9 +2,10 @@ import {
   BodyText,
   Container,
   DisplayLg,
-  HeadingSm,
   HeadingXXl,
-  IconTrafficCone,
+  IconAccessibility,
+  IconParking,
+  IconTransportation,
   PageTitleSection
 } from '@/design-system'
 import { LocationPageData } from '@/types'
@@ -15,9 +16,10 @@ import {
   Accordion,
   Alert,
   ContactFooter,
+  ImageCard,
   Map,
   PageWrapper,
-  PageLinksList,
+  ProfileGroup,
   RelatedContentList,
   RichText,
   ZebraStripedSection
@@ -41,6 +43,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
     public_transportation: publicTransportion,
     services,
     related_locations: relatedLocations,
+    people,
     partner_agencies: agencies,
     about_location: about
   } = page
@@ -52,34 +55,35 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
   return (
     <PageWrapper title={title}>
       <When condition={!!alert?.[0]?.value}>
-        {() => <Alert {...alert[0].value} />}
+        {() => (
+          <div className="mx-12 md:mx-28 lg:mx-96">
+            <Alert {...alert[0].value} />
+          </div>
+        )}
       </When>
       <ZebraStripedSection>
-        <div>
-          <Container className="mb-20 pb-40">
-            <PageTitleSection
-              label={t('location', { defaultValue: 'Location' })}
-              title={title}
-            >
-              <When condition={!!description}>
-                <DisplayLg
-                  as="p"
-                  className="my-20"
-                  data-testid="step-by-step-description"
-                >
-                  {description}
-                </DisplayLg>
-              </When>
-              <PageLinksList pageLinks={agencies} />
-              <When condition={address}>
-                <Map address={address} image={image} locationName={title} />
-              </When>
-              <div className="mt-40">
-                <RichText html={body} />
-              </div>
-            </PageTitleSection>
-          </Container>
-        </div>
+        <Container className="mb-20 pb-40">
+          <PageTitleSection
+            label={t('location', { defaultValue: 'Location' })}
+            title={title}
+          >
+            <When condition={!!description}>
+              <DisplayLg
+                as="p"
+                className="my-20"
+                data-testid="step-by-step-description"
+              >
+                {description}
+              </DisplayLg>
+            </When>
+            <When condition={address}>
+              <Map address={address} image={image} locationName={title} />
+            </When>
+            <div className="mt-40">
+              <RichText html={body} />
+            </div>
+          </PageTitleSection>
+        </Container>
         <When
           condition={
             intro ||
@@ -98,9 +102,9 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
                 <When condition={!!parking.length}>
                   {() => (
                     <>
-                      <div className="flex items-center space-x-8 mb-12">
-                        <IconTrafficCone width={20} />
-                        <HeadingSm as="h3">{parking[0].value.title}</HeadingSm>
+                      <div className="flex flex-col md:flex-row gap-12 mb-12">
+                        <IconParking width={40} />
+                        <DisplayLg as="h3">{parking[0].value.title}</DisplayLg>
                       </div>
                       <RichText html={parking[0].value.text} />
                     </>
@@ -109,11 +113,11 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
                 <When condition={!!accessibility.length}>
                   {() => (
                     <>
-                      <div className="flex items-center space-x-8 mb-12">
-                        <IconTrafficCone width={20} />
-                        <HeadingSm as="h3">
+                      <div className="flex flex-col md:flex-row gap-12 mb-12">
+                        <IconAccessibility width={40} />
+                        <DisplayLg as="h3">
                           {accessibility[0].value.title}
-                        </HeadingSm>
+                        </DisplayLg>
                       </div>
                       <RichText html={accessibility[0].value.text} />
                     </>
@@ -122,11 +126,11 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
                 <When condition={!!publicTransportion.length}>
                   {() => (
                     <>
-                      <div className="flex items-center space-x-8 mb-12">
-                        <IconTrafficCone width={20} />
-                        <HeadingSm as="h3">
+                      <div className="flex flex-col md:flex-row gap-12 mb-12">
+                        <IconTransportation width={40} />
+                        <DisplayLg as="h3">
                           {publicTransportion[0].value.title}
-                        </HeadingSm>
+                        </DisplayLg>
                       </div>
                       <RichText html={publicTransportion[0].value.text} />
                     </>
@@ -134,36 +138,6 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
                 </When>
               </div>
             </div>
-          </Container>
-        </When>
-        <When condition={!!contact.length}>
-          <Container className="my-40">
-            <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('contact-information', {
-                defaultValue: 'Contact information'
-              })}
-            </HeadingXXl>
-            <ContactFooter items={contact[0]} />
-          </Container>
-        </When>
-        <Container>
-          <HeadingXXl as="h2" className="my-12 md:my-20">
-            {t('about', { defaultValue: 'About' })}
-          </HeadingXXl>
-          <BodyText>{about}</BodyText>
-        </Container>
-        <When condition={!!accordions.length}>
-          <Container className="my-40 space-y-20">
-            <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('additional-location-info', {
-                defaultValue: 'Additional location info'
-              })}
-            </HeadingXXl>
-            {accordions.map((accordion) => (
-              <Accordion key={accordion.id} title={accordion.value.title}>
-                <RichText html={accordion.value.text} />
-              </Accordion>
-            ))}
           </Container>
         </When>
         <When condition={!!services.length}>
@@ -180,14 +154,62 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
             ))}
           </Container>
         </When>
-        <Container>
-          <RelatedContentList
-            title={t('related-locations', {
-              defaultValue: 'Related locations'
-            })}
-            content={relatedLocations}
-          />
-        </Container>
+        <When condition={about}>
+          <Container backgroundColor="neutral">
+            <HeadingXXl as="h2" className="my-12 md:my-20">
+              {t('about', { defaultValue: 'About' })}
+            </HeadingXXl>
+            <BodyText>{about}</BodyText>
+          </Container>
+        </When>
+        <When condition={!!accordions.length}>
+          <Container className="my-40 space-y-20" backgroundColor="neutral">
+            <HeadingXXl as="h2" className="my-12 md:my-20">
+              {t('additional-location-info', {
+                defaultValue: 'Additional location info'
+              })}
+            </HeadingXXl>
+            {accordions.map((accordion) => (
+              <Accordion key={accordion.id} title={accordion.value.title}>
+                <RichText html={accordion.value.text} />
+              </Accordion>
+            ))}
+          </Container>
+        </When>
+        <When condition={!!agencies.length}>
+          <Container backgroundColor="neutral">
+            <RelatedContentList title={`At ${title}`} content={agencies} />
+          </Container>
+        </When>
+        <When condition={!!people.length}>
+          <Container backgroundColor="primary">
+            <ProfileGroup
+              title={people[0].value.title}
+              profiles={people[0].value.profiles}
+            />
+          </Container>
+        </When>
+        <When condition={!!people.length}>
+          <Container backgroundColor="white">
+            <RelatedContentList
+              title={t('related-locations', {
+                defaultValue: 'Related locations'
+              })}
+              content={relatedLocations}
+              component={ImageCard}
+            />
+          </Container>
+        </When>
+        <When condition={!!contact.length}>
+          <Container className="my-40">
+            <HeadingXXl as="h2" className="my-12 md:my-20">
+              {t('contact-us', {
+                defaultValue: 'Contact us'
+              })}
+            </HeadingXXl>
+            <ContactFooter items={contact[0]} />
+          </Container>
+        </When>
       </ZebraStripedSection>
     </PageWrapper>
   )

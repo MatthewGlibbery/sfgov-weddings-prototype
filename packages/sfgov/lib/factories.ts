@@ -57,7 +57,8 @@ import {
   TypeDocumentSectionBlock,
   ResourceCollectionPageData,
   TypeButtonLinkValues,
-  TypeDocumentBlockValues
+  TypeDocumentBlockValues,
+  TypeProfileGroupBlock
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -428,9 +429,10 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
       id: gen.datatype.uuid()
     }
   ],
+  people: ProfileGroupFactory.make(2),
   related_locations: RelatedContentBlockFactory.make(1, {
     meta: {
-      type: 'sfgov_base.RelatedContentPage'
+      type: 'sf.LocationPage'
     }
   }),
   partner_agencies: RelatedContentBlockFactory.make(2, {
@@ -857,37 +859,28 @@ export const RelatedContentBlockFactory = factory<RelatedContentData>((gen) => {
 
   return {
     type: 'some-type',
+    id: gen.datatype.uuid(),
     value: {
       id: gen.datatype.number(),
       meta: {
-        type: `sfgov_${gen.lorem.word()}.${gen.lorem
-          .sentence(1)
-          .replace(/\.$/, '')}`,
+        type: 'wagtailcore.Page',
         html_url: gen.internet.url()
       },
       title: gen.commerce.productName(),
-      page_content: {
-        id: gen.datatype.number(),
-        meta: {
-          type: 'wagtailcore.Page',
-          html_url: gen.internet.url()
-        },
-        title: gen.commerce.productName(),
-        date_time: DateTimeBlockFactory.make(1, {
-          value: {
-            start_date: date,
-            start_time: '16:00:00',
-            end_date: futureDate,
-            end_time: futureTime,
-            is_all_day: gen.datatype.boolean(),
-            include_end_date_time: gen.datatype.boolean() ? 'yes' : 'no'
-          }
-        }),
-        date: gen.date.recent(),
-        cancelled: false
-      }
-    },
-    id: gen.datatype.number
+      image: ImageFactory.make(),
+      date_time: DateTimeBlockFactory.make(1, {
+        value: {
+          start_date: date,
+          start_time: '16:00:00',
+          end_date: futureDate,
+          end_time: futureTime,
+          is_all_day: gen.datatype.boolean(),
+          include_end_date_time: gen.datatype.boolean() ? 'yes' : 'no'
+        }
+      }),
+      date: gen.date.recent(),
+      pronouns: 'she/her'
+    }
   }
 })
 
@@ -1392,3 +1385,28 @@ export const ResourceCollectionPageFactory =
       }
     })
   }))
+
+export const ProfileGroupFactory = factory<TypeProfileGroupBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'profile_group',
+  value: {
+    title: 'profile group',
+    description: 'some profile group description',
+    profiles: [
+      {
+        type: 'profile_page',
+        value: {
+          profile_page: RelatedContentBlockFactory.make(),
+          role: 'some role'
+        }
+      },
+      {
+        type: 'profile_page',
+        value: {
+          profile_page: RelatedContentBlockFactory.make(),
+          role: 'some other role'
+        }
+      }
+    ]
+  }
+}))

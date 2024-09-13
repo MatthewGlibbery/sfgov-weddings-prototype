@@ -69,7 +69,7 @@ export const Location = (props: LocationBlockProps) => {
         </When>
         <Link
           href={addressQuery}
-          className="flex gap-4"
+          className="flex gap-4 mt-8"
           aria-label={`${t('get-directions-to', {
             defaultValue: 'Get directions to'
           })} ${locationName}`}

@@ -5,6 +5,9 @@ export function getPageURL(page: PageData) {
   if (page?.value?.meta) {
     meta = page.value.meta
   }
+  if (page?.meta) {
+    meta = page.meta
+  }
   if (meta?.html_url) {
     return meta.html_url.includes('://')
       ? new URL(meta.html_url).pathname

@@ -29,7 +29,8 @@ import {
   TypeDataStoriesSectionBlock,
   TypeCalloutBlock,
   TypeContactFooterBlock,
-  TopicFieldTypes
+  TopicFieldTypes,
+  TypeProfileGroupBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -52,6 +53,7 @@ export type MinimalPageData = {
   meta: MinimalMeta
   page_content?: MinimalPageData
   title: string
+  image?: WagtailImageData
   // should we add description here?
 }
 
@@ -194,6 +196,7 @@ export type LocationPageData = PageData & {
   services: TypeServicesSectionBlock[]
   related_locations: RelatedContentData[]
   partner_agencies: RelatedContentData[]
+  people: TypeProfileGroupBlock[]
   about_location: string
 }
 

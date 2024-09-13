@@ -79,18 +79,13 @@ describe('Tile', () => {
     expect(eventTile).toContainElement(type)
   })
 
-  it('renders an MeetingTile', () => {
-    const [meetingLink] = RelatedContentBlockFactory.make(1, {
-      value: {
-        page_content: {
-          meta: {
-            type: 'sf.Meeting'
-          }
-        }
-      }
-    }).map((item) => ({
-      ...item.value.page_content,
-      url: item.value.page_content.meta.html_url
+  it('renders a MeetingTile', () => {
+    const [meetingLink] = RelatedContentBlockFactory.make(1).map((item) => ({
+      ...item.value,
+      meta: {
+        type: 'sf.Meeting'
+      },
+      url: item.value.meta.html_url
     }))
 
     render(<MeetingTile link={meetingLink} />)
