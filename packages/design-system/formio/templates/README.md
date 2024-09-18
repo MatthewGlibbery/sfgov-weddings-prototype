@@ -45,5 +45,51 @@ Formio.use({
 })
 ```
 
+## JSX
+
+We use [vhtml] and the [`@jsx` pragma][jsx runtime] to compile JSX expressions into
+functions that return HTML strings. To enable it in a template, you **must**:
+
+1. Name the template file with a `.tsx` or `.jsx` extension
+2. Add the following at the top of the file:
+
+    ```js
+    /** @jsx h */
+    /** @jsxFrag null */
+    /** @jsxRuntime classic */
+    import h from 'vhtml'
+    ```
+
+From that point forward, all JSX expressions will _return_ a string (or, in the
+case of fragments like `<>foo</>`, an _array_ of strings). You can test this by
+logging JSX expressions in your scripts:
+
+```js
+console.log(<div id="foo" />)
+// logs: '<div id="foo"></div>'
+```
+
+### Raw HTML
+
+Many formio components "pre-render" the HTML of other form elements (namely, the
+children of nested components) and pass the raw HTML strings to another
+template's context. When rendering these HTML strings in JSX templates, you
+**must** use the [dangerouslySetInnerHTML] prop to avoid escaping them:
+
+```jsx
+// 👎 this will escape the HTML!
+export function form(ctx) {
+  return <div>{ctx.components}</div>
+}
+
+// 👍 this will not
+export function form(ctx) {
+  return <div dangerouslySetInnerHTML={{__html: ctx.components}} />
+}
+```
+
 [formio.js template system]: https://help.form.io/developers/form-development/form-templates
 [Formio.use()]: https://help.form.io/developers/modules#creating-a-module
+[vhtml]: https://github.com/developit/vhtml
+[jsx runtime]: https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html
+[dangerouslySetInnerHTML]: https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html

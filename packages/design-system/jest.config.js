@@ -23,12 +23,18 @@ const customJestConfig = {
       branches: 100
     }
   },
-  collectCoverageFrom: ['<rootDir>/components/**/*.tsx'],
+  collectCoverageFrom: [
+    '<rootDir>/components/**/*.tsx',
+    '<rootDir>/formio/**/*.ts*',
+  ],
   moduleNameMapper,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
   testPathIgnorePatterns: ['/browser/', '/dist/'],
   transform: {
+    '.*/formio/templates/.*\\.tsx$': ['babel-jest', {
+      extends: './babel.config.js'
+    }],
     '^.+\\.(t|j)sx?$': 'ts-jest'
   }
 }

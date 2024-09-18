@@ -2,5 +2,8 @@ const theme = require('./theme')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  theme
+  theme,
+  plugins: [
+    require('@thoughtbot/tailwindcss-aria-attributes')
+  ]
 }

@@ -1,5 +1,5 @@
 import { classed, classes } from './utils'
-import type { AnyComponent, ComponentProps } from '../types'
+import type { ComponentProps } from 'react'
 
 const focusDropShadow = 'focus:shadow-[0_0_0_4px_#C9CACA]'
 const inverseButtonClasses = classes(`
@@ -9,7 +9,7 @@ const inverseButtonClasses = classes(`
   focus:text-white focus:bg-primary500 ${focusDropShadow}
 `)
 
-export const Button = classed('button' as AnyComponent, {
+export const BUTTON_VARIANTS = {
   base: classes(
     'items-center',
     'justify-center',
@@ -69,6 +69,8 @@ export const Button = classed('button' as AnyComponent, {
     variant: 'primary',
     block: false
   }
-})
+} as const
+
+export const Button = classed('button', BUTTON_VARIANTS)
 
 export type ButtonProps = ComponentProps<typeof Button>

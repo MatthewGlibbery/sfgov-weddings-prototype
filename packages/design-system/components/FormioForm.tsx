@@ -1,12 +1,11 @@
-import { Form as FormioForm, Formio, Components } from '@formio/react'
-import { initializeFormio } from '../formio'
-import type { ComponentProps } from 'react'
+import { useFormio, type FormProps } from '../formio'
 
-// @formio/react doesn't export the props type, and doing it here allows us to
-// keep it in sync with a wrapping component if need be
-export type FormioFormProps = ComponentProps<typeof FormioForm>
+export type FormioFormProps = FormProps & {
+  isDev?: boolean
+}
 
-initializeFormio(Formio, Components)
-
-// exporting this as the default simplifies the dynamic() call in <FormPage>
-export default FormioForm
+// eslint-disable-next-line react/function-component-definition
+export default function FormioForm({ isDev, ...rest }: FormioFormProps) {
+  const { FormioForm } = useFormio(isDev)
+  return <FormioForm {...rest} />
+}

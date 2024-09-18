@@ -5,14 +5,32 @@
  * This would allow us to drop formiojs as a dependency (in favor of whatever
  * @formio/react imports directly).
  */
-import type { ComponentSchema as _ComponentSchema } from 'formiojs'
+import type {
+  ComponentSchema as _ComponentSchema,
+  ValidateOptions
+} from 'formiojs'
 
-export interface ComponentSchema extends _ComponentSchema {
+export type ComponentSchema = _ComponentSchema & {
   type: string
+
+  // some fields are missing in the formiojs type
+  validate?: ValidateOptions & {
+    customMessage?: string
+  }
+
+  // many types of text fields can optionally show the word and character counts
+  showCharCount?: boolean
+  showWordCount?: boolean
+
+  // this field is optional for all components
   properties?: { [key: string]: string }
+
+  // day components have sub-fields; see:
+  // https://github.com/formio/formio.js/blob/v4.21.3/src/components/day/Day.js#L12-L28
+  fields?: Record<string, { required: boolean }>
 }
 
-export interface PageSchema extends ComponentSchema {
+export type PageSchema = ComponentSchema & {
   type: 'panel'
   title: string
   components: ComponentSchema[]
@@ -20,50 +38,55 @@ export interface PageSchema extends ComponentSchema {
 
 interface BaseFormSchema {
   type: 'form'
-  components: ComponentSchema[]
   title?: string
-  display: 'form' | 'wizard'
 
   // metadata
   _id?: string
   name?: string
   path?: string
-  form?: string
   project?: string
   owner?: string
   tags?: string[]
 }
 
-export interface FlatFormSchema extends BaseFormSchema {
+export type FlatFormSchema = BaseFormSchema & {
   display: 'form'
+  components: ComponentSchema[]
 }
 
-export interface WizardFormSchema extends BaseFormSchema {
+export type WizardFormSchema = BaseFormSchema & {
   display: 'wizard'
   components: PageSchema[]
 }
 
 export type FormSchema = FlatFormSchema | WizardFormSchema
 
-export type ComponentContext = {
+export type ComponentContext<T extends ComponentSchema = ComponentSchema> = {
   id: string
-  component: ComponentSchema
+  component: T
   classes?: string
   className?: string
   styles?: string
   visible: boolean
+  label?: {
+    className: string
+  }
   children: string
+  // formio Component class instance
+  instance: {
+    id: string
+  }
   // TODO: get this type from i18next
   // https://www.i18next.com/overview/api#t
-  t(value?: string | string[], options?: object): string | undefined
+  t(value?: string | string[], options?: object): string
 }
 
-export interface FormioPlugin {
+export type FormioPlugin = {
   framework?: string
   templates?: {
     [framework: string]: {
       [name: string]: {
-        form?: (context: any) => string | string[]
+        form?: (context: any) => string | string[] | JSX.Element
       }
     }
   }

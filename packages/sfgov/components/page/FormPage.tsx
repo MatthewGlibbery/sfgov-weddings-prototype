@@ -1,4 +1,4 @@
-import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
+import dynamic from 'next/dynamic'
 import {
   Button,
   Container,
@@ -9,7 +9,7 @@ import { getPageURL } from '@/lib/utils'
 import type { FormPageData, PageData, TypeConfirmationBodyTypes } from '@/types'
 import { type ComponentType, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { When } from 'react-if'
+import { Else, If, Then } from 'react-if'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
 import { RichText } from '../RichText'
@@ -20,7 +20,7 @@ const FormioForm = dynamic(
   () => import('../../../design-system/components/FormioForm'),
   {
     ssr: false,
-    loading: (props: DynamicOptionsLoadingProps) => {
+    loading: () => {
       return <div>Loading...</div>
     }
   }
@@ -35,7 +35,7 @@ export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
     get_help: getHelp
   } = page
 
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [submitted, setSubmitted] = useState(false)
 
   return (
@@ -44,24 +44,29 @@ export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
         <div className="mb-20 pb-40 flex flex-col space-y-40">
           <PageTitleSection
             title={submitted ? confirmationTitle : title}
-            label={submitted ? t('Form confirmation') : t('Form')}
+            label={submitted ? t('Form submitted') : t('Form')}
           ></PageTitleSection>
         </div>
-        <FormioForm
-          src={formSchemaUrl}
-          onSubmitDone={() => setSubmitted(true)}
-        />
-        <When condition={submitted}>
-          <div className="space-y-40">
-            {confirmationBody.map((block) => (
-              <ConfirmationContent key={block.id} block={block} />
-            ))}
-            <HeadingXXl as="h2" className="flex flex-row gap-8">
-              {t('Contact us')}
-            </HeadingXXl>
-            <ContactFooter items={getHelp} />
-          </div>
-        </When>
+        <If condition={submitted}>
+          <Then>
+            <div className="space-y-40">
+              {confirmationBody.map((block) => (
+                <ConfirmationContent key={block.id} block={block} />
+              ))}
+              <HeadingXXl as="h2" className="flex flex-row gap-8">
+                {t('Contact us')}
+              </HeadingXXl>
+              <ContactFooter items={getHelp} />
+            </div>
+          </Then>
+          <Else>
+            <FormioForm
+              src={formSchemaUrl}
+              options={{ i18n }}
+              onSubmitDone={() => setSubmitted(true)}
+            />
+          </Else>
+        </If>
       </Container>
     </PageWrapper>
   )

@@ -4,15 +4,18 @@ import { singleFieldArgTypes, singleFieldSchema, withContainer } from './utils'
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta = {
-  title: 'formio / Text field',
+  title: 'formio / Phone number',
   args: {
-    label: 'Text field',
-    required: false
+    label: 'Phone number',
+    required: false,
+    errorMessage: 'Enter a valid phone number'
   },
   argTypes: {
     ...singleFieldArgTypes
   },
-  component: (args) => <FormioForm form={singleFieldSchema(args)} />,
+  component: (args) => (
+    <FormioForm form={singleFieldSchema({ type: 'phoneNumber', ...args })} />
+  ),
   decorators: [withContainer]
 }
 
@@ -26,7 +29,7 @@ type Story = StoryObj<typeof meta>
  */
 export const Optional: Story = {
   args: {
-    label: 'Optional text field'
+    label: 'Optional phone number'
   }
 }
 
@@ -36,7 +39,7 @@ export const Optional: Story = {
  */
 export const Required: Story = {
   args: {
-    label: 'Required text field',
+    label: 'Phone number',
     required: true
   }
 }

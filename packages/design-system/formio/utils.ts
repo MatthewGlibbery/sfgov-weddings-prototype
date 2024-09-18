@@ -37,3 +37,14 @@ export function hook<T extends object>(
   }
   return impl
 }
+
+export function omit<T extends object, K extends keyof T>(
+  obj: T,
+  keys: (K | string)[]
+): Omit<T, K> {
+  const copy = { ...obj }
+  for (const key of keys) {
+    delete copy[key as K]
+  }
+  return copy
+}
