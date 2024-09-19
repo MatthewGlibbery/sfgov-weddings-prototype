@@ -27,11 +27,12 @@ import { Location } from '../Location'
 import { PhoneNumberBlock } from '../PhoneNumberBlock'
 import { RelatedContentList } from '../RelatedContentList'
 import { RichText } from '../RichText'
-import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
+import { TileContentSection } from '../TileContentSection'
 import { Spotlight } from '../Spotlight'
 import { TitleAndText } from '../TitleAndText'
 import { PageWrapper } from './PageWrapper'
 import { Video } from '../Video'
+import { ResourceTileList } from '../Tile'
 
 export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   page
@@ -132,11 +133,16 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       case 'resources': {
         const resourceSections = content.value.resource_sections.map(
           (resourceSection) => {
+            const resourceTileList = (
+              <ResourceTileList
+                links={resourceSection.value.resource_sections.resources}
+              />
+            )
             return (
-              <ServicesAndResourcesSection
+              <TileContentSection
                 key={resourceSection.id}
                 title={resourceSection.value.resource_sections.title}
-                tiles={resourceSection.value.resource_sections.resources}
+                tileList={resourceTileList}
               />
             )
           }

@@ -28,9 +28,11 @@ import {
   PageLinksList,
   RichText,
   Spotlight,
-  ZebraStripedSection
+  ZebraStripedSection,
+  ServiceTileList,
+  ResourceTileList
 } from '../'
-import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
+import { TileContentSection } from '../TileContentSection'
 
 export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   page
@@ -187,13 +189,18 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             <HeadingXXl as="h2" className="my-12 md:my-20">
               {t('services', { defaultValue: 'Services' })}
             </HeadingXXl>
-            {services?.map((service) => (
-              <ServicesAndResourcesSection
-                key={service.id}
-                title={service.value.title}
-                tiles={service.value.services}
-              />
-            ))}
+            {services?.map((service) => {
+              const servicesTileList = (
+                <ServiceTileList links={service.value.services} />
+              )
+              return (
+                <TileContentSection
+                  key={service.id}
+                  title={service.value.title}
+                  tileList={servicesTileList}
+                />
+              )
+            })}
           </Container>
         </When>
         <When condition={!!news?.length}>
@@ -235,13 +242,18 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                 <HeadingXXl as="h2" className="my-12 md:my-20">
                   {t('resources', { defaultValue: 'Resources' })}
                 </HeadingXXl>
-                {resources?.map((resource) => (
-                  <ServicesAndResourcesSection
-                    key={resource.id}
-                    title={resource.value.title}
-                    tiles={resource.value.resources}
-                  />
-                ))}
+                {resources?.map((resource) => {
+                  const resourceTileList = (
+                    <ResourceTileList links={resource.value.resources} />
+                  )
+                  return (
+                    <TileContentSection
+                      key={resource.id}
+                      title={resource.value.title}
+                      tileList={resourceTileList}
+                    />
+                  )
+                })}
               </div>
             </When>
             <When condition={aboutDescription || !!callToAction.length}>

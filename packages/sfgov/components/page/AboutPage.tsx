@@ -13,7 +13,7 @@ import {
   IconArrowLeft,
   PageTitleSection
 } from '@/design-system'
-import { PageLink, ServicesAndResourcesSection } from '../'
+import { PageLink, ResourceTileList, TileConte, TileContentSection } from '../'
 
 export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -60,18 +60,26 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
                   <HeadingXXl as="h2">
                     {t('resources', { defaultValue: 'Resources' })}
                   </HeadingXXl>
-                  {resources.map((section) => (
-                    <ServicesAndResourcesSection
-                      key={section.id}
-                      title={section.value.title}
-                      tiles={
-                        section.type === 'resources'
-                          ? section.value.resources
-                          : section.value.documents
+                  {resources.map((section) => {
+                    switch (section.type) {
+                      case 'resources': {
+                        const resourceTileList = (
+                          <ResourceTileList links={section.value.resources} />
+                        )
+                        return (
+                          <TileContentSection
+                            key={section.id}
+                            title={section.value.title}
+                            tileList={resourceTileList}
+                          />
+                        )
                       }
-                      type={section.type}
-                    />
-                  ))}
+                      // TODO: downloadable files
+                      /* istanbul ignore next */
+                      default:
+                        return <></>
+                    }
+                  })}
                 </div>
               </When>
             </div>

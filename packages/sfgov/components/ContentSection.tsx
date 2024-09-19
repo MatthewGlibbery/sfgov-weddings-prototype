@@ -7,7 +7,8 @@ import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { Spotlight } from './Spotlight'
 import { RichText } from './RichText'
 import { Timeline } from './Timeline'
-import { ServicesAndResourcesSection } from './ServicesAndResourcesSection'
+import { TileContentSection } from './TileContentSection'
+import { ResourceTileList } from './Tile'
 
 export const ContentSection = ({
   title,
@@ -30,11 +31,12 @@ export const ContentSection = ({
             return <PhoneNumberBlock {...block.value} />
           case 'resources':
             return (
-              <ServicesAndResourcesSection
+              <TileContentSection
                 title={block.value.title}
-                tiles={block.value.resources}
+                tileList={<ResourceTileList links={block.value.resources} />}
               />
             )
+
           case 'spotlight':
             return <Spotlight {...block} />
           case 'timeline':

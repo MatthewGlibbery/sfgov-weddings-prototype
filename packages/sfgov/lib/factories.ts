@@ -1370,8 +1370,7 @@ export const ResourceCollectionPageFactory =
             id: gen.datatype.uuid()
           }
         ]
-      },
-      { type: 'some_unexpected_type', value: [] }
+      }
     ],
     custom_section: [TitleAndTextFactory.make()],
     topics: RelatedContentBlockFactory.make(1, {

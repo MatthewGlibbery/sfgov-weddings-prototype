@@ -25,10 +25,12 @@ import {
   TitleAndText,
   TableOfContents,
   tocWrapperClasses,
-  PageLinksList
+  PageLinksList,
+  DataStoryTileList,
+  ResourceTileList
 } from '../'
 
-import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
+import { TileContentSection } from '../TileContentSection'
 import { DocumentSectionBlock } from '../DocumentSection'
 
 export const ResourceCollectionPage: ComponentType<{
@@ -61,99 +63,110 @@ export const ResourceCollectionPage: ComponentType<{
                 {description}
               </DisplayLg>
             </When>
-            <PageLinksList
-              pageLinks={relatedTopics}
-              label={t('Part of: ', { defaultValue: 'Part of: ' })}
-            />
+            <When condition={!!relatedTopics.length}>
+              <PageLinksList
+                pageLinks={relatedTopics}
+                label={t('Part of: ', { defaultValue: 'Part of: ' })}
+              />
+            </When>
           </PageTitleSection>
         </div>
-        <div className="flex flex-col gap-y-60">
-          <Grid>
-            <div className={tocWrapperClasses}>
-              <TableOfContents />
-            </div>
-            <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
-              <When condition={!!dataDashboard.length}>
-                {dataDashboard.map((item) => (
-                  <EmbeddedContentBlock {...item.value} key={item.id} />
-                ))}
-              </When>
-              <When condition={!!introductoryText.length}>
-                {introductoryText.map((item) => (
-                  <TitleAndText
-                    {...item.value}
-                    id={camelCase(item.value.title)}
-                    key={item.id}
-                    heading={HeadingXXl}
-                    as="h2"
-                  />
-                ))}
-              </When>
-              <When condition={!!body.length}>
-                {body.map((item) => {
-                  switch (item.type) {
-                    case 'resources':
-                      return (
-                        <div>
-                          <HeadingXXl as="h2" className="mb-20" id="resources">
-                            {t('Resources')}
-                          </HeadingXXl>
-                          {item.value.map((resourceSection) => (
-                            <ServicesAndResourcesSection
-                              key={resourceSection.id}
-                              title={resourceSection.value.title}
-                              tiles={resourceSection.value.resources}
-                            />
-                          ))}
-                        </div>
-                      )
-                    case 'data_stories':
-                      return (
-                        <div>
-                          <HeadingXXl as="h2" className="mb-20" id="data">
-                            {t('Data')}
-                          </HeadingXXl>
-                          {item.value.map((dataStorySection) => (
-                            <ServicesAndResourcesSection
-                              key={dataStorySection.id}
-                              title={dataStorySection.value.title}
-                              tiles={dataStorySection.value.content}
-                            />
-                          ))}
-                        </div>
-                      )
-                    case 'documents':
-                      return (
-                        <div className="grid gap-y-20">
-                          <HeadingXXl as="h2" id="documents">
-                            {t('Documents')}
-                          </HeadingXXl>
-                          {item.value.map((documentSection) => (
-                            <DocumentSectionBlock
-                              key={documentSection.id}
-                              title={documentSection.value.title}
-                              content={documentSection.value.content}
-                            />
-                          ))}
-                        </div>
-                      )
-                    default: // do nothing
-                      return <></>
-                  }
-                })}
-              </When>
-              <When condition={!!customSection.length}>
-                {customSection.map((item) => (
-                  <TitleAndText
-                    {...item.value}
-                    id={camelCase(item.value.title)}
-                    key={item.id}
-                    heading={HeadingXl}
-                  />
-                ))}
-              </When>
-            </div>
-          </Grid>
+        <div className="flex flex-col gap-y-20 md:gap-y-40 lg:gap-y-60">
+          <When condition={!!dataDashboard.length}>
+            {dataDashboard.map((item) => (
+              <EmbeddedContentBlock {...item.value} key={item.id} />
+            ))}
+          </When>
+          <When condition={!!introductoryText.length}>
+            {introductoryText.map((item) => (
+              <TitleAndText
+                {...item.value}
+                id={camelCase(item.value.title)}
+                key={item.id}
+                heading={HeadingXXl}
+                as="h2"
+              />
+            ))}
+          </When>
+          <When condition={!!body.length}>
+            {body.map((item) => {
+              switch (item.type) {
+                case 'resources':
+                  return (
+                    <div className="grid gap-y-20">
+                      <HeadingXXl as="h2" className="!mb-0" id="resources">
+                        {t('Resources')}
+                      </HeadingXXl>
+                      {item.value.map((resourceSection) => {
+                        const resourceTileList = (
+                          <ResourceTileList
+                            links={resourceSection.value.resources}
+                          />
+                        )
+                        return (
+                          <TileContentSection
+                            key={resourceSection.id}
+                            title={resourceSection.value.title}
+                            tileList={resourceTileList}
+                          />
+                        )
+                      })}
+                    </div>
+                  )
+                case 'data_stories':
+                  return (
+                    <div className="grid gap-y-20">
+                      <HeadingXXl as="h2" className="!mb-0" id="data">
+                        {t('Data')}
+                      </HeadingXXl>
+                      {item.value.map((dataStorySection) => {
+                        const tileList = (
+                          <DataStoryTileList
+                            links={dataStorySection.value.content}
+                          />
+                        )
+                        return (
+                          <TileContentSection
+                            key={dataStorySection.id}
+                            title={dataStorySection.value.title}
+                            tileList={tileList}
+                          />
+                        )
+                      })}
+                    </div>
+                  )
+                case 'documents':
+                  return (
+                    <div className="grid gap-y-20">
+                      <HeadingXXl as="h2" className="!mb-0" id="documents">
+                        {t('Documents')}
+                      </HeadingXXl>
+                      {item.value.map((documentSection) => (
+                        <DocumentSectionBlock
+                          key={documentSection.id}
+                          title={documentSection.value.title}
+                          content={documentSection.value.content}
+                        />
+                      ))}
+                    </div>
+                  )
+                /* istanbul ignore next */
+                default: // do nothing
+                  return <></>
+              }
+            })}
+          </When>
+          <When condition={!!customSection.length}>
+            {customSection.map((item) => (
+              <TitleAndText
+                {...item.value}
+                id={camelCase(item.value.title)}
+                key={item.id}
+                heading={HeadingXl}
+                headingClasses="font-body"
+              />
+            ))}
+          </When>
           <When condition={!!agencies.length}>
             {/* Partner Agencies list */}
             <RelatedContentList

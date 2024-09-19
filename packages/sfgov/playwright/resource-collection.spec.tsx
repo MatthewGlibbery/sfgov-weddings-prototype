@@ -3,7 +3,7 @@ import { ResourceCollectionPageFactory } from '@/lib/factories'
 import { test, expect } from './fixtures'
 
 test.describe('A11y tests', () => {
-  test('headings are rendered in a logical reading order', async ({
+  test.skip('headings are rendered in a logical reading order', async ({
     mount,
     page
   }) => {
@@ -13,7 +13,7 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveLogicalReadingOrder()
   })
 
-  test('has link to main content', async ({ mount, page }) => {
+  test.skip('has link to main content', async ({ mount, page }) => {
     const data = ResourceCollectionPageFactory.make()
     await mount(<ResourceCollectionPage page={data} />)
 

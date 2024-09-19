@@ -6,7 +6,7 @@ import type { TopicPageData } from '@/types'
 import { PageWrapper } from './PageWrapper'
 import { Spotlight } from '../Spotlight'
 import { ContentSection } from '../ContentSection'
-import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
+import { TileContentSection } from '../TileContentSection'
 
 import {
   Container,
@@ -15,6 +15,7 @@ import {
   PageTitleSection
 } from '@/design-system'
 import { PageLinksList } from '../PageLinksList'
+import { ResourceTileList, ServiceTileList } from '../Tile'
 
 export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -69,13 +70,18 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
                   <HeadingXl as="h2" className="mb-20">
                     {t('services', { defaultValue: 'Services' })}
                   </HeadingXl>
-                  {section.value.services.map((serviceSection) => (
-                    <ServicesAndResourcesSection
-                      key={serviceSection.id}
-                      title={serviceSection.value.title}
-                      tiles={serviceSection.value.services}
-                    />
-                  ))}
+                  {section.value.services.map((serviceSection) => {
+                    const serviceTileList = (
+                      <ServiceTileList links={serviceSection.value.services} />
+                    )
+                    return (
+                      <TileContentSection
+                        key={serviceSection.id}
+                        title={serviceSection.value.title}
+                        tileList={serviceTileList}
+                      />
+                    )
+                  })}
                 </When>
               )
             case 'spotlight':
@@ -90,13 +96,20 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
                   <HeadingXl as="h2" className="m-0 mb-20">
                     {t('resources', { defaultValue: 'Resources' })}
                   </HeadingXl>
-                  {section.value.resources.map((resourceSection) => (
-                    <ServicesAndResourcesSection
-                      key={resourceSection.id}
-                      title={resourceSection.value.title}
-                      tiles={resourceSection.value.resources}
-                    />
-                  ))}
+                  {section.value.resources.map((resourceSection) => {
+                    const resourceTileList = (
+                      <ResourceTileList
+                        links={resourceSection.value.resources}
+                      />
+                    )
+                    return (
+                      <TileContentSection
+                        key={resourceSection.id}
+                        title={resourceSection.value.title}
+                        tileList={resourceTileList}
+                      />
+                    )
+                  })}
                 </When>
               )
             case 'content':

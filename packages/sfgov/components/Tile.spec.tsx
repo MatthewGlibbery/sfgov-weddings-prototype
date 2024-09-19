@@ -7,10 +7,13 @@ import {
   QuickLinkList,
   EventTile,
   EventTileList,
-  ServiceAndResourceTile,
-  ServiceAndResourceTileList,
+  ServiceTile,
+  ServiceTileList,
+  ResourceTile,
+  ResourceTileList,
   MeetingTile,
-  DocumentTile
+  DocumentTile,
+  DataStoryTile
 } from './Tile'
 import {
   EventTileFactory,
@@ -41,15 +44,27 @@ describe('Tile', () => {
     expect(newsTile).toContainElement(title)
   })
 
-  it('renders a ServiceAndResourceTile', () => {
-    render(<ServiceAndResourceTile link={linkValue} />)
+  it('renders a ServiceTile', () => {
+    render(<ServiceTile link={linkValue} />)
 
-    const serviceAndResourceTile = screen.getByRole('link')
+    const serviceTile = screen.getByRole('link')
     const title = screen.getByText(linkValue.title)
     const description = screen.getByText(linkValue.description)
 
-    expect(serviceAndResourceTile).toBeInTheDocument()
-    expect(serviceAndResourceTile).toContainElement(title)
+    expect(serviceTile).toBeInTheDocument()
+    expect(serviceTile).toContainElement(title)
+    expect(description).toBeInTheDocument()
+  })
+
+  it('renders a ResourceTile', () => {
+    render(<ResourceTile link={linkValue} />)
+
+    const resouceTile = screen.getByRole('link')
+    const title = screen.getByText(linkValue.title)
+    const description = screen.getByText(linkValue.description)
+
+    expect(resouceTile).toBeInTheDocument()
+    expect(resouceTile).toContainElement(title)
     expect(description).toBeInTheDocument()
   })
 
@@ -109,6 +124,18 @@ describe('Tile', () => {
     expect(docTile).toContainElement(title)
   })
 
+  it('renders a DataStoryTile', () => {
+    render(<DataStoryTile link={linkValue} />)
+
+    const dataStoryTile = screen.getByRole('link')
+    const title = screen.getByText(linkValue.title)
+    const description = screen.getByText(linkValue.description)
+
+    expect(dataStoryTile).toBeInTheDocument()
+    expect(dataStoryTile).toContainElement(title)
+    expect(description).toBeInTheDocument()
+  })
+
   it('renders a list of news tiles inside a TileSection', () => {
     render(<NewsTileList links={NewsTileFactory.make(3)} />)
 
@@ -116,8 +143,15 @@ describe('Tile', () => {
     expect(tileSection).toBeInTheDocument()
   })
 
-  it('renders a list of content tiles inside a TileSection', () => {
-    render(<ServiceAndResourceTileList links={GenericTileFactory.make(3)} />)
+  it('renders a list of service tiles inside a TileSection', () => {
+    render(<ServiceTileList links={GenericTileFactory.make(3)} />)
+
+    const tileSection = screen.getByTestId('tile-section')
+    expect(tileSection).toBeInTheDocument()
+  })
+
+  it('renders a list of resource tiles inside a TileSection', () => {
+    render(<ResourceTileList links={GenericTileFactory.make(3)} />)
 
     const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()

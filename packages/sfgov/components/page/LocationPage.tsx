@@ -22,9 +22,10 @@ import {
   ProfileGroup,
   RelatedContentList,
   RichText,
-  ZebraStripedSection
+  ZebraStripedSection,
+  ServiceTileList
 } from '..'
-import { ServicesAndResourcesSection } from '../ServicesAndResourcesSection'
+import { TileContentSection } from '../TileContentSection'
 
 export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
   page
@@ -145,13 +146,18 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
             <HeadingXXl as="h2" className="my-12 md:my-20">
               {t('services', { defaultValue: 'Services' })}
             </HeadingXXl>
-            {services.map((service) => (
-              <ServicesAndResourcesSection
-                key={service.id}
-                title={service.value.title}
-                tiles={service.value.services}
-              />
-            ))}
+            {services.map((service) => {
+              const servicesTileList = (
+                <ServiceTileList links={service.value.services} />
+              )
+              return (
+                <TileContentSection
+                  key={service.id}
+                  title={service.value.title}
+                  tileList={servicesTileList}
+                />
+              )
+            })}
           </Container>
         </When>
         <When condition={about}>
@@ -184,8 +190,8 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
         <When condition={!!people.length}>
           <Container backgroundColor="primary">
             <ProfileGroup
-              title={people[0].value.title}
-              profiles={people[0].value.profiles}
+              title={people[0]?.value.title}
+              profiles={people[0]?.value.profiles}
             />
           </Container>
         </When>

@@ -4,6 +4,7 @@ import {
   HeadingMd,
   IconArrowRight,
   IconCalendar,
+  IconData,
   IconDocument,
   IconChevronRight,
   Label,
@@ -33,10 +34,7 @@ export const TileSection = ({
   ...rest
 }: JSX.IntrinsicElements['div']) => (
   <div
-    className={classes(
-      'grid grid-cols-1 gap-y-20 md:grid-cols-2 md:gap-y-28',
-      className
-    )}
+    className={classes('grid grid-cols-1 gap-28 md:grid-cols-2', className)}
     {...rest}
   />
 )
@@ -86,19 +84,35 @@ export const NewsTile = ({ link }: TileProps) =>
     <></>
   )
 
-export const ServiceAndResourceTile = ({ link }: TileProps) => {
+export const ServiceTile = ({ link }: TileProps) => {
   return (
-    <div className="p-12">
-      <div className="flex items-start">
-        <BaseTile href={link.url}>
+    <BaseTile href={link.url} className="p-12">
+      <div className="flex items-start justify-end">
+        <div className="mr-auto">
           <HeadingMd className="m-0 mb-12 text-primary600">
             {link.title}
           </HeadingMd>
-        </BaseTile>
-        <IconChevronRight className="ml-16 mt-2 text-primary600" width={20} />
+          <p>{link.description}</p>
+        </div>
+        <IconChevronRight className="mt-2 text-primary600" width={20} />
       </div>
-      <p>{link.description}</p>
-    </div>
+    </BaseTile>
+  )
+}
+
+export const ResourceTile = ({ link }: TileProps) => {
+  return (
+    <BaseTile href={link.url} className="p-12">
+      <div className="flex items-start justify-end">
+        <div className="mr-auto">
+          <HeadingMd className="m-0 mb-12 text-primary600">
+            {link.title}
+          </HeadingMd>
+          <p>{link.description}</p>
+        </div>
+        <IconArrowRight className="mt-2 text-primary600" width={20} />
+      </div>
+    </BaseTile>
   )
 }
 
@@ -124,21 +138,30 @@ export const EventTile = ({ link }: TileProps) => (
 )
 
 export const DocumentTile = ({ link }: TileProps) => (
-  <div className="flex relative">
-    <BaseTile href={link.url}>
-      <HeadingMd className="m-0 mb-8 text-primary500">{link.title}</HeadingMd>
-      <When condition={!!link.description}>
-        <RichText html={link.description} />
-      </When>
-      <When condition={!!link.publishedDate}>
-        <div>{link.publishedDate}</div>
-      </When>
-    </BaseTile>
-    <IconChevronRight
-      className="ml-16 text-primary500 absolute top-0 right-0"
-      width={20}
-    />
-  </div>
+  <BaseTile href={link.url} className="p-12">
+    <IconDocument width={20} className="text-primary600" />
+    <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
+      {link.title}
+    </HeadingMd>
+    <When condition={!!link.description}>
+      <RichText html={link.description} />
+    </When>
+    <When condition={!!link.publishedDate}>
+      <div>{link.publishedDate}</div>
+    </When>
+  </BaseTile>
+)
+
+export const DataStoryTile = ({ link }: TileProps) => (
+  <BaseTile href={link.url} className="p-12">
+    <IconData width={20} className="text-primary600" />
+    <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
+      {link.title}
+    </HeadingMd>
+    <When condition={!!link.description}>
+      <RichText html={link.description} />
+    </When>
+  </BaseTile>
 )
 
 export const MeetingTile = ({ link }: TileProps) => {
@@ -255,5 +278,7 @@ export const NewsTileList = createTileList(NewsTile)
 export const QuickLinkList = createTileList(QuickLink)
 export const EventTileList = createTileList(EventTile)
 export const MeetingTileList = createTileList(MeetingTile)
-export const ServiceAndResourceTileList = createTileList(ServiceAndResourceTile)
+export const ServiceTileList = createTileList(ServiceTile)
+export const ResourceTileList = createTileList(ResourceTile)
+export const DataStoryTileList = createTileList(DataStoryTile)
 export const DocumentTileList = createTileList(DocumentTile)
