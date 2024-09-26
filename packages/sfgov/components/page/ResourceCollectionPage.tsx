@@ -6,15 +6,9 @@ import { camelCase } from '@/lib/utils'
 import {
   Container,
   DisplayLg,
-  Grid,
-  IconInfo,
-  IconQuestion,
   HeadingXl,
   HeadingXXl,
-  HeadingLg,
-  PageTitleSection,
-  MainContent,
-  BodyText
+  PageTitleSection
 } from '@/design-system'
 import type { ResourceCollectionPageData } from '@/types'
 
@@ -23,11 +17,9 @@ import {
   EmbeddedContentBlock,
   RelatedContentList,
   TitleAndText,
-  TableOfContents,
-  tocWrapperClasses,
   PageLinksList,
   DataStoryTileList,
-  ResourceTileList
+  ContentTileList
 } from '../'
 
 import { TileContentSection } from '../TileContentSection'
@@ -98,8 +90,8 @@ export const ResourceCollectionPage: ComponentType<{
                         {t('Resources')}
                       </HeadingXXl>
                       {item.value.map((resourceSection) => {
-                        const resourceTileList = (
-                          <ResourceTileList
+                        const TileList = (
+                          <ContentTileList
                             links={resourceSection.value.resources}
                           />
                         )
@@ -107,7 +99,7 @@ export const ResourceCollectionPage: ComponentType<{
                           <TileContentSection
                             key={resourceSection.id}
                             title={resourceSection.value.title}
-                            tileList={resourceTileList}
+                            tileList={TileList}
                           />
                         )
                       })}

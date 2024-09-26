@@ -15,7 +15,9 @@ import {
   PageTitleSection
 } from '@/design-system'
 import { PageLinksList } from '../PageLinksList'
-import { ResourceTileList, ServiceTileList } from '../Tile'
+import { ContentTileList } from '../Tile'
+import { ZebraStripedSection } from '../ZebraStripeSection'
+import { RelatedContentList } from '../RelatedContentList'
 
 export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -34,22 +36,21 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
             </DisplayLg>
           </When>
         </PageTitleSection>
+      </Container>
+      <ZebraStripedSection>
         {fields.map((section) => {
           switch (section.type) {
             case 'child_topics':
               return (
                 <When condition={!!section.value.page_content.length}>
-                  {section.value.page_content.map((topic, i) => (
-                    <span
-                      key={topic?.value?.id}
-                      data-testid="related_content_topics-section"
-                    >
-                      {i > 0 && ', '}
-                      <a href={topic?.value?.meta.html_url}>
-                        {topic?.value?.title}
-                      </a>
-                    </span>
-                  ))}
+                  <Container>
+                    <TileContentSection
+                      title=""
+                      tileList={
+                        <ContentTileList links={section.value.page_content} />
+                      }
+                    />
+                  </Container>
                 </When>
               )
             case 'content_top':
@@ -67,61 +68,75 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
             case 'services':
               return (
                 <When condition={!!section.value.services.length}>
-                  <HeadingXl as="h2" className="mb-20">
-                    {t('services', { defaultValue: 'Services' })}
-                  </HeadingXl>
-                  {section.value.services.map((serviceSection) => {
-                    const serviceTileList = (
-                      <ServiceTileList links={serviceSection.value.services} />
-                    )
-                    return (
-                      <TileContentSection
-                        key={serviceSection.id}
-                        title={serviceSection.value.title}
-                        tileList={serviceTileList}
-                      />
-                    )
-                  })}
+                  <Container>
+                    <HeadingXl as="h2" className="!mb-28">
+                      {t('services', { defaultValue: 'Services' })}
+                    </HeadingXl>
+                    {section.value.services.map((serviceSection) => {
+                      const tileList = (
+                        <ContentTileList
+                          links={serviceSection.value.services}
+                        />
+                      )
+                      return (
+                        <TileContentSection
+                          key={serviceSection.id}
+                          title={serviceSection.value.title}
+                          tileList={tileList}
+                        />
+                      )
+                    })}
+                  </Container>
                 </When>
               )
             case 'spotlight':
               return (
                 <When condition={!!section.value.spotlight.length}>
-                  <Spotlight {...section.value.spotlight[0]} />
+                  <Spotlight
+                    backgroundColor="white"
+                    {...section.value.spotlight[0]}
+                  />
                 </When>
               )
             case 'resources':
               return (
                 <When condition={!!section.value.resources.length}>
-                  <HeadingXl as="h2" className="m-0 mb-20">
-                    {t('resources', { defaultValue: 'Resources' })}
-                  </HeadingXl>
-                  {section.value.resources.map((resourceSection) => {
-                    const resourceTileList = (
-                      <ResourceTileList
-                        links={resourceSection.value.resources}
-                      />
-                    )
-                    return (
-                      <TileContentSection
-                        key={resourceSection.id}
-                        title={resourceSection.value.title}
-                        tileList={resourceTileList}
-                      />
-                    )
-                  })}
+                  <Container>
+                    <HeadingXl as="h2" className="!mb-28">
+                      {t('resources', { defaultValue: 'Resources' })}
+                    </HeadingXl>
+                    {section.value.resources.map((resourceSection) => {
+                      const tileList = (
+                        <ContentTileList
+                          links={resourceSection.value.resources}
+                        />
+                      )
+                      return (
+                        <TileContentSection
+                          key={resourceSection.id}
+                          title={resourceSection.value.title}
+                          tileList={tileList}
+                        />
+                      )
+                    })}
+                  </Container>
                 </When>
               )
             case 'content':
               return (
                 <When condition={!!section.value.content.length}>
-                  {section.value.content.map((section) => (
-                    <ContentSection
-                      key={section.id}
-                      title={section.value.title}
-                      section_content={section.value.section_content}
-                    />
-                  ))}
+                  <div
+                    className="flex flex-col gap-y-40"
+                    backgroundColor="white"
+                  >
+                    {section.value.content.map((section) => (
+                      <ContentSection
+                        key={section.id}
+                        title={section.value.title}
+                        section_content={section.value.section_content}
+                      />
+                    ))}
+                  </div>
                 </When>
               )
             /* istanbul ignore next */
@@ -131,10 +146,16 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
         })}
 
         <When condition={!!agencies}>
-          {/* Related Agencies list */}
-          <PageLinksList pageLinks={agencies} />
+          <Container>
+            <RelatedContentList
+              title={t('partner-agencies', {
+                defaultValue: 'Partner Agencies'
+              })}
+              content={agencies}
+            />
+          </Container>
         </When>
-      </Container>
+      </ZebraStripedSection>
     </PageWrapper>
   )
 }

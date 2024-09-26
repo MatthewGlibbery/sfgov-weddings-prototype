@@ -2,7 +2,7 @@ import { classed } from '@/design-system'
 import { ReactNode } from 'react'
 
 const Wrapper = classed('div', {
-  base: 'even:bg-secondary10 py-20 md:py-28 lg:py-40',
+  base: 'even:bg-neutral10 py-20 md:py-28 lg:py-40',
   variants: {
     noPadding: {
       true: 'p-0'
@@ -10,6 +10,7 @@ const Wrapper = classed('div', {
     backgroundColor: {
       neutral: '!bg-neutral10',
       primary: '!bg-primary50',
+      secondary: '!bg-secondary10',
       white: '!bg-white'
     }
   }
@@ -27,7 +28,7 @@ export const ZebraStripedSection = ({
   noPadding = false
 }: ZebraStripedSectionProps) => (
   <div className={className}>
-    {children.map((child: ReactNode, i: number) => (
+    {children.flat().map((child: ReactNode, i: number) => (
       <Wrapper
         key={i}
         noPadding={noPadding}

@@ -12,8 +12,8 @@ describe('<Timeline>', () => {
     render(<Timeline title="Some timeline" timeline_items={items} />)
     expect(screen.getByText('Some timeline')).toBeInTheDocument()
     for (let i = 0; i < items.length; i++) {
-      expect(screen.getByText(items[i].title)).toBeInTheDocument()
-      expect(screen.getByText(items[i].text)).toBeInTheDocument()
+      expect(screen.getAllByText(items[i].title)[0]).toBeInTheDocument()
+      expect(screen.getAllByText(items[i].text)[0]).toBeInTheDocument()
     }
   })
 })

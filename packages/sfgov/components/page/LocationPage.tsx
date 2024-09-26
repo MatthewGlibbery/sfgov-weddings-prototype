@@ -23,7 +23,7 @@ import {
   RelatedContentList,
   RichText,
   ZebraStripedSection,
-  ServiceTileList
+  ContentTileList
 } from '..'
 import { TileContentSection } from '../TileContentSection'
 
@@ -93,7 +93,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
             !!publicTransportion.length
           }
         >
-          <Container>
+          <Container backgroundColor="secondary">
             <div className="flex flex-col space-y-40">
               <HeadingXXl as="h2" className="my-12 md:my-20">
                 {t('getting-here', { defaultValue: 'Getting here' })}
@@ -148,7 +148,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
             </HeadingXXl>
             {services.map((service) => {
               const servicesTileList = (
-                <ServiceTileList links={service.value.services} />
+                <ContentTileList links={service.value.services} />
               )
               return (
                 <TileContentSection

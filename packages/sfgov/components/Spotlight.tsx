@@ -9,16 +9,16 @@ import {
   HeadingXXl
 } from '@/design-system'
 import { Image } from './Image'
-import { useTranslation } from 'next-i18next'
-import { IndicatorWithTitle } from './Indicator'
 
 type SpotlightProps = TypeSpotlightBlock & {
   themeClasses?: string
   buttonClasses?: string
+  theme?: 'black' | 'green' | 'orange'
+  secondary?: boolean
 }
 
 const SpotlightContainer = classed('div' as AnyComponent, {
-  base: 'flex flex-col md:rounded-4 md:flex-row md:py-28 gap-x-28 gap-y-20 bg-grey100',
+  base: 'flex flex-col md:rounded-4 md:flex-row px-20 py-28 gap-x-28 gap-y-20 bg-primary50',
   variants: {
     full: {
       true: 'md:flex-col',
@@ -26,12 +26,34 @@ const SpotlightContainer = classed('div' as AnyComponent, {
     },
     isReversed: {
       true: 'md:flex-row-reverse'
+    },
+    secondary: {
+      true: 'bg-primary700'
+    },
+    theme: {
+      black: 'bg-neutral800',
+      green: 'bg-secondary50',
+      orange: 'bg-accent50'
     }
-  }
+  },
+  compoundVariants: [
+    {
+      secondary: 'true',
+      theme: 'green',
+      className: 'bg-secondary600'
+    },
+    {
+      secondary: 'true',
+      theme: 'orange',
+      className: 'bg-accent600'
+    }
+  ]
 })
 
 export const Spotlight = ({
   value,
+  theme,
+  secondary,
   buttonClasses,
   themeClasses
 }: SpotlightProps) => {
@@ -64,12 +86,12 @@ export const Spotlight = ({
     }
   }
 
-  const { t } = useTranslation()
-
   return (
     <SpotlightContainer
       full={imageAlignment === 'full'}
       isReversed={imageAlignment !== 'full' && imagePosition === 'left'}
+      theme={theme}
+      secondary={secondary}
     >
       <div className="basis-0 grow">
         <When condition={!!image}>

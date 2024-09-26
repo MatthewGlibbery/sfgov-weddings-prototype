@@ -29,8 +29,7 @@ import {
   RichText,
   Spotlight,
   ZebraStripedSection,
-  ServiceTileList,
-  ResourceTileList
+  ContentTileList
 } from '../'
 import { TileContentSection } from '../TileContentSection'
 
@@ -190,14 +189,14 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               {t('services', { defaultValue: 'Services' })}
             </HeadingXXl>
             {services?.map((service) => {
-              const servicesTileList = (
-                <ServiceTileList links={service.value.services} />
+              const tileList = (
+                <ContentTileList links={service.value.services} />
               )
               return (
                 <TileContentSection
                   key={service.id}
                   title={service.value.title}
-                  tileList={servicesTileList}
+                  tileList={tileList}
                 />
               )
             })}
@@ -243,14 +242,14 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                   {t('resources', { defaultValue: 'Resources' })}
                 </HeadingXXl>
                 {resources?.map((resource) => {
-                  const resourceTileList = (
-                    <ResourceTileList links={resource.value.resources} />
+                  const tileList = (
+                    <ContentTileList links={resource.value.resources} />
                   )
                   return (
                     <TileContentSection
                       key={resource.id}
                       title={resource.value.title}
-                      tileList={resourceTileList}
+                      tileList={tileList}
                     />
                   )
                 })}

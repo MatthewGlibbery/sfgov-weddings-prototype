@@ -84,33 +84,17 @@ export const NewsTile = ({ link }: TileProps) =>
     <></>
   )
 
-export const ServiceTile = ({ link }: TileProps) => {
+export const ContentTile = ({ link }: TileProps) => {
   return (
     <BaseTile href={link.url} className="p-12">
-      <div className="flex items-start justify-end">
-        <div className="mr-auto">
+      <div className="flex items-start justify-between">
+        <div className="mr-12 space-y-12">
           <HeadingMd className="m-0 mb-12 text-primary600">
             {link.title}
           </HeadingMd>
           <p>{link.description}</p>
         </div>
-        <IconChevronRight className="mt-2 text-primary600" width={20} />
-      </div>
-    </BaseTile>
-  )
-}
-
-export const ResourceTile = ({ link }: TileProps) => {
-  return (
-    <BaseTile href={link.url} className="p-12">
-      <div className="flex items-start justify-end">
-        <div className="mr-auto">
-          <HeadingMd className="m-0 mb-12 text-primary600">
-            {link.title}
-          </HeadingMd>
-          <p>{link.description}</p>
-        </div>
-        <IconArrowRight className="mt-2 text-primary600" width={20} />
+        <IconArrowRight className="mt-2 text-primary600 shrink-0" width={20} />
       </div>
     </BaseTile>
   )
@@ -262,7 +246,7 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
     })
     return (
       <TileSection
-        className="gap-x-28 gap-y-16"
+        className="gap-x-28 gap-y-20"
         data-testid="tile-section"
         {...rest}
       >
@@ -278,7 +262,6 @@ export const NewsTileList = createTileList(NewsTile)
 export const QuickLinkList = createTileList(QuickLink)
 export const EventTileList = createTileList(EventTile)
 export const MeetingTileList = createTileList(MeetingTile)
-export const ServiceTileList = createTileList(ServiceTile)
-export const ResourceTileList = createTileList(ResourceTile)
+export const ContentTileList = createTileList(ContentTile)
 export const DataStoryTileList = createTileList(DataStoryTile)
 export const DocumentTileList = createTileList(DocumentTile)

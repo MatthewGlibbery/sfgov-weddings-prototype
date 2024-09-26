@@ -13,7 +13,7 @@ import {
   IconArrowLeft,
   PageTitleSection
 } from '@/design-system'
-import { PageLink, ResourceTileList, TileConte, TileContentSection } from '../'
+import { PageLink, ContentTileList, TileContentSection } from '../'
 
 export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -63,14 +63,14 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
                   {resources.map((section) => {
                     switch (section.type) {
                       case 'resources': {
-                        const resourceTileList = (
-                          <ResourceTileList links={section.value.resources} />
+                        const TileList = (
+                          <ContentTileList links={section.value.resources} />
                         )
                         return (
                           <TileContentSection
                             key={section.id}
                             title={section.value.title}
-                            tileList={resourceTileList}
+                            tileList={TileList}
                           />
                         )
                       }

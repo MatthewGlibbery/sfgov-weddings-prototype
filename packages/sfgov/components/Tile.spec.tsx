@@ -7,10 +7,8 @@ import {
   QuickLinkList,
   EventTile,
   EventTileList,
-  ServiceTile,
-  ServiceTileList,
-  ResourceTile,
-  ResourceTileList,
+  ContentTile,
+  ContentTileList,
   MeetingTile,
   DocumentTile,
   DataStoryTile
@@ -44,20 +42,8 @@ describe('Tile', () => {
     expect(newsTile).toContainElement(title)
   })
 
-  it('renders a ServiceTile', () => {
-    render(<ServiceTile link={linkValue} />)
-
-    const serviceTile = screen.getByRole('link')
-    const title = screen.getByText(linkValue.title)
-    const description = screen.getByText(linkValue.description)
-
-    expect(serviceTile).toBeInTheDocument()
-    expect(serviceTile).toContainElement(title)
-    expect(description).toBeInTheDocument()
-  })
-
-  it('renders a ResourceTile', () => {
-    render(<ResourceTile link={linkValue} />)
+  it('renders a ContentTile', () => {
+    render(<ContentTile link={linkValue} />)
 
     const resouceTile = screen.getByRole('link')
     const title = screen.getByText(linkValue.title)
@@ -144,14 +130,14 @@ describe('Tile', () => {
   })
 
   it('renders a list of service tiles inside a TileSection', () => {
-    render(<ServiceTileList links={GenericTileFactory.make(3)} />)
+    render(<ContentTileList links={GenericTileFactory.make(3)} />)
 
     const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()
   })
 
   it('renders a list of resource tiles inside a TileSection', () => {
-    render(<ResourceTileList links={GenericTileFactory.make(3)} />)
+    render(<ContentTileList links={GenericTileFactory.make(3)} />)
 
     const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()

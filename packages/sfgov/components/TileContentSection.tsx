@@ -14,7 +14,7 @@ export const TileContentSection = ({
   return (
     <div>
       <When condition={!!title}>
-        <HeadingXl as="p" className="font-body">
+        <HeadingXl as="p" className="font-body !mb-20">
           {title}
         </HeadingXl>
       </When>

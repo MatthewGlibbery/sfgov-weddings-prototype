@@ -18,6 +18,7 @@ const PageLinkWithBorder = ({ item }: ComponentProps) => (
     pb-20
     md:[&:nth-child(3n+1)]:border-r-1 
     md:[&:nth-child(3n)]:border-l-1 
+    md:[&:only-child]:border-r-0
     md:border-neutral200 md:[&:not(:nth-child(3n+1))]:pl-28 
   "
   >

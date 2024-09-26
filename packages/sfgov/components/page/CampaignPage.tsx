@@ -32,7 +32,7 @@ import { Spotlight } from '../Spotlight'
 import { TitleAndText } from '../TitleAndText'
 import { PageWrapper } from './PageWrapper'
 import { Video } from '../Video'
-import { ResourceTileList } from '../Tile'
+import { ContentTileList } from '../Tile'
 
 export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   page
@@ -55,8 +55,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   const { t } = useTranslation()
 
   const themeBackground = {
-    spotlight1: 'bg-primary50',
-    spotlight2: 'bg-primary700',
+    imageWithText: 'bg-primary700',
     accordion: '',
     video: 'bg-primary10'
   }
@@ -70,8 +69,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   }
   switch (theme) {
     case 'black':
-      themeBackground.spotlight1 = 'bg-neutral800'
-      themeBackground.spotlight2 = 'bg-neutral800'
+      themeBackground.imageWithText = 'bg-neutral800'
       themeBackground.video = 'bg-neutral10'
       themeText.spotlight1 = 'text-white'
       themeText.spotlight2 = 'text-white'
@@ -79,8 +77,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       break
     // istanbul ignore next
     case 'green':
-      themeBackground.spotlight1 = 'bg-secondary50'
-      themeBackground.spotlight2 = 'bg-secondary600'
+      themeBackground.imageWithText = 'bg-secondary600'
       themeBackground.accordion = 'bg-secondary10 border-secondary200'
       themeBackground.video = 'bg-secondary10'
       themeText.spotlight1 = 'text-secondary800'
@@ -88,8 +85,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       break
     // istanbul ignore next
     case 'orange':
-      themeBackground.spotlight1 = 'bg-accent50'
-      themeBackground.spotlight2 = 'bg-accent600'
+      themeBackground.imageWithText = 'bg-accent600'
       themeBackground.accordion = 'bg-accent10 border-accent200'
       themeBackground.video = 'bg-accent10'
       themeText.spotlight1 = 'text-accent800'
@@ -112,7 +108,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
         return (
           <div
             className={classes(
-              themeBackground.spotlight2,
+              themeBackground.imageWithText,
               'text-white py-28 md:rounded-4'
             )}
           >
@@ -133,8 +129,8 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       case 'resources': {
         const resourceSections = content.value.resource_sections.map(
           (resourceSection) => {
-            const resourceTileList = (
-              <ResourceTileList
+            const TileList = (
+              <ContentTileList
                 links={resourceSection.value.resource_sections.resources}
               />
             )
@@ -142,7 +138,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
               <TileContentSection
                 key={resourceSection.id}
                 title={resourceSection.value.resource_sections.title}
-                tileList={resourceTileList}
+                tileList={TileList}
               />
             )
           }
@@ -233,18 +229,12 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       </Container>
       <div className="relative top-[100px] xl:top-[250px] mb-[200px] xl:mb-[400px] max-w-lg md:mx-16 lg:mx-auto">
         <When condition={!!spotlight1.length}>
-          <div
-            className={classes(
-              themeBackground.spotlight1,
-              'px-20 py-28 md:py-0 mb-80 md:rounded-4'
-            )}
-          >
-            <Spotlight
-              themeClasses={themeText.spotlight1}
-              buttonClasses={themeButton.spotlight1}
-              {...spotlight1[0]}
-            />
-          </div>
+          <Spotlight
+            theme={theme}
+            themeClasses={themeText.spotlight1}
+            buttonClasses={themeButton.spotlight1}
+            {...spotlight1[0]}
+          />
         </When>
         <Container className="mb-20">
           <HeadingXXl as="h2">{factsTitle}</HeadingXXl>
@@ -281,18 +271,13 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           </When>
         </Container>
         <When condition={!!spotlight2.length}>
-          <div
-            className={classes(
-              themeBackground.spotlight2,
-              'px-20 py-28 md:py-0 mb-80 md:rounded-4'
-            )}
-          >
-            <Spotlight
-              themeClasses={themeText.spotlight2}
-              buttonClasses={themeButton.spotlight2}
-              {...spotlight2[0]}
-            />
-          </div>
+          <Spotlight
+            theme={theme}
+            secondary="true"
+            themeClasses={themeText.spotlight2}
+            buttonClasses={themeButton.spotlight2}
+            {...spotlight2[0]}
+          />
         </When>
         {additionalContent.map((content) => (
           <div key={content.id} className="mb-20 md:mb-40 lg:mb-60">
