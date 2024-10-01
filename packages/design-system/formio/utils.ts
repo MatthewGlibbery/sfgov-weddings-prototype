@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-type AnyFunction = (...args: any[]) => any
-
-// 🙃
-type MethodOf<T extends object> = {
-  [K in keyof T]: T[K] extends (this: T, ...args: any[]) => any | AnyFunction
-    ? K
-    : never
-}[keyof T]
+import type { MethodOf, AnyFunction } from './types/utils'
 
 /**
  * Replace the named method on an object with a new function that receives the
@@ -38,6 +31,10 @@ export function hook<T extends object>(
   return impl
 }
 
+/**
+ * Create a shallow copy of an object without any of the provided keys, a la:
+ * https://lodash.com/docs/4.17.15#omit
+ */
 export function omit<T extends object, K extends keyof T>(
   obj: T,
   keys: (K | string)[]

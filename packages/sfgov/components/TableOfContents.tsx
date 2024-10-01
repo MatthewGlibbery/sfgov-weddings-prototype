@@ -139,7 +139,7 @@ const useHeadingsData = (screen) => {
 
   useEffect(() => {
     const headingElements = Array.from(
-      document.querySelectorAll('h2[id], h3[id]:not([id=""]')
+      document.querySelectorAll('h2[id], h3[id]:not([id=""])')
     )
 
     let headings = headingElements
@@ -209,7 +209,7 @@ const useIntersectionObserver = (activeNode, setActiveNode, screen) => {
     })
 
     let headingElements = Array.from(
-      document.querySelectorAll('h2[id], h3[id]:not([id=""]')
+      document.querySelectorAll('h2[id], h3[id]:not([id=""])')
     )
 
     if (screen) {

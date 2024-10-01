@@ -14,6 +14,12 @@ module.exports = {
           '@tw-classed/react'
         ]
       }
-    ]
+    ],
+    '@typescript-eslint/no-unused-vars': ['warn', {
+      argsIgnorePattern: "fake"
+    }],
+    '@typescript-eslint/consistent-indexed-object-style': 'warn',
+    '@typescript-eslint/consistent-type-imports': 'warn',
+    '@typescript-eslint/no-import-type-side-effects': 'error',
   }
 }

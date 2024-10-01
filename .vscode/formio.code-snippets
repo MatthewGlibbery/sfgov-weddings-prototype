@@ -1,0 +1,12 @@
+{
+	"import vhtml for JSX": {
+		"scope": "typescriptreact",
+		"prefix": "import h ",
+		"body": [
+			"/** @jsx h */",
+			"/** @jsxFrag null */",
+			"/** @jsxRuntime classic */",
+			"import h from 'vhtml'"
+		]
+	}
+}

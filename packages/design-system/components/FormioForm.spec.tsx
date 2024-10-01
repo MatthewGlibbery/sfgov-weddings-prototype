@@ -1,16 +1,17 @@
+/* eslint-disable testing-library/no-node-access */
 import { Components, Formio } from '@formio/react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import type { ComponentSchema } from '../formio/types'
-import type { Form } from 'formiojs'
 import mockConsole from 'jest-mock-console'
-import FormioForm from './FormioForm'
+import type { Form, InputComponentSchema } from '../formio'
 import {
+  ColumnsFactory,
   ComponentFactory,
   FormFactory,
   PageFactory,
   WizardFactory
-} from '../__fixtures__/forms/factories'
+} from '../formio/factories'
 import basicForm from '../__fixtures__/forms/basic.json'
+import FormioForm from './FormioForm'
 
 let restoreConsole: ReturnType<typeof mockConsole>
 
@@ -189,7 +190,7 @@ describe('FormioForm', () => {
     })
 
     describe('input', () => {
-      function renderForm(props: Partial<ComponentSchema>) {
+      function renderForm(props: Partial<InputComponentSchema>) {
         render(
           <FormioForm
             form={FormFactory.make({
@@ -246,6 +247,55 @@ describe('FormioForm', () => {
         const wordCount = screen.getByTestId('wordcount')
         expect(wordCount).toBeInTheDocument()
         expect(wordCount.getAttribute('aria-live')).toBe('polite')
+      })
+    })
+
+    describe('columns', () => {
+      it('renders our template', async () => {
+        const labelA = 'A component'
+        const labelB = 'B component'
+        const labelC = 'C component'
+        render(
+          <FormioForm
+            form={FormFactory.make({
+              display: 'form',
+              components: [
+                ColumnsFactory.make({
+                  columns: [
+                    {
+                      width: 6,
+                      components: [ComponentFactory.make({ label: labelA })]
+                    },
+                    {
+                      width: 3,
+                      components: [ComponentFactory.make({ label: labelB })]
+                    },
+                    {
+                      width: 4,
+                      offset: 6,
+                      components: [ComponentFactory.make({ label: labelC })]
+                    }
+                  ]
+                })
+              ]
+            })}
+          />
+        )
+
+        const a = screen.getByLabelText(labelA, { exact: false })
+        expect(a).toBeInTheDocument()
+        expect(a.closest('[ref*=column]')).toHaveStyle({ width: '50%' })
+
+        const b = screen.getByLabelText(labelB, { exact: false })
+        expect(b).toBeInTheDocument()
+        expect(b.closest('[ref*=column]')).toHaveStyle({ width: '25%' })
+
+        const c = screen.getByLabelText(labelC, { exact: false })
+        expect(c).toBeInTheDocument()
+        expect(c.closest('[ref*=column]')).toHaveStyle({
+          width: '33.3333333%',
+          'margin-left': '-50%'
+        })
       })
     })
   })

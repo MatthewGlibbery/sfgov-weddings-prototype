@@ -30,7 +30,8 @@ import {
   TypeCalloutBlock,
   TypeContactFooterBlock,
   TopicFieldTypes,
-  TypeProfileGroupBlock
+  TypeProfileGroupBlock,
+  TypeContactFooterBlockValues
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -288,7 +289,7 @@ export type FormPageData = PageData & {
   form_schema_url: string
   confirmation_title: string
   confirmation_body: TypeConfirmationBodyTypes[]
-  get_help: GetHelpBlockTypes[]
+  get_help: TypeContactFooterBlockValues[]
 }
 
 export type ResourceCollectionPageData = PageData & {

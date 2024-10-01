@@ -9,6 +9,7 @@ const meta: Meta<typeof InformationPage> = {
   render: (args) => <InformationPage page={args} />,
   args: InfoPageFactory.make(),
   parameters: {
+    container: false,
     controls: {
       exclude: ['id', 'meta']
     }

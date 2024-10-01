@@ -18,7 +18,8 @@ export function form({ t, ...ctx }: ComponentContext) {
         {ctx.component.label}
       </label>
       {ctx.component.validate?.required ? (
-        <span className="text-danger600 sr-only" aria-label={t('(required)')}>
+        <span className="text-danger600" aria-label={t('(required)')}>
+          {' '}
           {t('*')}
         </span>
       ) : null}

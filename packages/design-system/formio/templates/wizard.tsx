@@ -13,7 +13,7 @@ export type ButtonType = 'cancel' | 'previous' | 'next' | 'submit'
  * templates.
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/Wizard.js#L185-L196
  */
-export type WizardRenderContext = ComponentContext & {
+export type WizardRenderContext = ComponentContext<WizardFormSchema> & {
   disableWizardSubmit: boolean
   wizardKey: string
   isBreadcrumbClickable: boolean
@@ -32,7 +32,6 @@ export type WizardRenderContext = ComponentContext & {
  */
 // https://github.com/formio/formio.js/blob/v4.21.3/src/Wizard.js#L239-L251
 type WizardContext = WizardRenderContext & {
-  component: WizardFormSchema
   className: string
   components: string
   wizardHeader: string

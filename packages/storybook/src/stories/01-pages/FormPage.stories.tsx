@@ -9,6 +9,7 @@ const meta: Meta<typeof FormPage> = {
   render: (args) => <FormPage page={args} />,
   args: FormPageFactory.make(),
   parameters: {
+    container: false,
     controls: {
       exclude: ['id', 'meta']
     }

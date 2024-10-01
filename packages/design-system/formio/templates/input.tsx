@@ -4,16 +4,17 @@
 /** @jsxRuntime classic */
 import h from 'vhtml'
 import type { ComponentProps, HTMLAttributes } from 'react'
-import type { ComponentContext, ComponentSchema } from '../types'
+import type { ComponentContext, InputComponentSchema } from '../types'
 import { omit } from '../utils'
+import { classes } from '../../components'
+import { classed } from '@tw-classed/core'
 
 export default { form }
 
 type InputType = 'input' | 'select'
 
 // https://github.com/formio/formio.js/blob/v4.21.3/src/components/_classes/input/Input.js#L157-L164
-export type InputContext = ComponentContext & {
-  component: ComponentSchema
+export type InputContext = ComponentContext<InputComponentSchema> & {
   prefix?: string | HTMLElement
   suffix?: string | HTMLElement
   hasValueMaskInput: boolean
@@ -26,49 +27,73 @@ export type InputContext = ComponentContext & {
   }
 }
 
+const addendumClass = classed({
+  base: classes(
+    'flex align-middle px-8 py-4',
+    'border-1 border-solid border-neutral300 bg-neutral100 text-neutral700'
+  ),
+  variants: {
+    variant: {
+      prefix: 'rounded-l border-r-0',
+      suffix: 'rounded-r border-l-0'
+    }
+  }
+})
+
 /**
  * @see https://github.com/formio/bootstrap/blob/main/src/templates/bootstrap5/input/form.ejs
  */
-export function form(ctx: InputContext) {
+export function form({ component, input, ...ctx }: InputContext) {
+  const { ref } = input
   // istanbul ignore next
   const required =
-    ctx.input.ref === 'input' || !ctx.input.ref
-      ? ctx.component.validate?.required
-      : ctx.component.fields?.[ctx.input.ref]?.required || false
+    ref === 'input' || !ref
+      ? component.validate?.required
+      : // @ts-expect-error this can be a "day" component with sub-fields
+        component.fields?.[ref]?.required || false
 
-  const uniqueId = `${ctx.instance.id}-${ctx.component.key}`
+  const uniqueId = `${ctx.instance.id}-${component.key}`
   const { prefix, suffix } = ctx
 
   return prefix || suffix ? (
-    <div className="flex">
-      <Addendum text={prefix} ref="prefix" className="flex-shrink self-start" />
-      <Input className="flex-auto" />
-      <Addendum text={suffix} ref="suffix" className="flex-shrink self-end" />
+    <div className="flex items-stretch">
+      <Addendum
+        text={prefix}
+        ref="prefix"
+        className={addendumClass({ variant: 'prefix' })}
+      />
+      <Input
+        className={classes(
+          'flex-auto',
+          prefix && 'rounded-l-0',
+          suffix && 'rounded-r-0'
+        )}
+      />
+      <Addendum
+        text={suffix}
+        ref="suffix"
+        className={addendumClass({ variant: 'suffix' })}
+      />
     </div>
   ) : (
     <Input />
   )
 
   function Input({ className }: { className?: string }) {
-    const Tag = ctx.input.type
-    const attrs = omit(ctx.input.attr, ['class', 'className', 'style'])
+    const Tag = input.type
+    const attrs = omit(input.attr, ['class', 'className', 'style'])
     return (
       <>
         <Tag
-          ref={ctx.input.ref || 'input'}
+          ref={input.ref || 'input'}
           id={uniqueId}
-          aria-labelledby={[
-            `l-${uniqueId}`,
-            ctx.component.description ? `d-${uniqueId}` : ''
-          ]
-            .join(' ')
-            .trim()}
+          aria-labelledby={`l-${uniqueId} d-${uniqueId}`}
           required={required}
           aria-required={required}
           className={[
             'rounded-4 px-8 py-4',
             'text-neutral800',
-            'border-1 border-solid border-[currentcolor]',
+            'border-1 border-solid border-current',
             'shadow-sm',
             'shadow-[transparent]',
             'flex-auto',
@@ -78,13 +103,13 @@ export function form(ctx: InputContext) {
             className || ''
           ].join(' ')}
           {...attrs}
-          dangerouslySetInnerHTML={{ __html: ctx.input.content || '' }}
+          dangerouslySetInnerHTML={{ __html: input.content || '' }}
         />
         {
           /* istanbul ignore next */
           ctx.hasValueMaskInput ? <input ref="valueMaskInput" /> : null
         }
-        {ctx.component.type === 'datetime' ? (
+        {component.type === 'datetime' ? (
           <span
             id={`${ctx.instance.id}-liveRegion`}
             className="sr-only"
@@ -93,16 +118,16 @@ export function form(ctx: InputContext) {
             data-testid="datetime-live-region"
           ></span>
         ) : null}
-        {ctx.component.showCharCount || ctx.component.showWordCount ? (
-          <div className="flex">
-            {ctx.component.showCharCount ? (
+        {component.showCharCount || component.showWordCount ? (
+          <div className="flex justify-end text-neutral700">
+            {component.showCharCount ? (
               <span
                 ref="charcount"
                 aria-live="polite"
                 data-testid="charcount"
               />
             ) : null}
-            {ctx.component.showWordCount ? (
+            {component.showWordCount ? (
               <span
                 ref="wordcount"
                 aria-live="polite"

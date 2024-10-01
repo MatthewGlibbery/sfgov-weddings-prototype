@@ -2,9 +2,11 @@ import React from 'react'
 import type { Preview } from '@storybook/react'
 import { SansFont, SlabFont, MonoFont } from '@/sfgov/components'
 import * as icons from '@/design-system/components/icons'
+import { classes, Container } from '@/design-system'
+import { disableArgTypes } from './stories/utils'
+
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import '!style-loader!css-loader!postcss-loader!../../design-system/css/main.css'
-import { classes } from '@/design-system'
 
 const previewClassName = classes(`
   font-body text-black m-0 p-0
@@ -14,16 +16,8 @@ const previewClassName = classes(`
 const iconKeys = Object.keys(icons)
 const preview: Preview = {
   argTypes: {
-    as: {
-      table: {
-        disable: true
-      }
-    },
-    ref: {
-      table: {
-        disable: true
-      }
-    },
+    // disable all of these arg types for all stories:
+    ...disableArgTypes('as', 'ref', 'displayName', '__docgenInfo'),
     // Define the arg type (control) for the "icon" prop, assuming we want this
     // to work the same way in all of our components.
     icon: {
@@ -48,14 +42,20 @@ const preview: Preview = {
   decorators: [
     // This is a hack to get the necessary font variables exposed to the
     // preview so we can use our fonts as configured in the tailwind preset
-    (Story) => (
-      <div className={previewClassName}>
-        <Story />
-      </div>
-    )
+    (Story, context) =>
+      context.parameters.container ? (
+        <Container className={previewClassName}>
+          <Story />
+        </Container>
+      ) : (
+        <div className={previewClassName}>
+          <Story />
+        </div>
+      )
   ],
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
+    container: true,
     controls: {
       matchers: {
         color: /(background|color)$/i

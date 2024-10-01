@@ -35,7 +35,7 @@ export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
     get_help: getHelp
   } = page
 
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const [submitted, setSubmitted] = useState(false)
 
   return (
@@ -62,7 +62,6 @@ export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
           <Else>
             <FormioForm
               src={formSchemaUrl}
-              options={{ i18n }}
               onSubmitDone={() => setSubmitted(true)}
             />
           </Else>

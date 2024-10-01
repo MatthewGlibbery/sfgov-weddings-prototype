@@ -1,25 +1,32 @@
 /* eslint-disable react/function-component-definition */
 import { Components, Form as FormioReactForm, Formio } from '@formio/react'
-import type { Form as _Form } from 'formiojs'
 import type { ComponentProps } from 'react'
 import templates from './templates'
-import type { FormioPlugin, FormSchema } from './types'
+import type {
+  Form,
+  FormioPlugin,
+  FormOptions,
+  FormSchema,
+  FormSubmission,
+  Override
+} from './types'
 import { hook } from './utils'
 
 export * from './types'
 
-export type Form = _Form & {
-  element: HTMLElement
-  alert: HTMLElement
-  submit(before?: boolean, options?: object): Promise<object>
-}
-
 // @formio/react doesn't export the props type, and doing it here allows us to
-// keep it in sync with a wrapping component if need be
-export type FormProps = ComponentProps<typeof FormioReactForm> & {
-  form?: FormSchema
-  formReady?: (form: Form) => void
-}
+// keep it in sync with a wrapping component, surface the props to parent, etc.
+export type FormProps = Override<
+  ComponentProps<typeof FormioReactForm>,
+  {
+    form?: FormSchema
+    formReady?: (form: Form) => void
+    onFormLoad?: (this: Form, schema: FormSchema) => void
+    onSubmit?: (this: Form, submission: FormSubmission, saved?: boolean) => void
+    onSubmitDone?: (this: Form, submission: FormSubmission) => void
+    options?: FormOptions
+  }
+>
 
 // making this a constant ensures that the 'framework' property of the plugin
 // and the key under which the templates are nested in 'templates' always match
@@ -81,17 +88,15 @@ export function useFormio(isDev?: boolean) {
      */
     hook(
       form,
-      // @ts-expect-error yeah yeah
       'setAlert',
-      function (
-        this: Form,
-        setAlert,
-        type: string,
-        message: string,
-        options?: unknown
-      ) {
-        debug('form.setAlert(', [type, message, options], ')')
-        setAlert(type, message, options)
+      function (this: Form, setAlert, type: string | boolean, ...rest) {
+        debug('form.setAlert(', [type, ...rest], ')')
+
+        // XXX: formio.js immediately hides the success alert; this skips
+        // calling form.setAlert(...) if the type is falsy and it's submitted
+        if (isDev && !type && this.submitted) return
+
+        setAlert(type, ...rest)
         if (this.alert) {
           this.element.append(this.alert)
         } else {
@@ -109,6 +114,6 @@ function once<T extends object>(obj: T, fn: (obj: T) => void) {
   }
 }
 
-function noop(...args: unknown[]) {
+function noop() {
   /* noop */
 }

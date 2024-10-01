@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, type TextProps } from '@/design-system'
 import type { Meta, StoryObj } from '@storybook/react'
+import { disableArgTypes } from '../utils'
 
 type TextVariant = NonNullable<TextProps['variant']>
 
@@ -33,7 +34,7 @@ const meta: Meta<typeof Text> = {
   },
   argTypes: {
     children: {
-      name: 'text',
+      name: 'Text',
       type: 'string'
     }
   }
@@ -71,6 +72,16 @@ export const AllVariants: TextStory = {
   }
 }
 
+export const Variant: TextStory = {
+  argTypes: {
+    variant: {
+      name: 'Variant',
+      control: 'select',
+      options: Object.keys(VARIANT_NAMES)
+    }
+  }
+}
+
 export const DisplayXXXl = variantStory('displayXXXl')
 export const DisplayLg = variantStory('displayLg')
 export const HeadingXXl = variantStory('headingXXl')
@@ -89,19 +100,12 @@ export const LabelMd = variantStory('labelMd')
 export const Small = variantStory('small')
 export const Monospace = variantStory('mono')
 
-function variantStory(
-  variant: TextVariant,
-  opts?: Partial<TextStory>
-): TextStory {
-  return Object.assign(
-    {
-      ...meta,
-      title: VARIANT_NAMES[variant] || variant,
-      name: VARIANT_NAMES[variant] || variant,
-      args: {
-        variant
-      }
+function variantStory(variant: TextVariant): TextStory {
+  return {
+    name: VARIANT_NAMES[variant] || variant,
+    args: {
+      variant
     },
-    opts
-  )
+    argTypes: disableArgTypes('variant')
+  }
 }
