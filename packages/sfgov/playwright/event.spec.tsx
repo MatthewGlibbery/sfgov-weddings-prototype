@@ -1,6 +1,7 @@
 import { EventPage } from '../components/page/EventPage'
 import { EventPageFactory } from '@/lib/factories'
 import { test, expect } from './fixtures'
+import React from 'react'
 
 test.describe('A11y tests', () => {
   test('headings are rendered in a logical reading order', async ({
@@ -303,6 +304,131 @@ test.describe('A11y tests', () => {
     await mount(<EventPage page={data} />)
 
     await expect(page).toHaveURLInLinkText()
+  })
+
+  test('accessible PowerBI dashboards on Resource Collection page', async ({
+    mount,
+    page
+  }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toMakePowerBiDashboardAccessibleResourceCollection()
+  })
+
+  test('all links have keyboard focus', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).allLinksHaveKeyboardFocus()
+  })
+
+  test('logical reading order in the accordion module on the Campaign page', async ({
+    mount,
+    page
+  }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderonCampaignCT()
+  })
+
+  test('logical reading order on the homepage', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderonHomePage()
+  })
+
+  test('presence of links to video transcripts', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toHaveVideoTextTranscript()
+  })
+
+  test('logical reading order in the Data section on the Resource Collection page', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderDataResourceCollection()
+  })
+
+  test('logical reading order in the Documents section on the Resource Collection page', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderDocumentsResourceCollection()
+  })
+
+  test('suppress block quotes on News content type', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toSuppressBlockQuoteOnNewsContentType()
+  })
+
+  test('article landmarks are present in the news section on the Homepage', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toHaveArticleLandmarkInNewsSectionOnHomepage()
+  })
+
+  test('suppress block quotes on Press Release content type', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toSuppressBlockQuoteOnPressReleaseContentType()
+  })
+
+  test('create a logical reading order in the accordion on the Location content type', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toHaveALogicalReadingOrderInAccordionOnLocationContentType()
+  })
+
+  test('create a logical reading order in the Getting Here section on the Location content type', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toHaveALogicalReadingOrderInGettingHereSectionOnLocationContentType()
+  })
+
+  test('create a logical reading order in the Glossary section on the Data Story content type', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toHaveALogicalReadingOrderInGlossarySectionOnDataStoryContentType()
+  })
+
+  test('suppress the In-Page Search Function for screen reader users on the Data Story content type', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toSuppressInPageSearchModuleForScreenReadersOnDataStoryContentType()
+  })
+
+  test('create a logical tab order on the Transaction content type', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toCreateLogicalTabOrderOnTransactionContentType()
+  })
+
+  test('create a logical tab order on the Data Story content type', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toCreateLogicalTabOrderOnDataStoryContentType()
+  })
+
+  test('create a logical tab order on the Form content type', async ({ mount, page }) => {
+    const data = EventPageFactory.make()
+    await mount(<EventPage page={data} />)
+
+    await expect(page).toCreateLogicalTabOrderOnFormContentType()
   })
 
   test('has no accessibility violations', async ({ mount, page }) => {
