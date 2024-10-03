@@ -15,11 +15,13 @@
   "repository": "SFDigitalServices/sfgov-next",
   "dependencies": {
     "@formio/react": "5.3.0",
+    "@thoughtbot/tailwindcss-aria-attributes": "^0.2.0",
     "@tw-classed/core": "^1.7.0",
     "@tw-classed/react": "^1.7.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwind-merge": "^1.13.0",
+    "tsc-alias": "^1.8.2",
     "vhtml": "^2.2.0"
   },
   "devDependencies": {
@@ -27,11 +29,11 @@
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
-    "@figma-export/cli": "^4.5.0",
-    "@figma-export/output-components-as-svg": "^4.5.0",
-    "@figma-export/output-components-as-svgr": "^4.5.0",
-    "@figma-export/transform-svg-with-svgo": "^4.5.0",
-    "@figma-export/types": "^4.5.0",
+    "@figma-export/cli": "^6.0.2",
+    "@figma-export/output-components-as-svg": "^6.0.1",
+    "@figma-export/output-components-as-svgr": "^6.0.1",
+    "@figma-export/transform-svg-with-svgo": "^6.0.2",
+    "@figma-export/types": "^6.0.0",
     "@thoughtbot/tailwindcss-aria-attributes": "^0.2.0",
     "@tw-classed/core": "^1.5.0",
     "@types/vhtml": "^2.2.9",
@@ -39,7 +41,6 @@
     "choices.js": "^9.0.1",
     "chokidar-cli": "^3.0.0",
     "formiojs": "^4.15.1",
-    "style-dictionary": "^3.7.2",
-    "tsc-alias": "^1.8.2"
+    "style-dictionary": "^3.7.2"
   }
 }

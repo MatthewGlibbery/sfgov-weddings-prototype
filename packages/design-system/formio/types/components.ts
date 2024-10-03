@@ -3,7 +3,7 @@ import type {
   ValidateOptions
 } from 'formiojs'
 import type { Override } from './utils'
-import type { Options as ChoicesOptions } from 'choices.js/src/scripts/interfaces/options'
+import type { Choices } from 'choices.js'
 
 /**
  * This is our "abstract" component schema, which does not specify an explict
@@ -310,7 +310,7 @@ export type SelectSchema = TypedComponentSchema<
     template?: string
     lazyLoad?: boolean
     // https://github.com/formio/formio.js/blob/v4.21.3/src/components/select/Select.js#L898-L939
-    customOptions?: Partial<ChoicesOptions>
+    customOptions?: Partial<Choices.Options>
   } & (
     | {
         dataSrc?: 'values'
