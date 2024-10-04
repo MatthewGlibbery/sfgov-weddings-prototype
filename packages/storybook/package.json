@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/SFDigitalServices/sfgov-next.git"
   },
-  "devDependencies": {
+  "dependencies": {
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-react": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
@@ -19,12 +19,14 @@
     "@storybook/nextjs": "^7.6.3",
     "@storybook/react": "^7.6.3",
     "@storybook/testing-library": "^0.2.2",
-    "chromatic": "^11.0.0",
     "dedent": "^1.5.3",
-    "eslint-plugin-storybook": "^0.6.15",
     "postcss-loader": "^7.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "storybook": "^7.6.3"
+  },
+  "devDependencies": {
+    "chromatic": "^11.0.0",
+    "eslint-plugin-storybook": "^0.6.15"
   }
 }
