@@ -43,7 +43,6 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
 
 const Home = ({ pages }: { pages: PageData[] }) => {
   const { t } = useTranslation()
-  console.log(pages)
   return (
     <PageWrapper>
       <Container className="py-8 mb-20">
