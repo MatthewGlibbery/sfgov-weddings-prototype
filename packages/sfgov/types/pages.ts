@@ -1,8 +1,8 @@
 import {
   BlockType,
+  TypeBodyTextBlock,
   TypeCallToActionBlock,
   TypeCostBlock,
-  TypeContentTileBlock,
   TypeDateTimeBlock,
   TypeEmailBlock,
   TypeImageBlock,
@@ -31,7 +31,8 @@ import {
   TypeContactFooterBlock,
   TopicFieldTypes,
   TypeProfileGroupBlock,
-  TypeContactFooterBlockValues
+  TypeContactFooterBlockValues,
+  TypeDocumentBlock
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -279,9 +280,9 @@ export type DataStoryPageData = PageData & {
 
 export type ReportPageData = PageData & {
   date: string
-  print_version: object
+  print_version: TypeDocumentBlock | undefined
   spotlight: TypeSpotlightBlock[]
-  body: string
+  content: TypeBodyTextBlock
   partner_agencies: RelatedContentData[]
 }
 

@@ -6,7 +6,6 @@ import type { StepByStepData } from '@/types'
 import type { ComponentType } from 'react'
 import { RichText } from '../RichText'
 import { useTranslation } from 'next-i18next'
-import { When } from 'react-if'
 
 export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
   page
@@ -28,7 +27,7 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
           title={title}
           label={t('step-by-step', { defaultValue: 'Step-by-step' })}
         >
-          <When condition={description}>
+          {description ? (
             <DisplayLg
               as="p"
               className="mb-16 text-neutral700"
@@ -36,7 +35,7 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
             >
               {description}
             </DisplayLg>
-          </When>
+          ) : null}
           <div className="my-60 lg:w-1/2" data-testid="step-by-step-intro">
             <RichText html={intro} />
           </div>
@@ -45,14 +44,16 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
       <Grid>
         <div className="col-span-full">
           <StepList steps={steps} />
-          <Container>
-            <RelatedContentList
-              title={t('partner-agencies', {
-                defaultValue: 'Partner agencies'
-              })}
-              content={agencies}
-            />
-          </Container>
+          {agencies.length ? (
+            <Container>
+              <RelatedContentList
+                title={t('partner-agencies', {
+                  defaultValue: 'Partner agencies'
+                })}
+                content={agencies}
+              />
+            </Container>
+          ) : null}
         </div>
       </Grid>
     </PageWrapper>

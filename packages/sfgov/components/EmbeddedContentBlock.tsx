@@ -1,6 +1,5 @@
 import { TypeEmbeddedContentBlockValues } from '@/types'
 import Link from 'next/link'
-import { When } from 'react-if'
 import { Accordion } from './Accordion'
 import { RichText } from './RichText'
 import { useTranslation } from 'next-i18next'
@@ -38,16 +37,18 @@ export const EmbeddedContentBlock = (props: TypeEmbeddedContentBlockValues) => {
           title={altText}
         />
       </div>
-      <When condition={!!dataNotes}>
+      {dataNotes ? (
         <Accordion title="Data notes and sources" dataStory>
           <div className="mb-12 text-neutral500">
             <RichText html={dataNotes} />
           </div>
-          <Link href={sourceData} className="text-neutral500">
-            {t('view-source-data', { defaultValue: 'View source data' })}
-          </Link>
         </Accordion>
-      </When>
+      ) : null}
+      {sourceData ? (
+        <Link href={sourceData} className="text-neutral500">
+          {t('view-source-data', { defaultValue: 'View source data' })}
+        </Link>
+      ) : null}
     </div>
   )
 }

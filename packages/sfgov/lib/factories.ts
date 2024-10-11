@@ -58,7 +58,8 @@ import {
   ResourceCollectionPageData,
   TypeButtonLinkValues,
   TypeDocumentBlockValues,
-  TypeProfileGroupBlock
+  TypeProfileGroupBlock,
+  TypeBodyTextBlock
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -1220,7 +1221,7 @@ export const EmbeddedContentFactory = factory<TypeEmbeddedContentBlock>(
         }
       },
       alt_text: gen.lorem.sentence(),
-      source_data: '',
+      source_data: gen.internet.url(),
       data_notes: gen.lorem.sentence()
     }
   })
@@ -1320,6 +1321,12 @@ export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
   })
 }))
 
+export const BodyTextBlockFactory = factory<TypeBodyTextBlock>((gen) => ({
+  type: 'body',
+  id: gen.datatype.uuid(),
+  value: gen.lorem.sentence()
+}))
+
 export const ReportPageFactory = factory<ReportPageData>((gen) => ({
   id: gen.datatype.number(),
   meta: PageMetaFactory.make({
@@ -1327,10 +1334,14 @@ export const ReportPageFactory = factory<ReportPageData>((gen) => ({
   }),
   title: 'Report page title',
   date: gen.date.soon().toString().split('T')[0],
-  body: TextBlockFactory.make().value,
-  spotlight: [],
+  content: [BodyTextBlockFactory.make()],
+  spotlight: [SpotlightFactory.make()],
   print_version: DocumentValueFactory.make(),
-  partner_agencies: []
+  partner_agencies: RelatedContentBlockFactory.make(3, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  })
 }))
 
 export const ResourceCollectionPageFactory =

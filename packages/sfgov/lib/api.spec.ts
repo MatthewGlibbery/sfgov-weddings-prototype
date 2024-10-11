@@ -404,7 +404,8 @@ describe('ContentAPI', () => {
         meta: {
           type: 'foo.Bar'
         },
-        part_of: ['https://part.of.url']
+        part_of: ['https://part.of.url'],
+        partner_agencies: [{ type: 'agency', value: 123, id: '111-222-333' }]
       }
       const partOfData = {
         meta: {
@@ -413,6 +414,13 @@ describe('ContentAPI', () => {
         title: 'some related page',
         html_path: 'http://some.page/path'
       }
+      const partnerAgencyData = {
+        meta: {
+          type: 'foo.Bar'
+        },
+        title: 'some agency page',
+        html_path: 'http://some.agency.page/path'
+      }
       const expectedData = {
         meta: { type: 'foo.Bar' },
         part_of: [
@@ -420,12 +428,19 @@ describe('ContentAPI', () => {
             title: 'some related page',
             meta: { html_url: 'http://some.page/path' }
           }
+        ],
+        partner_agencies: [
+          {
+            title: partnerAgencyData.title,
+            meta: { html_url: partnerAgencyData.html_path }
+          }
         ]
       }
-      fetchMock.mockResponseOnce(JSON.stringify(partOfData))
+      fetchMock
+        .once(JSON.stringify(partOfData))
+        .once(JSON.stringify(partnerAgencyData))
       const res = await example.getPreviewRelatedData('foo', data)
-      expect(fetchMock).toHaveBeenCalledTimes(1)
-      expect(fetchMock).toHaveBeenLastCalledWith('https://part.of.url')
+      expect(fetchMock).toHaveBeenCalledTimes(2)
       expect(res).toEqual(expectedData)
     })
 

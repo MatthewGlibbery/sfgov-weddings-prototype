@@ -92,6 +92,7 @@ export const Spotlight = ({
       isReversed={imageAlignment !== 'full' && imagePosition === 'left'}
       theme={theme}
       secondary={secondary}
+      data-testid="spotlight"
     >
       <div className="basis-0 grow">
         <When condition={!!image}>

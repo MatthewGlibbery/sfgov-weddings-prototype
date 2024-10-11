@@ -64,4 +64,11 @@ describe('StepByStepPage', () => {
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(fixture.title)
   })
+
+  it('renders without partner agencies', () => {
+    render(<StepByStepPage page={{ ...fixture, partner_agencies: [] }} />)
+    expect(
+      screen.queryByRole('heading', { level: 2, name: 'Partner agencies' })
+    ).not.toBeInTheDocument()
+  })
 })

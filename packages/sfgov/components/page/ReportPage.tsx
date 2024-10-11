@@ -1,18 +1,10 @@
 import type { ComponentType } from 'react'
-import { When } from 'react-if'
 import { useTranslation } from 'next-i18next'
 
 import type { ReportPageData } from '@/types'
 
 import { PageWrapper } from './PageWrapper'
-import {
-  Container,
-  Grid,
-  HeadingXl,
-  IconDocument,
-  Link,
-  PageTitleSection
-} from '@/design-system'
+import { Container, Grid, HeadingXl, PageTitleSection } from '@/design-system'
 import { RichText } from '../RichText'
 import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
 import { ComposedDate } from '../DateTime'
@@ -29,7 +21,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
     date,
     print_version: printVersion,
     spotlight,
-    body,
+    content,
     partner_agencies: agencies
   } = page
 
@@ -38,36 +30,46 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
       <Container className="flex flex-col gap-y-60">
         <PageTitleSection label={t('Report')} title={title}>
           <ComposedDate startDateInput={date} />
-          <When condition={!!spotlight.length}>
+          {spotlight.length ? (
             <div className="md:mx-16 mb-80">
               <Spotlight {...spotlight[0]} />
             </div>
-          </When>
+          ) : null}
         </PageTitleSection>
         <Grid>
           <div className={tocWrapperClasses}>
             <TableOfContents />
           </div>
-          <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
-            <RichText html={body} />
-            <When
-              condition={printVersion !== undefined && printVersion !== null}
-            >
-              <HeadingXl as="h3" className="mb-20">
-                {t('Print version')}
-              </HeadingXl>
-              <DocumentLink document={printVersion} />
-            </When>
-          </div>
+          {content?.map((contentSection) => {
+            switch (contentSection.type) {
+              case 'body':
+                return (
+                  <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
+                    <RichText html={contentSection.value} />
+                    {printVersion ? (
+                      <>
+                        <HeadingXl as="h3" className="mb-20">
+                          {t('Print version')}
+                        </HeadingXl>
+                        <DocumentLink document={printVersion} />
+                      </>
+                    ) : null}
+                  </div>
+                )
+              /* istanbul ignore next */
+              default:
+                return <></>
+            }
+          })}
         </Grid>
-        <When condition={!!agencies.length}>
+        {agencies.length ? (
           <div className="md:mt-60">
             <RelatedContentList
               title={t('Partner agencies')}
               content={agencies}
             />
           </div>
-        </When>
+        ) : null}
       </Container>
     </PageWrapper>
   )

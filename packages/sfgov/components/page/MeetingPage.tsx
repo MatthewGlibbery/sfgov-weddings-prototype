@@ -210,7 +210,9 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
             title={title}
             label={t('meeting', { defaultValue: 'Meeting' })}
           >
-            <PageLinksList pageLinks={[primaryAgencies[0]]} />
+            <When condition={!!primaryAgencies.length}>
+              <PageLinksList pageLinks={[primaryAgencies[0]]} />
+            </When>
           </PageTitleSection>
         </div>
       </Container>

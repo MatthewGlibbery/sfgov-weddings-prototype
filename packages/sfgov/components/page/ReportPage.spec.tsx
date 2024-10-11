@@ -25,4 +25,26 @@ describe('ReportPage', () => {
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(page.title)
   })
+
+  it('does not render a spotlight if there is no spotlight', () => {
+    page.spotlight = []
+    render(<ReportPage page={page} />)
+    expect(screen.queryByTestId('spotlight')).not.toBeInTheDocument()
+  })
+
+  it('does not render a partner agency section if there are no partner agenices', () => {
+    page.partner_agencies = []
+    render(<ReportPage page={page} />)
+    expect(
+      screen.queryByRole('heading', { level: 2, name: 'Partner agencies' })
+    ).not.toBeInTheDocument()
+  })
+
+  it('does not render a print version if there is no print version', () => {
+    page.print_version = undefined
+    render(<ReportPage page={page} />)
+    expect(
+      screen.queryByRole('heading', { level: 3, name: 'Print version' })
+    ).not.toBeInTheDocument()
+  })
 })

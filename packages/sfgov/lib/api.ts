@@ -220,7 +220,14 @@ export class ContentAPI implements IContentAPI {
     for (const key of Object.keys(relatedData)) {
       if (data[key]) {
         if (Array.isArray(data[key])) {
-          for (const url of data[key]) {
+          // not everything is a straight url
+          // some things (like page chooser streamfields) are an object
+          // and the related data is in `value` as a numerical id
+          for (const item of data[key]) {
+            let url = item
+            if (item.value) {
+              url = `${process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL}/pages/${item.value}`
+            }
             relatedData[key].push(await getRelatedData(url))
           }
         } else {

@@ -460,3 +460,5 @@ export type TypeProfileGroupBlock = BlockType<
     profiles: TypeProfilePageBlock[]
   }
 >
+
+export type TypeBodyTextBlock = BlockType<'body', string>

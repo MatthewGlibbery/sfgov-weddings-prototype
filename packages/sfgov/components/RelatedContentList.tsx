@@ -35,6 +35,7 @@ export const RelatedContentList = ({
   if (!content?.length) return null
 
   const Content = component || PageLinkWithBorder
+
   return (
     <div {...rest}>
       <HeadingXXl as="h2" className="mb-[20px]">

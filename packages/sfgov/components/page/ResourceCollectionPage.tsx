@@ -71,9 +71,11 @@ export const ResourceCollectionPage: ComponentType<{
           </When>
           <When condition={!!introductoryText.length}>
             {introductoryText.map((item) => (
+              // we will need to revisit id when we bring back table of contents
+              // title field is not required
               <TitleAndText
                 {...item.value}
-                id={camelCase(item.value.title)}
+                id={item.value.title ? camelCase(item.value.title) : ''}
                 key={item.id}
                 heading={HeadingXXl}
                 as="h2"
