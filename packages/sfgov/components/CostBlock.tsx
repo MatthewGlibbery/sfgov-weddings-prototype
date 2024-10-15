@@ -5,7 +5,6 @@ import {
   IconCash,
   HeadingLg
 } from '@/design-system'
-import { If, Then, Else, When, Switch, Case, Default } from 'react-if'
 import { useTranslation } from 'next-i18next'
 import type { TypeCostBlockValues } from '@/types'
 import { RichText } from './RichText'
@@ -50,48 +49,40 @@ export const CostBlock = ({
     }
   })
 
+  if (variant === 'step') {
+    return (
+      <div className="flex gap-4 items-start" data-testid="step-cost">
+        <IconCash className="text-neutral400 min-w-[20px]" height={20} alt="" />
+        <CostText id="costBlock" step={!!variant}>
+          {t('cost', { defaultValue: 'Cost' })}:
+        </CostText>
+        <span>{cost}.</span>
+        {description ? <RichText html={description} /> : null}
+      </div>
+    )
+  } else if (variant === 'transaction') {
+    return (
+      <div data-testid="transaction-cost">
+        <HeadingLg as="h3" id={id} transaction={!!variant} className="mb-12">
+          {t('cost', { defaultValue: 'Cost' })}
+        </HeadingLg>
+        <span className="block font-bold mb-12">{cost}</span>
+        {description ? <RichText html={description} /> : null}
+      </div>
+    )
+  }
+
   return (
-    <Switch>
-      <Case condition={variant === 'step'}>
-        <div className="flex gap-4 items-start" data-testid="step-cost">
-          <IconCash
-            className="text-neutral400 min-w-[20px]"
-            height={20}
-            alt=""
-          />
-          <CostText id="costBlock" step={!!variant}>
-            {t('cost', { defaultValue: 'Cost' })}:
-          </CostText>
-          <span>{cost}.</span>
-          <When condition={description}>
-            <RichText html={description} />
-          </When>
-        </div>
-      </Case>
-      <Case condition={variant === 'transaction'}>
-        <div data-testid="transaction-cost">
-          <HeadingLg as="h3" id={id} transaction={!!variant} className="mb-12">
-            {t('cost', { defaultValue: 'Cost' })}
-          </HeadingLg>
-          <span className="block font-bold mb-12">{cost}</span>
-          <When condition={description}>
-            <RichText html={description} />
-          </When>
-        </div>
-      </Case>
-      <Default>
+    <div>
+      <CostText as="h3" step={!!variant}>
+        {t('cost', { defaultValue: 'Cost' })}
+      </CostText>
+      <HeadingXs className="mb-12">{cost}</HeadingXs>
+      {description ? (
         <div>
-          <CostText as="h3" step={!!variant}>
-            {t('cost', { defaultValue: 'Cost' })}
-          </CostText>
-          <HeadingXs className="mb-12">{cost}</HeadingXs>
-          <When condition={description}>
-            <div>
-              <RichText html={description} />
-            </div>
-          </When>
+          <RichText html={description} />
         </div>
-      </Default>
-    </Switch>
+      ) : null}
+    </div>
   )
 }

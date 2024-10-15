@@ -1,7 +1,3 @@
-import { When } from 'react-if'
-import { useTranslation } from 'next-i18next'
-import type { ComponentType, ReactNode } from 'react'
-
 import {
   Container,
   HeadingLg,
@@ -15,19 +11,20 @@ import {
   PageTitleSection
 } from '@/design-system'
 import type { ProfilePageData } from '@/types'
-
-import { PageWrapper } from './PageWrapper'
+import { useTranslation } from 'next-i18next'
+import type { ComponentType, ReactNode } from 'react'
 import {
   ContactFooter,
-  ProfileCard,
-  QuickLinkList,
-  Spotlight,
-  RichText,
   EmailBlock,
   PhoneNumberBlock,
+  ProfileCard,
+  QuickLinkList,
+  RichText,
+  ShowMore,
   SocialMedia,
-  ShowMore
+  Spotlight
 } from '../'
+import { PageWrapper } from './PageWrapper'
 
 export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
   page
@@ -43,7 +40,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
     email,
     phone,
     social_media: socialMedia,
-    contact,
+    contact: [contact],
     spotlight,
     quick_links: quickLinks,
     additional_roles: additionalRoles
@@ -56,35 +53,6 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
         ? '#direct-contact'
         : '#agency-contact',
     linkText: 'Contact'
-  }
-
-  type DirectContactCardProps = {
-    title?: string
-    icon?: ComponentType<{ width?: string | number }> | null
-    children?: ReactNode
-  }
-
-  const DirectContactCard = ({
-    title,
-    icon: Icon = null,
-    children
-  }: DirectContactCardProps) => {
-    return (
-      <div className="border-solid border-neutral200 border-b-1 pb-16 last-of-type:border-0 md:border-r-1 md:border-b-0 md:pb-0 flex flex-col gap-y-28">
-        <div>
-          {Icon ? (
-            <Icon // @ts-expect-error erg
-              className="mb-12"
-              width={24}
-            />
-          ) : null}
-          <HeadingLg as="h3" className="font-body !mb-0">
-            {t(title, { defaultValue: title })}
-          </HeadingLg>
-        </div>
-        {children}
-      </div>
-    )
   }
 
   return (
@@ -107,7 +75,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
                 additionalRoles.length ? 'order-2 lg:w-2/3' : 'w-full'
               }`}
             >
-              <When condition={!!biography}>
+              {biography ? (
                 <ShowMore
                   maxHeight={
                     biography.replace(/<[^>]*>/g, '').length > 1000 ? 300 : null
@@ -115,9 +83,9 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
                 >
                   <RichText html={biography} />
                 </ShowMore>
-              </When>
+              ) : null}
             </div>
-            <When condition={!!additionalRoles.length}>
+            {additionalRoles.length ? (
               <aside className="flex flex-col gap-28 order-1 md:w-full lg:order-2 lg:w-1/3">
                 <HeadingXl className="font-slab !mb-0">
                   {t('Additional roles', {
@@ -135,11 +103,11 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
                         className="flex flex-row justify-between items-start block no-underline text-primary600 px-12 py-16 md:px-16 md:py-12 lg:px-12 lg:py-16"
                       >
                         <div className="flex flex-col gap-8">
-                          <When condition={!!item.role}>
+                          {item.role ? (
                             <HeadingMd className="!mb-0 text-desktop-heading-md flex content-end">
                               {item.role}
                             </HeadingMd>
-                          </When>
+                          ) : null}
                           <p className="">{item.referenced_by.title}</p>
                         </div>
                         <IconArrowRight width={20} className="mt-4" />
@@ -148,68 +116,89 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
                   ))}
                 </ul>
               </aside>
-            </When>
+            ) : null}
           </div>
 
-          <When condition={!!spotlight.length}>
+          {spotlight.length ? (
             <div className="bg-primary50 p-28">
               <Spotlight {...spotlight[0]} />
             </div>
-          </When>
-          <When condition={!!quickLinks.length}>
+          ) : null}
+          {quickLinks.length ? (
             <QuickLinkList
               links={quickLinks}
               className="lg:grid-cols-4 lg:gap-x-28"
             />
-          </When>
-          <When
-            condition={!!email.length || !!phone.length || !!socialMedia.length}
-          >
+          ) : null}
+          {email.length || phone.length || socialMedia.length ? (
             <div id="direct-contact">
               <HeadingXXl as="h2" className="!mb-[24px]">
                 {`${t('Contact', { defaultValue: 'Contact' })} ${title}`}
               </HeadingXXl>
               <div className="grid grid-cols-1 gap-y-28 gap-x-0 md:grid-cols-3 md:gap-x-28 md:gap-y-0 md:pb-0">
-                <When condition={!!phone.length}>
+                {phone.length ? (
                   <DirectContactCard title="Phone" icon={IconPhone}>
-                    <PhoneNumberBlock
-                      phone_number={phone[0]?.value}
-                      key={phone[0]?.id}
-                    />
+                    <PhoneNumberBlock phone_number={phone[0].value} />
                   </DirectContactCard>
-                </When>
-                <When condition={!!email.length}>
+                ) : null}
+                {email.length ? (
                   <DirectContactCard title="Email" icon={IconEmail}>
-                    <EmailBlock email={email[0]?.value} key={email[0]?.id} />
+                    <EmailBlock email={email[0].value} />
                   </DirectContactCard>
-                </When>
-                <When condition={!!socialMedia.length}>
+                ) : null}
+                {socialMedia.length ? (
                   <DirectContactCard title="Social media" icon={IconShare}>
-                    <SocialMedia items={socialMedia[0]?.value} />
+                    <SocialMedia items={socialMedia[0].value} />
                   </DirectContactCard>
-                </When>
+                ) : null}
               </div>
             </div>
-          </When>
-          <When
-            condition={
-              !!contact[0].value.address.length ||
-              !!contact[0].value.phone.length ||
-              !!contact[0].value.email.length ||
-              !!contact[0].value.social_media_other.length
-            }
-          >
+          ) : null}
+          {contact.value.address.length ||
+          contact.value.phone.length ||
+          contact.value.email.length ||
+          contact.value.social_media_other.length ? (
             <div id="agency-contact">
               <HeadingXXl as="h2" className="!mb-[24px]">
                 {t('Contact', {
                   defaultValue: `Contact ${primaryAgency?.title ?? ''}`
                 })}
               </HeadingXXl>
-              <ContactFooter items={contact[0]} />
+              <ContactFooter items={contact} />
             </div>
-          </When>
+          ) : null}
         </div>
       </Container>
     </PageWrapper>
+  )
+}
+
+type DirectContactCardProps = {
+  title: string
+  icon?: ComponentType<{ width?: string | number }> | null
+  children?: ReactNode
+}
+
+const DirectContactCard = ({
+  title,
+  icon: Icon = null,
+  children
+}: DirectContactCardProps) => {
+  const { t } = useTranslation()
+  return (
+    <div className="border-solid border-neutral200 border-b-1 pb-16 last-of-type:border-0 md:border-r-1 md:border-b-0 md:pb-0 flex flex-col gap-y-28">
+      <div>
+        {Icon ? (
+          <Icon // @ts-expect-error erg
+            className="mb-12"
+            width={24}
+          />
+        ) : null}
+        <HeadingLg as="h3" className="font-body !mb-0">
+          {t(title, { defaultValue: title })}
+        </HeadingLg>
+      </div>
+      {children}
+    </div>
   )
 }

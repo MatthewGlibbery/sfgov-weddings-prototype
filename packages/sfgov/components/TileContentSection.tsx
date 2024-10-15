@@ -1,10 +1,9 @@
-import { HeadingXl, IconDocument, Link } from '@/design-system'
-import { TypeContentTileBlock } from '@/types'
-import { When } from 'react-if'
+import { HeadingXl } from '@/design-system'
+import type { ReactNode } from 'react'
 
 type TileContentSectionProps = {
   title: string
-  tileList: TypeContentTileBlock[]
+  tileList: ReactNode
 }
 
 export const TileContentSection = ({
@@ -13,12 +12,12 @@ export const TileContentSection = ({
 }: TileContentSectionProps) => {
   return (
     <div>
-      <When condition={!!title}>
+      {title ? (
         <HeadingXl as="p" className="font-body !mb-20">
           {title}
         </HeadingXl>
-      </When>
-      <When condition={!!tileList}>{tileList}</When>
+      ) : null}
+      {tileList}
     </div>
   )
 }

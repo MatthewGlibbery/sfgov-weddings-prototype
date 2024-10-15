@@ -1,11 +1,11 @@
 import { Container, DisplayLg, Grid, PageTitleSection } from '@/design-system'
-import { PageWrapper } from './PageWrapper'
-import { StepList } from '../Step'
-import { RelatedContentList } from '../RelatedContentList'
 import type { StepByStepData } from '@/types'
-import type { ComponentType } from 'react'
-import { RichText } from '../RichText'
 import { useTranslation } from 'next-i18next'
+import type { ComponentType } from 'react'
+import { RelatedContentList } from '../RelatedContentList'
+import { RichText } from '../RichText'
+import { StepList } from '../Step'
+import { PageWrapper } from './PageWrapper'
 
 export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
   page

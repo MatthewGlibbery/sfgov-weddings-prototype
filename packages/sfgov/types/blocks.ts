@@ -162,6 +162,8 @@ export type TypeDocumentBlockValues = {
 
 export type TypeDocumentBlock = BlockType<'document', TypeDocumentBlockValues>
 
+export type TypeDocumentsBlock = BlockType<'documents', TypeDocumentBlock[]>
+
 export type TypeCallToActionBlock = BlockType<string, TypeCallToActionValues>
 
 /* Transaction Page */
@@ -170,11 +172,9 @@ export type TypeTextBlock = BlockType<'text', string>
 
 export type TypeButtonLinkBlock = BlockType<'button_link', TypeLinkValues>
 
-export type TypeWhatToDoVariant = 'callout' | 'what_to_do_step'
-
 export type TypeCalloutBlock = BlockType<'callout', string>
 
-export type TypeStepSpecificsVariant =
+export type TypeStepSpecificsBlock =
   | TypeLocationBlock
   | TypeCalloutBlock
   | TypeEmailBlock
@@ -187,14 +187,11 @@ export type TypeWhatToDoStepBlock = BlockType<
   'what_to_do_step',
   {
     section_title: string
-    section_specifics: TypeStepSpecificsVariant[]
+    section_specifics: TypeStepSpecificsBlock[]
   }
 >
 
-export type TypeWhatToDoBlock = BlockType<
-  TypeWhatToDoVariant,
-  (TypeCalloutBlock | TypeWhatToDoStepBlock)[]
->
+export type TypeWhatToDoBlock = TypeCalloutBlock | TypeWhatToDoStepBlock
 
 export type TypeResourcesSectionValues = {
   resources: TypeContentTileBlock[]
@@ -230,7 +227,7 @@ export type TypeContactFooterBlockValues = {
 
 export type TypeContactFooterBlock = BlockType<
   'contact',
-  TypeContactFooterBlockValues[]
+  TypeContactFooterBlockValues
 >
 
 export type TypeSpotlightBlockValues = {
@@ -402,7 +399,7 @@ export type TypeConfirmationBodyTypes =
 
 export type TypeDocumentSectionBlockValues = {
   title: string
-  content: (TypeDocumentBlock | TypeTextBlock)[]
+  content: Array<TypeDocumentBlock | TypeDocumentsBlock | TypeTextBlock>
 }
 
 export type TypeDocumentSectionBlock = BlockType<

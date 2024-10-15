@@ -1,18 +1,20 @@
 import { RelatedContentData } from '@/types'
-import { When } from 'react-if'
 import { PageLink } from './PageLink'
 
-type PageLinksListProps = {
+type PageLinksListProps = JSX.IntrinsicElements['div'] & {
   label?: string
   pageLinks: RelatedContentData[]
 }
-export const PageLinksList = ({ pageLinks, label }: PageLinksListProps) => {
+
+export const PageLinksList = ({
+  pageLinks,
+  label,
+  ...rest
+}: PageLinksListProps) => {
   return (
-    <div>
-      <When condition={label}>
-        <span>{label}</span>
-      </When>
-      <When condition={!!pageLinks.length}>
+    <div {...rest}>
+      {label ? <span>{label}</span> : null}
+      {pageLinks.length ? (
         <div>
           {pageLinks.map((pageLink, i) => (
             <span
@@ -27,7 +29,7 @@ export const PageLinksList = ({ pageLinks, label }: PageLinksListProps) => {
             </span>
           ))}
         </div>
-      </When>
+      ) : null}
     </div>
   )
 }

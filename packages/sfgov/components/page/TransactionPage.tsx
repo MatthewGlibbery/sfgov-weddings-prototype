@@ -1,33 +1,30 @@
-import { When } from 'react-if'
-import { useTranslation } from 'next-i18next'
-import type { ComponentType } from 'react'
-import { camelCase } from '@/lib/utils'
-
 import {
   Container,
   DisplayLg,
   Grid,
-  IconInfo,
-  IconQuestion,
+  HeadingLg,
   HeadingXl,
   HeadingXXl,
-  HeadingLg,
+  IconInfo,
+  IconQuestion,
   PageTitleSection
 } from '@/design-system'
+import { camelCase } from '@/lib/utils'
 import type { TransactionPageData } from '@/types'
-
-import { PageWrapper } from './PageWrapper'
+import { useTranslation } from 'next-i18next'
+import type { ComponentType } from 'react'
 import {
   Accordion,
-  CostBlock,
   ContactFooter,
+  CostBlock,
   RelatedContentList,
   RichText,
-  TitleAndText,
-  WhatToDo,
   TableOfContents,
-  tocWrapperClasses
+  TitleAndText,
+  tocWrapperClasses,
+  WhatToDo
 } from '../'
+import { PageWrapper } from './PageWrapper'
 
 export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   page
@@ -35,7 +32,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   const {
     title,
     description,
-    cost,
+    cost: [cost],
     things_to_know: thingsToKnow,
     what_to_do: whatToDo,
     supporting_information: supporingInformation,
@@ -54,37 +51,37 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
         <HeadingXXl as="h2" id={`whatToDo${screen}`}>
           {t('what-to-do', { defaultValue: 'What to do' })}
         </HeadingXXl>
-        {whatToDo.map((what) => (
-          <WhatToDo key={what.id} {...what} />
+        {whatToDo.map((what, i) => (
+          <WhatToDo block={what} key={i} />
         ))}
       </div>
-      <When condition={!!supporingInformation.length || !!customSection.length}>
-        <HeadingXXl as="h2" id={`supportingInformation${screen}`}>
-          {t('supporting-information', {
-            defaultValue: 'Supporting information'
-          })}
-        </HeadingXXl>
-        <When condition={!!supporingInformation.length}>
-          <div data-testid="special_cases-section">
-            <HeadingXl as="h3" id={`specialCases${screen}`} className="mb-20">
-              {t('special-cases', { defaultValue: 'Special cases' })}
-            </HeadingXl>
-            {supporingInformation.map((item, i) => (
-              <Accordion
-                key={`${item.value.title}${screen}`}
-                title={item.value.title}
-                data-testid={`special-case-${item.id}`}
-                open={i === 0}
-                as="h4"
-              >
-                <RichText html={item.value.text} />
-              </Accordion>
-            ))}
-          </div>
-        </When>
-        <When condition={!!customSection.length}>
-          {customSection.map((block) => (
-            <div key={block.id} data-testid="custom_section-section">
+      {!!supporingInformation.length || !!customSection.length ? (
+        <>
+          <HeadingXXl as="h2" id={`supportingInformation${screen}`}>
+            {t('supporting-information', {
+              defaultValue: 'Supporting information'
+            })}
+          </HeadingXXl>
+          {supporingInformation.length ? (
+            <div data-testid="special_cases-section">
+              <HeadingXl as="h3" id={`specialCases${screen}`} className="mb-20">
+                {t('special-cases', { defaultValue: 'Special cases' })}
+              </HeadingXl>
+              {supporingInformation.map((item, i) => (
+                <Accordion
+                  key={i}
+                  title={item.value.title}
+                  data-testid={`special-case-${item.id}`}
+                  open={i === 0}
+                  as="h4"
+                >
+                  <RichText html={item.value.text} />
+                </Accordion>
+              ))}
+            </div>
+          ) : null}
+          {customSection.map((block, i) => (
+            <div key={i} data-testid="custom_section-section">
               <TitleAndText
                 {...block.value}
                 id={camelCase(block.value.title) + screen}
@@ -92,10 +89,10 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               />
             </div>
           ))}
-        </When>
-      </When>
-      {goodForCommunity.map((block) => (
-        <div key={block.id} data-testid="good_for_community-section">
+        </>
+      ) : null}
+      {goodForCommunity.map((block, i) => (
+        <div key={i} data-testid="good_for_community-section">
           <TitleAndText
             {...block.value}
             as="h2"
@@ -104,18 +101,18 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           />
         </div>
       ))}
-      <When condition={!!relatedContentPages.length}>
+      {relatedContentPages.length ? (
         <RelatedContentList
           content={relatedContentPages}
           title={t('related', { defaultValue: 'Related' }) as string}
         />
-      </When>
+      ) : null}
     </div>
   )
 
   const TransactionFooter = ({ screen = '' }) => (
     <span className="mx-20 md:mx-0">
-      <When condition={!!getHelp.length}>
+      {getHelp.length ? (
         <div className="flex flex-col items-start gap-20">
           <HeadingXXl as="h2" className="flex flex-row gap-8">
             <IconQuestion width={32} />
@@ -123,9 +120,8 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           </HeadingXXl>
           <ContactFooter items={getHelp} />
         </div>
-      </When>
-      <When condition={!!agencies.length}>
-        {/* Partner Agencies list */}
+      ) : null}
+      {agencies.length ? (
         <RelatedContentList
           content={agencies}
           title={
@@ -134,7 +130,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             }) as string
           }
         />
-      </When>
+      ) : null}
     </span>
   )
 
@@ -146,17 +142,15 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           {t('what-to-know', { defaultValue: 'What to know' })}
         </HeadingXXl>
       </div>
-      <When condition={!!cost?.[0]?.value}>
-        {() => (
-          <CostBlock
-            {...cost[0].value}
-            variant="transaction"
-            id={`costBlock${screen}`}
-          />
-        )}
-      </When>
-      {thingsToKnow.map((thing) => (
-        <div key={thing.id} data-testid="things_to_know-section">
+      {cost ? (
+        <CostBlock
+          {...cost.value}
+          variant="transaction"
+          id={`costBlock${screen}`}
+        />
+      ) : null}
+      {thingsToKnow.map((thing, i) => (
+        <div key={i} data-testid="things_to_know-section">
           <TitleAndText
             {...thing.value}
             id={camelCase(thing.value.title) + screen}
@@ -175,7 +169,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             title={title}
             label={t('service', { defaultValue: 'Service' })}
           >
-            <When condition={description}>
+            {description ? (
               <DisplayLg
                 as="p"
                 className="mb-16"
@@ -183,7 +177,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               >
                 {description}
               </DisplayLg>
-            </When>
+            ) : null}
           </PageTitleSection>
         </div>
       </Container>

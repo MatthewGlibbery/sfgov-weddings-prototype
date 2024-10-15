@@ -3,9 +3,8 @@ import { render, screen } from '@testing-library/react'
 import { LocationPage } from './LocationPage'
 
 describe('LocationPage', () => {
-  const page = LocationPageFactory.make()
-
   it('renders a location page', () => {
+    const page = LocationPageFactory.make()
     render(<LocationPage page={page} />)
 
     const title = screen.getByRole('heading', {
@@ -13,5 +12,13 @@ describe('LocationPage', () => {
     })
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(page.title)
+  })
+
+  it('does not render a map if there is no address', () => {
+    const page = LocationPageFactory.make()
+    page.contact[0].value.address = []
+    render(<LocationPage page={page} />)
+
+    expect(screen.queryByTestId('location-map')).not.toBeInTheDocument()
   })
 })

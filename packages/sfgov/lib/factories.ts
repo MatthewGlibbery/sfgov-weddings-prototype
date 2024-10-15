@@ -59,7 +59,8 @@ import {
   TypeButtonLinkValues,
   TypeDocumentBlockValues,
   TypeProfileGroupBlock,
-  TypeBodyTextBlock
+  TypeBodyTextBlock,
+  TypeContactFooterBlock
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -373,6 +374,17 @@ export const NewsPageFactory = factory<NewsPageData>((gen) => ({
   })
 }))
 
+export const ContactBlockFactory = factory<TypeContactFooterBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'contact',
+  value: {
+    address: [LocationBlockFactory.make()],
+    email: [EmailBlockFactory.make()],
+    phone: [PhoneNumberFactory.make()],
+    social_media_other: []
+  }
+}))
+
 export const LocationPageFactory = factory<LocationPageData>((gen) => ({
   id: gen.datatype.number(),
   meta: PageMetaFactory.make({
@@ -381,17 +393,7 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
   title: 'location',
   description: 'Location description',
   alert: AlertBlockFactory.make(1),
-  contact: [
-    {
-      type: 'contact',
-      value: {
-        address: [],
-        phone: [PhoneNumberFactory.make()],
-        email: [EmailBlockFactory.make()],
-        social_media_other: [SocialMediaFactory.make()]
-      }
-    }
-  ],
+  contact: [ContactBlockFactory.make()],
   image: ImageFactory.make(),
   body: '<p>some rich text</p><blockquote>rich text</blockquote>',
   intro: '<p>some rich text</p><blockquote>rich text</blockquote>',
@@ -820,6 +822,7 @@ export const DocumentSectionBlockFactory = factory<TypeDocumentSectionBlock>(
       content: [
         TextBlockFactory.make(),
         {
+          id: gen.datatype.uuid(),
           type: 'documents',
           value: DocumentBlockFactory.make(2)
         }
@@ -1352,7 +1355,7 @@ export const ResourceCollectionPageFactory =
     }),
     title: 'Resource collection page title',
     description: 'Resource collection page description',
-    data_dashboard: [EmbeddedContentFactory.make()],
+    data_dashboard: [],
     introductory_text: [TitleAndTextFactory.make()],
     body: [
       { type: 'documents', value: [DocumentSectionBlockFactory.make()] },

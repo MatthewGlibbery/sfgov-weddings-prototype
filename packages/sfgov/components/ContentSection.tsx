@@ -22,23 +22,24 @@ export const ContentSection = ({
         </HeadingXXl>
       </Container>
       <div className="flex flex-col gap-20">
-        {sectionContent.map((block) => {
+        {sectionContent.map((block, i) => {
+          const props = { key: i }
           switch (block.type) {
             case 'button_link':
               return (
-                <Button as="a" href={block.value.url}>
+                <Button as="a" href={block.value.url} {...props}>
                   {block.value.link_text}
                 </Button>
               )
             case 'phone_number':
               return (
-                <Container>
+                <Container {...props}>
                   <PhoneNumberBlock {...block.value} />
                 </Container>
               )
             case 'resources':
               return (
-                <Container>
+                <Container {...props}>
                   <TileContentSection
                     title={block.value.title}
                     tileList={<ContentTileList links={block.value.resources} />}
@@ -47,16 +48,16 @@ export const ContentSection = ({
               )
 
             case 'spotlight':
-              return <Spotlight {...block} />
+              return <Spotlight {...props} {...block} />
             case 'timeline':
               return (
-                <Container>
+                <Container {...props}>
                   <Timeline {...block.value} />
                 </Container>
               )
             case 'text':
               return (
-                <Container>
+                <Container {...props}>
                   <BodyText>
                     <RichText html={block.value} />{' '}
                   </BodyText>
@@ -64,21 +65,18 @@ export const ContentSection = ({
               )
             case 'callout':
               return (
-                <Container>
+                <Container {...props}>
                   <Callout html={block.value} />
                 </Container>
               )
             case 'image':
-              return <Image imageRef={block.value} alt="image alt" />
+              return <Image imageRef={block.value} alt="image alt" {...props} />
             case 'powerbi_embed':
               return (
-                <Container>
+                <Container {...props}>
                   <EmbeddedContentBlock {...block.value} />
                 </Container>
               )
-            /* istanbul ignore next */
-            default:
-              return <></>
           }
         })}
       </div>

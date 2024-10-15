@@ -9,7 +9,6 @@ import { TypeVideoBlockValues } from '@/types'
 import { RichText } from './RichText'
 import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
-import { When } from 'react-if'
 import { useRouter } from 'next/router'
 
 export const Video = (props: TypeVideoBlockValues) => {
@@ -99,11 +98,11 @@ export const Video = (props: TypeVideoBlockValues) => {
             </div>
           </div>
         </VideoContainer>
-        <When condition={showTranscript}>
+        {showTranscript ? (
           <div className="lg:basis-1/3 max-h-[200px] overflow-y-scroll lg:max-h-[650px]">
             <RichText html={videoInfo.video_transcript} />
           </div>
-        </When>
+        ) : null}
       </div>
     )
   } else {
@@ -112,11 +111,11 @@ export const Video = (props: TypeVideoBlockValues) => {
 
   return (
     <div>
-      <When condition={showTitle}>
+      {showTitle ? (
         <HeadingXXl className="mb-[28px]" as="p">
           {title}
         </HeadingXXl>
-      </When>
+      ) : null}
       <RichText html={description} />
       {block}
     </div>

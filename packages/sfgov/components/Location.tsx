@@ -1,7 +1,4 @@
-import { When } from 'react-if'
-
-import { BodyText, HeadingSm, IconLocation, Link } from '@/design-system'
-
+import { BodyText, IconLocation, Link } from '@/design-system'
 import type { TypeLocationValues } from '@/types'
 import { useTranslation } from 'next-i18next'
 import { RichText } from './RichText'
@@ -36,37 +33,45 @@ export const Location = (props: LocationBlockProps) => {
   const addressQuery = `https://maps.google.com/?q=${locationName}+${line1}+${line2}+${city}+${state}+${zip}}`
   return (
     <div className="flex flex-col gap-y-8">
-      <When condition={!!boldedTitle}>
+      {boldedTitle ? (
         <BodyText data-testid="title" className="font-bold lg:mb-0">
           {boldedTitle}
         </BodyText>
-      </When>
+      ) : null}
       <BodyText>
-        <When condition={variant === 'full'}>
-          <When condition={!!organization && organization !== boldedTitle}>
-            {organization}
-            <br />
-          </When>
-          <When condition={!!addressee && addressee !== boldedTitle}>
+        {variant === 'full' ? (
+          organization && organization !== boldedTitle ? (
+            <>
+              {organization}
+              <br />
+            </>
+          ) : null
+        ) : null}
+        {addressee && addressee !== boldedTitle ? (
+          <>
             {addressee}
             <br />
-          </When>
-          <When condition={!!locationName && locationName !== boldedTitle}>
+          </>
+        ) : null}
+        {locationName && locationName !== boldedTitle ? (
+          <>
             {locationName}
             <br />
-          </When>
-        </When>
+          </>
+        ) : null}
         {line1}
         <br />
-        <When condition={!!line2}>
-          {line2}
-          <br />
-        </When>
+        {line2 ? (
+          <>
+            {line2}
+            <br />
+          </>
+        ) : null}
         {city}, {state} {zip}
         <br />
-        <When condition={!!locationNotes && variant === 'full'}>
+        {locationNotes && variant === 'full' ? (
           <RichText html={locationNotes} />
-        </When>
+        ) : null}
         <Link
           href={addressQuery}
           className="flex gap-4 mt-8"

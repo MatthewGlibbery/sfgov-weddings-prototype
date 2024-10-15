@@ -1,10 +1,3 @@
-import { ComponentType } from 'react'
-import { When } from 'react-if'
-import { useTranslation } from 'next-i18next'
-
-import type { MeetingPageData } from '@/types'
-
-import { PageWrapper } from './PageWrapper'
 import {
   Container,
   Grid,
@@ -17,17 +10,21 @@ import {
   Link,
   PageTitleSection
 } from '@/design-system'
+import type { MeetingPageData } from '@/types'
+import { useTranslation } from 'next-i18next'
+import { ComponentType } from 'react'
+import { Accordion } from '../Accordion'
+import { AgendaItemBlock } from '../AgendaItemBlock'
 import { Callout } from '../Callout'
 import { ComposedDate, ComposedTime } from '../DateTime'
 import { Location } from '../Location'
 import { OnlineEventBlock } from '../OnlineEventBlock'
-import { Accordion } from '../Accordion'
-import { RichText } from '../RichText'
-import { Video } from '../Video'
-import { AgendaItemBlock } from '../AgendaItemBlock'
-import { RelatedContentList } from '../RelatedContentList'
 import { PageLinksList } from '../PageLinksList'
+import { RelatedContentList } from '../RelatedContentList'
+import { RichText } from '../RichText'
 import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
+import { Video } from '../Video'
+import { PageWrapper } from './PageWrapper'
 
 export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   page
@@ -49,29 +46,37 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
 
   const MeetingContent = ({ screen = '' }) => (
     <span className="flex flex-col gap-16 mx-20 md:mx-0 lg:mx-0">
-      <When condition={!!overview}>
-        <HeadingXXl as="h2" className="my-12 md:my-20" id={`overview${screen}`}>
-          {t('overview', { defaultValue: 'Overview' })}
-        </HeadingXXl>
-        <RichText html={overview} />
-      </When>
-      <When condition={!!agenda.length}>
-        <HeadingXXl as="h2" className="my-12 md:my-20" id={`agenda${screen}`}>
-          {t('agenda', { defaultValue: 'Agenda' })}
-        </HeadingXXl>
-        <div className="flex flex-col gap-28">
-          {agenda.map((item, i) => (
-            <AgendaItemBlock
-              key={item.id}
-              id={`agenda-${i}${screen}`}
-              index={i}
-              title_and_text={item.value?.title_and_text}
-              documents={item.value?.documents}
-            />
-          ))}
-        </div>
-      </When>
-      <When condition={!!videos.length || !!relatedDocuments.length}>
+      {overview ? (
+        <>
+          <HeadingXXl
+            as="h2"
+            className="my-12 md:my-20"
+            id={`overview${screen}`}
+          >
+            {t('overview', { defaultValue: 'Overview' })}
+          </HeadingXXl>
+          <RichText html={overview} />
+        </>
+      ) : null}
+      {agenda.length ? (
+        <>
+          <HeadingXXl as="h2" className="my-12 md:my-20" id={`agenda${screen}`}>
+            {t('agenda', { defaultValue: 'Agenda' })}
+          </HeadingXXl>
+          <div className="flex flex-col gap-28">
+            {agenda.map((item, i) => (
+              <AgendaItemBlock
+                key={item.id}
+                id={`agenda-${i}${screen}`}
+                index={i}
+                title_and_text={item.value?.title_and_text}
+                documents={item.value?.documents}
+              />
+            ))}
+          </div>
+        </>
+      ) : null}
+      {videos.length || relatedDocuments.length ? (
         <div className="flex flex-col gap-40">
           <HeadingXXl
             as="h2"
@@ -80,7 +85,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           >
             {t('meeting-resources', { defaultValue: 'Meeting resources' })}
           </HeadingXXl>
-          <When condition={!!videos.length}>
+          {videos.length ? (
             <div className="space-y-20">
               <HeadingXl
                 as="h3"
@@ -92,8 +97,8 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
 
               <Video {...videos[0]?.value} showTitle={false} />
             </div>
-          </When>
-          <When condition={!!relatedDocuments.length}>
+          ) : null}
+          {relatedDocuments.length ? (
             <div className="space-y-20">
               <HeadingXl
                 as="h3"
@@ -109,10 +114,10 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                 </Link>
               ))}
             </div>
-          </When>
+          ) : null}
         </div>
-      </When>
-      <When condition={!!notices.length}>
+      ) : null}
+      {notices.length ? (
         <div className="flex flex-col gap-40">
           <HeadingXXl as="h2" className="my-12 md:mt-60">
             {t('notices', { defaultValue: 'Notices' })}
@@ -123,15 +128,15 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
             </Accordion>
           ))}
         </div>
-      </When>
-      <When condition={!!agencies.length}>
+      ) : null}
+      {agencies.length ? (
         <div className="md:mt-60">
           <RelatedContentList
             title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
             content={agencies}
           />
         </div>
-      </When>
+      ) : null}
     </span>
   )
 
@@ -149,13 +154,13 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       <HeadingLg as="h3" id={`dateTime${screen}`}>
         {t('date-and-time', { defaultValue: 'Date and time' })}
       </HeadingLg>
-      <When condition={!!date.length}>
+      {date.length ? (
         <div className="flex flex-col">
           <ComposedDate
             startDateInput={date[0]?.value.start_date}
             endDateInput={/* istanbul ignore */ date[0]?.value.end_date || ''}
           />
-          <When condition={date[0]?.value.start_time}>
+          {date[0]?.value.start_time ? (
             <ComposedTime
               startDateTimeInput={`1969-01-01T${date[0]?.value.start_time}`}
               endDateTimeInput={
@@ -165,54 +170,55 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                   : ''
               }
             />
-          </When>
+          ) : null}
         </div>
-      </When>
+      ) : null}
       <HeadingLg as="h3" id={`howToParticipate${screen}`}>
         {t('how-to-participate', { defaultValue: 'How to participate' })}
       </HeadingLg>
 
-      {meetingLocation.map((location) => {
-        let block = <></>
-        if (location.type === 'online') {
-          block = (
-            <div key={location.id} className="mb-20">
-              <HeadingMd as="h4" className="mb-12">
-                {t('online', { defaultValue: 'Online' })}
-              </HeadingMd>
-              <OnlineEventBlock {...location.value} key={location.id} />
-            </div>
-          )
-        }
-        if (location.type === 'address') {
-          block = (
-            <div key={location.id} className="mb-20">
-              <HeadingMd as="h4" className="mb-12">
-                {t('in-person', { defaultValue: 'In-person' })}
-              </HeadingMd>
-              <Location {...location.value} />
-            </div>
-          )
-        }
-        return block
-      })}
+      {
+        // eslint-disable-next-line array-callback-return
+        meetingLocation.map((location, i) => {
+          if (location.type === 'online') {
+            return (
+              <div key={i} className="mb-20">
+                <HeadingMd as="h4" className="mb-12">
+                  {t('online', { defaultValue: 'Online' })}
+                </HeadingMd>
+                <OnlineEventBlock {...location.value} key={location.id} />
+              </div>
+            )
+          }
+          if (location.type === 'address') {
+            return (
+              <div key={i} className="mb-20">
+                <HeadingMd as="h4" className="mb-12">
+                  {t('in-person', { defaultValue: 'In-person' })}
+                </HeadingMd>
+                <Location {...location.value} />
+              </div>
+            )
+          }
+        })
+      }
     </div>
   )
 
   return (
     <PageWrapper title={title}>
-      <When condition={!!cancelled}>
+      {cancelled ? (
         <Callout html="This meeting has been cancelled."></Callout>
-      </When>
+      ) : null}
       <Container className="flex flex-col gap-y-60">
         <div className="mb-20 pb-40 flex flex-col space-y-40">
           <PageTitleSection
             title={title}
             label={t('meeting', { defaultValue: 'Meeting' })}
           >
-            <When condition={!!primaryAgencies.length}>
-              <PageLinksList pageLinks={[primaryAgencies[0]]} />
-            </When>
+            {primaryAgencies.length ? (
+              <PageLinksList pageLinks={primaryAgencies} />
+            ) : null}
           </PageTitleSection>
         </div>
       </Container>

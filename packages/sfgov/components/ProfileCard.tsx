@@ -1,9 +1,5 @@
 // istanbul ignore file
 import {
-  classed,
-  IconEnvelope,
-  IconPhone,
-  Label,
   HeadingXl,
   HeadingMd,
   Button,
@@ -12,9 +8,8 @@ import {
   DisplayXXXl,
   IconArrowDown
 } from '@/design-system'
-import { EmailBlock, Image, RichText } from '.'
+import { Image } from '.'
 import type { WagtailImageData } from '@/types'
-import { When } from 'react-if'
 
 type ProfileCardProps = {
   name: string
@@ -43,37 +38,35 @@ export const ProfileCard = ({
     <div className="profile-card flex flex-col gap-28 md:gap-40">
       <div className="flex flex-col gap-28 md:flex-row lg:gap-96">
         <div className="flex flex-col gap-28 md:w-2/3">
-          <div class="flex flex-col gap-y-12">
-            <When condition={!!name}>
+          <div className="flex flex-col gap-y-12">
+            {name ? (
               <DisplayXXXl as="h1" className="my-12 md:my-20 !mb-0">
                 {name}
               </DisplayXXXl>
-            </When>
-            <When condition={!!pronouns}>
-              <DisplayLg>{pronouns}</DisplayLg>
-            </When>
+            ) : null}
+            {pronouns ? <DisplayLg>{pronouns}</DisplayLg> : null}
           </div>
           <div className="flex flex-col gap-y-8">
             <div className="flex flex-col gap-y-4">
-              <When condition={!!jobTitle}>
+              {jobTitle ? (
                 <HeadingXXl as="h2" className="text-black font-slab !mb-0">
                   {jobTitle}
                 </HeadingXXl>
-              </When>
-              <When condition={!!jobTitleLine2}>
+              ) : null}
+              {jobTitleLine2 ? (
                 <HeadingXl className="font-body text-gray500 !mb-0">
                   {jobTitleLine2}
                 </HeadingXl>
-              </When>
+              ) : null}
             </div>
-            <When condition={!!primaryAgency}>
+            {primaryAgency ? (
               <HeadingMd className="text-grey500 !mb-0">
                 {primaryAgency}
               </HeadingMd>
-            </When>
+            ) : null}
           </div>
         </div>
-        <When condition={!!image}>
+        {image ? (
           <div className="md:w-1/3 self-center">
             <div className="rounded-full border-1 overflow-hidden aspect-square w-[219px] h-[219px] lg:w-[345px] lg:h-[345px]">
               <Image
@@ -82,23 +75,23 @@ export const ProfileCard = ({
               />
             </div>
           </div>
-        </When>
+        ) : null}
       </div>
 
-      <When condition={!!button}>
+      {button ? (
         <div>
           <Button
             as="a"
-            href={button?.url}
+            href={button.url}
             className="w-full lg:w-1/2"
-            aria-label={button?.ariaLabel}
+            aria-label={button.ariaLabel}
             variant="tertiary"
           >
-            {button?.linkText}
+            {button.linkText}
             <IconArrowDown width={16} />
           </Button>
         </div>
-      </When>
+      ) : null}
     </div>
   )
 }

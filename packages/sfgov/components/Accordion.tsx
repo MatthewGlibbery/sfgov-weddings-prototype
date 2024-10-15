@@ -9,7 +9,6 @@ import {
   HeadingXs,
   Label
 } from '@/design-system'
-import { When } from 'react-if'
 
 export const StyledDetails = classed('details', 'block list-none')
 
@@ -71,7 +70,7 @@ export const Accordion = (props: AccordionProps) => {
   return (
     <StyledDetails open={isOpen} onToggle={toggleOpen} {...rest}>
       <StyledSummary data-testid="accordion-summary" datastory={dataStory}>
-        <When condition={!dataStory}>
+        {dataStory ? (
           <Label
             as={as}
             romanType="sans"
@@ -80,15 +79,14 @@ export const Accordion = (props: AccordionProps) => {
           >
             {title}
           </Label>
-        </When>
-        <When condition={dataStory}>
+        ) : (
           <Label
             className="text-primary600 font-medium"
             data-testid="accordion-title"
           >
             {title}
           </Label>
-        </When>
+        )}
         <Icon
           className={
             dataStory ? 'text-primary600' : 'text-primary500 min-w-[24px]'

@@ -137,7 +137,7 @@ export type TransactionPageData = PageData & {
   good_for_community: TypeTitleAndTextBlock[]
   topics: RelatedContentData[]
   partner_agencies: RelatedContentData[]
-  related_pages: RelatedContentData[]
+  related: RelatedContentData[]
 }
 
 export type ProfilePageData = PageData &
@@ -282,7 +282,7 @@ export type ReportPageData = PageData & {
   date: string
   print_version: TypeDocumentBlock | undefined
   spotlight: TypeSpotlightBlock[]
-  content: TypeBodyTextBlock
+  content: TypeBodyTextBlock[]
   partner_agencies: RelatedContentData[]
 }
 
@@ -297,8 +297,12 @@ export type ResourceCollectionPageData = PageData & {
   description: string
   data_dashboard: TypeEmbeddedContentBlock[]
   introductory_text: TypeTitleAndTextBlock[]
-  body: [(TypeDataStoriesSectionBlock | TypeResourcesSectionBlock)[]]
+  body: Array<
+    | BlockType<'documents', TypeDocumentBlock[]>
+    | BlockType<'data_stories', TypeDataStoriesSectionBlock[]>
+    | BlockType<'resources', TypeResourcesSectionBlock[]>
+  >
   custom_section: TypeTitleAndTextBlock[]
-  related_topics: RelatedContentData[]
+  topics: RelatedContentData[]
   partner_agencies: RelatedContentData[]
 }

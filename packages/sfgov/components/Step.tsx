@@ -1,4 +1,3 @@
-import { When } from 'react-if'
 import {
   BodyText,
   classed,
@@ -10,7 +9,7 @@ import {
 } from '@/design-system'
 import { PageLink } from './PageLink'
 import { CostBlock } from './CostBlock'
-import type { PageData, TypeStepBlock, TypeCostBlockValues } from '@/types'
+import type { PageData, TypeStepBlock } from '@/types'
 import { useTranslation } from 'next-i18next'
 import { RichText } from './RichText'
 import React from 'react'
@@ -137,27 +136,22 @@ export const Step = ({
             </div>
             <div className="flex flex-col-reverse gap-4 md:gap-8 md:flex-row md:items-baseline">
               <HeadingLg as="h2">{step.title}</HeadingLg>
-              <When condition={step.optional}>
+              {step.optional ? (
                 <div
                   className="bg-accent100 w-fit border-solid border-1 rounded-[14px] border-accent100 text-accent600 py-4 px-12 bg-grey200 mb-12"
                   data-testid="step-optional"
                 >
                   {t('optional', { defaultValue: 'Optional' })}
                 </div>
-              </When>
+              ) : null}
             </div>
           </div>
-          <When condition={step.cost?.length || step.time}>
+          {step.cost?.length || step.time ? (
             <div className="flex flex-col p-12 gap-8 rounded-4 border-solid border-1 border-neutral400">
-              <When condition={step.cost?.length}>
-                {() => (
-                  <CostBlock
-                    variant="step"
-                    {...(step?.cost?.[0].value as TypeCostBlockValues)}
-                  />
-                )}
-              </When>
-              <When condition={step.time}>
+              {step.cost?.length ? (
+                <CostBlock variant="step" {...step.cost[0].value} />
+              ) : null}
+              {step.time ? (
                 <div className="flex gap-4 items-start" data-testid="step-time">
                   <IconClock
                     className="text-neutral400 min-w-[20px]"
@@ -167,23 +161,23 @@ export const Step = ({
                   <BodyText className="font-bold">Time:</BodyText>
                   <span>{step.time}</span>
                 </div>
-              </When>
+              ) : null}
             </div>
-          </When>
-          <When condition={step.step_description}>
+          ) : null}
+          {step.step_description ? (
             <div className="mb-12" data-testid="step-description">
               <RichText html={step.step_description || ''} />
             </div>
-          </When>
-          <When condition={!!step.related_content_transactions?.[0]?.value}>
+          ) : null}
+          {step.related_content_transactions?.[0]?.value ? (
             <div className="flex items-center gap-4">
               <IconPencil className="text-primary500" width={20} alt="" />
               <PageLink
-                page={step.related_content_transactions?.[0]?.value as PageData}
+                page={step.related_content_transactions[0].value as PageData}
                 data-testid="step-transaction-link"
               />
             </div>
-          </When>
+          ) : null}
         </div>
       </div>
     </StepContainer>

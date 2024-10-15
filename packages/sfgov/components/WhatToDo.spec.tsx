@@ -5,7 +5,6 @@ import {
   LocationBlockFactory,
   PhoneNumberFactory,
   TextBlockFactory,
-  WhatToDoFactory,
   WhatToDoStepFactory
 } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
@@ -14,7 +13,7 @@ import { WhatToDo } from './WhatToDo'
 describe('WhatToDo', () => {
   it('renders a callout field', () => {
     const props = CalloutFactory.make()
-    render(<WhatToDo {...props} />)
+    render(<WhatToDo block={props} />)
 
     const text = screen.queryByText(props.value)
     expect(text).toBeInTheDocument()
@@ -62,7 +61,7 @@ describe('WhatToDo', () => {
       ...input
     }
 
-    render(<WhatToDo {...props} />)
+    render(<WhatToDo block={props} />)
 
     expect(screen.getByTestId(`${what}-field`)).toBeInTheDocument()
   })

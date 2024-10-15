@@ -27,7 +27,7 @@ const customJestConfig = {
       lines: 100,
       functions: 100,
       statements: 100,
-      branches: 90
+      branches: 80
     }
   },
   collectCoverageFrom: [

@@ -27,4 +27,10 @@ describe('PageTitleSection', () => {
 
     expect(h2).toHaveTextContent('subheader')
   })
+
+  it("doesn't render the h1 without a title", () => {
+    render(<PageTitleSection label="lol">wut</PageTitleSection>)
+
+    expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument()
+  })
 })

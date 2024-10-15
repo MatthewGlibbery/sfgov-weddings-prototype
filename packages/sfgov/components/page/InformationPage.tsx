@@ -5,16 +5,15 @@ import {
   PageTitleSection,
   type ContainerProps
 } from '@/design-system'
-import { RelatedContentList } from '../RelatedContentList'
-import { TitleAndText } from '../TitleAndText'
-import { Image } from '../Image'
-import { PageWrapper } from './PageWrapper'
 import type { InfoPageData, InfoPageSection } from '@/types'
 import type { ComponentType } from 'react'
-import { PageLinksList } from '../PageLinksList'
 import { useTranslation } from 'next-i18next'
 import { Callout } from '../Callout'
-import { When } from 'react-if'
+import { Image } from '../Image'
+import { PageLinksList } from '../PageLinksList'
+import { RelatedContentList } from '../RelatedContentList'
+import { TitleAndText } from '../TitleAndText'
+import { PageWrapper } from './PageWrapper'
 
 export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
   page
@@ -52,17 +51,17 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
                       {description}
                     </DisplayLg>
                   ) : null}
-                  <When condition={!!primaryAgency}>
+                  {primaryAgency ? (
                     <PageLinksList pageLinks={[primaryAgency]} />
-                  </When>
-                  <When condition={!!partOf.length}>
+                  ) : null}
+                  {partOf.length ? (
                     <div className="my-space-xxl">
                       <PageLinksList
                         label={t('Part of', { defaultValue: 'Part of ' }) || ''}
                         pageLinks={partOf}
                       />
                     </div>
-                  </When>
+                  ) : null}
                 </PageTitleSection>
               </div>
             </div>
@@ -123,5 +122,4 @@ const InfoSectionContent = ({ block, ...rest }: InfoSectionContentProps) => {
     case 'callout':
       return <Callout html={block.value} {...rest} />
   }
-  return null
 }

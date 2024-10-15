@@ -1,11 +1,3 @@
-import type { ComponentType } from 'react'
-import { When } from 'react-if'
-import { useTranslation } from 'next-i18next'
-
-import type { AboutPageData } from '@/types'
-
-import { TitleAndText } from '../TitleAndText'
-import { PageWrapper } from './PageWrapper'
 import {
   Container,
   Grid,
@@ -13,7 +5,12 @@ import {
   IconArrowLeft,
   PageTitleSection
 } from '@/design-system'
-import { PageLink, ContentTileList, TileContentSection } from '../'
+import type { AboutPageData } from '@/types'
+import { useTranslation } from 'next-i18next'
+import type { ComponentType } from 'react'
+import { ContentTileList, PageLink, TileContentSection } from '../'
+import { TitleAndText } from '../TitleAndText'
+import { PageWrapper } from './PageWrapper'
 
 export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -45,17 +42,17 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
                   </div>
                 </PageTitleSection>
               </div>
-              <When condition={!!aboutInfo.length}>
-                {aboutInfo.map((item) => (
-                  <TitleAndText
-                    key={item.id}
-                    as="h2"
-                    heading={HeadingXXl}
-                    {...item.value}
-                  />
-                ))}
-              </When>
-              <When condition={!!resources.length}>
+              {aboutInfo.length
+                ? aboutInfo.map((item) => (
+                    <TitleAndText
+                      key={item.id}
+                      as="h2"
+                      heading={HeadingXXl}
+                      {...item.value}
+                    />
+                  ))
+                : null}
+              {resources.length ? (
                 <div>
                   <HeadingXXl as="h2">
                     {t('resources', { defaultValue: 'Resources' })}
@@ -63,14 +60,15 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
                   {resources.map((section) => {
                     switch (section.type) {
                       case 'resources': {
-                        const TileList = (
-                          <ContentTileList links={section.value.resources} />
-                        )
                         return (
                           <TileContentSection
                             key={section.id}
                             title={section.value.title}
-                            tileList={TileList}
+                            tileList={
+                              <ContentTileList
+                                links={section.value.resources}
+                              />
+                            }
                           />
                         )
                       }
@@ -81,7 +79,7 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
                     }
                   })}
                 </div>
-              </When>
+              ) : null}
             </div>
           </div>
         </Grid>

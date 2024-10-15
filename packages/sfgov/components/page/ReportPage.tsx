@@ -1,16 +1,14 @@
-import type { ComponentType } from 'react'
-import { useTranslation } from 'next-i18next'
-
-import type { ReportPageData } from '@/types'
-
-import { PageWrapper } from './PageWrapper'
 import { Container, Grid, HeadingXl, PageTitleSection } from '@/design-system'
-import { RichText } from '../RichText'
-import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
+import type { ReportPageData } from '@/types'
+import { useTranslation } from 'next-i18next'
+import type { ComponentType } from 'react'
 import { ComposedDate } from '../DateTime'
-import { Spotlight } from '../Spotlight'
-import { RelatedContentList } from '../RelatedContentList'
 import { DocumentLink } from '../DocumentLink'
+import { RelatedContentList } from '../RelatedContentList'
+import { RichText } from '../RichText'
+import { Spotlight } from '../Spotlight'
+import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
+import { PageWrapper } from './PageWrapper'
 
 export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
   page
@@ -20,7 +18,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
     title,
     date,
     print_version: printVersion,
-    spotlight,
+    spotlight: [spotlight],
     content,
     partner_agencies: agencies
   } = page
@@ -30,9 +28,9 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
       <Container className="flex flex-col gap-y-60">
         <PageTitleSection label={t('Report')} title={title}>
           <ComposedDate startDateInput={date} />
-          {spotlight.length ? (
+          {spotlight ? (
             <div className="md:mx-16 mb-80">
-              <Spotlight {...spotlight[0]} />
+              <Spotlight {...spotlight} />
             </div>
           ) : null}
         </PageTitleSection>

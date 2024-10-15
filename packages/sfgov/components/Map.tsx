@@ -1,18 +1,29 @@
-import { ComponentType, useMemo, useState } from 'react'
-import NextImage from 'next/image'
-import { useTranslation } from 'next-i18next'
-import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api'
-import { TypeLocationBlock, WagtailImageData } from '@/types'
-import { When } from 'react-if'
 import { Button, IconPhone } from '@/design-system'
-import { Image, Location } from '.'
+import { TypeLocationBlock, WagtailImageData } from '@/types'
+import {
+  GoogleMap,
+  MarkerF,
+  useLoadScript,
+  type Libraries
+} from '@react-google-maps/api'
+import { useTranslation } from 'next-i18next'
+import NextImage from 'next/image'
+import { ComponentType, useMemo, useState } from 'react'
 import { fromAddress, setKey } from 'react-geocode'
+import { Image, Location } from '.'
 
-export const Map: ComponentType<{
+export type MapProps = JSX.IntrinsicElements['div'] & {
   address: TypeLocationBlock
   image: WagtailImageData
   locationName: string
-}> = ({ address, image, locationName }) => {
+}
+
+export const Map: ComponentType<MapProps> = ({
+  address,
+  image,
+  locationName,
+  ...rest
+}) => {
   const { t } = useTranslation()
 
   // Sets the default coords to 1 SVN
@@ -32,7 +43,7 @@ export const Map: ComponentType<{
     })
     .catch(console.error)
 
-  const libraries = useMemo(() => ['places'], [])
+  const libraries = useMemo<Libraries>(() => ['places'], [])
 
   const mapCenter = useMemo(() => ({ lat, lng }), [lat, lng])
 
@@ -49,7 +60,7 @@ export const Map: ComponentType<{
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-    libraries: libraries as any
+    libraries
   })
 
   const AddressTile: ComponentType<{
@@ -59,9 +70,9 @@ export const Map: ComponentType<{
   }> = ({ address, image, locationName }) => (
     <div className="flex flex-col md:flex-row-reverse md:gap-x-28 lg:flex-col space-y-20">
       <div className="flex-1">
-        <When condition={!!image}>
+        {image ? (
           <Image imageRef={image} alt={`Photo of ${locationName}`} />
-        </When>
+        ) : null}
       </div>
       <div className="flex flex-col flex-1 space-y-20">
         <Location {...address?.value} />
@@ -77,12 +88,13 @@ export const Map: ComponentType<{
 
   return (
     <>
-      <span className="lg:hidden">
+      <div className="lg:hidden">
         <NextImage
           src={`https://maps.googleapis.com/maps/api/staticmap?center=${addressQuery}&zoom=16&markers=${addressQuery}&size=1000x400&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`}
           width={1000}
           height={400}
           alt={`Map showing ${locationName}`}
+          data-testid="map-image"
         />
         <div className="py-20">
           <AddressTile
@@ -91,8 +103,8 @@ export const Map: ComponentType<{
             locationName={locationName}
           />
         </div>
-      </span>
-      <span className="hidden lg:block">
+      </div>
+      <div className="hidden lg:block" data-testid="google-map" {...rest}>
         {isLoaded ? (
           <GoogleMap
             options={mapOptions}
@@ -113,7 +125,7 @@ export const Map: ComponentType<{
         ) : (
           <div>loading...</div>
         )}
-      </span>
+      </div>
     </>
   )
 }

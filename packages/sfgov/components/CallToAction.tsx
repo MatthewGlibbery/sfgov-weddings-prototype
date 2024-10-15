@@ -1,4 +1,3 @@
-import { When } from 'react-if'
 import { TypeCallToActionValues } from '@/types'
 import { BodyText, Button, HeadingLg } from '@/design-system'
 
@@ -19,19 +18,17 @@ export const CallToAction = ({
     : buttonLink.button.url
   return (
     <div className="flex flex-col gap-y-8">
-      <When condition={title}>
+      {title ? (
         <HeadingLg as="h3" className="mb-4">
           {title}
         </HeadingLg>
-      </When>
-      <When condition={description}>
-        <BodyText>{description}</BodyText>
-      </When>
-      <When condition={!!(url && buttonLink.button.link_text)}>
+      ) : null}
+      {description ? <BodyText>{description}</BodyText> : null}
+      {url && buttonLink.button.link_text ? (
         <Button className="w-fit" as="a" href={url} aria-label={ariaLabel}>
           {buttonLink.button.link_text}
         </Button>
-      </When>
+      ) : null}
     </div>
   )
 }

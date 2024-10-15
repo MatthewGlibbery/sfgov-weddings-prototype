@@ -9,7 +9,6 @@ import { getPageURL } from '@/lib/utils'
 import type { FormPageData, PageData, TypeConfirmationBodyTypes } from '@/types'
 import { type ComponentType, useState } from 'react'
 import { useTranslation } from 'next-i18next'
-import { Else, If, Then } from 'react-if'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
 import { RichText } from '../RichText'
@@ -47,25 +46,22 @@ export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
             label={submitted ? t('Form submitted') : t('Form')}
           ></PageTitleSection>
         </div>
-        <If condition={submitted}>
-          <Then>
-            <div className="space-y-40">
-              {confirmationBody.map((block) => (
-                <ConfirmationContent key={block.id} block={block} />
-              ))}
-              <HeadingXXl as="h2" className="flex flex-row gap-8">
-                {t('Contact us')}
-              </HeadingXXl>
-              <ContactFooter items={getHelp} />
-            </div>
-          </Then>
-          <Else>
-            <FormioForm
-              src={formSchemaUrl}
-              onSubmitDone={() => setSubmitted(true)}
-            />
-          </Else>
-        </If>
+        {submitted ? (
+          <div className="space-y-40">
+            {confirmationBody.map((block) => (
+              <ConfirmationContent key={block.id} block={block} />
+            ))}
+            <HeadingXXl as="h2" className="flex flex-row gap-8">
+              {t('Contact us')}
+            </HeadingXXl>
+            <ContactFooter items={getHelp} />
+          </div>
+        ) : (
+          <FormioForm
+            src={formSchemaUrl}
+            onSubmitDone={() => setSubmitted(true)}
+          />
+        )}
       </Container>
     </PageWrapper>
   )

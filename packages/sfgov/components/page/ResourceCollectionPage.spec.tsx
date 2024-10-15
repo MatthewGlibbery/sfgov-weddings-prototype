@@ -14,9 +14,8 @@ window.IntersectionObserver = jest.fn(() => ({
 }))
 
 describe('ResourceCollectionPage', () => {
-  const page = ResourceCollectionPageFactory.make()
-
   it('renders a resource collection page', () => {
+    const page = ResourceCollectionPageFactory.make()
     render(<ResourceCollectionPage page={page} />)
 
     const title = screen.getByRole('heading', {
@@ -24,5 +23,31 @@ describe('ResourceCollectionPage', () => {
     })
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(page.title)
+  })
+
+  it('does not render a paragraph w/o description', () => {
+    const page = ResourceCollectionPageFactory.make({
+      description: undefined
+    })
+    render(<ResourceCollectionPage page={page} />)
+    expect(screen.queryByTestId('page-description')).not.toBeInTheDocument()
+  })
+
+  it('does not render related topics list w/o topics', () => {
+    const page = ResourceCollectionPageFactory.make({
+      topics: []
+    })
+    render(<ResourceCollectionPage page={page} />)
+    expect(screen.queryByTestId('related-topics-list')).not.toBeInTheDocument()
+  })
+
+  it('does not render the agencies list w/o agencies', () => {
+    const page = ResourceCollectionPageFactory.make({
+      partner_agencies: []
+    })
+    render(<ResourceCollectionPage page={page} />)
+    expect(
+      screen.queryByTestId('partner-agencies-list')
+    ).not.toBeInTheDocument()
   })
 })

@@ -1,7 +1,6 @@
 import { Container } from '@/design-system'
 import { useTranslation } from 'next-i18next'
 import { useSearchParams } from 'next/navigation'
-import { When } from 'react-if'
 import { LanguageSelector } from './LanguageSelector'
 import { Alert } from './Alert'
 
@@ -13,16 +12,12 @@ export const SiteHeader = (props: SiteHeaderProps) => {
 
   return (
     <header className="mb-40" role="banner" {...props}>
-      <When
-        condition={
-          searchParams ? searchParams.get('preview') === 'true' : false
-        }
-      >
+      {searchParams?.get('preview') === 'true' ? (
         <Alert
           description={t('You are previewing a draft.')}
           variant="preview"
         />
-      </When>
+      ) : null}
       <div className="bg-grey100 py-12">
         <Container>
           <nav role="navigation" aria-label="Primary Header Navigation">

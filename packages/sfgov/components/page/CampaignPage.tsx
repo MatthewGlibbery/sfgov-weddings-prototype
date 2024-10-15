@@ -18,21 +18,20 @@ import {
   TypeVideoBlock,
   WagtailImageData
 } from '@/types'
-import { ComponentType } from 'react'
 import { useTranslation } from 'next-i18next'
-import { When } from 'react-if'
+import { ComponentType } from 'react'
 import { Accordion } from '../Accordion'
 import { Image } from '../Image'
 import { Location } from '../Location'
 import { PhoneNumberBlock } from '../PhoneNumberBlock'
 import { RelatedContentList } from '../RelatedContentList'
 import { RichText } from '../RichText'
-import { TileContentSection } from '../TileContentSection'
 import { Spotlight } from '../Spotlight'
-import { TitleAndText } from '../TitleAndText'
-import { PageWrapper } from './PageWrapper'
-import { Video } from '../Video'
 import { ContentTileList } from '../Tile'
+import { TileContentSection } from '../TileContentSection'
+import { TitleAndText } from '../TitleAndText'
+import { Video } from '../Video'
+import { PageWrapper } from './PageWrapper'
 
 export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   page
@@ -113,9 +112,9 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
             )}
           >
             <div className="flex flex-col mx-20">
-              <When condition={!!content.value.image}>
+              {content.value.image ? (
                 <Image className="mb-16" imageRef={content.value.image} />
-              </When>
+              ) : null}
               <TitleAndText
                 title={content.value.title}
                 heading={HeadingXXl}
@@ -153,12 +152,12 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       case 'accordion_section':
         return (
           <div className="mx-20 md:mx-0 space-y-20">
-            <When condition={content.value.title}>
+            {content.value.title ? (
               <HeadingXXl as="h2">{content.value.title}</HeadingXXl>
-            </When>
-            <When condition={content.value.accordion_sidebar}>
+            ) : null}
+            {content.value.accordion_sidebar ? (
               <RichText html={content.value.accordion_sidebar} />
-            </When>
+            ) : null}
             {content.value.accordion_items.map((item) => (
               <Accordion
                 key={item.id}
@@ -201,44 +200,42 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
 
   return (
     <PageWrapper title={title}>
-      <When condition={!!headerImage}>
-        {() => (
-          <div className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0">
-            <Image
-              imageRef={headerImage}
-              className="object-cover w-1/1"
-              alt={headerImage?.title}
-            />
-          </div>
-        )}
-      </When>
+      {headerImage ? (
+        <div className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0">
+          <Image
+            imageRef={headerImage}
+            className="object-cover w-1/1"
+            alt={headerImage?.title}
+          />
+        </div>
+      ) : null}
       <Container className="bg-white relative p-20 top-[100px] xl:top-[250px] mx-0 md:mx-16 lg:mx-auto">
         <div className="hidden xl:flex xl:justify-between">
           <div>
             <PageTitleSection title={title} label={label} />
           </div>
-          <When condition={!!logo}>{() => <LogoComponent logo={logo} />}</When>
+          {logo ? <LogoComponent logo={logo} /> : null}
         </div>
         <div className="xl:hidden flex flex-col">
           <PageLabel label={label} />
-          <When condition={!!logo}>{() => <LogoComponent logo={logo} />}</When>
+          {logo ? <LogoComponent logo={logo} /> : null}
           <DisplayXXXl as="h1" className="my-12 md:my-20">
             {title}
           </DisplayXXXl>
         </div>
       </Container>
       <div className="relative top-[100px] xl:top-[250px] mb-[200px] xl:mb-[400px] max-w-lg md:mx-16 lg:mx-auto">
-        <When condition={!!spotlight1.length}>
+        {spotlight1.length ? (
           <Spotlight
             theme={theme}
             themeClasses={themeText.spotlight1}
             buttonClasses={themeButton.spotlight1}
             {...spotlight1[0]}
           />
-        </When>
+        ) : null}
         <Container className="mb-20">
           <HeadingXXl as="h2">{factsTitle}</HeadingXXl>
-          <When condition={!!factItems.length}>
+          {factItems.length ? (
             <Grid className="gap-28">
               {factItems.map((item) => {
                 const image = item.value.image
@@ -248,14 +245,14 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                     className="flex flex-col col-span-6 lg:col-span-4"
                     key={item.id}
                   >
-                    <When condition={image}>
+                    {image ? (
                       <Image
                         key={image?.id}
                         imageRef={image}
                         className="mb-20"
                       />
-                    </When>
-                    <When condition={!!titleAndText}>
+                    ) : null}
+                    {titleAndText ? (
                       <TitleAndText
                         key={item.id}
                         as="p"
@@ -263,14 +260,14 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                         title={titleAndText.title}
                         text={titleAndText.text}
                       />
-                    </When>
+                    ) : null}
                   </div>
                 )
               })}
             </Grid>
-          </When>
+          ) : null}
         </Container>
-        <When condition={!!spotlight2.length}>
+        {spotlight2.length ? (
           <Spotlight
             theme={theme}
             secondary="true"
@@ -278,26 +275,26 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
             buttonClasses={themeButton.spotlight2}
             {...spotlight2[0]}
           />
-        </When>
+        ) : null}
         {additionalContent.map((content) => (
           <div key={content.id} className="mb-20 md:mb-40 lg:mb-60">
             {getAdditionalContentComponent(content)}
           </div>
         ))}
         <Container className="flex flex-col md:gap-40 lg:gap-60">
-          <When condition={about}>
+          {about ? (
             <div>
               <HeadingXXl as="h2" className="mb-[20px]">
                 {t('about', { defaultValue: 'About' })}
               </HeadingXXl>
               <RichText html={about} />
             </div>
-          </When>
+          ) : null}
           <RelatedContentList
             title={t('partner-agencies', { defaultValue: 'Partner Agencies' })}
             content={agencies}
           />
-          <When condition={!!links.length}>
+          {links.length ? (
             <div>
               <HeadingXXl as="h2" className="mb-[20px]">
                 {t('related', { defaultValue: 'Related' })}
@@ -310,7 +307,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                 </div>
               ))}
             </div>
-          </When>
+          ) : null}
         </Container>
       </div>
     </PageWrapper>

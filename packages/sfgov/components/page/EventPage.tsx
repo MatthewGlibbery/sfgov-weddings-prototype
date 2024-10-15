@@ -1,4 +1,3 @@
-// import NextImage from 'next/image'
 import {
   BodyText,
   Container,
@@ -11,46 +10,37 @@ import {
   PageTitleSection
 } from '@/design-system'
 import type {
-  TypeEmailBlock,
   EventPageData,
+  TypeEmailBlock,
   TypePhoneNumberBlock
 } from '@/types'
-import { RelatedContentList } from '../RelatedContentList'
+import { useTranslation } from 'next-i18next'
+import type { ComponentType } from 'react'
 import {
-  PageWrapper,
+  CallToAction,
+  ContactFooter,
   CostBlock,
   DateTimeBlock,
-  Location,
-  CallToAction,
   Image,
-  Video,
-  RichText,
-  ContactFooter
+  Location,
+  PageWrapper,
+  RichText
 } from '../'
-import { When } from 'react-if'
-import type { ComponentType } from 'react'
-import { useTranslation } from 'next-i18next'
+import { RelatedContentList } from '../RelatedContentList'
 
 export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
   const {
     title,
     description,
-    date_time: dateTime,
-    cost,
+    date_time: [dateTime],
+    cost: [cost],
     location,
-    call_to_action: callToAction,
+    call_to_action: [callToAction],
     image,
     body,
-    contact,
-    partner_agencies: agencies,
-    topics
+    contact: contacts,
+    partner_agencies: agencies
   } = page
-
-  const phoneNumbers: TypePhoneNumberBlock[] = []
-  const emails: TypeEmailBlock[] = []
-  contact.forEach((item) =>
-    item.type === 'email' ? emails.push(item) : phoneNumbers.push(item)
-  )
 
   const { t } = useTranslation()
 
@@ -62,7 +52,7 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
             label={t('event', { defaultValue: 'Event' })}
             title={title}
           >
-            <When condition={description}>
+            {description ? (
               <DisplayLg
                 className="mb-16"
                 as="p"
@@ -70,19 +60,19 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
               >
                 {description}
               </DisplayLg>
-            </When>
+            ) : null}
           </PageTitleSection>
         </div>
         <Grid className="grid gap-y-60">
           <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1 order-2">
-            <When condition={!!image}>
+            {image ? (
               <Image imageRef={image} className="rounded-4" alt="image alt" />
-            </When>
-            <When condition={!!body}>
+            ) : null}
+            {body ? (
               <div>
                 <RichText html={body} />
               </div>
-            </When>
+            ) : null}
           </div>
           <div className="col-span-full lg:col-start-9 order-1 lg:order-2">
             <SidebarWrapper>
@@ -97,47 +87,49 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
               </HeadingXXl>
               <div className="flex flex-col gap-y-20">
                 <div>
-                  <When condition={!!callToAction?.[0]?.value}>
-                    <CallToAction {...callToAction[0]?.value} />
-                  </When>
+                  {callToAction ? (
+                    <CallToAction {...callToAction.value} />
+                  ) : null}
                 </div>
                 <div>
-                  <When condition={!!dateTime?.[0]?.value}>
-                    <DateTimeBlock {...dateTime[0]?.value} />
-                  </When>
+                  {dateTime ? <DateTimeBlock {...dateTime.value} /> : null}
                 </div>
                 <div>
-                  <When condition={!!cost.length}>
-                    <CostBlock {...cost[0]?.value} variant="transaction" />
-                  </When>
+                  {cost ? (
+                    <CostBlock {...cost.value} variant="transaction" />
+                  ) : null}
                 </div>
                 <div>
-                  <When condition={!!location.length}>
-                    <HeadingLg as="h3">
-                      {t('location', { defaultValue: 'Location' })}
-                    </HeadingLg>
-                    {location.map((locationItem) => (
-                      <div key={locationItem.id}>
-                        <When condition={locationItem.type === 'address'}>
-                          <div className="mb-space-body">
-                            <Location
-                              {...location[0]?.value}
-                              className="mb-space-body"
-                              variant="full"
-                            />
-                          </div>
-                        </When>
-                        <When condition={locationItem.type === 'online'}>
-                          <HeadingSm as="p" className="mt-8">
-                            {t('online', { defaultValue: 'Online' })}
-                          </HeadingSm>
-                          <BodyText>
-                            This event will also be available online
-                          </BodyText>
-                        </When>
-                      </div>
-                    ))}
-                  </When>
+                  {location.length ? (
+                    <>
+                      <HeadingLg as="h3">
+                        {t('location', { defaultValue: 'Location' })}
+                      </HeadingLg>
+                      {location.map((locationItem, i) => (
+                        <div key={i}>
+                          {locationItem.type === 'address' ? (
+                            <div className="mb-space-body">
+                              <Location
+                                {...locationItem.value}
+                                className="mb-space-body"
+                                variant="full"
+                              />
+                            </div>
+                          ) : null}
+                          {locationItem.type === 'online' ? (
+                            <>
+                              <HeadingSm as="p" className="mt-8">
+                                {t('online', { defaultValue: 'Online' })}
+                              </HeadingSm>
+                              <BodyText>
+                                This event will also be available online
+                              </BodyText>
+                            </>
+                          ) : null}
+                        </div>
+                      ))}
+                    </>
+                  ) : null}
                 </div>
               </div>
             </SidebarWrapper>
@@ -148,14 +140,14 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
           title={t('partner_agencies', { defaultValue: 'Partner agencies' })}
           content={agencies}
         />
-        <When condition={!!contact.length}>
+        {contacts.length ? (
           <div>
             <HeadingXXl as="h2" className="mb-space-lg">
               {t('contact_us', { defaultValue: 'Contact us' })}
             </HeadingXXl>
-            <ContactFooter items={contact[0]} />
+            <ContactFooter items={contacts[0]} />
           </div>
-        </When>
+        ) : null}
       </Container>
     </PageWrapper>
   )

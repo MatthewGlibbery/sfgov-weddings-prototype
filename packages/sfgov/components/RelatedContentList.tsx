@@ -1,18 +1,18 @@
 import { PageLink } from './PageLink'
-import { HeadingXXl, type ContainerProps } from '@/design-system'
-import { RelatedContentData } from '@/types'
-import { FC } from 'react'
+import { HeadingXXl } from '@/design-system'
+import type { RelatedContentData } from '@/types'
+import type { ComponentType } from 'react'
 
-type ComponentProps = {
+type PageLinkProps = Omit<JSX.IntrinsicElements['div'], 'className'> & {
   item: RelatedContentData
 }
 
-type RelatedContentProps = {
+type RelatedContentProps = Omit<JSX.IntrinsicElements['div'], 'content'> & {
   content: RelatedContentData[]
-  component?: FC<ComponentProps>
-} & ContainerProps
+  component?: ComponentType<PageLinkProps>
+}
 
-const PageLinkWithBorder = ({ item }: ComponentProps) => (
+const PageLinkWithBorder = ({ item, ...rest }: PageLinkProps) => (
   <div
     className="
     pb-20
@@ -21,6 +21,7 @@ const PageLinkWithBorder = ({ item }: ComponentProps) => (
     md:[&:only-child]:border-r-0
     md:border-neutral200 md:[&:not(:nth-child(3n+1))]:pl-28 
   "
+    {...rest}
   >
     <PageLink page={item} />
   </div>

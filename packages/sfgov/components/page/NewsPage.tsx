@@ -6,40 +6,17 @@ import {
   IconOpenQuote,
   PageTitleSection
 } from '@/design-system'
-import { NewsPageData } from '@/types'
-import { ComponentType, ReactNode } from 'react'
+import type { NewsPageData } from '@/types'
+import type { ComponentType, ReactNode } from 'react'
 import { useTranslation } from 'next-i18next'
-import { When } from 'react-if'
 import {
   ComposedDate,
   Image,
-  PageWrapper,
   PageLinksList,
-  RichText,
-  RelatedContentList
+  PageWrapper,
+  RelatedContentList,
+  RichText
 } from '..'
-
-type PullQuoteProps = {
-  children: ReactNode
-}
-
-const PullQuote = ({ children }: PullQuoteProps) => (
-  <div className="inline-flex relative self-center mb-28 md:m-28 md:mr-0 md:w-1/2 float-right">
-    <IconOpenQuote
-      className="text-secondary300 shrink-0 relative bottom-4 mr-8"
-      width={32}
-      height={28}
-    />
-    <HeadingXl as="p" className="text-secondary500 mr-28">
-      <span>{children}</span>
-    </HeadingXl>
-    <IconCloseQuote
-      className="text-secondary300 absolute right-0 bottom-0"
-      width={32}
-      height={28}
-    />
-  </div>
-)
 
 export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
   const {
@@ -64,9 +41,9 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
           </HeadingXl>
         </PageTitleSection>
         <div className="flex flex-col space-y-40 mt-40">
-          <When condition={!!image}>
+          {image ? (
             <Image imageRef={image} alt={`Photo related to ${abstract}`} />
-          </When>
+          ) : null}
           <div>
             <HeadingMd as="p" className="mb-12 lg:mb-16 text-accent500">
               <ComposedDate startDateInput={date} dateStyle="long" />
@@ -80,7 +57,7 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
               />
             </div>
           </div>
-          <When condition={!!agencies.length}>
+          {agencies.length ? (
             <div className="md:mt-60">
               <RelatedContentList
                 title={t('partner-agencies', {
@@ -89,9 +66,31 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
                 content={agencies}
               />
             </div>
-          </When>
+          ) : null}
         </div>
       </Container>
     </PageWrapper>
   )
 }
+
+type PullQuoteProps = {
+  children: ReactNode
+}
+
+const PullQuote = ({ children }: PullQuoteProps) => (
+  <div className="inline-flex relative self-center mb-28 md:m-28 md:mr-0 md:w-1/2 float-right">
+    <IconOpenQuote
+      className="text-secondary300 shrink-0 relative bottom-4 mr-8"
+      width={32}
+      height={28}
+    />
+    <HeadingXl as="p" className="text-secondary500 mr-28">
+      <span>{children}</span>
+    </HeadingXl>
+    <IconCloseQuote
+      className="text-secondary300 absolute right-0 bottom-0"
+      width={32}
+      height={28}
+    />
+  </div>
+)

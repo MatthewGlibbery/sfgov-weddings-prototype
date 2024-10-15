@@ -1,6 +1,5 @@
 import { HeadingXl, IconDownload, Link } from '@/design-system'
 import { TypeAgendaItemBlockValues } from '@/types'
-import { When } from 'react-if'
 import { RichText } from './RichText'
 import { StepBadge } from './Step'
 
@@ -14,22 +13,22 @@ export const AgendaItemBlock = (props: TypeAgendaItemBlockValues) => {
             <HeadingXl className="text-secondary600">{index + 1}</HeadingXl>
           </StepBadge>
         </div>
-        <When condition={titleAndText.title}>
+        {titleAndText.title ? (
           <HeadingXl romanType="sans" as="h3" id={id}>
             {titleAndText.title}
           </HeadingXl>
-        </When>
+        ) : null}
       </div>
       <RichText html={titleAndText.text} />
       {/* TODO: update when documents are fully serialized */}
-      <When condition={!!documents.length}>
-        {documents.map((document) => (
-          <Link href="#" className="flex gap-4" key={document.id}>
-            <IconDownload width={20} />
-            document placeholder
-          </Link>
-        ))}
-      </When>
+      {documents.length
+        ? documents.map((document) => (
+            <Link href="#" className="flex gap-4" key={document.id}>
+              <IconDownload width={20} />
+              document placeholder
+            </Link>
+          ))
+        : null}
     </div>
   )
 }

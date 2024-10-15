@@ -17,7 +17,6 @@ import type { TypeTileBlock } from '@/types'
 import { getPageURL } from '@/lib/utils'
 import { ComposedDate, ComposedTime } from './DateTime'
 import { useTranslation } from 'next-i18next'
-import { When } from 'react-if'
 import { RichText } from './RichText'
 
 export type TileSectionProps = {
@@ -127,12 +126,8 @@ export const DocumentTile = ({ link }: TileProps) => (
     <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
       {link.title}
     </HeadingMd>
-    <When condition={!!link.description}>
-      <RichText html={link.description} />
-    </When>
-    <When condition={!!link.publishedDate}>
-      <div>{link.publishedDate}</div>
-    </When>
+    {link.description ? <RichText html={link.description} /> : null}
+    {link.publishedDate ? <div>{link.publishedDate}</div> : null}
   </BaseTile>
 )
 
@@ -142,9 +137,7 @@ export const DataStoryTile = ({ link }: TileProps) => (
     <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
       {link.title}
     </HeadingMd>
-    <When condition={!!link.description}>
-      <RichText html={link.description} />
-    </When>
+    {link.description ? <RichText html={link.description} /> : null}
   </BaseTile>
 )
 
@@ -181,11 +174,11 @@ export const MeetingTile = ({ link }: TileProps) => {
                 ? t('meeting', { defaultValue: 'Meeting' })
                 : t('event', { defaultValue: 'Event' })}
             </Label>
-            <When condition={cancelled}>
+            {cancelled ? (
               <div className="py-8 px-12 text-center rounded-[20px] bg-grey700 text-white">
                 {t('cancelled', { defaultValue: 'Cancelled' })}
               </div>
-            </When>
+            ) : null}
           </div>
           <HeadingMd as="h4" className="text-grey500">
             {link.title}
@@ -196,7 +189,7 @@ export const MeetingTile = ({ link }: TileProps) => {
               <ComposedDate startDateInput={startDate} />
             </BodyText>
           </div>
-          <When condition={startTime}>
+          {startTime ? (
             <div className="flex space-x-8">
               <IconClock width={20} />
               <BodyText>
@@ -205,7 +198,7 @@ export const MeetingTile = ({ link }: TileProps) => {
                 />
               </BodyText>
             </div>
-          </When>
+          ) : null}
         </div>
       </BaseTile>
     )

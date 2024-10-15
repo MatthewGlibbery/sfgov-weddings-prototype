@@ -1,27 +1,18 @@
-import {
-  BodyText,
-  Button,
-  classed,
-  HeadingXl,
-  IconDocument,
-  Link
-} from '@/design-system'
-import { When } from 'react-if'
+import { BodyText, Button, classed, HeadingXl } from '@/design-system'
 import { Callout } from './Callout'
 import { EmailBlock } from './EmailBlock'
 import { Location } from './Location'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { RichText } from './RichText'
-import type * as Types from '@/types'
+import {
+  TypeWhatToDoStepBlock,
+  TypeStepSpecificsBlock,
+  TypeWhatToDoBlock
+} from '@/types'
 import { camelCase } from '@/lib/utils'
 import { DocumentLink } from './DocumentLink'
 
-type WhatToDoStepBlockProps = Types.TypeWhatToDoStepBlock & {
-  index: number
-}
-
-type BlockType =
-  Types.TypeWhatToDoStepBlock['value']['section_specifics'][number]['type']
+type BlockType = TypeStepSpecificsBlock['type']
 
 const StyledStep = classed('div', {
   base: 'flex',
@@ -32,7 +23,7 @@ const StyledStep = classed('div', {
   }
 })
 
-const StepContent = (block: Types.TypeStepSpecificsVariant) => {
+const StepContent = (block: TypeStepSpecificsBlock) => {
   switch (block.type) {
     case 'callout':
       return <Callout html={block.value} />
@@ -59,17 +50,16 @@ const StepContent = (block: Types.TypeStepSpecificsVariant) => {
   }
 }
 
-const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
-  const { section_title: sectionTitle, section_specifics: sectionSpecifics } =
-    props
+const WhatToDoStep = (props: TypeWhatToDoStepBlock['value']) => {
+  const { section_title: title, section_specifics: specifics } = props
   return (
     <>
-      <When condition={sectionTitle}>
-        <HeadingXl as="h3" id={camelCase(sectionTitle)}>
-          {sectionTitle}
+      {title ? (
+        <HeadingXl as="h3" id={camelCase(title)}>
+          {title}
         </HeadingXl>
-      </When>
-      {sectionSpecifics.map((block: Types.TypeStepSpecificsVariant) => {
+      ) : null}
+      {specifics.map((block: TypeStepSpecificsBlock) => {
         return (
           <StyledStep
             key={block.id}
@@ -84,16 +74,16 @@ const WhatToDoStep = (props: WhatToDoStepBlockProps) => {
   )
 }
 
-export const WhatToDo = (props: Types.TypeWhatToDoBlock) => {
-  const { id, type, value } = props
+export const WhatToDo = ({
+  block,
+  ...rest
+}: JSX.IntrinsicAttributes & { block: TypeWhatToDoBlock }) => {
   return (
-    <div className="flex flex-col gap-y-20" key={id}>
-      <When condition={type === 'callout'}>
-        <Callout html={value as string} />
-      </When>
-      <When condition={type === 'what_to_do_step'}>
-        <WhatToDoStep {...value} />
-      </When>
+    <div className="flex flex-col gap-y-20" {...rest}>
+      {block.type === 'callout' ? <Callout html={block.value} /> : null}
+      {block.type === 'what_to_do_step' ? (
+        <WhatToDoStep {...block.value} />
+      ) : null}
     </div>
   )
 }

@@ -8,7 +8,6 @@ import {
   StackedItem
 } from '@/design-system'
 import { TypeContactFooterBlockValues } from '@/types'
-import { When } from 'react-if'
 import {
   EmailBlock,
   Location,
@@ -58,7 +57,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
 
   return (
     <StackedContainer className="gap-28">
-      <When condition={!!footerSections.address.length}>
+      {footerSections.address.length ? (
         <StackedItem icon={IconHome} title="Address">
           <div className="flex flex-col gap-y-28">
             {footerSections.address.map((address) => (
@@ -66,8 +65,8 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
             ))}
           </div>
         </StackedItem>
-      </When>
-      <When condition={!!footerSections.phone_number.length}>
+      ) : null}
+      {footerSections.phone_number.length ? (
         <StackedItem icon={IconPhone} title="Phone">
           <div className="flex flex-col gap-y-28">
             {footerSections.phone_number.map((phone) => (
@@ -75,8 +74,8 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
             ))}
           </div>
         </StackedItem>
-      </When>
-      <When condition={!!footerSections.email.length}>
+      ) : null}
+      {footerSections.email.length ? (
         <StackedItem icon={IconEmail} title="Email">
           <div className="flex flex-col gap-y-28">
             {footerSections.email.map((email) => (
@@ -84,21 +83,21 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
             ))}
           </div>
         </StackedItem>
-      </When>
-      <When condition={!!footerSections.title_and_text.length}>
+      ) : null}
+      {footerSections.title_and_text.length ? (
         <StackedItem icon={IconAdditional} title="Additional info">
           {footerSections.title_and_text.map((extra) => (
             <TitleAndText {...extra.value} key={extra.id} />
           ))}
         </StackedItem>
-      </When>
-      <When condition={!!footerSections.social_media.length}>
+      ) : null}
+      {footerSections.social_media.length ? (
         <StackedItem icon={IconShare} title="Social media">
           {footerSections.social_media.map((item) => (
             <SocialMedia items={item.value} key={item.id} />
           ))}
         </StackedItem>
-      </When>
+      ) : null}
     </StackedContainer>
   )
 }

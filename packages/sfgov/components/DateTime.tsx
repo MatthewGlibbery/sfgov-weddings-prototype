@@ -1,9 +1,6 @@
 import { ReactElement } from 'react'
-import { When } from 'react-if'
-
 import type { TypeDateTimeValues } from '@/types'
 import { BodyText, HeadingLg } from '@/design-system'
-
 import { useTranslation } from 'next-i18next'
 
 type ComposedDateProps = {
@@ -217,7 +214,7 @@ export const DateTimeBlock = ({
   }
 
   const { t } = useTranslation()
-
+  const hasComposedTime = Object.keys(composedTimeProps).length > 0
   return (
     <div>
       <HeadingLg as="h3" className="mb-20">
@@ -225,11 +222,11 @@ export const DateTimeBlock = ({
       </HeadingLg>
       <BodyText>
         <ComposedDate startDateInput={start_date} endDateInput={end_date} />
-        <When condition={!!Object.keys(composedTimeProps).length}>
+        {hasComposedTime ? (
           <div>
             <ComposedTime {...composedTimeProps} />
           </div>
-        </When>
+        ) : null}
       </BodyText>
     </div>
   )
