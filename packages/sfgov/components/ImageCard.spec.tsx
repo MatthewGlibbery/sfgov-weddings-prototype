@@ -4,7 +4,6 @@ import { ImageCard } from './ImageCard'
 
 describe('ImageCard', () => {
   const data = RelatedContentBlockFactory.make()
-  console.log(data)
   it('should render an ImageCard', async () => {
     render(<ImageCard item={data} />)
 

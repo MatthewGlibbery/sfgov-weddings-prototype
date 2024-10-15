@@ -1,14 +1,13 @@
-/** @type {import('next').NextConfig} */
-
-// This one allows for loading stuff from the server
+// allows for loading stuff from the server
 // https://github.com/i18next/i18next-http-backend
 const HttpBackend = require('i18next-http-backend/cjs')
-// This allows us to handle multiple locales from 1 payload
+// allows us to handle multiple locales from 1 payload
 // https://github.com/i18next/i18next-multiload-backend-adapter
 const MultiloadBackendAdapter = require('i18next-multiload-backend-adapter/cjs')
 
+/** @type {import('next-i18next').UserConfig} */
 module.exports = {
-  debug: true,
+  debug: process.env.NODE_ENV === 'development',
   serializeConfig: false,
   i18n: {
     defaultLocale: 'en',
@@ -18,7 +17,7 @@ module.exports = {
     backend: HttpBackend,
     backendOption: {
       loadPath: process.env.TRANSLATIONS_STATIC_STRINGS_URL,
-      parse: (data) => {
+      parse(data) {
         // Note 1:
         // Somewhat fraught with peril as this could potentially get out of sync
         // with the translations server. We can ask for this from the server

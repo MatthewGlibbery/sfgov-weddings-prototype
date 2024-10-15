@@ -8,7 +8,7 @@ import {
 } from '@/design-system'
 import { NewsPageData } from '@/types'
 import { ComponentType, ReactNode } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { When } from 'react-if'
 import {
   ComposedDate,

@@ -9,6 +9,5 @@ type RequestContext = {
 export async function GET(request: Request, context: RequestContext) {
   const path = context.params.path.join('/')
   const locale = 'en'
-  console.warn('oops')
   return NextResponse.rewrite(`/page/${locale}/${path}/`)
 }

@@ -8,7 +8,7 @@ import {
 import { getPageURL } from '@/lib/utils'
 import type { FormPageData, PageData, TypeConfirmationBodyTypes } from '@/types'
 import { type ComponentType, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { Else, If, Then } from 'react-if'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'

@@ -1,7 +1,6 @@
 import {
   Container,
   DisplayLg,
-  DisplayXXXl,
   Grid,
   PageTitleSection,
   type ContainerProps
@@ -13,7 +12,7 @@ import { PageWrapper } from './PageWrapper'
 import type { InfoPageData, InfoPageSection } from '@/types'
 import type { ComponentType } from 'react'
 import { PageLinksList } from '../PageLinksList'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { Callout } from '../Callout'
 import { When } from 'react-if'
 
