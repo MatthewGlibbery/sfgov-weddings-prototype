@@ -44,10 +44,9 @@ export default defineConfig({
             __dirname,
             '../../packages/design-system/index.ts'
           ),
-          '@/components': path.resolve(__dirname, './components/index.ts'),
-          '@/lib/factories': path.resolve(__dirname, './lib/factories.ts'),
-          '@/lib/utils': path.resolve(__dirname, './lib/utils.ts'),
-          '@/types': path.resolve(__dirname, './types/index.ts'),
+          '@/components': path.resolve(__dirname, './components'),
+          '@/lib': path.resolve(__dirname, './lib'),
+          '@/types': path.resolve(__dirname, './types'),
           'next/router': path.resolve(__dirname, './__mocks__/next/router.ts'),
           'next/link': path.resolve(__dirname, './__mocks__/next/link.tsx'),
           'next/font/google': path.resolve(

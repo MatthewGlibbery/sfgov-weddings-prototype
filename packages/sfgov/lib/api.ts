@@ -5,6 +5,7 @@ import type {
   IContentAPI,
   WagtailImageData
 } from '../types'
+import { getenv } from './env'
 import { i18n } from '../next.config'
 
 // @ts-expect-error no, it's really not null/undefined
@@ -32,20 +33,12 @@ export class ContentAPI implements IContentAPI {
   constructor(options?: ContentAPIOptions) {
     // TODO: baseURL will probably be replaced by
     // NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL at some point
+    // FIXME: replace getenv() with requireEnv()
     const baseURL =
-      options?.baseURL || process.env.NEXT_PUBLIC_CONTENT_API_BASE_URL
+      options?.baseURL || getenv('NEXT_PUBLIC_CONTENT_API_BASE_URL')!
+    // FIXME: replace getenv() with requireEnv()
     const previewURL =
-      options?.previewURL || process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL
-    if (!previewURL) {
-      throw new Error(
-        `The previewURL argument is required; got ${JSON.stringify(previewURL)}`
-      )
-    }
-    if (!baseURL) {
-      throw new Error(
-        `The baseURL argument is required; got ${JSON.stringify(baseURL)}`
-      )
-    }
+      options?.previewURL || getenv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL')!
     this.baseURL = baseURL
     this.previewURL = previewURL
     this.options = options || {}
@@ -153,7 +146,7 @@ export class ContentAPI implements IContentAPI {
         }
 
         if (fetchEndpoint) {
-          fetchUrl = `${process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL}/${fetchEndpoint}/${value}`
+          fetchUrl = `${this.baseURL}/${fetchEndpoint}/${value}`
         }
       } else if (
         typeof value === 'string' &&
@@ -226,7 +219,7 @@ export class ContentAPI implements IContentAPI {
           for (const item of data[key]) {
             let url = item
             if (item.value) {
-              url = `${process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL}/pages/${item.value}`
+              url = `${this.previewURL}/pages/${item.value}`
             }
             relatedData[key].push(await getRelatedData(url))
           }

@@ -11,6 +11,7 @@ import NextImage from 'next/image'
 import { ComponentType, useMemo, useState } from 'react'
 import { fromAddress, setKey } from 'react-geocode'
 import { Image, Location } from '.'
+import { requireEnv } from '@/lib/env'
 
 export type MapProps = JSX.IntrinsicElements['div'] & {
   address: TypeLocationBlock
@@ -30,7 +31,8 @@ export const Map: ComponentType<MapProps> = ({
   const [lat, setLat] = useState(37.759571206469374)
   const [lng, setLng] = useState(-122.44429767907141)
 
-  setKey(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string)
+  const GOOGLE_MAPS_API_KEY = requireEnv('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY')
+  setKey(GOOGLE_MAPS_API_KEY)
 
   // eslint-disable-next-line max-len
   const addressQuery = `${address.value.line1}, ${address.value.city} ${address.value.state}, ${address.value.zip}`
@@ -59,7 +61,7 @@ export const Map: ComponentType<MapProps> = ({
   )
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     libraries
   })
 
@@ -90,7 +92,7 @@ export const Map: ComponentType<MapProps> = ({
     <>
       <div className="lg:hidden">
         <NextImage
-          src={`https://maps.googleapis.com/maps/api/staticmap?center=${addressQuery}&zoom=16&markers=${addressQuery}&size=1000x400&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`}
+          src={`https://maps.googleapis.com/maps/api/staticmap?center=${addressQuery}&zoom=16&markers=${addressQuery}&size=1000x400&key=${GOOGLE_MAPS_API_KEY}`}
           width={1000}
           height={400}
           alt={`Map showing ${locationName}`}

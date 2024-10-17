@@ -19,5 +19,18 @@ module.exports = {
       message: `import useTranslation from 'next-i18next' (not 'react-i18next')`
     }],
     'react/no-danger': 'error'
-  }
+  },
+  overrides: [
+    {
+      files: [
+        'components/**',
+        'lib/**',
+        'pages/**',
+        'next-i18next.config.js'
+      ],
+      rules: {
+        'no-process-env': 'error'
+      }
+    }
+  ]
 }

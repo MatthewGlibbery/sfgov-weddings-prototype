@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 'use client'
 
+import { requireEnv } from './env'
+
 type ImageLoaderProps = {
   src: string
   width?: number
@@ -12,6 +14,6 @@ type ImageLoaderProps = {
  * load a thumbnail rather than the original image
  */
 export default function getImageURL({ src }: ImageLoaderProps) {
-  const baseURL = process.env.NEXT_PUBLIC_IMAGE_DOMAIN
+  const baseURL = requireEnv('NEXT_PUBLIC_IMAGE_DOMAIN')
   return new URL(src, baseURL).toString()
 }

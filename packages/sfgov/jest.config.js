@@ -32,7 +32,7 @@ const customJestConfig = {
   },
   collectCoverageFrom: [
     '<rootDir>/components/**/*.tsx',
-    '<rootDir>/lib/**/*.{ts,tsx}',
+    '<rootDir>/lib/**/*.{js,ts,tsx}',
     // FIXME: there's no good way to cover these in tests
     '!<rootDir>/**/ErrorBoundary.tsx',
     '!<rootDir>/**/GoogleFonts.tsx'

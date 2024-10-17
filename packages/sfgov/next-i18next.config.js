@@ -1,3 +1,5 @@
+/* eslint-disable no-process-env */
+
 // allows for loading stuff from the server
 // https://github.com/i18next/i18next-http-backend
 const HttpBackend = require('i18next-http-backend/cjs')
@@ -16,6 +18,12 @@ module.exports = {
   backend: {
     backend: HttpBackend,
     backendOption: {
+      /**
+       * NB: we can't "require" the env var here because:
+       * - We need to be able to build the site without env vars
+       * - In tests, next/jest requires its config (which requires this file)
+       *   before jest.setup.js runs, preventing us from mocking `process.env`
+       */
       loadPath: process.env.TRANSLATIONS_STATIC_STRINGS_URL,
       parse(data) {
         // Note 1:
