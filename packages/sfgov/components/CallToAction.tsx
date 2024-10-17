@@ -19,7 +19,7 @@ export const CallToAction = ({
   return (
     <div className="flex flex-col gap-y-8">
       {title ? (
-        <HeadingLg as="h3" className="mb-4">
+        <HeadingLg as="h3" className="!mb-4">
           {title}
         </HeadingLg>
       ) : null}

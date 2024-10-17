@@ -59,6 +59,7 @@ import {
   TypeButtonLinkValues,
   TypeDocumentBlockValues,
   TypeProfileGroupBlock,
+  TypeDateTimeValues,
   TypeBodyTextBlock,
   TypeContactFooterBlock
 } from '@/types'
@@ -486,17 +487,6 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
     }
   ],
   about_description: '',
-  child_agency_section_title: '',
-  part_of: RelatedContentBlockFactory.make(2, {
-    meta: {
-      type: 'sfgov_base.RelatedContentAgency'
-    }
-  }),
-  related_child_agencies: RelatedContentBlockFactory.make(1, {
-    meta: {
-      type: 'sfgov_base.RelatedContentAgency'
-    }
-  }),
   partner_agencies: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
@@ -524,29 +514,45 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   ],
   archive_url: 'www.farm.com',
   archive_date: '2023-08-01',
-  agency_redirect: '',
-  related_topics: RelatedContentBlockFactory.make(1, {
-    meta: {
-      type: 'sfgov_base.RelatedContentAgency'
+  divisions_subcommittees: [
+    {
+      type: 'agency_section',
+      value: {
+        agency_section_title: 'division',
+        agencies: [
+          {
+            type: 'agency',
+            value: {
+              page: {
+                id: 20521,
+                meta: {
+                  html_url: 'http://api.staging.dev.sf.gov/majorly/',
+                  seo_title: '',
+                  search_description: '',
+                  url_path: '/home/majorly/',
+                  type: 'sf.Agency'
+                },
+                title: 'Majorly'
+              },
+              show_meetings_parent: false
+            },
+            id: 'd5a7b20c-6ad2-4852-9012-0e32322aa765'
+          }
+        ]
+      },
+      id: '1d5eab18-0b31-41e4-bdbb-86e0834656ee'
     }
-  }),
-  related_events: {
-    upcoming: RelatedContentBlockFactory.make(4, {
-      page_content: {
-        meta: {
-          type: 'sf.Meeting'
-        }
-      }
-    }),
-    past: RelatedContentBlockFactory.make(3, {
-      page_content: {
-        meta: {
-          type: 'sf.Event'
-        }
+  ],
+  people: ProfileGroupFactory.make(1),
+  events: {
+    upcoming: AgencyEventFactory.make(3),
+    past: AgencyEventFactory.make(3, {
+      meta: {
+        type: 'sf.Meeting'
       }
     })
   },
-  related_news: RelatedContentBlockFactory.make(1, {
+  news: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
@@ -1422,4 +1428,33 @@ export const ProfileGroupFactory = factory<TypeProfileGroupBlock>((gen) => ({
       }
     ]
   }
+}))
+
+export const AgencyEventFactory = factory((gen) => ({
+  id: gen.datatype.number(),
+  meta: {
+    html_url: 'http://api.staging.dev.sf.gov/event-of-the-century/',
+    seo_title: '',
+    search_description: '',
+    url_path: '/home/event-of-the-century/',
+    type: 'sf.Event'
+  },
+  title: 'Event of the century',
+  description: "It's happening!!",
+  date_time: [
+    {
+      type: 'date_time',
+      value: {
+        is_all_day: false,
+        start_date: '2024-10-14',
+        start_time: '18:32:00',
+        end_date: null,
+        end_time: null,
+        include_end_date_time: 'yes'
+      },
+      id: 'ce2f6378-c8f2-4f2e-93a8-f2c609cf27c7'
+    }
+  ],
+  start_datetime: '2024-10-14T18:32:00',
+  end_datetime: '2024-10-14T23:59:59'
 }))

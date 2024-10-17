@@ -3,11 +3,22 @@ import type { TypeDateTimeValues } from '@/types'
 import { BodyText, HeadingLg } from '@/design-system'
 import { useTranslation } from 'next-i18next'
 
+type FormatOptions = {
+  weekday?: 'narrow' | 'short' | 'long'
+  era?: 'narrow' | 'short' | 'long'
+  year?: 'numeric' | '2-digit'
+  month?: 'numeric' | '2-digit' | 'narrow' | 'short' | 'long'
+  day?: 'numeric' | '2-digit'
+  hour?: 'numeric' | '2-digit'
+  minute?: 'numeric' | '2-digit'
+  second?: 'numeric' | '2-digit'
+}
+
 type ComposedDateProps = {
   startDateInput: string
   endDateInput?: string
   locale?: string
-  dateStyle?: 'full' | 'long' | 'medium' | 'short' | undefined
+  dateStyle?: 'full' | 'long' | 'medium' | 'short' | FormatOptions | undefined
 }
 
 /**
@@ -43,7 +54,11 @@ export const ComposedDate = ({
   }
 
   try {
-    const formatter = Intl.DateTimeFormat(locale, { dateStyle })
+    let dateFormat = { dateStyle }
+    if (typeof dateStyle === 'object') {
+      dateFormat = { ...dateStyle }
+    }
+    const formatter = Intl.DateTimeFormat(locale, dateFormat)
     const startDate = new Date(`${startDateInput}T00:00:00`)
 
     if (!endDateInput || startDateInput === endDateInput) {

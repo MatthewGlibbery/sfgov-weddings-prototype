@@ -458,4 +458,17 @@ export type TypeProfileGroupBlock = BlockType<
   }
 >
 
+export type TypeAgencyPageBlock = BlockType<
+  'agency',
+  { page: PageData; show_meetings_parent: boolean }
+>
+
+export type TypeDivisionsSubcommitteeBlock = BlockType<
+  'agency_section',
+  {
+    agency_section_title: string
+    agencies: TypeAgencyPageBlock[]
+  }
+>
+
 export type TypeBodyTextBlock = BlockType<'body', string>

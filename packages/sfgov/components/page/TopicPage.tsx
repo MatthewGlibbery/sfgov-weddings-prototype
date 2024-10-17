@@ -1,19 +1,26 @@
+import type { ComponentType } from 'react'
+import { When } from 'react-if'
+import { useTranslation } from 'next-i18next'
+
+import type { TopicPageData } from '@/types'
+import { PageWrapper } from './PageWrapper'
+import { Spotlight } from '../Spotlight'
+import { ContentSection } from '../ContentSection'
+import {
+  ResourceSection,
+  ServiceSection,
+  TileContentSection
+} from '../TileContentSection'
+
 import {
   Container,
   DisplayLg,
   HeadingXl,
   PageTitleSection
 } from '@/design-system'
-import type { TopicPageData } from '@/types'
-import { useTranslation } from 'next-i18next'
-import type { ComponentType } from 'react'
-import { ContentSection } from '../ContentSection'
-import { RelatedContentList } from '../RelatedContentList'
-import { Spotlight } from '../Spotlight'
 import { ContentTileList } from '../Tile'
-import { TileContentSection } from '../TileContentSection'
 import { ZebraStripedSection } from '../ZebraStripeSection'
-import { PageWrapper } from './PageWrapper'
+import { RelatedContentList } from '../RelatedContentList'
 
 export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const { t } = useTranslation()
@@ -59,27 +66,9 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
                 : null
             case 'services':
               return section.value.services.length ? (
-                <>
-                  <Container>
-                    <HeadingXl as="h2" className="!mb-28">
-                      {t('services', { defaultValue: 'Services' })}
-                    </HeadingXl>
-                    {section.value.services.map((serviceSection) => {
-                      const tileList = (
-                        <ContentTileList
-                          links={serviceSection.value.services}
-                        />
-                      )
-                      return (
-                        <TileContentSection
-                          key={serviceSection.id}
-                          title={serviceSection.value.title}
-                          tileList={tileList}
-                        />
-                      )
-                    })}
-                  </Container>
-                </>
+                <Container>
+                  <ServiceSection sections={section.value.services} />
+                </Container>
               ) : null
             case 'spotlight':
               return section.value.spotlight.length ? (
@@ -91,23 +80,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
             case 'resources':
               return section.value.resources.length ? (
                 <Container>
-                  <HeadingXl as="h2" className="!mb-28">
-                    {t('resources', { defaultValue: 'Resources' })}
-                  </HeadingXl>
-                  {section.value.resources.map((resourceSection) => {
-                    const tileList = (
-                      <ContentTileList
-                        links={resourceSection.value.resources}
-                      />
-                    )
-                    return (
-                      <TileContentSection
-                        key={resourceSection.id}
-                        title={resourceSection.value.title}
-                        tileList={tileList}
-                      />
-                    )
-                  })}
+                  <ResourceSection sections={section.value.resources} />
                 </Container>
               ) : null
             case 'content':

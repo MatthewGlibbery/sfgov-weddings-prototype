@@ -8,9 +8,9 @@ describe('AgencyPage', () => {
   it('renders a full agency page', () => {
     render(<AgencyPage page={page} />)
 
-    const title = screen.getByRole('heading', {
+    const title = screen.getAllByRole('heading', {
       level: 1
-    })
+    })[0]
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(page.title)
   })
@@ -46,9 +46,9 @@ describe('AgencyPage', () => {
     })
     render(<AgencyPage page={pageWithBlanks} />)
 
-    const title = screen.getByRole('heading', {
+    const title = screen.getAllByRole('heading', {
       level: 1
-    })
+    })[0]
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(pageWithBlanks.title)
   })

@@ -32,6 +32,8 @@ import {
   TopicFieldTypes,
   TypeProfileGroupBlock,
   TypeContactFooterBlockValues,
+  TypeDivisionsSubcommitteeBlock,
+  TypeDateTimeValues,
   TypeDocumentBlock
 } from './blocks'
 import { WagtailImageData } from './images'
@@ -202,9 +204,16 @@ export type LocationPageData = PageData & {
   about_location: string
 }
 
-type TypeEventsAndMeetingsByDate = {
-  upcoming?: RelatedContentData[]
-  past?: RelatedContentData[]
+type TypeAgencyEvents = {
+  upcoming?: (RelatedContentData & TypeDateTimeValues)[]
+  past?: (RelatedContentData & TypeDateTimeValues)[]
+}
+
+type TypeAgencyNews = {
+  id: number
+  news_type: string
+  title: string
+  date: string
 }
 
 export type AgencyPageData = PageData & {
@@ -221,11 +230,15 @@ export type AgencyPageData = PageData & {
   spotlight_2: TypeSpotlightBlock[]
   resources: TypeResourcesSectionBlock[]
   about_description: string
+  events: TypeAgencyEvents
+  news: TypeAgencyNews[]
   child_agency_section_title: string
   part_of: RelatedContentData[]
   related_child_agencies: RelatedContentData[]
   partner_agencies: RelatedContentData[]
   call_to_action: TypeCallToActionBlock[]
+  divisions_subcommittees: TypeDivisionsSubcommitteeBlock[]
+  people: TypeProfileGroupBlock[]
   social_media: TypeSocialMediaBlock[]
   contact: TypeContactFooterBlock[]
   public_records: (
@@ -237,7 +250,6 @@ export type AgencyPageData = PageData & {
   archive_date: string
   agency_redirect: string
   related_topics: RelatedContentData[]
-  related_events: TypeEventsAndMeetingsByDate
   related_news: RelatedContentData[]
 }
 

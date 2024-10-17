@@ -1,4 +1,11 @@
-import { HeadingXl } from '@/design-system'
+import { HeadingXl, IconDocument, Link } from '@/design-system'
+import {
+  TypeContentTileBlock,
+  TypeResourcesSectionBlock,
+  TypeServicesSectionBlock
+} from '@/types'
+import { useTranslation } from 'react-i18next'
+import { ContentTileList } from './Tile'
 import type { ReactNode } from 'react'
 
 type TileContentSectionProps = {
@@ -6,18 +13,76 @@ type TileContentSectionProps = {
   tileList: ReactNode
 }
 
+type ServiceSectionProps = {
+  sections: TypeServicesSectionBlock[]
+}
+
+type ResourceSectionProps = {
+  sections: TypeResourcesSectionBlock[]
+}
+
+type TileSectionWrapperProps = {
+  links: TypeContentTileBlock[]
+  title: string
+}
+
 export const TileContentSection = ({
   title,
   tileList
-}: TileContentSectionProps) => {
+}: TileContentSectionProps) => (
+  <div>
+    {title ? (
+      <HeadingXl as="p" className="font-body !mb-20">
+        {title}
+      </HeadingXl>
+    ) : null}
+    {tileList}
+  </div>
+)
+
+const TileSectionWrapper = ({ links, title }: TileSectionWrapperProps) => {
+  const tileList = <ContentTileList links={links} />
+  return <TileContentSection title={title} tileList={tileList} />
+}
+
+export const ServiceSection = ({ sections }: ServiceSectionProps) => {
+  const { t } = useTranslation()
+
   return (
-    <div>
-      {title ? (
-        <HeadingXl as="p" className="font-body !mb-20">
-          {title}
-        </HeadingXl>
-      ) : null}
-      {tileList}
-    </div>
+    <>
+      <HeadingXl as="h2" className="!mb-28">
+        {t('services', { defaultValue: 'Services' })}
+      </HeadingXl>
+      <div className="flex flex-col space-y-12">
+        {sections.map((serviceSection) => (
+          <TileSectionWrapper
+            key={serviceSection.id}
+            links={serviceSection.value.services}
+            title={serviceSection.value.title}
+          />
+        ))}
+      </div>
+    </>
+  )
+}
+
+export const ResourceSection = ({ sections }: ResourceSectionProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <>
+      <HeadingXl as="h2" className="!mb-28">
+        {t('resources', { defaultValue: 'Resources' })}
+      </HeadingXl>
+      <div className="flex flex-col space-y-12">
+        {sections.map((resourceSection) => (
+          <TileSectionWrapper
+            key={resourceSection.id}
+            links={resourceSection.value.resources}
+            title={resourceSection.value.title}
+          />
+        ))}
+      </div>
+    </>
   )
 }

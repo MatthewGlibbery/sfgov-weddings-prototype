@@ -29,13 +29,19 @@ export const ZebraStripedSection = ({
 }: ZebraStripedSectionProps) => (
   <div className={className}>
     {children.flat().map((child: ReactNode, i: number) => (
-      <Wrapper
-        key={i}
-        noPadding={noPadding}
-        backgroundColor={child?.props?.children?.props?.backgroundColor || ''}
-      >
-        {child}
-      </Wrapper>
+      <>
+        {child?.props?.condition === false ? null : (
+          <Wrapper
+            key={i}
+            noPadding={noPadding}
+            backgroundColor={
+              child?.props?.children?.props?.backgroundColor || ''
+            }
+          >
+            {child}
+          </Wrapper>
+        )}
+      </>
     ))}
   </div>
 )

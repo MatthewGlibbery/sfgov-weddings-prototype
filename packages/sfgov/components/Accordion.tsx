@@ -72,17 +72,17 @@ export const Accordion = (props: AccordionProps) => {
       <StyledSummary data-testid="accordion-summary" datastory={dataStory}>
         {dataStory ? (
           <Label
-            as={as}
-            romanType="sans"
+            className="text-primary600 font-medium"
             data-testid="accordion-title"
-            className="text-primary500 font-bold text-heading-md"
           >
             {title}
           </Label>
         ) : (
           <Label
-            className="text-primary600 font-medium"
+            as={as}
+            romanType="sans"
             data-testid="accordion-title"
+            className="text-primary500 font-bold text-heading-md"
           >
             {title}
           </Label>

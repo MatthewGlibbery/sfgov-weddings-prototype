@@ -81,23 +81,37 @@ describe('Tile', () => {
   })
 
   it('renders a MeetingTile', () => {
-    const [meetingLink] = RelatedContentBlockFactory.make(1).map((item) => ({
-      ...item.value,
+    const meetingLink = {
       meta: {
         type: 'sf.Meeting'
       },
-      url: item.value.meta.html_url
-    }))
+      title: 'Committee meeting',
+      cancelled: false,
+      date_time: [
+        {
+          type: 'date_time',
+          value: {
+            is_all_day: false,
+            start_date: '2024-10-28',
+            start_time: '02:10:00',
+            end_date: null,
+            end_time: null,
+            include_end_date_time: 'yes'
+          },
+          id: 'ca83d381-4025-47dd-a58a-b563b416103f'
+        }
+      ],
+      start_datetime: '2024-10-28T02:10:00',
+      end_datetime: '2024-10-28T23:59:59'
+    }
 
     render(<MeetingTile link={meetingLink} />)
 
-    const meetingTile = screen.getByRole('link')
     const title = screen.getByText(meetingLink.title)
     const type = screen.getByText('Meeting')
 
-    expect(meetingTile).toBeInTheDocument()
-    expect(meetingTile).toContainElement(title)
-    expect(meetingTile).toContainElement(type)
+    expect(title).toBeInTheDocument()
+    expect(type).toBeInTheDocument()
   })
 
   it('renders a DocumentTile', () => {

@@ -6,11 +6,12 @@ import {
   IconCalendar,
   IconData,
   IconDocument,
-  IconChevronRight,
   Label,
   HeadingLg,
   BodyText,
-  IconClock
+  IconClock,
+  LabelXs,
+  DisplayXXXl
 } from '@/design-system'
 import type { ComponentType, ReactNode } from 'react'
 import type { TypeTileBlock } from '@/types'
@@ -145,67 +146,104 @@ export const MeetingTile = ({ link }: TileProps) => {
   const { t } = useTranslation()
 
   const {
-    meta: { type },
-    date_time: date,
-    cancelled
+    title,
+    cancelled,
+    date_time: dateTime,
+    meta: { type }
   } = link
 
-  if (date?.length) {
-    const dateObj = new Date(
-      date[0]?.value.start_date.replace(/-/g, '/').replace(/T.+/, '')
-    )
-    const startDate = date[0]?.value.start_date
-    const startTime = date[0].value.start_time
+  const startDate = dateTime?.[0].value.start_date || null
+  const startTime = dateTime?.[0].value.start_time || null
+
+  if (startDate) {
     return (
-      <BaseTile href={link.url}>
-        <div className="bg-grey100 p-8">
-          <BodyText className="font-bold">
-            {Intl.DateTimeFormat('en-US', {
-              timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-              month: 'long',
-              day: 'numeric'
-            }).format(dateObj)}
+      <div className="flex flex-col space-y-8">
+        <div className="lg:hidden bg-secondary100 p-8">
+          <BodyText className="text-secondary600 font-bold">
+            <ComposedDate
+              startDateInput={startDate}
+              dateStyle={{ month: 'long', day: '2-digit' }}
+            />
           </BodyText>
         </div>
-        <div className="flex flex-col space-y-8 p-8">
-          <div className="flex space-x-16 items-center">
-            <Label>
-              {type.includes('Meeting')
-                ? t('meeting', { defaultValue: 'Meeting' })
-                : t('event', { defaultValue: 'Event' })}
-            </Label>
-            {cancelled ? (
-              <div className="py-8 px-12 text-center rounded-[20px] bg-grey700 text-white">
-                {t('cancelled', { defaultValue: 'Cancelled' })}
-              </div>
-            ) : null}
-          </div>
-          <HeadingMd as="h4" className="text-grey500">
-            {link.title}
-          </HeadingMd>
-          <div className="flex space-x-8">
-            <IconCalendar width={20} />
-            <BodyText>
-              <ComposedDate startDateInput={startDate} />
+
+        <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
+          <div className="hidden lg:flex flex-col bg-secondary100 px-8 py-20 items-center min-h-[112px] min-w-[102px] max-h-min">
+            <BodyText className="text-secondary600 font-bold">
+              <ComposedDate
+                startDateInput={startDate}
+                dateStyle={{ month: 'long' }}
+              />
             </BodyText>
+            <DisplayXXXl className="text-secondary600 !mb-0">
+              <ComposedDate
+                startDateInput={startDate}
+                dateStyle={{ day: '2-digit' }}
+              />
+            </DisplayXXXl>
           </div>
-          {startTime ? (
-            <div className="flex space-x-8">
-              <IconClock width={20} />
-              <BodyText>
-                <ComposedTime
-                  startDateTimeInput={`${startDate}T${startTime}`}
-                />
-              </BodyText>
+          <div className="flex flex-col space-y-8 p-8">
+            <div className="flex space-x-16 items-center">
+              <LabelXs className="font-bold !m-0">
+                {type.includes('Meeting')
+                  ? t('meeting', { defaultValue: 'Meeting' })
+                  : t('event', { defaultValue: 'Event' })}
+              </LabelXs>
+              {cancelled ? (
+                <div className="py-4 px-12 text-center rounded-[20px] border-1 border-accent100 border-solid bg-accent100 text-accent600">
+                  {t('cancelled', { defaultValue: 'Cancelled' })}
+                </div>
+              ) : null}
             </div>
-          ) : null}
+            <HeadingMd
+              as="a"
+              className="text-primary600 no-underline"
+              href="/#"
+            >
+              {title}
+            </HeadingMd>
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-20">
+              <div className="flex space-x-8">
+                <IconCalendar className="text-neutral400" width={20} />
+                <BodyText>
+                  <ComposedDate
+                    startDateInput={startDate}
+                    dateStyle={{
+                      weekday: 'long',
+                      month: 'long',
+                      day: '2-digit',
+                      year: 'numeric'
+                    }}
+                  />
+                </BodyText>
+              </div>
+              {startTime ? (
+                <div className="flex space-x-8 lg:shrink-0 lg:self-center">
+                  <IconClock className="text-neutral400" width={20} />
+                  <BodyText>
+                    <ComposedTime
+                      startDateTimeInput={`${startDate}T${startTime}`}
+                    />
+                  </BodyText>
+                </div>
+              ) : null}
+            </div>
+          </div>
         </div>
-      </BaseTile>
+      </div>
     )
   }
   /* istanbul ignore next */
   return <></>
 }
+
+export const MeetingTileList = ({ links }) => (
+  <TileSection className="gap-x-28 gap-y-20" data-testid="tile-section">
+    {links.map((link) => (
+      <MeetingTile key={link.id} link={link} />
+    ))}
+  </TileSection>
+)
 
 function createTileList(TileComponent: ComponentType<TileProps>) {
   // eslint-disable-next-line react/function-component-definition
@@ -252,9 +290,8 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
 }
 
 export const NewsTileList = createTileList(NewsTile)
-export const QuickLinkList = createTileList(QuickLink)
+export const QuickLinkList = createTileList(ContentTile)
 export const EventTileList = createTileList(EventTile)
-export const MeetingTileList = createTileList(MeetingTile)
 export const ContentTileList = createTileList(ContentTile)
 export const DataStoryTileList = createTileList(DataStoryTile)
 export const DocumentTileList = createTileList(DocumentTile)
