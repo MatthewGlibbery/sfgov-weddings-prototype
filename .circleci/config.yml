@@ -17,6 +17,9 @@ jobs:
           name: Unit tests
           command: npm test
       - run:
+          name: Remove dev dependencies
+          command: npm prune --omit=dev
+      - run:
           name: SF.gov site build
           command: npm run build -w @sfgov/next
 
