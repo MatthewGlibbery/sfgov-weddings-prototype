@@ -299,7 +299,7 @@ export type ReportPageData = PageData & {
 }
 
 export type FormPageData = PageData & {
-  form_schema_url: string
+  schema_url: string
   confirmation_title: string
   confirmation_body: TypeConfirmationBodyTypes[]
   get_help: TypeContactFooterBlockValues[]

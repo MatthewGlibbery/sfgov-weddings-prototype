@@ -131,8 +131,7 @@ export const FormPageFactory = factory<FormPageData>((gen) => ({
     type: FORM_PAGE_TYPE
   }),
   title: 'This is a form',
-  form_schema_url:
-    'https://sfds.form.io/testclosethestreettotraffictemporarily',
+  schema_url: 'https://sfds.form.io/testclosethestreettotraffictemporarily',
   confirmation_title: 'confirmation of form',
   confirmation_body: [
     TextBlockFactory.make(),

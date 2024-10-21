@@ -30,7 +30,7 @@ export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
     title,
     confirmation_title: confirmationTitle,
     confirmation_body: confirmationBody,
-    form_schema_url: formSchemaUrl,
+    schema_url: formSchemaUrl,
     get_help: getHelp
   } = page
 
