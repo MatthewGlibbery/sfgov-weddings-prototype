@@ -13,7 +13,7 @@ module.exports = {
   serializeConfig: false,
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'es', 'zh', 'fil']
+    locales: ['en', 'es', 'zh-hant', 'fil']
   },
   backend: {
     backend: HttpBackend,
@@ -41,7 +41,7 @@ module.exports = {
         const localesMap = {
           1: 'en',
           2: 'es',
-          3: 'zh',
+          3: 'zh-hant',
           4: 'fil'
         }
         const translationStrings = {}

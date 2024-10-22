@@ -16,7 +16,7 @@ const StyledLanguageLink = classed(NextLink, {
 const localeNames: Record<string, string> = {
   en: 'English',
   es: 'Español',
-  zh: '中文',
+  'zh-hant': '中文',
   fil: 'Filipino'
 }
 

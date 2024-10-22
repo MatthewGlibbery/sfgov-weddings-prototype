@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async ({
           locale,
           ['common'],
           nextI18NextConfig,
-          ['en', 'es', 'zh', 'fil']
+          ['en', 'es', 'zh-hant', 'fil']
         ))
       }
     }
