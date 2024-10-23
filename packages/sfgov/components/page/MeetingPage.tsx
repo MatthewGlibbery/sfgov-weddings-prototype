@@ -5,9 +5,7 @@ import {
   HeadingMd,
   HeadingXl,
   HeadingXXl,
-  IconDownload,
   IconInfo,
-  Link,
   PageTitleSection
 } from '@/design-system'
 import type { MeetingPageData } from '@/types'
@@ -17,6 +15,7 @@ import { Accordion } from '../Accordion'
 import { AgendaItemBlock } from '../AgendaItemBlock'
 import { Callout } from '../Callout'
 import { ComposedDate, ComposedTime } from '../DateTime'
+import { DownloadableFilesSection } from '../DownloadableFilesSection'
 import { Location } from '../Location'
 import { OnlineEventBlock } from '../OnlineEventBlock'
 import { PageLinksList } from '../PageLinksList'
@@ -107,12 +106,20 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
               >
                 {t('related-documents', { defaultValue: 'Related documents' })}
               </HeadingXl>
-              {relatedDocuments.map((document) => (
-                <Link href="#" className="flex gap-4" key={document.id}>
-                  <IconDownload width={20} />
-                  document placeholder
-                </Link>
-              ))}
+              {relatedDocuments.map((downloadableFiles) => {
+                const heading = downloadableFiles?.value?.title ? (
+                  <HeadingMd as="p">
+                    {downloadableFiles?.value?.title}
+                  </HeadingMd>
+                ) : null
+                return (
+                  <DownloadableFilesSection
+                    heading={heading}
+                    documents={downloadableFiles?.value?.documents}
+                    key={downloadableFiles.id}
+                  />
+                )
+              })}
             </div>
           ) : null}
         </div>

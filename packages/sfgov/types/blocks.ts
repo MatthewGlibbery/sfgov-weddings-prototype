@@ -1,5 +1,6 @@
-import type { WagtailImageData } from './images'
-import type {
+import { ReactNode } from 'react'
+import { WagtailImageData } from './images'
+import {
   AgencyPage,
   MinimalMeta,
   MinimalPageData,
@@ -337,8 +338,9 @@ export type TypeVideoBlockValues = {
 export type TypeVideoBlock = BlockType<'video', TypeVideoBlockValues>
 
 export type TypeDownloadableFilesBlockValues = {
-  title: string
-  documents: BlockType<'document', number>[]
+  title?: string
+  heading?: ReactNode
+  documents: TypeDocumentBlock[]
 }
 
 export type TypeDownloadableFilesBlock = BlockType<

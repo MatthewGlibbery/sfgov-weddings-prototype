@@ -1,5 +1,6 @@
 import { HeadingXl, IconDownload, Link } from '@/design-system'
 import { TypeAgendaItemBlockValues } from '@/types'
+import { DownloadableFilesSection } from './DownloadableFilesSection'
 import { RichText } from './RichText'
 import { StepBadge } from './Step'
 
@@ -20,15 +21,9 @@ export const AgendaItemBlock = (props: TypeAgendaItemBlockValues) => {
         ) : null}
       </div>
       <RichText html={titleAndText.text} />
-      {/* TODO: update when documents are fully serialized */}
-      {documents.length
-        ? documents.map((document) => (
-            <Link href="#" className="flex gap-4" key={document.id}>
-              <IconDownload width={20} />
-              document placeholder
-            </Link>
-          ))
-        : null}
+      {documents.length ? (
+        <DownloadableFilesSection documents={documents} />
+      ) : null}
     </div>
   )
 }

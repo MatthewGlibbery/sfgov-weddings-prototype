@@ -254,7 +254,10 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
       const title = item.value.title
       const description =
         item.value.meta?.search_description || item.value.description
-      const url = item.type === 'page' ? getPageURL(item.value) : item.value.url
+
+      const url =
+        item.type === 'page' ? getPageURL(item.value) : item?.value?.url
+
       const meta = item.value.meta
       const date = item.value.date
       // eslint-disable-next-line camelcase

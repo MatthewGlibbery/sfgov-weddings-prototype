@@ -4,7 +4,9 @@ import {
   DisplayXXXl,
   Grid,
   HeadingLg,
+  HeadingXl,
   HeadingXXl,
+  IconDownload,
   Link,
   PageLabel,
   PageTitleSection
@@ -21,6 +23,7 @@ import {
 import { useTranslation } from 'next-i18next'
 import { ComponentType } from 'react'
 import { Accordion } from '../Accordion'
+import { DownloadableFilesSection } from '../DownloadableFilesSection'
 import { Image } from '../Image'
 import { Location } from '../Location'
 import { PhoneNumberBlock } from '../PhoneNumberBlock'
@@ -146,6 +149,14 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           <div className="mx-20 md:mx-0">
             <HeadingXXl as="h2">{content.value.title}</HeadingXXl>
             <div>{resourceSections}</div>
+            {content.value?.downloadable_resources.length ? (
+              <DownloadableFilesSection
+                title={t('downloadable_files', {
+                  defaultValue: 'Downloadable files'
+                })}
+                documents={content.value?.downloadable_resources}
+              />
+            ) : null}
           </div>
         )
       }

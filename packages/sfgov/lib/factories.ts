@@ -618,7 +618,8 @@ export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({
             },
             id: gen.datatype.uuid()
           }
-        ]
+        ],
+        downloadable_resources: DocumentBlockFactory.make(2)
       },
       id: gen.datatype.uuid()
     },
@@ -1111,7 +1112,8 @@ export const AboutPageFactory = factory<AboutPageData>((gen) => ({
         resources: [GenericTileFactory.make()]
       },
       id: gen.datatype.uuid()
-    }
+    },
+    DownloadableFilesBlockFactory.make()
   ]
 }))
 
@@ -1138,7 +1140,7 @@ export const TopicPageFactory = factory<TopicPageData>((gen) => ({
     {
       type: 'content_top',
       value: {
-        section: [ContentSectionFactory.make()]
+        content: [ContentSectionFactory.make()]
       },
       id: gen.datatype.uuid()
     },

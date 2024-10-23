@@ -68,7 +68,9 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   let divisionSubcommitteeTitle = 'Divisions'
 
   // istanbul ignore next
-  if (divisionsSubcommittees[0].value.agency_section_title === 'subcommittee') {
+  if (
+    divisionsSubcommittees[0]?.value.agency_section_title === 'subcommittee'
+  ) {
     divisionSubcommitteeTitle = 'Subcommittees'
   }
 

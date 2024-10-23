@@ -2,13 +2,17 @@ import {
   Container,
   Grid,
   HeadingXXl,
+  HeadingXl,
   IconArrowLeft,
+  IconDownload,
+  Link,
   PageTitleSection
 } from '@/design-system'
 import type { AboutPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 import type { ComponentType } from 'react'
 import { ContentTileList, PageLink, TileContentSection } from '../'
+import { DownloadableFilesSection } from '../DownloadableFilesSection'
 import { TitleAndText } from '../TitleAndText'
 import { PageWrapper } from './PageWrapper'
 
@@ -72,7 +76,14 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
                           />
                         )
                       }
-                      // TODO: downloadable files
+                      case 'downloadable_files': {
+                        return (
+                          <DownloadableFilesSection
+                            title={section?.value?.title}
+                            documents={section?.value?.documents}
+                          />
+                        )
+                      }
                       /* istanbul ignore next */
                       default:
                         return <></>

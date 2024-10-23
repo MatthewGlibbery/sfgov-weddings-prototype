@@ -55,8 +55,8 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
                 </Container>
               ) : null
             case 'content_top':
-              return section.value.section.length
-                ? section.value.section.map((section, i) => (
+              return section.value.content?.length
+                ? section.value.content.map((section, i) => (
                     <ContentSection
                       key={i}
                       title={section.value.title}
@@ -65,26 +65,26 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
                   ))
                 : null
             case 'services':
-              return section.value.services.length ? (
+              return section.value.services?.length ? (
                 <Container>
                   <ServiceSection sections={section.value.services} />
                 </Container>
               ) : null
             case 'spotlight':
-              return section.value.spotlight.length ? (
+              return section.value.spotlight?.length ? (
                 <Spotlight
                   backgroundColor="white"
                   {...section.value.spotlight[0]}
                 />
               ) : null
             case 'resources':
-              return section.value.resources.length ? (
+              return section.value.resources?.length ? (
                 <Container>
                   <ResourceSection sections={section.value.resources} />
                 </Container>
               ) : null
             case 'content':
-              return section.value.content.length ? (
+              return section.value.content?.length ? (
                 <div className="flex flex-col gap-y-40" backgroundColor="white">
                   {section.value.content.map((section) => (
                     <ContentSection
