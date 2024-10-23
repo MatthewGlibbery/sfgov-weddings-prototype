@@ -440,7 +440,7 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
       type: 'sf.LocationPage'
     }
   }),
-  partner_agencies: RelatedContentBlockFactory.make(2, {
+  at_this_location: RelatedContentBlockFactory.make(2, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }

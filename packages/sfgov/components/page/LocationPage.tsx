@@ -44,7 +44,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
     services,
     related_locations: relatedLocations,
     people,
-    partner_agencies: agencies,
+    at_this_location: atThisLocation,
     about_location: about
   } = page
 
@@ -172,9 +172,12 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
             ))}
           </Container>
         ) : null}
-        {agencies.length ? (
+        {atThisLocation.length ? (
           <Container backgroundColor="neutral">
-            <RelatedContentList title={`At ${title}`} content={agencies} />
+            <RelatedContentList
+              title={`At ${title}`}
+              content={atThisLocation}
+            />
           </Container>
         ) : null}
         {people.length ? (

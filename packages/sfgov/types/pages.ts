@@ -199,7 +199,7 @@ export type LocationPageData = PageData & {
   public_transportation: TypeTitleAndTextBlock[]
   services: TypeServicesSectionBlock[]
   related_locations: RelatedContentData[]
-  partner_agencies: RelatedContentData[]
+  at_this_location: RelatedContentData[]
   people: TypeProfileGroupBlock[]
   about_location: string
 }
