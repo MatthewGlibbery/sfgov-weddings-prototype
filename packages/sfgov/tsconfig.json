@@ -6,6 +6,9 @@
       "@/design-system": [
         "../design-system"
       ],
+      "@/design-system/*": [
+        "../design-system/*"
+      ],
       "@/*": [
         "./*"
       ]
@@ -38,7 +41,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "next-i18next.config.js", 
+    "next-i18next.config.js",
     "playwright.setup.js"
   ],
   "exclude": [

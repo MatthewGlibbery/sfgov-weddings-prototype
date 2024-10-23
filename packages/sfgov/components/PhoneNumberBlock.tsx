@@ -1,5 +1,4 @@
 import { BodyText, Link } from '@/design-system'
-import { TypePhoneNumberValues } from '@/types'
 
 export type PhoneNumberProps = {
   phone_number: string

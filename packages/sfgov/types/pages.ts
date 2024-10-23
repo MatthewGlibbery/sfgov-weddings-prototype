@@ -24,7 +24,7 @@ import {
   TypeAgendaItemBlock,
   TypeVideoBlock,
   TypeDownloadableFilesBlock,
-  TypeConfirmationBodyTypes,
+  ConfirmationBodyBlock,
   TypeEmbeddedContentBlock,
   TypeDataStoriesSectionBlock,
   TypeCalloutBlock,
@@ -301,8 +301,14 @@ export type ReportPageData = PageData & {
 export type FormPageData = PageData & {
   schema_url: string
   confirmation_title: string
-  confirmation_body: TypeConfirmationBodyTypes[]
-  get_help: TypeContactFooterBlockValues[]
+  confirmation_body: ConfirmationBodyBlock[]
+  get_help: (
+    | TypeLocationBlock
+    | TypeEmailBlock
+    | TypePhoneNumberBlock
+    | TypeTitleAndTextBlock
+  )[]
+  partner_agencies: RelatedContentData[]
 }
 
 export type ResourceCollectionPageData = PageData & {

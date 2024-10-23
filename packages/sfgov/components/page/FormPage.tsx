@@ -1,50 +1,61 @@
-import dynamic from 'next/dynamic'
+/* eslint-disable react/function-component-definition */
 import {
   Button,
   Container,
   HeadingXXl,
   PageTitleSection
 } from '@/design-system'
+import type { Form } from '@/design-system/formio'
 import { getPageURL } from '@/lib/utils'
-import type { FormPageData, PageData, TypeConfirmationBodyTypes } from '@/types'
-import { type ComponentType, useState } from 'react'
+import type {
+  ConfirmationBodyBlock,
+  FormPageData,
+  TypeContactFooterBlockValues
+} from '@/types'
+import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
+import { PageLinksList } from '../PageLinksList'
 import { RichText } from '../RichText'
 import { PageWrapper } from './PageWrapper'
+import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 
-// istanbul ignore next
-const FormioForm = dynamic(
-  () => import('../../../design-system/components/FormioForm'),
-  {
-    ssr: false,
-    loading: () => {
-      return <div>Loading...</div>
-    }
-  }
-)
+export type FormPageProps = {
+  page: FormPageData
+  submitted?: boolean
+  formPage?: number
+  formComponentKey?: string
+}
 
-export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
+export function FormPage({
+  page,
+  submitted: initialSubmitted,
+  formComponentKey,
+  formPage = 0
+}: FormPageProps) {
   const {
     title,
     confirmation_title: confirmationTitle,
     confirmation_body: confirmationBody,
     schema_url: formSchemaUrl,
-    get_help: getHelp
+    get_help: getHelp,
+    partner_agencies: agencies
   } = page
 
   const { t } = useTranslation()
-  const [submitted, setSubmitted] = useState(false)
+  const [userSubmitted, setSubmitted] = useState(false)
+  const submitted = initialSubmitted || userSubmitted
 
   return (
     <PageWrapper title={title}>
-      <Container className="flex flex-col">
-        <div className="mb-20 pb-40 flex flex-col space-y-40">
+      <Container>
+        <div className="space-y-12 mb-40">
           <PageTitleSection
             title={submitted ? confirmationTitle : title}
             label={submitted ? t('Form submitted') : t('Form')}
           ></PageTitleSection>
+          <PageLinksList pageLinks={agencies} />
         </div>
         {submitted ? (
           <div className="space-y-40">
@@ -54,21 +65,52 @@ export const FormPage: ComponentType<{ page: FormPageData }> = ({ page }) => {
             <HeadingXXl as="h2" className="flex flex-row gap-8">
               {t('Contact us')}
             </HeadingXXl>
-            <ContactFooter items={getHelp} />
+            {/* FIXME is this a problem here or in ContactFooter? */}
+            <ContactFooter
+              items={getHelp as unknown as TypeContactFooterBlockValues[]}
+            />
           </div>
         ) : (
           <FormioForm
             src={formSchemaUrl}
-            onSubmitDone={() => setSubmitted(true)}
+            formReady={onFormReady}
+            onSubmitDone={
+              // istanbul ignore next
+              () => setSubmitted(true)
+            }
           />
         )}
       </Container>
     </PageWrapper>
   )
+
+  // istanbul ignore next
+  async function onFormReady(form: Form) {
+    // focusing on a component jumps to the component's page
+    // automatically, so we don't need to call setPage() if a
+    // component key was passed
+    if (formComponentKey) {
+      await form.focusOnComponent(formComponentKey)
+    } else if (formPage > 0) {
+      // setPage() only exists on the Wizard class, so we optionally
+      // chain this both to appease the TypeScript gods and ensure
+      // that we only call it if it exists
+      await form.setPage?.(formPage)
+    }
+  }
 }
 
+// istanbul ignore next
+const FormioForm = dynamic(
+  () => import('../../../design-system/components/FormioForm'),
+  {
+    ssr: false,
+    loading: Loading
+  }
+)
+
 type ConfirmationContentProps = {
-  block: TypeConfirmationBodyTypes
+  block: ConfirmationBodyBlock
 }
 
 // istanbul ignore next
@@ -82,7 +124,10 @@ const ConfirmationContent = ({ block }: ConfirmationContentProps) => {
       return (
         <Button
           as="a"
-          href={block.value.url || getPageURL(block.value.page as PageData)}
+          href={
+            // istanbul ignore next
+            block.value.url || getPageURL(block.value.page!)
+          }
         >
           {block.value.link_text}
         </Button>
@@ -90,4 +135,15 @@ const ConfirmationContent = ({ block }: ConfirmationContentProps) => {
   }
   // istanbul ignore next
   return <></>
+}
+
+// istanbul ignore next
+function Loading(props: DynamicOptionsLoadingProps) {
+  const { t } = useTranslation()
+  const error = props.error || props.timedOut ? 'Timed out' : undefined
+  return (
+    <div>
+      {props.isLoading ? t('Loading...') : t('Error: {{error}}', { error })}
+    </div>
+  )
 }

@@ -7,7 +7,7 @@ import {
   StackedContainer,
   StackedItem
 } from '@/design-system'
-import { TypeContactFooterBlockValues } from '@/types'
+import type { TypeContactFooterBlockValues } from '@/types'
 import {
   EmailBlock,
   Location,
@@ -51,7 +51,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
     }
   } else {
     for (const item of items) {
-      footerSections[item.type].push(item)
+      footerSections[item.type]?.push(item)
     }
   }
 

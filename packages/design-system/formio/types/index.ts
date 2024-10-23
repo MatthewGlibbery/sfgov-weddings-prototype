@@ -18,6 +18,13 @@ export type Form = Override<
     submitted: boolean
     setAlert(type: string | boolean, message?: string, options?: object): void
     submit(before?: boolean, options?: object): Promise<object>
+    // focus on a component by its unique id
+    focusOnComponent(key: string): Promise<void>
+    /**
+     * This method only exists on multi-page forms, which render with the Wizard
+     * class: https://github.com/formio/formio.js/blob/v4.21.3/src/Wizard.js#L642
+     */
+    setPage?: (page: number) => Promise<void>
   }
 >
 

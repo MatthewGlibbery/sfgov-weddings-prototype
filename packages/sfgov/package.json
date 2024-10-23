@@ -5,7 +5,7 @@
     "build": "next build --no-lint",
     "dev": "next dev",
     "lint": "eslint . *.js __*",
-    "prebuild": "./scripts/link-storybook.sh",
+    "prebuild": "npm run build -w ../storybook",
     "prestart": "npm run build",
     "start": "next start",
     "test": "jest --coverage",

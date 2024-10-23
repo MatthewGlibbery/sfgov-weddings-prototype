@@ -1,5 +1,5 @@
-import { WagtailImageData } from './images'
-import {
+import type { WagtailImageData } from './images'
+import type {
   AgencyPage,
   MinimalMeta,
   MinimalPageData,
@@ -13,11 +13,6 @@ export interface BlockType<T extends string = string, V = object> {
   value: V
   id: string
 }
-
-export type TypePageBlock<
-  T extends string = string,
-  P extends PageData = PageData
-> = BlockType<T, P>
 
 export type TypeStepVariant = 'number' | 'and' | 'or'
 
@@ -77,7 +72,7 @@ export type TypeEmailValues = {
 
 export type TypeEmailBlock = BlockType<'email', TypeEmailValues>
 
-export type TypeLocationValues = {
+export type LocationData = {
   address_title: string
   agency?: AgencyPage
   organization?: string
@@ -92,18 +87,15 @@ export type TypeLocationValues = {
   variant?: string
 }
 
-export type TypeLocationBlock = BlockType<'address', TypeLocationValues>
+export type TypeLocationBlock = BlockType<'address', LocationData>
 
-export type TypePhoneNumberValues = {
+export type PhoneNumberData = {
   owner: string
   phone_number: string
   details: string
 }
 
-export type TypePhoneNumberBlock = BlockType<
-  'phone_number',
-  TypePhoneNumberValues
->
+export type TypePhoneNumberBlock = BlockType<'phone_number', PhoneNumberData>
 
 export type TypeDateTimeValues = {
   start_date: string
@@ -113,6 +105,7 @@ export type TypeDateTimeValues = {
   is_all_day: boolean
   include_end_date_time: string // TODO: convert to a Boolean later!
 }
+
 export type TypeDateTimeBlock = BlockType<string, TypeDateTimeValues>
 
 export type TypeTileBlockValues = MinimalPageData & {
@@ -392,7 +385,7 @@ export type TypeContentSectionBlock = BlockType<
   TypeContentSectionBlockValues
 >
 
-export type TypeConfirmationBodyTypes =
+export type ConfirmationBodyBlock =
   | TypeTextBlock
   | TypeCalloutBlock
   | TypeButtonLinkBlock

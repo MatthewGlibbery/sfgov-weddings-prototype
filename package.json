@@ -16,7 +16,6 @@
     "translations-upload": "node tools/scripts/translations-upload.mjs",
     "translate": "npm run translations-gather && npm run translations-upload"
   },
-  "repository": "SFDigitalServices/sfgov-next",
   "dependencies": {
     "@types/node": "18.14.2",
     "autoprefixer": "^10.4.14",

@@ -1,9 +1,9 @@
 import { BodyText, IconLocation, Link } from '@/design-system'
-import type { TypeLocationValues } from '@/types'
+import type { LocationData } from '@/types'
 import { useTranslation } from 'next-i18next'
 import { RichText } from './RichText'
 
-type LocationBlockProps = TypeLocationValues & {
+type LocationBlockProps = LocationData & {
   variant?: string
 }
 

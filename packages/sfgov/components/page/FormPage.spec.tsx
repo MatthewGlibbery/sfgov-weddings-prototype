@@ -4,36 +4,41 @@ import { FormPage } from './FormPage'
 import { MockDynamicComponent } from '@/__mocks__/next/dynamic'
 
 describe('FormPage', () => {
+  // FIXME: we should be looking for the translations here,
+  // not their uppercase variations
+  const formLabel = 'FORM'
+  const submittedLabel = 'FORM SUBMITTED'
+  const mockFormContent = 'Mock form content'
+  MockDynamicComponent.mockImplementation(() => <div>{mockFormContent}</div>)
+
   describe('form content', () => {
     it('renders a form.io form', async () => {
       const page = FormPageFactory.make()
 
-      MockDynamicComponent.mockImplementationOnce(() => <div>Form content</div>)
-
       render(<FormPage page={page} />)
 
-      const title = screen.getByRole('heading', {
-        level: 1
-      })
+      const title = screen.getByRole('heading', { level: 1 })
       expect(title).toBeInTheDocument()
       expect(title).toHaveTextContent(page.title)
-      expect(await screen.findByText('Form content')).toBeInTheDocument()
+      expect(screen.getByText(mockFormContent)).toBeInTheDocument()
+      expect(screen.getByText(formLabel)).toBeInTheDocument()
+      expect(screen.queryByText(submittedLabel)).not.toBeInTheDocument()
     })
   })
 
   describe('confirmation content', () => {
     it('renders the form page confirmation', async () => {
-      const page = FormPageFactory.make()
-
-      // @ts-expect-error bad props
-      MockDynamicComponent.mockImplementationOnce((props) => {
-        props.onSubmitDone?.()
-        return <div>Hidden form content</div>
+      const page = FormPageFactory.make({
+        confirmation_title: 'Woohoo!'
       })
 
-      render(<FormPage page={page} />)
+      render(<FormPage page={page} submitted />)
 
       expect(await screen.findByText('Contact us')).toBeInTheDocument()
+      expect(screen.queryByText(mockFormContent)).not.toBeInTheDocument()
+      expect(screen.getByText(page.confirmation_title)).toBeInTheDocument()
+      expect(screen.getByText(submittedLabel)).toBeInTheDocument()
+      expect(screen.queryByText(formLabel)).not.toBeInTheDocument()
     })
   })
 })
