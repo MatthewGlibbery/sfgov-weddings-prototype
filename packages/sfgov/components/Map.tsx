@@ -11,7 +11,7 @@ import NextImage from 'next/image'
 import { ComponentType, useMemo, useState } from 'react'
 import { fromAddress, setKey } from 'react-geocode'
 import { Image, Location } from '.'
-import { requireEnv } from '@/lib/env'
+import { getenv } from '@/lib/env'
 
 export type MapProps = JSX.IntrinsicElements['div'] & {
   address: TypeLocationBlock
@@ -31,7 +31,7 @@ export const Map: ComponentType<MapProps> = ({
   const [lat, setLat] = useState(37.759571206469374)
   const [lng, setLng] = useState(-122.44429767907141)
 
-  const GOOGLE_MAPS_API_KEY = requireEnv('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY')
+  const GOOGLE_MAPS_API_KEY = getenv('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY')!
   setKey(GOOGLE_MAPS_API_KEY)
 
   // eslint-disable-next-line max-len
