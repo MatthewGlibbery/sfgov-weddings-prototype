@@ -3,23 +3,25 @@ import type { ComponentProps } from 'react'
 
 const focusDropShadow = 'focus:shadow-[0_0_0_4px_#C9CACA]'
 const inverseButtonClasses = classes(`
-  text-primary900
+  text-primary700
   bg-primary100
-  hover:text-white hover:bg-primary500
-  focus:text-white focus:bg-primary500 ${focusDropShadow}
+  hover:text-primary900 hover:bg-primary200 
+  hover:border-primary200
+  focus:text-primary900 focus:bg-primary200
+  focus:border-primary200 ${focusDropShadow}
 `)
 
 export const BUTTON_VARIANTS = {
   base: classes(
     'items-center',
     'justify-center',
-    'rounded-[8px]', // FIXME: need 8px in theme.radii
+    'rounded-4', // FIXME: need 8px in theme.radii
     'gap-8',
     'px-20',
     'py-8',
     'border-[transparent]', // FIXME: need transparent in theme.colors
     'border-solid',
-    'border-3',
+    'border-1',
     'cursor-pointer',
     'font-body',
     'text-body',
@@ -33,26 +35,26 @@ export const BUTTON_VARIANTS = {
         'border-current border-1',
         'text-white',
         'bg-primary600',
-        'hover:bg-primary100',
-        'hover:border-primary100',
-        'hover:text-primary700',
-        'focus:bg-primary100',
-        'focus:border-primary100',
-        'focus:text-primary700',
+        'hover:bg-primary800',
+        'hover:border-primary800',
+        'hover:text-white',
+        'focus:bg-primary800',
+        'focus:border-primary800',
+        'focus:text-white',
         focusDropShadow
       ),
-      secondary: classes(
-        inverseButtonClasses,
-        'border-1',
-        'border-primary100',
-        'rounded-[4px]'
-      ),
+      secondary: classes(inverseButtonClasses),
       tertiary: classes(
-        'border-1',
         'border-primary600',
         'text-primary600',
         'bg-white',
-        'rounded-4'
+        'hover:bg-primary100',
+        'hover:border-primary700',
+        'hover:text-primary700',
+        'focus:bg-primary100',
+        'focus:border-primary700',
+        'focus:text-primary700',
+        focusDropShadow
       ),
       link: classes(
         inverseButtonClasses,

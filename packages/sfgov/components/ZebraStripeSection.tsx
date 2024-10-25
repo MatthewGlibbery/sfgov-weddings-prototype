@@ -34,9 +34,7 @@ export const ZebraStripedSection = ({
           <Wrapper
             key={i}
             noPadding={noPadding}
-            backgroundColor={
-              child?.props?.children?.props?.backgroundColor || ''
-            }
+            backgroundColor={child?.props?.backgroundColor || ''}
           >
             {child}
           </Wrapper>

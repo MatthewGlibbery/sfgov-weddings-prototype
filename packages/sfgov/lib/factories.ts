@@ -61,7 +61,8 @@ import {
   TypeProfileGroupBlock,
   TypeDateTimeValues,
   TypeBodyTextBlock,
-  TypeContactFooterBlock
+  TypeContactFooterBlock,
+  HomePageData
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -70,6 +71,7 @@ import {
   DATA_STORY_PAGE_TYPE,
   EVENT_PAGE_TYPE,
   FORM_PAGE_TYPE,
+  HOME_PAGE_TYPE,
   INFO_PAGE_TYPE,
   LOCATION_PAGE_TYPE,
   MEETING_PAGE_TYPE,
@@ -758,6 +760,18 @@ export const GenericTileFactory = factory<TypeContentTileBlock>((gen) => ({
 export const QuickLinkFactory = factory<TypeQuickLinkBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'quick_links',
+  value: TileValueFactory.make()
+}))
+
+export const ServiceTileFactory = factory<TypeContentTileBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'services',
+  value: TileValueFactory.make()
+}))
+
+export const TopicTileFactory = factory<TypeContentTileBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'topics',
   value: TileValueFactory.make()
 }))
 
@@ -1470,6 +1484,18 @@ export const AgencyEventFactory = factory((gen) => ({
   ],
   start_datetime: '2024-10-14T18:32:00',
   end_datetime: '2024-10-14T23:59:59'
+}))
+
+export const HomePageFactory = factory<HomePageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: HOME_PAGE_TYPE
+  }),
+  title: 'Welcome to SF.gov',
+  spotlight: SpotlightFactory.make(1),
+  top_services: ServiceTileFactory.make(4),
+  featured_topics: TopicTileFactory.make(4),
+  sf_government: ProfileGroupFactory.make(2)
 }))
 
 export const ALL_AGENCY_NAMES = [

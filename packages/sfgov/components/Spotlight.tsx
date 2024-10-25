@@ -5,6 +5,7 @@ import {
   Button,
   classed,
   classes,
+  HeadingXl,
   HeadingXXl
 } from '@/design-system'
 import { Image } from './Image'
@@ -17,14 +18,14 @@ type SpotlightProps = TypeSpotlightBlock & {
 }
 
 const SpotlightContainer = classed('div' as AnyComponent, {
-  base: 'flex flex-col md:rounded-4 md:flex-row px-20 py-28 gap-x-28 gap-y-20 bg-primary50',
+  base: 'flex flex-col md:rounded-4 md:flex-row-reverse px-20 py-28 gap-x-28 gap-y-20 bg-primary50',
   variants: {
     full: {
       true: 'md:flex-col',
       false: 'md:items-center'
     },
-    isReversed: {
-      true: 'md:flex-row-reverse'
+    isImageLeft: {
+      true: 'md:flex-row'
     },
     secondary: {
       true: 'bg-primary700'
@@ -54,7 +55,7 @@ export const Spotlight = ({
   theme,
   secondary,
   buttonClasses,
-  themeClasses
+  themeClasses = 'text-primary800'
 }: SpotlightProps) => {
   const {
     title,
@@ -88,21 +89,21 @@ export const Spotlight = ({
   return (
     <SpotlightContainer
       full={imageAlignment === 'full'}
-      isReversed={imageAlignment !== 'full' && imagePosition === 'left'}
+      isImageLeft={imageAlignment !== 'full' && imagePosition === 'left'}
       theme={theme}
       secondary={secondary}
       data-testid="spotlight"
     >
       <div className="basis-0 grow">
         {image ? (
-          <Image imageRef={image} className="rounded-4 w-100 aspect-[4/3]" />
+          <Image imageRef={image} className="rounded-4 w-100 aspect-[3/2]" />
         ) : null}
       </div>
       <div className="flex flex-col gap-y-20 basis-0 grow">
         {title ? (
-          <HeadingXXl as="h2" className={classes('mb-12', themeClasses)}>
+          <HeadingXl as="h2" className={classes('mb-12', themeClasses)}>
             {title}
-          </HeadingXXl>
+          </HeadingXl>
         ) : null}
         {description ? (
           <BodyText

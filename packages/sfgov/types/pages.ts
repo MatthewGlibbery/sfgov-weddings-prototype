@@ -34,7 +34,8 @@ import {
   TypeContactFooterBlockValues,
   TypeDivisionsSubcommitteeBlock,
   TypeDateTimeValues,
-  TypeDocumentBlock
+  TypeDocumentBlock,
+  TypeTileBlockValues
 } from './blocks'
 import { WagtailImageData } from './images'
 
@@ -323,4 +324,11 @@ export type ResourceCollectionPageData = PageData & {
   custom_section: TypeTitleAndTextBlock[]
   topics: RelatedContentData[]
   partner_agencies: RelatedContentData[]
+}
+
+export type HomePageData = PageData & {
+  spotlight: TypeSpotlightBlock[]
+  top_services: BlockType<'services', TypeTileBlockValues>[]
+  featured_topics: BlockType<'topics', TypeTileBlockValues>[]
+  sf_government: TypeProfileGroupBlock[]
 }

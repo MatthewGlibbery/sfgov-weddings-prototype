@@ -129,7 +129,7 @@ export type TypeTileBlock<T extends string = string> = BlockType<
 
 export type TypeNewsTileBlock = TypeTileBlock<'news'>
 export type TypeContentTileBlock = TypeTileBlock<
-  'content' | 'page' | 'external_link'
+  'content' | 'page' | 'external_link' | 'services' | 'topics'
 >
 export type TypeQuickLinkBlock = TypeTileBlock<'quick_links'>
 export type TypeEventTileBlock = TypeTileBlock<'event'>

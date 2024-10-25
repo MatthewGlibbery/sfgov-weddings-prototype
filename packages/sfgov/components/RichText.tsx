@@ -5,7 +5,7 @@ import parse, {
   Element,
   type HTMLReactParserOptions
 } from 'html-react-parser'
-import { HeadingMd, HeadingSm, Link } from '@/design-system'
+import { HeadingMd, HeadingSm, HeadingXl, Link } from '@/design-system'
 
 export type Matcher = string | RegExp
 export type ComponentMap = Record<string, ComponentType | string>
@@ -35,6 +35,7 @@ export type RichTextProps = {
   html: string
   components?: ComponentMap
   isNews?: boolean
+  isHomePage?: boolean
   'data-testid'?: never
 }
 
@@ -54,7 +55,7 @@ export type RichTextProps = {
  * ```
  */
 export const RichText = (props: RichTextProps) => {
-  const { html, components = {}, isNews } = props
+  const { html, components = {}, isNews, isHomePage } = props
 
   const options: HTMLReactParserOptions = {
     replace(node) {
@@ -128,6 +129,13 @@ export const RichText = (props: RichTextProps) => {
       }
 
       if (tagName === 'h3') {
+        if (isHomePage) {
+          return (
+            <HeadingXl as="h3" className="my-12 md:my-20" romanType="sans">
+              {domToReact(node.children, options)}
+            </HeadingXl>
+          )
+        }
         return (
           <HeadingMd as="h3" {...props}>
             {domToReact(node.children, options)}

@@ -11,7 +11,8 @@ import {
   BodyText,
   IconClock,
   LabelXs,
-  DisplayXXXl
+  DisplayXXXl,
+  classed
 } from '@/design-system'
 import type { ComponentType, ReactNode } from 'react'
 import type { TypeTileBlock } from '@/types'
@@ -22,6 +23,7 @@ import { RichText } from './RichText'
 
 export type TileSectionProps = {
   links?: TypeTileBlock[]
+  full?: boolean
 }
 
 export type TileProps = {
@@ -29,15 +31,14 @@ export type TileProps = {
   role?: 'listitem'
 } & JSX.IntrinsicAttributes
 
-export const TileSection = ({
-  className,
-  ...rest
-}: JSX.IntrinsicElements['div']) => (
-  <div
-    className={classes('grid grid-cols-1 gap-28 md:grid-cols-2', className)}
-    {...rest}
-  />
-)
+export const TileSection = classed('div', {
+  base: classes('grid grid-cols-1 gap-28 md:grid-cols-2 gap-x-28 gap-y-20'),
+  variants: {
+    full: {
+      true: 'gap-y-0 md:grid-cols-1'
+    }
+  }
+})
 
 const TileContainer = ({ className, ...rest }: JSX.IntrinsicElements['a']) => (
   <a
@@ -84,9 +85,12 @@ export const NewsTile = ({ link }: TileProps) =>
     <></>
   )
 
-export const ContentTile = ({ link }: TileProps) => {
+export const ContentTile = ({
+  link,
+  className = 'py-16 px-12 md:py-24'
+}: TileProps & { className?: string }) => {
   return (
-    <BaseTile href={link.url} className="p-12">
+    <BaseTile href={link.url} className={className}>
       <div className="flex items-start justify-between">
         <div className="mr-12 space-y-12">
           <HeadingMd className="m-0 mb-12 text-primary600">
@@ -245,6 +249,18 @@ export const MeetingTileList = ({ links }) => (
   </TileSection>
 )
 
+export const FeaturedTopicTile = ({ link }) => (
+  <div
+    className={classes(
+      'border-solid border-1 border-neutral200',
+      'rounded-4 py-[24px] px-20',
+      'lg:px-[32px] lg:py-40 mb-12'
+    )}
+  >
+    <ContentTile className="" link={link} />
+  </div>
+)
+
 function createTileList(TileComponent: ComponentType<TileProps>) {
   // eslint-disable-next-line react/function-component-definition
   return function TileList(props: TileSectionProps) {
@@ -254,10 +270,10 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
       const title = item.value.title
       const description =
         item.value.meta?.search_description || item.value.description
-
       const url =
-        item.type === 'page' ? getPageURL(item.value) : item?.value?.url
-
+        item.type === 'page' || item.value.meta
+          ? getPageURL(item.value)
+          : item.value.url
       const meta = item.value.meta
       const date = item.value.date
       // eslint-disable-next-line camelcase
@@ -279,11 +295,7 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
       }
     })
     return (
-      <TileSection
-        className="gap-x-28 gap-y-20"
-        data-testid="tile-section"
-        {...rest}
-      >
+      <TileSection full={props.full} data-testid="tile-section" {...rest}>
         {items.map((link) => (
           <TileComponent key={link.id} link={link} />
         ))}
@@ -296,5 +308,6 @@ export const NewsTileList = createTileList(NewsTile)
 export const QuickLinkList = createTileList(ContentTile)
 export const EventTileList = createTileList(EventTile)
 export const ContentTileList = createTileList(ContentTile)
+export const FeaturedTopicTileList = createTileList(FeaturedTopicTile)
 export const DataStoryTileList = createTileList(DataStoryTile)
 export const DocumentTileList = createTileList(DocumentTile)

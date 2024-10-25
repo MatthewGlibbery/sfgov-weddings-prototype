@@ -11,7 +11,9 @@ import {
   ContentTileList,
   MeetingTile,
   DocumentTile,
-  DataStoryTile
+  DataStoryTile,
+  FeaturedTopicTileList,
+  FeaturedTopicTile
 } from './Tile'
 import {
   EventTileFactory,
@@ -176,5 +178,24 @@ describe('Tile', () => {
 
     const tileSection = screen.queryByTestId('tile-section')
     expect(tileSection).not.toBeInTheDocument()
+  })
+
+  it('renders a FeaturedTopicTile', () => {
+    render(<FeaturedTopicTile link={linkValue} />)
+
+    const resouceTile = screen.getByRole('link')
+    const title = screen.getByText(linkValue.title)
+    const description = screen.getByText(linkValue.description)
+
+    expect(resouceTile).toBeInTheDocument()
+    expect(resouceTile).toContainElement(title)
+    expect(description).toBeInTheDocument()
+  })
+
+  it('renders a FeaturedTopicTileList', () => {
+    render(<FeaturedTopicTileList links={GenericTileFactory.make(3)} />)
+
+    const tileSection = screen.getByTestId('tile-section')
+    expect(tileSection).toBeInTheDocument()
   })
 })

@@ -1,4 +1,5 @@
 import { BodyText, Grid, HeadingLg, HeadingXl, LabelXs } from '@/design-system'
+import { getPageURL } from '@/lib/utils'
 import { TypeProfilePageBlock } from '@/types'
 import { Image } from './Image'
 import { RichText } from './RichText'
@@ -7,21 +8,27 @@ type ProfileGroupProps = {
   title: string
   description?: string
   profiles: TypeProfilePageBlock[]
+  isHomePage: boolean
 }
 
 export const ProfileGroup = ({
   title,
   description = '',
-  profiles
+  profiles,
+  isHomePage = false
 }: ProfileGroupProps) => (
   <>
     <HeadingXl as="h3" className="my-12 md:my-20" romanType="sans">
       {title}
     </HeadingXl>
     <div className="mb-40">
-      <RichText html={description} />
+      <RichText html={description} isHomePage={isHomePage} />
     </div>
-    <Grid className="grid-cols-1 md:grid-cols-3 gap-28">
+    <Grid
+      className={`grid-cols-1 gap-28 ${
+        isHomePage ? 'md:grid-cols-2' : 'md:grid-cols-3'
+      } lg:grid-cols-3`}
+    >
       {profiles.map((profile) => (
         <div
           key={profile.id}
@@ -33,7 +40,12 @@ export const ProfileGroup = ({
             </div>
           ) : null}
           <div className="flex flex-col md:text-center">
-            <HeadingLg className="!mb-0">
+            <HeadingLg
+              as="a"
+              className="!mb-0"
+              href={getPageURL(profile.value.profile_page)}
+              aria-label={`link to profile page of ${profile.value.profile_page.title}`}
+            >
               {profile.value.profile_page.title}
             </HeadingLg>
             <LabelXs>({profile.value.profile_page.pronouns})</LabelXs>
