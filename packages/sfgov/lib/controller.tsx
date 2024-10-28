@@ -1,8 +1,8 @@
-import type { ComponentType } from 'react'
-import type { PageData, PageProps, IContentAPI } from '@/types'
-import type { GetServerSideProps } from 'next'
-import safeJsonStringify from 'safe-json-stringify'
 import { ErrorBoundary, ErrorFallbackReport } from '@/components'
+import type { IContentAPI, PageData, PageProps } from '@/types'
+import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import type { ComponentType } from 'react'
+import safeJsonStringify from 'safe-json-stringify'
 
 // "unknown" page props literally have { page: unknown }
 type UnknownPageProps = PageProps<unknown>
@@ -71,6 +71,11 @@ export class WagtailPageTemplate<
   }
 }
 
+export type ModifyPropsCallback<Props extends object> = (
+  props: Props,
+  context: GetServerSidePropsContext
+) => Props | Promise<Props>
+
 export class Controller {
   api: IContentAPI
   templates: IPageTemplate[]
@@ -85,31 +90,40 @@ export class Controller {
     this.templates = templates
   }
 
-  makeGetServerSideProps(): GetServerSideProps<UnknownPageProps> {
-    return async ({ resolvedUrl, locale, query, req }) => {
+  makeGetServerSideProps<
+    Page extends PageData,
+    Props extends PageProps<Page> = PageProps<Page>
+  >(modifyProps?: ModifyPropsCallback<Props>): GetServerSideProps<Props> {
+    return async (context) => {
+      const { resolvedUrl, locale, query, req } = context
       const { cookie } = req.headers
-      const options = {
+      const options: RequestInit = {
         headers: {
-          Cookie: cookie
+          cookie: cookie!
         }
       }
 
+      const path = resolvedUrl.split('?')[0]
       try {
-        const page = await this.api.getPageByPath(
-          resolvedUrl,
+        const page = await this.api.getPageByPath<Page>(
+          path,
           {
             locale,
             preview: query.preview === 'true'
           },
           options
         )
+        let props = { page } as Props
+        if (modifyProps) {
+          props = await modifyProps(props, context)
+        }
         return {
-          props: { page }
+          props
         }
       } catch (error) {
         console.error(
           'No page found for path: "%s", locale: "%s"',
-          resolvedUrl,
+          path,
           locale
         )
       }
