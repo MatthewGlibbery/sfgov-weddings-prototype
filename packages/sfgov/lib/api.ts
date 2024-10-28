@@ -54,18 +54,18 @@ export class ContentAPI implements IContentAPI {
     params?: QueryParams,
     options?: RequestInit
   ) {
+    path = path.split('?')[0]
     if (params?.preview) {
-      const english = await this.getPreviewData<T>(
-        'pages/by-url/preview',
+      const page = await this.getPreviewData<T>(
+        path,
         {
-          path,
           locale: params?.locale,
           preview: true
         },
         options
       )
 
-      return english
+      return page
     }
 
     const english = await this.getData<T>(
@@ -101,11 +101,16 @@ export class ContentAPI implements IContentAPI {
   }
 
   async getPreviewData<T = unknown>(
-    path: string, // cms api path
-    params?: QueryParams, // contains path of page to request
+    path: string, // page path
+    params?: QueryParams,
     options?: RequestInit
   ) {
-    const res = await this.loadPreview(path, params, options)
+    const url = new URL(this.previewURL)
+    url.pathname += '/pages/by-url/preview'
+    url.searchParams.set('path', path)
+    url.searchParams.set('locale', params?.locale || 'en')
+
+    const res = await this.fetch(url.href, options)
     const previewData = await res.json().catch(() => {
       return {}
     })
@@ -256,19 +261,8 @@ export class ContentAPI implements IContentAPI {
   }
 
   load(path: string, params?: QueryParams, options?: RequestInit) {
-    const url = this.getURL(path, params).toString()
+    const url = this.getURL(path, params).href
     return this.fetch(url, options)
-  }
-
-  loadPreview(path: string, params?: QueryParams, options?: RequestInit) {
-    const url = new URL(this.previewURL)
-    let pagePath = String(params?.path)
-    url.pathname = join(url.pathname, path)
-    if (pagePath) {
-      pagePath = pagePath.substring(0, pagePath.indexOf('?'))
-      url.searchParams.set('path', pagePath)
-    }
-    return this.fetch(url.toString(), options)
   }
 
   getURL(path?: string, params?: QueryParams): URL {

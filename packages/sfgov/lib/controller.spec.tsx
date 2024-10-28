@@ -12,6 +12,15 @@ import type { ComponentType } from 'react'
 
 type MockedFunction = ReturnType<typeof jest.fn>
 
+let restoreConsole: ReturnType<typeof mockConsole>
+beforeAll(() => {
+  restoreConsole = mockConsole()
+})
+
+afterAll(() => {
+  restoreConsole()
+})
+
 describe('Controller', () => {
   const mockPath = 'departments/sf-environment'
   const mockMetaType = 'sfgov.Info'
@@ -153,7 +162,6 @@ describe('Controller', () => {
 
     it('throws if page.meta.type is missing in props', () => {
       const View = controller.makeViewComponent()
-      const restoreConsole = mockConsole()
       for (const props in [
         {},
         { page: null },
@@ -165,12 +173,10 @@ describe('Controller', () => {
           /No template found for page:/
         )
       }
-      restoreConsole()
     })
 
     it('throws if it gets a page.meta.type with no matching template', () => {
       const View = controller.makeViewComponent()
-      const restoreConsole = mockConsole()
       expect(() =>
         render(
           <View
@@ -184,7 +190,6 @@ describe('Controller', () => {
           />
         )
       ).toThrow(/No template found for page/)
-      restoreConsole()
     })
   })
 })

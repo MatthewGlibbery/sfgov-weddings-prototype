@@ -1,6 +1,16 @@
 import { ContentAPI, FixtureAPI } from './api'
 import mockEnv from 'mocked-env'
 import fetchMock from 'jest-fetch-mock'
+import mockConsole from 'jest-mock-console'
+
+let restoreConsole: ReturnType<typeof mockConsole>
+beforeAll(() => {
+  restoreConsole = mockConsole()
+})
+
+afterAll(() => {
+  restoreConsole()
+})
 
 describe('ContentAPI', () => {
   const example = new ContentAPI({
@@ -130,30 +140,38 @@ describe('ContentAPI', () => {
       expect(res).toEqual(spanish)
     })
 
-    it('gets preview data if preview is in params', async () => {
-      const data = {
-        meta: {
-          type: 'foo.Bar'
-        },
-        data: { title: 'some page' }
+    it.each([
+      { path: 'foo', query: '?path=foo&locale=en' },
+      { path: 'foo', locale: 'es', query: '?path=foo&locale=es' },
+      { path: 'foo?preview=true', query: '?path=foo&locale=en' }
+    ])(
+      'gets preview data for "%s" if preview is in params',
+      async ({ path, locale, query }) => {
+        fetchMock.mockResponseOnce(
+          JSON.stringify({
+            meta: {
+              type: 'foo.Bar'
+            },
+            data: { title: 'some page' }
+          })
+        )
+        const res = await example.getPageByPath(path, {
+          preview: true,
+          locale
+        })
+        expect(res).toEqual({
+          meta: {
+            type: 'foo.Bar'
+          },
+          title: 'some page'
+        })
+        expect(fetchMock).toHaveBeenCalledTimes(1)
+        expect(fetchMock).toHaveBeenLastCalledWith(
+          `https://api.example.com/api/cms/pages/by-url/preview${query}`,
+          undefined
+        )
       }
-      const expectedData = {
-        meta: {
-          type: 'foo.Bar'
-        },
-        title: 'some page'
-      }
-      fetchMock.mockResponseOnce(JSON.stringify(data))
-      const res = await example.getPageByPath('foo?preview=true', {
-        preview: true
-      })
-      expect(res).toEqual(expectedData)
-      expect(fetchMock).toHaveBeenCalledTimes(1)
-      expect(fetchMock).toHaveBeenLastCalledWith(
-        'https://api.example.com/api/cms/pages/by-url/preview?path=foo',
-        undefined
-      )
-    })
+    )
   })
 
   describe('load()', () => {
@@ -169,22 +187,6 @@ describe('ContentAPI', () => {
       const mock = jest.fn()
       const api = new ContentAPI({ ...example.options, fetch: mock })
       await api.load('foo')
-      expect(mock).toHaveBeenCalledTimes(1)
-    })
-  })
-
-  describe('loadPreview()', () => {
-    it('uses the global fetch implementation by default', async () => {
-      fetchMock.mockResponseOnce('derp')
-      const api = example
-      const res = await api.loadPreview('test')
-      expect(fetchMock).toHaveBeenCalledTimes(1)
-      await expect(res.text()).resolves.toEqual('derp')
-    })
-    it('respects the provided fetch implementation', async () => {
-      const mock = jest.fn()
-      const api = new ContentAPI({ ...example.options, fetch: mock })
-      await api.loadPreview('foo')
       expect(mock).toHaveBeenCalledTimes(1)
     })
   })
