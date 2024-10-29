@@ -87,7 +87,7 @@ export const NewsTile = ({ link }: TileProps) =>
 
 export const ContentTile = ({
   link,
-  className = 'py-16 px-12 md:py-24'
+  className = 'py-16 px-12 md:py-20'
 }: TileProps & { className?: string }) => {
   return (
     <BaseTile href={link.url} className={className}>

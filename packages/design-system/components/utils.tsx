@@ -11,6 +11,7 @@ const twMerge = extendTailwindMerge({
           'heading-sm',
           'heading-md',
           'heading-lg',
+          'heading-lg-li',
           'heading-xl',
           'heading-xxl',
           'display-lg',

@@ -17,7 +17,7 @@ export const ProfileGroup = ({
   profiles,
   isHomePage = false
 }: ProfileGroupProps) => (
-  <>
+  <div className={`${isHomePage ? 'mb-60 last:mb-0' : ''}`}>
     <HeadingXl as="h3" className="my-12 md:my-20" romanType="sans">
       {title}
     </HeadingXl>
@@ -48,11 +48,13 @@ export const ProfileGroup = ({
             >
               {profile.value.profile_page.title}
             </HeadingLg>
-            <LabelXs>({profile.value.profile_page.pronouns})</LabelXs>
+            {profile.value.profile_page.pronouns ? (
+              <LabelXs>({profile.value.profile_page.pronouns})</LabelXs>
+            ) : null}
             <BodyText className="font-bold">{profile.value.role}</BodyText>
           </div>
         </div>
       ))}
     </Grid>
-  </>
+  </div>
 )

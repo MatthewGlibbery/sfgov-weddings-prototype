@@ -102,78 +102,6 @@ const fontSize = {
       fontWeight: fontWeight.light
     }
   ],
-  'tablet-display-xxxl': [
-    '40px',
-    {
-      lineHeight: lineHeight['48'],
-      letterSpacing: '0px',
-      fontWeight: fontWeight.semibold
-    }
-  ],
-  'tablet-display-lg': [
-    '20px',
-    {
-      lineHeight: lineHeight['24'],
-      letterSpacing: '0px',
-      fontWeight: fontWeight.normal
-    }
-  ],
-  'tablet-heading-xxl': [
-    '32px',
-    {
-      lineHeight: lineHeight['44'],
-      letterSpacing: '0px',
-      fontWeight: fontWeight.medium
-    }
-  ],
-  'tablet-heading-xl': [
-    '24px',
-    {
-      lineHeight: lineHeight['32'],
-      letterSpacing: '0px',
-      fontWeight: fontWeight.semibold
-    }
-  ],
-  'tablet-heading-lg': [
-    '20px',
-    {
-      lineHeight: lineHeight['28'],
-      letterSpacing: '0px',
-      fontWeight: fontWeight.medium
-    }
-  ],
-  'tablet-heading-lg-li': [
-    '20px',
-    {
-      lineHeight: lineHeight['28'],
-      letterSpacing: '0px',
-      fontWeight: fontWeight.semibold
-    }
-  ],
-  'tablet-heading-md': [
-    '20px',
-    {
-      lineHeight: lineHeight['28'],
-      letterSpacing: '0px',
-      fontWeight: fontWeight.bold
-    }
-  ],
-  'tablet-heading-sm': [
-    '16px',
-    {
-      lineHeight: lineHeight['24'],
-      letterSpacing: '0px',
-      fontWeight: fontWeight.extrabold
-    }
-  ],
-  'tablet-heading-xs': [
-    '14px',
-    {
-      lineHeight: lineHeight['20'],
-      letterSpacing: '0px',
-      fontWeight: fontWeight.light
-    }
-  ],
   'display-xxxl': [
     '32px',
     {
@@ -191,9 +119,9 @@ const fontSize = {
     }
   ],
   'heading-xxl': [
-    '24px',
+    '28px',
     {
-      lineHeight: lineHeight['32'],
+      lineHeight: lineHeight['36'],
       letterSpacing: '0px',
       fontWeight: fontWeight.medium
     }

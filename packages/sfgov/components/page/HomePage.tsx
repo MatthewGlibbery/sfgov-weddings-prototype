@@ -1,4 +1,9 @@
-import { ComponentType, Container, DisplayXXXl } from '@/design-system'
+import {
+  ComponentType,
+  Container,
+  DisplayXXXl,
+  HeadingXXl
+} from '@/design-system'
 import { HomePageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 import {
@@ -24,17 +29,20 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
         {t('welcome to sf.gov', { defaultValue: 'Welcome to SF.gov' })}
       </h1>
       {spotlight ? (
-        <div className="mb-20 max-w-xl md:mx-16 lg:mx-auto">
+        <div className="mb-20 max-w-xl lg:mx-96 xl:mx-auto">
           <Spotlight {...spotlight[0]} />
         </div>
       ) : null}
       <ZebraStripedSection>
-        <Container className="py-8 mb-20">
+        <Container>
           {services.length || topics.length ? (
             <div className="mb-28 space-y-12">
-              <DisplayXXXl as="h2">
+              <DisplayXXXl as="h2" className="lg:hidden">
                 {t('services', { defaultValue: 'Services' })}
               </DisplayXXXl>
+              <HeadingXXl as="h2" className="hidden lg:block !mb-20">
+                {t('services', { defaultValue: 'Services' })}
+              </HeadingXXl>
               <div className="lg:hidden">
                 <ContentTileList full={true} links={services} />
               </div>
@@ -42,8 +50,12 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
                 <FeaturedTopicTileList full={true} links={topics} />
               </div>
               <div className="hidden lg:flex gap-x-96">
-                <ContentTileList full={true} links={services} />
-                <FeaturedTopicTileList links={topics} />
+                <div className="basis-[36%]">
+                  <ContentTileList full={true} links={services} />
+                </div>
+                <div className="basis-[53%]">
+                  <FeaturedTopicTileList links={topics} />
+                </div>
               </div>
             </div>
           ) : null}

@@ -10,21 +10,20 @@ export const Text = classed('span' as AnyComponent, {
       headingSm:
         'font-body text-heading-sm text-neutral900 mb-space-body lg:mb-8',
       headingMd:
-        'font-body text-heading-md md:text-tablet-heading-md lg:text-desktop-heading-md text-neutral900 mb-space-body',
+        'font-body text-heading-md lg:text-desktop-heading-md text-neutral900 mb-space-body',
       headingLg:
-        'font-slab text-heading-lg md:text-tablet-heading-md lg:text-desktop-heading-lg text-neutral900 mb-space-body',
+        'font-slab text-heading-lg lg:text-desktop-heading-lg text-neutral900 mb-space-body',
       headingLgListItem:
-        'font-body text-heading-lg-li md:text-tablet-heading-lg-li lg:text-desktop-heading-lg-li text-neutral900 mb-space-body',
+        'font-body text-heading-lg-li lg:text-desktop-heading-lg-li text-neutral900 mb-space-body',
       headingXl:
-        'font-slab text-heading-xl md:text-tablet-heading-xl lg:text-desktop-heading-xl text-neutral900 mb-space-body',
+        'font-slab text-heading-xl lg:text-desktop-heading-xl text-neutral900 mb-space-body',
       headingXlSans:
-        'font-body text-heading-xl md:text-tablet-heading-xl lg:text-desktop-heading-xl text-neutral900 mb-space-body',
+        'font-body text-heading-xl lg:text-desktop-heading-xl text-neutral900 mb-space-body',
       headingXXl:
-        'font-slab text-heading-xxl md:text-tablet-heading-xxl lg:text-desktop-heading-xxl text-neutral900 mb-space-body',
-      displayLg:
-        'font-body text-display-lg md:text-tablet-display-lg lg:text-desktop-display-lg',
+        'font-slab text-heading-xxl lg:text-desktop-heading-xxl text-neutral900 mb-space-body',
+      displayLg: 'font-body text-display-lg lg:text-desktop-display-lg',
       displayXXXl:
-        'font-slab text-display-xxxl md:text-tablet-display-xxxl lg:text-desktop-display-xxxl text-neutral900 mb-space-body lg:mb-16',
+        'font-slab text-display-xxxl lg:text-desktop-display-xxxl text-neutral900 mb-space-body lg:mb-16',
       mono: 'font-monospace text-body',
       label: 'font-body text-label',
       labelXs: 'font-body text-label-xs mb-space-body',

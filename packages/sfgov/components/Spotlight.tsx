@@ -5,8 +5,7 @@ import {
   Button,
   classed,
   classes,
-  HeadingXl,
-  HeadingXXl
+  HeadingXl
 } from '@/design-system'
 import { Image } from './Image'
 
@@ -18,7 +17,7 @@ type SpotlightProps = TypeSpotlightBlock & {
 }
 
 const SpotlightContainer = classed('div' as AnyComponent, {
-  base: 'flex flex-col md:rounded-4 md:flex-row-reverse px-20 py-28 gap-x-28 gap-y-20 bg-primary50',
+  base: 'flex flex-col md:rounded-4 md:flex-row-reverse px-20 md:px-28 py-28 lg:p-40 gap-x-28 gap-y-20 bg-primary50',
   variants: {
     full: {
       true: 'md:flex-col',
@@ -117,7 +116,7 @@ export const Spotlight = ({
           <Button
             as="a"
             href={url}
-            className={classes(buttonClasses, 'w-1/2')}
+            className={classes(buttonClasses)}
             aria-label={ariaLabel}
           >
             {linkText}

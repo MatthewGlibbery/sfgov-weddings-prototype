@@ -27,7 +27,8 @@ export const BUTTON_VARIANTS = {
     'text-body',
     'text-center',
     'no-underline',
-    'whitespace-nowrap'
+    'whitespace-nowrap',
+    'w-fit'
   ),
   variants: {
     variant: {

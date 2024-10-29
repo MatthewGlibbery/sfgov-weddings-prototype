@@ -4,7 +4,13 @@ import parse, {
   Element,
   type HTMLReactParserOptions
 } from 'html-react-parser'
-import { HeadingMd, HeadingSm, HeadingXl, Link } from '@/design-system'
+import {
+  HeadingLgListItem,
+  HeadingMd,
+  HeadingSm,
+  HeadingXl,
+  Link
+} from '@/design-system'
 import { Image } from './Image'
 
 export type Matcher = string | RegExp
@@ -139,9 +145,9 @@ export const RichText = (props: RichTextProps) => {
       if (tagName === 'h3') {
         if (isHomePage) {
           return (
-            <HeadingXl as="h3" className="my-12 md:my-20" romanType="sans">
+            <HeadingLgListItem as="h3" className="mt-40">
               {domToReact(node.children, options)}
-            </HeadingXl>
+            </HeadingLgListItem>
           )
         }
         return (
