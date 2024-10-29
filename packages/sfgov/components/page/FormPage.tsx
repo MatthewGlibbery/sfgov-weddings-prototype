@@ -20,6 +20,7 @@ import { PageLinksList } from '../PageLinksList'
 import { RichText } from '../RichText'
 import { PageWrapper } from './PageWrapper'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
+import { useSearchParams } from 'next/navigation'
 
 export type FormPageProps = {
   page: FormPageData
@@ -44,8 +45,10 @@ export function FormPage({
   } = page
 
   const { t } = useTranslation()
-  const [userSubmitted, setSubmitted] = useState(false)
-  const submitted = initialSubmitted || userSubmitted
+  const queryParams = useSearchParams()
+  const [submitted, setSubmitted] = useState(
+    initialSubmitted || queryParams?.get('submitted') === 'true'
+  )
 
   return (
     <PageWrapper title={title}>

@@ -2,6 +2,7 @@ import { FormPageFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
 import { FormPage } from './FormPage'
 import { MockDynamicComponent } from '@/__mocks__/next/dynamic'
+import { useSearchParams } from '@/__mocks__/next/navigation'
 
 describe('FormPage', () => {
   // FIXME: we should be looking for the translations here,
@@ -10,6 +11,10 @@ describe('FormPage', () => {
   const submittedLabel = 'FORM SUBMITTED'
   const mockFormContent = 'Mock form content'
   MockDynamicComponent.mockImplementation(() => <div>{mockFormContent}</div>)
+
+  afterEach(() => {
+    MockDynamicComponent.mockReset()
+  })
 
   describe('form content', () => {
     it('renders a form.io form', async () => {
@@ -39,6 +44,26 @@ describe('FormPage', () => {
       expect(screen.getByText(page.confirmation_title)).toBeInTheDocument()
       expect(screen.getByText(submittedLabel)).toBeInTheDocument()
       expect(screen.queryByText(formLabel)).not.toBeInTheDocument()
+    })
+  })
+
+  describe('Submitted query string param', () => {
+    it('renders the form page confirmation when submitted=true', async () => {
+      const page = FormPageFactory.make({
+        confirmation_title: 'Woohoo!'
+      })
+
+      useSearchParams.mockImplementationOnce(
+        () =>
+          new URLSearchParams({
+            submitted: 'true'
+          })
+      )
+
+      render(<FormPage page={page} />)
+
+      expect(screen.getByText(page.confirmation_title)).toBeInTheDocument()
+      expect(MockDynamicComponent).not.toHaveBeenCalled()
     })
   })
 })
