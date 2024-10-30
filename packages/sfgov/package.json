@@ -4,6 +4,7 @@
   "scripts": {
     "build": "next build --no-lint",
     "dev": "next dev",
+    "dev-e2e": "NODE_ENV=test next dev",
     "lint": "eslint . *.js __*",
     "prebuild": "npm run build -w ../storybook",
     "prestart": "npm run build",
