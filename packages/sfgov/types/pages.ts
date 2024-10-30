@@ -1,4 +1,5 @@
-import {
+import type { FormSchema } from '@/design-system/formio'
+import type {
   BlockType,
   TypeBodyTextBlock,
   TypeCallToActionBlock,
@@ -31,13 +32,12 @@ import {
   TypeContactFooterBlock,
   TopicFieldTypes,
   TypeProfileGroupBlock,
-  TypeContactFooterBlockValues,
   TypeDivisionsSubcommitteeBlock,
   TypeDateTimeValues,
   TypeDocumentBlock,
   TypeTileBlockValues
 } from './blocks'
-import { WagtailImageData } from './images'
+import type { WagtailImageData } from './images'
 
 export type MinimalMeta = {
   type: string
@@ -301,6 +301,7 @@ export type ReportPageData = PageData & {
 
 export type FormPageData = PageData & {
   schema_url: string
+  schema?: FormSchema
   confirmation_title: string
   confirmation_body: ConfirmationBodyBlock[]
   get_help: (

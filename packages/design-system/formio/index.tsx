@@ -21,9 +21,13 @@ export type FormProps = Override<
   {
     form?: FormSchema
     formReady?: (form: Form) => void
-    onFormLoad?: (this: Form, schema: FormSchema) => void
-    onSubmit?: (this: Form, submission: FormSubmission, saved?: boolean) => void
-    onSubmitDone?: (this: Form, submission: FormSubmission) => void
+    onFormLoad?: (this: Form | undefined, schema: FormSchema) => void
+    onSubmit?: (
+      this: Form | undefined,
+      submission: FormSubmission,
+      saved?: boolean
+    ) => void
+    onSubmitDone?: (this: Form | undefined, submission: FormSubmission) => void
     options?: FormOptions
   }
 >

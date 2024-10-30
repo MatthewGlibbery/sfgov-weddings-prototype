@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import { WagtailImageData } from './images'
 import {
   AgencyPage,
@@ -128,10 +127,13 @@ export type TypeTileBlock<T extends string = string> = BlockType<
 >
 
 export type TypeNewsTileBlock = TypeTileBlock<'news'>
+
 export type TypeContentTileBlock = TypeTileBlock<
   'content' | 'page' | 'external_link' | 'services' | 'topics'
 >
+
 export type TypeQuickLinkBlock = TypeTileBlock<'quick_links'>
+
 export type TypeEventTileBlock = TypeTileBlock<'event'>
 
 export type TypeButtonLinkValues = {
@@ -338,8 +340,7 @@ export type TypeVideoBlockValues = {
 export type TypeVideoBlock = BlockType<'video', TypeVideoBlockValues>
 
 export type TypeDownloadableFilesBlockValues = {
-  title?: string
-  heading?: ReactNode
+  title: string
   documents: TypeDocumentBlock[]
 }
 

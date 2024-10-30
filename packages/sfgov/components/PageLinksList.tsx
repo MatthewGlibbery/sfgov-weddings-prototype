@@ -17,10 +17,7 @@ export const PageLinksList = ({
       {pageLinks.length ? (
         <div>
           {pageLinks.map((pageLink, i) => (
-            <span
-              key={pageLink.id}
-              data-testid="related_content_agencies-section"
-            >
+            <span key={i} data-testid="related_content_agencies-section">
               {i > 0 && ', '}
               <PageLink
                 page={pageLink}

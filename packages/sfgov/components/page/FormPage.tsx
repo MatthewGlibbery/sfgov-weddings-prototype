@@ -12,15 +12,15 @@ import type {
   FormPageData,
   TypeContactFooterBlockValues
 } from '@/types'
-import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
+import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
+import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
 import { PageLinksList } from '../PageLinksList'
 import { RichText } from '../RichText'
 import { PageWrapper } from './PageWrapper'
-import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
-import { useSearchParams } from 'next/navigation'
 
 export type FormPageProps = {
   page: FormPageData
@@ -40,6 +40,7 @@ export function FormPage({
     confirmation_title: confirmationTitle,
     confirmation_body: confirmationBody,
     schema_url: formSchemaUrl,
+    schema: formSchema,
     get_help: getHelp,
     partner_agencies: agencies
   } = page
@@ -75,12 +76,11 @@ export function FormPage({
           </div>
         ) : (
           <FormioForm
-            src={formSchemaUrl}
+            // the `src` (URL) and `form` (schema) props are mutually exclusive
+            src={formSchema ? undefined : formSchemaUrl}
+            form={formSchema}
             formReady={onFormReady}
-            onSubmitDone={
-              // istanbul ignore next
-              () => setSubmitted(true)
-            }
+            onSubmitDone={() => setSubmitted(true)}
           />
         )}
       </Container>
@@ -129,7 +129,7 @@ const ConfirmationContent = ({ block }: ConfirmationContentProps) => {
           as="a"
           href={
             // istanbul ignore next
-            block.value.url || getPageURL(block.value.page!)
+            block.value.url || getPageURL(block.value.page)
           }
         >
           {block.value.link_text}
