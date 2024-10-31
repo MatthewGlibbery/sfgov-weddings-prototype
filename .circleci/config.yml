@@ -33,8 +33,7 @@ jobs:
             pip install --root-user-action=ignore ansible-tower-cli
             export TOWER_HOST=$AWX_HOST
             export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
-            tower-cli job launch --job-template=$STAGING_JOB_ID --extra-vars=""  --wait --monitor
-            tower-cli job launch --job-template=$PROD_JOB_ID --extra-vars=""  --wait --monitor
+            tower-cli workflow_job launch -W $STAGING_JOB_ID --extra-vars=""  --wait --monitor
 workflows:
   # Docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   build_and_test:
