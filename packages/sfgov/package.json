@@ -2,7 +2,7 @@
   "private": true,
   "name": "@sfgov/next",
   "scripts": {
-    "build": "next build --no-lint",
+    "build": "next build --no-lint --experimental-build-mode=compile",
     "dev": "next dev",
     "dev-e2e": "NODE_ENV=test next dev",
     "lint": "eslint . *.js __*",
