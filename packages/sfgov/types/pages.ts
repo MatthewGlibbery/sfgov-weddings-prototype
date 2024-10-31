@@ -59,6 +59,7 @@ export type MinimalPageData = {
   page_content?: MinimalPageData
   title: string
   image?: WagtailImageData
+  html_path: string
   // should we add description here?
 }
 

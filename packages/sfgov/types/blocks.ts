@@ -23,13 +23,23 @@ interface RangeType {
   maximum: number
 }
 
+// cms.blocks.composite.Link
 export type TypeLinkValues = {
-  link_to: string
   link_text: string
-  url: string
-  page?: MinimalPageData
-  aria_label?: string
-}
+} & (
+  | {
+      // if link_to === 'url' it will have a url, but no page
+      link_to: 'url'
+      url: string
+      page: never
+    }
+  | {
+      // if link_to === 'page' it will have page, but no url
+      link_to: 'page'
+      page: MinimalPageData
+      url: never
+    }
+)
 
 export type TypeCostBlockValues = {
   cost: TypeCostVariant
@@ -56,7 +66,7 @@ export type TypeStepBlock = BlockType<
 export type TypeImageBlock = BlockType<'image', WagtailImageData>
 
 export type TypeTitleAndTextValues = {
-  title: string
+  title?: string
   text: string
 }
 
@@ -136,6 +146,7 @@ export type TypeQuickLinkBlock = TypeTileBlock<'quick_links'>
 
 export type TypeEventTileBlock = TypeTileBlock<'event'>
 
+// cms.blocks.composite.ButtonLink
 export type TypeButtonLinkValues = {
   button: TypeLinkValues
   screenreader_label?: string
@@ -166,7 +177,7 @@ export type TypeCallToActionBlock = BlockType<string, TypeCallToActionValues>
 
 export type TypeTextBlock = BlockType<'text', string>
 
-export type TypeButtonLinkBlock = BlockType<'button_link', TypeLinkValues>
+export type TypeButtonLinkBlock = BlockType<'button_link', TypeButtonLinkValues>
 
 export type TypeCalloutBlock = BlockType<'callout', string>
 
@@ -232,7 +243,7 @@ export type TypeSpotlightBlockValues = {
   image: WagtailImageData
   image_alignment: string
   image_position: string
-  button_link: TypeLinkValues
+  button_link: TypeButtonLinkBlock[]
 }
 
 export type TypeSpotlightBlock = BlockType<

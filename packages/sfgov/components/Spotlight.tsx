@@ -73,15 +73,12 @@ export const Spotlight = ({
     const button = btnLink.button
 
     linkText = button?.link_text
-    ariaLabel =
-      btnLink.screenreader_label.length > 0
-        ? btnLink.screenreader_label
-        : `${title} ${linkText}`
+    ariaLabel = btnLink.screenreader_label || `${title} ${linkText}`
 
     if (button.link_to === 'url') {
       url = button.url
     } else if (button.link_to === 'page') {
-      url = button.page.meta?.html_url || button.page.html_path
+      url = button.page.meta.html_url || button.page.html_path
     }
   }
 

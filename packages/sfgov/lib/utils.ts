@@ -43,9 +43,9 @@ export function resolvePage<T extends PageData = PageData>(
   }
 }
 
-export function camelCase(str: string) {
+export function camelCase(str: string | undefined) {
   return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+    ?.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
       return index === 0 ? word.toLowerCase() : word.toUpperCase()
     })
     .replace(/\s+/g, '')
