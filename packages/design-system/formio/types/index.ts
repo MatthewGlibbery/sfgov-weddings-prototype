@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { EventEmitter } from 'formiojs/types/eventEmitter'
-import type { Formio, Form as _Form } from 'formiojs'
+import type { Components, Formio, Form as _Form } from 'formiojs'
 import type { i18n } from 'i18next'
 import type { AnyComponentSchema } from './components'
 import type { Override } from './utils'
@@ -118,8 +118,14 @@ export type FormOptions = Partial<{
   zoom: number
 }>
 
+export type ComponentConstructor = Components.components.base
+
 export type FormioPlugin = {
+  components?: Record<string, ComponentConstructor>
   framework?: string
+  options?: {
+    form?: FormOptions
+  }
   templates?: Record<
     string,
     Record<

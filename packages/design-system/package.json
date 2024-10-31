@@ -3,6 +3,7 @@
   "name": "@sfgov/design-system",
   "scripts": {
     "build": "tsc --build && tsc-alias",
+    "build-formio-css": "node build-formio-css.mjs",
     "build-tokens": "style-dictionary build --config ./sd.config.js",
     "clean": "tsc --build --clean",
     "lint": "eslint .",
@@ -10,9 +11,11 @@
     "postbuild-tokens": "eslint --fix tokens",
     "postfigma-export": "eslint --fix components/icons",
     "test": "jest --coverage",
-    "watch": "npm run build-tokens && chokidar 'tokens/**/*.json' -c 'npm run build-tokens'"
+    "watch": "npm run build-tokens && chokidar 'tokens/**/*.json' -c 'npm run build-tokens'",
+    "watch-formio-css": "chokidar build-formio-css.mjs -c 'npm run build-formio-css'"
   },
   "dependencies": {
+    "@formio/choices.js": "10.2.1",
     "@formio/react": "5.3.0",
     "@thoughtbot/tailwindcss-aria-attributes": "^0.2.0",
     "@tw-classed/core": "^1.7.0",
@@ -34,11 +37,20 @@
     "@figma-export/transform-svg-with-svgo": "^6.0.2",
     "@figma-export/types": "^6.0.0",
     "@formio/choices.js": "^10.2.1",
+    "@fullhuman/postcss-purgecss": "^6.0.0",
     "@tw-classed/core": "^1.5.0",
     "@types/vhtml": "^2.2.9",
     "babel-jest": "^29.7.0",
+    "babel-plugin-inline-import": "^3.0.0",
     "chokidar-cli": "^3.0.0",
+    "cssnano": "^7.0.6",
+    "cssnano-preset-advanced": "^7.0.6",
     "formiojs": "^4.15.1",
+    "postcss": "^8.4.47",
+    "postcss-filter-rules": "^0.8.0",
+    "postcss-import": "^16.1.0",
+    "postcss-import-url": "^7.2.0",
+    "postcss-prefix-selector": "^1.16.1",
     "style-dictionary": "^3.7.2"
   }
 }

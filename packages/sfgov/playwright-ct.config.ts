@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/experimental-ct-react'
+import importCss from 'rollup-plugin-import-css'
 import path from 'path'
 
 /**
@@ -36,6 +37,13 @@ export default defineConfig({
       build: {
         commonjsOptions: {
           include: [/next\.config/, /node_modules/]
+        },
+        rollupOptions: {
+          plugins: [
+            importCss({
+              include: ['**/*.css']
+            })
+          ]
         }
       },
       resolve: {

@@ -26,8 +26,13 @@ const customJestConfig = {
   collectCoverageFrom: [
     '<rootDir>/components/**/*.tsx',
     '<rootDir>/formio/**/*.ts*',
+    // FIXME: remove this when we bring back our formio templates
+    '!<rootDir>/formio/templates/**'
   ],
-  moduleNameMapper,
+  moduleNameMapper: {
+    ...moduleNameMapper,
+    '.*\\.css$': '<rootDir>/__mocks__/css.mjs'
+  },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
   testPathIgnorePatterns: ['/browser/', '/dist/'],
@@ -35,7 +40,8 @@ const customJestConfig = {
     '.*/formio/templates/.*\\.tsx$': ['babel-jest', {
       extends: './babel.config.js'
     }],
-    '^.+\\.(t|j)sx?$': 'ts-jest'
+    '^.+\\.(t|j)sx?$': 'ts-jest',
+    '.*\\.mjs$': 'babel-jest'
   }
 }
 

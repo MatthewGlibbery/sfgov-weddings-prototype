@@ -1,6 +1,6 @@
 // istanbul ignore file
 import { factory } from 'node-factory'
-import {
+import type {
   FlatFormSchema,
   PageSchema,
   WizardFormSchema,

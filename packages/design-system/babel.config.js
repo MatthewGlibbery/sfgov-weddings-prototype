@@ -11,5 +11,11 @@ module.exports = {
       // https://babeljs.io/docs/babel-preset-react#development
       development: false
     }]
+  ],
+  plugins: [
+    // inline CSS imports as strings
+    ['babel-plugin-inline-import', {
+      extensions: ['.css']
+    }]
   ]
 }
