@@ -1,11 +1,6 @@
 import { ALL_FONTS } from '@/components/server/GoogleFonts'
-import { PropsDebug } from '@/components/server/PropsDebug'
 import { Html, Head, Main, NextScript, DocumentProps } from 'next/document'
 import { classed } from '@/design-system'
-import packages from '../package.json'
-import Script from 'next/script'
-
-const { dependencies } = packages
 
 const StyledBody = classed(
   'body',
@@ -25,9 +20,6 @@ const Document = (props: DocumentProps) => {
         </a>
         <Main />
         <NextScript />
-        {props.isDevelopment ? (
-          <PropsDebug data={props.__NEXT_DATA__?.props?.pageProps} />
-        ) : null}
       </StyledBody>
     </Html>
   )

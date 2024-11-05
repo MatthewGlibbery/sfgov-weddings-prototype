@@ -42,7 +42,7 @@ export const ProfileGroup = ({
           <div className="flex flex-col md:text-center">
             <HeadingLg
               as="a"
-              className="!mb-0"
+              className={profile.value.profile_page.pronouns ? '!mb-0' : ''}
               href={getPageURL(profile.value.profile_page)}
               aria-label={`link to profile page of ${profile.value.profile_page.title}`}
             >

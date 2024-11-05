@@ -11,7 +11,6 @@ describe('FormPage', () => {
   // not their uppercase variations
   const formLabel = /^FORM$/i
   const submittedLabel = /^FORM SUBMITTED$/i
-  const submittedContent = 'Contact us'
 
   beforeEach(() => {
     FormioForm.mockReset()
@@ -50,7 +49,7 @@ describe('FormPage', () => {
 
       render(<FormPage page={page} />)
 
-      expect(await screen.findByText(submittedContent)).toBeInTheDocument()
+      expect(await screen.findByText(submittedLabel)).toBeInTheDocument()
       expect(screen.queryByText(expectedMissingText)).not.toBeInTheDocument()
     })
   })
@@ -68,13 +67,13 @@ describe('FormPage', () => {
       )
 
       render(<FormPage page={page} />)
-      expect(await screen.findByText(submittedContent)).toBeInTheDocument()
+      expect(await screen.findByText(submittedLabel)).toBeInTheDocument()
     })
 
     it('renders the form page confirmation with submitted={true}', async () => {
       const page = FormPageFactory.make()
       render(<FormPage page={page} submitted />)
-      expect(await screen.findByText(submittedContent)).toBeInTheDocument()
+      expect(await screen.findByText(submittedLabel)).toBeInTheDocument()
     })
   })
 
