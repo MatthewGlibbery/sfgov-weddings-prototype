@@ -12,7 +12,7 @@ import type {
   Override
 } from './types'
 import { hook } from './utils'
-import { classed } from '../components/utils'
+import { classed, classes } from '../components/utils'
 
 // @ts-expect-error not typescript
 import formioStyle from './bootstrap.css'
@@ -115,6 +115,19 @@ export function useFormio(isDev?: boolean) {
       info('renderTemplate(', args, ') ->', typeof content)
       return Array.isArray(content) ? content.join('') : content
     })
+
+    const HTMLElementPrototype = Components.components.htmlelement.prototype
+    hook(
+      HTMLElementPrototype,
+      'renderTemplate',
+      (renderTemplate, template, context, ...args) => {
+        const content = renderTemplate(template, context, ...args)
+
+        return modifyHTMLElementClassname(
+          Array.isArray(content) ? content.join('') : content
+        )
+      }
+    )
   })
 
   function FormioForm(props: FormProps) {
@@ -254,6 +267,49 @@ function once<T extends object>(obj: T, fn: (obj: T) => void) {
     fn(obj)
     INITIALIZED.set(obj, true)
   }
+}
+
+export function modifyHTMLElementClassname(value?: string) {
+  const defaultCalloutClasses = [
+    'border',
+    'border-2',
+    'callout-titles:text-heading-lg',
+    'callout-titles:font-bold',
+    'link:text-primary500'
+  ]
+  const replaced = value
+    ?.replace(
+      /\bbg-blue-1\b/g,
+      classes([
+        ...defaultCalloutClasses,
+        'bg-information10',
+        'border-information600',
+        'callout-titles:text-information600'
+      ])
+    )
+    .replace(/\bfg-blue-4\b/g, classes('text-information400'))
+    .replace(
+      /\bbg-green-1\b/g,
+      classes([
+        ...defaultCalloutClasses,
+        'bg-success10',
+        'border-success600',
+        'callout-titles:text-success600'
+      ])
+    )
+    .replace(/\bfg-green-4\b/g, classes('text-success400'))
+    .replace(
+      /\bbg-red-1\b/,
+      classes([
+        ...defaultCalloutClasses,
+        'bg-danger10',
+        'border-danger600',
+        'callout-titles:text-danger600'
+      ])
+    )
+    .replace(/\bfg-red-4\b/g, classes('text-danger400'))
+
+  return replaced
 }
 
 function noop() {

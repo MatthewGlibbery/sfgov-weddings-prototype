@@ -3,9 +3,10 @@ import { Components, Formio } from '@formio/react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import mockConsole from 'jest-mock-console'
 import React from 'react'
-import type { Form, InputComponentSchema } from '../formio'
+import type { Form, HTMLElementSchema, InputComponentSchema } from '../formio'
 import { rewriteLibraryUrl } from '../formio'
 import { FORM_CLASS } from '../formio/constants.mjs'
+import { modifyHTMLElementClassname } from '../formio/index'
 import {
   ColumnsFactory,
   ComponentFactory,
@@ -14,6 +15,7 @@ import {
   WizardFactory
 } from '../formio/factories'
 import basicForm from '../__fixtures__/forms/basic.json'
+import callouts from '../__fixtures__/forms/callouts.json'
 import FormioForm from './FormioForm'
 
 let restoreConsole: ReturnType<typeof mockConsole>
@@ -341,6 +343,125 @@ describe('FormioForm', () => {
         })
       })
     })
+  })
+
+  describe('callouts', () => {
+    it('replaces the bg-blue-1 and fg-blue-4 classes with expected Tailwind classes', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [callouts.components[0] as HTMLElementSchema]
+          })}
+        />
+      )
+
+      const alert = screen.getByRole('alert')
+      const classes = Array.from(alert.classList)
+      const defaultCalloutClasses = [
+        'border-2',
+        'callout-titles:text-heading-lg',
+        'callout-titles:font-bold'
+      ]
+      const expectedClasses = [
+        ...defaultCalloutClasses,
+        'bg-information10',
+        'border-information600',
+        'callout-titles:text-information600'
+      ]
+
+      expect(alert).toBeInTheDocument()
+      expect(classes).toEqual(expect.arrayContaining(expectedClasses))
+      expect(classes).not.toContain('bg-blue-1')
+
+      const icon = document.querySelector('span[data-icon=alert]')
+      expect(icon!.classList).toContain('text-information400')
+      expect(icon!.classList).not.toContain('fg-blue-4')
+    })
+
+    it('replaces the bg-green-1 and fg-green-4 class with expected Tailwind classes', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [callouts.components[1] as HTMLElementSchema]
+          })}
+        />
+      )
+
+      const alert = screen.getByRole('alert')
+      const classes = Array.from(alert.classList)
+      const defaultCalloutClasses = [
+        'border-2',
+        'callout-titles:text-heading-lg',
+        'callout-titles:font-bold',
+        'link:text-primary500'
+      ]
+      const expectedClasses = [
+        ...defaultCalloutClasses,
+        'bg-success10',
+        'border-success600',
+        'callout-titles:text-success600'
+      ]
+
+      expect(alert).toBeInTheDocument()
+      expect(classes).toEqual(expect.arrayContaining(expectedClasses))
+      expect(classes).not.toContain('bg-green-1')
+
+      const icon = document.querySelector('span[data-icon=check]')
+      expect(icon!.classList).toContain('text-success400')
+      expect(icon!.classList).not.toContain('fg-green-4')
+    })
+    it('replaces the bg-red-1 and fg-red-4 classes with expected Tailwind classes', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [callouts.components[2] as HTMLElementSchema]
+          })}
+        />
+      )
+
+      const alert = screen.getByRole('alert')
+      const classes = Array.from(alert.classList)
+      const defaultCalloutClasses = [
+        'border-2',
+        'callout-titles:text-heading-lg',
+        'callout-titles:font-bold',
+        'link:text-primary500'
+      ]
+      const expectedClasses = [
+        ...defaultCalloutClasses,
+        'bg-danger10',
+        'border-danger600',
+        'callout-titles:text-danger600'
+      ]
+
+      expect(alert).toBeInTheDocument()
+      expect(classes).toEqual(expect.arrayContaining(expectedClasses))
+      expect(classes).not.toContain('bg-red-1')
+
+      const icon = document.querySelector('span[data-icon=delete]')
+      expect(icon!.classList).toContain('text-danger400')
+      expect(icon!.classList).not.toContain('fg-red-4')
+    })
+    it('renders and replaces nothing if the className and content properties are not in the schema', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [callouts.components[3] as HTMLElementSchema]
+          })}
+        />
+      )
+
+      const alert = screen.getByRole('alert')
+      expect(alert).toBeInTheDocument()
+      const classes = Array.from(alert.classList)
+      expect(classes).toEqual(['formio-component-htmlelement'])
+    })
+  })
+})
+
+describe('modifyHTMLElementClassname()', () => {
+  it('returns undefined if undefined is received', () => {
+    expect(modifyHTMLElementClassname(undefined)).toEqual(undefined)
   })
 })
 

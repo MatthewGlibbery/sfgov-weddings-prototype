@@ -701,6 +701,21 @@ module.exports = {
     }
   },
   Success: {
+    10: {
+      value: '#F3FAF0',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#F3FAF0',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
+      },
+      name: '10',
+      attributes: {},
+      path: ['Success', '10']
+    },
     100: {
       value: '#def1d6',
       type: 'color',
@@ -1005,6 +1020,21 @@ module.exports = {
     }
   },
   Danger: {
+    10: {
+      value: '#FFF4F1',
+      type: 'color',
+      description: 'Shade color with 93.6% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#FFF4F1',
+        type: 'color',
+        description: 'Shade color with 93.6% of lightness'
+      },
+      name: '10',
+      attributes: {},
+      path: ['Danger', '10']
+    },
     100: {
       value: '#ffe0d9',
       type: 'color',
