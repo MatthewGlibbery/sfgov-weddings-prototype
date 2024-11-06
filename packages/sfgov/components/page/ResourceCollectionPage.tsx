@@ -41,7 +41,7 @@ export const ResourceCollectionPage: ComponentType<{
     <PageWrapper title={title}>
       <Container className="flex flex-col gap-y-60">
         <div className="flex flex-col">
-          <PageTitleSection title={title} label={t('Resource collection')}>
+          <PageTitleSection title={title} label={t('resource-collection', { defaultValue: 'Resource collection' })}>
             {description ? (
               <DisplayLg
                 as="p"
@@ -55,7 +55,7 @@ export const ResourceCollectionPage: ComponentType<{
               <PageLinksList
                 data-testid="related-topics-list"
                 pageLinks={relatedTopics}
-                label={t('Part of: ', { defaultValue: 'Part of: ' })}
+                label={t('part-of', { defaultValue: 'Part of' })}
               />
             ) : null}
           </PageTitleSection>
@@ -79,7 +79,7 @@ export const ResourceCollectionPage: ComponentType<{
                 return (
                   <div className="grid gap-y-20" key={i}>
                     <HeadingXXl as="h2" className="!mb-0" id="resources">
-                      {t('Resources')}
+                    {t('resources', { defaultValue: 'Resources' })}
                     </HeadingXXl>
                     {item.value.map((resourceSection, j) => {
                       return (
@@ -100,7 +100,7 @@ export const ResourceCollectionPage: ComponentType<{
                 return (
                   <div className="grid gap-y-20" key={i}>
                     <HeadingXXl as="h2" className="!mb-0" id="data">
-                      {t('Data')}
+                    {t('data', { defaultValue: 'Data' })}
                     </HeadingXXl>
                     {item.value.map((dataStorySection, j) => {
                       return (
@@ -121,7 +121,7 @@ export const ResourceCollectionPage: ComponentType<{
                 return (
                   <div className="grid gap-y-20" key={i}>
                     <HeadingXXl as="h2" className="!mb-0" id="documents">
-                      {t('Documents')}
+                    {t('documents', { defaultValue: 'Documents' })}
                     </HeadingXXl>
                     {item.value.map((documentSection, j) => (
                       <DocumentSectionBlock
@@ -149,7 +149,7 @@ export const ResourceCollectionPage: ComponentType<{
           {agencies.length ? (
             <RelatedContentList
               content={agencies}
-              title={t('Partner agencies')}
+              title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
               data-testid="partner-agencies-list"
             />
           ) : null}

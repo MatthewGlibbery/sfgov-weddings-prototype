@@ -26,7 +26,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
   return (
     <PageWrapper>
       <h1 className="sr-only">
-        {t('welcome to sf.gov', { defaultValue: 'Welcome to SF.gov' })}
+        {t('welcome-to-sf-gov', { defaultValue: 'Welcome to SF.gov' })}
       </h1>
       {spotlight ? (
         <div className="mb-20 max-w-xl lg:mx-96 xl:mx-auto">

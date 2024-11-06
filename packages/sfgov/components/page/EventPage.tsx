@@ -137,13 +137,13 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
         </Grid>
         <RelatedContentList
           id="divisions"
-          title={t('partner_agencies', { defaultValue: 'Partner agencies' })}
+          title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
           content={agencies}
         />
         {contacts.length ? (
           <div>
             <HeadingXXl as="h2" className="mb-space-lg">
-              {t('contact_us', { defaultValue: 'Contact us' })}
+              {t('contact-us', { defaultValue: 'Contact us' })}
             </HeadingXXl>
             <ContactFooter items={contacts[0]} />
           </div>

@@ -25,7 +25,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
   return (
     <PageWrapper title={title}>
       <Container className="mb-20 pb-40">
-        <PageTitleSection label={t('Report')} title={title}>
+        <PageTitleSection label={t('report', { defaultValue: 'Report' })} title={title}>
           <ComposedDate startDateInput={date} />
         </PageTitleSection>
       </Container>
@@ -51,7 +51,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
         {printVersion ? (
           <div>
             <HeadingXl as="h3" className="mb-20">
-              {t('Print version')}
+            {t('print-version', { defaultValue: 'Print version' })}
             </HeadingXl>
             <DocumentLink document={printVersion} />
           </div>
@@ -59,7 +59,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
         {agencies.length ? (
           <div className="md:mt-60">
             <RelatedContentList
-              title={t('Partner agencies')}
+              title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
               content={agencies}
             />
           </div>

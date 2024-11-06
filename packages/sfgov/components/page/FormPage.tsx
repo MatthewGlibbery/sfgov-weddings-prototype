@@ -50,6 +50,8 @@ export function FormPage({
   const [submitted, setSubmitted] = useState(
     initialSubmitted || queryParams?.get('submitted') === 'true'
   )
+  const formString = t('form', {defaultValue: 'Form'})
+  const formSubmittedString = t('form-submitted', {defaultValue: 'Form submitted'})
 
   return (
     <PageWrapper title={title}>
@@ -57,7 +59,7 @@ export function FormPage({
         <div className="space-y-12 mb-40">
           <PageTitleSection
             title={submitted ? confirmationTitle : title}
-            label={submitted ? t('Form submitted') : t('Form')}
+            label={submitted ? formSubmittedString : formString}
           ></PageTitleSection>
           <PageLinksList pageLinks={agencies} />
         </div>
@@ -67,7 +69,7 @@ export function FormPage({
               <ConfirmationContent key={block.id} block={block} />
             ))}
             <HeadingXXl as="h2" className="flex flex-row gap-8">
-              {t('Contact us')}
+              {t('contact-us', { defaultValue: 'Contact us' })}
             </HeadingXXl>
             {/* FIXME is this a problem here or in ContactFooter? */}
             <ContactFooter
@@ -146,7 +148,7 @@ function Loading(props: DynamicOptionsLoadingProps) {
   const error = props.error || props.timedOut ? 'Timed out' : undefined
   return (
     <div>
-      {props.isLoading ? t('Loading...') : t('Error: {{error}}', { error })}
+      {props.isLoading ? t('form-loading', { defaultValue: 'Loading...' }) : t('Error: {{error}}', { error })}
     </div>
   )
 }

@@ -5,7 +5,6 @@
 import { readFileSync } from 'fs'
 import chalk from 'chalk'
 
-const translationsApiUrl = 'http://localhost:8000/api/cms/cms.InlineDisplay'
 const delay = 200
 
 try {
@@ -18,7 +17,7 @@ try {
       (key, val) => {
         // global.fetch requires node 18
         global
-          .fetch(translationsApiUrl, {
+          .fetch(`${process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL}/cms.InlineDisplay`, {
             method: 'POST',
             body: JSON.stringify({
               slug: key,

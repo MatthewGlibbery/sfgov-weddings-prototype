@@ -88,7 +88,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
             {additionalRoles.length ? (
               <aside className="flex flex-col gap-28 order-1 md:w-full lg:order-2 lg:w-1/3">
                 <HeadingXl className="font-slab !mb-0">
-                  {t('Additional roles', {
+                  {t('additional-roles', {
                     defaultValue: 'Additional roles'
                   })}
                 </HeadingXl>

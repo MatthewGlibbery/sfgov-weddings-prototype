@@ -40,7 +40,7 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
               <div className="mb-20 flex flex-col">
                 <PageTitleSection
                   title={title}
-                  label={t('Info Page', { defaultValue: 'Info Page' })}
+                  label={t('info-page', { defaultValue: 'Info Page' })}
                 >
                   {description ? (
                     <DisplayLg
@@ -57,7 +57,7 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
                   {partOf.length ? (
                     <div className="my-space-xxl">
                       <PageLinksList
-                        label={t('Part of', { defaultValue: 'Part of ' }) || ''}
+                        label={t('part-of', { defaultValue: 'Part of ' }) || ''}
                         pageLinks={partOf}
                       />
                     </div>
@@ -70,17 +70,17 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
             <InfoSectionList as="main" blocks={infoSections} />
             <RelatedContentList
               id="divisions"
-              title="Departments" /* FIXME: translate */
+              title={t('departments', { defaultValue: 'Departments' })}
               content={agencies}
             />
             <RelatedContentList
               id="topics"
-              title="Topics" /* FIXME: translate */
+              title={t('topics', { defaultValue: 'Topics' })}
               content={topics}
             />
             <RelatedContentList
               id="related"
-              title="Related" /* FIXME: translate */
+              title={t('related', { defaultValue: 'Related' })}
               content={pages}
             />
           </div>

@@ -14,7 +14,10 @@ export const SiteHeader = (props: SiteHeaderProps) => {
     <header className="mb-40" role="banner" {...props}>
       {searchParams?.get('preview') === 'true' ? (
         <Alert
-          description={t('You are previewing a draft.')}
+          description={t('you-are-previewing-a-draft', {
+            defaultValue: 'You are previewing a draft'
+          })}
+
           variant="preview"
         />
       ) : null}

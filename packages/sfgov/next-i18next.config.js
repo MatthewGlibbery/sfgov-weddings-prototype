@@ -24,8 +24,12 @@ module.exports = {
        * - In tests, next/jest requires its config (which requires this file)
        *   before jest.setup.js runs, preventing us from mocking `process.env`
        */
-      loadPath: process.env.TRANSLATIONS_STATIC_STRINGS_URL,
-      parse(data) {
+      loadPath: `${process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL}/cms.InlineDisplayText`,
+      customHeaders: {
+        Authorization: `Token ${process.env.TRANSLATIONS_API_TOKEN}`,
+      },
+    
+      parse: function parse(data) { 
         // Note 1:
         // Somewhat fraught with peril as this could potentially get out of sync
         // with the translations server. We can ask for this from the server
@@ -34,10 +38,6 @@ module.exports = {
         // this function) but it requires a further unwinding of values being
         // setup and referenced through out the code.
         // TODO: Make localesMap dynamic and pull from server
-        // Note 2:
-        // "zh" for Chinese is okay here, but if we use dynamic locales from the
-        // server, we use zh-hant as the code.. so we'll need to reconcile that
-        // as this code base uses "zh" and relies on that.
         const localesMap = {
           1: 'en',
           2: 'es',
@@ -51,7 +51,7 @@ module.exports = {
         })
 
         JSON.parse(data).forEach((i) => {
-          const loc = localesMap[i.locale.split('/').pop()]
+          const loc = localesMap[i.locale]
           translationStrings[loc].common[i.slug] = i.text
         })
 
