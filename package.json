@@ -19,6 +19,7 @@
   "dependencies": {
     "@types/node": "18.14.2",
     "autoprefixer": "^10.4.14",
+    "i18next-parser": "^9.0.2",
     "node-factory": "^0.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -47,7 +48,6 @@
     "eslint-plugin-sfgov": "^2.0.0",
     "eslint-plugin-testing-library": "^5.10.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "i18next-parser": "^9.0.2",
     "jest": "^29.4.1",
     "jest-environment-jsdom": "^29.4.1",
     "jest-fetch-mock": "^3.0.3",

@@ -68,7 +68,8 @@ export default {
   input: [
     'packages/sfgov/**',
     '!**/*.spec.tsx',
-    '!packages/sfgov/node_modules/**'
+    '!packages/sfgov/node_modules/**',
+    '!packages/sfgov/public/**'
   ],
 
   // An array of globs that describe where to look for source files

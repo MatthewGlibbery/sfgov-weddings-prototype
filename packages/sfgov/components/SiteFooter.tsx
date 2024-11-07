@@ -43,7 +43,7 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
     },
     {
       href: '/contact',
-      text: t('contact us', { defaultValue: 'Contact us' })
+      text: t('contact-us', { defaultValue: 'Contact us' })
     }
   ]
 
@@ -91,7 +91,7 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
         </div>
         <div className="mb-40 md:flex-col">
           <HeadingMd as="p" className="text-white">
-            {t('our city', { defaultValue: 'Our City' })}
+            {t('our-city', { defaultValue: 'Our City' })}
           </HeadingMd>
           <div className="flex flex-wrap gap-x-16 md:flex-col md:gap-y-12">
             {links.map((link, i) => (
@@ -113,7 +113,7 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
           </HeadingMd>
           <div className="flex flex-wrap gap-x-16 md:flex-col md:gap-y-12">
             <Link className="text-white" href="/#">
-              {t('privacy policy', { defaultValue: 'Privacy policy' })}
+              {t('privacy-policy', { defaultValue: 'Privacy policy' })}
             </Link>
             <Link className="text-white" href="/#">
               {t('disclaimer', { defaultValue: 'Disclaimer' })}
