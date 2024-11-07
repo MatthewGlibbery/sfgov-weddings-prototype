@@ -111,10 +111,10 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           <div
             className={classes(
               themeBackground.imageWithText,
-              'text-white py-28 md:rounded-4'
+              'text-white md:rounded-4 max-w-xl lg:mx-auto'
             )}
           >
-            <div className="flex flex-col mx-20">
+            <div className="flex flex-col md:rounded-4 p-20 md:p-28 lg:p-40 gap-x-28 gap-y-20 max-w-xl lg:mx-auto">
               {content.value.image ? (
                 <Image className="mb-16" imageRef={content.value.image} />
               ) : null}
@@ -162,7 +162,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       }
       case 'accordion_section':
         return (
-          <div className="mx-20 md:mx-0 space-y-20">
+          <Container className="space-y-20">
             {content.value.title ? (
               <HeadingXXl as="h2">{content.value.title}</HeadingXXl>
             ) : null}
@@ -190,7 +190,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                 })}
               </Accordion>
             ))}
-          </div>
+          </Container>
         )
       case 'video':
         return (
@@ -235,17 +235,21 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           </DisplayXXXl>
         </div>
       </Container>
-      <div className="relative top-[100px] xl:top-[250px] mb-[200px] xl:mb-[400px] max-w-lg md:mx-16 lg:mx-auto">
+      <div className="relative top-[100px] xl:top-[250px] mb-[200px] xl:mb-[400px] space-y-20 md:space-y-40 lg:space-y-60 mt-60">
         {spotlight1.length ? (
-          <Spotlight
-            theme={theme}
-            themeClasses={themeText.spotlight1}
-            buttonClasses={themeButton.spotlight1}
-            {...spotlight1[0]}
-          />
+          <div className="mb-20 max-w-xl lg:mx-auto">
+            <Spotlight
+              theme={theme}
+              themeClasses={themeText.spotlight1}
+              buttonClasses={themeButton.spotlight1}
+              {...spotlight1[0]}
+            />
+          </div>
         ) : null}
         <Container className="mb-20">
-          <HeadingXXl as="h2">{factsTitle}</HeadingXXl>
+          <HeadingXXl as="h2" className="!mb-20">
+            {factsTitle}
+          </HeadingXXl>
           {factItems.length ? (
             <Grid className="gap-28">
               {factItems.map((item) => {
@@ -260,7 +264,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                       <Image
                         key={image?.id}
                         imageRef={image}
-                        className="mb-20"
+                        className="mb-20 aspect-[3/2]"
                       />
                     ) : null}
                     {titleAndText ? (
@@ -278,21 +282,23 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
             </Grid>
           ) : null}
         </Container>
-        {spotlight2.length ? (
-          <Spotlight
-            theme={theme}
-            secondary="true"
-            themeClasses={themeText.spotlight2}
-            buttonClasses={themeButton.spotlight2}
-            {...spotlight2[0]}
-          />
-        ) : null}
         {additionalContent.map((content) => (
           <div key={content.id} className="mb-20 md:mb-40 lg:mb-60">
             {getAdditionalContentComponent(content)}
           </div>
         ))}
-        <Container className="flex flex-col md:gap-40 lg:gap-60">
+        {spotlight2.length ? (
+          <div className="mb-20 max-w-xl lg:mx-auto">
+            <Spotlight
+              theme={theme}
+              secondary="true"
+              themeClasses={themeText.spotlight2}
+              buttonClasses={themeButton.spotlight2}
+              {...spotlight2[0]}
+            />
+          </div>
+        ) : null}
+        <Container className="flex flex-col gap-20 md:gap-40 lg:gap-60">
           {about ? (
             <div>
               <HeadingXXl as="h2" className="mb-[20px]">
