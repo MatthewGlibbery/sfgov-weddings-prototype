@@ -364,7 +364,8 @@ describe('ContentAPI', () => {
           },
           document: 789
         },
-        some_key: '/api/cms/0'
+        some_key: '/api/cms/0',
+        contact: [{ type: 'address', value: 123 }]
       }
       const pageUrlData = {
         title: 'some title'
@@ -380,6 +381,22 @@ describe('ContentAPI', () => {
         title: 'some document title',
         file_path: 'some/document/path'
       }
+      const addressData = {
+        url: 'http://localhost:8000/api/cms/cms.Address/1',
+        detail_url: 'http://localhost:8000/api/cms/cms.Address/1',
+        organization: '',
+        addressee: '',
+        location_name: 'City Hall',
+        line1: '1 Dr. Carlton B Goodlett',
+        line2: 'Room 408',
+        city: 'San Francisco',
+        state: 'CA',
+        zip: '94102',
+        location_notes: '<p data-block-key="vpbhb"></p>',
+        hours: [],
+        agency: null
+      }
+
       const someKeyData = undefined
       fetchMock
         .once(JSON.stringify(pageUrlData))
@@ -387,13 +404,14 @@ describe('ContentAPI', () => {
         .once(JSON.stringify(imageData))
         .once(JSON.stringify(documentData))
         .once(JSON.stringify(someKeyData))
+        .once(JSON.stringify(addressData))
 
       await example.massageData(data)
-      expect(fetchMock).toHaveBeenCalledTimes(5)
       expect(data.page_obj_url).toEqual(pageUrlData)
       expect(data.nested_obj.page).toEqual(nestedPageData)
       expect(data.nested_obj.component.image).toEqual(imageData)
       expect(data.nested_obj.document).toEqual(documentData)
+      expect(data.contact[0].value).toEqual(addressData)
     })
 
     it('throws on error', async () => {

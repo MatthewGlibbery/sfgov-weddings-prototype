@@ -161,13 +161,21 @@ export class ContentAPI implements IContentAPI {
         fetchUrl = value
       }
 
+      if (key === 'type' && value === 'address') {
+        fetchUrl = `${this.previewURL}/cms.Address/${obj.value}`
+      }
+
       if (fetchUrl) {
         try {
           const res = await this.fetch(fetchUrl)
           const data = await res.json().catch(() => {
             return value
           })
-          obj[key] = data
+          if (key === 'type' && value === 'address') {
+            obj.value = data
+          } else {
+            obj[key] = data
+          }
         } catch (error) {
           console.error(
             `Could not fetch data at ${fetchUrl} for key: ${key} with value ${value}. ${error}`
