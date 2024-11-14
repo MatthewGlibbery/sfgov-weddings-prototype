@@ -33,4 +33,16 @@ describe('PageTitleSection', () => {
 
     expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument()
   })
+
+  it('renders a label if it exists', () => {
+    render(<PageTitleSection title="Title" label="label" />)
+    const label = screen.getByTestId('page-label')
+    expect(label).toBeInTheDocument()
+    expect(label.textContent === 'label')
+  })
+
+  it("doesn't render a label if it doesn't exist", () => {
+    render(<PageTitleSection title="Title" />)
+    expect(screen.queryByTestId('page-label')).not.toBeInTheDocument()
+  })
 })

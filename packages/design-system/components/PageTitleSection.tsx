@@ -13,7 +13,8 @@ export const PageTitleSection = ({
   children
 }: ComponentProps<PageTitleSectionProps>) => (
   <>
-    <PageLabel label={label.replace(/_/g, ' ')} />
+    {label ? <PageLabel label={label.replace(/_/g, ' ')} /> : null}
+
     {title ? (
       <>
         <DisplayXXXl as="h1" className="my-12 md:my-20">

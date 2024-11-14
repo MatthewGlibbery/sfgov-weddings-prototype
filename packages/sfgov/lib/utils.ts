@@ -1,4 +1,6 @@
 import { IContentAPI, PageData, WagtailImageData } from '@/types'
+import { TFunction } from 'i18next'
+import { useTranslation } from 'next-i18next'
 
 export function getPageURL(page: PageData) {
   let meta = page?.meta
@@ -49,4 +51,28 @@ export function camelCase(str: string | undefined) {
       return index === 0 ? word.toLowerCase() : word.toUpperCase()
     })
     .replace(/\s+/g, '')
+}
+
+export function getHeaderLinks(t: TFunction) {
+  return [
+    { href: '/services', text: t('services', { defaultValue: 'Services' }) },
+    {
+      href: '/departments',
+      text: t('departments', { defaultValue: 'Departments' })
+    },
+    {
+      href: 'https://careers.sf.gov',
+      text: t('jobs', { defaultValue: 'Jobs' })
+    }
+  ]
+}
+
+export function getFooterLinks(t: TFunction) {
+  return [
+    ...getHeaderLinks(t),
+    {
+      href: '/contact',
+      text: t('contact us', { defaultValue: 'Contact us' })
+    }
+  ]
 }

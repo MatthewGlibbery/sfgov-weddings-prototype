@@ -5,7 +5,7 @@ type PageLabelProps = {
 }
 
 export const PageLabel = ({ label }: PageLabelProps) => (
-  <span className="space-y-0">
+  <span className="space-y-0" data-testid="page-label">
     <HeadingSm as="p" className="text-accent500 !mb-0">
       {/**
        * FIXME: we should not be uppercasing translated strings here.

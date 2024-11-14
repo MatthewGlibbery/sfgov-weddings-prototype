@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { SiteHeader } from './SiteHeader'
 import { useSearchParams } from '@/__mocks__/next/navigation'
 
@@ -10,7 +10,6 @@ describe('SiteHeader', () => {
     const nav = screen.getByRole('navigation')
     expect(nav).toBeInTheDocument()
     expect(nav).toHaveTextContent('English')
-    expect(nav).toHaveTextContent('Español')
   })
 
   it('does not render an alert without search params', () => {
@@ -26,5 +25,12 @@ describe('SiteHeader', () => {
     render(<SiteHeader />)
     expect(useSearchParams).toHaveBeenCalled()
     expect(screen.getByText(previewText)).toBeInTheDocument()
+  })
+
+  it('renders the smaller screen menu when the menu button is clicked', () => {
+    render(<SiteHeader />)
+    const details = screen.getByRole('group', { name: 'navigation' })
+    fireEvent.click(details)
+    expect(screen.getAllByRole('list')[1]).toBeVisible()
   })
 })

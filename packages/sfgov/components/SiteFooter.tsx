@@ -11,6 +11,7 @@ import {
 } from '@/design-system'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
+import { getFooterLinks } from '@/lib/utils'
 import { LanguageSelector } from './LanguageSelector'
 import footerSeal from '../public/static/footer-seal.svg'
 import rearFog from '../public/static/rear-fog.svg'
@@ -27,25 +28,7 @@ export type SiteFooterProps = ComponentProps<typeof StyledFooter>
 
 export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
   const { t } = useTranslation()
-
-  const links = [
-    {
-      href: '/services',
-      text: t('services', { defaultValue: 'Services' })
-    },
-    {
-      href: '/departments',
-      text: t('departments', { defaultValue: 'Departments' })
-    },
-    {
-      href: '/jobs',
-      text: t('jobs', { defaultValue: 'Jobs' })
-    },
-    {
-      href: '/contact',
-      text: t('contact-us', { defaultValue: 'Contact us' })
-    }
-  ]
+  const links = getFooterLinks(t)
 
   return (
     <StyledFooter role="contentinfo" {...rest}>
