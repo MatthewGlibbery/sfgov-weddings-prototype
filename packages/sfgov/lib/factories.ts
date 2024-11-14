@@ -62,7 +62,8 @@ import {
   TypeDateTimeValues,
   TypeBodyTextBlock,
   TypeContactFooterBlock,
-  HomePageData
+  HomePageData,
+  TypeTableBlock
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -1370,7 +1371,7 @@ export const ReportPageFactory = factory<ReportPageData>((gen) => ({
   }),
   title: 'Report page title',
   date: gen.date.soon().toString().split('T')[0],
-  content: [BodyTextBlockFactory.make()],
+  content: [BodyTextBlockFactory.make(), TableBlockFactory.make()],
   spotlight: [SpotlightFactory.make()],
   print_version: DocumentValueFactory.make(),
   partner_agencies: RelatedContentBlockFactory.make(3, {
@@ -1496,6 +1497,54 @@ export const HomePageFactory = factory<HomePageData>((gen) => ({
   top_services: ServiceTileFactory.make(4),
   featured_topics: TopicTileFactory.make(4),
   sf_government: ProfileGroupFactory.make(2)
+}))
+
+export const TableBlockFactory = factory<TypeTableBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'table',
+  value: {
+    table_header_options: 'row',
+    table: {
+      columns: [
+        {
+          type: 'rich_text',
+          heading: 'a column heading'
+        },
+        {
+          type: 'rich_text',
+          heading: 'a column heading'
+        },
+        {
+          type: 'rich_text',
+          heading: 'a column heading'
+        }
+      ],
+      rows: [
+        {
+          values: [
+            '<p data-block-key="aoeym">ello!</p>',
+            '<p data-block-key="aoeym">Table text</p>',
+            '<p data-block-key="vf47l">asd</p>'
+          ]
+        },
+        {
+          values: [
+            '<p data-block-key="vf47l">gold</p>',
+            '<p data-block-key="vf47l">asdasd</p>',
+            '<p data-block-key="vf47l">asd</p>'
+          ]
+        },
+        {
+          values: [
+            '<p data-block-key="vf47l">golf!</p>',
+            '<p data-block-key="vf47l">asdasd</p>',
+            '<p data-block-key="vf47l">asd</p>'
+          ]
+        }
+      ],
+      caption: "it's a table"
+    }
+  }
 }))
 
 export const ALL_AGENCY_NAMES = [

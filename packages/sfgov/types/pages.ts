@@ -35,7 +35,8 @@ import type {
   TypeDivisionsSubcommitteeBlock,
   TypeDateTimeValues,
   TypeDocumentBlock,
-  TypeTileBlockValues
+  TypeTileBlockValues,
+  TypeTableBlock
 } from './blocks'
 import type { WagtailImageData } from './images'
 
@@ -296,7 +297,7 @@ export type ReportPageData = PageData & {
   date: string
   print_version: TypeDocumentBlock | undefined
   spotlight: TypeSpotlightBlock[]
-  content: TypeBodyTextBlock[]
+  content: (TypeBodyTextBlock | TypeTableBlock)[]
   partner_agencies: RelatedContentData[]
 }
 

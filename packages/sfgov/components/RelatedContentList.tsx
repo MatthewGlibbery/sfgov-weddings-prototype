@@ -42,7 +42,7 @@ export const RelatedContentList = ({
       <HeadingXXl as="h2" className="mb-[20px]">
         {title}
       </HeadingXXl>
-      <div className="flex flex-col md:grid md:grid-cols-3 gap-28">
+      <div className="flex flex-col md:grid md:grid-cols-3 gap-x-28">
         {content.map((item: RelatedContentData, i) => (
           <Content key={i} item={item} />
         ))}

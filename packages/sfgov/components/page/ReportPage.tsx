@@ -1,4 +1,4 @@
-import { Container, HeadingXl, PageTitleSection } from '@/design-system'
+import { Container, Grid, HeadingXl, PageTitleSection } from '@/design-system'
 import type { ReportPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 import type { ComponentType } from 'react'
@@ -7,6 +7,7 @@ import { DocumentLink } from '../DocumentLink'
 import { RelatedContentList } from '../RelatedContentList'
 import { RichText } from '../RichText'
 import { Spotlight } from '../Spotlight'
+import { Table } from '../Table'
 import { PageWrapper } from './PageWrapper'
 
 export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
@@ -25,41 +26,52 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
   return (
     <PageWrapper title={title}>
       <Container className="mb-20 pb-40">
-        <PageTitleSection label={t('report', { defaultValue: 'Report' })} title={title}>
+        <PageTitleSection
+          label={t('report', { defaultValue: 'Report' })}
+          title={title}
+        >
           <ComposedDate startDateInput={date} />
         </PageTitleSection>
       </Container>
       {spotlight ? (
-        <div className="mb-20 max-w-xl lg:mx-auto">
+        <div className="mb-20 lg:mb-60 max-w-xl lg:mx-auto">
           <Spotlight {...spotlight} />
         </div>
       ) : null}
-      <Container className="space-y-40">
-        {content?.map((contentSection) => {
-          switch (contentSection.type) {
-            case 'body':
-              return (
-                <div className="flex flex-col gap-y-28">
-                  <RichText html={contentSection.value} />
-                </div>
-              )
-            /* istanbul ignore next */
-            default:
-              return <></>
-          }
-        })}
-        {printVersion ? (
-          <div>
-            <HeadingXl as="h3" className="mb-20">
-            {t('print-version', { defaultValue: 'Print version' })}
-            </HeadingXl>
-            <DocumentLink document={printVersion} />
+      <Container className="mb-60">
+        <Grid>
+          <div className="col-span-full lg:col-span-7 space-y-40 lg:space-y-60">
+            {content?.map((contentSection) => {
+              switch (contentSection.type) {
+                case 'body':
+                  return (
+                    <div className="flex flex-col gap-y-28">
+                      <RichText html={contentSection.value} />
+                    </div>
+                  )
+                case 'table':
+                  return <Table {...contentSection.value} />
+                /* istanbul ignore next */
+                default:
+                  return <></>
+              }
+            })}
+            {printVersion ? (
+              <div>
+                <HeadingXl as="h3" className="mb-20">
+                  {t('print-version', { defaultValue: 'Print version' })}
+                </HeadingXl>
+                <DocumentLink document={printVersion} />
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        </Grid>
         {agencies.length ? (
-          <div className="md:mt-60">
+          <div className="mt-40 lg:mt-60">
             <RelatedContentList
-              title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
+              title={t('partner-agencies', {
+                defaultValue: 'Partner agencies'
+              })}
               content={agencies}
             />
           </div>

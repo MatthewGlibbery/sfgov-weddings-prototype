@@ -479,3 +479,25 @@ export type TypeDivisionsSubcommitteeBlock = BlockType<
 >
 
 export type TypeBodyTextBlock = BlockType<'body', string>
+
+type TypeColumnCellValues = {
+  type: string
+  heading: string
+}
+
+type TypeRowCellValues = {
+  values: string[]
+}
+
+export type TypeTableValues = {
+  columns: TypeColumnCellValues[]
+  rows: TypeRowCellValues[]
+  caption: string
+}
+
+export type TypeTableBlockValues = {
+  table_header_options?: 'row' | 'column' | 'both' | 'neither'
+  table: TypeTableValues
+}
+
+export type TypeTableBlock = BlockType<'table', TypeTableBlockValues>
