@@ -145,8 +145,9 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
             )
           }
         )
+
         return (
-          <div className="mx-20 md:mx-0">
+          <Container className="space-y-20 lg:space-y-40">
             <HeadingXXl as="h2">{content.value.title}</HeadingXXl>
             <div>{resourceSections}</div>
             {content.value?.downloadable_resources.length ? (
@@ -155,9 +156,10 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                   defaultValue: 'Downloadable files'
                 })}
                 documents={content.value?.downloadable_resources}
+                isTile={true}
               />
             ) : null}
-          </div>
+          </Container>
         )
       }
       case 'accordion_section':

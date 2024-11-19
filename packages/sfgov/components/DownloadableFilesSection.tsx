@@ -1,11 +1,13 @@
-import { HeadingXl, IconDownload, Link } from '@/design-system'
+import { HeadingXl, IconDocument, IconDownload, Link } from '@/design-system'
 import { TypeDownloadableFilesBlockValues } from '@/types'
+import { FC } from 'react'
+import { ContentTile } from './Tile'
 
 export const DownloadableFilesSection = (
-  props: TypeDownloadableFilesBlockValues
+  props: TypeDownloadableFilesBlockValues & { heading?: FC; isTile?: boolean }
 ) => {
-  const { title, documents, heading } = props
-  let titleComponent
+  const { title, documents, heading, isTile } = props
+  let titleComponent, children
   if (heading) titleComponent = heading
   else
     titleComponent = title ? (
@@ -13,19 +15,36 @@ export const DownloadableFilesSection = (
         {title}
       </HeadingXl>
     ) : null
+
+  if (isTile)
+    children = documents.map((document) => (
+      <ContentTile
+        key={document.value.id}
+        link={{
+          url: document.value.file,
+          title: document.value.title,
+          description: document.value.description || ''
+        }}
+        icon={
+          <IconDocument className="mb-12 text-primary600 shrink-0" width={24} />
+        }
+      />
+    ))
+  else
+    children = documents.map((document) => (
+      <Link
+        href={document.value.file}
+        className="flex gap-4"
+        key={document.value.id}
+      >
+        <IconDownload width={20} />
+        {document.value.title}
+      </Link>
+    ))
   return (
     <div>
       {titleComponent}
-      {documents.map((document) => (
-        <Link
-          href={document.value.file}
-          className="flex gap-4"
-          key={document.value.id}
-        >
-          <IconDownload width={20} />
-          {document.value.title}
-        </Link>
-      ))}
+      {children}
     </div>
   )
 }

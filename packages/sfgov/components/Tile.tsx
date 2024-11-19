@@ -14,7 +14,7 @@ import {
   DisplayXXXl,
   classed
 } from '@/design-system'
-import type { ComponentType, ReactNode } from 'react'
+import type { ComponentType, ReactElement, ReactNode } from 'react'
 import type { TypeTileBlock } from '@/types'
 import { getPageURL } from '@/lib/utils'
 import { ComposedDate, ComposedTime } from './DateTime'
@@ -87,18 +87,25 @@ export const NewsTile = ({ link }: TileProps) =>
 
 export const ContentTile = ({
   link,
-  className = 'py-16 px-12 md:py-20'
-}: TileProps & { className?: string }) => {
+  className = 'py-16 px-12 md:py-20',
+  icon
+}: TileProps & { className?: string; icon?: ReactElement }) => {
   return (
     <BaseTile href={link.url} className={className}>
       <div className="flex items-start justify-between">
         <div className="mr-12 space-y-12">
+          {icon || null}
           <HeadingMd className="m-0 mb-12 text-primary600">
             {link.title}
           </HeadingMd>
-          <p>{link.description}</p>
+          {link.description ? <p>{link.description}</p> : null}
         </div>
-        <IconArrowRight className="mt-2 text-primary600 shrink-0" width={20} />
+        {!icon ? (
+          <IconArrowRight
+            className="mt-2 text-primary600 shrink-0"
+            width={20}
+          />
+        ) : null}
       </div>
     </BaseTile>
   )
