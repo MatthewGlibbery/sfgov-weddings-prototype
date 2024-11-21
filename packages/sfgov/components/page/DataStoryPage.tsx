@@ -13,35 +13,44 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
 
   return (
     <PageWrapper title={title}>
-      <Grid>
-        <Container className="mb-20 pb-40 col-span-8">
-          <PageTitleSection
-            label={t('data-story', { defaultValue: 'Data Story' })}
-            title={title}
-          >
-            {description ? (
-              <DisplayLg className="mb-20" as="p">
-                {description}
-              </DisplayLg>
+      <Container className="mb-20 pb-40">
+        <Grid>
+          <div className="col-span-full">
+            <PageTitleSection
+              label={t('data-story', { defaultValue: 'Data Story' })}
+              title={title}
+            >
+              {description ? (
+                <DisplayLg className="mb-20" as="p">
+                  {description}
+                </DisplayLg>
+              ) : null}
+            </PageTitleSection>
+          </div>
+          <div className="col-span-full lg:col-span-7">
+            {content.length ? (
+              <div className="mt-28 mb-20 flex flex-col gap-28">
+                {content.map((section) => (
+                  <ContentSection
+                    key={section.id}
+                    title={section.value.title}
+                    section_content={section.value.section_content}
+                    noWrapper={true}
+                  />
+                ))}
+              </div>
             ) : null}
-          </PageTitleSection>
-          {content.length ? (
-            <div className="mt-28 mb-20 flex flex-col gap-28">
-              {content.map((section) => (
-                <ContentSection
-                  key={section.id}
-                  title={section.value.title}
-                  section_content={section.value.section_content}
-                />
-              ))}
-            </div>
-          ) : null}
-          <RelatedContentList
-            title={t('partner-agencies', { defaultValue: 'Partner Agencies' })}
-            content={agencies}
-          />
-        </Container>
-      </Grid>
+          </div>
+          <div className="col-span-full">
+            <RelatedContentList
+              title={t('partner-agencies', {
+                defaultValue: 'Partner Agencies'
+              })}
+              content={agencies}
+            />
+          </div>
+        </Grid>
+      </Container>
     </PageWrapper>
   )
 }

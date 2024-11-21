@@ -24,6 +24,7 @@ import { RichText } from './RichText'
 export type TileSectionProps = {
   links?: TypeTileBlock[]
   full?: boolean
+  noDescription?: boolean
 }
 
 export type TileProps = {
@@ -275,12 +276,16 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
     if (!links?.length) return null
     const items = links.map((item) => {
       const title = item.value.title
-      const description =
+      let description =
         item.value.meta?.search_description || item.value.description
-      const url =
-        item.type === 'page' || item.value.meta
-          ? getPageURL(item.value)
-          : item.value.url
+      if (props.noDescription) description = ''
+      let url = item.value.url
+      if ((!item.value.page && item.value.link_to) || item.value.meta) {
+        url = getPageURL(item.value) || ''
+      }
+      if (item.value.page) {
+        url = getPageURL(item.value.page) || ''
+      }
       const meta = item.value.meta
       const date = item.value.date
       // eslint-disable-next-line camelcase

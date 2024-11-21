@@ -70,7 +70,11 @@ export const SiteHeader = (props: SiteHeaderProps) => {
   const { t } = useTranslation()
 
   return (
-    <header className="relative md:static" role="banner" {...props}>
+    <header
+      className="relative shadow md:static md:shadow-none"
+      role="banner"
+      {...props}
+    >
       {searchParams?.get('preview') === 'true' ? (
         <Alert
           description={t('you-are-previewing-a-draft', {
@@ -80,7 +84,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           variant="preview"
         />
       ) : null}
-      <div className="bg-grey100 md:py-40">
+      <div className="mb-20 md:py-40">
         <Container className="mr-0">
           <nav
             role="navigation"

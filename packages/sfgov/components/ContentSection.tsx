@@ -9,21 +9,26 @@ import { RichText } from './RichText'
 import { Timeline } from './Timeline'
 import { TileContentSection } from './TileContentSection'
 import { ContentTileList } from './Tile'
+import React from 'react'
 
 export const ContentSection = ({
   title,
-  section_content: sectionContent
-}: TypeContentSectionBlockValues) => {
+  section_content: sectionContent,
+  noWrapper = false
+}: TypeContentSectionBlockValues & { noWrapper?: boolean }) => {
+  const Wrapper = ({ children }: { children: React.ReactNode }) =>
+    noWrapper ? <>{children}</> : <Container>{children}</Container>
   return (
     <div>
-      <Container>
+      <Wrapper>
         <HeadingXXl as="h2" id={title}>
           {title}
         </HeadingXXl>
-      </Container>
+      </Wrapper>
       <div className="flex flex-col gap-20">
         {sectionContent.map((block, i) => {
           const props = { key: i }
+
           switch (block.type) {
             case 'button_link':
               return (
@@ -33,49 +38,49 @@ export const ContentSection = ({
               )
             case 'phone_number':
               return (
-                <Container {...props}>
+                <Wrapper {...props}>
                   <PhoneNumberBlock {...block.value} />
-                </Container>
+                </Wrapper>
               )
             case 'resources':
               return (
-                <Container {...props}>
+                <Wrapper {...props}>
                   <TileContentSection
                     title={block.value.title}
                     tileList={<ContentTileList links={block.value.resources} />}
                   />
-                </Container>
+                </Wrapper>
               )
 
             case 'spotlight':
               return <Spotlight {...props} {...block} />
             case 'timeline':
               return (
-                <Container {...props}>
+                <Wrapper {...props}>
                   <Timeline {...block.value} />
-                </Container>
+                </Wrapper>
               )
             case 'text':
               return (
-                <Container {...props}>
+                <Wrapper {...props}>
                   <BodyText>
                     <RichText html={block.value} />{' '}
                   </BodyText>
-                </Container>
+                </Wrapper>
               )
             case 'callout':
               return (
-                <Container {...props}>
+                <Wrapper {...props}>
                   <Callout html={block.value} />
-                </Container>
+                </Wrapper>
               )
             case 'image':
               return <Image imageRef={block.value} alt="image alt" {...props} />
             case 'powerbi_embed':
               return (
-                <Container {...props}>
+                <Wrapper {...props}>
                   <EmbeddedContentBlock {...block.value} />
-                </Container>
+                </Wrapper>
               )
           }
         })}

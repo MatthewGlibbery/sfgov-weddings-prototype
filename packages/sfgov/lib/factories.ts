@@ -738,6 +738,7 @@ export const TileValueFactory = factory((gen) => ({
   meta: PageMetaFactory.make(),
   link_to: 'page',
   url: '',
+  page: PageFactory.make(),
   title: gen.commerce.productName(),
   description: gen.commerce.productDescription(),
   event_type: 'music',

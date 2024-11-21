@@ -211,6 +211,15 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               ) : null}
             </Container>
           ) : null} */}
+          {spotlight2?.length ? (
+            <div className="mb-20 max-w-xl md:mx-16 lg:mx-auto">
+              <Spotlight
+                theme="orange"
+                themeClasses="text-accent800"
+                {...spotlight2[0]}
+              />
+            </div>
+          ) : null}
           {resources.length || aboutDescription || callToAction.length ? (
             <Container className="mt-40">
               {resources.length ? (
