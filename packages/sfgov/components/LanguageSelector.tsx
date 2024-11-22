@@ -68,6 +68,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
 
   return links.length > 0 ? (
     <details
+      name="menu"
       className="group md:relative"
       ref={detailsRef}
       aria-label="language selector"
@@ -76,7 +77,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
         <IconGlobe
           width="20"
           height="20"
-          className="flex-shrink-0 text-primary600 md:text-black"
+          className="shrink-0 text-primary600 md:text-black"
         />
         <p className="w-60 text-center text-label-xs text-primary600 font-bold md:text-black md:w-80">
           {selectedLanguage}
@@ -84,12 +85,12 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
         <IconChevronUp
           width="20"
           height="20"
-          className="hidden flex-shrink-0 group-open:md:block"
+          className="hidden shrink-0 group-open:md:block"
         />
         <IconChevronDown
           width="20"
           height="20"
-          className="hidden flex-shrink-0 md:block group-open:md:hidden"
+          className="hidden shrink-0 md:block group-open:md:hidden"
         />
       </summary>
       <StyledList {...props}>
