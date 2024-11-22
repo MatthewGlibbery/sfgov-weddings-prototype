@@ -1,6 +1,7 @@
 import NextLink, { type LinkProps } from 'next/link'
 import {
   classed,
+  classes,
   IconChevronDown,
   IconChevronUp,
   IconGlobe,
@@ -73,7 +74,13 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
       ref={detailsRef}
       aria-label="language selector"
     >
-      <summary className="flex list-none h-60 p-8 items-center justify-center hover:md:bg-primary100 group-open:bg-neutral50 group-open:md:bg-primary100 md:h-auto md:rounded-4">
+      <summary
+        className={classes(
+          'flex h-60 p-8 items-center justify-center group-open:bg-neutral50',
+          'list-none [&::-webkit-details-marker]:hidden',
+          'group-open:md:bg-primary100 hover:md:bg-primary100 md:h-auto md:rounded-4'
+        )}
+      >
         <IconGlobe
           width="20"
           height="20"

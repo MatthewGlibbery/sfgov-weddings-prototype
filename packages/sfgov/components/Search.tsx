@@ -73,7 +73,7 @@ export const SearchForm = () => {
   return (
     <form onSubmit={onSubmit}>
       <details className="group md:hidden" name="menu">
-        <summary className="bg-white group-open:bg-neutral50 list-none p-16 h-60 flex items-center">
+        <summary className="bg-white group-open:bg-neutral50 list-none p-16 h-60 flex items-center [&::-webkit-details-marker]:hidden">
           <IconSearch width="24" height="24" className="text-primary600" />
         </summary>
         <SearchInput value={searchTerm} onChange={setSearchTerm} />

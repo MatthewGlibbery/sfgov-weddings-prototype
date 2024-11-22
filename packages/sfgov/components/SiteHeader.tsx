@@ -57,7 +57,13 @@ const NavLinks = () => {
     <>
       {/* small screen - hamburger menu */}
       <details className="group md:hidden" aria-label="navigation" name="menu">
-        <summary className="bg-primary600 text-white group-open:bg-neutral50 group-open:text-primary600 list-none flex flex-col items-center justify-center w-60 h-60 md:hidden">
+        <summary
+          className={classes(
+            'bg-primary600 text-white group-open:bg-neutral50 group-open:text-primary600',
+            'list-none [&::-webkit-details-marker]:hidden',
+            'flex flex-col items-center justify-center w-60 h-60 md:hidden'
+          )}
+        >
           <div className="group-open:hidden">
             <IconHamburger height="24" width="24" />
             <p className="text-[10px]">Menu</p>
