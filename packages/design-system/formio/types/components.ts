@@ -270,6 +270,7 @@ export type InputOption = {
   value: string
   label: string
   shortcut?: string
+  disabled?: boolean
 }
 
 /**

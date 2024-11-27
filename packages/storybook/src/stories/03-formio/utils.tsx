@@ -63,7 +63,14 @@ export function createSingleFieldComponent(
     const { form: formProps, ...component } =
       typeof field === 'function' ? field(rest) : field
     const schema = singleFieldSchema({ ...component, ...rest })
-    return <FormioForm form={schema} {...formProps} {...formOverrides} />
+    return (
+      <FormioForm
+        isDev={true}
+        form={schema}
+        {...formProps}
+        {...formOverrides}
+      />
+    )
   }
 }
 

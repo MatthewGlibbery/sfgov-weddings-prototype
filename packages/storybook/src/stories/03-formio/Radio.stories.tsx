@@ -11,8 +11,12 @@ const meta: Meta = {
       { label: 'Green', value: 'green' },
       { label: 'Orange', value: 'orange' },
       { label: 'Red', value: 'red' },
-      { label: 'Yellow', value: 'yellow' },
-      { label: 'White', value: 'white' }
+      {
+        label:
+          'Under penalty of perjury, I hereby declare that the information contained within and submitted with the application is complete, true, and accurate. I understand that a misrepresentation of fact may be cause for rejection of this application, denial of a permit or suspension revocation of a permit issued, and other adverse action.',
+        value: 'yellow'
+      },
+      { label: 'Disabled', disabled: true }
     ]
   },
   argTypes: {

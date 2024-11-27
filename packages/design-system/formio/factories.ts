@@ -1,16 +1,19 @@
 // istanbul ignore file
 import { factory } from 'node-factory'
 import type {
-  FlatFormSchema,
-  PageSchema,
-  WizardFormSchema,
+  CheckboxSchema,
+  ColumnsSchema,
   ContainerSchema,
-  InputComponentSchema,
   FieldsetSchema,
-  WellSchema,
-  SelectSchema,
+  FlatFormSchema,
+  InputComponentSchema,
   InputOption,
-  ColumnsSchema
+  PageSchema,
+  RadioSchema,
+  SelectBoxesSchema,
+  SelectSchema,
+  WizardFormSchema,
+  WellSchema
 } from './types'
 
 const SEED = 123
@@ -93,6 +96,31 @@ export const OptionFactory = factory<InputOption>((fake) => {
   return {
     label,
     value: fake.helpers.slugify(label)
+  }
+})
+
+export const CheckboxFactory = factory<CheckboxSchema>((fake) => {
+  const name = fake.lorem.word()
+  const label = fake.lorem.paragraph()
+  return {
+    name,
+    label,
+    type: 'checkbox',
+    value: 'true'
+  }
+})
+
+export const RadioFactory = factory<RadioSchema>((fake) => {
+  return {
+    type: 'radio',
+    values: OptionFactory.make(5)
+  }
+})
+
+export const SelectBoxesFactory = factory<SelectBoxesSchema>((fake) => {
+  return {
+    type: 'selectboxes',
+    values: OptionFactory.make(5)
   }
 })
 

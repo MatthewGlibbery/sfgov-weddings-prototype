@@ -275,7 +275,13 @@ export function modifyHTMLElementClassname(value?: string) {
     'border-2',
     'callout-titles:text-heading-lg',
     'callout-titles:font-bold',
-    'link:text-primary500'
+    'link:text-primary500',
+    'py-20',
+    'px-28',
+    'callout-titles:inline-block',
+    'callout-titles:mb-8',
+    'max-md:callout-titles:text-desktop-heading-sm',
+    'min-md:callout-titles:text-desktop-heading-md'
   ]
   const replaced = value
     ?.replace(
@@ -299,7 +305,7 @@ export function modifyHTMLElementClassname(value?: string) {
     )
     .replace(/\bfg-green-4\b/g, classes('text-success400'))
     .replace(
-      /\bbg-red-1\b/,
+      /\bbg-red-1\b/g,
       classes([
         ...defaultCalloutClasses,
         'bg-danger10',

@@ -8,10 +8,14 @@ import { rewriteLibraryUrl } from '../formio'
 import { FORM_CLASS } from '../formio/constants.mjs'
 import { modifyHTMLElementClassname } from '../formio/index'
 import {
+  CheckboxFactory,
   ColumnsFactory,
   ComponentFactory,
   FormFactory,
+  OptionFactory,
   PageFactory,
+  RadioFactory,
+  SelectBoxesFactory,
   WizardFactory
 } from '../formio/factories'
 import basicForm from '../__fixtures__/forms/basic.json'
@@ -346,6 +350,16 @@ describe('FormioForm', () => {
   })
 
   describe('callouts', () => {
+    const defaultCalloutClasses = [
+      'border-2',
+      'link:text-primary500',
+      'py-20',
+      'px-28',
+      'callout-titles:inline-block',
+      'callout-titles:mb-8',
+      'max-md:callout-titles:text-desktop-heading-sm',
+      'min-md:callout-titles:text-desktop-heading-md'
+    ]
     it('replaces the bg-blue-1 and fg-blue-4 classes with expected Tailwind classes', async () => {
       render(
         <FormioForm
@@ -357,11 +371,6 @@ describe('FormioForm', () => {
 
       const alert = screen.getByRole('alert')
       const classes = Array.from(alert.classList)
-      const defaultCalloutClasses = [
-        'border-2',
-        'callout-titles:text-heading-lg',
-        'callout-titles:font-bold'
-      ]
       const expectedClasses = [
         ...defaultCalloutClasses,
         'bg-information10',
@@ -389,12 +398,6 @@ describe('FormioForm', () => {
 
       const alert = screen.getByRole('alert')
       const classes = Array.from(alert.classList)
-      const defaultCalloutClasses = [
-        'border-2',
-        'callout-titles:text-heading-lg',
-        'callout-titles:font-bold',
-        'link:text-primary500'
-      ]
       const expectedClasses = [
         ...defaultCalloutClasses,
         'bg-success10',
@@ -421,12 +424,6 @@ describe('FormioForm', () => {
 
       const alert = screen.getByRole('alert')
       const classes = Array.from(alert.classList)
-      const defaultCalloutClasses = [
-        'border-2',
-        'callout-titles:text-heading-lg',
-        'callout-titles:font-bold',
-        'link:text-primary500'
-      ]
       const expectedClasses = [
         ...defaultCalloutClasses,
         'bg-danger10',
@@ -455,6 +452,61 @@ describe('FormioForm', () => {
       expect(alert).toBeInTheDocument()
       const classes = Array.from(alert.classList)
       expect(classes).toEqual(['formio-component-htmlelement'])
+    })
+  })
+
+  describe('checkboxes', () => {
+    it('renders checkboxes in the DOM', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [
+              CheckboxFactory.make(),
+              CheckboxFactory.make(),
+              CheckboxFactory.make(),
+              CheckboxFactory.make(),
+              CheckboxFactory.make(),
+              CheckboxFactory.make(),
+              CheckboxFactory.make()
+            ]
+          })}
+        />
+      )
+
+      const checkboxInputs = await screen.findAllByTestId(/checkbox-/)
+      expect(checkboxInputs.length).toBe(7)
+    })
+  })
+  describe('radio buttons', () => {
+    it('renders radio buttons in the DOM', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [RadioFactory.make({ values: OptionFactory.make(17) })]
+          })}
+        />
+      )
+
+      const radioInputs = await screen.findAllByTestId(/radio-/)
+      expect(radioInputs.length).toBe(17)
+    })
+  })
+  describe('select boxes', () => {
+    it('renders select boxes in the DOM', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [
+              SelectBoxesFactory.make({
+                values: OptionFactory.make(17)
+              })
+            ]
+          })}
+        />
+      )
+
+      const selectBoxInputs = await screen.findAllByTestId(/selectBoxes-/)
+      expect(selectBoxInputs.length).toBe(17)
     })
   })
 })

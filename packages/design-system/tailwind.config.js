@@ -7,11 +7,5 @@ module.exports = {
   theme: {
     extend: {}
   },
-  presets: [require('./tailwind.preset')],
-  plugins: [
-    plugin(({ addVariant }) => {
-      addVariant('callout-titles', '& strong:first-child')
-      addVariant('link', '& a')
-    })
-  ]
+  presets: [require('./tailwind.preset')]
 }

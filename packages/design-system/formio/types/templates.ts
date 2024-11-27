@@ -15,6 +15,9 @@ export type ComponentContext<T extends ComponentSchema = ComponentSchema> = {
   // formio Component class instance
   instance: {
     id: string
+    root?: {
+      id: string
+    }
   }
   t(...args: Parameters<TFunction>): string
 }
