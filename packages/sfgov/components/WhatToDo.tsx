@@ -11,6 +11,7 @@ import {
 } from '@/types'
 import { camelCase } from '@/lib/utils'
 import { DocumentLink } from './DocumentLink'
+import { ButtonLink } from './ButtonLink'
 
 type BlockType = TypeStepSpecificsBlock['type']
 
@@ -32,11 +33,7 @@ const StepContent = (block: TypeStepSpecificsBlock) => {
     case 'email':
       return <EmailBlock {...block.value} />
     case 'button_link':
-      return (
-        <Button as="a" href={block.value.url} variant="primary">
-          {block.value.link_text}
-        </Button>
-      )
+      return <ButtonLink link={block.value} />
     case 'phone_number':
       return <PhoneNumberBlock {...block.value} />
     case 'text':

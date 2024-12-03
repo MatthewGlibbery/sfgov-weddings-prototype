@@ -34,7 +34,8 @@ describe('<CallToAction />', () => {
         button: {
           link_to: 'page',
           link_text: '',
-          url: ctaValues.button_link.button.url
+          url: ctaValues.button_link.button.url,
+          page: null
         }
       }
     },

@@ -1033,7 +1033,7 @@ export const LinkFactory = factory<TypeLinkValues>((gen) => ({
 export const ButtonLinkFactory = factory<TypeButtonLinkBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'button_link',
-  value: LinkFactory.make()
+  value: AriaButtonLinkFactory.make()
 }))
 
 export const AriaButtonLinkFactory = factory<TypeButtonLinkValues>((gen) => ({

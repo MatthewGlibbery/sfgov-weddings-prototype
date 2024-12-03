@@ -10,6 +10,7 @@ import { Timeline } from './Timeline'
 import { TileContentSection } from './TileContentSection'
 import { ContentTileList } from './Tile'
 import React from 'react'
+import { ButtonLink } from './ButtonLink'
 
 export const ContentSection = ({
   title,
@@ -32,9 +33,9 @@ export const ContentSection = ({
           switch (block.type) {
             case 'button_link':
               return (
-                <Button as="a" href={block.value.url} {...props}>
-                  {block.value.link_text}
-                </Button>
+                <Wrapper>
+                  <ButtonLink link={block.value} {...props} />
+                </Wrapper>
               )
             case 'phone_number':
               return (

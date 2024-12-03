@@ -1,5 +1,6 @@
 import { TypeCallToActionValues } from '@/types'
 import { BodyText, Button, HeadingLg } from '@/design-system'
+import { ButtonLink } from './ButtonLink'
 
 /* FYI: In current sf.gov there are CTA variants that aren't accounted for
  * here nor in the Wagtail block type. Should we need them for the
@@ -12,10 +13,9 @@ export const CallToAction = ({
   button_link: buttonLink
 }: TypeCallToActionValues) => {
   const ariaLabel =
-    buttonLink.screenreader_label ?? `${title} ${buttonLink.button.link_text}`
-  const url = buttonLink.button.page
-    ? buttonLink.button.page.meta.html_url
-    : buttonLink.button.url
+    buttonLink.screenreader_label || `${title} ${buttonLink.button.link_text}`
+  buttonLink.screenreader_label = ariaLabel
+
   return (
     <div className="flex flex-col gap-y-8">
       {title ? (
@@ -24,11 +24,7 @@ export const CallToAction = ({
         </HeadingLg>
       ) : null}
       {description ? <BodyText>{description}</BodyText> : null}
-      {url && buttonLink.button.link_text ? (
-        <Button className="w-fit" as="a" href={url} aria-label={ariaLabel}>
-          {buttonLink.button.link_text}
-        </Button>
-      ) : null}
+      <ButtonLink link={buttonLink} />
     </div>
   )
 }
