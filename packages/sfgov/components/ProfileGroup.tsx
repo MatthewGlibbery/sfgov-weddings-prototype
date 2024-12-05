@@ -8,7 +8,7 @@ type ProfileGroupProps = {
   title: string
   description?: string
   profiles: TypeProfilePageBlock[]
-  isHomePage: boolean
+  isHomePage?: boolean
 }
 
 export const ProfileGroup = ({

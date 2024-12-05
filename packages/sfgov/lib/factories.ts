@@ -402,7 +402,7 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
   image: ImageFactory.make(),
   body: '<p>some rich text</p><blockquote>rich text</blockquote>',
   intro: '<p>some rich text</p><blockquote>rich text</blockquote>',
-  accordions: TitleAndTextFactory.make(2),
+  additional_info: TitleAndTextFactory.make(2),
   parking: [
     TitleAndTextFactory.make({
       value: {
@@ -444,6 +444,11 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
     }
   }),
   at_this_location: RelatedContentBlockFactory.make(2, {
+    meta: {
+      type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  partner_agencies: RelatedContentBlockFactory.make(2, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }

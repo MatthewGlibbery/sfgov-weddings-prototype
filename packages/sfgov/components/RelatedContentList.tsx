@@ -17,6 +17,7 @@ const PageLinkWithBorder = ({ item, ...rest }: PageLinkProps) => (
     className="
     pb-20
     md:[&:nth-child(3n+1)]:border-r-1 
+    md:[&:nth-child(3n+1)]:pr-28
     md:[&:nth-child(3n)]:border-l-1 
     md:[&:only-child]:border-r-0
     md:border-neutral200 md:[&:not(:nth-child(3n+1))]:pl-28 
@@ -37,12 +38,19 @@ export const RelatedContentList = ({
 
   const Content = component || PageLinkWithBorder
 
+  const gridClass =
+    !component && content.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'
+  const gapClass = component ? 'gap-y-28' : ''
   return (
     <div {...rest}>
-      <HeadingXXl as="h2" className="mb-[20px]">
-        {title}
-      </HeadingXXl>
-      <div className="flex flex-col md:grid md:grid-cols-3 gap-x-28">
+      {title ? (
+        <HeadingXXl as="h2" className="!mb-20">
+          {title}
+        </HeadingXXl>
+      ) : null}
+      <div
+        className={`flex flex-col md:grid gap-x-28 ${gridClass} ${gapClass}`}
+      >
         {content.map((item: RelatedContentData, i) => (
           <Content key={i} item={item} />
         ))}

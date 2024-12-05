@@ -196,7 +196,6 @@ export type LocationPageData = PageData & {
   image: WagtailImageData
   body: string
   intro: string
-  accordions: TypeTitleAndTextBlock[]
   parking: TypeTitleAndTextBlock[]
   accessibility: TypeTitleAndTextBlock[]
   public_transportation: TypeTitleAndTextBlock[]
@@ -205,6 +204,8 @@ export type LocationPageData = PageData & {
   at_this_location: RelatedContentData[]
   people: TypeProfileGroupBlock[]
   about_location: string
+  additional_info: TypeTitleAndTextBlock[]
+  partner_agencies: RelatedContentData[]
 }
 
 type TypeAgencyEvents = {

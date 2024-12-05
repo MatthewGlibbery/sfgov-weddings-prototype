@@ -28,18 +28,20 @@ export const ZebraStripedSection = ({
   noPadding = false
 }: ZebraStripedSectionProps) => (
   <div className={className}>
-    {children.flat().map((child: ReactNode, i: number) => (
-      <>
-        {child?.props?.condition === false ? null : (
-          <Wrapper
-            key={i}
-            noPadding={noPadding}
-            backgroundColor={child?.props?.backgroundColor || ''}
-          >
-            {child}
-          </Wrapper>
-        )}
-      </>
-    ))}
+    {children
+      .flat()
+      .filter((child) => child)
+      .map((child: ReactNode, i: number) => (
+        <span key={i}>
+          {child?.props?.condition === false ? null : (
+            <Wrapper
+              noPadding={noPadding}
+              backgroundColor={child?.props?.backgroundColor || ''}
+            >
+              {child}
+            </Wrapper>
+          )}
+        </span>
+      ))}
   </div>
 )

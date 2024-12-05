@@ -4,10 +4,10 @@ import { Image } from './Image'
 import { PageLink } from './PageLink'
 
 type ImageCardProps = {
-  item: RelatedContentData
+  value: RelatedContentData
 }
 
-export const ImageCard = ({ item }: ImageCardProps) => (
+export const ImageCard = ({ item }: { item: ImageCardProps }) => (
   <PageLink className="no-underline" page={item}>
     {item.value.image ? (
       <Image
@@ -16,8 +16,5 @@ export const ImageCard = ({ item }: ImageCardProps) => (
       />
     ) : null}
     <HeadingLg>{item.value.title}</HeadingLg>
-    {item.value.description ? (
-      <BodyText>{item.value.description}</BodyText>
-    ) : null}
   </PageLink>
 )

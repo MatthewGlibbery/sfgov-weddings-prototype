@@ -2,6 +2,7 @@ import {
   BodyText,
   Container,
   DisplayLg,
+  HeadingXlSans,
   HeadingXXl,
   IconAccessibility,
   IconParking,
@@ -37,7 +38,6 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
     image,
     body,
     intro,
-    accordions,
     parking,
     accessibility,
     public_transportation: publicTransportion,
@@ -45,7 +45,9 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
     related_locations: relatedLocations,
     people,
     at_this_location: atThisLocation,
-    about_location: about
+    about_location: about,
+    additional_info: additionalInfo,
+    partner_agencies: partnerAgencies
   } = page
 
   const { t } = useTranslation()
@@ -150,56 +152,84 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
             })}
           </Container>
         ) : null}
-        {about ? (
-          <Container backgroundColor="neutral">
-            <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('about', { defaultValue: 'About' })}
-            </HeadingXXl>
-            <BodyText>{about}</BodyText>
-          </Container>
-        ) : null}
-        {accordions.length ? (
-          <Container className="my-40 space-y-20" backgroundColor="neutral">
-            <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('additional-location-info', {
-                defaultValue: 'Additional location info'
-              })}
-            </HeadingXXl>
-            {accordions.map((accordion) => (
-              <Accordion key={accordion.id} title={accordion.value.title}>
-                <RichText html={accordion.value.text} />
-              </Accordion>
-            ))}
-          </Container>
-        ) : null}
-        {atThisLocation.length ? (
-          <Container backgroundColor="neutral">
-            <RelatedContentList
-              title={`At ${title}`}
-              content={atThisLocation}
-            />
+        {about ||
+        partnerAgencies.length ||
+        additionalInfo.length ||
+        atThisLocation.length ? (
+          <Container
+            className="space-y-28 md:space-y-40"
+            backgroundColor="neutral"
+          >
+            {about ? (
+              <>
+                <HeadingXXl as="h2" className="my-12 md:my-20">
+                  {t('about', { defaultValue: 'About' })}
+                </HeadingXXl>
+                <BodyText>{about}</BodyText>
+              </>
+            ) : null}
+            {partnerAgencies.length ? (
+              <div className="space-y-20">
+                <HeadingXlSans as="h3" className="my-12 md:my-20">
+                  {t('partner-agencies', {
+                    defaultValue: 'Partner agencies'
+                  })}
+                </HeadingXlSans>
+                <RelatedContentList content={partnerAgencies} />
+              </div>
+            ) : null}
+            {additionalInfo.length ? (
+              <div className="space-y-20">
+                <HeadingXlSans as="h3" className="my-12 md:my-20">
+                  {t('additional-location-info', {
+                    defaultValue: 'Additional location info'
+                  })}
+                </HeadingXlSans>
+                {additionalInfo.map((accordion) => (
+                  <Accordion
+                    key={accordion.id}
+                    title={accordion.value.title || ''}
+                  >
+                    <RichText html={accordion.value.text} />
+                  </Accordion>
+                ))}
+              </div>
+            ) : null}
+            {atThisLocation.length ? (
+              <div className="space-y-20">
+                <HeadingXlSans as="h3" className="my-12 md:my-20">
+                  {t('at', {
+                    defaultValue: `At ${title}`
+                  })}
+                </HeadingXlSans>
+                <RelatedContentList content={atThisLocation} />
+              </div>
+            ) : null}
           </Container>
         ) : null}
         {people.length ? (
-          <>
-            <Container backgroundColor="primary">
-              <ProfileGroup
-                title={people[0]?.value.title}
-                profiles={people[0]?.value.profiles}
-              />
-            </Container>
-            <Container backgroundColor="white">
-              <RelatedContentList
-                title={t('related-locations', {
-                  defaultValue: 'Related locations'
-                })}
-                content={relatedLocations}
-                component={ImageCard}
-              />
-            </Container>
-          </>
+          <Container backgroundColor="primary">
+            <ProfileGroup
+              title={people[0]?.value.title}
+              profiles={people[0]?.value.profiles}
+            />
+          </Container>
         ) : null}
-        {contact ? (
+        {relatedLocations.length ? (
+          <Container backgroundColor="white">
+            <RelatedContentList
+              title={t('related-locations', {
+                defaultValue: 'Related locations'
+              })}
+              content={relatedLocations}
+              component={ImageCard}
+            />
+          </Container>
+        ) : null}
+        {contact.value.address.length ||
+        contact.value.phone.length ||
+        contact.value.email.length ||
+        contact.value.social_media_other.length ? (
           <Container className="my-40">
             <HeadingXXl as="h2" className="my-12 md:my-20">
               {t('contact-us', {
