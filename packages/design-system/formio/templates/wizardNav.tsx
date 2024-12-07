@@ -32,7 +32,7 @@ export function form({ t, ...ctx }: WizardRenderContext) {
   }
   return (
     <ul
-      className="list-none m-0 mt-20 p-0 flex space-x-8"
+      className="list-none m-0 mt-20 p-0 flex space-x-8 justify-between"
       id={`${ctx.wizardKey}-nav`}
     >
       {ctx.buttonOrder.map((type) => {

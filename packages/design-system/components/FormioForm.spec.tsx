@@ -140,6 +140,57 @@ describe('FormioForm', () => {
     expect(input2).toBeInTheDocument()
   })
 
+  describe('wizard header', () => {
+    it('renders the wizard header in the DOM', async () => {
+      render(
+        <FormioForm
+          form={WizardFactory.make({
+            components: [
+              PageFactory.make({
+                title: 'Page 1',
+                components: [
+                  ComponentFactory.make({
+                    label: 'Page one'
+                  })
+                ]
+              }),
+              PageFactory.make({
+                title: 'Page 2',
+                components: [
+                  ComponentFactory.make({
+                    label: 'Page two'
+                  })
+                ]
+              }),
+              PageFactory.make({
+                title: 'Page 3',
+                components: [
+                  ComponentFactory.make({
+                    label: 'Page three'
+                  })
+                ]
+              }),
+              PageFactory.make({
+                title: 'Page 4',
+                components: [
+                  ComponentFactory.make({
+                    label: 'Page four'
+                  })
+                ]
+              })
+            ]
+          })}
+        />
+      )
+
+      const wizardHeaderPanels = await screen.findAllByTestId(/wizardHeader-/)
+      expect(wizardHeaderPanels.length).toBe(4)
+      wizardHeaderPanels.forEach((panel) => {
+        expect(panel).toBeInTheDocument()
+      })
+    })
+  })
+
   describe.skip('templates', () => {
     describe('component', () => {
       it('does not render a conditionally hidden field', async () => {
@@ -475,6 +526,9 @@ describe('FormioForm', () => {
 
       const checkboxInputs = await screen.findAllByTestId(/checkbox-/)
       expect(checkboxInputs.length).toBe(7)
+      checkboxInputs.forEach((input) => {
+        expect(input).toBeInTheDocument()
+      })
     })
   })
   describe('radio buttons', () => {
@@ -489,6 +543,9 @@ describe('FormioForm', () => {
 
       const radioInputs = await screen.findAllByTestId(/radio-/)
       expect(radioInputs.length).toBe(17)
+      radioInputs.forEach((input) => {
+        expect(input).toBeInTheDocument()
+      })
     })
   })
   describe('select boxes', () => {
@@ -507,6 +564,9 @@ describe('FormioForm', () => {
 
       const selectBoxInputs = await screen.findAllByTestId(/selectBoxes-/)
       expect(selectBoxInputs.length).toBe(17)
+      selectBoxInputs.forEach((input) => {
+        expect(input).toBeInTheDocument()
+      })
     })
   })
 })

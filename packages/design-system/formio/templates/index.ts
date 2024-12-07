@@ -5,8 +5,9 @@ import checkbox from './checkbox'
 // import input from './input'
 // import label from './label'
 import radio from './radio'
-// import wizard from './wizard'
-// import wizardNav from './wizardNav'
+import wizard from './wizard'
+import wizardHeader from './wizardHeader'
+import wizardNav from './wizardNav'
 
 export default {
   // alert,
@@ -15,7 +16,8 @@ export default {
   // component,
   // input,
   // label,
-  radio
-  // wizard,
-  // wizardNav
+  radio,
+  wizard,
+  wizardHeader,
+  wizardNav
 }

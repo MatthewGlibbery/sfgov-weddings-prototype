@@ -46,15 +46,26 @@ type WizardContext = WizardRenderContext & {
 export function form(ctx: WizardContext) {
   const title = ctx.panels[ctx.currentPage].title
   return (
-    <div data-formio-template="wizard" className={`TODO ${ctx.className}`}>
-      <div dangerouslySetInnerHTML={{ __html: ctx.wizardHeader }} />
-      <h2 className="text-display-lg">{title}</h2>
+    <div
+      data-formio-template="wizard"
+      className={`
+        flex flex-col
+        md:flex-row-reverse md:flex-auto md:justify-between
+        ${ctx.className}
+      `}
+    >
       <div
-        ref={ctx.wizardKey}
-        className="space-y-20"
-        dangerouslySetInnerHTML={{ __html: ctx.components }}
+        dangerouslySetInnerHTML={{ __html: ctx.wizardHeader }}
+        className="basis-1/3 w-full"
       />
-      <div dangerouslySetInnerHTML={{ __html: ctx.wizardNav }} />
+      <div className="w-full basis-2/3">
+        <h1 className="mb-60 text-desktop-display-xxxl font-slab">{title}</h1>
+        <div
+          ref={ctx.wizardKey}
+          dangerouslySetInnerHTML={{ __html: ctx.components }}
+        />
+        <div dangerouslySetInnerHTML={{ __html: ctx.wizardNav }} />
+      </div>
     </div>
   )
 }
