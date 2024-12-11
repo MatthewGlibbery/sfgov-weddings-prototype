@@ -47,14 +47,16 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
 
   const TransactionContent = ({ screen = '' }) => (
     <div className="flex flex-col gap-y-60 mx-20 md:mx-0 col-span-full lg:col-span-7">
-      <div className="flex flex-col gap-y-28">
-        <HeadingXXl as="h2" id={`whatToDo${screen}`}>
-          {t('what-to-do', { defaultValue: 'What to do' })}
-        </HeadingXXl>
-        {whatToDo.map((what, i) => (
-          <WhatToDo block={what} key={i} />
-        ))}
-      </div>
+      {whatToDo.length ? (
+        <div className="flex flex-col gap-y-28">
+          <HeadingXXl as="h2" id={`whatToDo${screen}`}>
+            {t('what-to-do', { defaultValue: 'What to do' })}
+          </HeadingXXl>
+          {whatToDo.map((what, i) => (
+            <WhatToDo block={what} key={i} />
+          ))}
+        </div>
+      ) : null}
       {!!supporingInformation.length || !!customSection.length ? (
         <>
           <HeadingXXl as="h2" id={`supportingInformation${screen}`}>
@@ -134,32 +136,33 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
     </span>
   )
 
-  const TransactionDetails = ({ screen = '' }) => (
-    <div className="flex flex-col gap-y-28 p-28 bg-neutral50 rounded-[8px]">
-      <div className="flex gap-x-8">
-        <IconInfo width={40} />
-        <HeadingXXl as="h2" id={`whatToKnow${screen}`}>
-          {t('what-to-know', { defaultValue: 'What to know' })}
-        </HeadingXXl>
-      </div>
-      {cost ? (
-        <CostBlock
-          {...cost.value}
-          variant="transaction"
-          id={`costBlock${screen}`}
-        />
-      ) : null}
-      {thingsToKnow.map((thing, i) => (
-        <div key={i} data-testid="things_to_know-section">
-          <TitleAndText
-            {...thing.value}
-            id={camelCase(thing.value.title) + screen}
-            heading={HeadingLg}
-          />
+  const TransactionDetails = ({ screen = '' }) =>
+    cost || thingsToKnow.length ? (
+      <div className="flex flex-col gap-y-28 p-28 bg-neutral50 rounded-[8px]">
+        <div className="flex gap-x-8">
+          <IconInfo width={40} />
+          <HeadingXXl as="h2" id={`whatToKnow${screen}`}>
+            {t('what-to-know', { defaultValue: 'What to know' })}
+          </HeadingXXl>
         </div>
-      ))}
-    </div>
-  )
+        {cost ? (
+          <CostBlock
+            {...cost.value}
+            variant="transaction"
+            id={`costBlock${screen}`}
+          />
+        ) : null}
+        {thingsToKnow.map((thing, i) => (
+          <div key={i} data-testid="things_to_know-section">
+            <TitleAndText
+              {...thing.value}
+              id={camelCase(thing.value.title) + screen}
+              heading={HeadingLg}
+            />
+          </div>
+        ))}
+      </div>
+    ) : null
 
   return (
     <PageWrapper title={title}>

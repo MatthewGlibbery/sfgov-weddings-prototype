@@ -273,6 +273,7 @@ export type CampaignPageData = PageData & {
   about_campaign: string
   partner_agencies: RelatedContentData[]
   related_links: RelatedContentData[]
+  contact: TypeContactFooterBlock[]
 }
 
 export type MeetingPageData = PageData & {

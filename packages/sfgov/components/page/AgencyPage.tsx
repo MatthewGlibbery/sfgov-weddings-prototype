@@ -2,6 +2,7 @@
 import {
   BodyText,
   Button,
+  classes,
   Container,
   DisplayLg,
   DisplayXXXl,
@@ -95,7 +96,12 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
         </div>
       ) : null}
 
-      <Container className="bg-white relative p-20 rounded-t-[8px] top-[100px] xl:top-[250px] mx-0 md:mx-16 lg:mx-auto">
+      <Container
+        className={classes(
+          'bg-white relative p-20 rounded-t-[8px] mx-0 md:mx-16 lg:mx-auto',
+          mainImage ? 'top-[100px] xl:top-[250px]' : ''
+        )}
+      >
         <div className="hidden xl:flex xl:justify-between">
           <div>
             <PageTitleSection title={title} label={label}>
@@ -121,7 +127,13 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
           ) : null}
         </div>
       </Container>
-      <div className="relative top-[100px] xl:top-[250px] mb-[200px] xl:mb-[400px]">
+      <div
+        className={classes(
+          mainImage
+            ? 'relative top-[100px] xl:top-[250px] mb-[200px] xl:mb-[400px]'
+            : ''
+        )}
+      >
         {spotlight1?.length ? (
           <div className="mb-20 max-w-xl md:mx-16 lg:mx-auto">
             <Spotlight {...spotlight1[0]} />
@@ -275,7 +287,8 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               ))}
             </Container>
           ) : null}
-          {contact.length ? (
+          {contact.length &&
+          Object.values(contact[0].value).some((val) => val.length) ? (
             <Container>
               <HeadingXXl as="h2" className="my-12 md:my-20">
                 {t('contact-information', {

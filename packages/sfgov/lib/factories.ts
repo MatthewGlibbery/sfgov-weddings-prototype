@@ -660,6 +660,18 @@ export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({
       },
       id: '1d3ca768-e94b-4f8b-bfae-0c7d52e047b3'
     }
+  ],
+  contact: [
+    {
+      type: 'contact',
+      value: {
+        address: [],
+        phone: [PhoneNumberFactory.make()],
+        email: [EmailBlockFactory.make()],
+        social_media_other: [SocialMediaFactory.make()]
+      },
+      id: '1c3ca768-e94b-4f8b-bfae-0c7d52e047b3'
+    }
   ]
 }))
 

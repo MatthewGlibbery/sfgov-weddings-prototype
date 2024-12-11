@@ -23,6 +23,7 @@ import {
 import { useTranslation } from 'next-i18next'
 import { ComponentType } from 'react'
 import { Accordion } from '../Accordion'
+import { ContactFooter } from '../ContactFooter'
 import { DownloadableFilesSection } from '../DownloadableFilesSection'
 import { Image } from '../Image'
 import { Location } from '../Location'
@@ -51,7 +52,8 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
     spotlight_2: spotlight2,
     about_campaign: about,
     partner_agencies: agencies,
-    related_links: links
+    related_links: links,
+    contact
   } = page
 
   const { t } = useTranslation()
@@ -197,7 +199,10 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       case 'video':
         return (
           <div
-            className={classes(themeBackground.video, 'py-40 px-20 xl:px-40')}
+            className={classes(
+              themeBackground.video,
+              'py-40 px-20 md:px-28 lg:px-40 mb-20 max-w-xl lg:mx-auto'
+            )}
           >
             <Video {...content.value} />
           </div>
@@ -222,7 +227,12 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           />
         </div>
       ) : null}
-      <Container className="bg-white relative p-20 top-[100px] xl:top-[250px] mx-0 md:mx-16 lg:mx-auto">
+      <Container
+        className={classes(
+          'bg-white relative p-20 mx-0 md:mx-16 lg:mx-auto',
+          headerImage ? 'top-[100px] xl:top-[250px]' : ''
+        )}
+      >
         <div className="hidden xl:flex xl:justify-between">
           <div>
             <PageTitleSection title={title} label={label} />
@@ -237,7 +247,14 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           </DisplayXXXl>
         </div>
       </Container>
-      <div className="relative top-[100px] xl:top-[250px] mb-[200px] xl:mb-[400px] space-y-20 md:space-y-40 lg:space-y-60 mt-60">
+      <div
+        className={classes(
+          'relative space-y-20 md:space-y-40 lg:space-y-60 mt-60',
+          headerImage
+            ? 'top-[100px] xl:top-[250px] mb-[150px] xl:mb-[300px]'
+            : 'mb-20 md:mb-40 lg:mb-60'
+        )}
+      >
         {spotlight1.length ? (
           <div className="mb-20 max-w-xl lg:mx-auto">
             <Spotlight
@@ -325,6 +342,17 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                   </Link>
                 </div>
               ))}
+            </div>
+          ) : null}
+          {contact.length &&
+          Object.values(contact[0].value).some((val) => val.length) ? (
+            <div>
+              <HeadingXXl as="h2" className="my-12 md:my-20">
+                {t('contact-information', {
+                  defaultValue: 'Contact information'
+                })}
+              </HeadingXXl>
+              <ContactFooter items={contact[0]} />
             </div>
           ) : null}
         </Container>

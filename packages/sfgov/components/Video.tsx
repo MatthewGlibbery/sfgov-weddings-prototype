@@ -110,12 +110,8 @@ export const Video = (props: TypeVideoBlockValues) => {
   }
 
   return (
-    <div>
-      {showTitle ? (
-        <HeadingXXl className="mb-[28px]" as="p">
-          {title}
-        </HeadingXXl>
-      ) : null}
+    <div className="space-y-28">
+      {showTitle ? <HeadingXXl as="p">{title}</HeadingXXl> : null}
       <RichText html={description} />
       {block}
     </div>
