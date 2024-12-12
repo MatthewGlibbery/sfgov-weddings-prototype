@@ -287,7 +287,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               ))}
             </Container>
           ) : null}
-          {contact.length &&
+          {contact?.length &&
           Object.values(contact[0].value).some((val) => val.length) ? (
             <Container>
               <HeadingXXl as="h2" className="my-12 md:my-20">

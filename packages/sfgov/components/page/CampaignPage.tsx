@@ -344,7 +344,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
               ))}
             </div>
           ) : null}
-          {contact.length &&
+          {contact?.length &&
           Object.values(contact[0].value).some((val) => val.length) ? (
             <div>
               <HeadingXXl as="h2" className="my-12 md:my-20">
