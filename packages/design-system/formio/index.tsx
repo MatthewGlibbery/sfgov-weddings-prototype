@@ -113,7 +113,9 @@ export function useFormio(isDev?: boolean) {
     hook(ComponentPrototype, 'renderTemplate', (renderTemplate, ...args) => {
       const content = renderTemplate(...args)
       info('renderTemplate(', args, ') ->', typeof content)
-      return Array.isArray(content) ? content.join('') : content
+      return modifyComponentClassname(
+        Array.isArray(content) ? content.join('') : content
+      )
     })
 
     const HTMLElementPrototype = Components.components.htmlelement.prototype
@@ -268,6 +270,9 @@ function once<T extends object>(obj: T, fn: (obj: T) => void) {
     INITIALIZED.set(obj, true)
   }
 }
+export function modifyComponentClassname(value?: string) {
+  return value?.replace(/\bd-none\b/g, 'hidden')
+}
 
 export function modifyHTMLElementClassname(value?: string) {
   const defaultCalloutClasses = [
@@ -293,7 +298,7 @@ export function modifyHTMLElementClassname(value?: string) {
         'callout-titles:text-information600'
       ])
     )
-    .replace(/\bfg-blue-4\b/g, classes('text-information400'))
+    .replace(/\bfg-blue-4\b/g, 'text-information400')
     .replace(
       /\bbg-green-1\b/g,
       classes([
@@ -303,7 +308,7 @@ export function modifyHTMLElementClassname(value?: string) {
         'callout-titles:text-success600'
       ])
     )
-    .replace(/\bfg-green-4\b/g, classes('text-success400'))
+    .replace(/\bfg-green-4\b/g, 'text-success400')
     .replace(
       /\bbg-red-1\b/g,
       classes([
@@ -313,7 +318,7 @@ export function modifyHTMLElementClassname(value?: string) {
         'callout-titles:text-danger600'
       ])
     )
-    .replace(/\bfg-red-4\b/g, classes('text-danger400'))
+    .replace(/\bfg-red-4\b/g, 'text-danger400')
 
   return replaced
 }

@@ -6,7 +6,10 @@ import React from 'react'
 import type { Form, HTMLElementSchema, InputComponentSchema } from '../formio'
 import { rewriteLibraryUrl } from '../formio'
 import { FORM_CLASS } from '../formio/constants.mjs'
-import { modifyHTMLElementClassname } from '../formio/index'
+import {
+  modifyComponentClassname,
+  modifyHTMLElementClassname
+} from '../formio/index'
 import {
   CheckboxFactory,
   ColumnsFactory,
@@ -215,6 +218,26 @@ describe('FormioForm', () => {
 
         const input = screen.queryByText(label)
         expect(input).not.toBeInTheDocument()
+      })
+
+      it('replaces the d-none class with hidden ', async () => {
+        const label = 'Hidden'
+        render(
+          <FormioForm
+            form={FormFactory.make({
+              components: [
+                ComponentFactory.make({
+                  label,
+                  className: 'd-none'
+                })
+              ]
+            })}
+          />
+        )
+
+        const input = screen.queryByText(label)
+        expect(input?.classList).not.toContain('d-none')
+        expect(input?.classList).toContain('hidden')
       })
     })
 
@@ -568,6 +591,12 @@ describe('FormioForm', () => {
         expect(input).toBeInTheDocument()
       })
     })
+  })
+})
+
+describe('modifyComponentClassname()', () => {
+  it('returns undefined if undefined is received', () => {
+    expect(modifyComponentClassname(undefined)).toEqual(undefined)
   })
 })
 
