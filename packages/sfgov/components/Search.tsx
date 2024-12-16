@@ -22,7 +22,9 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
       <div className="flex items-center">
         <input
           type="text"
-          placeholder={t('search-input-placeholder', { defaultValue: 'Search' })}
+          placeholder={t('search-input-placeholder', {
+            defaultValue: 'Search'
+          })}
           className={classes(
             'w-full px-16 md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4',
             'focus:ring focus:border-primary500 focus:!ring-primary500 focus:outline-none focus:rounded-tr-4 focus:rounded-br-4'
@@ -34,7 +36,9 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
         />
         {value ? (
           <button
-            aria-label={t('clear-search-aria-label', { defaultValue: 'clear search' })}
+            aria-label={t('clear-search-aria-label', {
+              defaultValue: 'clear search'
+            })}
             className="absolute right-[88px] md:right-[72px]"
             onClick={clearSearch}
             type="button"
@@ -66,11 +70,15 @@ export const SearchForm = ({ query, searchInput }: SearchFormProps) => {
   const [searchTerm, setSearchTerm] = useState(query || '')
   const router = useRouter()
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    router.push(`/search?q=${searchTerm}`)
+    event.preventDefault()
+    router.push({
+      pathname: '/search',
+      query: { q: searchTerm }
+    })
   }
   return (
     <form onSubmit={onSubmit}>
-      {searchInput({ value: searchTerm, setSearchTerm: setSearchTerm })}
+      {searchInput({ value: searchTerm, setSearchTerm })}
     </form>
   )
 }

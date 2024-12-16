@@ -52,6 +52,9 @@ describe('Search', () => {
     const button = screen.getByRole('button')
     fireEvent.change(searchInput, { target: { value: 'keyword' } })
     fireEvent.click(button)
-    expect(push).toHaveBeenCalledWith('/search?q=keyword')
+    expect(push).toHaveBeenCalledWith({
+      pathname: '/search',
+      query: { q: 'keyword' }
+    })
   })
 })

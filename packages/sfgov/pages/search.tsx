@@ -73,7 +73,6 @@ const EmptyState = (props: EmptyStateData) => {
 }
 
 export const SearchInput = ({ onChange, value }: SearchInputProps) => {
-  console.log(value)
   const { t } = useTranslation()
   const clearSearch = () => {
     onChange('')
