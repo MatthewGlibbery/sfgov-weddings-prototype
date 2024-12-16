@@ -3,6 +3,7 @@ import {
   Container,
   HeadingXl,
   IconHamburger,
+  IconSearch,
   IconX
 } from '@/design-system'
 import { useTranslation } from 'next-i18next'
@@ -13,7 +14,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../public/static/CCSF-seal-vector.svg'
 import { getHeaderLinks } from '@/lib/utils'
-import { SearchForm } from './Search'
+import { SearchForm, SearchInput } from './Search'
 
 export type SiteHeaderProps = Omit<JSX.IntrinsicElements['header'], 'className'>
 
@@ -124,7 +125,31 @@ export const SiteHeader = (props: SiteHeaderProps) => {
               <LanguageSelector />
             </div>
             <div>
-              <SearchForm />
+              {/* there are two search inputs here because of small screen vs medium+ screen
+              with this approach, we use details html to toggle the menu items for free
+              otherwise, we would need to pass menu state around between components
+              although, this approach also requires us to keep two search inputs in sync
+              either way, we would be passing a handler around to deal with state
+              but this approach keeps it in this file (for now :sob:) */}
+              <SearchForm
+                searchInput={({ value, setSearchTerm }) => (
+                  <>
+                    <details className="group md:hidden" name="menu">
+                      <summary className="bg-white group-open:bg-neutral50 list-none p-16 h-60 flex items-center [&::-webkit-details-marker]:hidden">
+                        <IconSearch
+                          width="24"
+                          height="24"
+                          className="text-primary600"
+                        />
+                      </summary>
+                      <SearchInput value={value} onChange={setSearchTerm} />
+                    </details>
+                    <div className="hidden md:block">
+                      <SearchInput value={value} onChange={setSearchTerm} />
+                    </div>
+                  </>
+                )}
+              />
             </div>
           </nav>
         </Container>

@@ -85,6 +85,7 @@ import {
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
+import { SearchPageData } from '@/pages/search'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
@@ -1563,6 +1564,26 @@ export const TableBlockFactory = factory<TypeTableBlock>((gen) => ({
       caption: "it's a table"
     }
   }
+}))
+
+export const SearchResultsPageFactory = factory<SearchPageData>((gen) => ({
+  query: gen.lorem.word(),
+  results: [
+    {
+      id: '1',
+      title: gen.lorem.sentence(),
+      description: 'Description of topic result 1',
+      html_path: '/path1'
+    }
+  ],
+  services: [
+    {
+      id: '1',
+      title: gen.lorem.sentence(),
+      description: 'Description of topic result 1',
+      html_path: '/path1'
+    }
+  ]
 }))
 
 export const ALL_AGENCY_NAMES = [
