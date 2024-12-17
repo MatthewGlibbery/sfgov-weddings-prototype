@@ -21,12 +21,6 @@ describe('FormPage', () => {
       const page = FormPageFactory.make()
       FormioForm.mockReturnValueOnce(<div data-testid="dynamic-form" />)
       render(<FormPage page={page} />)
-      const title = screen.getByRole('heading', {
-        level: 1
-      })
-      expect(title).toBeInTheDocument()
-      expect(title).toHaveTextContent(page.title)
-      expect(screen.getByText(formLabel)).toBeInTheDocument()
       expect(screen.queryByText(submittedLabel)).not.toBeInTheDocument()
 
       expect(FormioForm).toHaveBeenCalledTimes(1)

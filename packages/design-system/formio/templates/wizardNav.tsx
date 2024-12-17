@@ -40,7 +40,7 @@ export function form({ t, ...ctx }: WizardRenderContext) {
         return ctx.buttons[type] && text ? (
           <li className="m-0 p-0" key={type}>
             <button ref={`${ctx.wizardKey}-${type}`} {...props}>
-              {text}
+              {ctx.currentPage === 0 ? t('Get started') : text}
             </button>
           </li>
         ) : null

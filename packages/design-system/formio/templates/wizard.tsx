@@ -50,21 +50,31 @@ export function form(ctx: WizardContext) {
       data-formio-template="wizard"
       className={`
         flex flex-col
-        md:flex-row-reverse md:flex-auto md:justify-between
+        lg:flex-row-reverse lg:flex-auto lg:justify-between
         ${ctx.className}
       `}
     >
+      <h1 className="my-space-desktop-md text-desktop-display-xxxl font-slab lg:hidden">
+        {title}
+      </h1>
       <div
         dangerouslySetInnerHTML={{ __html: ctx.wizardHeader }}
-        className="basis-1/3 w-full"
+        className="w-full basis-1/3"
       />
       <div className="w-full basis-2/3">
-        <h1 className="mb-60 text-desktop-display-xxxl font-slab">{title}</h1>
+        <h1 className="text-desktop-display-xxxl font-slab max-lg:hidden lg:block">
+          {title}
+        </h1>
+
         <div
           ref={ctx.wizardKey}
           dangerouslySetInnerHTML={{ __html: ctx.components }}
+          className="my-space-desktop-xxl"
         />
-        <div dangerouslySetInnerHTML={{ __html: ctx.wizardNav }} />
+        <div
+          dangerouslySetInnerHTML={{ __html: ctx.wizardNav }}
+          className="mb-space-desktop-xxl"
+        />
       </div>
     </div>
   )

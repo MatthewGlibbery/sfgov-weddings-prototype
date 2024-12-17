@@ -137,7 +137,7 @@ describe('FormioForm', () => {
     const input1 = screen.getByLabelText(field1.label, { exact: false })
     expect(input1).toBeInTheDocument()
 
-    await click('Next')
+    await click('Get started')
 
     const input2 = screen.getByLabelText(field2.label, { exact: false })
     expect(input2).toBeInTheDocument()

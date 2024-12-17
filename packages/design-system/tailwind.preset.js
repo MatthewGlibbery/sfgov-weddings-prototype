@@ -10,6 +10,15 @@ const completedIcon = `<svg width="18" height="18" viewBox="0 0 18 18" fill="non
 <path d="M4.1875 10.0833L7 13L14 5" stroke="#FCFCFC" stroke-width="2"/>
 </svg>`
 
+const dropdownIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 7L10 14L17 7" stroke="#0B0C0C" stroke-width="2"/>
+</svg>
+`
+
+function svgBackgroundImage(icon) {
+  return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(icon)}")`
+}
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   theme,
@@ -20,9 +29,7 @@ module.exports = {
       addVariant('link', '& a')
       addUtilities({
         '.bg-check-white': {
-          backgroundImage: `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-            checkIcon
-          )}")`,
+          backgroundImage: svgBackgroundImage(checkIcon),
           backgroundColor: `${theme.colors.primary500}`,
           backgroundSize: '24px 24px',
           backgroundPosition: 'center center',
@@ -31,10 +38,14 @@ module.exports = {
         '.panel-completed': {
           width: '18px',
           height: '18px',
-          backgroundImage: `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-            completedIcon
-          )}")`,
+          backgroundImage: svgBackgroundImage(completedIcon),
           backgroundSize: '18px 18px',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat'
+        },
+        '.dropdown-open': {
+          backgroundImage: svgBackgroundImage(dropdownIcon),
+          backgroundSize: '20px 20px',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat'
         },
