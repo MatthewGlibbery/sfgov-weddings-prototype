@@ -365,7 +365,43 @@ describe('ContentAPI', () => {
           document: 789
         },
         some_key: '/api/cms/0',
-        contact: [{ type: 'address', value: 123 }]
+        contact: [{ type: 'address', value: 123 }],
+        body: [
+          {
+            type: 'documents',
+            value: [
+              {
+                type: 'document_section',
+                value: {
+                  title: 'document section title',
+                  content: [
+                    {
+                      type: 'document',
+                      value: 21
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            type: 'resources',
+            value: [
+              {
+                type: 'resource_section',
+                value: {
+                  title: 'resource section title',
+                  resources: [
+                    {
+                      type: 'page',
+                      value: 23
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       }
       const pageUrlData = {
         title: 'some title'
@@ -396,6 +432,11 @@ describe('ContentAPI', () => {
         hours: [],
         agency: null
       }
+      const nestedDocumentData = {
+        id: 21,
+        title: 'document title',
+        file: 'http://path/to/file.pdf'
+      }
 
       const someKeyData = undefined
       fetchMock
@@ -405,6 +446,7 @@ describe('ContentAPI', () => {
         .once(JSON.stringify(documentData))
         .once(JSON.stringify(someKeyData))
         .once(JSON.stringify(addressData))
+        .once(JSON.stringify(nestedDocumentData))
 
       await example.massageData(data)
       expect(data.page_obj_url).toEqual(pageUrlData)
@@ -412,6 +454,9 @@ describe('ContentAPI', () => {
       expect(data.nested_obj.component.image).toEqual(imageData)
       expect(data.nested_obj.document).toEqual(documentData)
       expect(data.contact[0].value).toEqual(addressData)
+      expect(data.body[0].value[0].value.content[0].value).toEqual(
+        nestedDocumentData
+      )
     })
 
     it('throws on error', async () => {
@@ -430,7 +475,21 @@ describe('ContentAPI', () => {
           type: 'foo.Bar'
         },
         part_of: ['https://part.of.url'],
-        partner_agencies: [{ type: 'agency', value: 123, id: '111-222-333' }]
+        partner_agencies: [{ type: 'agency', value: 123, id: '111-222-333' }],
+        services: [
+          {
+            type: 'services',
+            value: {
+              title: 'Services',
+              services: [
+                {
+                  type: 'page',
+                  value: 7988
+                }
+              ]
+            }
+          }
+        ]
       }
       const partOfData = {
         meta: {
@@ -446,26 +505,52 @@ describe('ContentAPI', () => {
         title: 'some agency page',
         html_path: 'http://some.agency.page/path'
       }
+      const nestedServiceData = {
+        id: 23,
+        title: 'Nested service data title',
+        html_path: 'http://nested/service/path'
+      }
       const expectedData = {
         meta: { type: 'foo.Bar' },
         part_of: [
           {
             title: 'some related page',
-            meta: { html_url: 'http://some.page/path' }
+            meta: { html_url: 'http://some.page/path' },
+            value: partOfData
           }
         ],
         partner_agencies: [
           {
             title: partnerAgencyData.title,
-            meta: { html_url: partnerAgencyData.html_path }
+            meta: { html_url: partnerAgencyData.html_path },
+            value: partnerAgencyData
+          }
+        ],
+        services: [
+          {
+            type: 'services',
+            value: {
+              title: 'Services',
+              services: [
+                {
+                  title: nestedServiceData.title,
+                  meta: {
+                    html_url: nestedServiceData.html_path
+                  },
+                  value: nestedServiceData
+                }
+              ]
+            }
           }
         ]
       }
+      const nestedData = {}
       fetchMock
         .once(JSON.stringify(partOfData))
         .once(JSON.stringify(partnerAgencyData))
+        .once(JSON.stringify(nestedServiceData))
       const res = await example.getPreviewRelatedData('foo', data)
-      expect(fetchMock).toHaveBeenCalledTimes(2)
+      expect(fetchMock).toHaveBeenCalledTimes(3)
       expect(res).toEqual(expectedData)
     })
 
@@ -515,7 +600,8 @@ describe('ContentAPI', () => {
         meta: { type: 'foo.Bar' },
         primary_agency: {
           title: 'some related page',
-          meta: { html_url: 'http://some.page/path' }
+          meta: { html_url: 'http://some.page/path' },
+          value: primaryAgencyData
         }
       }
       fetchMock.mockResponseOnce(JSON.stringify(primaryAgencyData))

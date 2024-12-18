@@ -277,7 +277,9 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
     const items = links.map((item) => {
       const title = item.value.title
       let description =
-        item.value.meta?.search_description || item.value.description
+        item.value.meta?.search_description ||
+        item.value.description ||
+        item.value.data?.description
       if (props.noDescription) description = ''
       let url = item.value.url
       if ((!item.value.page && item.value.link_to) || item.value.meta) {

@@ -165,6 +165,27 @@ export class ContentAPI implements IContentAPI {
         fetchUrl = `${this.previewURL}/cms.Address/${obj.value}`
       }
 
+      let addToValue = false
+      if (
+        value &&
+        typeof value === 'object' &&
+        value.type === 'document' &&
+        typeof value.value === 'number'
+      ) {
+        addToValue = true
+        fetchUrl = `${this.previewURL}/documents/${value.value}`
+      }
+
+      if (
+        value &&
+        typeof value === 'object' &&
+        value.type === 'page' &&
+        typeof value.value === 'number'
+      ) {
+        addToValue = true
+        fetchUrl = `${this.previewURL}/pages/${value.value}`
+      }
+
       if (fetchUrl) {
         try {
           const res = await this.fetch(fetchUrl)
@@ -173,6 +194,10 @@ export class ContentAPI implements IContentAPI {
           })
           if (key === 'type' && value === 'address') {
             obj.value = data
+            return
+          } else if (addToValue) {
+            obj[key].value = data
+            return
           } else {
             obj[key] = data
           }
@@ -199,6 +224,8 @@ export class ContentAPI implements IContentAPI {
       try {
         const res = await this.fetch(url)
         data = await res.json()
+        // remove canonical_page because it triggers a fetch in massageData
+        delete data.canonical_page
       } catch (error) {
         return null
       }
@@ -206,21 +233,27 @@ export class ContentAPI implements IContentAPI {
         ? data
         : {
             title: data.title,
-            meta: { html_url: data.html_path }
+            meta: { html_url: data.html_path },
+            value: data
           }
     }
 
     const relatedData = {
+      background_header_image: null,
+      fields: [],
+      image: null,
+      logo: null,
+      main_image: null,
+      page_content: [],
       part_of: [],
-      topics: [],
       partner_agencies: [],
+      primary_agency: {},
       related_child_agencies: [],
       related_pages: [],
-      primary_agency: {},
-      logo: null,
-      background_header_image: null,
-      image: null,
-      main_image: null
+      related: [],
+      resources: [],
+      services: [],
+      topics: []
     }
 
     for (const key of Object.keys(relatedData)) {
@@ -230,11 +263,20 @@ export class ContentAPI implements IContentAPI {
           // some things (like page chooser streamfields) are an object
           // and the related data is in `value` as a numerical id
           for (const item of data[key]) {
-            let url = item
-            if (item.value) {
-              url = `${this.previewURL}/pages/${item.value}`
+            if (
+              typeof item.value === 'object' &&
+              !Array.isArray(item.value) &&
+              item.value != null
+            ) {
+              item.value = await this.getPreviewRelatedData(path, item.value)
+              relatedData[key].push(item)
+            } else {
+              let url = item
+              if (item.value) {
+                url = `${this.previewURL}/pages/${item.value}`
+              }
+              relatedData[key].push(await getRelatedData(url))
             }
-            relatedData[key].push(await getRelatedData(url))
           }
         } else {
           relatedData[key] = await getRelatedData(data[key])
