@@ -15,6 +15,7 @@ module.exports = {
     defaultLocale: 'en',
     locales: ['en', 'es', 'zh-hant', 'fil']
   },
+  lowerCaseLng: true,
   backend: {
     backend: HttpBackend,
     backendOption: {
