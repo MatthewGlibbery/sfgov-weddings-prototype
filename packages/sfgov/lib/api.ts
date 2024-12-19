@@ -137,6 +137,7 @@ export class ContentAPI implements IContentAPI {
     for (const key of Object.keys(obj)) {
       let fetchUrl = null
       const value = obj[key]
+      let addToValue = false
 
       if (typeof value === 'number') {
         // we've encountered a numerical value for a key
@@ -161,11 +162,32 @@ export class ContentAPI implements IContentAPI {
         fetchUrl = value
       }
 
-      if (key === 'type' && value === 'address') {
-        fetchUrl = `${this.previewURL}/cms.Address/${obj.value}`
+      const typeMapping = {
+        address: {
+          path: 'cms.Address',
+          addToValue: true
+        },
+        document: {
+          path: 'documents',
+          addToValue: true
+        },
+        page: {
+          path: 'pages',
+          addToValue: true
+        }
+      }
+      if (
+        value &&
+        typeof value === 'object' &&
+        typeMapping[value.type] &&
+        typeof value.value === 'number'
+      ) {
+        addToValue = typeMapping[value.type].addToValue
+        fetchUrl = `${this.previewURL}/${typeMapping[value.type].path}/${
+          value.value
+        }`
       }
 
-      let addToValue = false
       if (
         value &&
         typeof value === 'object' &&
@@ -192,12 +214,13 @@ export class ContentAPI implements IContentAPI {
           const data = await res.json().catch(() => {
             return value
           })
-          if (key === 'type' && value === 'address') {
-            obj.value = data
-            return
-          } else if (addToValue) {
+          if (addToValue) {
+            // some templates require an id property which isn't returned as part of the fetch
+            if (!Object.prototype.hasOwnProperty.call(data, `id`)) {
+              data.id = fetchUrl.slice(fetchUrl.lastIndexOf(`/`) + 1)
+            }
             obj[key].value = data
-            return
+            continue
           } else {
             obj[key] = data
           }

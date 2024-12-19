@@ -418,6 +418,7 @@ describe('ContentAPI', () => {
         file_path: 'some/document/path'
       }
       const addressData = {
+        id: 123,
         url: 'http://localhost:8000/api/cms/cms.Address/1',
         detail_url: 'http://localhost:8000/api/cms/cms.Address/1',
         organization: '',
