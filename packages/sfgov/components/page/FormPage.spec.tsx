@@ -9,7 +9,6 @@ import { FormPage } from './FormPage'
 describe('FormPage', () => {
   // FIXME: we should be looking for the translations here,
   // not their uppercase variations
-  const formLabel = /^FORM$/i
   const submittedLabel = /^FORM SUBMITTED$/i
 
   beforeEach(() => {
@@ -101,6 +100,70 @@ describe('FormPage', () => {
         }),
         {}
       )
+    })
+
+    describe('query string parameters', () => {
+      it('passes query string parameters as submission data', () => {
+        useSearchParams.mockReturnValueOnce(
+          new URLSearchParams({
+            x: '1',
+            foo: 'bar'
+          })
+        )
+        const page = FormPageFactory.make()
+        render(<FormPage page={page} />)
+        expect(FormioForm).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            src: undefined,
+            submission: {
+              data: {
+                x: '1',
+                foo: 'bar'
+              }
+            }
+          }),
+          {}
+        )
+      })
+
+      it('does not pass the submitted parameter as submission data', () => {
+        useSearchParams.mockReturnValueOnce(
+          new URLSearchParams({
+            submitted: 'wut',
+            x: '1',
+            foo: 'bar'
+          })
+        )
+        const page = FormPageFactory.make()
+        render(<FormPage page={page} />)
+        expect(FormioForm).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            src: undefined,
+            submission: {
+              data: {
+                x: '1',
+                foo: 'bar'
+              }
+            }
+          }),
+          {}
+        )
+      })
+
+      it('can handle no search params', () => {
+        useSearchParams.mockReturnValueOnce(null)
+        const page = FormPageFactory.make()
+        render(<FormPage page={page} />)
+        expect(FormioForm).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            src: undefined,
+            submission: {
+              data: {}
+            }
+          }),
+          {}
+        )
+      })
     })
   })
 })

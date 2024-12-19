@@ -45,12 +45,17 @@ export function FormPage({
     partner_agencies: agencies
   } = page
 
-  const { t } = useTranslation()
   const queryParams = useSearchParams()
+  const { submitted: queryParamSubmitted, ...rawQueryParams } =
+    Object.fromEntries(queryParams?.entries() || [])
   const [submitted, setSubmitted] = useState(
-    initialSubmitted || queryParams?.get('submitted') === 'true'
+    initialSubmitted || queryParamSubmitted === 'true'
   )
-  const formSubmittedString = t('form-submitted', {defaultValue: 'Form submitted'})
+
+  const { t } = useTranslation()
+  const formSubmittedString = t('form-submitted', {
+    defaultValue: 'Form submitted'
+  })
 
   return (
     <PageWrapper title={title}>
@@ -82,6 +87,9 @@ export function FormPage({
             // the `src` (URL) and `form` (schema) props are mutually exclusive
             src={formSchema ? undefined : formSchemaUrl}
             form={formSchema}
+            submission={{
+              data: rawQueryParams
+            }}
             formReady={onFormReady}
             onSubmitDone={() => setSubmitted(true)}
           />
@@ -149,7 +157,9 @@ function Loading(props: DynamicOptionsLoadingProps) {
   const error = props.error || props.timedOut ? 'Timed out' : undefined
   return (
     <div>
-      {props.isLoading ? t('form-loading', { defaultValue: 'Loading...' }) : t('Error: {{error}}', { error })}
+      {props.isLoading
+        ? t('form-loading', { defaultValue: 'Loading...' })
+        : t('Error: {{error}}', { error })}
     </div>
   )
 }
