@@ -411,7 +411,9 @@ describe('ContentAPI', () => {
       }
       const imageData = {
         title: 'some image title',
-        file_path: 'some/file/path'
+        file_path: 'some/file/path',
+        width: 100,
+        height: 100
       }
       const documentData = {
         title: 'some document title',
@@ -452,7 +454,10 @@ describe('ContentAPI', () => {
       await example.massageData(data)
       expect(data.page_obj_url).toEqual(pageUrlData)
       expect(data.nested_obj.page).toEqual(nestedPageData)
-      expect(data.nested_obj.component.image).toEqual(imageData)
+      expect(data.nested_obj.component.image).toEqual({
+        ...imageData,
+        ...{ original: { width: 100, height: 100 } }
+      })
       expect(data.nested_obj.document).toEqual(documentData)
       expect(data.contact[0].value).toEqual(addressData)
       expect(data.body[0].value[0].value.content[0].value).toEqual(

@@ -214,6 +214,13 @@ export class ContentAPI implements IContentAPI {
           const data = await res.json().catch(() => {
             return value
           })
+          // add original.width && original.height for images
+          if (key === 'image' && !('original' in data)) {
+            data.original = {
+              width: data.width,
+              height: data.height
+            }
+          }
           if (addToValue) {
             // some templates require an id property which isn't returned as part of the fetch
             if (!Object.prototype.hasOwnProperty.call(data, `id`)) {
