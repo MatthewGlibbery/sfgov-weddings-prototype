@@ -43,7 +43,8 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
     contact: [contact],
     spotlight,
     quick_links: quickLinks,
-    additional_roles: additionalRoles
+    additional_roles: additionalRoles,
+    agency_contact: agencyContact
   } = page
 
   const { t } = useTranslation()
@@ -54,6 +55,17 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
         : '#agency-contact',
     linkText: 'Contact'
   }
+
+  // set contact to agency contact if it exists
+  const contactData = agencyContact?.[0] || contact
+
+  // manual entries should override any primary agency contact info
+  // re-assign any manual entries for contact information
+  Object.keys(contactData.value || {}).forEach((key) => {
+    if (contact?.value[key]?.length) {
+      contactData.value[key] = contact.value[key]
+    }
+  })
 
   return (
     <PageWrapper title={title}>
@@ -154,17 +166,14 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
               </div>
             </div>
           ) : null}
-          {contact.value.address.length ||
-          contact.value.phone.length ||
-          contact.value.email.length ||
-          contact.value.social_media_other.length ? (
+          {Object.values(contactData.value).some((val) => val.length) ? (
             <div id="agency-contact">
               <HeadingXXl as="h2" className="!mb-[24px]">
                 {t('Contact', {
                   defaultValue: `Contact ${primaryAgency?.title ?? ''}`
                 })}
               </HeadingXXl>
-              <ContactFooter items={contact} />
+              <ContactFooter items={contactData} />
             </div>
           ) : null}
         </div>

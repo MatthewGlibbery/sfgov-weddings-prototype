@@ -58,7 +58,11 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
   return (
     <StackedContainer className="gap-28">
       {footerSections.address.length ? (
-        <StackedItem icon={IconHome} title="Address">
+        <StackedItem
+          icon={IconHome}
+          title="Address"
+          data-testid="contact-address"
+        >
           <div className="flex flex-col gap-y-28">
             {footerSections.address.map((address) => (
               <Location {...address.value} key={address.id} />
@@ -67,7 +71,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
         </StackedItem>
       ) : null}
       {footerSections.phone_number.length ? (
-        <StackedItem icon={IconPhone} title="Phone">
+        <StackedItem icon={IconPhone} title="Phone" data-testid="contact-phone">
           <div className="flex flex-col gap-y-28">
             {footerSections.phone_number.map((phone) => (
               <PhoneNumberBlock {...phone.value} key={phone.id} />
@@ -76,7 +80,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
         </StackedItem>
       ) : null}
       {footerSections.email.length ? (
-        <StackedItem icon={IconEmail} title="Email">
+        <StackedItem icon={IconEmail} title="Email" data-testid="contact-email">
           <div className="flex flex-col gap-y-28">
             {footerSections.email.map((email) => (
               <EmailBlock {...email.value} key={email.id} />
@@ -85,14 +89,22 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
         </StackedItem>
       ) : null}
       {footerSections.title_and_text.length ? (
-        <StackedItem icon={IconAdditional} title="Additional info">
+        <StackedItem
+          icon={IconAdditional}
+          title="Additional info"
+          data-testid="contact-additional-info"
+        >
           {footerSections.title_and_text.map((extra) => (
             <TitleAndText {...extra.value} key={extra.id} />
           ))}
         </StackedItem>
       ) : null}
       {footerSections.social_media.length ? (
-        <StackedItem icon={IconShare} title="Social media">
+        <StackedItem
+          icon={IconShare}
+          title="Social media"
+          data-testid="contact-social"
+        >
           {footerSections.social_media.map((item) => (
             <SocialMedia items={item.value} key={item.id} />
           ))}

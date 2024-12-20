@@ -319,11 +319,7 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
   profile_type: 'city_employee',
   primary_job_title: 'Media Programming Man',
   primary_job_title_line_2: 'I program the media',
-  partner_agencies: RelatedContentBlockFactory.make(1, {
-    meta: {
-      type: 'sfgov_base.RelatedContentAgency'
-    }
-  }),
+  primary_agency: RelatedAgencyFactory.make(1, { meta: { type: 'sf.Agency' } }),
   show_contact: true,
   image: ImageFactory.make(),
   biography: '<p data-block-key="1jel0">Lorem Ipsum</p>',
@@ -340,7 +336,7 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
     {
       type: 'contact',
       value: {
-        address: [LocationBlockFactory.make(1)],
+        address: [LocationBlockFactory.make()],
         phone: [PhoneNumberFactory.make()],
         email: [EmailBlockFactory.make()],
         social_media_other: [SocialMediaFactory.make()]
@@ -356,6 +352,17 @@ export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
         content_type: 'Location Page',
         title: 'Whangdoodleland',
         id: 35
+      }
+    }
+  ],
+  agency_contact: [
+    {
+      type: 'contact',
+      value: {
+        address: [LocationBlockFactory.make()],
+        phone: [PhoneNumberFactory.make()],
+        email: [EmailBlockFactory.make()],
+        social_media_other: [SocialMediaFactory.make()]
       }
     }
   ]
@@ -988,6 +995,7 @@ export const DateTimeBlockFactory = factory<TypeDateTimeBlock>((gen) => ({
 }))
 
 export const LocationBlockFactory = factory<TypeLocationBlock>((gen) => {
+  const addressTitle = gen.lorem.words()
   return {
     id: gen.datatype.uuid(),
     type: 'address',
@@ -1003,6 +1011,7 @@ export const LocationBlockFactory = factory<TypeLocationBlock>((gen) => {
           html_url: gen.internet.url()
         }
       },
+      address_title: addressTitle,
       organization: gen.name.jobTitle(),
       addressee: `${gen.name.firstName()} ${gen.name.lastName()}`,
       location_name: gen.lorem.word(),
