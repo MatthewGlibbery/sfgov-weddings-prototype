@@ -35,7 +35,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
       ) : null}
       <ZebraStripedSection>
         <Container>
-          {services.length || topics.length ? (
+          {services?.length || topics?.length ? (
             <div className="mb-28 space-y-12">
               <DisplayXXXl as="h2" className="lg:hidden">
                 {t('services', { defaultValue: 'Services' })}
@@ -67,7 +67,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
               </div>
             </div>
           ) : null}
-          {sfGovernment.length ? (
+          {sfGovernment?.length ? (
             <DisplayXXXl as="h2">
               {t('sf-elected-officials', {
                 defaultValue: 'San Francisco elected officials'
@@ -75,7 +75,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
             </DisplayXXXl>
           ) : null}
         </Container>
-        {sfGovernment.length ? (
+        {sfGovernment?.length ? (
           <Container backgroundColor="primary">
             {sfGovernment.map((profileGroup) => (
               <ProfileGroup

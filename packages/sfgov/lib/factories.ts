@@ -1523,6 +1523,7 @@ export const TableBlockFactory = factory<TypeTableBlock>((gen) => ({
   type: 'table',
   value: {
     table_header_options: 'row',
+    description: '<p>some description</p>',
     table: {
       columns: [
         {

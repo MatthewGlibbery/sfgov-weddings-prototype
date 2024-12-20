@@ -497,6 +497,7 @@ export type TypeTableValues = {
 
 export type TypeTableBlockValues = {
   table_header_options?: 'row' | 'column' | 'both' | 'neither'
+  description: string
   table: TypeTableValues
 }
 

@@ -3,8 +3,8 @@ import { TypeTableBlockValues, TypeTableValues } from '@/types'
 import { RichText } from './RichText'
 
 const wrapperStyles = {
-  background: `linear-gradient(to right, white, white),
-      linear-gradient(to right, white, white),
+  background: `linear-gradient(to right, rgb(252,252,252), rgb(252,252,252)),
+      linear-gradient(to right, rgb(252,252,252), rgb(252,252,252)),
   
       linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0.001)),
       linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0.001))`,
@@ -17,7 +17,9 @@ const wrapperStyles = {
 }
 const baseCellClasses = classes(
   'p-20 border-b-1 border-solid border-neutral200',
-  'min-w-[130px] md:min-w-[140px] lg:min-w-[120px] text-left'
+  'min-w-[130px] md:min-w-[180px] lg:min-w-[150px] text-left',
+  'max-w-[130px] md:max-w-[180px] lg:max-w-[150px]',
+  'whitespace-normal break-words'
 )
 
 const TableWrapper = classed('div', 'whitespace-nowrap overflow-auto')
@@ -34,7 +36,7 @@ const TableHeader = classed('th', {
 const TableData = classed('td', classes(baseCellClasses))
 
 export const Table = (props: TypeTableBlockValues) => {
-  const { table_header_options: headers, table } = props
+  const { table_header_options: headers, table, description } = props
 
   const buildTableData = (
     headers: string | undefined,
@@ -140,7 +142,7 @@ export const Table = (props: TypeTableBlockValues) => {
           {table.caption}
         </HeadingXXl>
       ) : null}
-
+      {description ? <RichText html={description} /> : null}
       <TableWrapper style={wrapperStyles}>
         <table className="w-full">
           {table.caption ? (
