@@ -210,7 +210,7 @@ export const MeetingTile = ({ link }: TileProps) => {
             <HeadingMd
               as="a"
               className="text-primary600 no-underline"
-              href="/#"
+              href={link?.meta?.html_url || '#'}
             >
               {title}
             </HeadingMd>
