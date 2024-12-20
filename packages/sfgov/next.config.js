@@ -1,5 +1,8 @@
 const { i18n } = require('./next-i18next.config')
 
+/** @typedef {import('next/dist/lib/load-custom-routes').Redirect} Redirect */
+/** @typedef {import('next/dist/lib/load-custom-routes').Rewrite} Rewrite */
+
 /** @type {import('next').NextConfig} */
 module.exports = {
   i18n,
@@ -28,9 +31,23 @@ module.exports = {
   },
   poweredByHeader: false,
   experimental: {},
-  transpilePackages: ['../design-system, ../../node_modules/lodash/index.js'],
-  // storybook redirects
+  transpilePackages: [
+    '../design-system',
+    '../../node_modules/lodash/index.js'
+  ],
+  // redirects cause the browser URL to change
   redirects: async () => [
+    ...storybookRedirects()
+  ],
+}
+
+/**
+ * These redirects allow storybook to be served at /storybook when its build is
+ * output to public/storybook.
+ * @returns {Redirect[]}
+ */
+function storybookRedirects() {
+  return [
     {
       source: '/storybook',
       destination: '/storybook/index.html',
