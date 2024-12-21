@@ -1,11 +1,12 @@
 /* eslint-disable react/function-component-definition */
 import {
   Button,
+  classed,
   Container,
   HeadingXXl,
   PageTitleSection
 } from '@/design-system'
-import type { Form } from '@/design-system/formio'
+import type { Form, FormSubmission } from '@/design-system/formio'
 import { getPageURL } from '@/lib/utils'
 import type {
   ConfirmationBodyBlock,
@@ -15,7 +16,7 @@ import type {
 import { useTranslation } from 'next-i18next'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
 import { PageLinksList } from '../PageLinksList'
@@ -46,8 +47,12 @@ export function FormPage({
   } = page
 
   const queryParams = useSearchParams()
-  const { submitted: queryParamSubmitted, ...rawQueryParams } =
-    Object.fromEntries(queryParams?.entries() || [])
+  const {
+    submission: submissionId,
+    submitted: queryParamSubmitted,
+    ...rawQueryParams
+  } = Object.fromEntries(queryParams?.entries() || [])
+  const [error, setError] = useState<ReactNode>()
   const [submitted, setSubmitted] = useState(
     initialSubmitted || queryParamSubmitted === 'true'
   )
@@ -80,23 +85,61 @@ export function FormPage({
             />
           </div>
         ) : (
-          <FormioForm
-            // the `src` (URL) and `form` (schema) props are mutually exclusive
-            src={formSchema ? undefined : formSchemaUrl}
-            form={formSchema}
-            submission={{
-              data: rawQueryParams
-            }}
-            formReady={onFormReady}
-            onSubmitDone={() => setSubmitted(true)}
-          />
+          <>
+            {error ? (
+              <InfoBox variant="error" className="mb-40">
+                {error}
+              </InfoBox>
+            ) : null}
+            <FormioForm
+              // the `src` (URL) and `form` (schema) props are mutually exclusive
+              src={formSchema ? undefined : formSchemaUrl}
+              form={formSchema}
+              submission={{
+                data: rawQueryParams
+              }}
+              formReady={onFormReady}
+              onSubmitDone={() => setSubmitted(true)}
+            />
+          </>
         )}
       </Container>
     </PageWrapper>
   )
 
+  // FIXME: get coverage on this!
   // istanbul ignore next
   async function onFormReady(form: Form) {
+    if (submissionId && !form.formio.submissionId) {
+      /**
+       * In the olden days, we handled submission IDs by just appending
+       * `/submission/{id}` bit to the end of the form schema URL and telling
+       * formio.js to get the form from there. However, in the new world we have
+       * a translated form schema and can't use that trick.
+       *
+       * Instead, we tweak the Formio instance by setting the submissionId and
+       * submissionUrl fields directly (these would normally be parsed from the
+       * URL) then loading the submission directly and passing _that_ to the
+       * form so it can use the submission's data.
+       */
+      const { formio } = form
+      formio.submissionId = submissionId
+      formio.submissionUrl = formio.formUrl! + `/submission/${submissionId}`
+      try {
+        const submission: FormSubmission = await formio.loadSubmission()
+        form.submission = submission
+        await form.render()
+      } catch (error) {
+        // if we can't fetch the submission,
+        setError(
+          t('form-submission-not-found', {
+            defaultValue:
+              'Unable to find the form submssion id "{{ submissionId }}".',
+            submissionId
+          })
+        )
+      }
+    }
     // focusing on a component jumps to the component's page
     // automatically, so we don't need to call setPage() if a
     // component key was passed
@@ -124,7 +167,6 @@ type ConfirmationContentProps = {
   block: ConfirmationBodyBlock
 }
 
-// istanbul ignore next
 const ConfirmationContent = ({ block }: ConfirmationContentProps) => {
   switch (block.type) {
     case 'text':
@@ -148,15 +190,28 @@ const ConfirmationContent = ({ block }: ConfirmationContentProps) => {
   return <></>
 }
 
+const InfoBox = classed('div', {
+  base: 'p-20',
+  variants: {
+    variant: {
+      loading: 'bg-neutral100',
+      error: 'bg-danger100 border-solid border-2 border-danger700 text-black'
+    }
+  }
+})
+
 // istanbul ignore next
 function Loading(props: DynamicOptionsLoadingProps) {
   const { t } = useTranslation()
   const error = props.error || props.timedOut ? 'Timed out' : undefined
   return (
-    <div>
+    <InfoBox
+      variant={props.isLoading ? 'loading' : props.error ? 'error' : undefined}
+      className="mb-40"
+    >
       {props.isLoading
         ? t('form-loading', { defaultValue: 'Loading...' })
-        : t('Error: {{error}}', { error })}
-    </div>
+        : t('form-error', { defaultValue: 'Error: {{error}}', error })}
+    </InfoBox>
   )
 }

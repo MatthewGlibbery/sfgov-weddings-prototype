@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Formio, Components, Form as _Form } from 'formiojs'
 import type { EventEmitter } from 'formiojs/types/eventEmitter'
-import type { Components, Formio, Form as _Form } from 'formiojs'
 import type { i18n } from 'i18next'
 import type { AnyComponentSchema } from './components'
 import type { Override } from './utils'
@@ -9,24 +9,6 @@ export * from './components'
 export * from './forms'
 export * from './templates'
 export * from './utils'
-
-export type Form = Override<
-  _Form,
-  {
-    element: HTMLElement
-    alert: HTMLElement
-    submitted: boolean
-    setAlert(type: string | boolean, message?: string, options?: object): void
-    submit(before?: boolean, options?: object): Promise<object>
-    // focus on a component by its unique id
-    focusOnComponent(key: string): Promise<void>
-    /**
-     * This method only exists on multi-page forms, which render with the Wizard
-     * class: https://github.com/formio/formio.js/blob/v4.21.3/src/Wizard.js#L642
-     */
-    setPage?: (page: number) => Promise<void>
-  }
->
 
 export type FormSubmission = {
   _id?: string
@@ -44,6 +26,26 @@ export type FormSubmission = {
     onLine: boolean
   }
 }
+
+export type Form = Override<
+  _Form,
+  {
+    formio: Formio
+    element: HTMLElement
+    alert: HTMLElement
+    submitted: boolean
+    submission?: FormSubmission
+    setAlert(type: string | boolean, message?: string, options?: object): void
+    submit(before?: boolean, options?: object): Promise<object>
+    // focus on a component by its unique id
+    focusOnComponent(key: string): Promise<void>
+    /**
+     * This method only exists on multi-page forms, which render with the Wizard
+     * class: https://github.com/formio/formio.js/blob/v4.21.3/src/Wizard.js#L642
+     */
+    setPage?: (page: number) => Promise<void>
+  }
+>
 
 type SubmissionHookData = FormSubmission & { component?: AnyComponentSchema }
 
