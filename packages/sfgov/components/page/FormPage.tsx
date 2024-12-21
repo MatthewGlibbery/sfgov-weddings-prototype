@@ -60,28 +60,25 @@ export function FormPage({
   return (
     <PageWrapper title={title}>
       <Container>
+        <div className="space-y-12 mb-40">
+          <PageTitleSection
+            title={submitted ? confirmationTitle : ''}
+            label={submitted ? formSubmittedString : title}
+          ></PageTitleSection>
+        </div>
         {submitted ? (
-          <>
-            <div className="space-y-12 mb-40">
-              <PageTitleSection
-                title={confirmationTitle}
-                label={formSubmittedString}
-              ></PageTitleSection>
-              <PageLinksList pageLinks={agencies} />
-            </div>
-            <div className="space-y-40">
-              {confirmationBody.map((block) => (
-                <ConfirmationContent key={block.id} block={block} />
-              ))}
-              <HeadingXXl as="h2" className="flex flex-row gap-8">
-                {t('contact-us', { defaultValue: 'Contact us' })}
-              </HeadingXXl>
-              {/* FIXME is this a problem here or in ContactFooter? */}
-              <ContactFooter
-                items={getHelp as unknown as TypeContactFooterBlockValues[]}
-              />
-            </div>
-          </>
+          <div className="space-y-40">
+            {confirmationBody.map((block) => (
+              <ConfirmationContent key={block.id} block={block} />
+            ))}
+            <HeadingXXl as="h2" className="flex flex-row gap-8">
+              {t('contact-us', { defaultValue: 'Contact us' })}
+            </HeadingXXl>
+            {/* FIXME is this a problem here or in ContactFooter? */}
+            <ContactFooter
+              items={getHelp as unknown as TypeContactFooterBlockValues[]}
+            />
+          </div>
         ) : (
           <FormioForm
             // the `src` (URL) and `form` (schema) props are mutually exclusive

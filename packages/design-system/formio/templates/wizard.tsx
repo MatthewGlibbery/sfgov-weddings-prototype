@@ -58,7 +58,7 @@ export function form(ctx: WizardContext) {
         {title}
       </h1>
       <div
-        dangerouslySetInnerHTML={{ __html: ctx.wizardHeader }}
+        dangerouslySetInnerHTML={{ __html: ctx.wizardHeader ?? '' }}
         className="w-full basis-1/3"
       />
       <div className="w-full basis-2/3">
@@ -68,11 +68,11 @@ export function form(ctx: WizardContext) {
 
         <div
           ref={ctx.wizardKey}
-          dangerouslySetInnerHTML={{ __html: ctx.components }}
+          dangerouslySetInnerHTML={{ __html: ctx.components ?? '' }}
           className="my-space-desktop-xxl"
         />
         <div
-          dangerouslySetInnerHTML={{ __html: ctx.wizardNav }}
+          dangerouslySetInnerHTML={{ __html: ctx.wizardNav ?? '' }}
           className="mb-space-desktop-xxl"
         />
       </div>
