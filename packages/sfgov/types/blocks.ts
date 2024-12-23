@@ -253,7 +253,8 @@ export type TypeSpotlightBlock = BlockType<
 
 export type TypeTimelineBlockValues = {
   title: string
-  timeline_items: TypeTitleAndTextValues[]
+  timeline_items: BlockType<'item', TypeTitleAndTextValues>[]
+  button_link: TypeButtonLinkValues
 }
 
 export type TypeResourcesSectionBlock = BlockType<

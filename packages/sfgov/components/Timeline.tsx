@@ -1,6 +1,13 @@
-import { BodyText, classed, classes, HeadingXXl } from '@/design-system'
+import {
+  BodyText,
+  classed,
+  classes,
+  HeadingXXl,
+  IconArrowRight
+} from '@/design-system'
 import type { TypeTimelineBlockValues, TypeTitleAndTextValues } from '@/types'
 import React from 'react'
+import { ButtonLink } from './ButtonLink'
 
 type TimelineItemType = {
   item: TypeTitleAndTextValues
@@ -72,19 +79,36 @@ const TimelineItem = ({
 
 export const Timeline = ({
   title,
-  timeline_items: timelineItems
+  timeline_items: timelineItems,
+  button_link: buttonLink
 }: TypeTimelineBlockValues) => {
   return (
     <div>
-      <HeadingXXl as="h3" className="!mb-28">
-        {title}
-      </HeadingXXl>
+      <div className="flex justify-between mb-28 gap-28">
+        {title ? <HeadingXXl as="h3">{title}</HeadingXXl> : null}
+        {buttonLink ? (
+          <>
+            <div className="lg:hidden self-center">
+              <ButtonLink
+                link={buttonLink}
+                iconOnly={true}
+                variant="tertiary"
+              />
+            </div>
+            <div className="hidden lg:block self-center">
+              <ButtonLink link={buttonLink} variant="tertiary">
+                <IconArrowRight width={20} />
+              </ButtonLink>
+            </div>
+          </>
+        ) : null}
+      </div>
       <div className="md:flex">
         {timelineItems.map((timelineItem, i) => {
           return (
             <TimelineItem
               key={timelineItem.id}
-              item={timelineItem}
+              item={timelineItem.value}
               first={i === 0}
               last={i === timelineItems.length - 1}
               only={i === 0 && timelineItems.length === 1}

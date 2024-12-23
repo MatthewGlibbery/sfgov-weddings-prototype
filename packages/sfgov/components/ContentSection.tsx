@@ -26,7 +26,7 @@ export const ContentSection = ({
           {title}
         </HeadingXXl>
       </Wrapper>
-      <div className="flex flex-col gap-20">
+      <div className="space-y-20">
         {sectionContent.map((block, i) => {
           const props = { key: i }
 
@@ -83,6 +83,9 @@ export const ContentSection = ({
                   <EmbeddedContentBlock {...block.value} />
                 </Wrapper>
               )
+            // istanbul ignore next
+            default:
+              return <></>
           }
         })}
       </div>

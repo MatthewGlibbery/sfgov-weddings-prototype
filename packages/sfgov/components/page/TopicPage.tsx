@@ -27,7 +27,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const { title, description, fields, partner_agencies: agencies } = page
   return (
     <PageWrapper title={title}>
-      <Container className="mb-20 pb-40">
+      <Container className="mb-20">
         <PageTitleSection label={t('Topic')} title={title}>
           {description ? (
             <DisplayLg
@@ -85,7 +85,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
               ) : null
             case 'content':
               return section.value.content?.length ? (
-                <div className="flex flex-col gap-y-40" backgroundColor="white">
+                <div backgroundColor="white">
                   {section.value.content.map((section) => (
                     <ContentSection
                       key={section.id}
