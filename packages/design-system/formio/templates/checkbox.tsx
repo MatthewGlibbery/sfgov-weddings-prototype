@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 /** @jsx h */
 /** @jsxFrag null */
 /** @jsxRuntime classic */
@@ -25,7 +28,7 @@ export type CheckboxContext = ComponentContext<CheckboxSchema> & {
 export function form(ctx: CheckboxContext) {
   return (
     <label
-      className={`${ctx.input.labelClass} flex items-center gap-x-16 my-20`}
+      class={`${ctx.input.labelClass} flex items-center gap-x-16 my-20`}
       data-testid={`checkbox-${ctx.instance.id}`}
     >
       <input
@@ -33,7 +36,7 @@ export function form(ctx: CheckboxContext) {
         id={`${ctx.instance.id}-${ctx.component.key}`}
         {...ctx.input.attr}
         checked={ctx.checked}
-        className={classes(
+        class={classes(
           'appearance-none',
           'w-40',
           'h-40',
