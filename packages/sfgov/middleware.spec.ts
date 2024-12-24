@@ -164,29 +164,31 @@ describe('Middleware', () => {
   })
 
   describe('Drupal file URLs', () => {
-    it.each(['/file/foo', '/sites/default/files/path/to/foo.txt'])(
-      'proxies the platform API',
-      async (path) => {
-        const expectedApiUrl =
-          MOCK_API_BASE_URL +
-          '/api/drupal/media/find?path=' +
-          encodeURIComponent(path)
+    it.each([
+      '/file/foo',
+      '/media/foo',
+      '/image/foo',
+      '/sites/default/files/path/to/foo.txt'
+    ])('proxies the platform API', async (path) => {
+      const expectedApiUrl =
+        MOCK_API_BASE_URL +
+        '/api/drupal/media/find?path=' +
+        encodeURIComponent(path)
 
-        const mediaURL = `https://media.local/documents/derp/foo-${randomString()}.txt`
-        fetchMock.mockResponseOnce('', {
-          status: 302,
-          headers: {
-            location: mediaURL
-          }
-        })
+      const mediaURL = `https://media.local/documents/derp/foo-${randomString()}.txt`
+      fetchMock.mockResponseOnce('', {
+        status: 302,
+        headers: {
+          location: mediaURL
+        }
+      })
 
-        await middleware(new NextRequest('http://test.url' + path))
-        expect(fetchMock).toHaveBeenCalledWith(expectedApiUrl, {
-          redirect: 'manual'
-        })
-        expect(rewriteSpy).toHaveBeenCalledWith(mediaURL)
-      }
-    )
+      await middleware(new NextRequest('http://test.url' + path))
+      expect(fetchMock).toHaveBeenCalledWith(expectedApiUrl, {
+        redirect: 'manual'
+      })
+      expect(rewriteSpy).toHaveBeenCalledWith(mediaURL)
+    })
 
     it('handles relative redirect URIs in the location header', async () => {
       const path = '/file/x'

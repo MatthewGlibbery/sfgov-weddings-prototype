@@ -54,7 +54,12 @@ export async function middleware(request: NextRequest) {
   return NextResponse.redirect(redirLoc, redirCode)
 }
 
-const FILE_PATH_PATTERNS = ['/sites/default/files/', '/file/']
+const FILE_PATH_PATTERNS = [
+  '/sites/default/files/',
+  '/file/',
+  '/media/',
+  '/image/'
+]
 
 function isFilePath(path: string): boolean {
   return FILE_PATH_PATTERNS.some((pattern) => path.startsWith(pattern))
