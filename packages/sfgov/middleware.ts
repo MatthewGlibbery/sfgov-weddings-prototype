@@ -9,34 +9,37 @@ export async function middleware(request: NextRequest) {
   }
 
   const reqUrl = request.nextUrl
-
-  // FIXME: remove this once we have file redirects in Wagtail
-  if (isFilePath(reqUrl.pathname)) {
-    return fileRewrite(reqUrl.pathname)
-  }
-
   const resp = await fetch(new URL(reqUrl.pathname, API_BASE_URL).href, {
     redirect: 'manual'
   })
 
   // Not a redirect, continue on
   if (!isRedirectStatus(resp.status)) {
+    if (isFilePath(reqUrl.pathname)) {
+      return fileRewrite(reqUrl.pathname)
+    }
+
     return NextResponse.next()
   }
 
+  // The platform has other logic to do redirects, which appends a slash in
+  // certain situations. See django.middleware.common.CommonMiddleware,
+  // APPEND_SLASH for more infomation.
+  //
+  // In the event that the requested resource is redirected to the same path
+  // due to the enabled  middleware, then short circuit it and process for file
+  // path or continue as normal.
   const rawRedirLoc = resp.headers.get('location')
   // Narrowing for TS, blast you red squigglies
   if (!rawRedirLoc) {
     return NextResponse.next()
   }
 
-  // The platform has other logic to do redirects. In the event that the
-  // requested resource is redirected to the same path, then short circuit it
-  // and continue to render as normal.
-  const redirLoc = new URL(rawRedirLoc, `${reqUrl.protocol}//${reqUrl.host}`)
-  if (
-    redirLoc.pathname.replace(/\//g, '') === reqUrl.pathname.replace(/\//g, '')
-  ) {
+  if (rawRedirLoc === `${reqUrl.pathname}/`) {
+    if (isFilePath(reqUrl.pathname)) {
+      return fileRewrite(reqUrl.pathname)
+    }
+
     return NextResponse.next()
   }
 
@@ -45,6 +48,7 @@ export async function middleware(request: NextRequest) {
   if (resp.status === 302 || resp.status === 307) {
     redirCode = 307
   }
+  const redirLoc = new URL(rawRedirLoc, `${reqUrl.protocol}//${reqUrl.host}`)
 
   // Redirects are lossy and don't preserve the locale, so we add it back in
   redirLoc.pathname = `${
