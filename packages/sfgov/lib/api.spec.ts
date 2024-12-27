@@ -15,7 +15,7 @@ afterAll(() => {
 describe('ContentAPI', () => {
   const example = new ContentAPI({
     baseURL: 'https://api.example.com/api/v3',
-    previewURL: 'https://api.example.com/api/cms'
+    previewURL: 'https://api.example.com/api/v2'
   })
 
   beforeEach(() => {
@@ -152,7 +152,7 @@ describe('ContentAPI', () => {
             meta: {
               type: 'foo.Bar'
             },
-            data: { title: 'some page' }
+            title: 'some page'
           })
         )
         const res = await example.getPageByPath(path, {
@@ -167,7 +167,7 @@ describe('ContentAPI', () => {
         })
         expect(fetchMock).toHaveBeenCalledTimes(1)
         expect(fetchMock).toHaveBeenLastCalledWith(
-          `https://api.example.com/api/cms/pages/by-url/preview${query}`,
+          `https://api.example.com/api/v2/pages/preview${query}`,
           undefined
         )
       }
@@ -273,7 +273,7 @@ describe('ContentAPI', () => {
         meta: {
           type: 'foo.Bar'
         },
-        data: { title: 'some page' }
+        title: 'some page'
       }
       const expectedData = {
         meta: {
@@ -349,288 +349,6 @@ describe('ContentAPI', () => {
       await expect(example.getPreviewData('derp')).rejects.toThrow(
         `400 Bad Request: ${message}`
       )
-    })
-  })
-
-  describe('massageData()', () => {
-    it('fetches data when necessary', async () => {
-      const data = {
-        page_obj_url: 'http://api/cms/pages/url',
-        key: 'some value',
-        nested_obj: {
-          page: 123,
-          component: {
-            image: 456
-          },
-          document: 789
-        },
-        some_key: '/api/cms/0',
-        contact: [{ type: 'address', value: 123 }],
-        body: [
-          {
-            type: 'documents',
-            value: [
-              {
-                type: 'document_section',
-                value: {
-                  title: 'document section title',
-                  content: [
-                    {
-                      type: 'document',
-                      value: 21
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            type: 'resources',
-            value: [
-              {
-                type: 'resource_section',
-                value: {
-                  title: 'resource section title',
-                  resources: [
-                    {
-                      type: 'page',
-                      value: 23
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      }
-      const pageUrlData = {
-        title: 'some title'
-      }
-      const nestedPageData = {
-        title: 'some nested page title'
-      }
-      const imageData = {
-        title: 'some image title',
-        file_path: 'some/file/path',
-        width: 100,
-        height: 100
-      }
-      const documentData = {
-        title: 'some document title',
-        file_path: 'some/document/path'
-      }
-      const addressData = {
-        id: 123,
-        url: 'http://localhost:8000/api/cms/cms.Address/1',
-        detail_url: 'http://localhost:8000/api/cms/cms.Address/1',
-        organization: '',
-        addressee: '',
-        location_name: 'City Hall',
-        line1: '1 Dr. Carlton B Goodlett',
-        line2: 'Room 408',
-        city: 'San Francisco',
-        state: 'CA',
-        zip: '94102',
-        location_notes: '<p data-block-key="vpbhb"></p>',
-        hours: [],
-        agency: null
-      }
-      const nestedDocumentData = {
-        id: 21,
-        title: 'document title',
-        file: 'http://path/to/file.pdf'
-      }
-
-      const someKeyData = undefined
-      fetchMock
-        .once(JSON.stringify(pageUrlData))
-        .once(JSON.stringify(nestedPageData))
-        .once(JSON.stringify(imageData))
-        .once(JSON.stringify(documentData))
-        .once(JSON.stringify(someKeyData))
-        .once(JSON.stringify(addressData))
-        .once(JSON.stringify(nestedDocumentData))
-
-      await example.massageData(data)
-      expect(data.page_obj_url).toEqual(pageUrlData)
-      expect(data.nested_obj.page).toEqual(nestedPageData)
-      expect(data.nested_obj.component.image).toEqual({
-        ...imageData,
-        ...{ original: { width: 100, height: 100 } }
-      })
-      expect(data.nested_obj.document).toEqual(documentData)
-      expect(data.contact[0].value).toEqual(addressData)
-      expect(data.body[0].value[0].value.content[0].value).toEqual(
-        nestedDocumentData
-      )
-    })
-
-    it('throws on error', async () => {
-      const data = { page: 123 }
-      fetchMock.mockResponseOnce(() => {
-        throw new Error('sad face!')
-      })
-      await expect(example.massageData(data)).rejects.toThrow(/sad face/)
-    })
-  })
-
-  describe('getPreviewRelatedData()', () => {
-    it('fetches data', async () => {
-      const data = {
-        meta: {
-          type: 'foo.Bar'
-        },
-        part_of: ['https://part.of.url'],
-        partner_agencies: [{ type: 'agency', value: 123, id: '111-222-333' }],
-        services: [
-          {
-            type: 'services',
-            value: {
-              title: 'Services',
-              services: [
-                {
-                  type: 'page',
-                  value: 7988
-                }
-              ]
-            }
-          }
-        ]
-      }
-      const partOfData = {
-        meta: {
-          type: 'foo.Bar'
-        },
-        title: 'some related page',
-        html_path: 'http://some.page/path'
-      }
-      const partnerAgencyData = {
-        meta: {
-          type: 'foo.Bar'
-        },
-        title: 'some agency page',
-        html_path: 'http://some.agency.page/path'
-      }
-      const nestedServiceData = {
-        id: 23,
-        title: 'Nested service data title',
-        html_path: 'http://nested/service/path'
-      }
-      const expectedData = {
-        meta: { type: 'foo.Bar' },
-        part_of: [
-          {
-            title: 'some related page',
-            meta: { html_url: 'http://some.page/path' },
-            value: partOfData
-          }
-        ],
-        partner_agencies: [
-          {
-            title: partnerAgencyData.title,
-            meta: { html_url: partnerAgencyData.html_path },
-            value: partnerAgencyData
-          }
-        ],
-        services: [
-          {
-            type: 'services',
-            value: {
-              title: 'Services',
-              services: [
-                {
-                  title: nestedServiceData.title,
-                  meta: {
-                    html_url: nestedServiceData.html_path
-                  },
-                  value: nestedServiceData
-                }
-              ]
-            }
-          }
-        ]
-      }
-      const nestedData = {}
-      fetchMock
-        .once(JSON.stringify(partOfData))
-        .once(JSON.stringify(partnerAgencyData))
-        .once(JSON.stringify(nestedServiceData))
-      const res = await example.getPreviewRelatedData('foo', data)
-      expect(fetchMock).toHaveBeenCalledTimes(3)
-      expect(res).toEqual(expectedData)
-    })
-
-    it('fetches related image data', async () => {
-      const data = {
-        meta: {
-          type: 'foo.Bar'
-        },
-        logo: 'https://some/images/detail.path'
-      }
-      const imageData = {
-        id: 4456,
-        meta: {
-          download_url: '/media/original_images/download_2_FPWtavT.jpeg',
-          type: 'cms.BaseImage'
-        },
-        title: 'asdf'
-      }
-      const expectedData = {
-        meta: { type: 'foo.Bar' },
-        logo: imageData
-      }
-      fetchMock.mockResponseOnce(JSON.stringify(imageData))
-      const res = await example.getPreviewRelatedData('foo', data)
-      expect(fetchMock).toHaveBeenCalledTimes(1)
-      expect(fetchMock).toHaveBeenLastCalledWith(
-        'https://some/images/detail.path'
-      )
-      expect(res).toEqual(expectedData)
-    })
-
-    it('deals with non-Array related data', async () => {
-      const data = {
-        meta: {
-          type: 'foo.Bar'
-        },
-        primary_agency: 'https://part.of.url'
-      }
-      const primaryAgencyData = {
-        meta: {
-          type: 'foo.Bar'
-        },
-        title: 'some related page',
-        html_path: 'http://some.page/path'
-      }
-      const expectedData = {
-        meta: { type: 'foo.Bar' },
-        primary_agency: {
-          title: 'some related page',
-          meta: { html_url: 'http://some.page/path' },
-          value: primaryAgencyData
-        }
-      }
-      fetchMock.mockResponseOnce(JSON.stringify(primaryAgencyData))
-      const res = await example.getPreviewRelatedData('foo', data)
-      expect(res).toEqual(expectedData)
-    })
-
-    it('returns null on fetch error', async () => {
-      const data = {
-        meta: {
-          type: 'foo.Bar'
-        },
-        primary_agency: 'not a url'
-      }
-      const expectedData = {
-        meta: { type: 'foo.Bar' },
-        primary_agency: null
-      }
-      fetchMock.mockResponseOnce(() => {
-        throw new Error('wrong!')
-      })
-      const res = await example.getPreviewRelatedData('foo', data)
-      expect(res).toEqual(expectedData)
     })
   })
 

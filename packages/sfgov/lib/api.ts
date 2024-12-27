@@ -38,7 +38,7 @@ export class ContentAPI implements IContentAPI {
       options?.baseURL || getenv('NEXT_PUBLIC_CONTENT_API_BASE_URL')!
     // FIXME: replace getenv() with requireEnv()
     const previewURL =
-      options?.previewURL || getenv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL')!
+      options?.previewURL || getenv('NEXT_PUBLIC_CONTENT_API_BASE_URL')!
     this.baseURL = baseURL
     this.previewURL = previewURL
     this.options = options || {}
@@ -106,7 +106,7 @@ export class ContentAPI implements IContentAPI {
     options?: RequestInit
   ) {
     const url = new URL(this.previewURL)
-    url.pathname += '/pages/by-url/preview'
+    url.pathname += '/pages/preview'
     url.searchParams.set('path', path)
     url.searchParams.set('locale', params?.locale || 'en')
 
@@ -125,197 +125,7 @@ export class ContentAPI implements IContentAPI {
       throw new Error(error)
     }
 
-    previewData.data.meta = previewData.meta
-    await this.getPreviewRelatedData(path, previewData.data)
-    await this.massageData(previewData.data)
-    return previewData.data as T
-  }
-
-  async massageData(obj: any) {
-    if (!obj || typeof obj !== 'object' || !Object.keys(obj).length) return
-
-    for (const key of Object.keys(obj)) {
-      let fetchUrl = null
-      const value = obj[key]
-      let addToValue = false
-
-      if (typeof value === 'number') {
-        // we've encountered a numerical value for a key
-        // inspect the key
-        let fetchEndpoint = null
-        if (key.includes('page')) {
-          fetchEndpoint = 'pages'
-        } else if (key.includes('image')) {
-          fetchEndpoint = 'images'
-        } else if (key.includes('document')) {
-          fetchEndpoint = 'documents'
-        }
-
-        if (fetchEndpoint) {
-          fetchUrl = `${this.baseURL}/${fetchEndpoint}/${value}`
-        }
-      } else if (
-        typeof value === 'string' &&
-        value.includes('/api/cms') &&
-        key !== 'detail_url'
-      ) {
-        fetchUrl = value
-      }
-
-      const typeMapping = {
-        address: {
-          path: 'cms.Address',
-          addToValue: true
-        },
-        document: {
-          path: 'documents',
-          addToValue: true
-        },
-        page: {
-          path: 'pages',
-          addToValue: true
-        }
-      }
-      if (
-        value &&
-        typeof value === 'object' &&
-        typeMapping[value.type] &&
-        typeof value.value === 'number'
-      ) {
-        addToValue = typeMapping[value.type].addToValue
-        fetchUrl = `${this.previewURL}/${typeMapping[value.type].path}/${
-          value.value
-        }`
-      }
-
-      if (
-        value &&
-        typeof value === 'object' &&
-        value.type === 'document' &&
-        typeof value.value === 'number'
-      ) {
-        addToValue = true
-        fetchUrl = `${this.previewURL}/documents/${value.value}`
-      }
-
-      if (
-        value &&
-        typeof value === 'object' &&
-        value.type === 'page' &&
-        typeof value.value === 'number'
-      ) {
-        addToValue = true
-        fetchUrl = `${this.previewURL}/pages/${value.value}`
-      }
-
-      if (fetchUrl) {
-        try {
-          const res = await this.fetch(fetchUrl)
-          const data = await res.json().catch(() => {
-            return value
-          })
-          // add original.width && original.height for images
-          if (key === 'image' && !('original' in data)) {
-            data.original = {
-              width: data.width,
-              height: data.height
-            }
-          }
-          if (addToValue) {
-            // some templates require an id property which isn't returned as part of the fetch
-            if (!Object.prototype.hasOwnProperty.call(data, `id`)) {
-              data.id = fetchUrl.slice(fetchUrl.lastIndexOf(`/`) + 1)
-            }
-            obj[key].value = data
-            continue
-          } else {
-            obj[key] = data
-          }
-        } catch (error) {
-          console.error(
-            `Could not fetch data at ${fetchUrl} for key: ${key} with value ${value}. ${error}`
-          )
-          throw error
-        }
-      }
-
-      await this.massageData(value)
-    }
-    return obj
-  }
-
-  async getPreviewRelatedData<T = unknown>(path: string, data: object) {
-    // the current cms api responds with detail urls for related data
-    // so we have to make an additional fetch to retrieve the related object's
-    // fully serialized details.  the related object can be another page,
-    // an image, a document, or anything, really
-    const getRelatedData = async (url: string) => {
-      let data = null
-      try {
-        const res = await this.fetch(url)
-        data = await res.json()
-        // remove canonical_page because it triggers a fetch in massageData
-        delete data.canonical_page
-      } catch (error) {
-        return null
-      }
-      return url.match(/\/images\//) // the related data is an image
-        ? data
-        : {
-            title: data.title,
-            meta: { html_url: data.html_path },
-            value: data
-          }
-    }
-
-    const relatedData = {
-      background_header_image: null,
-      fields: [],
-      image: null,
-      logo: null,
-      main_image: null,
-      page_content: [],
-      part_of: [],
-      partner_agencies: [],
-      primary_agency: {},
-      related_child_agencies: [],
-      related_pages: [],
-      related: [],
-      resources: [],
-      services: [],
-      topics: []
-    }
-
-    for (const key of Object.keys(relatedData)) {
-      if (data[key]) {
-        if (Array.isArray(data[key])) {
-          // not everything is a straight url
-          // some things (like page chooser streamfields) are an object
-          // and the related data is in `value` as a numerical id
-          for (const item of data[key]) {
-            if (
-              typeof item.value === 'object' &&
-              !Array.isArray(item.value) &&
-              item.value != null
-            ) {
-              item.value = await this.getPreviewRelatedData(path, item.value)
-              relatedData[key].push(item)
-            } else {
-              let url = item
-              if (item.value) {
-                url = `${this.previewURL}/pages/${item.value}`
-              }
-              relatedData[key].push(await getRelatedData(url))
-            }
-          }
-        } else {
-          relatedData[key] = await getRelatedData(data[key])
-        }
-        data[key] = relatedData[key]
-      }
-    }
-
-    return data
+    return previewData as T
   }
 
   async getData<T = unknown>(
