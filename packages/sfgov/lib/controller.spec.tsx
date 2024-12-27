@@ -151,6 +151,30 @@ describe('Controller', () => {
       })
       expect(modifyProps).toHaveBeenCalledWith({ page: mockPage }, context)
     })
+
+    it('redirects when the data calls for it', async () => {
+      const stubAPI = {
+        getPageByPath: jest.fn(() =>
+          Promise.resolve({
+            ...mockPage,
+            redirect_url: 'http://www.sf.gov'
+          })
+        )
+      } as unknown as IContentAPI
+
+      const controller = new Controller(stubAPI, [])
+      const getServerSideProps = controller.makeGetServerSideProps()
+      const context = stubContext({
+        resolvedUrl: mockPath,
+        locale: 'es'
+      })
+      await expect(getServerSideProps(context)).resolves.toMatchObject({
+        redirect: {
+          destination: 'http://www.sf.gov',
+          permanent: false
+        }
+      })
+    })
   })
 
   describe('makeViewComponent()', () => {

@@ -113,6 +113,15 @@ export class Controller {
           },
           options
         )
+        // redirect based off field in the model
+        if (page.redirect_url) {
+          return {
+            redirect: {
+              destination: page.redirect_url,
+              permanent: false
+            }
+          }
+        }
         let props = { page } as Props
         if (modifyProps) {
           props = await modifyProps(props, context)
