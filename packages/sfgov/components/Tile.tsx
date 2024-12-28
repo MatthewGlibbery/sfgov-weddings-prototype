@@ -88,7 +88,7 @@ export const NewsTile = ({ link }: TileProps) =>
 
 export const ContentTile = ({
   link,
-  className = 'py-16 px-12 md:py-20',
+  className = 'group p-12 hover:bg-primary50 hover:rounded-4',
   icon
 }: TileProps & { className?: string; icon?: ReactElement }) => {
   return (
@@ -96,14 +96,14 @@ export const ContentTile = ({
       <div className="flex items-start justify-between">
         <div className="mr-12 space-y-12">
           {icon || null}
-          <HeadingMd className="m-0 mb-12 text-primary600">
+          <HeadingMd className="m-0 mb-12 text-primary600 group-hover:text-primary900">
             {link.title}
           </HeadingMd>
           {link.description ? <p>{link.description}</p> : null}
         </div>
         {!icon ? (
           <IconArrowRight
-            className="mt-2 text-primary600 shrink-0"
+            className="mt-2 shrink-0 text-primary600 group-hover:text-primary900"
             width={20}
           />
         ) : null}

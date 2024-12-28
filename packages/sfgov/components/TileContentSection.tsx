@@ -1,4 +1,4 @@
-import { HeadingXl, IconDocument, Link } from '@/design-system'
+import { HeadingXl, HeadingXXl, IconDocument, Link } from '@/design-system'
 import {
   TypeContentTileBlock,
   TypeResourcesSectionBlock,
@@ -50,9 +50,9 @@ export const ServiceSection = ({ sections }: ServiceSectionProps) => {
 
   return (
     <>
-      <HeadingXl as="h2" className="!mb-28">
+      <HeadingXXl as="h2" className="!mb-28">
         {t('services', { defaultValue: 'Services' })}
-      </HeadingXl>
+      </HeadingXXl>
       <div className="flex flex-col space-y-12">
         {sections.map((serviceSection) => (
           <TileSectionWrapper
@@ -71,9 +71,9 @@ export const ResourceSection = ({ sections }: ResourceSectionProps) => {
 
   return (
     <>
-      <HeadingXl as="h2" className="!mb-28">
+      <HeadingXXl as="h2" className="!mb-28">
         {t('resources', { defaultValue: 'Resources' })}
-      </HeadingXl>
+      </HeadingXXl>
       <div className="flex flex-col space-y-12">
         {sections.map((resourceSection) => (
           <TileSectionWrapper
