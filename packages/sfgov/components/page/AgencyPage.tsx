@@ -37,6 +37,8 @@ import {
   ProfileGroup
 } from '../'
 import { ResourceSection, ServiceSection } from '../TileContentSection'
+import { ButtonLink } from '../ButtonLink'
+import { getPageURL } from '@/lib/utils'
 
 export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   page
@@ -55,7 +57,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     resources,
     about_description: aboutDescription,
     events,
-    news,
+    // news,
     partner_agencies: partnerAgencies,
     call_to_action: callToAction,
     divisions_subcommittees: divisionsSubcommittees,
@@ -63,7 +65,8 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     contact,
     public_records: publicRecords,
     archive_url: archiveUrl,
-    archive_date: archiveDate
+    archive_date: archiveDate,
+    about_page: [aboutPage]
   } = page
 
   let divisionSubcommitteeTitle = 'Divisions'
@@ -239,38 +242,61 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                   <ResourceSection sections={resources} />
                 </div>
               ) : null}
-              {aboutDescription || !!callToAction.length ? (
+              {aboutDescription || !!callToAction.length || aboutPage ? (
                 <div className="flex flex-col gap-12">
                   <HeadingXXl as="h2">
                     {t('about', { defaultValue: 'About' })}
                   </HeadingXXl>
-                  {aboutDescription ? (
-                    <RichText html={aboutDescription} />
-                  ) : null}
-                  {callToAction.length ? (
-                    <CallToAction {...callToAction[0].value} />
-                  ) : null}
-                  {divisionsSubcommittees.length ? (
-                    <RelatedContentList
-                      title={t(
-                        `${divisionsSubcommittees[0].value.agency_section_title}`,
-                        {
-                          defaultValue: divisionSubcommitteeTitle
-                        }
-                      )}
-                      content={divisionsSubcommittees[0].value.agencies.map(
-                        (agency) => agency.value.page
-                      )}
-                    />
-                  ) : null}
-                  {partnerAgencies.length ? (
-                    <RelatedContentList
-                      title={t('partner-agencies', {
-                        defaultValue: 'Partner Agencies'
-                      })}
-                      content={partnerAgencies}
-                    />
-                  ) : null}
+                  <div className="flex flex-col gap-40">
+                    <div className="flex flex-row gap-40">
+                      {aboutDescription || aboutPage ? (
+                        <div className="w-1/2">
+                          {aboutDescription ? (
+                            <RichText html={aboutDescription} />
+                          ) : null}
+                          {aboutPage ? (
+                            <Button
+                              as="a"
+                              href={getPageURL(aboutPage)}
+                              aria-label={`Learn more ${aboutPage.title}`}
+                            >
+                              {t('learn-more-about-us', {
+                                defaultValue: 'Learn more about us'
+                              })}
+                            </Button>
+                          ) : null}
+                        </div>
+                      ) : null}
+                      {callToAction.length ? (
+                        <div className="w-1/2">
+                          <CallToAction {...callToAction[0].value} />
+                        </div>
+                      ) : null}
+                    </div>
+                    <div className="flex flex-row gap-28">
+                      {divisionsSubcommittees.length ? (
+                        <RelatedContentList
+                          title={t(
+                            `${divisionsSubcommittees[0].value.agency_section_title}`,
+                            {
+                              defaultValue: divisionSubcommitteeTitle
+                            }
+                          )}
+                          content={divisionsSubcommittees[0].value.agencies.map(
+                            (agency) => agency.value.page
+                          )}
+                        />
+                      ) : null}
+                      {partnerAgencies.length ? (
+                        <RelatedContentList
+                          title={t('partner-agencies', {
+                            defaultValue: 'Partner Agencies'
+                          })}
+                          content={partnerAgencies}
+                        />
+                      ) : null}
+                    </div>
+                  </div>
                 </div>
               ) : null}
             </Container>

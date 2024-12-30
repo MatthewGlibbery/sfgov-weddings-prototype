@@ -513,6 +513,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   social_media: SocialMediaFactory.make(1),
   contact: [
     {
+      id: gen.datatype.uuid(),
       type: 'contact',
       value: {
         address: [],
@@ -573,7 +574,8 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
     }
-  })
+  }),
+  about_page: RelatedContentBlockFactory.make(1, { meta: { type: 'sf.About' } })
 }))
 
 export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({

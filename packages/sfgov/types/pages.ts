@@ -255,6 +255,7 @@ export type AgencyPageData = PageData & {
   agency_redirect: string
   related_topics: RelatedContentData[]
   related_news: RelatedContentData[]
+  about_page: RelatedContentData[]
 }
 
 export type CampaignPageData = PageData & {
