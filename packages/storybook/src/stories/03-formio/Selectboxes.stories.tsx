@@ -5,6 +5,7 @@ const meta: Meta = {
   title: 'formio / fields / Selectboxes',
   args: {
     label: 'Select some colors',
+    description: 'This is the selectboxes description',
     values: [
       { label: 'Black', value: 'black' },
       { label: 'Blue', value: 'blue' },

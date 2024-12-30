@@ -14,13 +14,23 @@ export function form({ t, ...ctx }: ComponentContext) {
   const uniqueId = `${ctx.instance.id}-${ctx.component.key}`
   return (
     <div>
-      <label ref="label" className={ctx.label?.className} id={`l-${uniqueId}`}>
+      <label
+        ref="label"
+        className={`text-label-md ${ctx.label?.className.replace(
+          'field-required',
+          ''
+        )}`}
+        id={`l-${uniqueId}`}
+      >
         {ctx.component.label}
       </label>
       {ctx.component.validate?.required ? (
-        <span className="text-danger600" aria-label={t('(required)')}>
+        <span
+          className="text-danger600"
+          aria-label={t('required', { defaultValue: 'Required' })}
+        >
           {' '}
-          {t('*')}
+          {t('*', { defaultValue: '*' })}
         </span>
       ) : null}
     </div>

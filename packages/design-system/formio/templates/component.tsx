@@ -12,11 +12,14 @@ export default { form }
  */
 export function form(ctx: ComponentContext) {
   return (
-    <div id={ctx.id} ref="component">
+    <div
+      id={ctx.id}
+      className={`mb-space-desktop-xl ${ctx.classes}`}
+      ref="component"
+    >
       {ctx.visible ? (
         <>
           <div dangerouslySetInnerHTML={{ __html: ctx.children }} />
-          <div ref="messageContainer" className="text-danger600" />
         </>
       ) : null}
     </div>

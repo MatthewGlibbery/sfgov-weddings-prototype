@@ -21,7 +21,7 @@ function toggleOpenAttribute() {
 /**
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/wizardHeader/form.ejs
  */
-export function form({ t, ...ctx }: WizardRenderContext) {
+export function form({ ...ctx }: WizardRenderContext) {
   const numPages = ctx.panels.length - 1
   const isOpen = !isMobile()
   const currentPage = ctx.currentPage

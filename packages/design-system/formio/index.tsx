@@ -271,7 +271,7 @@ function once<T extends object>(obj: T, fn: (obj: T) => void) {
   }
 }
 export function modifyComponentClassname(value?: string) {
-  return value?.replace(/\bd-none\b/g, 'hidden')
+  return value?.replace(/\bd-none\b/g, 'hidden').replace(/\bd-flex\b/g, 'flex')
 }
 
 export function modifyHTMLElementClassname(value?: string) {

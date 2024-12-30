@@ -5,6 +5,7 @@ const meta: Meta = {
   title: 'formio / fields / Radio',
   args: {
     label: 'Select one color',
+    description: 'This is the radio buttons description',
     values: [
       { label: 'Black', value: 'black' },
       { label: 'Blue', value: 'blue' },
