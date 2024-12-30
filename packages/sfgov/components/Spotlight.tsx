@@ -82,17 +82,22 @@ export const Spotlight = ({
     }
   }
 
+  const full = imageAlignment === 'full'
+  const imgClasses = full
+    ? 'object-contain rounded-4'
+    : 'object-contain rounded-4 md:aspect-[4/3]'
+
   return (
     <SpotlightContainer
-      full={imageAlignment === 'full'}
-      isImageLeft={imageAlignment !== 'full' && imagePosition === 'left'}
+      full={full}
+      isImageLeft={!full && imagePosition === 'left'}
       theme={theme}
       secondary={secondary}
       data-testid="spotlight"
     >
       <div className="basis-0 grow">
         {image ? (
-          <Image imageRef={image} className="rounded-4 w-100 aspect-[3/2]" />
+          <Image imageRef={image} className={classes('w-full', imgClasses)} />
         ) : null}
       </div>
       <div className="flex flex-col gap-y-20 basis-0 grow">
