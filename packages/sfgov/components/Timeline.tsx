@@ -19,7 +19,7 @@ type TimelineItemType = {
 const TimelineItemContainer = classed('div', {
   base: classes(
     'flex py-20 md:pt-12 md:pl-20 md:pr-40 ml-12 md:ml-0 border-solid',
-    'max-w-[859px] xl:mx-auto', // hack: we add 25px for tablet and up to account for the hack to get the badge alignment correct
+    'max-w-[859px]', // hack: we add 25px for tablet and up to account for the hack to get the badge alignment correct
     'border-l-[4px] border-secondary500',
     'md:border-l-0 md:border-t-[4px]'
   ),

@@ -20,13 +20,13 @@ export const ContentSection = ({
   const Wrapper = ({ children }: { children: React.ReactNode }) =>
     noWrapper ? <>{children}</> : <Container>{children}</Container>
   return (
-    <div>
+    <div className="space-y-20 md:space-y-28 lg:space-y-40">
       <Wrapper>
         <HeadingXXl as="h2" id={title}>
           {title}
         </HeadingXXl>
       </Wrapper>
-      <div className="space-y-20">
+      <div className="space-y-20 md:space-y-28 lg:space-y-40">
         {sectionContent.map((block, i) => {
           const props = { key: i }
 
