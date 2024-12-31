@@ -84,8 +84,8 @@ export const Spotlight = ({
 
   const full = imageAlignment === 'full'
   const imgClasses = full
-    ? 'object-contain rounded-4'
-    : 'object-contain rounded-4 md:aspect-[4/3]'
+    ? 'object-cover object-top rounded-4'
+    : 'object-cover object-top rounded-4 aspect-[4/3]'
 
   return (
     <SpotlightContainer
