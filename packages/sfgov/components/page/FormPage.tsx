@@ -6,20 +6,19 @@ import {
   HeadingXXl,
   PageTitleSection
 } from '@/design-system'
-import type { Form, FormSubmission } from '@/design-system/formio'
+import { useTranslation } from 'next-i18next'
 import { getPageURL } from '@/lib/utils'
 import type {
   ConfirmationBodyBlock,
   FormPageData,
   TypeContactFooterBlockValues
 } from '@/types'
-import { useTranslation } from 'next-i18next'
+import type { Form, FormSubmission } from '@/design-system/formio'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useState, type ReactNode } from 'react'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
-import { PageLinksList } from '../PageLinksList'
 import { RichText } from '../RichText'
 import { PageWrapper } from './PageWrapper'
 
@@ -46,6 +45,7 @@ export function FormPage({
     partner_agencies: agencies
   } = page
 
+  const { t, i18n } = useTranslation()
   const queryParams = useSearchParams()
   const {
     submission: submissionId,
@@ -57,7 +57,6 @@ export function FormPage({
     initialSubmitted || queryParamSubmitted === 'true'
   )
 
-  const { t } = useTranslation()
   const formSubmittedString = t('form-submitted', {
     defaultValue: 'Form submitted'
   })
@@ -91,17 +90,22 @@ export function FormPage({
                 {error}
               </InfoBox>
             ) : null}
-            <FormioForm
-              // the `src` (URL) and `form` (schema) props are mutually exclusive
-              src={formSchema ? undefined : formSchemaUrl}
-              form={formSchema}
-              submission={{
-                data: rawQueryParams
-              }}
-              formReady={onFormReady}
-              onSubmitDone={() => setSubmitted(true)}
-            />
-          </>
+           <FormioForm
+            // the `src` (URL) and `form` (schema) props are mutually exclusive
+            src={formSchema ? undefined : formSchemaUrl}
+            form={formSchema}
+            submission={{
+              data: rawQueryParams
+            }}
+            formReady={onFormReady}
+            onSubmitDone={() => setSubmitted(true)}
+            options = {{ 
+              i18next: i18n, 
+              language: i18n.language,
+              defaultNS: 'common'
+            }}
+          />
+        </>
         )}
       </Container>
     </PageWrapper>

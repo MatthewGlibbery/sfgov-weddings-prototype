@@ -1,5 +1,4 @@
 /* eslint-disable no-process-env */
-
 // allows for loading stuff from the server
 // https://github.com/i18next/i18next-http-backend
 const HttpBackend = require('i18next-http-backend/cjs')
@@ -26,9 +25,6 @@ module.exports = {
        *   before jest.setup.js runs, preventing us from mocking `process.env`
        */
       loadPath: `${process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL}/cms.InlineDisplayText`,
-      customHeaders: {
-        Authorization: `Token ${process.env.TRANSLATIONS_API_TOKEN}`,
-      },
     
       parse: function parse(data) { 
         // Note 1:

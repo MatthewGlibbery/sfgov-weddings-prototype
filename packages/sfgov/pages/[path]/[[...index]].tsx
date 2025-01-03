@@ -10,7 +10,7 @@ export const getServerSideProps = controller.makeGetServerSideProps(
   async (props, { locale }) => {
     const translations = await serverSideTranslations(
       locale!,
-      ['common'],
+      ['translation', 'common'],
       nextI18NextConfig,
       ['en', 'es', 'zh-hant', 'fil']
     )

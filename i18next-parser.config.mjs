@@ -67,8 +67,9 @@ export default {
 
   input: [
     'packages/sfgov/**',
+    'packages/design-system/**',
     '!**/*.spec.tsx',
-    '!packages/sfgov/node_modules/**',
+    '!**/node_modules/**',
     '!packages/sfgov/public/**'
   ],
 
