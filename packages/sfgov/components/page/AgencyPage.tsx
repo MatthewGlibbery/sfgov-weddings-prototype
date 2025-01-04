@@ -83,7 +83,10 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   const label = t('agency', { defaultValue: 'Agency' })
 
   const LogoComponent = ({ logo }: { logo: WagtailImageData }) => (
-    <Image className="max-w-[33%] mt-20 xl:mt-0" imageRef={logo} />
+    <Image
+      className="max-w-1/2 md:max-w-[33%] object-contain mt-20 xl:mt-0"
+      imageRef={logo}
+    />
   )
 
   return (
@@ -91,11 +94,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
       {alert?.[0]?.value ? <Alert {...alert[0].value} /> : null}
       {mainImage ? (
         <div className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0">
-          <Image
-            imageRef={mainImage}
-            className="object-cover w-1/1"
-            alt={mainImage?.title}
-          />
+          <Image imageRef={mainImage} className="object-cover w-1/1" />
         </div>
       ) : null}
 
@@ -302,7 +301,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             </Container>
           ) : null}
           {people.length ? (
-            <Container backgroundColor="primary">
+            <Container backgroundcolor="primary">
               {people.map((profileGroup) => (
                 <ProfileGroup
                   key={profileGroup.id}

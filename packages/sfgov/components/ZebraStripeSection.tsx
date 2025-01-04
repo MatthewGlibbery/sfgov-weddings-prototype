@@ -7,7 +7,7 @@ const Wrapper = classed('div', {
     noPadding: {
       true: 'p-0'
     },
-    backgroundColor: {
+    backgroundcolor: {
       neutral: '!bg-neutral10',
       primary: '!bg-primary50',
       secondary: '!bg-secondary10',
@@ -34,7 +34,7 @@ export const ZebraStripedSection = ({
       .map((child: ReactNode, i: number) => (
         <Wrapper
           noPadding={noPadding}
-          backgroundColor={child?.props?.backgroundColor || ''}
+          backgroundcolor={child?.props?.backgroundcolor || ''}
           key={i}
         >
           {child?.props?.condition === false ? null : child}

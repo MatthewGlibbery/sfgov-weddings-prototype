@@ -116,7 +116,7 @@ type InfoSectionContentProps = {
 const InfoSectionContent = ({ block, ...rest }: InfoSectionContentProps) => {
   switch (block.type) {
     case 'image':
-      return <Image alt="" imageRef={block.value} {...rest} />
+      return <Image imageRef={block.value} {...rest} />
     case 'title_and_text':
       return <TitleAndText {...block.value} as="h2" {...rest} />
     case 'callout':

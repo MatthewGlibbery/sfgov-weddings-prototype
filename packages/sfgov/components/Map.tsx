@@ -68,14 +68,9 @@ export const Map: ComponentType<MapProps> = ({
   const AddressTile: ComponentType<{
     address: TypeLocationBlock
     image: WagtailImageData
-    locationName: string
-  }> = ({ address, image, locationName }) => (
+  }> = ({ address, image }) => (
     <div className="flex flex-col md:flex-row-reverse md:gap-x-28 lg:flex-col space-y-20">
-      <div className="flex-1">
-        {image ? (
-          <Image imageRef={image} alt={`Photo of ${locationName}`} />
-        ) : null}
-      </div>
+      <div className="flex-1">{image ? <Image imageRef={image} /> : null}</div>
       <div className="flex flex-col flex-1 space-y-20">
         <Location {...address?.value} />
         <Button variant="secondary">
@@ -99,11 +94,7 @@ export const Map: ComponentType<MapProps> = ({
           data-testid="map-image"
         />
         <div className="py-20">
-          <AddressTile
-            address={address}
-            image={image}
-            locationName={locationName}
-          />
+          <AddressTile address={address} image={image} />
         </div>
       </div>
       <div className="hidden lg:block" data-testid="google-map" {...rest}>
@@ -117,11 +108,7 @@ export const Map: ComponentType<MapProps> = ({
           >
             <MarkerF position={mapCenter} />
             <div className="w-[40%] relative top-28 right-60 py-20 px-16 float-right bg-white shadow-md">
-              <AddressTile
-                address={address}
-                image={image}
-                locationName={locationName}
-              />
+              <AddressTile address={address} image={image} />
             </div>
           </GoogleMap>
         ) : (

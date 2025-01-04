@@ -76,7 +76,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
           ) : null}
         </Container>
         {sfGovernment?.length ? (
-          <Container backgroundColor="primary">
+          <Container backgroundcolor="primary">
             {sfGovernment.map((profileGroup) => (
               <ProfileGroup
                 key={profileGroup.id}
@@ -84,7 +84,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
                 description={profileGroup.value.description}
                 profiles={profileGroup.value.profiles}
                 isHomePage={true}
-                backgroundColor="primary"
+                backgroundcolor="primary"
               />
             ))}
           </Container>

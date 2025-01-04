@@ -41,9 +41,7 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
           </HeadingXl>
         </PageTitleSection>
         <div className="flex flex-col space-y-40 mt-40">
-          {image ? (
-            <Image imageRef={image} alt={`Photo related to ${abstract}`} />
-          ) : null}
+          {image ? <Image imageRef={image} /> : null}
           <div>
             <HeadingMd as="p" className="mb-12 lg:mb-16 text-accent500">
               <ComposedDate startDateInput={date} dateStyle="long" />

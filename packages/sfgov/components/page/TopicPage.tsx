@@ -73,7 +73,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
             case 'spotlight':
               return section.value.spotlight?.length ? (
                 <Spotlight
-                  backgroundColor="white"
+                  backgroundcolor="white"
                   {...section.value.spotlight[0]}
                 />
               ) : null
@@ -85,7 +85,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
               ) : null
             case 'content':
               return section.value.content?.length ? (
-                <div backgroundColor="white">
+                <div backgroundcolor="white">
                   {section.value.content.map((section) => (
                     <ContentSection
                       key={section.id}

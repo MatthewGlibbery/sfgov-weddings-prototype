@@ -38,6 +38,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
     image,
     body,
     intro,
+    accordions,
     parking,
     accessibility,
     public_transportation: publicTransportion,
@@ -46,7 +47,6 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
     people,
     at_this_location: atThisLocation,
     about_location: about,
-    additional_info: additionalInfo,
     partner_agencies: partnerAgencies
   } = page
 
@@ -91,7 +91,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
         !!parking.length ||
         !!accessibility.length ||
         !!publicTransportion.length ? (
-          <Container backgroundColor="secondary">
+          <Container backgroundcolor="secondary">
             <div className="flex flex-col space-y-40">
               <HeadingXXl as="h2" className="my-12 md:my-20">
                 {t('getting-here', { defaultValue: 'Getting here' })}
@@ -154,11 +154,11 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
         ) : null}
         {about ||
         partnerAgencies.length ||
-        additionalInfo.length ||
+        accordions.length ||
         atThisLocation.length ? (
           <Container
             className="space-y-28 md:space-y-40"
-            backgroundColor="neutral"
+            backgroundcolor="neutral"
           >
             {about ? (
               <>
@@ -178,14 +178,14 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
                 <RelatedContentList content={partnerAgencies} />
               </div>
             ) : null}
-            {additionalInfo.length ? (
+            {accordions.length ? (
               <div className="space-y-20">
-                <HeadingXlSans as="h3" className="my-12 md:my-20">
+                <HeadingXXl as="h2" className="my-12 md:my-20">
                   {t('additional-location-info', {
                     defaultValue: 'Additional location info'
                   })}
-                </HeadingXlSans>
-                {additionalInfo.map((accordion) => (
+                </HeadingXXl>
+                {accordions.map((accordion) => (
                   <Accordion
                     key={accordion.id}
                     title={accordion.value.title || ''}
@@ -208,7 +208,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
           </Container>
         ) : null}
         {people.length ? (
-          <Container backgroundColor="primary">
+          <Container backgroundcolor="primary">
             <ProfileGroup
               title={people[0]?.value.title}
               profiles={people[0]?.value.profiles}
@@ -216,7 +216,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
           </Container>
         ) : null}
         {relatedLocations.length ? (
-          <Container backgroundColor="white">
+          <Container backgroundcolor="white">
             <RelatedContentList
               title={t('related-locations', {
                 defaultValue: 'Related locations'

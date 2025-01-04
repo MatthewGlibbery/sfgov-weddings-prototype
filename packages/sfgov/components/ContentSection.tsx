@@ -76,7 +76,7 @@ export const ContentSection = ({
                 </Wrapper>
               )
             case 'image':
-              return <Image imageRef={block.value} alt="image alt" {...props} />
+              return <Image imageRef={block.value} {...props} />
             case 'powerbi_embed':
               return (
                 <Wrapper {...props}>

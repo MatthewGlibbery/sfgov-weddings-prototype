@@ -211,7 +211,10 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   }
 
   const LogoComponent = ({ logo }: { logo: WagtailImageData }) => (
-    <Image className="max-w-[33%] mt-20 xl:mt-0" imageRef={logo} />
+    <Image
+      className="max-w-1/2 md:max-w-[33%] object-contain mt-20 xl:mt-0"
+      imageRef={logo}
+    />
   )
 
   const label = t('campaign', { defaultValue: 'Campaign' })
@@ -220,11 +223,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
     <PageWrapper title={title}>
       {headerImage ? (
         <div className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0">
-          <Image
-            imageRef={headerImage}
-            className="object-cover w-1/1"
-            alt={headerImage?.title}
-          />
+          <Image imageRef={headerImage} className="object-cover w-1/1" />
         </div>
       ) : null}
       <Container

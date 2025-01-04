@@ -65,9 +65,7 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
         </div>
         <Grid className="grid gap-y-60">
           <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1 order-2">
-            {image ? (
-              <Image imageRef={image} className="rounded-4" alt="image alt" />
-            ) : null}
+            {image ? <Image imageRef={image} className="rounded-4" /> : null}
             {body ? (
               <div>
                 <RichText html={body} />

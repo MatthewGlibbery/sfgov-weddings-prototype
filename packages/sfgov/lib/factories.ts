@@ -410,7 +410,7 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
   image: ImageFactory.make(),
   body: '<p>some rich text</p><blockquote>rich text</blockquote>',
   intro: '<p>some rich text</p><blockquote>rich text</blockquote>',
-  additional_info: TitleAndTextFactory.make(2),
+  accordions: TitleAndTextFactory.make(2),
   parking: [
     TitleAndTextFactory.make({
       value: {
@@ -1480,7 +1480,12 @@ export const ProfileGroupFactory = factory<TypeProfileGroupBlock>((gen) => ({
       {
         type: 'profile_page',
         value: {
-          profile_page: RelatedContentBlockFactory.make(),
+          profile_page: {
+            ...RelatedContentBlockFactory.make(),
+            pronouns: '',
+            primary_job_title: 'Job holder',
+            primary_job_title_line_2: 'Job seeker'
+          },
           role: 'some other role'
         }
       }

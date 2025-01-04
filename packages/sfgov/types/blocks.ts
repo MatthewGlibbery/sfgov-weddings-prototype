@@ -453,7 +453,10 @@ export type TypeProfilePageBlock = BlockType<
     profile_page: PageData & {
       pronouns: string
       image: WagtailImageData
+      primary_job_title: string
+      primary_job_title_line_2: string
     }
+    role: string
   }
 >
 
