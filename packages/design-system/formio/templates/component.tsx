@@ -14,7 +14,8 @@ export function form(ctx: ComponentContext) {
   return (
     <div
       id={ctx.id}
-      className={`mb-space-desktop-xl ${ctx.classes}`}
+      // 'row' caused fieldset rows with multiple columns to be misaligned
+      className={ctx.classes?.replace('row', '')}
       ref="component"
     >
       {ctx.visible ? (

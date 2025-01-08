@@ -23,7 +23,7 @@ export function form({
 }: ColumnsContext) {
   const columns = 12
   return (
-    <div className="flex flex-wrap">
+    <div className="flex xs:gap-16 md:gap-28">
       {component.columns.map((col, index) => (
         <Column
           // when the component renders, all of the column's properties are

@@ -14,11 +14,13 @@ import {
   CheckboxFactory,
   ColumnsFactory,
   ComponentFactory,
+  FieldsetFactory,
   FormFactory,
   OptionFactory,
   PageFactory,
   RadioFactory,
   SelectBoxesFactory,
+  SelectFactory,
   WizardFactory
 } from '../formio/factories'
 import basicForm from '../__fixtures__/forms/basic.json'
@@ -137,7 +139,7 @@ describe('FormioForm', () => {
     const input1 = screen.getByLabelText(field1.label, { exact: false })
     expect(input1).toBeInTheDocument()
 
-    await click('Get started')
+    await click('Get started →')
 
     const input2 = screen.getByLabelText(field2.label, { exact: false })
     expect(input2).toBeInTheDocument()
@@ -194,76 +196,135 @@ describe('FormioForm', () => {
     })
   })
 
+  describe('component', () => {
+    it('does not render a conditionally hidden field', async () => {
+      const label = 'Hidden'
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [
+              // @ts-expect-error derp
+              ComponentFactory.make({
+                label,
+                conditional: {
+                  show: true,
+                  when: 'x',
+                  eq: true
+                }
+              })
+            ]
+          })}
+        />
+      )
+
+      const input = screen.queryByText(label)
+      expect(input).not.toBeInTheDocument()
+    })
+
+    it('replaces the d-none and d-flex classes', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [callouts.components[0] as HTMLElementSchema]
+          })}
+        />
+      )
+
+      const input = document.querySelector('span[data-icon=alert]')
+      expect(input?.classList).not.toContain('d-none')
+      expect(input?.classList).toContain('hidden')
+      expect(input?.classList).not.toContain('d-flex')
+      expect(input?.classList).toContain('flex')
+    })
+  })
+
+  describe('label', () => {
+    it('renders the label', async () => {
+      const label = 'Field label'
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [
+              ComponentFactory.make({
+                label,
+                validate: {
+                  required: false
+                }
+              })
+            ]
+          })}
+        />
+      )
+
+      const input = screen.getByLabelText(label)
+      expect(input).toBeInTheDocument()
+    })
+    it('renders the label with required asterisk', async () => {
+      const label = 'Field label'
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [
+              ComponentFactory.make({
+                label,
+                validate: {
+                  required: true
+                }
+              })
+            ]
+          })}
+        />
+      )
+
+      const input = screen.getByLabelText(label + ' *')
+      expect(input).toBeInTheDocument()
+    })
+  })
+
+  describe('field', () => {
+    it('renders the field template', async () => {
+      const label = 'Field label'
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [
+              ComponentFactory.make({
+                label,
+                validate: {
+                  required: true
+                }
+              })
+            ]
+          })}
+        />
+      )
+
+      const fields = await screen.findAllByTestId(/sfds-field-/)
+      fields.forEach((field) => {
+        expect(field).toBeInTheDocument()
+      })
+    })
+  })
+  describe('fieldset', () => {
+    it('renders the fieldset template', async () => {
+      const label = 'Field label'
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [
+              FieldsetFactory.make({
+                label
+              })
+            ]
+          })}
+        />
+      )
+
+      const fieldset = screen.getByTestId('formio-sfds-fieldset')
+      expect(fieldset).toBeInTheDocument()
+    })
+  })
   describe.skip('templates', () => {
-    describe('component', () => {
-      it('does not render a conditionally hidden field', async () => {
-        const label = 'Hidden'
-        render(
-          <FormioForm
-            form={FormFactory.make({
-              components: [
-                // @ts-expect-error derp
-                ComponentFactory.make({
-                  label,
-                  conditional: {
-                    show: true,
-                    when: 'x',
-                    eq: true
-                  }
-                })
-              ]
-            })}
-          />
-        )
-
-        const input = screen.queryByText(label)
-        expect(input).not.toBeInTheDocument()
-      })
-
-      it('replaces the d-none class with hidden ', async () => {
-        const label = 'Hidden'
-        render(
-          <FormioForm
-            form={FormFactory.make({
-              components: [
-                ComponentFactory.make({
-                  label,
-                  className: 'd-none'
-                })
-              ]
-            })}
-          />
-        )
-
-        const input = screen.queryByText(label)
-        expect(input?.classList).not.toContain('d-none')
-        expect(input?.classList).toContain('hidden')
-      })
-    })
-
-    describe('label', () => {
-      it('renders the label', async () => {
-        const label = 'Field label'
-        render(
-          <FormioForm
-            form={FormFactory.make({
-              components: [
-                ComponentFactory.make({
-                  label,
-                  validate: {
-                    required: true
-                  }
-                })
-              ]
-            })}
-          />
-        )
-
-        const input = screen.getByLabelText(label)
-        expect(input).toBeInTheDocument()
-      })
-    })
-
     describe('alert', () => {
       it('renders the alert template when invalid', async () => {
         const label = 'Field label'
@@ -301,7 +362,7 @@ describe('FormioForm', () => {
           />
         )
 
-        await click('Next')
+        await click('Get started →')
 
         const message = screen.getByText(`${label}: ${error}`, { exact: false })
         expect(message).toBeInTheDocument()
@@ -311,114 +372,114 @@ describe('FormioForm', () => {
         expect(alert).toContainElement(message)
       })
     })
+  })
 
-    describe('input', () => {
-      function renderForm(props: Partial<InputComponentSchema>) {
-        render(
-          <FormioForm
-            form={FormFactory.make({
-              components: [ComponentFactory.make(props)]
-            })}
-          />
-        )
-      }
+  describe('input', () => {
+    function renderForm(props: Partial<InputComponentSchema>) {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [ComponentFactory.make(props)]
+          })}
+        />
+      )
+    }
 
-      it('renders aria-live region for datetime components', () => {
-        renderForm({ type: 'datetime' })
-        const region = screen.getByTestId('datetime-live-region')
-        expect(region).toBeInTheDocument()
-        expect(region.getAttribute('aria-live')).toBe('assertive')
-      })
-
-      it('renders a description', () => {
-        const label = 'Field label'
-        const description = 'This is the description'
-        renderForm({ label, description })
-        const el = screen.getByText(description)
-        expect(el).toBeInTheDocument()
-        expect(el).toBeVisible()
-
-        const input = screen.getByLabelText(label)
-        expect(input.getAttribute('aria-labelledby')).toContain(el.id)
-      })
-
-      it('renders prefix', () => {
-        const prefix = 'Before'
-        renderForm({ prefix })
-        const pre = screen.getByText(prefix)
-        expect(pre).toBeInTheDocument()
-        expect(pre).toHaveAttribute('ref', 'prefix')
-      })
-
-      it('renders suffix', () => {
-        const suffix = 'After'
-        renderForm({ suffix })
-        const suff = screen.getByText(suffix)
-        expect(suff).toBeInTheDocument()
-        expect(suff).toHaveAttribute('ref', 'suffix')
-      })
-
-      it('renders character counter', () => {
-        renderForm({ showCharCount: true })
-        const charCount = screen.getByTestId('charcount')
-        expect(charCount).toBeInTheDocument()
-        expect(charCount.getAttribute('aria-live')).toBe('polite')
-      })
-
-      it('renders word counter', () => {
-        renderForm({ showWordCount: true })
-        const wordCount = screen.getByTestId('wordcount')
-        expect(wordCount).toBeInTheDocument()
-        expect(wordCount.getAttribute('aria-live')).toBe('polite')
-      })
+    it('renders aria-live region for datetime components', () => {
+      renderForm({ type: 'datetime' })
+      const region = screen.getByTestId('datetime-live-region')
+      expect(region).toBeInTheDocument()
+      expect(region.getAttribute('aria-live')).toBe('assertive')
     })
 
-    describe('columns', () => {
-      it('renders our template', async () => {
-        const labelA = 'A component'
-        const labelB = 'B component'
-        const labelC = 'C component'
-        render(
-          <FormioForm
-            form={FormFactory.make({
-              display: 'form',
-              components: [
-                ColumnsFactory.make({
-                  columns: [
-                    {
-                      width: 6,
-                      components: [ComponentFactory.make({ label: labelA })]
-                    },
-                    {
-                      width: 3,
-                      components: [ComponentFactory.make({ label: labelB })]
-                    },
-                    {
-                      width: 4,
-                      offset: 6,
-                      components: [ComponentFactory.make({ label: labelC })]
-                    }
-                  ]
-                })
-              ]
-            })}
-          />
-        )
+    it('renders a description', () => {
+      const label = 'Field label'
+      const description = 'This is the description'
+      renderForm({ label, description })
+      const el = screen.getByText(description)
+      expect(el).toBeInTheDocument()
+      expect(el).toBeVisible()
 
-        const a = screen.getByLabelText(labelA, { exact: false })
-        expect(a).toBeInTheDocument()
-        expect(a.closest('[ref*=column]')).toHaveStyle({ width: '50%' })
+      const input = screen.getByLabelText(label)
+      expect(input.getAttribute('aria-labelledby')).toContain(el.id)
+    })
 
-        const b = screen.getByLabelText(labelB, { exact: false })
-        expect(b).toBeInTheDocument()
-        expect(b.closest('[ref*=column]')).toHaveStyle({ width: '25%' })
+    it('renders prefix', () => {
+      const prefix = 'Before'
+      renderForm({ prefix })
+      const pre = screen.getByText(prefix)
+      expect(pre).toBeInTheDocument()
+      expect(pre).toHaveAttribute('ref', 'prefix')
+    })
 
-        const c = screen.getByLabelText(labelC, { exact: false })
-        expect(c).toBeInTheDocument()
-        expect(c.closest('[ref*=column]')).toHaveStyle({
-          width: '33.3333333%',
-          'margin-left': '-50%'
-        })
+    it('renders suffix', () => {
+      const suffix = 'After'
+      renderForm({ suffix })
+      const suff = screen.getByText(suffix)
+      expect(suff).toBeInTheDocument()
+      expect(suff).toHaveAttribute('ref', 'suffix')
+    })
+
+    it('renders character counter', () => {
+      renderForm({ showCharCount: true })
+      const charCount = screen.getByTestId('charcount')
+      expect(charCount).toBeInTheDocument()
+      expect(charCount.getAttribute('aria-live')).toBe('polite')
+    })
+
+    it('renders word counter', () => {
+      renderForm({ showWordCount: true })
+      const wordCount = screen.getByTestId('wordcount')
+      expect(wordCount).toBeInTheDocument()
+      expect(wordCount.getAttribute('aria-live')).toBe('polite')
+    })
+  })
+
+  describe('columns', () => {
+    it('renders our template', async () => {
+      const labelA = 'A component'
+      const labelB = 'B component'
+      const labelC = 'C component'
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            display: 'form',
+            components: [
+              ColumnsFactory.make({
+                columns: [
+                  {
+                    width: 6,
+                    components: [ComponentFactory.make({ label: labelA })]
+                  },
+                  {
+                    width: 3,
+                    components: [ComponentFactory.make({ label: labelB })]
+                  },
+                  {
+                    width: 4,
+                    offset: 6,
+                    components: [ComponentFactory.make({ label: labelC })]
+                  }
+                ]
+              })
+            ]
+          })}
+        />
+      )
+
+      const a = screen.getByLabelText(labelA, { exact: false })
+      expect(a).toBeInTheDocument()
+      expect(a.closest('[ref*=column]')).toHaveStyle({ width: '50%' })
+
+      const b = screen.getByLabelText(labelB, { exact: false })
+      expect(b).toBeInTheDocument()
+      expect(b.closest('[ref*=column]')).toHaveStyle({ width: '25%' })
+
+      const c = screen.getByLabelText(labelC, { exact: false })
+      expect(c).toBeInTheDocument()
+      expect(c.closest('[ref*=column]')).toHaveStyle({
+        width: '33.3333333%',
+        'margin-left': '-50%'
       })
     })
   })
@@ -569,6 +630,20 @@ describe('FormioForm', () => {
       radioInputs.forEach((input) => {
         expect(input).toBeInTheDocument()
       })
+    })
+  })
+  describe('select', () => {
+    it('renders our select template in the DOM', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [SelectFactory.make()]
+          })}
+        />
+      )
+
+      const select = screen.getByTestId('formio-sfds-select')
+      expect(select).toBeInTheDocument()
     })
   })
   describe('select boxes', () => {

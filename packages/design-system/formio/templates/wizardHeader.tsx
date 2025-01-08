@@ -50,9 +50,12 @@ export function form({ ...ctx }: WizardRenderContext) {
           id="nav-toggle"
           aria-controls="nav-menu"
         >
-          <div className="flex-1 p-space-sm text-heading-md text-left">
-            {`Section ${currentPage} of ${numPages}: ${ctx.panels[currentPage].title}`}
-          </div>
+          <div
+            className="flex-1 p-space-sm text-heading-md text-left"
+            dangerouslySetInnerHTML={{
+              __html: `Section ${currentPage} of ${numPages}: ${ctx.panels[currentPage].title}`
+            }}
+          />
           <div className="w-40 dropdown-open group-open:scale-y-[-1]"></div>
         </summary>
         <div
@@ -81,7 +84,7 @@ export function form({ ...ctx }: WizardRenderContext) {
                             ? 'active font-bold text-[18px]'
                             : 'text-body',
                           isLastPage
-                            ? 'translate-x-[1px] !pb-0'
+                            ? 'translate-x-[1px]'
                             : completed
                             ? 'border-l-2 border-solid border-success500'
                             : 'border-l-2 pb-space-desktop-md border-dashed border-neutral200 cursor-default'

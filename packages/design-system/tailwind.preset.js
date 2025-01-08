@@ -47,6 +47,7 @@ module.exports = {
         },
         '.dropdown-open': {
           backgroundImage: svgBackgroundImage(dropdownIcon),
+          backgroundColor: `${theme.colors.white}`,
           backgroundSize: '20px 20px',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat'

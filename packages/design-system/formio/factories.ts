@@ -87,6 +87,7 @@ export const FieldsetFactory = factory<FieldsetSchema>((fake) => {
   return {
     type: 'fieldset',
     legend: 'Fieldset',
+    collapsible: false,
     components: ComponentFactory.make(3)
   }
 })

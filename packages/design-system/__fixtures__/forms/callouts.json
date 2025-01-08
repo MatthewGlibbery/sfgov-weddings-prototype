@@ -10,7 +10,7 @@
           "value": "alert"
         }
       ],
-      "content": "<span class=\"fg-blue-4 mr-2\" data-icon=\"alert\"><!-- no text here --></span>\n<span><strong>Projects in plan review use Bluebeam </strong>\n<p>If your application is already in plan review, and you are responding to plan check comments, do not use this form. You should:&nbsp;</p>\n<ul>\n    <li>Add your updated documents directly to the Bluebeam session, or</li>\n    <li><a href=\"https://www.sf.gov/resubmit-plans-building-permit-application\" target=\"_blank\" rel=\"noopener noreferrer\">Follow these instructions to upload revisions</a>, if you do not have access to Bluebeam.</li>\n</ul></span>",
+      "content": "<span class=\"d-none d-flex fg-blue-4 mr-2\" data-icon=\"alert\"><!-- no text here --></span>\n<span><strong>Projects in plan review use Bluebeam </strong>\n<p>If your application is already in plan review, and you are responding to plan check comments, do not use this form. You should:&nbsp;</p>\n<ul>\n    <li>Add your updated documents directly to the Bluebeam session, or</li>\n    <li><a href=\"https://www.sf.gov/resubmit-plans-building-permit-application\" target=\"_blank\" rel=\"noopener noreferrer\">Follow these instructions to upload revisions</a>, if you do not have access to Bluebeam.</li>\n</ul></span>",
       "refreshOnChange": false,
       "key": "alertInformational1",
       "tags": ["shared"],

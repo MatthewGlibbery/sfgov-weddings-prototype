@@ -64,7 +64,7 @@ export function form(ctx: RadioContext) {
                 'h-40',
                 'shrink-0',
                 'border',
-                'border-2',
+                'border-1',
                 'outline-2',
                 'outline-offset-4',
                 'outline-primary500',

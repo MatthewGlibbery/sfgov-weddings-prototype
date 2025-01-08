@@ -18,7 +18,7 @@ export function form({ ...ctx }: FieldContext) {
   const description = ctx.component.description
 
   return (
-    <>
+    <div data-testid={`sfds-field-${ctx.instance.id}-${ctx.component.key}`}>
       {!ctx.label.hidden && ctx.label.labelPosition !== 'bottom'
         ? ctx.labelMarkup
         : ''}
@@ -39,6 +39,6 @@ export function form({ ...ctx }: FieldContext) {
       {!ctx.label.hidden && ctx.label.labelPosition === 'bottom'
         ? ctx.labelMarkup
         : ''}
-    </>
+    </div>
   )
 }

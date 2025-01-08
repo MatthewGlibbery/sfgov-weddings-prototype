@@ -12,8 +12,21 @@ export default { form }
  */
 export function form({ t, ...ctx }: ComponentContext) {
   const uniqueId = `${ctx.instance.id}-${ctx.component.key}`
+  const required = ctx.component.validate?.required ? (
+    <span
+      className="text-danger600"
+      aria-label={t('required', { defaultValue: 'Required' })}
+    >
+      {' '}
+      {t('*', { defaultValue: '*' })}
+    </span>
+  ) : (
+    ''
+  )
+  const labelText = (ctx.component.label || '') + required
+
   return (
-    <div>
+    <>
       <label
         ref="label"
         className={`text-label-md ${ctx.label?.className.replace(
@@ -21,18 +34,10 @@ export function form({ t, ...ctx }: ComponentContext) {
           ''
         )}`}
         id={`l-${uniqueId}`}
-      >
-        {ctx.component.label}
-      </label>
-      {ctx.component.validate?.required ? (
-        <span
-          className="text-danger600"
-          aria-label={t('required', { defaultValue: 'Required' })}
-        >
-          {' '}
-          {t('*', { defaultValue: '*' })}
-        </span>
-      ) : null}
-    </div>
+        dangerouslySetInnerHTML={{
+          __html: labelText
+        }}
+      ></label>
+    </>
   )
 }

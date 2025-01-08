@@ -439,6 +439,7 @@ export type FieldsetSchema = TypedComponentSchema<
   {
     legend: string
     components: InputComponentSchema[]
+    collapsible: boolean
   },
   NestedComponentSchema
 >

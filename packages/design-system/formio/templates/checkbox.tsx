@@ -42,7 +42,7 @@ export function form(ctx: CheckboxContext) {
           'h-40',
           'shrink-0',
           'border',
-          'border-2',
+          'border-1',
           'outline-2',
           'outline-offset-4',
           'outline-primary500',
@@ -56,7 +56,7 @@ export function form(ctx: CheckboxContext) {
         aria-required={ctx.component.validate?.required ? 'true' : 'false'}
         aria-describedby={`d-${ctx.instance.id}-${ctx.component.key}`}
       />
-      <span>{ctx.input.label}</span>
+      <div dangerouslySetInnerHTML={{ __html: ctx.input.label }} />
     </label>
   )
 }

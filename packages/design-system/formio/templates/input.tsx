@@ -50,7 +50,7 @@ export function form({ component, input, ...ctx }: InputContext) {
     ref === 'input' || !ref
       ? component.validate?.required
       : // @ts-expect-error this can be a "day" component with sub-fields
-        component.fields?.[ref]?.required || false
+        component.fields?.[ref]?.required || null
 
   const uniqueId = `${ctx.instance.id}-${component.key}`
   const { prefix, suffix } = ctx
@@ -91,15 +91,21 @@ export function form({ component, input, ...ctx }: InputContext) {
           required={required}
           aria-required={required}
           className={[
+            'h-[56px]',
+            'w-full',
             'rounded-4 px-8 py-4',
             'text-neutral800',
-            'border-1 border-solid border-current',
+            'border-1 border-solid border-black',
             'shadow-sm',
             'shadow-[transparent]',
             'flex-auto',
-            'focus:shadow-neutral300',
+            'focus:outline-none',
+            'focus:border-3 focus:border-primary500',
             'aria-invalid:text-danger600',
+            'aria-invalid:border-danger600',
             'aria-invalid:bg-danger100',
+            'disabled:border-neutral300',
+            'disabled:bg-neutral100',
             className || ''
           ].join(' ')}
           {...attrs}
