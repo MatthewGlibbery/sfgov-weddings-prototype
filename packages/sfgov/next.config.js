@@ -35,6 +35,46 @@ module.exports = {
     '../design-system',
     '../../node_modules/lodash/index.js'
   ],
+  async headers() {
+    /**
+     * Set headers on responses, filtered by path and/or header and query string
+     * @see https://nextjs.org/docs/pages/api-reference/config/next-config-js/headers
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+     */
+    // this pattern matches any path
+    const ANY_PATH = '/:path*'
+    const CACHE_CONTROL = 'cache-control'
+    // by default, cache responses for 10 minutes
+    const TTL_DEFAULT = 10 * 60
+    return [
+      {
+        source: ANY_PATH,
+        headers: [
+          {
+            key: CACHE_CONTROL,
+            value: `public, max-age=${TTL_DEFAULT}`
+          }
+        ]
+      },
+      // don't cache previews
+      {
+        source: ANY_PATH,
+        has: [
+          {
+            type: 'query',
+            key: 'preview',
+            value: 'true'
+          }
+        ],
+        headers: [
+          {
+            key: CACHE_CONTROL,
+            value: 'no-store, must-revalidate'
+          }
+        ]
+      }
+    ]
+  },
   // redirects cause the browser URL to change
   redirects: async () => [
     ...storybookRedirects()
