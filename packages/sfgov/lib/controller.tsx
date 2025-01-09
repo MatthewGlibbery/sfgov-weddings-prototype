@@ -114,10 +114,11 @@ export class Controller {
           options
         )
         // redirect based off field in the model
-        if (page.redirect_url) {
+        if (page.redirect_url || page.agency_redirect) {
+          const redirect = page.redirect_url || page.agency_redirect
           return {
             redirect: {
-              destination: page.redirect_url,
+              destination: redirect,
               permanent: false
             }
           }
