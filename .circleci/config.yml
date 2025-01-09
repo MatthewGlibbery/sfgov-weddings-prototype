@@ -30,7 +30,7 @@ jobs:
       - run:
           name: install ansible tower cli
           command: |
-            if [ "$STAGING_JOB" != "" ]; then
+            if [ "$STAGING_JOB_ID" != "" ]; then
               apt-get update && apt-get install -y vim
               pip install --root-user-action=ignore ansible-tower-cli
             fi
@@ -38,7 +38,7 @@ jobs:
           name: deploy via tower-cli
           # see: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
           command: |
-            if [ "$STAGING_JOB" != "" ]; then
+            if [ "$STAGING_JOB_ID" != "" ]; then
               export TOWER_HOST=$AWX_HOST
               export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
               export TOWER_VERBOSE=true
