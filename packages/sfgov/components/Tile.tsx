@@ -99,7 +99,11 @@ export const ContentTile = ({
           <HeadingMd className="m-0 mb-12 text-primary600 group-hover:text-primary900">
             {link.title}
           </HeadingMd>
-          {link.description ? <p>{link.description}</p> : null}
+          {link.description ? (
+            <div>
+              <RichText html={link.description} />
+            </div>
+          ) : null}
         </div>
         {!icon ? (
           <IconArrowRight

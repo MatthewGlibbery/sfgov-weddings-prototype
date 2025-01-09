@@ -20,7 +20,6 @@ import {
   GenericTileFactory,
   NewsTileFactory,
   QuickLinkFactory,
-  RelatedContentBlockFactory,
   TileValueFactory
 } from '@/lib/factories'
 
@@ -44,12 +43,15 @@ describe('Tile', () => {
     expect(newsTile).toContainElement(title)
   })
 
-  it('renders a ContentTile', () => {
+  it('renders a ContentTile (with rich text description)', () => {
+    const linkValue = TileValueFactory.make({
+      description: '<p>Yo</p>'
+    })
     render(<ContentTile link={linkValue} />)
 
     const resouceTile = screen.getByRole('link')
     const title = screen.getByText(linkValue.title)
-    const description = screen.getByText(linkValue.description)
+    const description = screen.getByText('Yo')
 
     expect(resouceTile).toBeInTheDocument()
     expect(resouceTile).toContainElement(title)
