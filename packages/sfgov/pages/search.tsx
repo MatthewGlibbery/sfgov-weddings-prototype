@@ -146,7 +146,11 @@ const SearchPage = (props: SearchPageData) => {
             const itemUrl = item.url
             return (
               <div key={itemUrl} className="flex flex-col gap-y-8 no-underline">
-                <HeadingLg className="text-black font-bold font-body !m-0">
+                <HeadingLg
+                  as="a"
+                  className="text-primary600 font-bold font-body !m-0 no-underline hover:underline focus:underline"
+                  href={itemUrl}
+                >
                   {item.title}
                 </HeadingLg>
                 <p>{item.summary}</p>

@@ -22,7 +22,7 @@ export const menuClasses = classes(
   'absolute top-full left-0 w-full m-0 px-0 py-20',
   'text-left list-none grid grid-cols-1',
   'bg-neutral50 shadow-[rgba(0,0,0,0.12)_0px_2px_4px_-2px]',
-  'md:static md:flex md:py-0 md:bg-white md:shadow-none'
+  'md:static md:flex md:py-0 md:bg-white md:shadow-none z-50'
 )
 
 const Links = () => {
