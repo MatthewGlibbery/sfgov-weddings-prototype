@@ -42,6 +42,7 @@ export type RichTextProps = {
   components?: ComponentMap
   isNews?: boolean
   isHomePage?: boolean
+  isDarkBg?: boolean
   'data-testid'?: never
 }
 
@@ -61,7 +62,7 @@ export type RichTextProps = {
  * ```
  */
 export const RichText = (props: RichTextProps) => {
-  const { html, components = {}, isNews, isHomePage } = props
+  const { html, components = {}, isNews, isHomePage, isDarkBg = false } = props
 
   const options: HTMLReactParserOptions = {
     replace(node) {
@@ -174,6 +175,13 @@ export const RichText = (props: RichTextProps) => {
       }
 
       if (tagName === 'a') {
+        if (isDarkBg) {
+          return (
+            <Link className="text-white" href={attribs.href}>
+              {domToReact(node.children, options)}
+            </Link>
+          )
+        }
         return (
           <Link href={attribs.href}>{domToReact(node.children, options)}</Link>
         )

@@ -85,7 +85,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
 
   const LogoComponent = ({ logo }: { logo: WagtailImageData }) => (
     <Image
-      className="max-w-1/2 md:max-w-[33%] object-contain mt-20 xl:mt-0"
+      className="max-w-[33%] md:max-w-1/4 object-contain mt-20 xl:mt-0"
       imageRef={logo}
     />
   )
@@ -105,7 +105,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
           mainImage ? 'top-[100px] xl:top-[250px]' : ''
         )}
       >
-        <div className="hidden xl:flex xl:justify-between">
+        <div className="hidden xl:flex xl:justify-between gap-28">
           <div>
             <PageTitleSection title={title} label={label}>
               {description ? (
@@ -370,8 +370,8 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                 {t('submit-requests', {
                   defaultValue: 'Submit requests'
                 })}
-              </Link>
-              {t('for-the', { defaultValue: ' for the' })} {title}.
+              </Link>{' '}
+              {t('for-the', { defaultValue: 'for the' })} {title}.
             </BodyText>
           </div>
         ) : null}

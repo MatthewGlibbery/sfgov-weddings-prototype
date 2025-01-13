@@ -82,6 +82,32 @@ export type TypeEmailValues = {
 
 export type TypeEmailBlock = BlockType<'email', TypeEmailValues>
 
+export type TypeBreakHoursBlock = BlockType<
+  'break',
+  {
+    break_from: string
+    break_to: string
+  }
+>
+
+export type TypeHoursDetailsValues = {
+  open: string
+  closed: string
+  break_hours: TypeBreakHoursBlock[]
+}
+
+export type TypeHoursValues = {
+  days: string
+  all: TypeHoursDetailsValues
+  monday: TypeHoursDetailsValues
+  tuesday: TypeHoursDetailsValues
+  wednesday: TypeHoursDetailsValues
+  thursday: TypeHoursDetailsValues
+  friday: TypeHoursDetailsValues
+  saturday: TypeHoursDetailsValues
+  sunday: TypeHoursDetailsValues
+}
+
 export type LocationData = {
   address_title: string
   agency?: AgencyPage
@@ -94,6 +120,7 @@ export type LocationData = {
   city: string
   state: string
   zip: string
+  hours: TypeHoursValues
   variant?: string
 }
 

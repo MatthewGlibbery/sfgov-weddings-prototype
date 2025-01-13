@@ -8,6 +8,7 @@ export type TitleAndTextProps = JSX.IntrinsicElements['section'] &
     id?: string
     heading?: React.FC
     headingClasses?: string
+    isDarkBg?: boolean
   }
 
 export const TitleAndText = ({
@@ -17,6 +18,7 @@ export const TitleAndText = ({
   id,
   heading,
   headingClasses,
+  isDarkBg = false,
   ...rest
 }: TitleAndTextProps) => {
   if (!title && !text) return null
@@ -28,7 +30,7 @@ export const TitleAndText = ({
           {title}
         </TitleComponent>
       ) : null}
-      {text ? <RichText html={text} /> : null}
+      {text ? <RichText html={text} isDarkBg={isDarkBg} /> : null}
     </section>
   )
 }

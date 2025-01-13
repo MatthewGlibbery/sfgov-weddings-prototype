@@ -1026,7 +1026,122 @@ export const LocationBlockFactory = factory<TypeLocationBlock>((gen) => {
       ]),
       city: 'San Francisco',
       state: 'CA',
-      zip: gen.random.arrayElement(SF_ZIP_CODES)
+      zip: gen.random.arrayElement(SF_ZIP_CODES),
+      hours: {
+        days: 'set_hours',
+        all: {
+          open: '08:00:00',
+          closed: '17:00:00',
+          break_hours: [
+            {
+              type: 'break',
+              value: {
+                break_from: '12:00:00',
+                break_to: '13:00:00'
+              },
+              id: 'cbd68249-467f-4038-8587-be9b92d3b76e'
+            }
+          ]
+        },
+        monday: {
+          open: '08:00:00',
+          closed: '17:00:00',
+          break_hours: [
+            {
+              type: 'break',
+              value: {
+                break_from: '12:00:00',
+                break_to: '13:00:00'
+              },
+              id: 'cbd68249-467f-4038-8587-be9b92d3b76e'
+            }
+          ]
+        },
+        tuesday: {
+          open: '08:00:00',
+          closed: '17:00:00',
+          break_hours: [
+            {
+              type: 'break',
+              value: {
+                break_from: '12:00:00',
+                break_to: '13:00:00'
+              },
+              id: 'cbd68249-467f-4038-8587-be9b92d3b76e'
+            }
+          ]
+        },
+        wednesday: {
+          open: '08:00:00',
+          closed: '17:00:00',
+          break_hours: [
+            {
+              type: 'break',
+              value: {
+                break_from: '12:00:00',
+                break_to: '13:00:00'
+              },
+              id: 'cbd68249-467f-4038-8587-be9b92d3b76e'
+            }
+          ]
+        },
+        thursday: {
+          open: '08:00:00',
+          closed: '17:00:00',
+          break_hours: [
+            {
+              type: 'break',
+              value: {
+                break_from: '12:00:00',
+                break_to: '13:00:00'
+              },
+              id: 'cbd68249-467f-4038-8587-be9b92d3b76e'
+            }
+          ]
+        },
+        friday: {
+          open: '08:00:00',
+          closed: '17:00:00',
+          break_hours: [
+            {
+              type: 'break',
+              value: {
+                break_from: '12:00:00',
+                break_to: '13:00:00'
+              },
+              id: 'cbd68249-467f-4038-8587-be9b92d3b76e'
+            }
+          ]
+        },
+        saturday: {
+          open: '08:00:00',
+          closed: '17:00:00',
+          break_hours: [
+            {
+              type: 'break',
+              value: {
+                break_from: '12:00:00',
+                break_to: '13:00:00'
+              },
+              id: 'cbd68249-467f-4038-8587-be9b92d3b76e'
+            }
+          ]
+        },
+        sunday: {
+          open: '08:00:00',
+          closed: '17:00:00',
+          break_hours: [
+            {
+              type: 'break',
+              value: {
+                break_from: '12:00:00',
+                break_to: '13:00:00'
+              },
+              id: 'cbd68249-467f-4038-8587-be9b92d3b76e'
+            }
+          ]
+        }
+      }
     }
   }
 })

@@ -50,7 +50,7 @@ export const ProfileGroup = ({
             >
               <div className="rounded-full overflow-hidden aspect-square w-[68px] h-[68px]">
                 <Image
-                  className="aspect-square object-cover"
+                  className="aspect-square object-cover min-h-full"
                   imageRef={profile.value.profile_page.image}
                 />
               </div>
@@ -79,7 +79,6 @@ export const ProfileGroup = ({
             <HeadingLg
               as="a"
               className={classes(
-                'no-underline',
                 profile.value.profile_page.pronouns ? '!mb-0' : ''
               )}
               href={getPageURL(profile.value.profile_page)}

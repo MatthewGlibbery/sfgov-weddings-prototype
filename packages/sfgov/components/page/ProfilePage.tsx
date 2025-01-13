@@ -39,7 +39,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
     biography,
     email,
     phone,
-    social_media: socialMedia,
+    social_media: [socialMedia],
     contact: [contact],
     spotlight,
     quick_links: quickLinks,
@@ -50,7 +50,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
   const { t } = useTranslation()
   const button = {
     url:
-      email.length || phone.length || socialMedia.length
+      email.length || phone.length || socialMedia
         ? '#direct-contact'
         : '#agency-contact',
     linkText: 'Contact'
@@ -142,7 +142,12 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
               className="lg:grid-cols-4 lg:gap-x-28"
             />
           ) : null}
-          {email.length || phone.length || socialMedia.length ? (
+          {email.length ||
+          phone.length ||
+          // istanbul ignore next
+          Object.values(socialMedia?.value || []).some(
+            /* istanbul ignore next */ (val) => val
+          ) ? (
             <div id="direct-contact">
               <HeadingXXl as="h2" className="!mb-[24px]">
                 {`${t('Contact', { defaultValue: 'Contact' })} ${title}`}
@@ -158,9 +163,9 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
                     <EmailBlock email={email[0].value} />
                   </DirectContactCard>
                 ) : null}
-                {socialMedia.length ? (
+                {Object.values(socialMedia?.value || []).some((val) => val) ? (
                   <DirectContactCard title="Social media" icon={IconShare}>
-                    <SocialMedia items={socialMedia[0].value} />
+                    <SocialMedia items={socialMedia.value} />
                   </DirectContactCard>
                 ) : null}
               </div>

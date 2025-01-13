@@ -125,6 +125,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                 heading={HeadingXXl}
                 as="h2"
                 headingClasses="text-white"
+                isDarkBg={true}
                 text={content.value.description}
               />
             </div>
@@ -212,7 +213,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
 
   const LogoComponent = ({ logo }: { logo: WagtailImageData }) => (
     <Image
-      className="max-w-1/2 md:max-w-[33%] object-contain mt-20 xl:mt-0"
+      className="max-w-[33%] md:max-w-1/4 object-contain mt-20 xl:mt-0"
       imageRef={logo}
     />
   )
@@ -232,7 +233,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           headerImage ? 'top-[100px] xl:top-[250px]' : ''
         )}
       >
-        <div className="hidden xl:flex xl:justify-between">
+        <div className="hidden xl:flex xl:justify-between gap-28">
           <div>
             <PageTitleSection title={title} label={label} />
           </div>
