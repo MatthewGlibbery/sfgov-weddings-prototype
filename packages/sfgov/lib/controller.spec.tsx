@@ -1,8 +1,4 @@
-import {
-  Controller,
-  ModifyPropsCallback,
-  WagtailPageTemplate
-} from './controller'
+import { Controller, WagtailPageTemplate } from './controller'
 import { FixtureAPI } from './api'
 import { render } from '@testing-library/react'
 import mockConsole from 'jest-mock-console'
@@ -131,25 +127,6 @@ describe('Controller', () => {
       await expect(getServerSideProps(context)).resolves.toEqual({
         notFound: true
       })
-    })
-
-    it('supports the modifyProps() callback', async () => {
-      const context = stubContext({
-        resolvedUrl: mockPath,
-        locale: 'es'
-      })
-      const modifyProps = jest.fn(((props, context) => {
-        return { ...props, foo: 'bar' }
-      }) as ModifyPropsCallback<{ page: PageData }>)
-
-      const getServerSideProps = controller.makeGetServerSideProps(modifyProps)
-      await expect(getServerSideProps(context)).resolves.toMatchObject({
-        props: {
-          page: mockPage,
-          foo: 'bar'
-        }
-      })
-      expect(modifyProps).toHaveBeenCalledWith({ page: mockPage }, context)
     })
 
     it('redirects when the data calls for it', async () => {

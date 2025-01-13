@@ -13,9 +13,10 @@ import {
   LabelXs,
   IconSearch
 } from '@/design-system'
-import { getenv } from '@/lib/env'
+import { requireEnv } from '@/lib/env'
 import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
+import { withServerSideTranslations } from '@/lib/translations'
 
 type SearchResult = {
   id?: string
@@ -35,6 +36,46 @@ type EmptyStateData = {
   numColumns: number
   noResults?: boolean
 }
+
+export const getServerSideProps = withServerSideTranslations(
+  async (context) => {
+    const {
+      query: { q },
+      locale
+    } = context
+    const searchUrl = new URL('/api/search', requireEnv('API_BASE_URL'))
+    searchUrl.searchParams.set('query', q as string)
+    searchUrl.searchParams.set('locale', locale as string)
+
+    // fetch topics, too, for the empty/no results state
+    const topicsUrl = new URL(
+      requireEnv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL') + '/sf.Topic'
+    )
+    topicsUrl.searchParams.set('locale__language_code', locale as string)
+    let results = []
+    let services = []
+
+    try {
+      const searchRes = await fetch(searchUrl.href)
+      if (searchRes.ok) {
+        const searchData = await searchRes.json()
+        results = searchData.results
+      }
+    } catch (error) {
+      console.error('error fetching search results')
+    }
+
+    try {
+      const topicsRes = await fetch(topicsUrl.href)
+      const topicsData = await topicsRes.json()
+      services = topicsData
+    } catch (error) {
+      console.error('error fetching topics')
+    }
+
+    return { props: { query: q || '', results, services } }
+  }
+)
 
 const EmptyState = (props: EmptyStateData) => {
   const { t } = useTranslation()
@@ -202,43 +243,6 @@ const SearchPage = (props: SearchPageData) => {
       </Container>
     </PageWrapper>
   )
-}
-
-export const getServerSideProps = async (context) => {
-  const {
-    query: { q },
-    locale
-  } = context
-  const searchUrl = new URL('/api/search', getenv('API_BASE_URL'))
-  searchUrl.searchParams.set('query', q)
-  searchUrl.searchParams.set('locale', locale)
-
-  // fetch topics, too, for the empty/no results state
-  const topicsUrl = new URL(getenv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL'))
-  topicsUrl.pathname += '/sf.Topic'
-  topicsUrl.searchParams.set('locale__language_code', 'en')
-  let results = []
-  let services = []
-
-  try {
-    const searchRes = await fetch(searchUrl.href)
-    if (searchRes.ok) {
-      const searchData = await searchRes.json()
-      results = searchData.results
-    }
-  } catch (error) {
-    console.error('error fetching search results')
-  }
-
-  try {
-    const topicsRes = await fetch(topicsUrl.href)
-    const topicsData = await topicsRes.json()
-    services = topicsData
-  } catch (error) {
-    console.error('error fetching topics')
-  }
-
-  return { props: { query: q || '', results, services } }
 }
 
 export default SearchPage

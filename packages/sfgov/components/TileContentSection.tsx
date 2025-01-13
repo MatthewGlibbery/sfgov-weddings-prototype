@@ -1,10 +1,10 @@
-import { HeadingXl, HeadingXXl, IconDocument, Link } from '@/design-system'
+import { HeadingXl, HeadingXXl } from '@/design-system'
 import {
   TypeContentTileBlock,
   TypeResourcesSectionBlock,
   TypeServicesSectionBlock
 } from '@/types'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { ContentTileList } from './Tile'
 import type { ReactNode } from 'react'
 

@@ -6,7 +6,8 @@ import {
   HeadingLg,
   PageTitleSection
 } from '@/design-system'
-import { getenv } from '@/lib/env'
+import { requireEnv } from '@/lib/env'
+import { withServerSideTranslations } from '@/lib/translations'
 
 type Topic = {
   title: string
@@ -18,6 +19,19 @@ type Topic = {
 type TopicPageData = {
   topics: Topic[]
 }
+
+export const getServerSideProps = withServerSideTranslations(
+  async ({ locale }) => {
+    const url = new URL(
+      requireEnv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL') + '/sf.Topic'
+    )
+    url.searchParams.set('top_level_topic', 'true')
+    url.searchParams.set('locale__language_code', locale as string)
+    const res = await fetch(url.href)
+    const topics = await res.json()
+    return { props: { topics } }
+  }
+)
 
 const TopicsPage = (props: TopicPageData) => {
   const { topics } = props
@@ -55,15 +69,6 @@ const TopicsPage = (props: TopicPageData) => {
       </Container>
     </PageWrapper>
   )
-}
-
-export const getServerSideProps = async () => {
-  const url = `${getenv(
-    'NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL'
-  )}/sf.Topic?top_level_topic=true&locale__language_code=en`
-  const res = await fetch(url)
-  const topics = await res.json()
-  return { props: { topics } }
 }
 
 export default TopicsPage

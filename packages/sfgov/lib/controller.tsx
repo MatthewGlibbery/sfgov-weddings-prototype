@@ -71,11 +71,6 @@ export class WagtailPageTemplate<
   }
 }
 
-export type ModifyPropsCallback<Props extends object> = (
-  props: Props,
-  context: GetServerSidePropsContext
-) => Props | Promise<Props>
-
 export class Controller {
   api: IContentAPI
   templates: IPageTemplate[]
@@ -93,7 +88,7 @@ export class Controller {
   makeGetServerSideProps<
     Page extends PageData,
     Props extends PageProps<Page> = PageProps<Page>
-  >(modifyProps?: ModifyPropsCallback<Props>): GetServerSideProps<Props> {
+  >(): GetServerSideProps<Props> {
     return async (context) => {
       const { resolvedUrl, locale, query, req } = context
       const { cookie } = req.headers
@@ -123,10 +118,7 @@ export class Controller {
             }
           }
         }
-        let props = { page } as Props
-        if (modifyProps) {
-          props = await modifyProps(props, context)
-        }
+        const props = { page } as Props
         return {
           props
         }
