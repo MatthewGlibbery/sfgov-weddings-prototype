@@ -28,11 +28,15 @@ export const CostBlock = ({
 
   if (costType === 'free') {
     cost = 'Free'
-  } else if (costType === 'flat_fee') {
+  } else if (costType === 'flat_fee' && flatFee != null) {
     cost = `$${flatFee}`
-  } else if (costType === 'range') {
+  } else if (
+    costType === 'range' &&
+    range?.minimum != null &&
+    range?.maximum != null
+  ) {
     cost = `$${range?.minimum} to $${range?.maximum}`
-  } else if (costType === 'minimum') {
+  } else if (costType === 'minimum' && range?.minimum != null) {
     cost = `$${range?.minimum} and up`
   }
 
@@ -56,7 +60,10 @@ export const CostBlock = ({
         <CostText id="costBlock" step={!!variant}>
           {t('cost', { defaultValue: 'Cost' })}:
         </CostText>
-        <span>{cost}.</span>
+        <span>
+          {cost}
+          {cost ? '.' : ''}
+        </span>
         {description ? <RichText html={description} /> : null}
       </div>
     )
