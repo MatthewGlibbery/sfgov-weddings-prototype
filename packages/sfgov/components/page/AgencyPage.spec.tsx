@@ -2,6 +2,12 @@ import { AgencyPageFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
 import { AgencyPage } from './AgencyPage'
 
+jest.mock('next/router', () => ({
+  useRouter: jest.fn().mockReturnValue({
+    query: { path: 'agency-name', filter: 'upcoming' }
+  })
+}))
+
 describe('AgencyPage', () => {
   const page = AgencyPageFactory.make()
 

@@ -53,15 +53,15 @@ const TopicsPage = (props: TopicPageData) => {
                 key={topic.translation_key}
                 className="grid grid-cols-1 gap-y-8"
               >
-                <a
-                  href={topic.url}
-                  className="grid grid-cols-1 gap-y-8 no-underline"
-                >
-                  <HeadingLg className="font-body text-primary500 !mb-0">
+                <HeadingLg className="font-body text-primary500 !mb-0">
+                  <a
+                    href={topic.url}
+                    className="grid grid-cols-1 gap-y-8 no-underline"
+                  >
                     {topic.title}
-                  </HeadingLg>
-                  <BodyText>{topic.description}</BodyText>
-                </a>
+                  </a>
+                </HeadingLg>
+                <BodyText>{topic.description}</BodyText>
               </li>
             )
           })}

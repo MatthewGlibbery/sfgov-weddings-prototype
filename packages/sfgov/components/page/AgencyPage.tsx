@@ -8,9 +8,9 @@ import {
   DisplayXXXl,
   HeadingLg,
   HeadingSm,
+  HeadingXlSans,
   HeadingXXl,
-  IconArrowRight,
-  Label,
+  IconChevronRight,
   LabelMd,
   Link,
   PageLabel,
@@ -39,11 +39,13 @@ import {
 import { ResourceSection, ServiceSection } from '../TileContentSection'
 import { ButtonLink } from '../ButtonLink'
 import { getPageURL } from '@/lib/utils'
+import { useRouter } from 'next/router'
 
 export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   page
 }) => {
   const {
+    meta: { slug },
     title,
     logo,
     description,
@@ -79,7 +81,6 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   }
 
   const { t } = useTranslation()
-
   const label = t('agency', { defaultValue: 'Agency' })
 
   const LogoComponent = ({ logo }: { logo: WagtailImageData }) => (
@@ -153,6 +154,18 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                 <HeadingXXl as="h2">
                   {t('calendar', { defaultValue: 'Calendar' })}
                 </HeadingXXl>
+                <ButtonLink
+                  link={{
+                    button: {
+                      url: `${slug}/events/upcoming`,
+                      link_text: t('full-calendar', {
+                        defaultValue: 'Full calendar'
+                      })
+                    }
+                  }}
+                >
+                  <IconChevronRight className="w-20 h=20" />
+                </ButtonLink>
               </div>
               {meetingInformation?.length ? (
                 <div className="flex flex-col md:flex-row gap-28">
@@ -249,7 +262,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                   <div className="flex flex-col gap-40">
                     <div className="flex flex-row gap-40">
                       {aboutDescription || aboutPage ? (
-                        <div className="w-1/2">
+                        <div className="flex flex-col gap-y-28 w-1/2">
                           {aboutDescription ? (
                             <RichText html={aboutDescription} />
                           ) : null}
@@ -274,25 +287,31 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                     </div>
                     <div className="flex flex-row gap-28">
                       {divisionsSubcommittees.length ? (
-                        <RelatedContentList
-                          title={t(
-                            `${divisionsSubcommittees[0].value.agency_section_title}`,
-                            {
-                              defaultValue: divisionSubcommitteeTitle
-                            }
-                          )}
-                          content={divisionsSubcommittees[0].value.agencies.map(
-                            (agency) => agency.value.page
-                          )}
-                        />
+                        <div>
+                          <HeadingXlSans>
+                            {t(
+                              `${divisionsSubcommittees[0].value.agency_section_title}`,
+                              {
+                                defaultValue: divisionSubcommitteeTitle
+                              }
+                            )}
+                          </HeadingXlSans>
+                          <RelatedContentList
+                            content={divisionsSubcommittees[0].value.agencies.map(
+                              (agency) => agency.value.page
+                            )}
+                          />
+                        </div>
                       ) : null}
                       {partnerAgencies.length ? (
-                        <RelatedContentList
-                          title={t('partner-agencies', {
-                            defaultValue: 'Partner Agencies'
-                          })}
-                          content={partnerAgencies}
-                        />
+                        <div>
+                          <HeadingXlSans>
+                            {t('partner-agencies', {
+                              defaultValue: 'Partner Agencies'
+                            })}
+                          </HeadingXlSans>
+                          <RelatedContentList content={partnerAgencies} />
+                        </div>
                       ) : null}
                     </div>
                   </div>

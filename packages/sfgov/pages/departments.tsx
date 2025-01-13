@@ -50,15 +50,15 @@ const DepartmentsPage = (props: DepartmentPageData) => {
           {departments.map((department) => {
             return (
               <li key={department.translation_key}>
-                <a
-                  href={department.url}
-                  className="grid grid-cols-1 gap-y-8 no-underline"
-                >
-                  <HeadingLg className="font-body text-primary500 !mb-0">
+                <HeadingLg className="font-body text-primary500 !mb-0">
+                  <a
+                    href={department.url}
+                    className="grid grid-cols-1 gap-y-8 no-underline"
+                  >
                     {department.title}
-                  </HeadingLg>
-                  <BodyText>{department.description}</BodyText>
-                </a>
+                  </a>
+                </HeadingLg>
+                <BodyText>{department.description}</BodyText>
               </li>
             )
           })}
