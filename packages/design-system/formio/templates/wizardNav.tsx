@@ -30,6 +30,7 @@ export function form({ t, ...ctx }: WizardRenderContext) {
       className: buttonClass()
     }
   }
+
   return (
     <ul
       className="list-none mt-20 p-0 flex space-x-8 justify-between lg:mb-space-desktop-xxl md:mb-space-tablet-xxl xs:mb-space-lg"
@@ -37,10 +38,11 @@ export function form({ t, ...ctx }: WizardRenderContext) {
     >
       {ctx.buttonOrder.map((type) => {
         const { text, ...props } = buttonProps[type] || {}
+        const isSinglePage = ctx.panels.length === 1
         return ctx.buttons[type] && text ? (
           <li className="m-0 p-0" key={type}>
             <button ref={`${ctx.wizardKey}-${type}`} {...props}>
-              {ctx.currentPage === 0
+              {ctx.currentPage === 0 && !isSinglePage
                 ? t('get-started', { defaultValue: 'Get started →' })
                 : text}
             </button>

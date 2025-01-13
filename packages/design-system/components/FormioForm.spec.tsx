@@ -145,6 +145,40 @@ describe('FormioForm', () => {
     expect(input2).toBeInTheDocument()
   })
 
+  describe('nav buttons', () => {
+    it('renders "Get started →" for the first page', async () => {
+      // @ts-expect-error derp
+      render(<FormioForm form={basicForm} />)
+
+      const button = screen.getByText('Get started →')
+      expect(button).toBeInTheDocument()
+    })
+    it('renders "Submit" for the feedback form', async () => {
+      render(
+        <FormioForm
+          form={WizardFactory.make({
+            components: [
+              PageFactory.make({
+                title: 'Website feedback',
+                components: [
+                  ComponentFactory.make({
+                    label: 'Page one'
+                  })
+                ]
+              })
+            ]
+          })}
+        />
+      )
+
+      const button = screen.getByRole('button', {
+        name: 'Submit'
+      })
+      expect(button).toBeInTheDocument()
+      expect(button).toHaveTextContent('Submit')
+    })
+  })
+
   describe('wizard header', () => {
     it('renders the wizard header in the DOM', async () => {
       render(
