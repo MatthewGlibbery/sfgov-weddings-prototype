@@ -35,15 +35,38 @@ jobs:
               pip install --root-user-action=ignore ansible-tower-cli
             fi
       - run:
-          name: deploy via tower-cli
+          name: build image via tower-cli
           # see: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
           command: |
-            if [ "$STAGING_JOB_ID" != "" ]; then
+            if [ "$STAGING_BUILD_IMAGE_JOB_ID" != "" ]; then
               export TOWER_HOST=$AWX_HOST
               export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
               export TOWER_VERBOSE=true
-              tower-cli workflow_job launch -W $STAGING_JOB_ID --extra-vars="" --wait --monitor
+              tower-cli workflow_job launch -W $STAGING_BUILD_IMAGE_JOB_ID --extra-vars="" --wait --monitor
             fi
+          no_output_timeout: 30m
+      - run:
+          name: build staging instance via tower-cli
+          # see: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
+          command: |
+            if [ "$STAGING_CREATE_INSTANCE_JOB_ID" != "" ]; then
+              export TOWER_HOST=$AWX_HOST
+              export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
+              export TOWER_VERBOSE=true
+              tower-cli job launch -W $STAGING_CREATE_INSTANCE_JOB_ID --extra-vars="" --wait --monitor
+            fi
+          no_output_timeout: 30m
+      - run:
+          name: deploy to staging via tower-cli
+          # see: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
+          command: |
+            if [ "$STAGING_DEPLOY_JOB_ID" != "" ]; then
+              export TOWER_HOST=$AWX_HOST
+              export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
+              export TOWER_VERBOSE=true
+              tower-cli job launch -W $STAGING_DEPLOY_JOB_ID --extra-vars="" --wait --monitor
+            fi
+          no_output_timeout: 30m
 
 workflows:
   # Docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
