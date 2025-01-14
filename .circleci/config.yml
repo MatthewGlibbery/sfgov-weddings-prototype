@@ -42,7 +42,7 @@ jobs:
               export TOWER_HOST=$AWX_HOST
               export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
               export TOWER_VERBOSE=true
-              tower-cli workflow_job launch -W $STAGING_BUILD_IMAGE_JOB_ID --extra-vars="" --wait --monitor
+              tower-cli workflow_job launch -W $STAGING_BUILD_IMAGE_JOB_ID --extra-vars="" --wait
             fi
           no_output_timeout: 30m
       - run:
@@ -53,7 +53,7 @@ jobs:
               export TOWER_HOST=$AWX_HOST
               export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
               export TOWER_VERBOSE=true
-              tower-cli job launch -W $STAGING_CREATE_INSTANCE_JOB_ID --extra-vars="" --wait --monitor
+              tower-cli job launch -W $STAGING_CREATE_INSTANCE_JOB_ID --extra-vars="" --wait
             fi
           no_output_timeout: 30m
       - run:
@@ -64,7 +64,7 @@ jobs:
               export TOWER_HOST=$AWX_HOST
               export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
               export TOWER_VERBOSE=true
-              tower-cli job launch -W $STAGING_DEPLOY_JOB_ID --extra-vars="" --wait --monitor
+              tower-cli job launch -W $STAGING_DEPLOY_JOB_ID --extra-vars="" --wait
             fi
           no_output_timeout: 30m
 
