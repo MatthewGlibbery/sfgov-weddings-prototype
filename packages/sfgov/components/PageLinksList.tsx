@@ -12,7 +12,7 @@ export const PageLinksList = ({
   ...rest
 }: PageLinksListProps) => {
   return (
-    <div {...rest}>
+    <div className="flex gap-4" {...rest}>
       {label ? <span>{label}</span> : null}
       {pageLinks.length ? (
         <div>

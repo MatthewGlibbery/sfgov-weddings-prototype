@@ -62,7 +62,9 @@ const Hours = ({ hours }: { hours: TypeHoursValues }) => {
   return (
     <div className="space-y-8">
       {Object.entries(hours).map(([key, value]) => {
-        if (key === 'days' || key === 'all') return null
+        if (key === 'days' || key === 'all' || !(value.open && value.closed)) {
+          return null
+        }
         return <DayHours key={key} day={weekdays[key].value} hours={value} />
       })}
     </div>

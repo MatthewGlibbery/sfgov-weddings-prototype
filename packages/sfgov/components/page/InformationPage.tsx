@@ -2,6 +2,7 @@ import {
   Container,
   DisplayLg,
   Grid,
+  HeadingXXl,
   PageTitleSection,
   type ContainerProps
 } from '@/design-system'
@@ -36,37 +37,35 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
       <Container>
         <Grid>
           <div className="col-span-full">
-            <div className="flex flex-col gap-y-60">
-              <div className="mb-20 flex flex-col">
-                <PageTitleSection
-                  title={title}
-                  label={t('info-page', { defaultValue: 'Info Page' })}
-                >
-                  {description ? (
-                    <DisplayLg
-                      as="p"
-                      className="mb-12"
-                      data-testid="info-page-description"
-                    >
-                      {description}
-                    </DisplayLg>
-                  ) : null}
-                  {primaryAgency ? (
-                    <PageLinksList pageLinks={[primaryAgency]} />
-                  ) : null}
-                  {partOf.length ? (
-                    <div className="my-space-xxl">
-                      <PageLinksList
-                        label={t('part-of', { defaultValue: 'Part of ' }) || ''}
-                        pageLinks={partOf}
-                      />
-                    </div>
-                  ) : null}
-                </PageTitleSection>
-              </div>
+            <div className=" flex flex-col">
+              <PageTitleSection
+                title={title}
+                label={t('info-page', { defaultValue: 'Info Page' })}
+              >
+                {description ? (
+                  <DisplayLg
+                    as="p"
+                    className="mb-12"
+                    data-testid="info-page-description"
+                  >
+                    {description}
+                  </DisplayLg>
+                ) : null}
+                {primaryAgency ? (
+                  <PageLinksList pageLinks={[primaryAgency]} />
+                ) : null}
+                {partOf.length ? (
+                  <div>
+                    <PageLinksList
+                      label={t('part-of', { defaultValue: 'Part of ' }) || ''}
+                      pageLinks={partOf}
+                    />
+                  </div>
+                ) : null}
+              </PageTitleSection>
             </div>
           </div>
-          <div className="flex flex-col space-y-40 col-span-full lg:col-span-7">
+          <div className="flex flex-col gap-[36px] md:gap-28 lg:gap-40 col-span-full lg:col-span-7">
             <InfoSectionList as="main" blocks={infoSections} />
             <RelatedContentList
               id="divisions"
@@ -118,7 +117,9 @@ const InfoSectionContent = ({ block, ...rest }: InfoSectionContentProps) => {
     case 'image':
       return <Image imageRef={block.value} {...rest} />
     case 'title_and_text':
-      return <TitleAndText {...block.value} as="h2" {...rest} />
+      return (
+        <TitleAndText {...block.value} as="h2" heading={HeadingXXl} {...rest} />
+      )
     case 'callout':
       return <Callout html={block.value} {...rest} />
   }
