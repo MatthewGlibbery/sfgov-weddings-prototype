@@ -19,26 +19,30 @@
     @apply underline text-primary600;
   }
 
+  h2 {
+    @apply text-desktop-heading-xxl;
+  }
+
   p + p {
     margin-top: 1em;
   }
 
-  [ref="component"] + [ref="component"] {
-    @apply mt-space-desktop-xl
+  [ref='component'] + [ref='component'] {
+    @apply mt-space-desktop-xl;
   }
 
-  [data-testid="formio-sfds-fieldset"] label {
+  [data-testid='formio-sfds-fieldset'] label {
     @apply text-body;
   }
 
   .Formio .form-control.selection {
     @apply appearance-none !h-[56px] w-full p-16 !border-none place-self-center;
   }
-  
+
   .Formio .formio-choices {
-    @apply !h-[56px] place-self-center !border-1 !border-black !rounded-4;
+    @apply !h-[56px] w-full place-self-center !border-1 !border-black !rounded-4;
   }
-  
+
   .Formio .formio-choices.is-focused {
     @apply !border-[3px] !border-primary500 !rounded-4;
   }
