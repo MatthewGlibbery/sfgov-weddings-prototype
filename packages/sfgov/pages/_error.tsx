@@ -3,7 +3,7 @@ import { Container } from '@/design-system'
 import { useTranslation } from 'next-i18next'
 import construction from '../public/static/construction.jpg'
 
-const ErrorPage = () => {
+const Error = ({ statusCode }) => {
   const { t } = useTranslation()
 
   return (
@@ -15,8 +15,7 @@ const ErrorPage = () => {
             defaultValue: 'Whoops, we’re fixing a problem on our end.'
           }),
           description: t('500-spotlight-description', {
-            defaultValue:
-              'Internal server issue, try the site again at a later time.'
+            defaultValue: `${statusCode} internal server issue, try the site again at a later time.`
           }),
           image: {
             meta: {
@@ -42,4 +41,9 @@ const ErrorPage = () => {
   )
 }
 
-export default ErrorPage
+Error.getInitialProps = ({ res, err }) => {
+  const statusCode = res ? res.statusCode : err ? err.statusCode : 404
+  return { statusCode }
+}
+
+export default Error
