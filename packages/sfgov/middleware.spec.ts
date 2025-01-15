@@ -145,6 +145,24 @@ describe('Middleware', () => {
       )
     })
 
+    it('should retain query parameters on redirects', async () => {
+      fetchMock.mockResponseOnce('', {
+        status: 301,
+        statusText: 'ok',
+        headers: { location: '/to-the-new-place' }
+      })
+      const resp = await middleware(
+        new NextRequest('http://test.url/en/redirect-me?p1=hi&p2=1', {
+          nextConfig
+        })
+      )
+
+      expect(nextSpy).not.toHaveBeenCalled()
+      expect(redirectSpy).toHaveBeenCalled()
+      expect(resp.headers.get('location')).toEqual(
+        'http://test.url/to-the-new-place?p1=hi&p2=1'
+      )
+    })
     it('redirects with absolute URLs appropriately', async () => {
       const absUrl = 'https://www.thisisatest.com/with/path'
       fetchMock.mockResponseOnce('', {

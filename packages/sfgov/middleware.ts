@@ -55,6 +55,10 @@ export async function middleware(request: NextRequest) {
     reqUrl.locale && reqUrl.locale !== 'en' ? `/${reqUrl.locale}` : ''
   }${redirLoc.pathname}`
 
+  if (reqUrl.search) {
+    redirLoc.search = reqUrl.search
+  }
+
   return NextResponse.redirect(redirLoc, redirCode)
 }
 

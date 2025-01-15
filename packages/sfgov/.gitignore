@@ -4,3 +4,4 @@ node_modules/
 /playwright/.cache/
 /public/storybook
 /test-results/
+.env.test.local
