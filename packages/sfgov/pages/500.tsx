@@ -5,7 +5,7 @@ import Link from 'next/link'
 import construction from '../public/static/construction.jpg'
 import logo from '../public/static/CCSF-seal-vector.svg'
 
-const Error = ({ statusCode }) => {
+const Custom500 = () => {
   const { t } = useTranslation()
 
   return (
@@ -30,7 +30,8 @@ const Error = ({ statusCode }) => {
             defaultValue: 'Whoops, we’re fixing a problem on our end.'
           }),
           description: t('500-spotlight-description', {
-            defaultValue: `${statusCode} internal server issue. Try the site again at a later time.`
+            defaultValue:
+              'Internal server issue. Try the site again at a later time.'
           }),
           image: {
             meta: {
@@ -56,9 +57,4 @@ const Error = ({ statusCode }) => {
   )
 }
 
-Error.getInitialProps = ({ res, err }) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404
-  return { statusCode }
-}
-
-export default Error
+export default Custom500
