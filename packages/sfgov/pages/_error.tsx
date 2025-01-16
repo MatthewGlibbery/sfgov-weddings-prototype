@@ -1,12 +1,36 @@
+/* eslint-disable react/function-component-definition */
 import { Image, Spotlight } from '@/components'
 import { Container, HeadingXl } from '@/design-system'
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import construction from '../public/static/construction.jpg'
 import logo from '../public/static/CCSF-seal-vector.svg'
+import type { NextPageContext } from 'next'
 
-const Error = ({ statusCode }) => {
+/**
+ * This is our error page. Server-side rendering errors are routed here, but
+ * client-side rendering errors are NOT.
+ *
+ * @see https://nextjs.org/docs/14/pages/building-your-application/routing/custom-error#more-advanced-error-page-customizing
+ */
+
+type ErrorPageProps = {
+  statusCode: number
+}
+
+export default function ErrorPage({ statusCode }: ErrorPageProps) {
   const { t } = useTranslation()
+  const title = t('error-page-spotlight-title', {
+    defaultValue: 'Whoops, we’re fixing a problem on our end.'
+  })
+  const description = t('error-page-spotlight-description', {
+    defaultValue:
+      '{{statusCode}} internal server issue. Try the site again at a later time.',
+    statusCode
+  })
+  const altText = t('error-page-image-alt-text', {
+    defaultValue: 'City workers doing construction on a street downtown'
+  })
 
   return (
     <Container className="mx-0 md:mx-28 md:my-28 lg:my-40">
@@ -26,39 +50,33 @@ const Error = ({ statusCode }) => {
       <Spotlight
         type="spotlight"
         value={{
-          title: t('500-spotlight-text', {
-            defaultValue: 'Whoops, we’re fixing a problem on our end.'
-          }),
-          description: t('500-spotlight-description', {
-            defaultValue: `${statusCode} internal server issue. Try the site again at a later time.`
-          }),
+          title,
+          description,
           image: {
             meta: {
-              download_url: construction
+              type: 'wagtailimages.Image',
+              download_url: construction.src
             },
             original: {
-              width: 640,
-              height: 440
+              width: construction.width,
+              height: construction.height,
+              alt: altText
             },
-            alt_text: t('500-image-alt-text', {
-              defaultValue:
-                'city workers doing construction on a street downtown'
-            })
+            alt_text: altText
           },
           image_alignment: 'side-by-side',
           image_position: 'left'
         }}
         theme="orange"
         themeClasses="text-accent800"
-        id="1"
+        id="0"
       />
     </Container>
   )
 }
 
-Error.getInitialProps = ({ res, err }) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404
-  return { statusCode }
+ErrorPage.getInitialProps = ({ res, err }: NextPageContext): ErrorPageProps => {
+  return {
+    statusCode: (res || err)?.statusCode || 500
+  }
 }
-
-export default Error

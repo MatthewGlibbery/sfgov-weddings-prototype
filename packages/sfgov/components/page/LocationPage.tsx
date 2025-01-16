@@ -198,8 +198,9 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
             {atThisLocation.length ? (
               <div className="space-y-20">
                 <HeadingXlSans as="h3" className="my-12 md:my-20">
-                  {t('at', {
-                    defaultValue: `At ${title}`
+                  {t('at-this-location', {
+                    defaultValue: 'At {{title}}',
+                    title
                   })}
                 </HeadingXlSans>
                 <RelatedContentList content={atThisLocation} />

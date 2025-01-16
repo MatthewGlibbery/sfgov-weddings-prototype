@@ -174,9 +174,12 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
           {Object.values(contactData.value).some((val) => val.length) ? (
             <div id="agency-contact">
               <HeadingXXl as="h2" className="!mb-[24px]">
-                {t('Contact', {
-                  defaultValue: `Contact ${primaryAgency?.title ?? ''}`
-                })}
+                {primaryAgency?.title
+                  ? t('contact-agency', {
+                      defaultValue: 'Contact {{agency}}',
+                      agency: primaryAgency.title
+                    })
+                  : t('contact', { defaultValue: 'Contact' })}
               </HeadingXXl>
               <ContactFooter items={contactData} />
             </div>

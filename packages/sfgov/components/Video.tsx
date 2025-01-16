@@ -48,9 +48,6 @@ export const Video = (props: TypeVideoBlockValues) => {
     )
     if (!matcher) return <></>
     const videoId = matcher.length ? matcher[1] : ''
-    const showOrHide = showTranscript
-      ? t('hide', { defaultValue: 'Hide' })
-      : t('show', { defaultValue: 'Show' })
 
     block = (
       <div className="bg-grey100 py-12 flex flex-col lg:flex-row lg:space-x-28">
@@ -71,10 +68,9 @@ export const Video = (props: TypeVideoBlockValues) => {
                 onClick={() => setShowTrancscript(!showTranscript)}
               >
                 <IconTranscript className="text-primary500" width={20} />
-                {t('show-or-hide-transcript', {
-                  defaultValue: `{{showOrHide}} transcript`,
-                  showOrHide
-                })}
+                {showTranscript
+                  ? t('hide-transcript', { defaultValue: 'Hide transcript' })
+                  : t('show-transcript', { defaultValue: 'Show transcript' })}
               </Link>
             </div>
             <div className="flex items-center pl-20 border-l-1 border-neutral200">
