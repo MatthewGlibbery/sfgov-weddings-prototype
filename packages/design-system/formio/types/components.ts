@@ -196,10 +196,12 @@ export type FileSchema = TypedComponentSchema<
     fileNameTemplate?: string
     image?: boolean
     imageSize?: number | string
+    imageUpload?: boolean
     privateDownload?: boolean
     uploadOnly?: boolean
     webcam?: boolean
     webcamSize?: string
+    useWebViewCamera?: boolean
     fileTypes?: {
       label: string
       value: string

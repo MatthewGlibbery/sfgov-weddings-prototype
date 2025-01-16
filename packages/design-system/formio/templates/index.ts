@@ -6,6 +6,7 @@ import field from './field'
 import fieldset from './fieldset'
 import html from './html'
 import input from './input'
+import file from './file'
 import label from './label'
 import radio from './radio'
 import select from './select'
@@ -22,6 +23,7 @@ export default {
   fieldset,
   html,
   input,
+  file,
   label,
   radio,
   select,

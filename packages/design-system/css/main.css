@@ -35,12 +35,16 @@
     @apply text-body;
   }
 
+  .Formio .progress-container {
+    @apply flex gap-28 px-4 py-2 border rounded-4
+  }
+
   .Formio .form-control.selection {
     @apply appearance-none !h-[56px] w-full p-16 !border-none place-self-center;
   }
 
   .Formio .formio-choices {
-    @apply !h-[56px] w-full place-self-center !border-1 !border-black !rounded-4;
+    @apply !h-[56px] !w-full place-self-center !border-1 !border-black !rounded-4;
   }
 
   .Formio .formio-choices.is-focused {

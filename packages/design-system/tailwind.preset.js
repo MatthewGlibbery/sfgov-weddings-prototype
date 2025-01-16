@@ -17,6 +17,10 @@ const dropdownIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none
 </svg>
 `
 
+const removeIcon = `<svg viewBox="0 0 20 20" fill="${theme.colors.white}" height="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.77 10l7.115-7.115a1.252 1.252 0 00-1.77-1.77L10 8.23 2.885 1.115a1.252 1.252 0 00-1.77 1.77L8.23 10l-7.115 7.115a1.26 1.26 0 000 1.77 1.255 1.255 0 001.77 0L10 11.77l7.115 7.115a1.255 1.255 0 001.77 0 1.26 1.26 0 000-1.77L11.77 10z"/>
+</svg>`
+
 function svgBackgroundImage(icon) {
   return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(icon)}")`
 }
@@ -48,6 +52,14 @@ module.exports = {
         '.dropdown-open': {
           backgroundImage: svgBackgroundImage(dropdownIcon),
           backgroundColor: `${theme.colors.white}`,
+          backgroundSize: '20px 20px',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat'
+        },
+        '.remove-icon': {
+          width: '20px',
+          height: '20px',
+          backgroundImage: svgBackgroundImage(removeIcon),
           backgroundSize: '20px 20px',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat'
