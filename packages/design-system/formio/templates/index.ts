@@ -4,6 +4,7 @@ import columns from './columns'
 import component from './component'
 import field from './field'
 import fieldset from './fieldset'
+import html from './html'
 import input from './input'
 import label from './label'
 import radio from './radio'
@@ -19,6 +20,7 @@ export default {
   component,
   field,
   fieldset,
+  html,
   input,
   label,
   radio,
