@@ -111,7 +111,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
                       className=" border-neutral200 border-b-1 last-of-type:border-0 md:border-b-0 md:border-r-1 lg:border-b-1 lg:border-r-0"
                     >
                       <a
-                        href="#"
+                        href={item?.referenced_by?.meta?.html_url}
                         className="flex flex-row justify-between items-start block no-underline text-primary600 px-12 py-16 md:px-16 md:py-12 lg:px-12 lg:py-16"
                       >
                         <div className="flex flex-col gap-8">

@@ -131,10 +131,16 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
               {t('policy', { defaultValue: 'Policy' })}
             </HeadingMd>
             <div className="flex flex-wrap gap-x-16 md:flex-col md:gap-y-12">
-              <Link className="text-white" href="/#">
+              <Link
+                className="text-white"
+                href="/information--privacy-policy-sfgov"
+              >
                 {t('privacy-policy', { defaultValue: 'Privacy policy' })}
               </Link>
-              <Link className="text-white" href="/#">
+              <Link
+                className="text-white"
+                href="/information--disclaimer-sfgov"
+              >
                 {t('disclaimer', { defaultValue: 'Disclaimer' })}
               </Link>
             </div>{' '}

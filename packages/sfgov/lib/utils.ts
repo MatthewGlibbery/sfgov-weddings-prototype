@@ -71,8 +71,8 @@ export function getFooterLinks(t: TFunction) {
   return [
     ...getHeaderLinks(t),
     {
-      href: '/contact',
-      text: t('contact us', { defaultValue: 'Contact us' })
+      href: '/contact-sfgov',
+      text: t('contact-us', { defaultValue: 'Contact us' })
     }
   ]
 }
