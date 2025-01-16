@@ -90,22 +90,21 @@ export function FormPage({
                 {error}
               </InfoBox>
             ) : null}
-           <FormioForm
-            // the `src` (URL) and `form` (schema) props are mutually exclusive
-            src={formSchema ? undefined : formSchemaUrl}
-            form={formSchema}
-            submission={{
-              data: rawQueryParams
-            }}
-            formReady={onFormReady}
-            onSubmitDone={() => setSubmitted(true)}
-            options = {{ 
-              i18next: i18n, 
-              language: i18n.language,
-              defaultNS: 'common'
-            }}
-          />
-        </>
+            <FormioForm
+              // the `src` (URL) and `form` (schema) props are mutually exclusive
+              src={formSchema ? undefined : formSchemaUrl}
+              form={formSchema}
+              submission={{
+                data: rawQueryParams
+              }}
+              formReady={onFormReady}
+              onSubmitDone={() => setSubmitted(true)}
+              options={{
+                language: i18n.language,
+                defaultNS: 'common'
+              }}
+            />
+          </>
         )}
       </Container>
     </PageWrapper>
