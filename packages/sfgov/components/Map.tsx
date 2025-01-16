@@ -70,13 +70,20 @@ export const Map: ComponentType<MapProps> = ({
     image: WagtailImageData
   }> = ({ address, image }) => (
     <div className="flex flex-col md:flex-row-reverse md:gap-x-28 lg:flex-col space-y-20">
-      <div className="flex-1">{image ? <Image imageRef={image} /> : null}</div>
+      <div className="flex-1 aspect-[3/2]">
+        {image ? (
+          <Image
+            imageRef={image}
+            className="object-cover object-center max-w-[700px] max-h-[500px]"
+          />
+        ) : null}
+      </div>
       <div className="flex flex-col flex-1 space-y-20">
-        <Location {...address?.value} />
-        <Button variant="secondary">
+        <Location {...address?.value} variant="card" />
+        <Button as="a" variant="tertiary" className="w-full" href="#contact">
           <IconPhone width={16} />
-          {t('view-full-contact-information', {
-            defaultValue: 'View full contact information'
+          {t('contact-and-hours', {
+            defaultValue: 'Contact and hours'
           })}
         </Button>
       </div>
@@ -93,7 +100,7 @@ export const Map: ComponentType<MapProps> = ({
           alt={`Map showing ${locationName}`}
           data-testid="map-image"
         />
-        <div className="py-20">
+        <div className="py-20 rounded-4">
           <AddressTile address={address} image={image} />
         </div>
       </div>
@@ -104,10 +111,10 @@ export const Map: ComponentType<MapProps> = ({
             zoom={16}
             center={{ lat, lng: lng + 0.001 }}
             mapTypeId={google.maps.MapTypeId.ROADMAP}
-            mapContainerStyle={{ width: '100%', height: '550px' }}
+            mapContainerStyle={{ width: '100%', height: '600px' }}
           >
             <MarkerF position={mapCenter} />
-            <div className="w-[40%] relative top-28 right-60 py-20 px-16 float-right bg-white shadow-md">
+            <div className="w-[40%] relative top-28 right-60 py-20 px-16 float-right bg-white shadow-md rounded-4">
               <AddressTile address={address} image={image} />
             </div>
           </GoogleMap>

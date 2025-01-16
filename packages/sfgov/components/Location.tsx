@@ -95,7 +95,7 @@ export const Location = (props: LocationBlockProps) => {
     ((agency && agency.title) || organization || addressee || locationName)
 
   const addressQuery = `https://maps.google.com/?q=${locationName}+${line1}+${line2}+${city}+${state}+${zip}}`
-  return (
+  const cardVariant = (
     <div className="flex flex-col gap-y-8">
       {boldedTitle ? (
         <BodyText data-testid="title" className="font-bold lg:mb-0">
@@ -103,26 +103,6 @@ export const Location = (props: LocationBlockProps) => {
         </BodyText>
       ) : null}
       <BodyText>
-        {variant === 'full' ? (
-          organization && organization !== boldedTitle ? (
-            <>
-              {organization}
-              <br />
-            </>
-          ) : null
-        ) : null}
-        {addressee && addressee !== boldedTitle ? (
-          <>
-            {addressee}
-            <br />
-          </>
-        ) : null}
-        {locationName && locationName !== boldedTitle ? (
-          <>
-            {locationName}
-            <br />
-          </>
-        ) : null}
         {line1}
         <br />
         {line2 ? (
@@ -132,7 +112,7 @@ export const Location = (props: LocationBlockProps) => {
           </>
         ) : null}
         {city}, {state} {zip}
-        {locationName || hours || locationNotes ? (
+        {locationName ? (
           <div className="space-y-28">
             <Link
               href={addressQuery}
@@ -144,11 +124,70 @@ export const Location = (props: LocationBlockProps) => {
               <IconLocation width={20} />
               {t('get-directions', { defaultValue: 'Get directions' })}
             </Link>
-            {hours ? <Hours hours={hours} /> : null}
-            {locationNotes ? <RichText html={locationNotes} /> : null}
           </div>
         ) : null}
       </BodyText>
     </div>
   )
+  switch (variant) {
+    case 'card':
+      return cardVariant
+    default:
+      return (
+        <div className="flex flex-col gap-y-8">
+          {boldedTitle ? (
+            <BodyText data-testid="title" className="font-bold lg:mb-0">
+              {boldedTitle}
+            </BodyText>
+          ) : null}
+          <BodyText>
+            {variant === 'full' ? (
+              organization && organization !== boldedTitle ? (
+                <>
+                  {organization}
+                  <br />
+                </>
+              ) : null
+            ) : null}
+            {addressee && addressee !== boldedTitle ? (
+              <>
+                {addressee}
+                <br />
+              </>
+            ) : null}
+            {locationName && locationName !== boldedTitle ? (
+              <>
+                {locationName}
+                <br />
+              </>
+            ) : null}
+            {line1}
+            <br />
+            {line2 ? (
+              <>
+                {line2}
+                <br />
+              </>
+            ) : null}
+            {city}, {state} {zip}
+            {locationName || hours || locationNotes ? (
+              <div className="space-y-28">
+                <Link
+                  href={addressQuery}
+                  className="flex gap-4 mt-8"
+                  aria-label={`${t('get-directions-to', {
+                    defaultValue: 'Get directions to'
+                  })} ${locationName}`}
+                >
+                  <IconLocation width={20} />
+                  {t('get-directions', { defaultValue: 'Get directions' })}
+                </Link>
+                {hours ? <Hours hours={hours} /> : null}
+                {locationNotes ? <RichText html={locationNotes} /> : null}
+              </div>
+            ) : null}
+          </BodyText>
+        </div>
+      )
+  }
 }

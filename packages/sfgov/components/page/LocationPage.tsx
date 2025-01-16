@@ -232,7 +232,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
         contact.value.email.length ||
         contact.value.social_media_other.length ? (
           <Container className="my-40">
-            <HeadingXXl as="h2" className="my-12 md:my-20">
+            <HeadingXXl as="h2" className="my-12 md:my-20" id="contact">
               {t('contact-us', {
                 defaultValue: 'Contact us'
               })}
