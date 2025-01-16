@@ -12,7 +12,7 @@ const Document = (props: DocumentProps) => {
   return (
     <Html>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/icon.ico" />
       </Head>
       <StyledBody>
         <a href="#main-content" className="sr-only focus:not-sr-only">
