@@ -4,6 +4,7 @@ import {
   fireEvent,
   type RenderResult
 } from '@testing-library/react'
+import { act } from 'react-dom/test-utils'
 import { Accordion } from './Accordion'
 
 describe('<Accordion />', () => {
@@ -30,6 +31,30 @@ describe('<Accordion />', () => {
 
     expect(getSummary()).toHaveTextContent(testTitle)
     expect(getContent()).toBeInTheDocument()
+  })
+
+  it('toggles open and closed', async () => {
+    render(
+      <Accordion title={testTitle} open>
+        {testContent}
+      </Accordion>
+    )
+    const details = getDetails()
+    const summary = getSummary()
+
+    // XXX: this seems to be the only sure-fire way to get the <details> element
+    // to dispatch a 'toggle' event and get coverage on the callback
+    const toggle = () =>
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      act(() => {
+        fireEvent.click(summary)
+        return sleep(10)
+      })
+
+    await toggle()
+    expect(details.open).toBe(false)
+    await toggle()
+    expect(details.open).toBe(true)
   })
 
   it('shows the content when the header element is clicked', () => {
@@ -125,3 +150,7 @@ describe('<Accordion />', () => {
     })
   })
 })
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

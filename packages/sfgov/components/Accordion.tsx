@@ -64,11 +64,12 @@ export const Accordion = (props: AccordionProps) => {
   const [isOpen, setOpen] = useState(!!open)
   const Icon = isOpen ? OpenedIcon : ClosedIcon
 
-  /* istanbul ignore next */
-  const toggleOpen = () => setOpen(!isOpen)
-
   return (
-    <StyledDetails open={isOpen} onToggle={toggleOpen} {...rest}>
+    <StyledDetails
+      open={isOpen}
+      onToggle={(e) => setOpen(e.currentTarget.open)}
+      {...rest}
+    >
       <StyledSummary data-testid="accordion-summary" datastory={dataStory}>
         {dataStory ? (
           <Label
