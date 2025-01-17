@@ -72,10 +72,7 @@ export const Map: ComponentType<MapProps> = ({
     <div className="flex flex-col md:flex-row-reverse md:gap-x-28 lg:flex-col space-y-20">
       <div className="flex-1 aspect-[3/2]">
         {image ? (
-          <Image
-            imageRef={image}
-            className="object-cover object-center max-w-[700px] max-h-[500px]"
-          />
+          <Image imageRef={image} className="object-cover object-center" />
         ) : null}
       </div>
       <div className="flex flex-col flex-1 space-y-20">
