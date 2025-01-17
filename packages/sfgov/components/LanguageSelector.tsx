@@ -17,7 +17,7 @@ const StyledList = classed(
 const StyledDiv = classed('div', 'flex gap-x-28 md:flex-col md:gap-y-12')
 
 const StyledLanguageLink = classed(NextLink, {
-  base: 'block w-full no-underline text-primary600 text-label-xs px-28 py-12 font-bold md:px-16 md:py-15',
+  base: 'block w-full no-underline text-primary500 text-label-xs px-28 py-12 font-bold md:px-16 md:py-15',
   variants: {
     current: {
       true: 'font-bold'
@@ -84,9 +84,9 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
         <IconGlobe
           width="20"
           height="20"
-          className="shrink-0 text-primary600 md:text-black"
+          className="shrink-0 text-primary500 md:text-black"
         />
-        <p className="w-60 text-center text-label-xs text-primary600 font-bold md:text-black md:w-80">
+        <p className="w-60 text-center text-label-xs text-primary500 font-bold md:text-black md:w-80">
           {selectedLanguage}
         </p>
         <IconChevronUp

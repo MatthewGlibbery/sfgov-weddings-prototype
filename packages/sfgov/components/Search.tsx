@@ -48,7 +48,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
         ) : null}
         <button
           aria-label="search"
-          className="flex items-center justify-center border-1 p-16 rounded-tr-4 rounded-br-4 bg-primary600 h-[44px] w-[44px]  md:h-[56px] md:w-[56px] hover:bg-primary800"
+          className="flex items-center justify-center border-1 p-16 rounded-tr-4 rounded-br-4 bg-primary500 h-[44px] w-[44px]  md:h-[56px] md:w-[56px] hover:bg-primary800"
           type="submit"
         >
           <IconSearch width="20" height="20" className="text-white shrink-0" />

@@ -26,7 +26,7 @@ export const DownloadableFilesSection = (
           description: document.value.description || ''
         }}
         icon={
-          <IconDocument className="mb-12 text-primary600 shrink-0" width={24} />
+          <IconDocument className="mb-12 text-primary500 shrink-0" width={24} />
         }
       />
     ))

@@ -56,7 +56,7 @@ export const ShowMore = ({ maxHeight, children }: ShowMoreProps) => {
           className={`absolute -top-[70px] w-full h-60 bg-gradient-to-t from-white ${showMoreValues.overlayClass}`}
         ></div>
         <a
-          className="flex gap-4 text-primary600 w-full items-center justify-center no-underline"
+          className="flex gap-4 text-primary500 w-full items-center justify-center no-underline"
           href="#"
           onClick={(e) => {
             e.preventDefault()

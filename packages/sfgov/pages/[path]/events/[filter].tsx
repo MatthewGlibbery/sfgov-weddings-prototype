@@ -110,7 +110,7 @@ const EventItem = (item: Event) => {
   )
   return (
     <div className="flex flex-col gap-y-8">
-      <HeadingLgListItem className="!mb-0 text-primary600 flex items-start flex-col gap-y-8 md:flex-row md:gap-x-8 md:items-center">
+      <HeadingLgListItem className="!mb-0 text-primary500 flex items-start flex-col gap-y-8 md:flex-row md:gap-x-8 md:items-center">
         <a href={item.meta?.html_url} className="no-underline">
           {item.title}
         </a>
@@ -173,7 +173,7 @@ const EventsPage = (props: EventPageData) => {
   })
 
   const pillCls = 'no-underline px-16 py-[15px]'
-  const activePillCls = 'bg-primary600 text-white'
+  const activePillCls = 'bg-primary500 text-white'
   const inactivePillCls = 'bg-primary100 text-primary700'
 
   return (

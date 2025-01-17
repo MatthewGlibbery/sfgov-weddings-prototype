@@ -37,7 +37,7 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
                   title={title}
                 >
                   <div className="flex gap-4">
-                    <IconArrowLeft className="text-primary600" width={20} />
+                    <IconArrowLeft className="text-primary500" width={20} />
                     <PageLink page={primaryAgency}>
                       {t('back-to-main-page', {
                         defaultValue: 'Back to main page'

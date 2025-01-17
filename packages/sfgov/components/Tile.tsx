@@ -96,7 +96,7 @@ export const ContentTile = ({
       <div className="flex items-start justify-between">
         <div className="mr-12 space-y-12">
           {icon || null}
-          <HeadingMd className="m-0 mb-12 text-primary600 group-hover:text-primary900">
+          <HeadingMd className="m-0 mb-12 text-primary500 group-hover:text-primary900">
             {link.title}
           </HeadingMd>
           {link.description ? (
@@ -107,7 +107,7 @@ export const ContentTile = ({
         </div>
         {!icon ? (
           <IconArrowRight
-            className="mt-2 shrink-0 text-primary600 group-hover:text-primary900"
+            className="mt-2 shrink-0 text-primary500 group-hover:text-primary900"
             width={20}
           />
         ) : null}
@@ -118,9 +118,9 @@ export const ContentTile = ({
 
 export const QuickLink = ({ link }: TileProps) => (
   <BaseTile href={link.url} className="p-12 relative">
-    <HeadingLg className="my-12 text-primary600">{link.title}</HeadingLg>
+    <HeadingLg className="my-12 text-primary500">{link.title}</HeadingLg>
     <div>{link.description}</div>
-    <IconArrowRight className="text-primary600 self-end" width={20} />
+    <IconArrowRight className="text-primary500 self-end" width={20} />
   </BaseTile>
 )
 
@@ -139,7 +139,7 @@ export const EventTile = ({ link }: TileProps) => (
 
 export const DocumentTile = ({ link }: TileProps) => (
   <BaseTile href={link.url} className="p-12">
-    <IconDocument width={20} className="text-primary600" />
+    <IconDocument width={20} className="text-primary500" />
     <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
       {link.title}
     </HeadingMd>
@@ -150,7 +150,7 @@ export const DocumentTile = ({ link }: TileProps) => (
 
 export const DataStoryTile = ({ link }: TileProps) => (
   <BaseTile href={link.url} className="p-12">
-    <IconData width={20} className="text-primary600" />
+    <IconData width={20} className="text-primary500" />
     <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
       {link.title}
     </HeadingMd>
@@ -213,7 +213,7 @@ export const MeetingTile = ({ link }: TileProps) => {
             </div>
             <HeadingMd
               as="a"
-              className="text-primary600 no-underline"
+              className="text-primary500 no-underline"
               href={link?.meta?.html_url || '#'}
             >
               {title}

@@ -87,13 +87,13 @@ module.exports = {
       path: ['Primary', '400']
     },
     500: {
-      value: '#386ebf',
+      value: '#2A60AF',
       type: 'color',
       description: 'Shade color with 54.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
-        value: '#386ebf',
+        value: '#2A60AF',
         type: 'color',
         description: 'Shade color with 54.3% of lightness'
       },

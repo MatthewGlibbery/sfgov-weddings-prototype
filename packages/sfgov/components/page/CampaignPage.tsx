@@ -69,7 +69,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   }
   const themeButton = {
     spotlight1: '',
-    spotlight2: 'bg-white text-primary600'
+    spotlight2: 'bg-white text-primary500'
   }
   switch (theme) {
     case 'black':
@@ -77,7 +77,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       themeBackground.video = 'bg-neutral10'
       themeText.spotlight1 = 'text-white'
       themeText.spotlight2 = 'text-white'
-      themeButton.spotlight1 = 'bg-white text-primary600'
+      themeButton.spotlight1 = 'bg-white text-primary500'
       break
     // istanbul ignore next
     case 'green':

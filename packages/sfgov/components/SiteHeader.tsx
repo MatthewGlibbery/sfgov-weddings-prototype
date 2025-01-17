@@ -41,7 +41,7 @@ const Links = () => {
           <li key={link.text}>
             <Link
               href={link.href}
-              className="block w-full no-underline font-bold text-label-xs px-28 py-12 text-primary600
+              className="block w-full no-underline font-bold text-label-xs px-28 py-12 text-primary500
             md:px-8 md:py-15 md:text-black"
             >
               {link.text}
@@ -60,7 +60,7 @@ const NavLinks = () => {
       <details className="group md:hidden" aria-label="navigation" name="menu">
         <summary
           className={classes(
-            'bg-primary600 text-white group-open:bg-neutral50 group-open:text-primary600',
+            'bg-primary500 text-white group-open:bg-neutral50 group-open:text-primary500',
             'list-none [&::-webkit-details-marker]:hidden',
             'flex flex-col items-center justify-center w-60 h-60 md:hidden'
           )}
@@ -139,7 +139,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                         <IconSearch
                           width="24"
                           height="24"
-                          className="text-primary600"
+                          className="text-primary500"
                         />
                       </summary>
                       <SearchInput value={value} onChange={setSearchTerm} />

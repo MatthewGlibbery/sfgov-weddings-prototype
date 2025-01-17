@@ -36,7 +36,7 @@ export const BUTTON_VARIANTS = {
       primary: classes(
         'border-current border-1',
         'text-white',
-        'bg-primary600',
+        'bg-primary500',
         'hover:bg-primary800',
         'hover:border-primary800',
         'hover:text-white',
@@ -47,8 +47,8 @@ export const BUTTON_VARIANTS = {
       ),
       secondary: classes(inverseButtonClasses),
       tertiary: classes(
-        'border-primary600',
-        'text-primary600',
+        'border-primary500',
+        'text-primary500',
         'bg-white',
         'hover:bg-primary100',
         'hover:border-primary700',

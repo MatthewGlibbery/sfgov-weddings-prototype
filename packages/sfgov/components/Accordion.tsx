@@ -72,7 +72,7 @@ export const Accordion = (props: AccordionProps) => {
       <StyledSummary data-testid="accordion-summary" datastory={dataStory}>
         {dataStory ? (
           <Label
-            className="text-primary600 font-medium"
+            className="text-primary500 font-medium"
             data-testid="accordion-title"
           >
             {title}
@@ -89,7 +89,7 @@ export const Accordion = (props: AccordionProps) => {
         )}
         <Icon
           className={
-            dataStory ? 'text-primary600' : 'text-primary500 min-w-[24px]'
+            dataStory ? 'text-primary500' : 'text-primary500 min-w-[24px]'
           }
           data-testid={Icon.name}
           width={24}

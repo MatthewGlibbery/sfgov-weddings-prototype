@@ -112,7 +112,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
                     >
                       <a
                         href={item?.referenced_by?.meta?.html_url}
-                        className="flex flex-row justify-between items-start block no-underline text-primary600 px-12 py-16 md:px-16 md:py-12 lg:px-12 lg:py-16"
+                        className="flex flex-row justify-between items-start block no-underline text-primary500 px-12 py-16 md:px-16 md:py-12 lg:px-12 lg:py-16"
                       >
                         <div className="flex flex-col gap-8">
                           {item.role ? (

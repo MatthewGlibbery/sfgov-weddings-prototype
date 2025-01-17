@@ -110,7 +110,7 @@ export function form({ ...ctx }: WizardRenderContext) {
                       isCurrentPage
                         ? 'text-black pl-20'
                         : completed
-                        ? 'text-primary600 underline cursor-pointer pl-[14px]'
+                        ? 'text-primary500 underline cursor-pointer pl-[14px]'
                         : 'cursor-default text-neutral600 pl-20'
                     )}
                   >

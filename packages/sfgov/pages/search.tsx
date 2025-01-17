@@ -150,7 +150,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
         ) : null}
         <button
           aria-label={t('search-button-aria-label', { defaultValue: 'search' })}
-          className="flex items-center justify-center border-1 p-16 rounded-tr-4 rounded-br-4 bg-primary600 h-[44px] w-[44px]  md:h-[56px] md:w-[76px] hover:bg-primary800"
+          className="flex items-center justify-center border-1 p-16 rounded-tr-4 rounded-br-4 bg-primary500 h-[44px] w-[44px]  md:h-[56px] md:w-[76px] hover:bg-primary800"
           type="submit"
         >
           <LabelXs className="!mb-0 text-white hidden md:block">
@@ -189,7 +189,7 @@ const SearchPage = (props: SearchPageData) => {
               <div key={itemUrl} className="flex flex-col gap-y-8 no-underline">
                 <HeadingLg
                   as="a"
-                  className="text-primary600 font-bold font-body !m-0 no-underline hover:underline focus:underline"
+                  className="text-primary500 font-bold font-body !m-0 no-underline hover:underline focus:underline"
                   href={itemUrl}
                 >
                   {item.title}
@@ -209,7 +209,7 @@ const SearchPage = (props: SearchPageData) => {
         {pageResults.length !== results.length ? (
           <div className="flex items-center justify-center border-b-1 border-neutral300">
             <button
-              className="px-16 py-[15px] flex items-center self-center gap-x-4 text-primary600"
+              className="px-16 py-[15px] flex items-center self-center gap-x-4 text-primary500"
               onClick={(e) => {
                 e.preventDefault()
                 setCurrentPage(currentPage + 1)
