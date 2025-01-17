@@ -80,11 +80,21 @@ ErrorPage.getInitialProps = ({
   res,
   err
 }: NextPageContext): ErrorPageProps => {
-  const statusCode = err?.statusCode || res?.statusCode || 500
-  const url = req?.url || '?'
-  const message = err ? String(err) : statusCode
-  console.error('[ERROR] at "%s": %s', url, message)
-  return {
-    statusCode
+  try {
+    const statusCode = err?.statusCode || res?.statusCode || 500
+    const url = req?.url || '?'
+    const message = err ? err.stack || err.message : statusCode
+    console.error('[ERROR] at "%s":', url, message)
+    return {
+      statusCode
+    }
+  } catch (error) {
+    console.error(
+      '[ERROR] when collecting error info:',
+      (error as Error).stack || error
+    )
+    return {
+      statusCode: 500
+    }
   }
 }
