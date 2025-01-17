@@ -75,8 +75,16 @@ export default function ErrorPage({ statusCode }: ErrorPageProps) {
   )
 }
 
-ErrorPage.getInitialProps = ({ res, err }: NextPageContext): ErrorPageProps => {
+ErrorPage.getInitialProps = ({
+  req,
+  res,
+  err
+}: NextPageContext): ErrorPageProps => {
+  const statusCode = err?.statusCode || res?.statusCode || 500
+  const url = req?.url || '?'
+  const message = err ? String(err) : statusCode
+  console.error('[ERROR] at "%s": %s', url, message)
   return {
-    statusCode: (res || err)?.statusCode || 500
+    statusCode
   }
 }
