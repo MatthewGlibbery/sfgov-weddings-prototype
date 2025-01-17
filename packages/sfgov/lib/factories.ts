@@ -89,7 +89,7 @@ import { SearchPageData } from '@/pages/search'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
-  html_url: gen.internet.url()
+  html_url: `${gen.internet.url()}/${gen.lorem.slug()}`
 }))
 
 export const EventPageFactory = factory<EventPageData>((gen) => ({
@@ -898,7 +898,7 @@ export const PageFactory = factory<PageData>((gen) => ({
       .sentence(1)
       .replace(/\.$/, '')}`,
     url_path: new URL(gen.internet.url()).pathname,
-    html_url: gen.internet.url()
+    html_url: `${gen.internet.url()}/${gen.lorem.slug()}`
   },
   title: gen.commerce.productName()
 }))

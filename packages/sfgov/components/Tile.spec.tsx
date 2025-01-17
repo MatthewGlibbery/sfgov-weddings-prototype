@@ -175,6 +175,29 @@ describe('Tile', () => {
     expect(tileSection).toBeInTheDocument()
   })
 
+  it('renders a list of content tiles inside a TileSection', () => {
+    const links = GenericTileFactory.make(3)
+    const urlTile = GenericTileFactory.make({
+      value: TileValueFactory.make({
+        link_to: 'url',
+        url: 'https://some.url'
+      })
+    })
+    links.push(urlTile)
+    render(<ContentTileList links={links} />)
+    const tileSection = screen.getByTestId('tile-section')
+    const tiles = screen.queryAllByRole('link')
+    expect(tileSection).toBeInTheDocument()
+    for (let i = 0; i < tiles.length; i++) {
+      const linkValue = links[i].value
+      expect(tiles[i].getAttribute('href')).toEqual(
+        linkValue.link_to === 'page'
+          ? new URL(linkValue.page.meta.html_url).pathname
+          : linkValue.url
+      )
+    }
+  })
+
   it('does not render a NewsTileList if there are no links', () => {
     render(<NewsTileList />)
 

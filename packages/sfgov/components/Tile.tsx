@@ -285,13 +285,16 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
         item.value.description ||
         item.value.data?.description
       if (props.noDescription) description = ''
-      let url = item.value.url
-      if ((!item.value.page && item.value.link_to) || item.value.meta) {
-        url = getPageURL(item.value) || ''
+      let url: string | undefined = item?.value?.url
+      if (item.value.link_to) {
+        // we're dealing with a link block
+        if (item?.value?.link_to === 'page') url = getPageURL(item.value?.page)
+        if (item?.value?.link_to === 'url') url = item?.value?.url
+      } else if (item.value.meta) {
+        // we're dealing with a page chooser
+        url = getPageURL(item.value)
       }
-      if (item.value.page) {
-        url = getPageURL(item.value.page) || ''
-      }
+
       const meta = item.value.meta
       const date = item.value.date
       // eslint-disable-next-line camelcase
