@@ -3,18 +3,26 @@ import { FixtureAPI } from './api'
 import { render } from '@testing-library/react'
 import mockConsole from 'jest-mock-console'
 import type { GetServerSidePropsContext } from 'next'
-import type { IContentAPI, PageData } from '@/types'
+import type { IContentAPI, MinimalPageData, PageData } from '@/types'
 import type { ComponentType } from 'react'
+import mockedEnv from 'mocked-env'
 
 type MockedFunction = ReturnType<typeof jest.fn>
 
 let restoreConsole: ReturnType<typeof mockConsole>
+let restoreEnv: ReturnType<typeof mockedEnv> | undefined
+
 beforeAll(() => {
   restoreConsole = mockConsole()
 })
 
 afterAll(() => {
   restoreConsole()
+})
+
+afterEach(() => {
+  restoreEnv?.()
+  restoreEnv = undefined
 })
 
 describe('Controller', () => {
@@ -27,7 +35,7 @@ describe('Controller', () => {
       url_path: mockPath
     },
     title: 'Mock page'
-  }
+  } as MinimalPageData
 
   const api = new FixtureAPI({
     pages: [mockPage]
@@ -69,17 +77,6 @@ describe('Controller', () => {
         })
       ).toBe(MockPageComponent)
     })
-
-    it.skip('matches globs', () => {
-      const template = new WagtailPageTemplate(MockPageComponent, mockMetaType)
-      const controller = new Controller(api, [template])
-      const mockPageProps = {
-        page: mockPage
-      }
-      expect(controller.getViewComponent(mockPageProps)).toBe(MockPageComponent)
-      template.metaType = '*.Page'
-      expect(controller.getViewComponent(mockPageProps)).toBe(MockPageComponent)
-    })
   })
 
   describe('makeGetServerSideProps()', () => {
@@ -110,6 +107,23 @@ describe('Controller', () => {
       await expect(getServerSideProps(context)).resolves.toMatchObject({
         props: {
           page: mockPage
+        }
+      })
+    })
+
+    it('sets env to public env vars', async () => {
+      restoreEnv = mockedEnv({ NEXT_PUBLIC_FOO: 'bar' })
+      const getServerSideProps = controller.makeGetServerSideProps()
+      const context = stubContext({
+        resolvedUrl: mockPath,
+        locale: 'es'
+      })
+      await expect(getServerSideProps(context)).resolves.toMatchObject({
+        props: {
+          page: mockPage,
+          env: {
+            NEXT_PUBLIC_FOO: 'bar'
+          }
         }
       })
     })
@@ -181,13 +195,15 @@ describe('Controller', () => {
       expect(() =>
         render(
           <View
-            page={{
-              id: 1,
-              meta: {
-                type: 'wut'
-              },
-              title: 'Hi'
-            }}
+            page={
+              {
+                id: 1,
+                meta: {
+                  type: 'wut'
+                },
+                title: 'Hi'
+              } as MinimalPageData
+            }
           />
         )
       ).toThrow(/No template found for page/)

@@ -37,4 +37,5 @@ export interface IContentAPI {
  */
 export type PageProps<T, SpecificData = T extends PageData ? T : unknown> = {
   page: SpecificData
+  env?: Record<string, string | undefined>
 }

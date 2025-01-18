@@ -61,6 +61,7 @@ export type MinimalPageData = {
   title: string
   image?: WagtailImageData
   html_path: string
+  redirect_url?: string
   // should we add description here?
 }
 

@@ -11,9 +11,9 @@ import NextImage from 'next/image'
 import { ComponentType, useMemo, useState } from 'react'
 import { fromAddress, setKey } from 'react-geocode'
 import { Image, Location } from '.'
-import { getenv } from '@/lib/env'
 
 export type MapProps = JSX.IntrinsicElements['div'] & {
+  googleMapsApiKey: string
   address: TypeLocationBlock
   image: WagtailImageData
   locationName: string
@@ -23,6 +23,7 @@ export const Map: ComponentType<MapProps> = ({
   address,
   image,
   locationName,
+  googleMapsApiKey,
   ...rest
 }) => {
   const { t } = useTranslation()
@@ -31,8 +32,12 @@ export const Map: ComponentType<MapProps> = ({
   const [lat, setLat] = useState(37.759571206469374)
   const [lng, setLng] = useState(-122.44429767907141)
 
-  const GOOGLE_MAPS_API_KEY = getenv('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY')!
-  setKey(GOOGLE_MAPS_API_KEY)
+  // istanbul ignore next
+  if (googleMapsApiKey) {
+    setKey(googleMapsApiKey)
+  } else {
+    console.error('Missing google maps API key; this will not work!')
+  }
 
   // eslint-disable-next-line max-len
   const addressQuery = `${address.value.line1}, ${address.value.city} ${address.value.state}, ${address.value.zip}`
@@ -61,7 +66,7 @@ export const Map: ComponentType<MapProps> = ({
   )
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey,
     libraries
   })
 
@@ -94,7 +99,7 @@ export const Map: ComponentType<MapProps> = ({
     <>
       <div className="lg:hidden">
         <NextImage
-          src={`https://maps.googleapis.com/maps/api/staticmap?center=${addressQuery}&zoom=16&markers=${addressQuery}&size=1000x400&key=${GOOGLE_MAPS_API_KEY}`}
+          src={`https://maps.googleapis.com/maps/api/staticmap?center=${addressQuery}&zoom=16&markers=${addressQuery}&size=1000x400&key=${googleMapsApiKey}`}
           width={1000}
           height={400}
           alt={`Map showing ${locationName}`}

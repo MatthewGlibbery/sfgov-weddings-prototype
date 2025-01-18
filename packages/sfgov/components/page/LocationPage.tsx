@@ -9,9 +9,7 @@ import {
   IconTransportation,
   PageTitleSection
 } from '@/design-system'
-import { LocationPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
-import { ComponentType } from 'react'
 import {
   Accordion,
   Alert,
@@ -26,10 +24,12 @@ import {
   ZebraStripedSection
 } from '..'
 import { TileContentSection } from '../TileContentSection'
+import type { LocationPageData, PageProps } from '@/types'
 
-export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
-  page
-}) => {
+export type LocationPageProps = PageProps<LocationPageData>
+
+// eslint-disable-next-line react/function-component-definition
+export function LocationPage({ page, env }: LocationPageProps) {
   const {
     title,
     description,
@@ -76,6 +76,7 @@ export const LocationPage: ComponentType<{ page: LocationPageData }> = ({
             </DisplayLg>
             {address ? (
               <Map
+                googleMapsApiKey={env?.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
                 address={address}
                 image={image}
                 locationName={title}

@@ -1,8 +1,9 @@
 import { ErrorBoundary, ErrorFallbackReport } from '@/components'
 import type { IContentAPI, PageData, PageProps } from '@/types'
-import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import type { GetServerSideProps } from 'next'
 import type { ComponentType } from 'react'
 import safeJsonStringify from 'safe-json-stringify'
+import { getPublicEnv } from './env'
 
 // "unknown" page props literally have { page: unknown }
 type UnknownPageProps = PageProps<unknown>
@@ -109,8 +110,9 @@ export class Controller {
           options
         )
         // redirect based off field in the model
-        if (page.redirect_url || page.agency_redirect) {
-          const redirect = page.redirect_url || page.agency_redirect
+        // @ts-expect-error page may be AgencyPageData
+        const redirect = page.redirect_url || page.agency_redirect
+        if (redirect) {
           return {
             redirect: {
               destination: redirect,
@@ -118,9 +120,11 @@ export class Controller {
             }
           }
         }
-        const props = { page } as Props
         return {
-          props
+          props: {
+            page,
+            env: getPublicEnv()
+          } as Props
         }
       } catch (error) {
         console.error(

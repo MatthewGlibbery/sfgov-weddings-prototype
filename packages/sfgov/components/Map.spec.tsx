@@ -1,6 +1,6 @@
 import { ImageFactory, LocationBlockFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
-import { Map } from './Map'
+import { Map, type MapProps } from './Map'
 
 jest.mock('@react-google-maps/api', () => {
   return {
@@ -39,10 +39,11 @@ jest.mock('react-geocode', () => ({
 }))
 
 describe('Map', () => {
-  const props = {
+  const props: MapProps = {
     address: LocationBlockFactory.make(),
     image: ImageFactory.make(),
-    locationName: '1 SVN'
+    locationName: '1 SVN',
+    googleMapsApiKey: 'test'
   }
   it('renders a Map', () => {
     render(<Map {...props} />)
