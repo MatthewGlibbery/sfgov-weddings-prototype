@@ -137,8 +137,11 @@ function gatherComponents(pages) {
  * @returns {string}
  */
 function getFigmaHref(page, nodeId) {
-  const qs = nodeId ? `?node-id=${nodeId}` : ''
-  return `https://figma.com/file/${fileId}/${page.name}${qs}`
+  const url = new URL(`https://figma.com/file/${fileId}/${page.name}`)
+  if (nodeId) {
+    url.searchParams.set('node-id', nodeId)
+  }
+  return url.href
 }
 
 async function writeJSON(output, data) {

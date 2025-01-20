@@ -19,6 +19,8 @@ export type MapProps = JSX.IntrinsicElements['div'] & {
   locationName: string
 }
 
+const GMAPS_LIBRARIES: Libraries = ['places']
+
 export const Map: ComponentType<MapProps> = ({
   address,
   image,
@@ -31,6 +33,8 @@ export const Map: ComponentType<MapProps> = ({
   // Sets the default coords to 1 SVN
   const [lat, setLat] = useState(37.759571206469374)
   const [lng, setLng] = useState(-122.44429767907141)
+  const mapSize = { width: 1000, height: 400 }
+  const mapZoom = 16
 
   // istanbul ignore next
   if (googleMapsApiKey) {
@@ -40,8 +44,11 @@ export const Map: ComponentType<MapProps> = ({
   }
 
   // eslint-disable-next-line max-len
-  const addressQuery = `${address.value.line1}, ${address.value.city} ${address.value.state}, ${address.value.zip}`
-
+  const addressQuery = useMemo(
+    () =>
+      `${address.value.line1}, ${address.value.city} ${address.value.state}, ${address.value.zip}`,
+    [address]
+  )
   fromAddress(addressQuery)
     .then(({ results }) => {
       setLat(results[0].geometry.location.lat)
@@ -50,10 +57,7 @@ export const Map: ComponentType<MapProps> = ({
     })
     .catch(console.error)
 
-  const libraries = useMemo<Libraries>(() => ['places'], [])
-
   const mapCenter = useMemo(() => ({ lat, lng }), [lat, lng])
-
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
       fullscreenControl: false,
@@ -67,7 +71,7 @@ export const Map: ComponentType<MapProps> = ({
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey,
-    libraries
+    libraries: GMAPS_LIBRARIES
   })
 
   const AddressTile: ComponentType<{
@@ -95,14 +99,27 @@ export const Map: ComponentType<MapProps> = ({
     </div>
   )
 
+  const mapImageURL = new URL('https://maps.googleapis.com/maps/api/staticmap')
+  mapImageURL.searchParams.set('key', googleMapsApiKey)
+  mapImageURL.searchParams.set('center', addressQuery)
+  mapImageURL.searchParams.set('markers', addressQuery)
+  mapImageURL.searchParams.set('zoom', String(mapZoom))
+  mapImageURL.searchParams.set(
+    'size',
+    [mapSize.width, mapSize.height].join('x')
+  )
+
   return (
     <>
       <div className="lg:hidden">
         <NextImage
-          src={`https://maps.googleapis.com/maps/api/staticmap?center=${addressQuery}&zoom=16&markers=${addressQuery}&size=1000x400&key=${googleMapsApiKey}`}
-          width={1000}
-          height={400}
-          alt={`Map showing ${locationName}`}
+          src={mapImageURL.href}
+          width={mapSize.width}
+          height={mapSize.height}
+          alt={t('map-alt-text', {
+            defaultValue: 'Map of {{locationName}}',
+            locationName
+          })}
           data-testid="map-image"
         />
         <div className="py-20 rounded-4">
@@ -113,7 +130,7 @@ export const Map: ComponentType<MapProps> = ({
         {isLoaded ? (
           <GoogleMap
             options={mapOptions}
-            zoom={16}
+            zoom={mapZoom}
             center={{ lat, lng: lng + 0.001 }}
             mapTypeId={google.maps.MapTypeId.ROADMAP}
             mapContainerStyle={{ width: '100%', height: '600px' }}
@@ -124,7 +141,7 @@ export const Map: ComponentType<MapProps> = ({
             </div>
           </GoogleMap>
         ) : (
-          <div>loading...</div>
+          <div>{t('map-loading', { defaultValue: 'loading...' })}</div>
         )}
       </div>
     </>

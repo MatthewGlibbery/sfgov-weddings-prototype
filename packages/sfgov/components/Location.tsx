@@ -94,44 +94,49 @@ export const Location = (props: LocationBlockProps) => {
     addressTitle ??
     ((agency && agency.title) || organization || addressee || locationName)
 
-  const addressQuery = `https://maps.google.com/?q=${locationName}+${line1}+${line2}+${city}+${state}+${zip}}`
-  const cardVariant = (
-    <div className="flex flex-col gap-y-8">
-      {boldedTitle ? (
-        <BodyText data-testid="title" className="font-bold lg:mb-0">
-          {boldedTitle}
-        </BodyText>
-      ) : null}
-      <BodyText>
-        {line1}
-        <br />
-        {line2 ? (
-          <>
-            {line2}
-            <br />
-          </>
-        ) : null}
-        {city}, {state} {zip}
-        {locationName ? (
-          <div className="space-y-28">
-            <Link
-              href={addressQuery}
-              className="flex gap-4 mt-8"
-              aria-label={`${t('get-directions-to', {
-                defaultValue: 'Get directions to'
-              })} ${locationName}`}
-            >
-              <IconLocation width={20} />
-              {t('get-directions', { defaultValue: 'Get directions' })}
-            </Link>
-          </div>
-        ) : null}
-      </BodyText>
-    </div>
+  const mapsURL = new URL('https://maps.google.com/')
+  mapsURL.searchParams.set(
+    'q',
+    `${locationName} ${line1} ${line2} ${city} ${state} ${zip}`
   )
+
   switch (variant) {
     case 'card':
-      return cardVariant
+      return (
+        <div className="flex flex-col gap-y-8">
+          {boldedTitle ? (
+            <BodyText data-testid="title" className="font-bold lg:mb-0">
+              {boldedTitle}
+            </BodyText>
+          ) : null}
+          <BodyText>
+            {line1}
+            <br />
+            {line2 ? (
+              <>
+                {line2}
+                <br />
+              </>
+            ) : null}
+            {city}, {state} {zip}
+            {locationName ? (
+              <div className="space-y-28">
+                <Link
+                  href={mapsURL.href}
+                  className="flex gap-4 mt-8"
+                  aria-label={t('get-directions-to', {
+                    defaultValue: 'Get directions to {{locationName}}',
+                    locationName
+                  })}
+                >
+                  <IconLocation width={20} />
+                  {t('get-directions', { defaultValue: 'Get directions' })}
+                </Link>
+              </div>
+            ) : null}
+          </BodyText>
+        </div>
+      )
     default:
       return (
         <div className="flex flex-col gap-y-8">
@@ -173,7 +178,7 @@ export const Location = (props: LocationBlockProps) => {
             {locationName || hours || locationNotes ? (
               <div className="space-y-28">
                 <Link
-                  href={addressQuery}
+                  href={mapsURL.href}
                   className="flex gap-4 mt-8"
                   aria-label={`${t('get-directions-to', {
                     defaultValue: 'Get directions to'
