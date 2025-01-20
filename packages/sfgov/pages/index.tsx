@@ -12,7 +12,7 @@ export const getServerSideProps: GetServerSideProps =
     const api = new ContentAPI()
     const data = await api
       .getPageByPath('home-page', {
-        locale: 'en'
+        locale
       })
       .catch((error) => {
         console.error('Error fetching homepage:', error)
