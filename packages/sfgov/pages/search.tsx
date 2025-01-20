@@ -23,6 +23,7 @@ type SearchResult = {
   title: string
   summary: string
   url: string
+  html_path: string
 }
 
 export type SearchPageData = {
@@ -32,7 +33,7 @@ export type SearchPageData = {
 }
 
 type EmptyStateData = {
-  items: []
+  items: SearchResult[]
   numColumns: number
   noResults?: boolean
 }

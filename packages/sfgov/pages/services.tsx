@@ -8,6 +8,7 @@ import {
 } from '@/design-system'
 import { requireEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
+import { useTranslation } from 'next-i18next'
 
 type Topic = {
   title: string
@@ -34,15 +35,21 @@ export const getServerSideProps = withServerSideTranslations(
 )
 
 const TopicsPage = (props: TopicPageData) => {
+  const { t } = useTranslation()
   const { topics } = props
   return (
     <PageWrapper>
       <Container className="grid grid-cols-1 gap-y-60">
         <div>
-          <PageTitleSection title="Services" label="">
+          <PageTitleSection
+            title={t('services', { defaultValue: 'Services' })}
+            label=""
+          >
             <DisplayLg>
-              Select a service category to find a specific service or to learn
-              more.
+              {t('services-list-desc', {
+                defaultValue:
+                  'Select a service category to find a specific service or to learn more.'
+              })}
             </DisplayLg>
           </PageTitleSection>
         </div>

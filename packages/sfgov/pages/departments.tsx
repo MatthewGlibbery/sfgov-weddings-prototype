@@ -8,6 +8,7 @@ import {
 } from '@/design-system'
 import { requireEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
+import { useTranslation } from 'next-i18next'
 
 type Department = {
   title: string
@@ -34,15 +35,21 @@ export const getServerSideProps = withServerSideTranslations(
 )
 
 const DepartmentsPage = (props: DepartmentPageData) => {
+  const { t } = useTranslation()
   const { departments } = props
   return (
     <PageWrapper>
       <Container className="grid grid-cols-1 gap-y-60">
         <div>
-          <PageTitleSection title="Departments" label="">
+          <PageTitleSection
+            title={t('departments', { defaultValue: 'Departments' })}
+            label=""
+          >
             <DisplayLg>
-              A list of the departments and organizations within the government
-              for the City and County of San Francisco.
+              {t('agency-list-desc', {
+                defaultValue:
+                  'A list of the departments and organizations within the government for the City and County of San Francisco.'
+              })}
             </DisplayLg>
           </PageTitleSection>
         </div>
