@@ -78,7 +78,7 @@ export const Spotlight = ({
     if (button.link_to === 'url') {
       url = button.url
     } else if (button.link_to === 'page') {
-      url = button.page.meta.html_url || button.page.html_path
+      url = (button.page.html_path || button.page.meta.html_url) as string
     }
   }
 
