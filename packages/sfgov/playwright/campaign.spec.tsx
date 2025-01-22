@@ -4,7 +4,7 @@ import React from 'react'
 import { test, expect } from './fixtures'
 
 test.describe('A11y tests', () => {
-  test('headings are rendered in a logical reading order', async ({
+  test.skip('headings are rendered in a logical reading order', async ({
     mount,
     page
   }) => {

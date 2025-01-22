@@ -177,7 +177,6 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
             {content.value.accordion_items.map((item) => (
               <Accordion
                 key={item.id}
-                as="p"
                 title={item.value.title}
                 classes={themeBackground.accordion}
               >
