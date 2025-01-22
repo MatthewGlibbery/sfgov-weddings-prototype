@@ -28,7 +28,6 @@ import type { LocationPageData, PageProps } from '@/types'
 
 export type LocationPageProps = PageProps<LocationPageData>
 
-// eslint-disable-next-line react/function-component-definition
 export function LocationPage({ page, env }: LocationPageProps) {
   const {
     title,

@@ -1,4 +1,3 @@
-/* eslint-disable react/function-component-definition */
 import React from 'react'
 import FormioForm from '@/design-system/components/FormioForm'
 import { Form, FormProps } from '@/design-system/formio'

@@ -1,4 +1,3 @@
-/* eslint-disable react/function-component-definition */
 import { Image, Spotlight } from '@/components'
 import { Container, HeadingXl } from '@/design-system'
 import { useTranslation } from 'next-i18next'

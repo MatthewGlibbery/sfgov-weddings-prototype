@@ -1,4 +1,3 @@
-/* eslint-disable react/function-component-definition */
 import { Components, Form as FormioReactForm, Formio } from '@formio/react'
 import type { ComponentProps } from 'react'
 import { FORM_CLASS } from './constants.mjs'

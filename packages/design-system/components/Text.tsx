@@ -42,7 +42,6 @@ export type TextProps = ComponentProps<typeof Text>
 export type TextVariant = TextProps['variant']
 
 function createVariant(variant: TextVariant) {
-  // eslint-disable-next-line react/function-component-definition
   return function TextVariant(props: Omit<TextProps, 'variant'>) {
     return <Text variant={variant} {...props} />
   }

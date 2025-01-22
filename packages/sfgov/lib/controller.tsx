@@ -159,7 +159,6 @@ export class Controller {
 
   makeViewComponent(): ComponentType<KnownPageProps> {
     const getViewComponent = this.getViewComponent.bind(this)
-    // eslint-disable-next-line react/function-component-definition
     return function ControllerView(props) {
       const Component = getViewComponent(props)
       return (

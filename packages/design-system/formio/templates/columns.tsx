@@ -37,7 +37,6 @@ export function form({
     </div>
   )
 
-  // eslint-disable-next-line react/function-component-definition
   function Column({
     column: col,
     ...rest

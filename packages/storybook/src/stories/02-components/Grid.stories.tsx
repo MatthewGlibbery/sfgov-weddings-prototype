@@ -39,7 +39,6 @@ type GridStory = StoryObj<typeof meta>
 
 export const Grid_: GridStory = {}
 
-// eslint-disable-next-line react/function-component-definition
 function GridOverlay() {
   const overlayClasses = classes(
     'fixed h-full top-0 left-0 right-0 z-50 opacity-40'

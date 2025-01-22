@@ -274,7 +274,6 @@ export const FeaturedTopicTile = ({ link }) => (
 )
 
 function createTileList(TileComponent: ComponentType<TileProps>) {
-  // eslint-disable-next-line react/function-component-definition
   return function TileList(props: TileSectionProps) {
     const { links, ...rest } = props
     if (!links?.length) return null

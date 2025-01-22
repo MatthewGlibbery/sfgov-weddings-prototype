@@ -41,14 +41,6 @@ module.exports = {
         'import/no-unresolved': 'off',
         'no-undef': 'off',
         'no-unused-vars': 'off',
-        // React overrides
-        'react/function-component-definition': [
-          'error',
-          {
-            namedComponents: 'arrow-function',
-            unnamedComponents: 'arrow-function'
-          }
-        ]
       }
     },
     {
