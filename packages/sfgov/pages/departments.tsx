@@ -28,6 +28,7 @@ export const getServerSideProps = withServerSideTranslations(
     )
     url.searchParams.set('show_agency_list', 'true')
     url.searchParams.set('locale__language_code', locale as string)
+    url.searchParams.set('live', 'true')
     const res = await fetch(url.href)
     const departments = await res.json()
     return { props: { departments } }

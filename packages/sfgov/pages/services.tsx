@@ -28,6 +28,7 @@ export const getServerSideProps = withServerSideTranslations(
     )
     url.searchParams.set('top_level_topic', 'true')
     url.searchParams.set('locale__language_code', locale as string)
+    url.searchParams.set('live', 'true')
     const res = await fetch(url.href)
     const topics = await res.json()
     return { props: { topics } }
