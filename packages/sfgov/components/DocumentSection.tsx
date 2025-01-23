@@ -9,9 +9,11 @@ export const DocumentSectionBlock = ({
 }: TypeDocumentSectionBlockValues) => {
   return (
     <div className="grid gap-y-20">
-      <HeadingXl as="h3" className="font-body !mb-0">
-        {title}
-      </HeadingXl>
+      {title ? (
+        <HeadingXl as="h3" className="font-body !mb-0">
+          {title}
+        </HeadingXl>
+      ) : null}
       <div className="grid gap-y-20">
         {content.map((item) => {
           switch (item.type) {

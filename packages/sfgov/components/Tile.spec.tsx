@@ -33,6 +33,14 @@ describe('Tile', () => {
     expect(tileSection).toBeEmptyDOMElement()
   })
 
+  it('doesnt render an empty ContentTile in a ContentTileList', () => {
+    render(
+      <ContentTileList links={[{ type: 'page', value: null, id: 'w333eee' }]} />
+    )
+
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+  })
+
   it('renders a NewsTile', () => {
     render(<NewsTile link={linkValue} />)
 

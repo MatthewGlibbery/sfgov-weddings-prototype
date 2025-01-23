@@ -284,9 +284,9 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                         </div>
                       ) : null}
                     </div>
-                    <div className="flex flex-row gap-28">
+                    <div className="flex flex-col lg:flex-row gap-28 lg:gap-96">
                       {divisionsSubcommittees.length ? (
-                        <div>
+                        <div className="flex flex-col gap-20 md:gap-12">
                           <HeadingXlSans>
                             {t(
                               `${divisionsSubcommittees[0].value.agency_section_title}`,
@@ -303,7 +303,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                         </div>
                       ) : null}
                       {partnerAgencies.length ? (
-                        <div>
+                        <div className="flex flex-col gap-20 md:gap-12">
                           <HeadingXlSans>
                             {t('partner-agencies', {
                               defaultValue: 'Partner Agencies'
@@ -386,7 +386,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                 {t('see-previous-website', {
                   defaultValue: 'See previous website'
                 })}
-              </Link>
+              </Link>{' '}
               {t('archived-on', { defaultValue: ' archived on' })}{' '}
               <ComposedDate startDateInput={archiveDate} />.
             </BodyText>
