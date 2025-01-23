@@ -32,7 +32,7 @@ const Hours = ({ hours }: { hours: TypeHoursValues }) => {
     day: string
     hours: TypeHoursDetailsValues
   }) => (
-    <div className="flex justify-between md:flex-col lg:flex-row">
+    <div className="flex justify-between @[20px]/hours:flex-col @[260px]/hours:flex-row">
       <BodyText className="font-bold">{day}</BodyText>
       {hours.break_hours.length ? (
         <div>
@@ -59,8 +59,16 @@ const Hours = ({ hours }: { hours: TypeHoursValues }) => {
     </div>
   )
 
+  // the address API sends every day with filled hours
+  // when users select 'Monday to Friday' so we
+  // remove Saturday and Sunday from the list when iterating
+  if (hours.days === 'set_hours') {
+    delete hours.saturday
+    delete hours.sunday
+  }
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 @container/hours">
       {Object.entries(hours).map(([key, value]) => {
         if (key === 'days' || key === 'all' || !(value.open && value.closed)) {
           return null

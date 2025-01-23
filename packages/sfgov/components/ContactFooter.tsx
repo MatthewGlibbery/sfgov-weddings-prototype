@@ -15,8 +15,7 @@ import {
   SocialMedia,
   TitleAndText
 } from './'
-import { useTranslation} from 'next-i18next'
-
+import { useTranslation } from 'next-i18next'
 
 type ContactFooterProps = {
   items: TypeContactFooterBlockValues[]
@@ -62,8 +61,10 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
     <StackedContainer className="gap-28">
       {footerSections.address.length ? (
         <StackedItem
+          className="max-w-[400px]"
           icon={IconHome}
-          title={ t('address', { defaultValue: 'Address' }) }
+          title={t('address', { defaultValue: 'Address' })}
+          headingAs="h3"
           data-testid="contact-address"
         >
           <div className="flex flex-col gap-y-28">
@@ -74,9 +75,13 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
         </StackedItem>
       ) : null}
       {footerSections.phone_number.length ? (
-        <StackedItem icon={IconPhone} 
-          title={ t('phone', { defaultValue: 'Phone' }) } 
-          data-testid="contact-phone">
+        <StackedItem
+          className="max-w-[400px]"
+          icon={IconPhone}
+          title={t('phone', { defaultValue: 'Phone' })}
+          headingAs="h3"
+          data-testid="contact-phone"
+        >
           <div className="flex flex-col gap-y-28">
             {footerSections.phone_number.map((phone) => (
               <PhoneNumberBlock {...phone.value} key={phone.id} />
@@ -85,9 +90,13 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
         </StackedItem>
       ) : null}
       {footerSections.email.length ? (
-        <StackedItem icon={IconEmail} 
-          title={ t('email', { defaultValue: 'Email' }) } 
-          data-testid="contact-email">
+        <StackedItem
+          className="max-w-[400px]"
+          icon={IconEmail}
+          title={t('email', { defaultValue: 'Email' })}
+          headingAs="h3"
+          data-testid="contact-email"
+        >
           <div className="flex flex-col gap-y-28">
             {footerSections.email.map((email) => (
               <EmailBlock {...email.value} key={email.id} />
@@ -97,19 +106,23 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
       ) : null}
       {footerSections.title_and_text.length ? (
         <StackedItem
+          className="max-w-[400px]"
           icon={IconAdditional}
-          title={ t('additional-info', { defaultValue: 'Additional info' }) }
+          title={t('additional-info', { defaultValue: 'Additional info' })}
+          headingAs="h3"
           data-testid="contact-additional-info"
         >
           {footerSections.title_and_text.map((extra) => (
-            <TitleAndText {...extra.value} key={extra.id} />
+            <TitleAndText {...extra.value} key={extra.id} as={'p'} />
           ))}
         </StackedItem>
       ) : null}
       {footerSections.social_media.length ? (
         <StackedItem
+          className="max-w-[400px]"
           icon={IconShare}
-          title={ t('social-media', { defaultValue: 'Social media' }) }
+          title={t('social-media', { defaultValue: 'Social media' })}
+          headingAs="h3"
           data-testid="contact-social"
         >
           {footerSections.social_media.map((item) => (

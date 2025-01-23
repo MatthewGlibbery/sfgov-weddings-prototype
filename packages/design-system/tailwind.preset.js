@@ -29,6 +29,7 @@ function svgBackgroundImage(icon) {
 module.exports = {
   theme,
   plugins: [
+    require('@tailwindcss/container-queries'),
     require('@thoughtbot/tailwindcss-aria-attributes'),
     plugin(({ addVariant, addUtilities }) => {
       addVariant('callout-titles', '& strong:first-child')

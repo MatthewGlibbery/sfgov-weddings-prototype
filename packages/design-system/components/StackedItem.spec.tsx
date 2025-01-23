@@ -38,4 +38,17 @@ describe('<StackedItem />', () => {
       'wohoo'
     )
   })
+
+  it('renders a title as an h3 when provided', () => {
+    render(
+      <StackedItem title="wohoo" headingAs="h3">
+        Testing
+      </StackedItem>
+    )
+    expect(
+      screen.getByRole('heading', {
+        level: 3
+      })
+    ).toHaveTextContent('wohoo')
+  })
 })

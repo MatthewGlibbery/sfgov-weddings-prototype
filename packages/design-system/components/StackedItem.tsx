@@ -10,10 +10,12 @@ const StyledItem = classed(
 export type StackedItemProps = ComponentProps<typeof StyledItem> & {
   icon?: ComponentType<{ width?: string | number }> | null
   title?: string
+  headingAs?: string
 }
 
 export const StackedItem = ({
   icon: Icon = null,
+  headingAs = 'p',
   title = '',
   children,
   ...rest
@@ -30,7 +32,9 @@ export const StackedItem = ({
         />
       ) : null}
       {title ? (
-        <HeadingLg className="flex items-center mb-28">{title}</HeadingLg>
+        <HeadingLg className="flex items-center mb-28" as={headingAs}>
+          {title}
+        </HeadingLg>
       ) : null}
       {children}
     </StyledItem>
