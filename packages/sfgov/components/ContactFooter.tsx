@@ -61,7 +61,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
     <StackedContainer className="gap-28">
       {footerSections.address.length ? (
         <StackedItem
-          className="max-w-[400px]"
+          className="md:max-w-[400px]"
           icon={IconHome}
           title={t('address', { defaultValue: 'Address' })}
           headingAs="h3"
@@ -76,7 +76,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
       ) : null}
       {footerSections.phone_number.length ? (
         <StackedItem
-          className="max-w-[400px]"
+          className="md:max-w-[400px]"
           icon={IconPhone}
           title={t('phone', { defaultValue: 'Phone' })}
           headingAs="h3"
@@ -91,7 +91,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
       ) : null}
       {footerSections.email.length ? (
         <StackedItem
-          className="max-w-[400px]"
+          className="md:max-w-[400px]"
           icon={IconEmail}
           title={t('email', { defaultValue: 'Email' })}
           headingAs="h3"
@@ -106,7 +106,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
       ) : null}
       {footerSections.title_and_text.length ? (
         <StackedItem
-          className="max-w-[400px]"
+          className="md:max-w-[400px]"
           icon={IconAdditional}
           title={t('additional-info', { defaultValue: 'Additional info' })}
           headingAs="h3"
@@ -119,7 +119,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
       ) : null}
       {footerSections.social_media.length ? (
         <StackedItem
-          className="max-w-[400px]"
+          className="md:max-w-[400px]"
           icon={IconShare}
           title={t('social-media', { defaultValue: 'Social media' })}
           headingAs="h3"
