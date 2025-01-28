@@ -1,33 +1,39 @@
-import i18next from 'i18next'
+import { withDefaultProps } from '@/lib/utils'
+import { createInstance } from 'i18next'
 import type { TFunction, UseTranslation } from 'next-i18next'
+import * as nextI18next from 'next-i18next'
+import { createContext } from 'react'
 
-/**
- * Export a mock of the t() function so that we can override the implementation
- * in tests without having to mock useTranslation()'s return value. The default
- * implementation returns either the defaultValue option or the key as a
- * fallback.
- */
-export const mockT = jest.fn(((key: string, options) => {
-  // https://www.i18next.com/translation-function/essentials#passing-a-default-value
-  if (typeof options === 'string') {
-    return options || key
-  } else if (options && typeof options === 'object') {
-    return options.defaultValue || key
-  }
-  return key
-}) as TFunction)
+export const i18n = createInstance({
+  lng: 'en',
+  initImmediate: true
+})
 
-export const mockI18n = jest.mocked(i18next)
+i18n.init()
 
-/**
- * Mock useTranslation() so that we can assert that it's been called and, if
- * need be, mock the implementation of other methods on a case-by-case basis
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const useTranslation = jest.fn(((ns, options) => {
+// export a mock that allows us to hook into t() calls, change their return
+// value, and assert that they're called with the expected values
+export const t = jest.fn(i18n.getFixedT('en'))
+
+// Mock useTranslation() so that we can override t() with our mock
+export const useTranslation = jest.fn((() => {
   return {
-    t: mockT as unknown as TFunction,
-    i18n: mockI18n as typeof i18next,
+    t: t as unknown as TFunction,
+    i18n,
     ready: true
   }
 }) as UseTranslation)
+
+// overriding the context export here provides our "fixed" i18next instance to
+// all of next-i18next's components and higher-order components
+export const I18nContext = createContext(i18n)
+
+export const Trans = withDefaultProps(nextI18next.Trans, {
+  i18n
+})
+
+export const Translation = withDefaultProps(nextI18next.Translation, {
+  i18n
+})
+
+export { withTranslation, appWithTranslation } from 'next-i18next'

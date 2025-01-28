@@ -124,9 +124,9 @@ export function form({ t, ...ctx }: FileContext) {
                     ) : (
                       <div className="p-8 bg-success100">
                         <a
+                          ref="fileLink"
                           href={file.url || '#'}
                           target="_blank"
-                          ref="fileLink"
                           rel="noreferrer"
                         >
                           <span className="sr-only">
@@ -145,20 +145,16 @@ export function form({ t, ...ctx }: FileContext) {
                   {hasTypes && !ctx.disabled ? (
                     <div className="col-md-2">
                       <select className="file-type" ref="fileType">
-                        {ctx.component.fileTypes?.map((type) => {
-                          const optionProps = {
-                            className: 'test',
-                            value: type.value,
-                            selected:
-                              type.label === file.fileType ? true : undefined
-                          }
-
-                          return (
-                            <option key={type.value} {...optionProps}>
-                              {t(type.label, { defaultValue: type.label })}
-                            </option>
-                          )
-                        })}
+                        {ctx.component.fileTypes?.map((type) => (
+                          // eslint-disable-next-line react/jsx-key
+                          <option
+                            className="test"
+                            value={type.value}
+                            selected={type.label === file.fileType}
+                          >
+                            {type.label}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   ) : (

@@ -326,7 +326,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
             </div>
           ) : null}
           <RelatedContentList
-            title={t('partner-agencies', { defaultValue: 'Partner Agencies' })}
+            title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
             content={agencies}
           />
           {links.length ? (

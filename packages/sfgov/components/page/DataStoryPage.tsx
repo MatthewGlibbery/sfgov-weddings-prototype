@@ -44,7 +44,7 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
           <div className="col-span-full">
             <RelatedContentList
               title={t('partner-agencies', {
-                defaultValue: 'Partner Agencies'
+                defaultValue: 'Partner agencies'
               })}
               content={agencies}
             />

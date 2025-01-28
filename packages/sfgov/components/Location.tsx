@@ -1,82 +1,17 @@
 import { BodyText, IconLocation, Link } from '@/design-system'
 import type {
+  DayOfWeek,
   LocationData,
   TypeHoursDetailsValues,
   TypeHoursValues
 } from '@/types'
-import { useTranslation } from 'next-i18next'
+import { Trans, useTranslation } from 'next-i18next'
 import { ComposedTime } from './DateTime'
 import { RichText } from './RichText'
+import { ReactNode } from 'react'
 
 type LocationBlockProps = LocationData & {
   variant?: string
-}
-
-const Hours = ({ hours }: { hours: TypeHoursValues }) => {
-  const { t } = useTranslation()
-
-  const weekdays = {
-    monday: { value: t('monday', { defaultValue: 'Monday' }) },
-    tuesday: { value: t('tuesday', { defaultValue: 'Tuesday' }) },
-    wednesday: { value: t('wednesday', { defaultValue: 'Wednesday' }) },
-    thursday: { value: t('thursday', { defaultValue: 'Thursday' }) },
-    friday: { value: t('friday', { defaultValue: 'Friday' }) },
-    saturday: { value: t('saturday', { defaultValue: 'Saturday' }) },
-    sunday: { value: t('sunday', { defaultValue: 'Sunday' }) }
-  }
-
-  const DayHours = ({
-    day,
-    hours
-  }: {
-    day: string
-    hours: TypeHoursDetailsValues
-  }) => (
-    <div className="flex justify-between @[20px]/hours:flex-col @[260px]/hours:flex-row">
-      <BodyText className="font-bold">{day}</BodyText>
-      {hours.break_hours.length ? (
-        <div>
-          <div>
-            <ComposedTime startDateTimeInput={`1969-01-01T${hours.open}`} /> to{' '}
-            <ComposedTime
-              startDateTimeInput={`1969-01-01T${hours.break_hours[0].value.break_from}`}
-            />
-          </div>
-          <div>
-            <ComposedTime
-              startDateTimeInput={`1969-01-01T${hours.break_hours[0].value.break_to}`}
-            />{' '}
-            to{' '}
-            <ComposedTime startDateTimeInput={`1969-01-01T${hours.closed}`} />
-          </div>
-        </div>
-      ) : (
-        <BodyText>
-          <ComposedTime startDateTimeInput={`1969-01-01T${hours.open}`} /> to{' '}
-          <ComposedTime startDateTimeInput={`1969-01-01T${hours.closed}`} />
-        </BodyText>
-      )}
-    </div>
-  )
-
-  // the address API sends every day with filled hours
-  // when users select 'Monday to Friday' so we
-  // remove Saturday and Sunday from the list when iterating
-  if (hours.days === 'set_hours') {
-    delete hours.saturday
-    delete hours.sunday
-  }
-
-  return (
-    <div className="space-y-8 @container/hours">
-      {Object.entries(hours).map(([key, value]) => {
-        if (key === 'days' || key === 'all' || !(value.open && value.closed)) {
-          return null
-        }
-        return <DayHours key={key} day={weekdays[key].value} hours={value} />
-      })}
-    </div>
-  )
 }
 
 export const Location = (props: LocationBlockProps) => {
@@ -97,6 +32,11 @@ export const Location = (props: LocationBlockProps) => {
   } = props
 
   const { t } = useTranslation()
+  const GET_DIRECTIONS = t('get-directions', { defaultValue: 'Get directions' })
+  const GET_DIRECTIONS_TO = t('get-directions-to', {
+    defaultValue: 'Get directions to {{locationName}}',
+    locationName
+  })
 
   const boldedTitle =
     addressTitle ??
@@ -132,13 +72,10 @@ export const Location = (props: LocationBlockProps) => {
                 <Link
                   href={mapsURL.href}
                   className="flex gap-4 mt-8"
-                  aria-label={t('get-directions-to', {
-                    defaultValue: 'Get directions to {{locationName}}',
-                    locationName
-                  })}
+                  aria-label={GET_DIRECTIONS_TO}
                 >
                   <IconLocation width={20} />
-                  {t('get-directions', { defaultValue: 'Get directions' })}
+                  {GET_DIRECTIONS}
                 </Link>
               </div>
             ) : null}
@@ -188,12 +125,10 @@ export const Location = (props: LocationBlockProps) => {
                 <Link
                   href={mapsURL.href}
                   className="flex gap-4 mt-8"
-                  aria-label={`${t('get-directions-to', {
-                    defaultValue: 'Get directions to'
-                  })} ${locationName}`}
+                  aria-label={GET_DIRECTIONS_TO}
                 >
                   <IconLocation width={20} />
-                  {t('get-directions', { defaultValue: 'Get directions' })}
+                  {GET_DIRECTIONS}
                 </Link>
                 {hours ? <Hours hours={hours} /> : null}
                 {locationNotes ? <RichText html={locationNotes} /> : null}
@@ -203,4 +138,92 @@ export const Location = (props: LocationBlockProps) => {
         </div>
       )
   }
+}
+
+function Hours({ hours }: { hours: TypeHoursValues }) {
+  const { t } = useTranslation()
+
+  const weekdays: Record<DayOfWeek, { value: string }> = {
+    monday: { value: t('monday', { defaultValue: 'Monday' }) },
+    tuesday: { value: t('tuesday', { defaultValue: 'Tuesday' }) },
+    wednesday: { value: t('wednesday', { defaultValue: 'Wednesday' }) },
+    thursday: { value: t('thursday', { defaultValue: 'Thursday' }) },
+    friday: { value: t('friday', { defaultValue: 'Friday' }) },
+    saturday: { value: t('saturday', { defaultValue: 'Saturday' }) },
+    sunday: { value: t('sunday', { defaultValue: 'Sunday' }) }
+  }
+
+  // the address API sends every day with filled hours
+  // when users select 'Monday to Friday' so we
+  // remove Saturday and Sunday from the list when iterating
+  if (hours.days === 'set_hours') {
+    delete hours.saturday
+    delete hours.sunday
+  }
+
+  return (
+    <div className="space-y-8 @container/hours">
+      {Object.entries(hours).map(([key, value]) => {
+        const hours = value as TypeHoursDetailsValues
+        if (key === 'days' || key === 'all' || !(hours.open && hours.closed)) {
+          return null
+        }
+        return (
+          <DayHours
+            key={key}
+            day={weekdays[key as DayOfWeek].value}
+            hours={hours}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+function DayHours({
+  day,
+  hours
+}: {
+  day: string
+  hours: TypeHoursDetailsValues
+}) {
+  return (
+    <div className="flex justify-between @[20px]/hours:flex-col @[260px]/hours:flex-row">
+      <BodyText className="font-bold">{day}</BodyText>
+      {hours.break_hours.length ? (
+        <div>
+          <div>
+            <TimeToTime
+              start={hours.open}
+              end={hours.break_hours[0].value.break_from}
+            />
+          </div>
+          <div>
+            <TimeToTime
+              start={hours.break_hours[0].value.break_to}
+              end={hours.closed}
+            />
+          </div>
+        </div>
+      ) : (
+        <BodyText>
+          <TimeToTime start={hours.open} end={hours.closed} />
+        </BodyText>
+      )}
+    </div>
+  )
+}
+
+function TimeToTime({ start, end }: { start: string; end: string }) {
+  return (
+    <Trans i18nKey="time-to-time">
+      <ComposedTime startDateTimeInput={absoluteStartTime(start)} />
+      {' to '}
+      <ComposedTime startDateTimeInput={absoluteStartTime(end)} />
+    </Trans>
+  )
+}
+
+function absoluteStartTime(time: string) {
+  return `1969-01-01T${time}`
 }

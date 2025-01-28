@@ -75,7 +75,7 @@ describe('Cost', () => {
 
   it('renders a step variant cost block', () => {
     render(<CostBlock variant="step" {...cost.value} />)
-
-    expect(screen.getByText(/:/)).toBeInTheDocument()
+    expect(screen.getByText('Cost:', { trim: true })).toBeInTheDocument()
+    expect(screen.getByText('Free.', { trim: true })).toBeInTheDocument()
   })
 })

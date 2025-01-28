@@ -17,7 +17,7 @@ import {
 } from '@/design-system'
 import { AgencyPageData, WagtailImageData } from '@/types'
 import { ComponentType } from 'react'
-import { useTranslation } from 'next-i18next'
+import { Trans, useTranslation } from 'next-i18next'
 import {
   Alert,
   CallToAction,
@@ -288,12 +288,9 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                       {divisionsSubcommittees.length ? (
                         <div className="flex flex-col gap-20 md:gap-12">
                           <HeadingXlSans>
-                            {t(
-                              `${divisionsSubcommittees[0].value.agency_section_title}`,
-                              {
-                                defaultValue: divisionSubcommitteeTitle
-                              }
-                            )}
+                            {divisionsSubcommittees[0].value
+                              .agency_section_title ||
+                              divisionSubcommitteeTitle}
                           </HeadingXlSans>
                           <RelatedContentList
                             content={divisionsSubcommittees[0].value.agencies.map(
@@ -306,7 +303,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                         <div className="flex flex-col gap-20 md:gap-12">
                           <HeadingXlSans>
                             {t('partner-agencies', {
-                              defaultValue: 'Partner Agencies'
+                              defaultValue: 'Partner agencies'
                             })}
                           </HeadingXlSans>
                           <RelatedContentList content={partnerAgencies} />
@@ -365,12 +362,13 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               })}
             </HeadingLg>
             <BodyText>
-              <Link href={link} data-testid="public-records-link">
-                {t('submit-requests', {
-                  defaultValue: 'Submit requests'
-                })}
-              </Link>{' '}
-              {t('for-the', { defaultValue: 'for the' })} {title}.
+              <Trans i18nKey="submit-requests-link">
+                <Link href={link} data-testid="public-records-link">
+                  Submit requests
+                </Link>
+                {' for the '}
+                {{ title }}.
+              </Trans>
             </BodyText>
           </div>
         ) : null}

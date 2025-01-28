@@ -1,6 +1,6 @@
-import { IContentAPI, PageData, WagtailImageData } from '@/types'
-import { TFunction } from 'i18next'
-import { useTranslation } from 'next-i18next'
+import type { IContentAPI, PageData, WagtailImageData } from '@/types'
+import type { TFunction } from 'i18next'
+import type { ComponentType } from 'react'
 
 export function getPageURL(page: PageData) {
   let meta = page?.meta
@@ -75,4 +75,23 @@ export function getFooterLinks(t: TFunction) {
       text: t('contact-us', { defaultValue: 'Contact us' })
     }
   ]
+}
+
+/**
+ * Create a React component that renders the given component with prop defaults.
+ * The props type is inferred from the component type:
+ *
+ * ```ts
+ * const Hello = (p: { what: string }) => <div>Hello, {p.what}!</div>
+ * const X = withDefaultProps(Y, { what: 'World' })
+ * <X /> // renders <div>Hello, world!</div>
+ * ```
+ */
+export function withDefaultProps<P extends object>(
+  Component: ComponentType<P>,
+  defaults: Partial<P>
+) {
+  return function WithDefaultProps(props: P) {
+    return <Component {...defaults} {...props} />
+  }
 }

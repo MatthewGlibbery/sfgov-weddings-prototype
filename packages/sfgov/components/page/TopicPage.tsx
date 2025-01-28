@@ -102,7 +102,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
           <Container>
             <RelatedContentList
               title={t('partner-agencies', {
-                defaultValue: 'Partner Agencies'
+                defaultValue: 'Partner agencies'
               })}
               content={agencies}
             />

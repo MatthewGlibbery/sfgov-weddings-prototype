@@ -60,7 +60,9 @@ export const ResourceCollectionPage: ComponentType<{
               <PageLinksList
                 data-testid="related-topics-list"
                 pageLinks={relatedTopics}
-                label={t('part-of', { defaultValue: 'Part of' })}
+                label={t('resources-page-part-of-label', {
+                  defaultValue: 'Part of'
+                })}
               />
             ) : null}
           </PageTitleSection>

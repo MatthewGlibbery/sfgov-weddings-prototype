@@ -57,7 +57,9 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
                 {partOf.length ? (
                   <div>
                     <PageLinksList
-                      label={t('part-of', { defaultValue: 'Part of ' }) || ''}
+                      label={t('info-page-part-of-label', {
+                        defaultValue: 'Part of '
+                      })}
                       pageLinks={partOf}
                     />
                   </div>

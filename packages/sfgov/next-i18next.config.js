@@ -25,8 +25,8 @@ module.exports = {
        *   before jest.setup.js runs, preventing us from mocking `process.env`
        */
       loadPath: `${process.env.NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL}/cms.InlineDisplayText`,
-    
-      parse: function parse(data) { 
+
+      parse(data) {
         // Note 1:
         // Somewhat fraught with peril as this could potentially get out of sync
         // with the translations server. We can ask for this from the server

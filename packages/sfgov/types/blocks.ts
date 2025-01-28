@@ -96,17 +96,19 @@ export type TypeHoursDetailsValues = {
   break_hours: TypeBreakHoursBlock[]
 }
 
+export type DayOfWeek =
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'
+  | 'sunday'
+
 export type TypeHoursValues = {
   days: string
-  all: TypeHoursDetailsValues
-  monday: TypeHoursDetailsValues
-  tuesday: TypeHoursDetailsValues
-  wednesday: TypeHoursDetailsValues
-  thursday: TypeHoursDetailsValues
-  friday: TypeHoursDetailsValues
-  saturday: TypeHoursDetailsValues
-  sunday: TypeHoursDetailsValues
-}
+  all?: TypeHoursDetailsValues
+} & Partial<Record<DayOfWeek, TypeHoursDetailsValues>>
 
 export type LocationData = {
   address_title: string

@@ -150,7 +150,10 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
           ) ? (
             <div id="direct-contact">
               <HeadingXXl as="h2" className="!mb-[24px]">
-                {`${t('Contact', { defaultValue: 'Contact' })} ${title}`}
+                {t('contact-title', {
+                  defaultValue: 'Contact {{title}}',
+                  title
+                })}
               </HeadingXXl>
               <div className="grid grid-cols-1 gap-y-28 gap-x-0 md:grid-cols-3 md:gap-x-28 md:gap-y-0 md:pb-0">
                 {phone.length ? (
@@ -201,7 +204,6 @@ const DirectContactCard = ({
   icon: Icon = null,
   children
 }: DirectContactCardProps) => {
-  const { t } = useTranslation()
   return (
     <div className="border-solid border-neutral200 border-b-1 pb-16 last-of-type:border-0 md:border-r-1 md:border-b-0 md:pb-0 flex flex-col gap-y-28">
       <div>
@@ -212,7 +214,7 @@ const DirectContactCard = ({
           />
         ) : null}
         <HeadingLg as="h3" className="font-body !mb-0">
-          {t(title, { defaultValue: title })}
+          {title}
         </HeadingLg>
       </div>
       {children}

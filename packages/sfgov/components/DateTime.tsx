@@ -233,7 +233,7 @@ export const DateTimeBlock = ({
   return (
     <div>
       <HeadingLg as="h3" className="mb-20">
-        {t('date_and_time', { defaultValue: 'Date and time' })}
+        {t('date-and-time', { defaultValue: 'Date and time' })}
       </HeadingLg>
       <BodyText>
         <ComposedDate startDateInput={start_date} endDateInput={end_date} />
