@@ -8,6 +8,7 @@ import {
   HeadingXl
 } from '@/design-system'
 import { Image } from './Image'
+import { getPageURL } from '@/lib/utils'
 
 type SpotlightProps = TypeSpotlightBlock & {
   themeClasses?: string
@@ -78,7 +79,7 @@ export const Spotlight = ({
     if (button.link_to === 'url') {
       url = button.url
     } else if (button.link_to === 'page') {
-      url = (button.page.html_path || button.page.meta.html_url) as string
+      url = getPageURL(button.page)
     }
   }
 
