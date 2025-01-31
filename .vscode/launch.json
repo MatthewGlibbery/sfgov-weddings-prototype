@@ -5,7 +5,8 @@
             "name": "Next.js: debug server-side",
             "type": "node-terminal",
             "request": "launch",
-            "command": "npm run dev"
+            "command": "npm run dev",
+            "cwd": "${workspaceFolder}/packages/sfgov"
         },
         {
             "name": "Next.js: debug client-side",
@@ -15,26 +16,22 @@
         },
         {
             "name": "Next.js: debug full stack",
-            "type": "node-terminal",
-            "request": "launch",
-            "command": "npm run dev",
-            "serverReadyAction": {
-                "pattern": "started server on .+, url: (https?://.+)",
-                "uriFormat": "%s",
-            }
-        },
-        {
             "type": "node",
             "request": "launch",
-            "name": "SFGOV:Jest: Current File",
-            "program": "${workspaceFolder}/node_modules/.bin/jest",
-            "args": [
-                "${fileBasenameNoExtension}",
-                "--config",
-                "${workspaceFolder}/packages/sfgov/jest.config.js"
+            "program": "${workspaceFolder}/packages/sfgov/node_modules/.bin/next",
+            "runtimeArgs": [
+                "--inspect"
             ],
-            "cwd": "${workspaceFolder}/packages/sfgov",
-            "console": "integratedTerminal",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "serverReadyAction": {
+                "action": "debugWithEdge",
+                "killOnServerStop": true,
+                "pattern": "- Local:.+(https?://.+)",
+                "uriFormat": "%s",
+                "webRoot": "${workspaceFolder}/packages/sfgov"
+            }
         }
     ]
 }

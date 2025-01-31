@@ -28,6 +28,4 @@ export const getServerSideProps: GetServerSideProps =
     }
   })
 
-const Home = HomePage
-
-export default Home
+export default HomePage
