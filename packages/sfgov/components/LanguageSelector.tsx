@@ -1,4 +1,3 @@
-import NextLink, { type LinkProps } from 'next/link'
 import {
   classed,
   classes,
@@ -7,8 +6,9 @@ import {
   IconGlobe,
   type ComponentProps
 } from '@/design-system'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
 
 const StyledList = classed(
   'ul',
@@ -21,14 +21,14 @@ const StyledLanguageLink = classed(NextLink, {
   variants: {
     current: {
       true: 'font-bold'
-    },
-    isFooter: {
-      true: 'text-slate300 text-white underline p-0 md:p-0 font-normal text-label-sm'
     }
   }
 })
 
-const localeNames: Record<string, string> = {
+// TODO: add 'vi-vn' here when we introduce Vietnamese
+type LocaleCode = 'en' | 'es' | 'zh-hant' | 'fil'
+
+const localeNames: Record<LocaleCode, string> = {
   en: 'English',
   es: 'Español',
   'zh-hant': '中文',
@@ -41,25 +41,28 @@ export type LanguageSelectorProps = ComponentProps<typeof StyledList> & {
 
 export const LanguageSelector = (props: LanguageSelectorProps) => {
   const { asPath: currentPath, locale: currentLocale, locales } = useRouter()
-  const [selectedLanguage, setSelectedLanguage] = useState(
-    localeNames[currentLocale]
+  const [selectedLocale, setSelectedLanguage] = useState(
+    currentLocale as LocaleCode
   )
-  const links: LinkProps[] =
-    locales?.map((locale) => ({
-      href: currentPath,
-      locale,
-      language: localeNames[locale],
-      children: localeNames[locale]
-    })) || []
-  const detailsRef = useRef(null)
+  const links =
+    (locales as LocaleCode[] | undefined)
+      // exclude locales that aren't named in our label mapping
+      ?.filter((locale) => locale in localeNames)
+      .map((locale) => ({
+        href: currentPath,
+        locale,
+        language: localeNames[locale],
+        children: localeNames[locale]
+      })) || []
+  const detailsRef = useRef<HTMLDetailsElement>(null)
 
   if (props.isFooter) {
     return (
       <StyledDiv>
         {links.map((link) => (
           <StyledLanguageLink
-            key={link.locale as string}
-            isFooter={true}
+            key={link.locale}
+            className="text-slate300 text-white underline p-0 md:p-0 font-normal text-label-sm"
             {...link}
           />
         ))}
@@ -67,7 +70,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
     )
   }
 
-  return links.length > 0 ? (
+  return links.length ? (
     <details
       name="menu"
       className="group md:relative"
@@ -87,7 +90,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
           className="shrink-0 text-primary500 md:text-black"
         />
         <p className="w-60 text-center text-label-xs text-primary500 font-bold md:text-black md:w-80">
-          {selectedLanguage}
+          {localeNames[selectedLocale]}
         </p>
         <IconChevronUp
           width="20"
@@ -102,16 +105,15 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
       </summary>
       <StyledList {...props}>
         {links
-          .filter((link) => link.language !== selectedLanguage)
+          .filter((link) => link.locale !== selectedLocale)
           .map((link) => {
             const current = link.locale === currentLocale
             return (
-              <li key={link.locale as string}>
-                {/* @ts-expect-error derp */}
+              <li key={link.locale}>
                 <StyledLanguageLink
                   aria-current={current ? 'page' : false}
                   onClick={() => {
-                    setSelectedLanguage(link.language)
+                    setSelectedLanguage(link.locale)
                     if (detailsRef.current) {
                       detailsRef.current.open = false
                     }

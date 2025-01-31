@@ -30,7 +30,7 @@ export async function getServerSideTranslations(
 ) {
   return serverSideTranslations(
     context.locale as string,
-    ['translation', 'common'],
+    'common',
     nextI18NextConfig,
     nextI18NextConfig.i18n.locales
   )
