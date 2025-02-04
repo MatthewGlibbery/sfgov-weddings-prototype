@@ -70,16 +70,19 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     about_page: [aboutPage]
   } = page
 
-  let divisionSubcommitteeTitle = 'Divisions'
+  const { t } = useTranslation()
+
+  let divisionSubcommitteeTitle = t('divisions', { defaultValue: 'Divisions' })
 
   // istanbul ignore next
   if (
     divisionsSubcommittees[0]?.value.agency_section_title === 'subcommittee'
   ) {
-    divisionSubcommitteeTitle = 'Subcommittees'
+    divisionSubcommitteeTitle = t('subcommittees', {
+      defaultValue: 'Subcommittees'
+    })
   }
 
-  const { t } = useTranslation()
   const label = t('agency', { defaultValue: 'Agency' })
 
   const LogoComponent = ({ logo }: { logo: WagtailImageData }) => (
@@ -288,9 +291,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                       {divisionsSubcommittees.length ? (
                         <div className="flex flex-col gap-20 md:gap-12">
                           <HeadingXlSans>
-                            {divisionsSubcommittees[0].value
-                              .agency_section_title ||
-                              divisionSubcommitteeTitle}
+                            {divisionSubcommitteeTitle}
                           </HeadingXlSans>
                           <RelatedContentList
                             content={divisionsSubcommittees[0].value.agencies.map(
