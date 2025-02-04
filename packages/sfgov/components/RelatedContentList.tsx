@@ -51,9 +51,11 @@ export const RelatedContentList = ({
       <div
         className={`flex flex-col md:grid gap-x-28 ${gridClass} ${gapClass}`}
       >
-        {content.map((item: RelatedContentData, i) => (
-          <Content key={i} item={item} />
-        ))}
+        {content
+          .filter((item) => item?.value?.live) // filter for published only
+          .map((item: RelatedContentData, i) => {
+            return <Content key={i} item={item} />
+          })}
       </div>
     </div>
   )

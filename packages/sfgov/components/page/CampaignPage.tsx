@@ -334,13 +334,19 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
               <HeadingXXl as="h2" className="mb-[20px]">
                 {t('related', { defaultValue: 'Related' })}
               </HeadingXXl>
-              {links.map((link) => (
-                <div key={link.id}>
-                  <Link href={link.value.url || getPageURL(link.value.page)}>
-                    {link.value.link_text}
-                  </Link>
-                </div>
-              ))}
+              {links
+                .filter((link) => link?.value?.page?.live) // filter for published only
+                .map((link) => {
+                  return (
+                    <div key={link.id}>
+                      <Link
+                        href={link.value.url || getPageURL(link.value.page)}
+                      >
+                        {link.value.link_text}
+                      </Link>
+                    </div>
+                  )
+                })}
             </div>
           ) : null}
           {contact?.length &&
