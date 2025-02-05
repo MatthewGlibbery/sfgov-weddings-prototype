@@ -127,40 +127,17 @@ describe('<InformationPage>', () => {
         ).not.toThrow()
       })
     })
+  })
 
-    describe('related content part of', () => {
-      it('renders a related content link', () => {
-        expect(() =>
-          render(
-            <InformationPage
-              page={{
-                ...fixture,
-                part_of: [
-                  {
-                    type: 'agency',
-                    value: {
-                      id: 4,
-                      meta: {
-                        type: 'sfgov_information_page.InformationPage',
-                        detail_url: 'http://localhost:8000/api/v2/pages/4/',
-                        html_url:
-                          'http://localhost/some-other-information-page/',
-                        slug: 'some-other-information-page',
-                        seo_title: 'meta title tag',
-                        search_description: 'meta description'
-                      },
-                      title: 'Some other information page'
-                    }
-                  }
-                ]
-              }}
-            />
-          )
-        ).not.toThrow()
+  describe('related links', () => {
+    const fixture = InfoPageFactory.make()
+    it('renders a part of link', () => {
+      expect(() => render(<InformationPage page={fixture} />)).not.toThrow()
 
-        const link = screen.getByText('Some other information page')
-        expect(link).toBeInTheDocument()
+      const partOfLink = screen.getByRole('link', {
+        name: `View the page for ${fixture.part_of[0].value.title}`
       })
+      expect(partOfLink).toBeInTheDocument()
     })
   })
 })

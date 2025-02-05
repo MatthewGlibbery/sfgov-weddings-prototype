@@ -295,7 +295,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                           </HeadingXlSans>
                           <RelatedContentList
                             content={divisionsSubcommittees[0].value.agencies.map(
-                              (agency) => agency.value.page
+                              (agency) => ({ value: agency.value.page })
                             )}
                           />
                         </div>

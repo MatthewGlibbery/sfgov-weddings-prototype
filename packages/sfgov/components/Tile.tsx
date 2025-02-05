@@ -278,7 +278,12 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
     const { links, ...rest } = props
     if (!links?.length) return null
     const items = links.map((item) => {
-      if (!item.value) return null
+      if (
+        !item.value ||
+        item?.value?.live === false ||
+        item?.value?.page?.live === false
+      )
+        return null
       const title = item.value.title
       let description =
         item.value.meta?.search_description ||

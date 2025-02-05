@@ -31,6 +31,7 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
   } = page
 
   const { t } = useTranslation()
+  const filteredPartOf = partOf.filter((item) => item?.value?.live)
 
   return (
     <PageWrapper title={title}>
@@ -54,13 +55,13 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
                 {primaryAgency ? (
                   <PageLinksList pageLinks={[primaryAgency]} />
                 ) : null}
-                {partOf.length ? (
+                {filteredPartOf.length ? (
                   <div>
                     <PageLinksList
                       label={t('info-page-part-of-label', {
                         defaultValue: 'Part of '
                       })}
-                      pageLinks={partOf}
+                      pageLinks={filteredPartOf}
                     />
                   </div>
                 ) : null}
