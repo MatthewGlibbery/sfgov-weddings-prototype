@@ -900,8 +900,7 @@ export const PageFactory = factory<PageData>((gen) => ({
     url_path: new URL(gen.internet.url()).pathname,
     html_url: `${gen.internet.url()}/${gen.lorem.slug()}`
   },
-  title: gen.commerce.productName(),
-  live: true
+  title: gen.commerce.productName()
 }))
 
 export const RelatedContentBlockFactory = factory<RelatedContentData>((gen) => {
@@ -935,8 +934,7 @@ export const RelatedContentBlockFactory = factory<RelatedContentData>((gen) => {
         }
       }),
       date: gen.date.recent(),
-      pronouns: 'she/her',
-      live: true
+      pronouns: 'she/her'
     }
   }
 })

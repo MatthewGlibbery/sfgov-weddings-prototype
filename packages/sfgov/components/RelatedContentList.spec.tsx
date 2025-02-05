@@ -1,23 +1,30 @@
 import { render, screen } from '@testing-library/react'
 import { RelatedContentList } from './RelatedContentList'
-import { PageFactory } from '@/lib/factories'
 
 describe('RelatedContentList', () => {
+  const content = [
+    {
+      type: 'page',
+      value: {
+        id: 2,
+        meta: {
+          type: 'wagtailcore.Page',
+          detail_url: 'http://localhost:8000/api/v2/pages/2/',
+          html_url: 'http://localhost/',
+          slug: 'home',
+          seo_title: '',
+          search_description: ''
+        },
+        title: 'Hello there'
+      }
+    }
+  ]
+
   it('renders a related content link', () => {
-    const content = [{ type: 'page', value: PageFactory.make() }]
     render(<RelatedContentList content={content} />)
 
-    const link = screen.getByText(content[0].value.title)
+    const link = screen.getByText('Hello there')
     expect(link).toBeInTheDocument()
-  })
-
-  it('does not render a related content link for unpublished pages', () => {
-    const content = [
-      { type: 'page', value: PageFactory.make() },
-      { type: 'page', value: PageFactory.make({ live: false }) }
-    ]
-    render(<RelatedContentList content={content} />)
-    expect(screen.queryByText(content[1].value.title)).not.toBeInTheDocument()
   })
 
   it('renders nothing with empty/null contents', () => {

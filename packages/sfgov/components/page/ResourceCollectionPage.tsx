@@ -31,12 +31,11 @@ export const ResourceCollectionPage: ComponentType<{
     introductory_text: introductoryText,
     body,
     custom_section: customSection,
-    topics,
+    topics: relatedTopics,
     partner_agencies: agencies
   } = page
 
   const { t } = useTranslation()
-  const filteredTopics = topics.filter((item) => item?.value?.live)
 
   return (
     <PageWrapper title={title}>
@@ -57,10 +56,10 @@ export const ResourceCollectionPage: ComponentType<{
                 {description}
               </DisplayLg>
             ) : null}
-            {filteredTopics.length ? (
+            {relatedTopics.length ? (
               <PageLinksList
                 data-testid="related-topics-list"
-                pageLinks={filteredTopics}
+                pageLinks={relatedTopics}
                 label={t('resources-page-part-of-label', {
                   defaultValue: 'Part of'
                 })}
