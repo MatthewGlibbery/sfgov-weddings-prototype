@@ -171,6 +171,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           <PageTitleSection
             title={title}
             label={t('service', { defaultValue: 'Service' })}
+            isHidden={true}
           >
             {description ? (
               <DisplayLg

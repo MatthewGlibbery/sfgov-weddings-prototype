@@ -228,18 +228,18 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       ) : null}
       <Container
         className={classes(
-          'bg-white relative p-20 mx-0 md:mx-16 lg:mx-auto',
-          headerImage ? 'top-[100px] xl:top-[250px]' : ''
+          'bg-white relative p-20 mx-0',
+          headerImage ? 'top-[100px] xl:top-[250px]' : 'md:px-0'
         )}
       >
         <div className="hidden xl:flex xl:justify-between gap-28">
           <div>
-            <PageTitleSection title={title} label={label} />
+            <PageTitleSection title={title} label={label} isHidden={true} />
           </div>
           {logo ? <LogoComponent logo={logo} /> : null}
         </div>
         <div className="xl:hidden flex flex-col">
-          <PageLabel label={label} />
+          <PageLabel label={label} isHidden={true} />
           {logo ? <LogoComponent logo={logo} /> : null}
           <DisplayXXXl as="h1" className="my-12 md:my-20">
             {title}

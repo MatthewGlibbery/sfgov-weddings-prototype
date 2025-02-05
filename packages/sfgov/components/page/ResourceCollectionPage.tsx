@@ -47,6 +47,7 @@ export const ResourceCollectionPage: ComponentType<{
             label={t('resource-collection', {
               defaultValue: 'Resource collection'
             })}
+            isHidden={true}
           >
             {description ? (
               <DisplayLg

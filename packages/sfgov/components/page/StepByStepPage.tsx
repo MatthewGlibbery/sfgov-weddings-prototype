@@ -26,6 +26,7 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
         <PageTitleSection
           title={title}
           label={t('step-by-step', { defaultValue: 'Step-by-step' })}
+          isHidden={true}
         >
           {description ? (
             <DisplayLg

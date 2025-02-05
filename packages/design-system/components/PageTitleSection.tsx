@@ -5,15 +5,19 @@ import { DisplayXXXl } from './Text'
 type PageTitleSectionProps = AnyComponent & {
   label: string
   title: string
+  isHidden?: boolean
 }
 
 export const PageTitleSection = ({
   label,
   title,
+  isHidden = false,
   children
 }: ComponentProps<PageTitleSectionProps>) => (
   <>
-    {label ? <PageLabel label={label.replace(/_/g, ' ')} /> : null}
+    {label ? (
+      <PageLabel label={label.replace(/_/g, ' ')} isHidden={isHidden} />
+    ) : null}
 
     {title ? (
       <>

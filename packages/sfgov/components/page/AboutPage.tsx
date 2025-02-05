@@ -35,6 +35,7 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
                 <PageTitleSection
                   label={t('about-us', { defaultValue: 'About Us' })}
                   title={title}
+                  isHidden={true}
                 >
                   <div className="flex gap-4">
                     <IconArrowLeft className="text-primary500" width={20} />

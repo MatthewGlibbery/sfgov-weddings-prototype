@@ -45,4 +45,12 @@ describe('PageTitleSection', () => {
     render(<PageTitleSection title="Title" />)
     expect(screen.queryByTestId('page-label')).not.toBeInTheDocument()
   })
+
+  it('appends the sr-only class to the label if it is marked as hidden', () => {
+    const { container } = render(
+      <PageTitleSection title="Title" label="haha" isHidden={true} />
+    )
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(container.firstChild).toHaveClass('sr-only')
+  })
 })

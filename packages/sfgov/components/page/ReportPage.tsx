@@ -29,6 +29,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
         <PageTitleSection
           label={t('report', { defaultValue: 'Report' })}
           title={title}
+          isHidden={true}
         >
           <ComposedDate startDateInput={date} />
         </PageTitleSection>

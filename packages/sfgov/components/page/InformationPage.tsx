@@ -42,6 +42,7 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
               <PageTitleSection
                 title={title}
                 label={t('info-page', { defaultValue: 'Info Page' })}
+                isHidden={true}
               >
                 {description ? (
                   <DisplayLg
