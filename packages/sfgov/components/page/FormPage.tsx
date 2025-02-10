@@ -15,7 +15,8 @@ import type {
 import type { Form, FormSubmission } from '@/design-system/formio'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
-import { useState, type ReactNode } from 'react'
+import { useRouter } from 'next/router'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
 import { RichText } from '../RichText'
@@ -26,13 +27,15 @@ export type FormPageProps = {
   submitted?: boolean
   formPage?: number
   formComponentKey?: string
+  warnBeforeLeaving?: boolean
 }
 
 export function FormPage({
   page,
   submitted: initialSubmitted,
   formComponentKey,
-  formPage = 0
+  formPage = 0,
+  warnBeforeLeaving = false
 }: FormPageProps) {
   const {
     title,
@@ -59,6 +62,34 @@ export function FormPage({
   const formSubmittedString = t('form-submitted', {
     defaultValue: 'Form submitted'
   })
+
+  const router = useRouter()
+  useEffect(() => {
+    const handleBeforeUnload = (event: Event) => {
+      if (warnBeforeLeaving) {
+        event.preventDefault()
+      }
+    }
+
+    const nextNavigationHandler = () => {
+      if (warnBeforeLeaving) {
+        const result = window.confirm(
+          'Navigate away? Changes you made may not be saved.'
+        )
+        if (!result) {
+          router.events?.emit('routeChangeError')
+          // eslint-disable-next-line no-throw-literal
+          throw "Abort route change by user's confirmation."
+        }
+      }
+    }
+    router.events?.on('beforeHistoryChange', nextNavigationHandler)
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => {
+      router.events?.off('beforeHistoryChange', nextNavigationHandler)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [warnBeforeLeaving, router.events])
 
   return (
     <PageWrapper title={title}>
@@ -95,6 +126,10 @@ export function FormPage({
               form={formSchema}
               submission={{
                 data: rawQueryParams
+              }}
+              onChange={(form: Form) => {
+                const isPristine = form.changed?.instance.pristine
+                warnBeforeLeaving = !isPristine
               }}
               formReady={onFormReady}
               onSubmitDone={() => setSubmitted(true)}

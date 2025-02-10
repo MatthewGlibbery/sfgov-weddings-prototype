@@ -1,10 +1,49 @@
 import { FormProps } from '@/design-system/formio'
 import { FormFactory } from '@/design-system/formio/factories'
 import { FormPageFactory } from '@/lib/factories'
-import { MockDynamicComponent as FormioForm } from '@/__mocks__/next/dynamic'
+import { MockDynamicComponent } from '@/__mocks__/next/dynamic'
 import { render, screen } from '@testing-library/react'
 import { useSearchParams } from '@/__mocks__/next/navigation'
 import { FormPage } from './FormPage'
+import { useRouter } from 'next/router'
+import FormioForm from '@/design-system/components/FormioForm'
+
+type EventHandler = (...args: unknown[]) => void
+
+const eventHandlers = new Map<string, Set<EventHandler>>()
+
+jest.mock('next/router', () => ({
+  useRouter() {
+    return {
+      route: '/',
+      pathname: '',
+      query: '',
+      asPath: '',
+      push: jest.fn(),
+      events: {
+        on: jest.fn((event: string, handler: EventHandler) => {
+          if (!eventHandlers.has(event)) {
+            eventHandlers.set(event, new Set())
+          }
+          eventHandlers.get(event)?.add(handler)
+        }),
+        off: jest.fn((event: string, handler: EventHandler) => {
+          if (eventHandlers.has(event)) {
+            const handlers = eventHandlers.get(event)
+            handlers?.delete(handler)
+          }
+        }),
+        emit: jest.fn((event: string, ...args: unknown[]) => {
+          if (eventHandlers.has(event)) {
+            eventHandlers.get(event)?.forEach((handler) => handler(...args))
+          }
+        })
+      },
+      beforePopState: jest.fn(() => null),
+      prefetch: jest.fn(() => null)
+    }
+  }
+}))
 
 describe('FormPage', () => {
   // FIXME: we should be looking for the translations here,
@@ -12,18 +51,56 @@ describe('FormPage', () => {
   const submittedLabel = /^FORM SUBMITTED$/i
 
   beforeEach(() => {
-    FormioForm.mockReset()
+    MockDynamicComponent.mockReset()
   })
 
   describe('form content', () => {
     it('renders the dynamic FormioForm component', async () => {
       const page = FormPageFactory.make()
-      FormioForm.mockReturnValueOnce(<div data-testid="dynamic-form" />)
+      MockDynamicComponent.mockReturnValueOnce(
+        <div data-testid="dynamic-form" />
+      )
       render(<FormPage page={page} />)
       expect(screen.queryByText(submittedLabel)).not.toBeInTheDocument()
 
-      expect(FormioForm).toHaveBeenCalledTimes(1)
+      expect(MockDynamicComponent).toHaveBeenCalledTimes(1)
       expect(screen.getByTestId('dynamic-form')).toBeInTheDocument()
+    })
+  })
+
+  /**
+   * These tests use the actual <FormioForm> component, which can take some time
+   * to render. Only run tests in here if you need to simulate rendering and
+   * interaction with a real form.
+   */
+  describe('render FormioForm', () => {
+    beforeEach(() => {
+      MockDynamicComponent.mockImplementation(FormioForm)
+    })
+
+    it('renders an actual FormioForm', async () => {
+      const page = FormPageFactory.make({
+        schema: {
+          type: 'form',
+          display: 'wizard',
+          components: [
+            {
+              type: 'panel',
+              components: [
+                {
+                  type: 'textfield',
+                  label: 'Your name',
+                  key: 'name'
+                }
+              ]
+            }
+          ]
+        }
+      })
+      render(<FormPage page={page} />)
+
+      const input = await screen.findByLabelText('Your name')
+      expect(input).toBeInTheDocument()
     })
   })
 
@@ -33,7 +110,7 @@ describe('FormPage', () => {
       const expectedMissingText = 'MISSING'
       // mock the FormioForm component to simulate submission of the form by
       // calling the onSubmitDone() callback asynchronously
-      FormioForm.mockImplementationOnce((props: FormProps) => {
+      MockDynamicComponent.mockImplementationOnce((props: FormProps) => {
         setTimeout(() => {
           props.onSubmitDone?.call(undefined, { data: {} })
         }, 10)
@@ -77,7 +154,7 @@ describe('FormPage', () => {
         schema_url: schemaUrl
       })
       render(<FormPage page={page} />)
-      expect(FormioForm).toHaveBeenLastCalledWith(
+      expect(MockDynamicComponent).toHaveBeenLastCalledWith(
         expect.objectContaining({
           src: schemaUrl,
           form: undefined
@@ -93,7 +170,7 @@ describe('FormPage', () => {
         schema
       })
       render(<FormPage page={page} />)
-      expect(FormioForm).toHaveBeenLastCalledWith(
+      expect(MockDynamicComponent).toHaveBeenLastCalledWith(
         expect.objectContaining({
           src: undefined,
           form: schema
@@ -112,7 +189,7 @@ describe('FormPage', () => {
         )
         const page = FormPageFactory.make()
         render(<FormPage page={page} />)
-        expect(FormioForm).toHaveBeenLastCalledWith(
+        expect(MockDynamicComponent).toHaveBeenLastCalledWith(
           expect.objectContaining({
             src: undefined,
             submission: {
@@ -136,7 +213,7 @@ describe('FormPage', () => {
         )
         const page = FormPageFactory.make()
         render(<FormPage page={page} />)
-        expect(FormioForm).toHaveBeenLastCalledWith(
+        expect(MockDynamicComponent).toHaveBeenLastCalledWith(
           expect.objectContaining({
             src: undefined,
             submission: {
@@ -154,7 +231,7 @@ describe('FormPage', () => {
         useSearchParams.mockReturnValueOnce(null)
         const page = FormPageFactory.make()
         render(<FormPage page={page} />)
-        expect(FormioForm).toHaveBeenLastCalledWith(
+        expect(MockDynamicComponent).toHaveBeenLastCalledWith(
           expect.objectContaining({
             src: undefined,
             submission: {
@@ -164,6 +241,57 @@ describe('FormPage', () => {
           {}
         )
       })
+    })
+  })
+
+  describe('warn before leaving', () => {
+    const router = useRouter()
+    const page = FormPageFactory.make()
+
+    const originalConfirm = window.confirm
+    let preventDefault: jest.Mock
+    let event: Event
+
+    beforeEach(() => {
+      window.confirm = jest.fn().mockReturnValue(true)
+      preventDefault = jest.fn()
+      event = new Event('beforeunload', { cancelable: true })
+      Object.defineProperty(event, 'preventDefault', {
+        value: preventDefault
+      })
+    })
+
+    afterEach(() => {
+      window.confirm = originalConfirm
+    })
+
+    it('shows window confirmation when warnBeforeLeaving is true', async () => {
+      render(<FormPage page={page} warnBeforeLeaving={true} />)
+
+      router.events.emit('beforeHistoryChange')
+      expect(window.confirm).toBeCalled()
+
+      window.dispatchEvent(event)
+      expect(preventDefault).toHaveBeenCalled()
+    })
+
+    it('does not show window confirmation when warnBeforeLeaving is false', async () => {
+      render(<FormPage page={page} warnBeforeLeaving={false} />)
+
+      router.events.emit('beforeHistoryChange')
+      expect(window.confirm).not.toBeCalled()
+
+      window.dispatchEvent(event)
+      expect(preventDefault).not.toHaveBeenCalled()
+    })
+
+    it('throws error if user cancels navigation', async () => {
+      window.confirm = jest.fn().mockReturnValue(false)
+      render(<FormPage page={page} warnBeforeLeaving={true} />)
+
+      expect(() => router.events.emit('beforeHistoryChange')).toThrow(
+        "Abort route change by user's confirmation."
+      )
     })
   })
 })

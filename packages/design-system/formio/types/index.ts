@@ -33,6 +33,7 @@ export type Form = Override<
     formio: Formio
     element: HTMLElement
     alert: HTMLElement
+    changed: any
     submitted: boolean
     submission?: FormSubmission
     setAlert(type: string | boolean, message?: string, options?: object): void
