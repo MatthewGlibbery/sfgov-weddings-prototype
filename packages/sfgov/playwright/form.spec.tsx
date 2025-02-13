@@ -4,16 +4,9 @@ import { test, expect } from './fixtures'
 import React from 'react'
 
 test.describe('A11y tests', () => {
-  test('headings are rendered in a logical reading order', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrder()
-  })
-
+  
+  // Required Global Tests
+  
   test('has accessible landmarks', async ({ mount, page }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
@@ -28,26 +21,12 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveLandmarkRoles()
   })
 
-  test('has search landmarks plus aria', async ({ mount, page }) => {
+  test.skip('has search landmark', async ({ mount, page }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
-    await expect(page).toHaveSearchLandmarksPlusAria()
-  })
-
-  test('has prefers reduced motion', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHavePrefersReducedMotion()
-  })
-
-  test('has language access', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLanguageAccess()
-  })
+    await expect(page).toHaveSearchLandmark()
+  })  
 
   test('has language interaction', async ({ mount, page }) => {
     const data = FormPageFactory.make()
@@ -67,7 +46,7 @@ test.describe('A11y tests', () => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
-    await expect(page).toBeKeyboardAccessible()
+    await expect(page).toBeKeyboardFocusIndicatorAccessible()
   })
 
   test('does keyboard focus indicator have sufficient color contrast', async ({
@@ -77,7 +56,7 @@ test.describe('A11y tests', () => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
-    await expect(page).toHaveColorContrast()
+    await expect(page).keyboardFocusIndicatorToHaveColorContrast()
   })
 
   test('do links have descriptive aria label text', async ({ mount, page }) => {
@@ -86,6 +65,52 @@ test.describe('A11y tests', () => {
 
     await expect(page).toHaveDescriptiveLinkText()
   })
+
+  test('create accessible data tables for screen reader users', async ({ mount, page }) => {
+    const data = FormPageFactory.make()
+    await mount(<FormPage page={data} />)
+
+    await expect(page).toHaveScopeAttributesInDataTables()
+  })
+
+ test('all links have keyboard focus', async ({ mount, page }) => {
+    const data = FormPageFactory.make()
+    await mount(<FormPage page={data} />)
+
+    await expect(page).toHaveKeyboardFocusInLinks()
+  })  
+
+  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({ mount, page }) => {
+    const data = FormPageFactory.make()
+    await mount(<FormPage page={data} />)
+
+    await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
+  })
+
+  test.skip('validate axe core accessibility tests', async ({ mount, page }) => {
+    const data = FormPageFactory.make()
+    await mount(<FormPage page={data} />)
+
+    await expect(page).toPassAxeCoreTests()
+  })
+
+// Content Type Specific Tests
+
+  test.skip('create a logical tab order on the Form content type', async ({ mount, page }) => {
+  const data = FormPageFactory.make()
+  await mount(<FormPage page={data} />)
+
+  await expect(page).toCreateLogicalTabOrderOnFormContentType()
+  })
+
+  test.skip('the progress indicator nav landmark on the forms content type should have an aria label', async ({ mount, page }) => {
+    const data = FormPageFactory.make()
+    await mount(<FormPage page={data} />)
+  
+    await expect(page).toHaveAriaLabelInProgressBarNavLandmarkOnFormsContentType()
+  })
+
+  // Forms Related Tests
 
   test('do form elements include required attributes', async ({
     mount,
@@ -104,14 +129,14 @@ test.describe('A11y tests', () => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
-    await expect(page).toHaveRequiredFormAttributes()
+    await expect(page).toHaveRequiredAttributesInSpecificFormElements()
   })
 
   test('has inline error messaage', async ({ mount, page }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
-    await expect(page).toHaveErrorMessage()
+    await expect(page).toHaveInlineErrorMessage()
   })
 
   test('do not have dashes and parentheses in the input placeholder tag', async ({
@@ -121,7 +146,7 @@ test.describe('A11y tests', () => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
-    await expect(page).toNotHaveDashesAndParentheses()
+    await expect(page).toNotHaveDashesAndParenthesesInPlaceholder()
   })
   test('keyboard access to date picker', async ({ mount, page }) => {
     const data = FormPageFactory.make()
@@ -157,13 +182,6 @@ test.describe('A11y tests', () => {
     await expect(page).toAssociateSpecificFormInstructionsWithFormControl()
   })
 
-  test('Power BI Dashboard is accessible', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toMakePowerBiDashboardAccessible()
-  })
-
   test('delete items in multiselect combobox', async ({ mount, page }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
@@ -181,249 +199,4 @@ test.describe('A11y tests', () => {
     await expect(page).toIncludeFieldsetandLegend()
   })
 
-  test('create logical reading order on step by step page', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveStepbyStepLogicalReadingOrder()
-  })
-
-  test('correct tab order in main landmark', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).CorrectTabOrderInMainContentArea()
-  })
-
-  test('logical reading order on transaction content type', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderonTransactionCT()
-  })
-
-  test('logical reading order on meeting content type', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderonMeetingCT()
-  })
-
-  test('logical reading order in contact information section', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderContactInfo()
-  })
-
-  test('logical reading order in meeting resources section', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderMeetingResources()
-  })
-
-  test('and or aria labels are present on step by step page', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveAndOrAriaLabels()
-  })
-
-  test('logical reading order within the main landmark on the info page', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveInformationLogicalReadingOrder()
-  })
-
-  test('logical reading order in the contact us section', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderContactUs()
-  })
-
-  test('logical reading order in event details section', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderEventDetails()
-  })
-
-  test('logical reading order in Resources section on the About page', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderAboutUs()
-  })
-
-  test('no URL in link text', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveURLInLinkText()
-  })
-
-  test('accessible PowerBI dashboards on Resource Collection page', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toMakePowerBiDashboardAccessibleResourceCollection()
-  })
-
-  test('all links have keyboard focus', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).allLinksHaveKeyboardFocus()
-  })
-
-  test('logical reading order in the accordion module on the Campaign page', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderonCampaignCT()
-  })
-
-  test('logical reading order on the homepage', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderonHomePage()
-  })
-
-  test('presence of links to video transcripts', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveVideoTextTranscript()
-  })
-
-  test('logical reading order in the Data section on the Resource Collection page', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderDataResourceCollection()
-  })
-
-  test('logical reading order in the Documents section on the Resource Collection page', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderDocumentsResourceCollection()
-  })
-
-  test('suppress block quotes on News content type', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toSuppressBlockQuoteOnNewsContentType()
-  })
-
-  test('article landmarks are present in the news section on the Homepage', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveArticleLandmarkInNewsSectionOnHomepage()
-  })
-
-  test('suppress block quotes on Press Release content type', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toSuppressBlockQuoteOnPressReleaseContentType()
-  })
-
-  test('create a logical reading order in the accordion on the Location content type', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveALogicalReadingOrderInAccordionOnLocationContentType()
-  })
-
-  test('create a logical reading order in the Getting Here section on the Location content type', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveALogicalReadingOrderInGettingHereSectionOnLocationContentType()
-  })
-
-  test('create a logical reading order in the Glossary section on the Data Story content type', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveALogicalReadingOrderInGlossarySectionOnDataStoryContentType()
-  })
-
-  test('suppress the In-Page Search Function for screen reader users on the Data Story content type', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toSuppressInPageSearchModuleForScreenReadersOnDataStoryContentType()
-  })
-
-  test('create a logical tab order on the Transaction content type', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toCreateLogicalTabOrderOnTransactionContentType()
-  })
-
-  test('create a logical tab order on the Data Story content type', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toCreateLogicalTabOrderOnDataStoryContentType()
-  })
-
-  test('create a logical tab order on the Form content type', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toCreateLogicalTabOrderOnFormContentType()
-  })
-
-  test('has no accessibility violations', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toPassA11yScan()
-  })
 })

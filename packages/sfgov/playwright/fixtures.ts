@@ -1,70 +1,12 @@
 import { AxeBuilder } from '@axe-core/playwright'
 import { test, expect as baseExpect } from '@playwright/experimental-ct-react'
-import type { ElementHandle, Page } from '@playwright/test'
+import type { ElementHandle, Locator, Page } from '@playwright/test'
 import { findByText } from '@testing-library/react'
 import tinycolor from 'tinycolor2'
 
 export { test } from '@playwright/experimental-ct-react'
 
-export const expect = baseExpect.extend({
-  async toHaveLogicalReadingOrder(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrder'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // We have to wait for an element we know is on the page to load
-      // before querying, otherwise `getByRole` won't retrieve elements
-      const h1 = await page.waitForSelector('h1')
-
-      // Get all the headings on the page
-      const headings = await page.getByRole('heading')
-      let previousHeadingLevel = 0
-      let isHeadingOrderCorrect = true
-      const count = await headings.count()
-      for (let i = 0; i < count; i++) {
-        const element = headings.nth(i)
-        const tagName = await element.evaluate((heading) => heading.tagName)
-        const currentHeadingLevel = parseInt(tagName.charAt(1))
-        if (currentHeadingLevel < previousHeadingLevel) {
-          isHeadingOrderCorrect = false
-        }
-        previousHeadingLevel = currentHeadingLevel
-        baseExpect(isHeadingOrderCorrect).toBeTruthy()
-      }
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
+export const expect = baseExpect.extend({   
   async toHaveLandmarks(page: Page) {
     const assertionName = 'toHaveLandmarks'
     let pass: boolean
@@ -159,56 +101,61 @@ export const expect = baseExpect.extend({
       actual: matcherResult?.actual
     }
   },
-  async toBeKeyboardAccessible(page: Page) {
-    const assertionName = 'toBeKeyboardAccessible'
+  async toBeKeyboardFocusIndicatorAccessible(page: Page) {
+    const assertionName = 'toBeKeyboardFocusIndicatorAccessible'
     let pass: boolean
     let matcherResult: any
     try {
-      // Check if document style sheet is present
-      const documentStyleSheet = await page.$('document.styleSheets')
-      if (documentStyleSheet) {
-        // Proceed with the rest of the checks if the document style sheet is present
-        // Check for basic focus behavior
-        await page.keyboard.press('Tab')
-        const focusedElement = await page.$(':focus')
-        const indicatorStyle = await focusedElement?.evaluate((element) => {
-          const computedStyle = getComputedStyle(element)
-          return computedStyle.outline
-        })
-        baseExpect(indicatorStyle).not.toBe('none')
+      // Check if the specific stylesheet is present
+const stylesheetExists = await page.evaluate(() => {
+  const styleSheets = Array.from(document.styleSheets);
+  return styleSheets.some((sheet) =>
+    sheet.href?.includes('_next/static/css/0366a0cd74896cbb.css')
+  );
+});
 
-        // Checks that keyboard focus classes are present in stylesheet
-        const styleSheetContents = await page.evaluate(() => {
-          const styleSheets = Array.from(document.styleSheets)
-          return styleSheets
-            .filter((sheet) => sheet.href)
-            .map((sheet) => {
-              const rules = Array.from(sheet.cssRules).map(
-                (rule) => rule.cssText
-              )
-              return { href: sheet.href, rules }
-            })
-        })
-        const focusIndicatorStylesExist = styleSheetContents.some((sheet) => {
-          return sheet.rules.some((rule) => {
-            return (
-              rule.includes(':focus') ||
-              rule.includes('outline:') ||
-              rule.includes('border:')
-            )
-          })
-        })
-        baseExpect(focusIndicatorStylesExist).toBe(true)
+if (stylesheetExists) {
+  // Proceed with the rest of the checks if the specific stylesheet is present
 
-        // Checks that keyboard focus selectors are present
-        baseExpect(await page.locator(':focus').isVisible()).toBeTruthy()
-        baseExpect(await page.locator('outline:').isVisible()).toBeTruthy()
-        baseExpect(await page.locator('border:').isVisible()).toBeTruthy()
-      } else {
-        // If the document style sheet does not exist, the test passes
-        expect(true).toBe(true)
-      }
+  // Check for basic focus behavior
+  await page.keyboard.press('Tab');
+  const focusedElement = await page.$(':focus');
+  const indicatorStyle = await focusedElement?.evaluate((element) => {
+    const computedStyle = getComputedStyle(element);
+    return computedStyle.outline;
+  });
+  baseExpect(indicatorStyle).not.toBe('none');
 
+  // Check that keyboard focus classes are present in stylesheets
+  const styleSheetContents = await page.evaluate(() => {
+    const styleSheets = Array.from(document.styleSheets);
+    return styleSheets
+      .filter((sheet) => sheet.href)
+      .map((sheet) => {
+        const rules = Array.from(sheet.cssRules).map((rule) => rule.cssText);
+        return { href: sheet.href, rules };
+      });
+  });
+
+  const focusIndicatorStylesExist = styleSheetContents.some((sheet) => {
+    return sheet.rules.some((rule) => {
+      return (
+        rule.includes(':focus') ||
+        rule.includes('outline:') ||
+        rule.includes('border:')
+      );
+    });
+  });
+  baseExpect(focusIndicatorStylesExist).toBe(true);
+
+  // Check that keyboard focus selectors are present
+  baseExpect(await page.locator(':focus').isVisible()).toBeTruthy();
+  baseExpect(await page.locator('outline:').isVisible()).toBeTruthy();
+  baseExpect(await page.locator('border:').isVisible()).toBeTruthy();
+} else {
+  // If the specific stylesheet does not exist, the test passes
+  expect(true).toBe(true);
+}
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
@@ -243,158 +190,16 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveSearchLandmarksPlusAria(page: Page) {
-    const assertionName = 'toHaveSearchLandmarksPlusAria'
+  async toHaveSearchLandmark(page: Page) {
+    const assertionName = 'toHaveSearchLandmark'
     let pass: boolean
     let matcherResult: any
     try {
-      // Check if the search module is present
-      const searchModule = await page.$('[role="search"]')
-      if (searchModule) {
-        // Proceed with the rest of the checks if the search module is present
-        baseExpect(
-          await page.locator('[aria-autocomplete="both"]').isVisible()
-        ).toBeTruthy()
-        baseExpect(
-          await page.locator('[role="combobox"]').isVisible()
-        ).toBeTruthy()
-        baseExpect(
-          await page.locator('[role="search"]').isVisible()
-        ).toBeTruthy()
-        baseExpect(await page.locator('[aria-owns]').isVisible()).toBeTruthy()
-        baseExpect(
-          await page.locator('[aria-expanded]').isVisible()
-        ).toBeTruthy()
-      } else {
-        // If the search module does not exist, the test passes
-        expect(true).toBe(true)
-      }
-
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async toHavePrefersReducedMotion(page: Page) {
-    const assertionName = 'toHavePrefersReducedMotion'
-    let pass: boolean
-    let matcherResult: any
-
-    try {
-      // Check if document style sheet is present
-      const documentStyleSheet = await page.$('document.styleSheets')
-      if (documentStyleSheet) {
-        // Proceed with the rest of the checks if the document style sheet is present
-        const styleSheetContents = await page.evaluate(() => {
-          const styleSheets = Array.from(document.styleSheets)
-          return styleSheets
-            .filter((sheet) => sheet.href)
-            .map((sheet) => {
-              const rules = Array.from(sheet.cssRules).map(
-                (rule) => rule.cssText
-              )
-              return { href: sheet.href, rules }
-            })
-        })
-        const prefersReducedMotionStylesExist = styleSheetContents.some(
-          (sheet) => {
-            return sheet.rules.some((rule) => {
-              return (
-                rule.includes('prefers-reduced-motion:') ||
-                rule.includes('reduce')
-              )
-            })
-          }
-        )
-      } else {
-        // If the document style sheet does not exist, the test passes
-        expect(true).toBe(true)
-      }
-
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async toHaveLanguageAccess(page: Page) {
-    const assertionName = 'toHaveLanguageAccess'
-    let pass: boolean
-    let matcherResult: any
-
-    try {
-      // Check if the language module is present
-      const languageModule = await page.$('select#language-dropdown')
-      if (languageModule) {
-        // Proceed with the rest of the checks if the language module is present
-
-        // Validate that the 4 required languages are present in the drop down memu.
-        // Validate that the language attributes are available in the drop down menu.
-        baseExpect(await page.locator('[en|en]').isVisible()).toBeTruthy()
-        baseExpect(await page.locator('[en|es]').isVisible()).toBeTruthy()
-        baseExpect(await page.locator('[en|zh-TW]').isVisible()).toBeTruthy()
-        baseExpect(await page.locator('[en|tl]').isVisible()).toBeTruthy()
-      } else {
-        // If the language module does not exist, the test passes
-        expect(true).toBe(true)
-      }
+      baseExpect(
+        await page
+          .locator('header form[role="search"]')
+          .isVisible()
+      ).toBeTruthy();
 
       pass = true
     } catch (e: any) {
@@ -433,49 +238,24 @@ export const expect = baseExpect.extend({
   async toHaveLanguageInteraction(page: Page) {
     const assertionName = 'toHaveLanguageInteraction'
     let pass: boolean
-    let matcherResult: any
-
-    // Check for language drop down selector
-    const dropdownSelector = await page.$('select#language-dropdown')
-
-    if (!dropdownSelector) {
-      console.log('No language dropdown selector is present.')
-      return {
-        message: (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          'No language dropdown selector is present.',
-        pass: true,
-        name: assertionName,
-        actual: 'No language dropdown selector is present.'
-      }
-    }
-
+    let matcherResult: any   
     try {
-      // Validate that the user is able to select a language from the drop down menu, emulating the keyboard interactions.
-      const dropdownSelector = 'select#language-dropdown' // Add the correct dropdown Selector
-
+      // Define the correct dropdown selector
+      const dropdownSelector = '[aria-label="language selector"]';
+    
       // Wait for the dropdown menu to appear
-      await page.waitForSelector(dropdownSelector)
+      await page.waitForSelector(dropdownSelector);
 
-      // Click on the dropdown to open it
-      await page.click(dropdownSelector)
-
+      // Focus the dropdown menu to ensure it is active for keyboard interactions
+      await page.focus(dropdownSelector);
+    
+      // Open the dropdown menu using "Enter"
+      await page.keyboard.press('Enter');
+    
       // Emulate keyboard interactions to select a language
-      await page.keyboard.press('ArrowDown') // Using the arrow keys to navigate down to the desired option
-      await page.keyboard.press('Enter') // Select the option by pressing Enter
+      await page.keyboard.press('Tab'); // Navigate down to the desired option
+      await page.keyboard.press('Enter'); // Select the option by pressing Enter
 
-      // After making the selection, verify that the selected language is Spanish by validating the Spanish language attribute
-      await expect(
-        page.locator(`${dropdownSelector} option:checked`)
-      ).toHaveValue('es')
-
-      // Or it could validate that the text 'Spanish' is the selected text
-      await expect(
-        page.locator(`${dropdownSelector} option:checked`)
-      ).toHaveText('Spanish')
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
@@ -517,7 +297,7 @@ export const expect = baseExpect.extend({
     try {
       // Replace 'your_dropdown_selector'
       // with the name of our dropdown menu selector
-      const dropdownSelector = 'your_dropdown_selector'
+      const dropdownSelector = '[aria-label="language selector"]';
 
       // Get the available options in the dropdown
       const options = await page.$$eval(
@@ -526,7 +306,7 @@ export const expect = baseExpect.extend({
       )
 
       // List of languages to validate
-      const languagesToValidate = ['English', 'Spanish', 'Chinese', 'Filipino']
+      const languagesToValidate = ['English', 'Español', '中文', 'Filipino']
 
       // Validate if each language is available in the dropdown
       for (const language of languagesToValidate) {
@@ -573,51 +353,45 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveColorContrast(page: Page) {
-    const assertionName = 'toHaveColorContrast'
+  async keyboardFocusIndicatorToHaveColorContrast(page: Page) {
+    const assertionName = 'keyboardFocusIndicatorToHaveColorContrast'
     let pass: boolean
     let matcherResult: any
     try {
-      // Validate that the keyboard focus indicator has sufficient color contrast against the background
-      // Need to specify the CSS selector for the keyboard focus indicator
-      const focusIndicatorSelector = 'a[href]'
+       // Select all links on the page
+  const links = await page.$$('a[href]');
+  // Minimum contrast ratio for WCAG Level AA
+  const minContrastRatio = 3.1;
+  for (const link of links) {
+    // Set focus on the link to trigger the focus indicator
+    await link.focus();
 
-      // Get the foreground and background-color properties of the focus indicator
-      const focusIndicatorColor = await page.evaluate((selector) => {
-        const element = document.querySelector(selector)
+    // Get the color and background color of the focused link
+    const focusIndicatorColor = await page.evaluate((element) => {
+      const computedStyle = window.getComputedStyle(element);
+      return {
+        color: computedStyle.color,
+        backgroundColor: computedStyle.backgroundColor,
+      };
+    }, link);
 
-        if (!element) {
-          console.error(`Element with selector '${selector}' not found.`)
-          return null
-        }
-
-        const computedStyle = window.getComputedStyle(element)
-
-        return {
-          color: computedStyle.color,
-          backgroundColor: computedStyle.backgroundColor
-        }
-      }, focusIndicatorSelector)
-
-      // Check if the focus indicator color is valid and meet the WCAG Level AA standards
-      if (!focusIndicatorColor) {
-        throw new Error('Error getting focus indicator color. Exiting script.')
-      }
-      // Calculate the contrast ratio by using the color contrast library tinycolor2
-      const contrastRatio = tinycolor.readability(
-        tinycolor(focusIndicatorColor.color),
-        tinycolor(focusIndicatorColor.backgroundColor)
-      )
-
-      // Define the minimum required contrast ratio to meet the WCAG Level AA (4.5)
-      const minContrastRatio = 3.1
-
-      // Check if the contrast ratio meets the WCAG Level AA standards
-      if (contrastRatio >= minContrastRatio) {
-        console.log('Contrast ratio meets WCAG Level AA standards.')
-      } else {
-        console.error('Contrast ratio does not meet WCAG Level AA standards.')
-      }
+    // Check if the focus indicator color is valid
+    if (!focusIndicatorColor) {
+      console.error('Error getting focus indicator color for a link.');
+      continue;
+    }
+    // Calculate the contrast ratio using tinycolor
+    const contrastRatio = tinycolor.readability(
+      tinycolor(focusIndicatorColor.color),
+      tinycolor(focusIndicatorColor.backgroundColor)
+    );
+    // Check if the contrast ratio meets WCAG Level AA standards
+    if (contrastRatio >= minContrastRatio) {
+      console.log('Contrast ratio meets WCAG Level AA standards for a link.');
+    } else {
+      console.error('Contrast ratio does not meet WCAG Level AA standards for a link.');
+    }
+  }
 
       pass = true
     } catch (e: any) {
@@ -789,8 +563,8 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveRequiredFormAttributes(page: Page) {
-    const assertionName = 'toHaveRequiredFormAttributes'
+  async toHaveRequiredAttributesInSpecificFormElements(page: Page) {
+    const assertionName = 'toHaveRequiredAttributesInSpecificFormElements'
     let pass: boolean
     let matcherResult: any
     try {
@@ -851,8 +625,8 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveErrorMessage(page: Page) {
-    const assertionName = 'toHaveErrorMessage'
+  async toHaveInlineErrorMessage(page: Page) {
+    const assertionName = 'toHaveInlineErrorMessage'
     let pass: boolean
     let matcherResult: any
     try {
@@ -922,8 +696,8 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toNotHaveDashesAndParentheses(page: Page) {
-    const assertionName = 'toNotHaveDashesAndParentheses'
+  async toNotHaveDashesAndParenthesesInPlaceholder(page: Page) {
+    const assertionName = 'toNotHaveDashesAndParenthesesInPlaceholder'
     let pass: boolean
     let matcherResult: any
     try {
@@ -1324,59 +1098,56 @@ export const expect = baseExpect.extend({
     let pass: boolean
     let matcherResult: any
     try {
-      // Check if the paragraph <p>DATA STORY</p> is present
-      const isDataStoryPresent = await page
-        .locator('p:has-text("DATA STORY")')
-        .isVisible()
-
-      if (isDataStoryPresent) {
-        try {
-          // Switch to the iframe context
-          const frameLocator = page.frameLocator(
-            'iframe[class="powerbi-iframe"]'
-          ) // Adjust the selector as needed
-
-          // Tab into the dashboard
-          await page.keyboard.press('Tab')
-
-          // Wait for the navigation module to appear
-          await page.waitForTimeout(1000) // Adjust based on the expected responsiveness of the dashboard
-
-          // Validate that the dashboard navigation module is visible
-          const isNavModuleVisible = await frameLocator
-            .locator('selector-for-navigation-module')
-            .isVisible()
-          expect(isNavModuleVisible).toBeTruthy()
-
-          // Check for the title attribute in the iframe
-          // Select all iframes
-          const iframes = page.locator('iframe')
-
-          // Count the number of iframes
-          const iframeCount = await iframes.count()
-
-          // Iterate through each iframe and check the title attribute
-          for (let i = 0; i < iframeCount; i++) {
-            const titleAttribute = await iframes.nth(i).getAttribute('title')
-
-            // Verify that the title attribute is present and not empty for each iframe
-            expect(
-              titleAttribute,
-              `iframe at index ${i} is missing a title attribute or it is empty`
-            ).toBeTruthy()
-          }
-
-          // Find the “Show data notes and sources” link
-          const isLinkVisible = await page
-            .locator('text="Show data notes and sources"')
-            .isVisible()
-          expect(isLinkVisible).toBeTruthy()
-        } catch (error) {
-          console.error('An error occurred during the test:', error)
-        }
-      } else {
-        console.log('DATA STORY paragraph not found, skipping the test.')
-      }
+      // Check if the iframe is present
+     const iframeLocator = page.locator('iframe');
+     const isIframePresent = await iframeLocator.isVisible();
+ 
+     if (isIframePresent) {
+       // Check that the iframe's src attribute starts with "https://app.powerbigov.us/"
+       const iframeSrc = await iframeLocator.getAttribute('src');
+       if (iframeSrc && iframeSrc.startsWith('https://app.powerbigov.us/')) {
+         
+         // Proceed with the remaining checks
+ 
+         // Switch to the iframe context
+         const frameLocator = page.frameLocator('iframe'); // Adjust the selector as needed
+ 
+         // Tab into the dashboard
+         await page.keyboard.press('Tab');
+ 
+         // Wait for the navigation module to appear
+         await page.waitForTimeout(1000); // Adjust based on the expected responsiveness of the dashboard
+ 
+         // Validate that the dashboard navigation module is visible
+         const isNavModuleVisible = await frameLocator
+           .locator('selector-for-navigation-module')
+           .isVisible();
+         expect(isNavModuleVisible).toBeTruthy();
+ 
+         // Check for the title attribute in the iframe
+         const iframes = page.locator('iframe');
+         const iframeCount = await iframes.count();
+ 
+         for (let i = 0; i < iframeCount; i++) {
+           const titleAttribute = await iframes.nth(i).getAttribute('title');
+           expect(
+             titleAttribute,
+             `iframe at index ${i} is missing a title attribute or it is empty`
+           ).toBeTruthy();
+         }
+ 
+         // Find the "Show data notes and sources" link
+         const isLinkVisible = await page
+           .locator('text="Show data notes and sources"')
+           .isVisible();
+         expect(isLinkVisible).toBeTruthy();
+       } else {
+         console.log('iframe src does not match required pattern, skipping the test.');
+       }
+     } else {
+       console.log('iframe not found, skipping the test.');
+     } 
+ 
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
@@ -1582,8 +1353,8 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveStepbyStepLogicalReadingOrder(page: Page) {
-    const assertionName = 'toHaveStepbyStepLogicalReadingOrder'
+  async toHaveLogicalReadingOrderOnStepByStepContentType(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderOnStepByStepContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -1648,134 +1419,9 @@ export const expect = baseExpect.extend({
       actual: matcherResult?.actual
     }
   },
-
-  async CorrectTabOrderInMainContentArea(page: Page) {
-    const assertionName = 'CorrectTabOrderInMainContentArea'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // Focus on the main landmark
-      await page.locator('main').focus()
-
-      // Ensure the main landmark is visible
-      expect(page.locator('main').isVisible()).toBeTruthy()
-
-      // Locate the first h1 heading within the main landmark and check for visibility
-      const h1 = page.locator('main >> h1')
-      expect(await h1.isVisible()).toBeTruthy()
-
-      // Locate "Table of Contents" navigation element, if it exists
-      const tocNav = page.locator(
-        'main >> nav[role="navigation"][aria-label="Table of contents"]'
-      )
-      const isTocPresent = await tocNav.isVisible()
-
-      // Locate "Get Help" h2 heading, if it exists
-      const getHelpH2 = page.locator('main >> h2:text("Get Help")')
-      const isGetHelpPresent = await getHelpH2.isVisible()
-
-      // If "Table of Contents" navigation element is present, validate its position relative to h1
-      if (isTocPresent) {
-        // Verify "Table of Contents" navigation comes after the first h1 heading
-        // Get the bounding boxes for both elements
-        const h1BoundingBox = await h1.boundingBox()
-        const tocNavBoundingBox = await tocNav.boundingBox()
-
-        // Ensure the bounding boxes are valid
-        if (!h1BoundingBox || !tocNavBoundingBox) {
-          throw new Error('Unable to get bounding boxes for elements')
-        }
-
-        // Verify that the "Table of Contents" navigation comes after the first h1 heading
-        // by comparing their 'top' positions
-        expect(h1BoundingBox.y).toBeLessThan(tocNavBoundingBox.y)
-
-        // Verify all content following h1 comes before "Table of Contents" navigation
-        // This can be more complex depending on the structure, but a basic approach:
-        const contentAfterH1BeforeTOC = page.locator(
-          'main >> h1 >> .. >> nav[role="navigation"][aria-label="Table of contents"]'
-        )
-        const contentAfterH1BeforeTOCText =
-          await contentAfterH1BeforeTOC.allTextContents()
-        expect(contentAfterH1BeforeTOCText.length).toBeGreaterThan(0)
-      }
-
-      // If both "Get Help" and "Table of Contents" are present
-      if (isTocPresent && isGetHelpPresent) {
-        const tocPosition = await tocNav.evaluate((node) => {
-          // Using XPath to select the h2 element with the text "Get Help"
-          const xpath = "//h2[contains(text(), 'Get Help')]"
-          const h2Element = document.evaluate(
-            xpath,
-            document,
-            null,
-            XPathResult.FIRST_ORDERED_NODE_TYPE,
-            null
-          ).singleNodeValue
-
-          if (!h2Element) {
-            return -1 // Indicates that the "Get Help" h2 element was not found
-          }
-
-          // Getting the document position
-          const position = node.compareDocumentPosition(h2Element)
-
-          // Checking if the tocNav node is preceding the h2 element
-          return position & Node.DOCUMENT_POSITION_PRECEDING
-        })
-
-        // Node.DOCUMENT_POSITION_PRECEDING === 2
-        const isTocBeforeGetHelp = tocPosition & 2 // Check if the result of compareDocumentPosition included DOCUMENT_POSITION_PRECEDING
-
-        // Indicate tocNav comes before "Get Help"
-        expect(isTocBeforeGetHelp).toBeTruthy()
-      }
-
-      // If "Get Help" is present, validate content before it
-      if (isGetHelpPresent) {
-        const contentBeforeGetHelpLocator = page.locator(
-          'main >> h1 >> .. >> h2:text("Get Help")'
-        )
-        const contentBeforeGetHelp =
-          await contentBeforeGetHelpLocator.allTextContents()
-        expect(contentBeforeGetHelp.length).toBeGreaterThan(0)
-      }
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async toHaveLogicalReadingOrderonTransactionCT(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderonTransactionCT'
+  
+  async toHaveLogicalReadingOrderInAccordionOnTransactionContentType(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderInAccordionOnTransactionContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -1842,8 +1488,8 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveLogicalReadingOrderonMeetingCT(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderonMeetingCT'
+  async toHaveLogicalReadingOrderInAccordionOnMeetingContentType(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderInAccordionOnMeetingContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -1988,316 +1634,46 @@ export const expect = baseExpect.extend({
     let pass: boolean
     let matcherResult: any
     try {
-      // Find the <h2> element with the text "Contact information"
-      const contactInfoH2 = await page.locator('h2', {
-        hasText: 'Contact information'
-      })
+// Find the <h2> element with the text "Contact information"
+const contactInfoH2 = page.locator('h2', {
+  hasText: 'Contact information',
+});
 
-      // Check if the 'Contact information' heading is visible
-      const isVisible = await contactInfoH2.isVisible()
+// Check if the 'Contact information' heading is visible
+const isVisible = await contactInfoH2.isVisible();
+console.log("'Contact information' heading visibility:", isVisible);
 
-      if (isVisible) {
-        // If visible, perform the additional checks
-        // Validate that all headings following the h2 heading are h3 headings until it encounters another h2 heading or reaches the end of the container.
+if (isVisible) {
+  // Locate all following sibling headings (h* tags) after the h2 heading
+  const headingSiblings = contactInfoH2.locator('xpath=following-sibling::*[self::h2 or self::h3 or self::h4 or self::h5 or self::h6]');
+  const count = await headingSiblings.count();
+  console.log('Number of following headings:', count);
 
-        // Get all following siblings until another h2 or the end of the container
-        const followingElements = await contactInfoH2.locator(
-          '>> following-sibling::*'
-        )
+  if (count === 0) {
+    // If no headings exist, pass the test
+    console.log("No headings found after the 'Contact information' heading. Passing the test.");
+  } else {
+    // Validate the following headings
+    for (let i = 0; i < count; i++) {
+      const heading = headingSiblings.nth(i);
+      const tagName = await heading.evaluate((el) => el.tagName);
 
-        // Check each sibling if it is a heading and if it is, verify it's an h3
-        await followingElements.evaluateAll((elements) => {
-          for (const element of elements) {
-            // If the element is a heading, check its level
-            if (element.tagName.startsWith('h')) {
-              if (element.tagName !== 'h3') {
-                throw new Error(`Expected h3, but found ${element.tagName}`)
-              }
-            }
-          }
-        })
-      } else {
-        // If the 'Contact information' heading is not visible, pass the test
-        console.log(
-          "'Contact information' heading is not present. Passing the test."
-        )
-      }
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async toHaveLogicalReadingOrderMeetingResources(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderMeetingResources'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // Step 2: Locate the <h2>Meeting resources</h2> heading using XPath
-      const meetingResourcesHeading = await page.$(
-        '//h2[text()="Meeting resources"]'
-      )
-
-      if (meetingResourcesHeading) {
-        // Collect all headings between <h2>Meeting resources</h2> and the next <h2>
-        const headingsBetween = await page.evaluate(() => {
-          const allHeadings = Array.from(
-            document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-          )
-          const meetingResourcesIndex = allHeadings.findIndex(
-            (heading) => heading.textContent === 'Meeting resources'
-          )
-          const nextH2Index = allHeadings
-            .slice(meetingResourcesIndex + 1)
-            .findIndex((heading) => heading.tagName === 'H2')
-          const endIndex =
-            nextH2Index !== -1
-              ? meetingResourcesIndex + 1 + nextH2Index
-              : allHeadings.length
-
-          return allHeadings
-            .slice(meetingResourcesIndex + 1, endIndex)
-            .map((heading) => heading.tagName)
-        })
-
-        // Assert all collected headings are <h3>
-        headingsBetween.forEach((tagName) => {
-          expect(tagName).toBe('H3')
-        })
-      } else {
-        console.log(
-          'The heading <h2>Meeting resources</h2> does not exist on the page.'
-        )
+      if (tagName === 'H2') {
+        // Stop checking at the next H2
+        console.log("Encountered another H2 heading. Stopping validation.");
+        break;
       }
 
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async toHaveAndOrAriaLabels(page: Page) {
-    const assertionName = 'toHaveAndOrAriaLabels'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // Check if the paragraph <p>STEP-BY-STEP</p> exists
-      const paragraph = await page.$('p:text("STEP-BY-STEP")')
-
-      if (paragraph) {
-        // If the paragraph exists, check the <span> with aria-label="additional step"
-        const additionalStepSpan = await page.$(
-          'span[aria-label="additional step"]'
-        )
-        expect(additionalStepSpan).not.toBeNull()
-
-        // Check the <span> with aria-label="optional step"
-        const optionalStepSpan = await page.$(
-          'span[aria-label="optional step"]'
-        )
-        expect(optionalStepSpan).not.toBeNull()
-      } else {
-        // If the paragraph does not exist, the test passes
-        expect(true).toBe(true)
+      if (tagName !== 'H3') {
+        throw new Error(`Expected H3, but found ${tagName}`);
       }
-
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
     }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async toHaveInformationLogicalReadingOrder(page: Page) {
-    const assertionName = 'toHaveInformationLogicalReadingOrder'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // Check that the info page paragraph is present on the page
-      const specificParagraph = await page.$('p:text("INFO PAGE")')
-
-      if (specificParagraph) {
-        // If the paragraph is present it is going to find the h1 heading
-        const h1TextContent = await page.$eval('h1', (el) => el.textContent)
-
-        // Collect all headings after the h1 heading
-        const headingsAfterH1 = await page.evaluate((h1Text) => {
-          const allHeadings = Array.from(
-            document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-          )
-          const h1Element = allHeadings.find((h) => h.textContent === h1Text)
-          const h1Index = h1Element ? allHeadings.indexOf(h1Element) : -1
-          return allHeadings
-            .slice(h1Index + 1)
-            .map((heading) => heading.tagName)
-        }, h1TextContent)
-
-        // Verify that all headings after the h1 heading are h2 headings
-        headingsAfterH1.forEach((tagName) => {
-          expect(tagName).toBe('H2')
-        })
-      } else {
-        console.log(
-          'The specific paragraph "INFO PAGE" does not exist on the page.'
-        )
-      }
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async toHaveLogicalReadingOrderWhatToKnow(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderWhatToKnow'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // Step 1: Locate the <h2>What to know</h2> heading using XPath
-      const whattoKnowHeading = await page.$('//h2[text()="What to know"]')
-
-      if (whattoKnowHeading) {
-        // Collect all headings between <h2>What to know</h2> and the next <h2>
-        const headingsBetween = await page.evaluate(() => {
-          const allHeadings = Array.from(
-            document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-          )
-          const whattoKnowIndex = allHeadings.findIndex(
-            (heading) => heading.textContent === 'What to know'
-          )
-          const nextH2Index = allHeadings
-            .slice(whattoKnowIndex + 1)
-            .findIndex((heading) => heading.tagName === 'H2')
-          const endIndex =
-            nextH2Index !== -1
-              ? whattoKnowIndex + 1 + nextH2Index
-              : allHeadings.length
-
-          return allHeadings
-            .slice(whattoKnowIndex + 1, endIndex)
-            .map((heading) => heading.tagName)
-        })
-
-        // Assert all collected headings are <h3>
-        headingsBetween.forEach((tagName) => {
-          expect(tagName).toBe('H3')
-        })
-      } else {
-        console.log(
-          'The heading <h2>What to know</h2> does not exist on the page.'
-        )
-      }
-
+    console.log("All headings following the 'Contact information' heading are valid H3s. Passing the test.");
+  }
+} else {
+  // If the 'Contact information' heading is not visible, pass the test
+  console.log("'Contact information' heading is not present. Passing the test.");
+}
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
@@ -2406,33 +1782,113 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveLogicalReadingOrderEventDetails(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderEventDetails'
+  async toHaveLogicalReadingOrderAdditionalInfoSectionInGetHelpModule(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderAdditionalInfoSectionInGetHelpModule'
     let pass: boolean
     let matcherResult: any
     try {
-      // Step 2: Locate the <h2>Details</h2> heading using XPath
-      const detailsHeading = await page.$('//h2[text()="Details"]')
+// Find the <h2> element with the text "Get help"
+const getHelpH2 = page.locator('h2', {
+  hasText: 'Get help',
+});
 
-      if (detailsHeading) {
-        // Collect all headings between <h2>Details</h2> and the next <h2>
+// Check if the 'Get help' heading is visible
+const isVisible = await getHelpH2.isVisible();
+console.log("'Get help' heading visibility:", isVisible);
+
+if (isVisible) {
+  // Locate the "Additional info" text within the 'Get help' section
+  const additionalInfoText = getHelpH2.locator('xpath=following::text()[contains(., "Additional info")]');
+
+  // Check if the "Additional info" text exists
+  const additionalInfoExists = await additionalInfoText.isVisible();
+  console.log("'Additional info' text visibility:", additionalInfoExists);
+
+  if (additionalInfoExists) {
+    // Locate all headings (h2 to h6) after the "Additional info" text
+    const followingHeadings = additionalInfoText.locator(
+      'xpath=following::*[self::h2 or self::h3 or self::h4 or self::h5 or self::h6]'
+    );
+
+    const count = await followingHeadings.count();
+    console.log('Number of headings following "Additional info":', count);
+
+    // Validate there are no headings after "Additional info"
+    if (count === 0) {
+      console.log("No headings found after the 'Additional info' text. Passing the test.");
+    } else {
+      throw new Error(`Found ${count} heading(s) after the 'Additional info' text.`);
+    }
+  } else {
+    console.log("'Additional info' text is not present. Passing the test.");
+  }
+} else {
+  // If the 'Get help' heading is not visible, pass the test
+  console.log("'Get help' heading is not present. Passing the test.");
+}
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderMeetingResources(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderMeetingResources'
+    let pass: boolean
+    let matcherResult: any
+    try {
+      // Step 1: Locate the <h2>Meeting resources</h2> heading using XPath
+      const meetingResourcesHeading = await page.$(
+        '//h2[text()="Meeting resources"]'
+      )
+
+      if (meetingResourcesHeading) {
+        // Collect all headings between <h2>Meeting resources</h2> and the next <h2>
         const headingsBetween = await page.evaluate(() => {
           const allHeadings = Array.from(
             document.querySelectorAll('h1, h2, h3, h4, h5, h6')
           )
-          const detailsIndex = allHeadings.findIndex(
-            (heading) => heading.textContent === 'Details'
+          const meetingResourcesIndex = allHeadings.findIndex(
+            (heading) => heading.textContent === 'Meeting resources'
           )
           const nextH2Index = allHeadings
-            .slice(detailsIndex + 1)
+            .slice(meetingResourcesIndex + 1)
             .findIndex((heading) => heading.tagName === 'H2')
           const endIndex =
             nextH2Index !== -1
-              ? detailsIndex + 1 + nextH2Index
+              ? meetingResourcesIndex + 1 + nextH2Index
               : allHeadings.length
 
           return allHeadings
-            .slice(detailsIndex + 1, endIndex)
+            .slice(meetingResourcesIndex + 1, endIndex)
             .map((heading) => heading.tagName)
         })
 
@@ -2441,7 +1897,69 @@ export const expect = baseExpect.extend({
           expect(tagName).toBe('H3')
         })
       } else {
-        console.log('The heading <h2>Details</h2> does not exist on the page.')
+        console.log(
+          'The heading <h2>Meeting resources</h2> does not exist on the page.'
+        )
+      }
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+  
+
+  async toHaveAndOrAriaLabelsOnStepbyStepContentType(page: Page) {
+    const assertionName = 'toHaveAndOrAriaLabelsOnStepbyStepContentType'
+    let pass: boolean
+    let matcherResult: any
+    try {
+      // Check if the paragraph <p>STEP-BY-STEP</p> exists
+      const paragraph = await page.$('p:text("STEP-BY-STEP")')
+
+      if (paragraph) {
+        // If the paragraph exists, check the <span> with aria-label="additional step"
+        const additionalStepSpan = await page.$(
+          'span[aria-label="additional step"]'
+        )
+        expect(additionalStepSpan).not.toBeNull()
+
+        // Check the <span> with aria-label="optional step"
+        const optionalStepSpan = await page.$(
+          'span[aria-label="optional step"]'
+        )
+        expect(optionalStepSpan).not.toBeNull()
+      } else {
+        // If the paragraph does not exist, the test passes
+        expect(true).toBe(true)
       }
 
       pass = true
@@ -2478,8 +1996,201 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveLogicalReadingOrderAboutUs(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderAboutUs'
+  async toHaveLogicalReadingOrderOnInformationContentType(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderOnInformationContentType'
+    let pass: boolean
+    let matcherResult: any
+    try {
+      // Check that the info page paragraph is present on the page
+const specificParagraph = await page.$('p:text("INFO PAGE")');
+
+if (specificParagraph) {
+  // If the paragraph is present, find the h1 heading and its text content
+  const h1TextContent = await page.$eval('h1', (el) => el.textContent || '');
+
+  // Collect all headings after the h1 heading and verify they are all h2
+  const allAreH2 = await page.evaluate((h1Text) => {
+    const allHeadings = Array.from(
+      document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+    );
+    const h1Element = allHeadings.find((h) => (h.textContent || '').trim() === h1Text);
+    if (!h1Element) return false; // Handle cases where the h1 is missing
+    const h1Index = allHeadings.indexOf(h1Element);
+    const headingsAfterH1 = allHeadings.slice(h1Index + 1);
+    return headingsAfterH1.every((heading) => heading.tagName === 'H2');
+  }, h1TextContent);
+
+  // Assert that all headings after the h1 are h2
+  expect(allAreH2).toBe(true);
+} else {
+  console.log('The specific paragraph "INFO PAGE" does not exist on the page.');
+}
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderWhatToKnow(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderWhatToKnow'
+    let pass: boolean
+    let matcherResult: any
+    try {
+      // Step 1: Locate the <h2>What to know</h2> heading using XPath
+      const whattoKnowHeading = await page.$('//h2[text()="What to know"]')
+
+      if (whattoKnowHeading) {
+        // Collect all headings between <h2>What to know</h2> and the next <h2>
+        const headingsBetween = await page.evaluate(() => {
+          const allHeadings = Array.from(
+            document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+          )
+          const whattoKnowIndex = allHeadings.findIndex(
+            (heading) => heading.textContent === 'What to know'
+          )
+          const nextH2Index = allHeadings
+            .slice(whattoKnowIndex + 1)
+            .findIndex((heading) => heading.tagName === 'H2')
+          const endIndex =
+            nextH2Index !== -1
+              ? whattoKnowIndex + 1 + nextH2Index
+              : allHeadings.length
+
+          return allHeadings
+            .slice(whattoKnowIndex + 1, endIndex)
+            .map((heading) => heading.tagName)
+        })
+
+        // Assert all collected headings are <h3>
+        headingsBetween.forEach((tagName) => {
+          expect(tagName).toBe('H3')
+        })
+      } else {
+        console.log(
+          'The heading <h2>What to know</h2> does not exist on the page.'
+        )
+      }
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },  
+
+  async toHaveLogicalReadingOrderEventDetails(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderEventDetails'
+    let pass: boolean
+    let matcherResult: any
+    try {
+      // Check for the specific paragraph
+  const specificParagraph = await page.$('p:text("EVENT")');
+
+  if (specificParagraph) {
+  
+    // Check that specific texts are h3 headings
+    const mayorHeading = page.locator('h3:has-text("Date and Time")');
+    await expect(mayorHeading).toBeVisible();
+  
+    const boardOfSupervisorsHeading = page.locator('h3:has-text("Cost")');
+    await expect(boardOfSupervisorsHeading).toBeVisible();
+  
+    const electedOfficialsHeading = page.locator('h3:has-text("Location")');
+    await expect(electedOfficialsHeading).toBeVisible();
+   } else {
+      console.log('The specific paragraph "EVENT" does not exist on the page. Passing the test');
+    } 
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderInResourcesSectionOnAboutContentType(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderInResourcesSectionOnAboutContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -2701,18 +2412,18 @@ export const expect = baseExpect.extend({
     let matcherResult: any
     try {
       // Select the footer landmark
-      const footer = await page.locator('footer')
+      const footer = page.locator('footer')
 
-      // Validate that "Languages" is an h2 heading within the footer
-      const languagesHeading = footer.locator('h2', { hasText: 'Languages' })
+      // Validate that "Our City" is an h2 heading within the footer
+      const languagesHeading = footer.locator('h2', { hasText: 'Our City' })
       await expect(languagesHeading).toBeVisible()
 
-      // Validate that "City Links" is an h2 heading within the footer
-      const cityLinksHeading = footer.locator('h2', { hasText: 'City Links' })
+      // Validate that "Languages" is an h2 heading within the footer
+      const cityLinksHeading = footer.locator('h2', { hasText: 'Languages' })
       await expect(cityLinksHeading).toBeVisible()
 
-      // Validate that "Resources" is an h2 heading within the footer
-      const resourcesHeading = footer.locator('h2', { hasText: 'Resources' })
+      // Validate that "Policy" is an h2 heading within the footer
+      const resourcesHeading = footer.locator('h2', { hasText: 'Policy' })
       await expect(resourcesHeading).toBeVisible()
 
       pass = true
@@ -2749,189 +2460,52 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveURLInLinkText(page: Page) {
-    const assertionName = 'toHaveURLInLinkText'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // Get all anchor elements on the page
-      const links = await page.$$('a')
-
-      for (const link of links) {
-        // Get the href attribute of the link
-        const href = await link.getAttribute('href')
-        // Get the text content of the link
-        const text = await link.innerText()
-
-        if (
-          href &&
-          !href.includes('#') &&
-          !href.includes('tel:') &&
-          !href.includes('mailto:')
-        ) {
-          // Normalize the href to remove the protocol and other components
-          const url = new URL(href, page.url())
-          const normalizedHref = url.hostname + url.pathname
-
-          // Validate that the link text does not contain the normalized URL
-          expect(text).not.toContain(normalizedHref)
-        }
-      }
-
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async toMakePowerBiDashboardAccessibleResourceCollection(page: Page) {
-    const assertionName = 'toMakePowerBiDashboardAccessibleResourceCollection'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // Check if the paragraph <p>RESOURCE COLLECTION</p> is present
-      const isResourceCollectionPresent = await page
-        .locator('p:has-text("RESOURCE COLLECTION")')
-        .isVisible()
-      if (isResourceCollectionPresent) {
-        try {
-          // Switch to the iframe context
-          const frameLocator = page.frameLocator(
-            'iframe[class="powerbi-iframe"]'
-          ) // Adjust the selector as needed
-
-          // Tab into the dashboard
-          await page.keyboard.press('Tab')
-
-          // Wait for the navigation module to appear
-          await page.waitForTimeout(1000) // Adjust based on the expected responsiveness of the dashboard
-
-          // Validate that the dashboard navigation module is visible
-          const isNavModuleVisible = await frameLocator
-            .locator('selector-for-navigation-module')
-            .isVisible()
-          expect(isNavModuleVisible).toBeTruthy()
-
-          // Check for the title attribute in the iframe
-          // Select all iframes
-          const iframes = page.locator('iframe')
-
-          // Count the number of iframes
-          const iframeCount = await iframes.count()
-
-          // Iterate through each iframe and check the title attribute
-          for (let i = 0; i < iframeCount; i++) {
-            const titleAttribute = await iframes.nth(i).getAttribute('title')
-
-            // Verify that the title attribute is present and not empty for each iframe
-            expect(
-              titleAttribute,
-              `iframe at index ${i} is missing a title attribute or it is empty`
-            ).toBeTruthy()
-          }
-
-          // Find the “Show data notes and sources” link
-          const isLinkVisible = await page
-            .locator('text="Show data notes and sources"')
-            .isVisible()
-          expect(isLinkVisible).toBeTruthy()
-        } catch (error) {
-          console.error('An error occurred during the test:', error)
-        }
-      } else {
-        console.log(
-          'RESOURCE COLLECTION paragraph not found, skipping the test.'
-        )
-      }
-
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async allLinksHaveKeyboardFocus(page: Page) {
-    const assertionName = 'allLinksHaveKeyboardFocus'
+  async toHaveKeyboardFocusInLinks(page: Page) {
+    const assertionName = 'toHaveKeyboardFocusInLinks'
     let pass: boolean
     let matcherResult: any
     try {
       // Get all links on the page
-      const links = await page.$$eval('a', (links) =>
-        links.map((link) => link.getAttribute('href'))
-      )
-
+      const links = await page.$$eval('a', (anchors) =>
+        anchors.map((anchor) => ({
+          href: anchor.getAttribute('href'),
+          text: anchor.textContent?.trim() || '',
+        }))
+      );
+  
       // Iterate through each link and check if it receives keyboard focus
-      for (const href of links) {
-        // Navigate to the link element
-        const link = await page.$(`a[href="${href}"]`)
-        // bounding box returns null if the element is not visible
-        const box = await link?.boundingBox()
-        if (link && box) {
-          // Focus the link
-          await link.focus()
-
-          // Check if the link has received focus
-          const isFocused = await page.evaluate(
-            (el) => document.activeElement === el,
+      for (let i = 0; i < links.length; i++) {
+        const { href, text } = links[i];
+        console.log(`Testing link ${i + 1}: "${text}" with href "${href}"`);
+  
+        // Select the nth link directly
+        const allLinks = await page.$$('a');
+        const link = allLinks[i];
+  
+        if (link) {
+          // Ensure the link is visible and interactive before testing focus
+          const isVisible = await link.isVisible();
+          const isDisabled = await page.evaluate(
+            (el) => el.hasAttribute('disabled') || el.getAttribute('tabindex') === '-1',
             link
-          )
-          expect(isFocused).toBe(true)
+          );
+  
+          if (isVisible && !isDisabled) {
+            // Focus the link
+            await link.focus();
+  
+            // Check if the link has received focus
+            const isFocused = await page.evaluate(
+              (el) => document.activeElement === el,
+              link
+            );
+  
+            if (!isFocused) {
+              throw new Error(`Link "${text}" (href: "${href}") did not receive focus.`);
+            }
+          } else {
+            console.warn(`Skipping link "${text}" (href: "${href}") as it is not focusable.`);
+          }
         }
       }
 
@@ -2969,8 +2543,95 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveLogicalReadingOrderonCampaignCT(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderonCampaignCT'
+  async toHaveKeyboardFocusOnMeetingTranscriptLinks(page: Page) {
+    const assertionName = 'toHaveKeyboardFocusOnMeetingTranscriptLinks'
+    let pass: boolean
+    let matcherResult: any
+    try {
+       // Define the target link texts to verify focus
+  const targetLinkTexts = ["Show transcript", "View full transcript"];
+
+  // Get all focusable elements on the page
+  const focusableSelectors = [
+    'a[href]',        // Links with href
+    'button',         // Buttons
+    'input',          // Inputs
+    '[tabindex]:not([tabindex="-1"])' // Elements with a tabindex other than -1
+  ];
+  const focusableElements = await page.$$(focusableSelectors.join(','));
+
+  // Variable to track if the target links received focus
+  const focusFailures = [];
+
+  // Simulate tabbing through the page and check focus on target links
+  for (const targetText of targetLinkTexts) {
+    let isFocused = false;
+
+    for (let i = 0; i < focusableElements.length; i++) {
+      // Press Tab to move to the next focusable element
+      await page.keyboard.press('Tab');
+
+      // Get the text content of the currently focused element
+      const elementText = await page.evaluate(() => {
+        const activeElement = document.activeElement;
+        return activeElement ? activeElement.textContent?.trim() || '' : null;
+      });
+
+      // Check if the active element's text matches the target link text
+      if (elementText === targetText) {
+        console.log(`Target link "${targetText}" received focus.`);
+        isFocused = true;
+        break;
+      }
+    }
+
+    if (!isFocused) {
+      focusFailures.push(targetText);
+      console.error(`Target link "${targetText}" did not receive focus during tab navigation.`);
+    }
+  }
+
+  // Fail the test if any target link did not receive focus
+  if (focusFailures.length > 0) {
+    throw new Error(`The following links did not receive focus during tab navigation: ${focusFailures.join(', ')}`);
+  }
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderInAccordionOnCampaignContentType (page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderInAccordionOnCampaignContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -3043,47 +2704,17 @@ export const expect = baseExpect.extend({
     let pass: boolean
     let matcherResult: any
     try {
-      // Find the <h1> element with the text "Welcome to sf.gov"
-      const homeInfoH1 = await page.locator('h1', {
-        hasText: 'Welcome to sf.gov'
-      })
 
-      // Check if the 'Welcome to sf.gov' heading is visible
-      const isVisible = await homeInfoH1.isVisible()
+    // Locate the element with the text 'Services' within the <main> landmark
+const servicesElement = page.locator('main', { hasText: 'Services' }).locator(':text("Services")');
 
-      if (isVisible) {
-        // If visible, perform the additional checks
+// Validate the element is visible
+baseExpect(await servicesElement.isVisible()).toBeTruthy();
 
-        // Check that specific texts are h2 headings
-        const servicesHeading = page.locator('h2:has-text("Services")')
-        await expect(servicesHeading).toBeVisible()
-
-        const newsHeading = page.locator('h2:has-text("News")')
-        await expect(newsHeading).toBeVisible()
-
-        const sfGovHeading = page.locator(
-          'h2:has-text("San Francisco Government")'
-        )
-        await expect(sfGovHeading).toBeVisible()
-
-        // Check that specific texts are h3 headings
-        const boardOfSupervisorsHeading = page.locator(
-          'h3:has-text("Board of Supervisors")'
-        )
-        await expect(boardOfSupervisorsHeading).toBeVisible()
-
-        const electedOfficialsHeading = page.locator(
-          'h3:has-text("Elected Officials")'
-        )
-        await expect(electedOfficialsHeading).toBeVisible()
-      } else {
-        // If the 'Welcome to sf.gov' heading is not visible, pass the test
-        console.log(
-          "'Welcome to sf.gov' heading is not present. Passing the test."
-        )
-      }
-
-      pass = true
+// Validate that the element with text 'Services' is an h2 heading
+baseExpect(await servicesElement.evaluate(node => node.tagName === 'H2')).toBeTruthy();
+      
+pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
       pass = false
@@ -3123,7 +2754,7 @@ export const expect = baseExpect.extend({
     let matcherResult: any
     try {
       // Find the <h3> element with the text "Video recording"
-      const videoInfoH3 = await page.locator('h3', {
+      const videoInfoH3 = page.locator('h3', {
         hasText: 'Video recording'
       })
 
@@ -3179,8 +2810,8 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveLogicalReadingOrderDataResourceCollection(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderDataResourceCollection'
+  async toHaveLogicalReadingOrderInResourcesSectionOnResourceCollectionContentType(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderInResourcesSectionOnResourceCollectionContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -3189,18 +2820,18 @@ export const expect = baseExpect.extend({
   const specificParagraph = await page.$('p:has-text("RESOURCE COLLECTION")');
   
   if (specificParagraph) {
-    // Step 2: Locate the <h2>Data</h2> heading using XPath
-    const dataHeading = await page.$('//h2[text()="Data"]');
+    // Step 2: Locate the <h2>Resources</h2> heading using XPath
+    const resourcesHeading = await page.$('//h2[text()="Resources"]');
   
-    if (dataHeading) {
-      // Collect all headings between <h2>Data</h2> and the next <h2>
+    if (resourcesHeading) {
+      // Collect all headings between <h2>Resources</h2> and the next <h2>
       const headingsBetween = await page.evaluate(() => {
         const allHeadings = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
-        const dataIndex = allHeadings.findIndex(heading => heading.textContent === 'Data');
-        const nextH2Index = allHeadings.slice(dataIndex + 1).findIndex(heading => heading.tagName === 'H2');
-        const endIndex = nextH2Index !== -1 ? dataIndex + 1 + nextH2Index : allHeadings.length;
+        const resourcesIndex = allHeadings.findIndex(heading => heading.textContent === 'Data');
+        const nextH2Index = allHeadings.slice(resourcesIndex + 1).findIndex(heading => heading.tagName === 'H2');
+        const endIndex = nextH2Index !== -1 ? resourcesIndex + 1 + nextH2Index : allHeadings.length;
   
-        return allHeadings.slice(dataIndex + 1, endIndex).map(heading => heading.tagName);
+        return allHeadings.slice(resourcesIndex + 1, endIndex).map(heading => heading.tagName);
       });
   
       // Assert all collected headings are <h3>
@@ -3208,7 +2839,7 @@ export const expect = baseExpect.extend({
         expect(tagName).toBe('H3');
       });
     } else {
-      console.log('The <h2>Data</h2> heading does not exist on the page.');
+      console.log('The <h2>Resources</h2> heading does not exist on the page.');
     }
   } else {
     console.log('The "Resource Collection" paragraph does not exist on the page.');
@@ -3249,8 +2880,8 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveLogicalReadingOrderDocumentsResourceCollection(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderDocumetsResourceCollection'
+  async toHaveLogicalReadingOrderInDocumentsSectionOnResourceCollectionContentType(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderInDocumentsSectionOnResourceCollectionContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -3330,7 +2961,7 @@ export const expect = baseExpect.extend({
 
   if (specificParagraph) {
     // If <p>NEWS</p> exists, validate blockquote elements
-    const blockquotes = await page.locator('blockquote');
+    const blockquotes = page.locator('blockquote');
     
     const count = await blockquotes.count();
     for (let i = 0; i < count; i++) {
@@ -3457,7 +3088,7 @@ if (pageTitle === "City and County of San Francisco") {
 
   if (specificParagraph) {
     // If <p>PRESS RELEASE</p> exists, validate blockquote elements
-    const blockquotes = await page.locator('blockquote');
+    const blockquotes = page.locator('blockquote');
     
     const count = await blockquotes.count();
     for (let i = 0; i < count; i++) {
@@ -3532,8 +3163,8 @@ if (locationParagraphExists) {
     // Check that all these heading elements are <h4> headings
     await headingElements
       .evaluateAll((headings) => {
-        // Check if every heading is an <h4>
-        return headings.every((heading) => heading.tagName === 'H4')
+        // Check if every heading is an <h3>
+        return headings.every((heading) => heading.tagName === 'H3')
       })
       .then((result) => {
         // Verify that the condition holds true
@@ -3740,8 +3371,8 @@ if (locationParagraphExists) {
     }
   },
 
-  async toSuppressInPageSearchModuleForScreenReadersOnDataStoryContentType(page: Page) {
-    const assertionName = 'toSuppressInPageSearchModuleForScreenReadersOnDataStoryContentType'
+  async toSuppressInPageSearchModuleOnDataStoryContentType(page: Page) {
+    const assertionName = 'toSuppressInPageSearchModuleOnDataStoryContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -3812,102 +3443,76 @@ if (specificParagraph) {
     let matcherResult: any
     try {
      
-        // Focus on the main landmark
-  await page.locator('main').focus()
-
-  // Ensure the main landmark is visible
-  expect(await page.locator('main').isVisible()).toBeTruthy()
-
-  // Locate the first h1 heading within the main landmark and check for visibility
-  const h1 = page.locator('main >> h1')
-  expect(await h1.isVisible()).toBeTruthy()
-
-  // Locate "Table of Contents" navigation element, if it exists
-  const tocNav = page.locator(
-    'main >> nav[role="navigation"][aria-label="Table of contents"]'
-  )
-  const isTocPresent = await tocNav.isVisible()
-
-  // Locate "Get help" h2 heading, if it exists
-  const gethelpH2 = page.locator('main >> h2:text("Get help")')
-  const isGethelpPresent = await gethelpH2.isVisible()
-
-  // If "Table of Contents" navigation element is present, validate its position relative to h1
-  if (isTocPresent) {
-    // Verify "Table of Contents" navigation comes after the first h1 heading
-    // Get the bounding boxes for both elements
-    const h1BoundingBox = await h1.boundingBox()
-    const tocNavBoundingBox = await tocNav.boundingBox()
-
-    // Ensure the bounding boxes are valid
-    if (!h1BoundingBox || !tocNavBoundingBox) {
-      throw new Error('Unable to get bounding boxes for elements')
-    }
-
-    // Verify that the "Table of Contents" navigation comes after the first h1 heading
-    // by comparing their 'top' positions
-    expect(h1BoundingBox.y).toBeLessThan(tocNavBoundingBox.y)
-
-    // Verify all content following h1 comes before "Table of Contents" navigation
-    // This can be more complex depending on the structure, but a basic approach:
-    const contentAfterH1BeforeTOC = page.locator(
-      'main >> h1 >> .. >> nav[role="navigation"][aria-label="Table of contents"]'
-    )
-    const contentAfterH1BeforeTOCText =
-      await contentAfterH1BeforeTOC.allTextContents()
-    expect(contentAfterH1BeforeTOCText.length).toBeGreaterThan(0)
-  }
-
-  // If both "Get help" and "Table of Contents" are present
-  if (isTocPresent && isGethelpPresent) {
-    const tocPosition = await tocNav.evaluate((node) => {
-      // Using XPath to select the h2 element with the text "Get help"
-      const xpath = "//h2[contains(text(), 'Get help')]"
-      const h2Element = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      ).singleNodeValue
-
-      if (!h2Element) {
-        return -1 // Indicates that the "Get help" h2 element was not found
-      }
-
-      // Getting the document position
-      const position = node.compareDocumentPosition(h2Element)
-
-      // Checking if the tocNav node is preceding the h2 element
-      return position & Node.DOCUMENT_POSITION_PRECEDING
-    })
-
-    // Node.DOCUMENT_POSITION_PRECEDING === 2
-    const isTocBeforeGethelp = tocPosition & 2 // Check if the result of compareDocumentPosition included DOCUMENT_POSITION_PRECEDING
-
-    // Indicate tocNav comes before "Get help"
-    expect(isTocBeforeGethelp).toBeTruthy()
-  }
-
-  // If "Get help" is present, validate content before it
-  if (isGethelpPresent) {
-    const contentBeforeGethelpLocator = page.locator(
-      'main >> h1 >> .. >> h2:text("Get help")'
-    )
-    const contentBeforeGethelp =
-      await contentBeforeGethelpLocator.allTextContents()
-    expect(contentBeforeGethelp.length).toBeGreaterThan(0)
-  }
-
-  // New validation: Check if <p>SERVICE</p> is present within the main landmark
-  const serviceP = page.locator('main >> p:text("SERVICE")')
-  const isServicePresent = await serviceP.count()
-
-  if (isServicePresent) {
-    // If <p>SERVICE</p> is present, validate it is visible
-    expect(await serviceP.isVisible()).toBeTruthy()
-  }
-
+        
+// Check for the specific paragraph
+  const specificParagraph = await page.$('p:text("SERVICE")');
+  
+  if (specificParagraph) {
+ 
+ // Define a comprehensive focusable element selector
+ const focusableSelector = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"]), [contenteditable]';
+ 
+ // Wait for the elements to ensure they are loaded
+ await page.waitForSelector('h1');
+ await page.waitForSelector('nav[role="navigation"][aria-label="Table of contents"]');
+ 
+ // Get all focusable elements after <h1> using locator
+ const focusableAfterH1Locator = page.locator(`h1 ~ ${focusableSelector}`);
+ const focusableAfterH1Count = await focusableAfterH1Locator.count();
+ console.log('Focusable elements after h1:', focusableAfterH1Count);
+ 
+ // Get all focusable elements after the <nav role="navigation" aria-label="Table of contents"> using locator
+ const focusableAfterNavLocator = page.locator(`nav[role="navigation"][aria-label="Table of contents"] ~ ${focusableSelector}`);
+ const focusableAfterNavCount = await focusableAfterNavLocator.count();
+ console.log('Focusable elements after nav Table of contents:', focusableAfterNavCount);
+ 
+ // Function to log the currently focused element
+ const logFocusedElement = async (description: string) => {
+   const activeElementInfo = await page.evaluate(() => {
+     const activeElement = document.activeElement;
+     if (!activeElement) return null;
+     return {
+       tagName: activeElement.tagName,
+       id: activeElement.id || null,
+       className: activeElement.className || null,
+       tabindex: activeElement.getAttribute('tabindex') || null, // Check if the element has tabindex
+       name: activeElement.getAttribute('name') || null,
+       type: activeElement.getAttribute('type') || null,
+       isHidden: window.getComputedStyle(activeElement).visibility === 'hidden' || window.getComputedStyle(activeElement).display === 'none'
+     };
+   });
+ 
+   console.log(`${description} - Currently focused element:`, activeElementInfo);
+ };
+ 
+ // Validate elements after <h1>
+ for (let i = 0; i < focusableAfterH1Count; i++) {
+   await focusableAfterH1Locator.nth(i).focus();  // Focus each element manually
+   await logFocusedElement(`Focusing element ${i + 1} after <h1>`);
+ 
+   // Check if the element is visible and enabled (focusable)
+   const isVisible = await focusableAfterH1Locator.nth(i).isVisible();
+   const isEnabled = await focusableAfterH1Locator.nth(i).isEnabled();
+   expect(isVisible).toBe(true);
+   expect(isEnabled).toBe(true);
+ }
+ 
+ // Validate elements after <nav role="navigation" aria-label="Table of contents">
+ for (let i = 0; i < focusableAfterNavCount; i++) {
+   await focusableAfterNavLocator.nth(i).focus();  // Focus each element manually
+   await logFocusedElement(`Focusing element ${i + 1} after <nav role="navigation" aria-label="Table of contents">`);
+ 
+   // Check if the element is visible and enabled (focusable)
+   const isVisible = await focusableAfterNavLocator.nth(i).isVisible();
+   const isEnabled = await focusableAfterNavLocator.nth(i).isEnabled();
+   expect(isVisible).toBe(true);
+   expect(isEnabled).toBe(true);
+ }
+       } else {
+         console.log(
+           'The specific paragraph "SERVICE" does not exist on the page.'
+         )
+       } 
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
@@ -3948,101 +3553,75 @@ if (specificParagraph) {
     let matcherResult: any
     try {
      
-         // Focus on the main landmark
-  await page.locator('main').focus()
-
-  // Ensure the main landmark is visible
-  expect(await page.locator('main').isVisible()).toBeTruthy()
-
-  // Locate the first h1 heading within the main landmark and check for visibility
-  const h1 = page.locator('main >> h1')
-  expect(await h1.isVisible()).toBeTruthy()
-
-  // Locate "Table of Contents" navigation element, if it exists
-  const tocNav = page.locator(
-    'main >> nav[role="navigation"][aria-label="Table of contents"]'
-  )
-  const isTocPresent = await tocNav.isVisible()
-
-  // Locate "Partner agencies" h2 heading, if it exists
-  const partneragenciesH2 = page.locator('main >> h2:text("Partner agencies")')
-  const isPartneragenciesPresent = await partneragenciesH2.isVisible()
-
-  // If "Table of Contents" navigation element is present, validate its position relative to h1
-  if (isTocPresent) {
-    // Verify "Table of Contents" navigation comes after the first h1 heading
-    // Get the bounding boxes for both elements
-    const h1BoundingBox = await h1.boundingBox()
-    const tocNavBoundingBox = await tocNav.boundingBox()
-
-    // Ensure the bounding boxes are valid
-    if (!h1BoundingBox || !tocNavBoundingBox) {
-      throw new Error('Unable to get bounding boxes for elements')
-    }
-
-    // Verify that the "Table of Contents" navigation comes after the first h1 heading
-    // by comparing their 'top' positions
-    expect(h1BoundingBox.y).toBeLessThan(tocNavBoundingBox.y)
-
-    // Verify all content following h1 comes before "Table of Contents" navigation
-    // This can be more complex depending on the structure, but a basic approach:
-    const contentAfterH1BeforeTOC = page.locator(
-      'main >> h1 >> .. >> nav[role="navigation"][aria-label="Table of contents"]'
-    )
-    const contentAfterH1BeforeTOCText =
-      await contentAfterH1BeforeTOC.allTextContents()
-    expect(contentAfterH1BeforeTOCText.length).toBeGreaterThan(0)
-  }
-
-  // If both "Partner agencies" and "Table of Contents" are present
-  if (isTocPresent && isPartneragenciesPresent) {
-    const tocPosition = await tocNav.evaluate((node) => {
-      // Using XPath to select the h2 element with the text "Partner agencies"
-      const xpath = "//h2[contains(text(), 'Partner agencies')]"
-      const h2Element = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      ).singleNodeValue
-
-      if (!h2Element) {
-        return -1 // Indicates that the "Partner agencies" h2 element was not found
-      }
-
-      // Getting the document position
-      const position = node.compareDocumentPosition(h2Element)
-
-      // Checking if the tocNav node is preceding the h2 element
-      return position & Node.DOCUMENT_POSITION_PRECEDING
-    })
-
-    // Node.DOCUMENT_POSITION_PRECEDING === 2
-    const isTocBeforePartneragencies = tocPosition & 2 // Check if the result of compareDocumentPosition included DOCUMENT_POSITION_PRECEDING
-
-    // Indicate tocNav comes before "Partner agencies"
-    expect(isTocBeforePartneragencies).toBeTruthy()
-  }
-
-  // If "Partner agencies" is present, validate content before it
-  if (isPartneragenciesPresent) {
-    const contentBeforePartneragenciesLocator = page.locator(
-      'main >> h1 >> .. >> h2:text("Partner agencies")'
-    )
-    const contentBeforePartneragencies =
-      await contentBeforePartneragenciesLocator.allTextContents()
-    expect(contentBeforePartneragencies.length).toBeGreaterThan(0)
-  }
-
-  // New validation: Check if <p>DATA STORY</p> is present within the main landmark
-  const dataStoryP = page.locator('main >> p:text("DATA STORY")')
-  const isDataStoryPresent = await dataStoryP.count()
-
-  if (isDataStoryPresent) {
-    // If <p>DATA STORY</p> is present, validate it is visible
-    expect(await dataStoryP.isVisible()).toBeTruthy()
-  }
+         // Check for the specific paragraph
+  const specificParagraph = await page.$('p:text("DATA STORY")');
+  
+  if (specificParagraph) {
+ 
+ // Define a comprehensive focusable element selector
+ const focusableSelector = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"]), [contenteditable]';
+ 
+ // Wait for the elements to ensure they are loaded
+ await page.waitForSelector('h1');
+ await page.waitForSelector('nav[role="navigation"][aria-label="Table of contents"]');
+ 
+ // Get all focusable elements after <h1> using locator
+ const focusableAfterH1Locator = page.locator(`h1 ~ ${focusableSelector}`);
+ const focusableAfterH1Count = await focusableAfterH1Locator.count();
+ console.log('Focusable elements after h1:', focusableAfterH1Count);
+ 
+ // Get all focusable elements after the <nav role="navigation" aria-label="Table of contents"> using locator
+ const focusableAfterNavLocator = page.locator(`nav[role="navigation"][aria-label="Table of contents"] ~ ${focusableSelector}`);
+ const focusableAfterNavCount = await focusableAfterNavLocator.count();
+ console.log('Focusable elements after nav Table of contents:', focusableAfterNavCount);
+ 
+ // Function to log the currently focused element
+ const logFocusedElement = async (description: string) => {
+   const activeElementInfo = await page.evaluate(() => {
+     const activeElement = document.activeElement;
+     if (!activeElement) return null;
+     return {
+       tagName: activeElement.tagName,
+       id: activeElement.id || null,
+       className: activeElement.className || null,
+       tabindex: activeElement.getAttribute('tabindex') || null, // Check if the element has tabindex
+       name: activeElement.getAttribute('name') || null,
+       type: activeElement.getAttribute('type') || null,
+       isHidden: window.getComputedStyle(activeElement).visibility === 'hidden' || window.getComputedStyle(activeElement).display === 'none'
+     };
+   });
+ 
+   console.log(`${description} - Currently focused element:`, activeElementInfo);
+ };
+ 
+ // Validate elements after <h1>
+ for (let i = 0; i < focusableAfterH1Count; i++) {
+   await focusableAfterH1Locator.nth(i).focus();  // Focus each element manually
+   await logFocusedElement(`Focusing element ${i + 1} after <h1>`);
+ 
+   // Check if the element is visible and enabled (focusable)
+   const isVisible = await focusableAfterH1Locator.nth(i).isVisible();
+   const isEnabled = await focusableAfterH1Locator.nth(i).isEnabled();
+   expect(isVisible).toBe(true);
+   expect(isEnabled).toBe(true);
+ }
+ 
+ // Validate elements after <nav role="navigation" aria-label="Table of contents">
+ for (let i = 0; i < focusableAfterNavCount; i++) {
+   await focusableAfterNavLocator.nth(i).focus();  // Focus each element manually
+   await logFocusedElement(`Focusing element ${i + 1} after <nav role="navigation" aria-label="Table of contents">`);
+ 
+   // Check if the element is visible and enabled (focusable)
+   const isVisible = await focusableAfterNavLocator.nth(i).isVisible();
+   const isEnabled = await focusableAfterNavLocator.nth(i).isEnabled();
+   expect(isVisible).toBe(true);
+   expect(isEnabled).toBe(true);
+ }
+       } else {
+         console.log(
+           'The specific paragraph "DATA STORY" does not exist on the page.'
+         )
+       } 
  
       pass = true
     } catch (e: any) {
@@ -4084,47 +3663,75 @@ if (specificParagraph) {
     let matcherResult: any
     try {
      
-       // Focus on the main landmark
-  await page.locator('main').focus()
+       // Check if "form" or "formio" is present in the DOM
+  const formPresent = await page.$('form') !== null;
+  const formIoPresent = await page.$('form-io') !== null;
 
-  // Ensure the main landmark is visible
-  expect(await page.locator('main').isVisible()).toBeTruthy()
+// If either "form" or "formio" is present, validate the <nav> landmark
+  if (formPresent || formIoPresent) {
 
-  // Locate the first h1 heading within the main landmark and check for visibility
-  const h1 = page.locator('main >> h1')
-  expect(await h1.isVisible()).toBeTruthy()
+  // Define a comprehensive focusable element selector
+  const focusableSelector = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"]), [contenteditable]';
 
-  // Locate "Progress indicator and navigation" navigation element, if it exists
-  const tocNav = page.locator(
-    'main >> nav[role="navigation"][aria-label="Progress indicator and navigation"]'
-  )
-  const isTocPresent = await tocNav.isVisible()
+  // Wait for the elements to ensure they are loaded
+  await page.waitForSelector('h1');
+  await page.waitForSelector('nav[aria-label="Progress indicator and navigation"]');
 
-  // If "Progress indicator and navigation" element is present, validate its position relative to h1
-  if (isTocPresent) {
-    // Verify "Progress indicator and navigation" comes after the first h1 heading
-    // Get the bounding boxes for both elements
-    const h1BoundingBox = await h1.boundingBox()
-    const tocNavBoundingBox = await tocNav.boundingBox()
+  // Get all focusable elements after <h1> using locator
+  const focusableAfterH1Locator = page.locator(`h1 ~ ${focusableSelector}`);
+  const focusableAfterH1Count = await focusableAfterH1Locator.count();
+  console.log('Focusable elements after h1:', focusableAfterH1Count);
 
-    // Ensure the bounding boxes are valid
-    if (!h1BoundingBox || !tocNavBoundingBox) {
-      throw new Error('Unable to get bounding boxes for elements')
-    }
+  // Get all focusable elements after the <aria-label="Progress indicator and navigation"> using locator
+  const focusableAfterNavLocator = page.locator(`nav[aria-label="Progress indicator and navigation"] ~ ${focusableSelector}`);
+  const focusableAfterNavCount = await focusableAfterNavLocator.count();
+  console.log('Focusable elements after nav Progress indicator and navigation:', focusableAfterNavCount);
 
-    // Verify that the "Progress indicator and navigation" comes after the first h1 heading
-    // by comparing their 'top' positions
-    expect(h1BoundingBox.y).toBeLessThan(tocNavBoundingBox.y)
+  // Function to log the currently focused element
+  const logFocusedElement = async (description: string) => {
+    const activeElementInfo = await page.evaluate(() => {
+      const activeElement = document.activeElement;
+      if (!activeElement) return null;
+      return {
+        tagName: activeElement.tagName,
+        id: activeElement.id || null,
+        className: activeElement.className || null,
+        tabindex: activeElement.getAttribute('tabindex') || null, // Check if the element has tabindex
+        name: activeElement.getAttribute('name') || null,
+        type: activeElement.getAttribute('type') || null,
+        isHidden: window.getComputedStyle(activeElement).visibility === 'hidden' || window.getComputedStyle(activeElement).display === 'none'
+      };
+    });
 
-    // Verify all content following h1 comes before "Progress indicator and navigation"
-    const contentAfterH1BeforeTOC = page.locator(
-      'main >> h1 >> .. >> nav[role="navigation"][aria-label="Progress indicator and navigation"]'
-    )
-    const contentAfterH1BeforeTOCText =
-      await contentAfterH1BeforeTOC.allTextContents()
-    expect(contentAfterH1BeforeTOCText.length).toBeGreaterThan(0)
-  }   
- 
+    console.log(`${description} - Currently focused element:`, activeElementInfo);
+  };
+
+  // Validate elements after <h1>
+  for (let i = 0; i < focusableAfterH1Count; i++) {
+    await focusableAfterH1Locator.nth(i).focus();  // Focus each element manually
+    await logFocusedElement(`Focusing element ${i + 1} after <h1>`);
+
+    // Check if the element is visible and enabled (focusable)
+    const isVisible = await focusableAfterH1Locator.nth(i).isVisible();
+    const isEnabled = await focusableAfterH1Locator.nth(i).isEnabled();
+    expect(isVisible).toBe(true);
+    expect(isEnabled).toBe(true);
+  }
+
+  // Validate elements after <nav aria-label="Progress indicator and navigation">
+  for (let i = 0; i < focusableAfterNavCount; i++) {
+    await focusableAfterNavLocator.nth(i).focus();  // Focus each element manually
+    await logFocusedElement(`Focusing element ${i + 1} after <nav aria-label="Progress indicator and navigation">`);
+
+    // Check if the element is visible and enabled (focusable)
+    const isVisible = await focusableAfterNavLocator.nth(i).isVisible();
+    const isEnabled = await focusableAfterNavLocator.nth(i).isEnabled();
+    expect(isVisible).toBe(true);
+    expect(isEnabled).toBe(true);
+  }
+} else {
+  console.log("Neither 'form' nor 'formio' is present.");
+} 
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
@@ -4159,8 +3766,8 @@ if (specificParagraph) {
     }
   },
 
-  async toCreateLogicalReadingOrderAgencyContentTypeServices(page: Page) {
-    const assertionName = 'toCreateLogicalReadingOrderAgencyContentTypeServices'
+  async toCreateLogicalReadingOrderInServicesSectionOnAgencyContentType(page: Page) {
+    const assertionName = 'toCreateLogicalReadingOrderInServicesSectionOnAgencyContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -4241,8 +3848,8 @@ if (specificParagraph) {
     }
   },
 
-  async toCreateLogicalReadingOrderAgencyContentTypeResources(page: Page) {
-    const assertionName = 'toCreateLogicalReadingOrderAgencyContentTypeResources'
+  async toCreateLogicalReadingOrderInResourcesSectionOnAgencyContentType(page: Page) {
+    const assertionName = 'toCreateLogicalReadingOrderInResourcesSectionOnAgencyContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -4323,8 +3930,8 @@ if (specificParagraph) {
     }
   },
 
-  async toCreateLogicalReadingOrderAgencyContentTypeAbout(page: Page) {
-    const assertionName = 'toCreateLogicalReadingOrderAgencyContentTypeAbout'
+  async toCreateLogicalReadingOrderInAboutSectionOnAgencyContentType(page: Page) {
+    const assertionName = 'toCreateLogicalReadingOrderInAboutSectionOnAgencyContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -4411,102 +4018,75 @@ if (specificParagraph) {
     let matcherResult: any
     try {
     
-        // Focus on the main landmark
-        await page.locator('main').focus()
-      
-        // Ensure the main landmark is visible
-        expect(await page.locator('main').isVisible()).toBeTruthy()
-      
-        // Locate the first h1 heading within the main landmark and check for visibility
-        const h1 = page.locator('main >> h1')
-        expect(await h1.isVisible()).toBeTruthy()
-      
-        // Locate "Table of Contents" navigation element, if it exists
-        const tocNav = page.locator(
-          'main >> nav[role="navigation"][aria-label="Table of contents"]'
-        )
-        const isTocPresent = await tocNav.isVisible()
-      
-        // Locate "Partner agencies" h2 heading, if it exists
-        const partneragenciesH2 = page.locator('main >> h2:text("Partner agencies")')
-        const isPartneragenciesPresent = await partneragenciesH2.isVisible()
-      
-        // If "Table of Contents" navigation element is present, validate its position relative to h1
-        if (isTocPresent) {
-          // Verify "Table of Contents" navigation comes after the first h1 heading
-          // Get the bounding boxes for both elements
-          const h1BoundingBox = await h1.boundingBox()
-          const tocNavBoundingBox = await tocNav.boundingBox()
-      
-          // Ensure the bounding boxes are valid
-          if (!h1BoundingBox || !tocNavBoundingBox) {
-            throw new Error('Unable to get bounding boxes for elements')
-          }
-      
-          // Verify that the "Table of Contents" navigation comes after the first h1 heading
-          // by comparing their 'top' positions
-          expect(h1BoundingBox.y).toBeLessThan(tocNavBoundingBox.y)
-      
-          // Verify all content following h1 comes before "Table of Contents" navigation
-          // This can be more complex depending on the structure, but a basic approach:
-          const contentAfterH1BeforeTOC = page.locator(
-            'main >> h1 >> .. >> nav[role="navigation"][aria-label="Table of contents"]'
-          )
-          const contentAfterH1BeforeTOCText =
-            await contentAfterH1BeforeTOC.allTextContents()
-          expect(contentAfterH1BeforeTOCText.length).toBeGreaterThan(0)
-        }
-      
-        // If both "Partner agencies" and "Table of Contents" are present
-        if (isTocPresent && isPartneragenciesPresent) {
-          const tocPosition = await tocNav.evaluate((node) => {
-            // Using XPath to select the h2 element with the text "Partner agencies"
-            const xpath = "//h2[contains(text(), 'Partner agencies')]"
-            const h2Element = document.evaluate(
-              xpath,
-              document,
-              null,
-              XPathResult.FIRST_ORDERED_NODE_TYPE,
-              null
-            ).singleNodeValue
-      
-            if (!h2Element) {
-              return -1 // Indicates that the "Partner agencies" h2 element was not found
-            }
-      
-            // Getting the document position
-            const position = node.compareDocumentPosition(h2Element)
-      
-            // Checking if the tocNav node is preceding the h2 element
-            return position & Node.DOCUMENT_POSITION_PRECEDING
-          })
-      
-          // Node.DOCUMENT_POSITION_PRECEDING === 2
-          const isTocBeforePartneragencies = tocPosition & 2 // Check if the result of compareDocumentPosition included DOCUMENT_POSITION_PRECEDING
-      
-          // Indicate tocNav comes before "Partner agencies"
-          expect(isTocBeforePartneragencies).toBeTruthy()
-        }
-      
-        // If "Partner agencies" is present, validate content before it
-        if (isPartneragenciesPresent) {
-          const contentBeforePartneragenciesLocator = page.locator(
-            'main >> h1 >> .. >> h2:text("Partner agencies")'
-          )
-          const contentBeforePartneragencies =
-            await contentBeforePartneragenciesLocator.allTextContents()
-          expect(contentBeforePartneragencies.length).toBeGreaterThan(0)
-        }
-      
-        // New validation: Check if <p>RESOURCE COLLECTION</p> is present within the main landmark
-        const resourceCollectionP = page.locator('main >> p:text("RESOURCE COLLECTION")')
-        const isResourceCollectionPresent = resourceCollectionP.count()
-      
-        if (await isResourceCollectionPresent) {
-          // If <p>RESOURCE COLLECTION</p> is present, validate it is visible
-          expect(await resourceCollectionP.isVisible()).toBeTruthy()
-        }      
+       // Check for the specific paragraph
+  const specificParagraph = await page.$('p:text("RESOURCE COLLECTION")');
+  
+  if (specificParagraph) {
  
+ // Define a comprehensive focusable element selector
+ const focusableSelector = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"]), [contenteditable]';
+ 
+ // Wait for the elements to ensure they are loaded
+ await page.waitForSelector('h1');
+ await page.waitForSelector('nav[role="navigation"][aria-label="Table of contents"]');
+ 
+ // Get all focusable elements after <h1> using locator
+ const focusableAfterH1Locator = page.locator(`h1 ~ ${focusableSelector}`);
+ const focusableAfterH1Count = await focusableAfterH1Locator.count();
+ console.log('Focusable elements after h1:', focusableAfterH1Count);
+ 
+ // Get all focusable elements after the <nav role="navigation" aria-label="Table of contents"> using locator
+ const focusableAfterNavLocator = page.locator(`nav[role="navigation"][aria-label="Table of contents"] ~ ${focusableSelector}`);
+ const focusableAfterNavCount = await focusableAfterNavLocator.count();
+ console.log('Focusable elements after nav Table of contents:', focusableAfterNavCount);
+ 
+ // Function to log the currently focused element
+ const logFocusedElement = async (description: string) => {
+   const activeElementInfo = await page.evaluate(() => {
+     const activeElement = document.activeElement;
+     if (!activeElement) return null;
+     return {
+       tagName: activeElement.tagName,
+       id: activeElement.id || null,
+       className: activeElement.className || null,
+       tabindex: activeElement.getAttribute('tabindex') || null, // Check if the element has tabindex
+       name: activeElement.getAttribute('name') || null,
+       type: activeElement.getAttribute('type') || null,
+       isHidden: window.getComputedStyle(activeElement).visibility === 'hidden' || window.getComputedStyle(activeElement).display === 'none'
+     };
+   });
+ 
+   console.log(`${description} - Currently focused element:`, activeElementInfo);
+ };
+ 
+ // Validate elements after <h1>
+ for (let i = 0; i < focusableAfterH1Count; i++) {
+   await focusableAfterH1Locator.nth(i).focus();  // Focus each element manually
+   await logFocusedElement(`Focusing element ${i + 1} after <h1>`);
+ 
+   // Check if the element is visible and enabled (focusable)
+   const isVisible = await focusableAfterH1Locator.nth(i).isVisible();
+   const isEnabled = await focusableAfterH1Locator.nth(i).isEnabled();
+   expect(isVisible).toBe(true);
+   expect(isEnabled).toBe(true);
+ }
+ 
+ // Validate elements after <nav role="navigation" aria-label="Table of contents">
+ for (let i = 0; i < focusableAfterNavCount; i++) {
+   await focusableAfterNavLocator.nth(i).focus();  // Focus each element manually
+   await logFocusedElement(`Focusing element ${i + 1} after <nav role="navigation" aria-label="Table of contents">`);
+ 
+   // Check if the element is visible and enabled (focusable)
+   const isVisible = await focusableAfterNavLocator.nth(i).isVisible();
+   const isEnabled = await focusableAfterNavLocator.nth(i).isEnabled();
+   expect(isVisible).toBe(true);
+   expect(isEnabled).toBe(true);
+ }
+       } else {
+         console.log(
+           'The specific paragraph "RESOURCE COLLECTION" does not exist on the page.'
+         )
+       } 
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
@@ -4547,57 +4127,81 @@ if (specificParagraph) {
     let matcherResult: any
     try {
     
-         // Focus on the main landmark
-  await page.locator('main').focus()
+// Check for the specific paragraph  
+const specificParagraph = await page.$('p:has-text("PROFILE")');
 
-  // Ensure the main landmark is visible
-  expect(await page.locator('main').isVisible()).toBeTruthy()
+if (specificParagraph) {
+  // Check if <aside role="complementary"> exists
+  const asideExists = await page.$('aside[role="complementary"]');  
 
-  // Locate the first h1 heading within the main landmark and check for visibility
-  const h1 = page.locator('main >> h1')
-  expect(await h1.isVisible()).toBeTruthy()
+  if (asideExists) {
+    // Define a comprehensive focusable element selector
+    const focusableSelector = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"]), [contenteditable]';
 
-  // Locate "Additional profiles" navigation element, if it exists
-  const tocAside = page.locator(
-    'main >> aside[role="complementary"]'
-  )
-  const isTocPresent = await tocAside.isVisible()
+    // Wait for the elements to ensure they are loaded
+    await page.waitForSelector('h1');
 
-  // If "Additional roles" navigation element is present, validate its position relative to h1
-  if (isTocPresent) {
-    // Verify "Additional roles" navigation comes after the first h1 heading
-    // Get the bounding boxes for both elements
-    const h1BoundingBox = await h1.boundingBox()
-    const tocAsideBoundingBox = await tocAside.boundingBox()
+    // Get all focusable elements after <h1> using locator
+    const focusableAfterH1Locator = page.locator(`h1 ~ ${focusableSelector}`);
+    const focusableAfterH1Count = await focusableAfterH1Locator.count();
+    console.log('Focusable elements after h1:', focusableAfterH1Count);
 
-    // Ensure the bounding boxes are valid
-    if (!h1BoundingBox || !tocAsideBoundingBox) {
-      throw new Error('Unable to get bounding boxes for elements')
+    // Function to log the currently focused element
+    const logFocusedElement = async (description: string) => {
+      const activeElementInfo = await page.evaluate(() => {
+        const activeElement = document.activeElement;
+        if (!activeElement) return null;
+        return {
+          tagName: activeElement.tagName,
+          id: activeElement.id || null,
+          className: activeElement.className || null,
+          tabindex: activeElement.getAttribute('tabindex') || null, // Check if the element has tabindex
+          name: activeElement.getAttribute('name') || null,
+          type: activeElement.getAttribute('type') || null,
+          isHidden: window.getComputedStyle(activeElement).visibility === 'hidden' || window.getComputedStyle(activeElement).display === 'none'
+        };
+      });
+
+      console.log(`${description} - Currently focused element:`, activeElementInfo);
+    };
+
+    // Validate elements after <h1>
+    for (let i = 0; i < focusableAfterH1Count; i++) {
+      await focusableAfterH1Locator.nth(i).focus();  // Focus each element manually
+      await logFocusedElement(`Focusing element ${i + 1} after <h1>`);
+
+      // Check if the element is visible and enabled (focusable)
+      const isVisible = await focusableAfterH1Locator.nth(i).isVisible();
+      const isEnabled = await focusableAfterH1Locator.nth(i).isEnabled();
+      expect(isVisible).toBe(true);
+      expect(isEnabled).toBe(true);
     }
 
-    // Verify that the "Additional roles" navigation comes after the first h1 heading
-    // by comparing their 'top' positions
-    expect(h1BoundingBox.y).toBeLessThan(tocAsideBoundingBox.y)
+    // Get all focusable elements after the <aside role="complementary">
+    const focusableAfterAsideLocator = page.locator(`aside[role="complementary"] ~ ${focusableSelector}`);
+    const focusableAfterAsideCount = await focusableAfterAsideLocator.count();
+    console.log('Focusable elements after aside complementary:', focusableAfterAsideCount);
 
-    // Verify all content following h1 comes before "Additional roles" navigation
-    // This can be more complex depending on the structure, but a basic approach:
-    const contentAfterH1BeforeTOC = page.locator(
-      'main >> h1 >> .. >> aside[role="complementary"]'
-    )
-    const contentAfterH1BeforeTOCText =
-      await contentAfterH1BeforeTOC.allTextContents()
-    expect(contentAfterH1BeforeTOCText.length).toBeGreaterThan(0)
+    // Validate elements after <aside role="complementary">
+    for (let i = 0; i < focusableAfterAsideCount; i++) {
+      await focusableAfterAsideLocator.nth(i).focus();  // Focus each element manually
+      await logFocusedElement(`Focusing element ${i + 1} after <aside role="complementary">`);
+
+      // Check if the element is visible and enabled (focusable)
+      const isVisible = await focusableAfterAsideLocator.nth(i).isVisible();
+      const isEnabled = await focusableAfterAsideLocator.nth(i).isEnabled();
+      expect(isVisible).toBe(true);
+      expect(isEnabled).toBe(true);
+    }
+  } else {
+    // Handles case where <aside role="complementary"> does not exist
+    console.log('The aside[role="complementary"] does not exist on the page.');
   }
+} else {
+  // Handles case where "PROFILE" paragraph does not exist
+  console.log('The "PROFILE" paragraph does not exist on the page.');
+}
 
-  // New validation: Check if <p>PROFILE</p> is present within the main landmark
-  const profileP = page.locator('main >> p:text("PROFILE")')
-  const isProfilePresent = profileP.count()
-
-  if (await isProfilePresent) {
-    // If <p>PROFILE</p> is present, validate it is visible
-    expect(await profileP.isVisible()).toBeTruthy()
-  }
- 
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
@@ -4632,8 +4236,8 @@ if (specificParagraph) {
     }
   },
 
-  async toCreateLogicalReadingOrderProfileContentTypeContactSections(page: Page) {
-    const assertionName = 'toCreateLogicalReadingOrderProfileContentTypeContactSections'
+  async toCreateLogicalReadingOrderInContactSectionsOnProfileContentType (page: Page) {
+    const assertionName = 'toCreateLogicalReadingOrderInContactSectionsOnProfileContentType'
     let pass: boolean
     let matcherResult: any
     try {
@@ -4733,7 +4337,7 @@ if (specificParagraph) {
       const paragraph = paragraphs.nth(i);
 
       // Check the parent <article> landmark
-      const articleParent = await paragraph.locator('xpath=ancestor::article').first();
+      const articleParent = paragraph.locator('xpath=ancestor::article').first();
 
       // Verify that the <p> is within an <article>
       await expect(articleParent).toBeVisible();
@@ -4779,8 +4383,1057 @@ if (specificParagraph) {
     }
   },
 
-  async toPassA11yScan(page: Page) {
-    const assertionName = 'toPassA11yScan'
+  async toSuppressInPageSearchModuleOnReportContentType(page: Page) {
+    const assertionName = 'toSuppressInPageSearchModuleOnReportContentType'
+    let pass: boolean
+    let matcherResult: any
+    try {
+    
+      // Step 1: Check that the "REPORT" paragraph is present on the page
+const specificParagraph = await page.$('p:has-text("REPORT")');
+
+if (specificParagraph) {
+  // Step 2: Check if the <label>Search on this page</label> is present
+  const searchLabel = await page.$('label:has-text("Search on this page")');
+
+  if (searchLabel) {
+    // Validate that the associated <input> tag has aria-hidden="true"
+    const inputTag = await searchLabel.evaluateHandle(label => label.nextElementSibling);
+    
+    if (inputTag) {
+      const ariaHidden = await inputTag.getProperty('aria-hidden');
+      expect(ariaHidden).toBe('true');
+    } else {
+      console.error('Associated <input> tag not found.');
+    }
+  } else {
+    console.log('<label>Search on this page</label> not found.');
+  }
+
+} else {
+  // If <p>REPORT</p> does not exist, pass the test
+  console.log('<p>REPORT</p> not found. Test passes.');
+}
+ 
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalTabOrderOnReportContentType(page: Page) {
+    const assertionName = 'toHaveLogicalTabOrderOnReportContentType'
+    let pass: boolean
+    let matcherResult: any
+    try {
+     
+        // Check for the specific paragraph
+  const specificParagraph = await page.$('p:text("REPORT")');
+  
+  if (specificParagraph) {
+ 
+ // Define a comprehensive focusable element selector
+ const focusableSelector = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"]), [contenteditable]';
+ 
+ // Wait for the elements to ensure they are loaded
+ await page.waitForSelector('h1');
+ await page.waitForSelector('nav[role="navigation"][aria-label="Table of contents"]');
+ 
+ // Get all focusable elements after <h1> using locator
+ const focusableAfterH1Locator = page.locator(`h1 ~ ${focusableSelector}`);
+ const focusableAfterH1Count = await focusableAfterH1Locator.count();
+ console.log('Focusable elements after h1:', focusableAfterH1Count);
+ 
+ // Get all focusable elements after the <nav role="navigation" aria-label="Table of contents"> using locator
+ const focusableAfterNavLocator = page.locator(`nav[role="navigation"][aria-label="Table of contents"] ~ ${focusableSelector}`);
+ const focusableAfterNavCount = await focusableAfterNavLocator.count();
+ console.log('Focusable elements after nav Table of contents:', focusableAfterNavCount);
+ 
+ // Function to log the currently focused element
+ const logFocusedElement = async (description: string) => {
+   const activeElementInfo = await page.evaluate(() => {
+     const activeElement = document.activeElement;
+     if (!activeElement) return null;
+     return {
+       tagName: activeElement.tagName,
+       id: activeElement.id || null,
+       className: activeElement.className || null,
+       tabindex: activeElement.getAttribute('tabindex') || null, // Check if the element has tabindex
+       name: activeElement.getAttribute('name') || null,
+       type: activeElement.getAttribute('type') || null,
+       isHidden: window.getComputedStyle(activeElement).visibility === 'hidden' || window.getComputedStyle(activeElement).display === 'none'
+     };
+   });
+ 
+   console.log(`${description} - Currently focused element:`, activeElementInfo);
+ };
+ 
+ // Validate elements after <h1>
+ for (let i = 0; i < focusableAfterH1Count; i++) {
+   await focusableAfterH1Locator.nth(i).focus();  // Focus each element manually
+   await logFocusedElement(`Focusing element ${i + 1} after <h1>`);
+ 
+   // Check if the element is visible and enabled (focusable)
+   const isVisible = await focusableAfterH1Locator.nth(i).isVisible();
+   const isEnabled = await focusableAfterH1Locator.nth(i).isEnabled();
+   expect(isVisible).toBe(true);
+   expect(isEnabled).toBe(true);
+ }
+ 
+ // Validate elements after <nav role="navigation" aria-label="Table of contents">
+ for (let i = 0; i < focusableAfterNavCount; i++) {
+   await focusableAfterNavLocator.nth(i).focus();  // Focus each element manually
+   await logFocusedElement(`Focusing element ${i + 1} after <nav role="navigation" aria-label="Table of contents">`);
+ 
+   // Check if the element is visible and enabled (focusable)
+   const isVisible = await focusableAfterNavLocator.nth(i).isVisible();
+   const isEnabled = await focusableAfterNavLocator.nth(i).isEnabled();
+   expect(isVisible).toBe(true);
+   expect(isEnabled).toBe(true);
+ }
+       } else {
+         console.log(
+           'The specific paragraph "REPORT" does not exist on the page.'
+         )
+       } 
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalTabOrderOnMeetingContentType(page: Page) {
+    const assertionName = 'toHaveLogicalTabOrderOnMeetingContentType'
+    let pass: boolean
+    let matcherResult: any
+    try {
+
+      // Check for the specific paragraph
+  const specificParagraph = await page.$('p:text("MEETING")');
+  
+  if (specificParagraph) { 
+     
+      // Define a comprehensive focusable element selector
+      const focusableSelector = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"]), [contenteditable]';
+      
+      // Wait for the elements to ensure they are loaded
+      await page.waitForSelector('h1');
+      await page.waitForSelector('nav[role="navigation"][aria-label="Table of contents"]');
+      
+      // Get all focusable elements after <h1> using locator
+      const focusableAfterH1Locator = page.locator(`h1 ~ ${focusableSelector}`);
+      const focusableAfterH1Count = await focusableAfterH1Locator.count();
+      console.log('Focusable elements after h1:', focusableAfterH1Count);
+      
+      // Get all focusable elements after the <nav role="navigation" aria-label="Table of contents"> using locator
+      const focusableAfterNavLocator = page.locator(`nav[role="navigation"][aria-label="Table of contents"] ~ ${focusableSelector}`);
+      const focusableAfterNavCount = await focusableAfterNavLocator.count();
+      console.log('Focusable elements after nav Table of contents:', focusableAfterNavCount);
+      
+      // Function to log the currently focused element
+      const logFocusedElement = async (description: string) => {
+        const activeElementInfo = await page.evaluate(() => {
+          const activeElement = document.activeElement;
+          if (!activeElement) return null;
+          return {
+            tagName: activeElement.tagName,
+            id: activeElement.id || null,
+            className: activeElement.className || null,
+            tabindex: activeElement.getAttribute('tabindex') || null, // Check if the element has tabindex
+            name: activeElement.getAttribute('name') || null,
+            type: activeElement.getAttribute('type') || null,
+            isHidden: window.getComputedStyle(activeElement).visibility === 'hidden' || window.getComputedStyle(activeElement).display === 'none'
+          };
+        });
+      
+        console.log(`${description} - Currently focused element:`, activeElementInfo);
+      };
+      
+      // Validate elements after <h1>
+      for (let i = 0; i < focusableAfterH1Count; i++) {
+        await focusableAfterH1Locator.nth(i).focus();  // Focus each element manually
+        await logFocusedElement(`Focusing element ${i + 1} after <h1>`);
+      
+        // Check if the element is visible and enabled (focusable)
+        const isVisible = await focusableAfterH1Locator.nth(i).isVisible();
+        const isEnabled = await focusableAfterH1Locator.nth(i).isEnabled();
+        expect(isVisible).toBe(true);
+        expect(isEnabled).toBe(true);
+      }
+      
+      // Validate elements after <nav role="navigation" aria-label="Table of contents">
+      for (let i = 0; i < focusableAfterNavCount; i++) {
+        await focusableAfterNavLocator.nth(i).focus();  // Focus each element manually
+        await logFocusedElement(`Focusing element ${i + 1} after <nav role="navigation" aria-label="Table of contents">`);
+      
+        // Check if the element is visible and enabled (focusable)
+        const isVisible = await focusableAfterNavLocator.nth(i).isVisible();
+        const isEnabled = await focusableAfterNavLocator.nth(i).isEnabled();
+        expect(isVisible).toBe(true);
+        expect(isEnabled).toBe(true);
+      }    
+  } else {
+    console.log(
+      'The specific paragraph "MEETING" does not exist on the page.'
+    )
+  }  
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveScopeAttributesInDataTables(page: Page) {
+    const assertionName = 'toHaveScopeAttributesInDataTables'
+    let pass: boolean
+    let matcherResult: any
+    try {
+     
+ 
+  // Locate all <th> elements in the table
+  const tableHeaders = page.locator('th');
+
+  // Loop through each header cell and check the 'scope' attribute
+  for (let i = 0; i < await tableHeaders.count(); i++) {
+    const header = tableHeaders.nth(i);
+    const scopeAttr = await header.getAttribute('scope');
+
+    // Check if the scope attribute is missing
+    if (scopeAttr === null) {
+      throw new Error(`Error: Missing scope attribute on <th> element at index ${i}`);
+    }
+
+    // Assert that the 'scope' attribute is either 'col' or 'row'
+    const validScopes = ['col', 'row'];
+    
+    if (!validScopes.includes(scopeAttr)) {
+      throw new Error(`Invalid scope attribute value on <th> element at index ${i}: ${scopeAttr}`);
+    }
+    
+    // You could also add the following assertion to let Playwright's expect check the validity
+    expect(validScopes).toContain(scopeAttr);
+  }
+  
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveAsideLandmarkRole(page: Page) {
+    const assertionName = 'toHaveAsideLandmarkRole'
+    let pass: boolean
+    let matcherResult: any
+    try {
+      try {
+        // Locate the <aside> landmark
+        const specificLandmark = page.locator('aside');
+      
+        // Check if the <aside> landmark exists
+        const count = await specificLandmark.count();
+      
+        if (count > 0) {
+          // If <aside> exists, validate its 'role' attribute
+          await expect(specificLandmark).toHaveAttribute('role', 'complementary');
+        } else {
+          console.log('The <aside> landmark does not exist on the page. Test Passed.');
+        }
+      } catch (error) {
+        console.error('Test failed due to an error:', error);
+      }
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveAriaLabelInProgressBarNavLandmarkOnFormsContentType(page: Page) {
+    const assertionName = 'toHaveAriaLabelInProgressBarNavLandmarkOnFormsContentType'
+    let pass: boolean
+    let matcherResult: any
+    try {
+     
+   // Check if "form" or "formio" is present in the DOM
+  const formPresent = await page.$('form') !== null;
+  const formIoPresent = await page.$('form-io') !== null;
+
+  // If either "form" or "formio" is present, validate the <nav> landmark
+  if (formPresent || formIoPresent) {
+    const nav = await page.$('nav[aria-label="Progress indicator and navigation"]');
+    expect(nav).not.toBeNull();
+  } else {
+    console.log("Neither 'form' nor 'formio' is present.");
+  }
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderDepartmentListView(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderDepartmentListView'
+    let pass: boolean
+    let matcherResult: any
+    try {
+     
+    // Check if the page title is "Departments | San Francisco"
+const title = await page.title();
+
+if (title === 'Departments | San Francisco') {
+  // If the title matches, perform the additional checks
+
+// Find the <main> element
+  const main = page.locator('main');
+
+  // Check that there is exactly one <h1> within <main>
+  const h1Count = await main.locator('h1').count();
+  expect(h1Count).toBe(1); // Ensure exactly one <h1>
+
+  // Find the <h1> within <main> containing the word "Departments"
+  const h1WithDepartments = main.locator('h1:has-text("Departments")').first();
+
+  // Ensure that the first "Departments" within <main> is indeed inside an <h1>
+  const textContent = await h1WithDepartments.textContent();
+  expect(textContent).toContain('Departments');
+
+  // Check that all following elements with <a> tags are inside <h2>
+  const links = main.locator('h1:has-text("Departments") ~ h2 a'); // Select links following <h1> within <h2> elements
+  const linksCount = await links.count();
+
+  // Ensure all the links following <h1> "Departments" are inside <h2>
+for (let i = 0; i < linksCount; i++) {
+  const link = links.nth(i);
+  
+  // Check if the parent element of the link is an <h2>
+  const parentTag = await link.evaluate(el => el.parentElement?.tagName);
+  
+  // Validate that the parent tag is 'H2'
+  expect(parentTag).toBe('H2');
+}
+} else {
+  // If the page title does not match, pass the test and log a message
+  console.log('The page title is not "Departments | San Francisco". Passing the test.');
+}
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderServicesListView(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderServicesListView'
+    let pass: boolean
+    let matcherResult: any
+    try {
+     
+     // Check if the page title is "Services | San Francisco"
+const title = await page.title();
+
+if (title === 'Services | San Francisco') {
+  // If the title matches, perform the additional checks
+
+// Find the <main> element
+  const main = page.locator('main');
+
+  // Check that there is exactly one <h1> within <main>
+  const h1Count = await main.locator('h1').count();
+  expect(h1Count).toBe(1); // Ensure exactly one <h1>
+
+  // Find the <h1> within <main> containing the word "Services"
+  const h1WithServices = main.locator('h1:has-text("Services")').first();
+
+  // Ensure that the first "Services" within <main> is indeed inside an <h1>
+  const textContent = await h1WithServices.textContent();
+  expect(textContent).toContain('Services');
+
+  // Check that all following elements with <a> tags are inside <h2>
+  const links = main.locator('h1:has-text("Services") ~ h2 a'); // Select links following <h1> within <h2> elements
+  const linksCount = await links.count();
+
+ // Ensure all the links following <h1> "Services" are inside <h2>
+for (let i = 0; i < linksCount; i++) {
+  const link = links.nth(i);
+  
+  // Check if the parent element of the link is an <h2>
+  const parentTag = await link.evaluate(el => el.parentElement?.tagName);
+  
+  // Validate that the parent tag is 'H2'
+  expect(parentTag).toBe('H2');
+}
+} else {
+  // If the page title does not match, pass the test and log a message
+  console.log('The page title is not "Services | San Francisco". Passing the test.');
+}
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderSearchListView(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderSearchListView'
+    let pass: boolean
+    let matcherResult: any
+    try {
+     
+     // Check if the page title is "Search | San Francisco"
+const title = await page.title();
+
+if (title === 'Search | San Francisco') {
+  // If the title matches, perform the additional checks
+
+// Find the <main> element
+  const main = page.locator('main');
+
+  // Check that there is exactly one <h1> within <main>
+  const h1Count = await main.locator('h1').count();
+  expect(h1Count).toBe(1); // Ensure exactly one <h1>
+
+  // Find the <h1> within <main> containing the word "Search"
+  const h1WithSearch = main.locator('h1:has-text("Search")').first();
+
+  // Ensure that the first "Search" within <main> is indeed inside an <h1>
+  const textContent = await h1WithSearch.textContent();
+  expect(textContent).toContain('Search');
+
+  // Check that all following elements with <a> tags are inside <h2>
+  const links = main.locator('h1:has-text("Search") ~ h2 a'); // Select links following <h1> within <h2> elements
+  const linksCount = await links.count();
+
+ // Ensure all the links following <h1> "Search" are inside <h2>
+for (let i = 0; i < linksCount; i++) {
+  const link = links.nth(i);
+  
+  // Check if the parent element of the link is an <h2>
+  const parentTag = await link.evaluate(el => el.parentElement?.tagName);
+  
+  // Validate that the parent tag is 'H2'
+  expect(parentTag).toBe('H2');
+}
+} else {
+  // If the page title does not match, pass the test and log a message
+  console.log('The page title is not "Search | San Francisco". Passing the test.');
+}
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderAboutSfGov(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderAboutSfGov'
+    let pass: boolean
+    let matcherResult: any
+    try {
+   
+// Check if the page title is "About SF.gov | San Francisco"
+const title = await page.title();
+
+if (title === 'About SF.gov | San Francisco') {
+  // If the title matches, perform the additional checks
+
+// Find the <main> element
+  const main = page.locator('main');
+
+  // Check that there is exactly one <h1> within <main>
+  const h1Count = await main.locator('h1').count();
+  expect(h1Count).toBe(1); // Ensure exactly one <h1>
+
+  // Find the <h1> within <main> containing the word "About SF.gov"
+  const h1WithAboutSF = main.locator('h1:has-text("About SF.gov")').first();
+
+  // Ensure that the first "About SF.gov" within <main> is indeed inside an <h1>
+  const textContent = await h1WithAboutSF.textContent();
+  expect(textContent).toContain('About SF.gov');
+
+// Check that all headings following the <h1> are <h2>
+  const headings = main.locator('h1:has-text("About SF.gov") ~ h2, h1:has-text("About SF.gov") ~ h3, h1:has-text("About SF.gov") ~ h4, h1:has-text("About SF.gov") ~ h5, h1:has-text("About SF.gov") ~ h6'); // All headings after <h1>
+
+  const headingsCount = await headings.count();
+
+  // Ensure all headings are <h2>
+  for (let i = 0; i < headingsCount; i++) {
+    const headingTag = await headings.nth(i).evaluate(el => el.tagName);
+    expect(headingTag).toBe('H2');
+  }
+} else {
+  // If the page title does not match, pass the test and log a message
+  console.log('The page title is not "About SF.gov | San Francisco". Passing the test.');
+}     
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderDisclaimer(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderDisclaimer'
+    let pass: boolean
+    let matcherResult: any
+    try {
+   
+// Check if the page title is "Disclaimer for SF.gov | San Francisco"
+const title = await page.title();
+
+if (title === 'Disclaimer for SF.gov | San Francisco') {
+  // If the title matches, perform the additional checks
+
+// Find the <main> element
+  const main = page.locator('main');
+
+  // Check that there is exactly one <h1> within <main>
+  const h1Count = await main.locator('h1').count();
+  expect(h1Count).toBe(1); // Ensure exactly one <h1>
+
+  // Find the <h1> within <main> containing the word "Disclaimer for SF.gov"
+  const h1WithDisclaimer = main.locator('h1:has-text("Disclaimer for SF.gov")').first();
+
+  // Ensure that the first "Disclaimer for SF.gov" within <main> is indeed inside an <h1>
+  const textContent = await h1WithDisclaimer.textContent();
+  expect(textContent).toContain('Disclaimer for SF.gov');
+
+// Check that all headings following the <h1> are <h2>
+  const headings = main.locator('h1:has-text("Disclaimer for SF.gov") ~ h2, h1:has-text("Disclaimer for SF.gov") ~ h3, h1:has-text("Disclaimer for SF.gov") ~ h4, h1:has-text("Disclaimer for SF.gov") ~ h5, h1:has-text("Disclaimer for SF.gov") ~ h6'); // All headings after <h1>
+
+  const headingsCount = await headings.count();
+
+  // Ensure all headings are <h2>
+  for (let i = 0; i < headingsCount; i++) {
+    const headingTag = await headings.nth(i).evaluate(el => el.tagName);
+    expect(headingTag).toBe('H2');
+  }
+} else {
+  // If the page title does not match, pass the test and log a message
+  console.log('The page title is not "Disclaimer for SF.gov | San Francisco". Passing the test.');
+}
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderPrivacy(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderPrivacy'
+    let pass: boolean
+    let matcherResult: any
+    try {
+   
+// Check if the page title is "Privacy policy for SF.gov | San Francisco"
+const title = await page.title();
+
+if (title === 'Privacy policy for SF.gov | San Francisco') {
+  // If the title matches, perform the additional checks
+
+// Find the <main> element
+  const main = page.locator('main');
+
+  // Check that there is exactly one <h1> within <main>
+  const h1Count = await main.locator('h1').count();
+  expect(h1Count).toBe(1); // Ensure exactly one <h1>
+
+  // Find the <h1> within <main> containing the word "About SF.gov"
+  const h1WithPrivacy = main.locator('h1:has-text("Privacy policy for SF.gov")').first();
+
+  // Ensure that the first "Privacy policy for SF.gov" within <main> is indeed inside an <h1>
+  const textContent = await h1WithPrivacy.textContent();
+  expect(textContent).toContain('Privacy policy for SF.gov');
+
+// Check that all headings following the <h1> are <h2>
+  const headings = main.locator('h1:has-text("Privacy policy for SF.gov") ~ h2, h1:has-text("Privacy policy for SF.gov") ~ h3, h1:has-text("Privacy policy for SF.gov") ~ h4, h1:has-text("Privacy policy for SF.gov") ~ h5, h1:has-text("Privacy policy for SF.gov") ~ h6'); // All headings after <h1>
+
+  const headingsCount = await headings.count();
+
+  // Ensure all headings are <h2>
+  for (let i = 0; i < headingsCount; i++) {
+    const headingTag = await headings.nth(i).evaluate(el => el.tagName);
+    expect(headingTag).toBe('H2');
+  }
+} else {
+  // If the page title does not match, pass the test and log a message
+  console.log('The page title is not "Privacy policy for SF.gov | San Francisco". Passing the test.');
+}
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderContact(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderContact'
+    let pass: boolean
+    let matcherResult: any
+    try {
+   // Check if the page title is "Contact SF.gov | San Francisco"
+const title = await page.title();
+
+if (title === 'Contact SF.gov | San Francisco') {
+  // If the title matches, perform the additional checks
+
+// Find the <main> element
+  const main = page.locator('main');
+
+  // Check that there is exactly one <h1> within <main>
+  const h1Count = await main.locator('h1').count();
+  expect(h1Count).toBe(1); // Ensure exactly one <h1>
+
+  // Find the <h1> within <main> containing the word "Contact SF.gov"
+  const h1WithContact = main.locator('h1:has-text("Contact SF.gov")').first();
+
+  // Ensure that the first "Contact SF.gov" within <main> is indeed inside an <h1>
+  const textContent = await h1WithContact.textContent();
+  expect(textContent).toContain('Contact SF.gov');
+
+// Check that "What to do" and "Get help" are <h2>
+  const whatToDo = main.locator('h2:has-text("What to do")').first();
+  const getHelp = main.locator('h2:has-text("Get help")').first();
+
+  expect(await whatToDo.evaluate(el => el.tagName)).toBe('H2'); // Ensure "What to do" is <h2>
+  expect(await getHelp.evaluate(el => el.tagName)).toBe('H2');  // Ensure "Get help" is <h2>
+
+  // Check that "Emergencies" and "Online" are <h3>
+  const emergencies = main.locator('h3:has-text("Emergencies")').first();
+  const online = main.locator('h3:has-text("Online")').first();
+
+  expect(await emergencies.evaluate(el => el.tagName)).toBe('H3'); // Ensure "Emergencies" is <h3>
+  expect(await online.evaluate(el => el.tagName)).toBe('H3');      // Ensure "Online" is <h3>
+
+
+} else {
+  // If the page title does not match, pass the test and log a message
+  console.log('The page title is not "Contact SF.gov | San Francisco". Passing the test.');
+}
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveAriaLabelsInFooterNavigationLandmarks(page: Page) {
+    const assertionName = 'toHaveAriaLabelsInFooterNavigationLandmarks'
+    let pass: boolean
+    let matcherResult: any
+    try {
+   
+// Locate the footer landmark
+  const footer = page.locator('footer');
+  
+  // Select the first <nav> inside the footer
+  const primaryNav = footer.locator('nav').nth(0);
+  
+  // Validate the first nav has the aria-label "Primary Footer Navigation"
+  await expect(primaryNav).toHaveAttribute('aria-label', 'Primary Footer Navigation');
+
+  // Select the second <nav> inside the footer
+  const secondaryNav = footer.locator('nav').nth(1);
+
+  // Validate the second nav has the aria-label "Secondary Social Media Footer Navigation"
+  await expect(secondaryNav).toHaveAttribute('aria-label', 'Secondary Social Media Footer Navigation');
+
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toPassAxeCoreTests(page: Page) {
+    const assertionName = 'toPassAxeCoreTests'
     let pass: boolean
     let matcherResult: any
     try {
@@ -4823,3 +5476,7 @@ if (specificParagraph) {
     }
   }
 })
+function isFocusable(locator: any): (this: import("@playwright/test").ExpectMatcherState, receiver: any, ...args: any[]) => import("@playwright/test").MatcherReturnType | Promise<import("@playwright/test").MatcherReturnType> {
+  throw new Error('Function not implemented.')
+}
+

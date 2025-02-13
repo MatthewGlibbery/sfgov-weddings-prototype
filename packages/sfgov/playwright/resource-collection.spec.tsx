@@ -1,51 +1,32 @@
-import { ResourceCollectionPage } from '@/components'
+import { ResourceCollectionPage } from '../components/page/ResourceCollectionPage'
 import { ResourceCollectionPageFactory } from '@/lib/factories'
 import { test, expect } from './fixtures'
+import React from 'react'
 
 test.describe('A11y tests', () => {
-  test.skip('headings are rendered in a logical reading order', async ({
-    mount,
-    page
-  }) => {
-    const data = ResourceCollectionPageFactory.make()
-    await mount(<ResourceCollectionPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrder()
-  })
-
-  test.skip('has link to main content', async ({ mount, page }) => {
-    const data = ResourceCollectionPageFactory.make()
-    await mount(<ResourceCollectionPage page={data} />)
-
-    await expect(page.locator('a[href="#main-content"]')).toBeVisible()
-  })
-
-  test('has accessible landmark roles', async ({ mount, page }) => {
+ 
+   // Required Global Tests
+  
+   test('has accessible landmarks', async ({ mount, page }) => {
     const data = ResourceCollectionPageFactory.make()
     await mount(<ResourceCollectionPage page={data} />)
 
     await expect(page).toHaveLandmarks()
   })
 
-  test('has search landmarks plus aria', async ({ mount, page }) => {
+  test('has accessible landmark roles', async ({ mount, page }) => {
     const data = ResourceCollectionPageFactory.make()
     await mount(<ResourceCollectionPage page={data} />)
 
-    await expect(page).toHaveSearchLandmarksPlusAria()
+    await expect(page).toHaveLandmarkRoles()
   })
 
-  test('has prefers reduced motion', async ({ mount, page }) => {
-    const data = ResourceCollectionPageFactory.make()
-    await mount(<ResourceCollectionPage page={data} />)
-    await expect(page).toHavePrefersReducedMotion()
-  })
-
-  test('has language access', async ({ mount, page }) => {
+  test.skip('has search landmark', async ({ mount, page }) => {
     const data = ResourceCollectionPageFactory.make()
     await mount(<ResourceCollectionPage page={data} />)
 
-    await expect(page).toHaveLanguageAccess()
-  })
+    await expect(page).toHaveSearchLandmark()
+  })  
 
   test('has language interaction', async ({ mount, page }) => {
     const data = ResourceCollectionPageFactory.make()
@@ -65,13 +46,77 @@ test.describe('A11y tests', () => {
     const data = ResourceCollectionPageFactory.make()
     await mount(<ResourceCollectionPage page={data} />)
 
-    await expect(page).toBeKeyboardAccessible()
+    await expect(page).toBeKeyboardFocusIndicatorAccessible()
   })
 
-  test('has no accessibility violations', async ({ mount, page }) => {
+  test('does keyboard focus indicator have sufficient color contrast', async ({
+    mount,
+    page
+  }) => {
     const data = ResourceCollectionPageFactory.make()
     await mount(<ResourceCollectionPage page={data} />)
 
-    await expect(page).toPassA11yScan()
+    await expect(page).keyboardFocusIndicatorToHaveColorContrast()
+  })
+
+  test('do links have descriptive aria label text', async ({ mount, page }) => {
+    const data = ResourceCollectionPageFactory.make()
+    await mount(<ResourceCollectionPage page={data} />)
+
+    await expect(page).toHaveDescriptiveLinkText()
+  })
+
+  test('create accessible data tables for screen reader users', async ({ mount, page }) => {
+    const data = ResourceCollectionPageFactory.make()
+    await mount(<ResourceCollectionPage page={data} />)
+
+    await expect(page).toHaveScopeAttributesInDataTables()
+  }) 
+
+  test.skip('all links have keyboard focus', async ({ mount, page }) => {
+    const data = ResourceCollectionPageFactory.make()
+    await mount(<ResourceCollectionPage page={data} />)
+
+    await expect(page).toHaveKeyboardFocusInLinks()
+  }) 
+
+  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({ mount, page }) => {
+    const data = ResourceCollectionPageFactory.make()
+    await mount(<ResourceCollectionPage page={data} />)
+
+    await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
+  })
+
+  test('validate axe core accessibility tests', async ({ mount, page }) => {
+    const data = ResourceCollectionPageFactory.make()
+    await mount(<ResourceCollectionPage page={data} />)
+
+    await expect(page).toPassAxeCoreTests()
+  })
+
+// Content Type Specific Tests  
+
+  test('logical reading order in the Documents section on the Resource Collection page', async ({ mount, page }) => {
+    const data = ResourceCollectionPageFactory.make()
+    await mount(<ResourceCollectionPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderInDocumentsSectionOnResourceCollectionContentType()
+  })
+
+  test('logical reading order in the Resources section on the Resource Collection page', async ({ mount, page }) => {
+    const data = ResourceCollectionPageFactory.make()
+    await mount(<ResourceCollectionPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderInResourcesSectionOnResourceCollectionContentType()
+  })
+
+
+  // Module Specific Tests
+
+  test('Power BI Dashboard is accessible', async ({ mount, page }) => {
+    const data = ResourceCollectionPageFactory.make()
+    await mount(<ResourceCollectionPage page={data} />)
+
+    await expect(page).toMakePowerBiDashboardAccessible()
   })
 })

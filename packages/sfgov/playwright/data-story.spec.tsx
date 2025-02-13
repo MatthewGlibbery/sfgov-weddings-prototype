@@ -1,46 +1,115 @@
-import { DataStoryPage } from '@/components'
+import { DataStoryPage } from '../components/page/DataStoryPage'
 import { DataStoryPageFactory } from '@/lib/factories'
-import React from 'react'
 import { test, expect } from './fixtures'
+import React from 'react'
 
 test.describe('A11y tests', () => {
-  test('headings are rendered in a logical reading order', async ({
-    mount,
-    page
-  }) => {
-    const data = DataStoryPageFactory.make()
-    await mount(<DataStoryPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrder()
-  })
-
-  test.skip('has link to main content', async ({ mount, page }) => {
-    const data = DataStoryPageFactory.make()
-    await mount(<DataStoryPage page={data} />)
-
-    await expect(page.locator('a[href="#main-content"]')).toContainText(
-      'Skip to main content'
-    )
-  })
-
-  test('has accessible landmark roles', async ({ mount, page }) => {
+  
+   // Required Global Tests
+  
+   test('has accessible landmarks', async ({ mount, page }) => {
     const data = DataStoryPageFactory.make()
     await mount(<DataStoryPage page={data} />)
 
     await expect(page).toHaveLandmarks()
   })
 
+  test('has accessible landmark roles', async ({ mount, page }) => {
+    const data = DataStoryPageFactory.make()
+    await mount(<DataStoryPage page={data} />)
+
+    await expect(page).toHaveLandmarkRoles()
+  })
+
+  test.skip('has search landmark', async ({ mount, page }) => {
+    const data = DataStoryPageFactory.make()
+    await mount(<DataStoryPage page={data} />)
+
+    await expect(page).toHaveSearchLandmark()
+  })
+
+  test('has language interaction', async ({ mount, page }) => {
+    const data = DataStoryPageFactory.make()
+    await mount(<DataStoryPage page={data} />)
+
+    await expect(page).toHaveLanguageInteraction()
+  })
+
+  test('has language access in dropdown menu', async ({ mount, page }) => {
+    const data = DataStoryPageFactory.make()
+    await mount(<DataStoryPage page={data} />)
+
+    await expect(page).toHaveLanguageAccessInDropdownmenu()
+  })
+
   test('is keyboard accessible', async ({ mount, page }) => {
     const data = DataStoryPageFactory.make()
     await mount(<DataStoryPage page={data} />)
 
-    await expect(page).toBeKeyboardAccessible()
+    await expect(page).toBeKeyboardFocusIndicatorAccessible()
   })
 
-  test('has no accessibility violations', async ({ mount, page }) => {
+  test('does keyboard focus indicator have sufficient color contrast', async ({
+    mount,
+    page
+  }) => {
     const data = DataStoryPageFactory.make()
     await mount(<DataStoryPage page={data} />)
 
-    await expect(page).toPassA11yScan()
+    await expect(page).keyboardFocusIndicatorToHaveColorContrast()
   })
+
+  test('do links have descriptive aria label text', async ({ mount, page }) => {
+    const data = DataStoryPageFactory.make()
+    await mount(<DataStoryPage page={data} />)
+
+    await expect(page).toHaveDescriptiveLinkText()
+  })
+
+  test('create accessible data tables for screen reader users', async ({ mount, page }) => {
+    const data = DataStoryPageFactory.make()
+    await mount(<DataStoryPage page={data} />)
+
+    await expect(page).toHaveScopeAttributesInDataTables()
+  })
+
+ test('all links have keyboard focus', async ({ mount, page }) => {
+    const data = DataStoryPageFactory.make()
+    await mount(<DataStoryPage page={data} />)
+
+    await expect(page).toHaveKeyboardFocusInLinks()
+  })  
+
+  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({ mount, page }) => {
+    const data = DataStoryPageFactory.make()
+    await mount(<DataStoryPage page={data} />)
+
+    await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
+  })
+
+  test('validate axe core accessibility tests', async ({ mount, page }) => {
+    const data = DataStoryPageFactory.make()
+    await mount(<DataStoryPage page={data} />)
+
+    await expect(page).toPassAxeCoreTests()
+  })
+
+// Content Type Specific Tests
+
+test('suppress the In-Page Search Function for screen reader users on the Data Story content type', async ({ mount, page }) => {
+  const data = DataStoryPageFactory.make()
+  await mount(<DataStoryPage page={data} />)
+
+  await expect(page).toSuppressInPageSearchModuleOnDataStoryContentType()
+})
+
+// Module Specific Tests
+
+test('Power BI Dashboard is accessible', async ({ mount, page }) => {
+  const data = DataStoryPageFactory.make()
+  await mount(<DataStoryPage page={data} />)
+
+  await expect(page).toMakePowerBiDashboardAccessible()
+})
+
 })
