@@ -10,6 +10,13 @@ export * from './forms'
 export * from './templates'
 export * from './utils'
 
+export type EventError =
+  | string
+  | Error
+  | Error[]
+  | { message: string }
+  | Array<{ message: string }>
+
 export type FormSubmission = {
   _id?: string
   state?: 'draft' | 'submitted'

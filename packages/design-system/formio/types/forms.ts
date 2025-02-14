@@ -14,6 +14,7 @@ interface BaseFormSchema {
 
   // metadata
   _id?: string
+  _vid?: number
   name?: string
   path?: string
   project?: string

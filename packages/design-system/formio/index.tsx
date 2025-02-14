@@ -1,8 +1,9 @@
 import { Components, Form as FormioReactForm, Formio } from '@formio/react'
-import { ComponentProps, useEffect, useState } from 'react'
+import type { ComponentProps } from 'react'
 import { FORM_CLASS } from './constants.mjs'
 import templates from './templates'
 import type {
+  EventError,
   Form,
   FormioPlugin,
   FormOptions,
@@ -33,6 +34,7 @@ type FormOwnProps = Override<
       saved?: boolean
     ) => void
     onSubmitDone?: (this: Form | undefined, submission: FormSubmission) => void
+    onError?: (this: Form | undefined, error: EventError) => void
     options?: FormOptions
   }
 >

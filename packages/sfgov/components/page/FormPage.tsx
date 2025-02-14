@@ -5,14 +5,20 @@ import {
   HeadingXXl,
   PageTitleSection
 } from '@/design-system'
-import { useTranslation } from 'next-i18next'
+import type { Form, FormSubmission } from '@/design-system/formio'
+import { putMetricData } from '@/lib/metrics'
 import { getPageURL } from '@/lib/utils'
 import type {
   ConfirmationBodyBlock,
   FormPageData,
   TypeContactFooterBlockValues
 } from '@/types'
-import type { Form, FormSubmission } from '@/design-system/formio'
+import type {
+  Dimension,
+  PutMetricDataInput,
+  MetricDatum
+} from '@aws-sdk/client-cloudwatch'
+import { useTranslation } from 'next-i18next'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
@@ -30,6 +36,14 @@ export type FormPageProps = {
   warnBeforeLeaving?: boolean
 }
 
+// Form metrics have a fixed namespace and dimensions
+type FormMetricDataInput = Omit<
+  PutMetricDataInput,
+  'Namespace' | 'MetricData'
+> & {
+  MetricData: Array<Omit<MetricDatum, 'Dimensions'>>
+}
+
 export function FormPage({
   page,
   submitted: initialSubmitted,
@@ -41,12 +55,12 @@ export function FormPage({
     title,
     confirmation_title: confirmationTitle,
     confirmation_body: confirmationBody,
-    schema_url: formSchemaUrl,
-    schema: formSchema,
     get_help: getHelp,
-    partner_agencies: agencies
+    schema: formSchema,
+    schema_url: formSchemaUrl
   } = page
 
+  const router = useRouter()
   const { t, i18n } = useTranslation()
   const queryParams = useSearchParams()
   const {
@@ -54,16 +68,29 @@ export function FormPage({
     submitted: queryParamSubmitted,
     ...rawQueryParams
   } = Object.fromEntries(queryParams?.entries() || [])
-  const [error, setError] = useState<ReactNode>()
+
   const [submitted, setSubmitted] = useState(
     initialSubmitted || queryParamSubmitted === 'true'
   )
+
+  const [error, setError] = useState<ReactNode>()
 
   const formSubmittedString = t('form-submitted', {
     defaultValue: 'Form submitted'
   })
 
-  const router = useRouter()
+  // dimensions to include in all form metrics
+  const metricDimensions: Dimension[] = [
+    {
+      Name: 'page_uri',
+      Value: router.asPath
+    },
+    {
+      Name: 'formio_schema_url',
+      Value: formSchemaUrl
+    }
+  ]
+
   useEffect(() => {
     const handleBeforeUnload = (event: Event) => {
       if (warnBeforeLeaving) {
@@ -121,22 +148,20 @@ export function FormPage({
               </InfoBox>
             ) : null}
             <FormioForm
-              // the `src` (URL) and `form` (schema) props are mutually exclusive
+              // the src (URL) and form (schema) props are mutually exclusive
               src={formSchema ? undefined : formSchemaUrl}
               form={formSchema}
               submission={{
                 data: rawQueryParams
               }}
+              options={{
+                language: i18n.language
+              }}
               onChange={(form: Form) => {
-                const isPristine = form.changed?.instance.pristine
-                warnBeforeLeaving = !isPristine
+                warnBeforeLeaving = !form.changed?.instance.pristine
               }}
               formReady={onFormReady}
-              onSubmitDone={() => setSubmitted(true)}
-              options={{
-                language: i18n.language,
-                defaultNS: 'common'
-              }}
+              onSubmitDone={onSubmitDone}
             />
           </>
         )}
@@ -147,6 +172,22 @@ export function FormPage({
   // FIXME: get coverage on this!
   // istanbul ignore next
   async function onFormReady(form: Form) {
+    form.on(
+      'submitError',
+      () => {
+        putFormMetrics({
+          MetricData: [
+            {
+              MetricName: 'submit_error',
+              Value: 1,
+              Unit: 'Count'
+            }
+          ]
+        })
+      },
+      false
+    )
+
     if (submissionId && !form.formio.submissionId) {
       /**
        * In the olden days, we handled submission IDs by just appending
@@ -162,12 +203,12 @@ export function FormPage({
       const { formio } = form
       formio.submissionId = submissionId
       formio.submissionUrl = formio.formUrl! + `/submission/${submissionId}`
+
       try {
         const submission: FormSubmission = await formio.loadSubmission()
         form.submission = submission
         await form.render()
       } catch (error) {
-        // if we can't fetch the submission,
         setError(
           t('form-submission-not-found', {
             defaultValue:
@@ -188,6 +229,34 @@ export function FormPage({
       // that we only call it if it exists
       await form.setPage?.(formPage)
     }
+  }
+
+  function onSubmitDone() {
+    putFormMetrics({
+      MetricData: [
+        {
+          MetricName: 'submit',
+          Value: 1,
+          Unit: 'Count'
+        }
+      ]
+    })
+    setSubmitted(true)
+  }
+
+  /**
+   * Shortcut for putting form-specific metrics that uses a fixed namespace
+   * and adds the form metric dimensions to every MetricData entry
+   */
+  function putFormMetrics({ MetricData, ...rest }: FormMetricDataInput) {
+    return putMetricData({
+      Namespace: 'web_forms',
+      ...rest,
+      MetricData: MetricData.map((datum) => ({
+        ...datum,
+        Dimensions: metricDimensions
+      }))
+    })
   }
 }
 
