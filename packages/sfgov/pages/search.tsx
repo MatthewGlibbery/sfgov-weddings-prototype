@@ -13,7 +13,7 @@ import {
   LabelXs,
   IconSearch
 } from '@/design-system'
-import { requireEnv } from '@/lib/env'
+import { getPublicEnv, requireEnv } from '@/lib/env'
 import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { withServerSideTranslations } from '@/lib/translations'
@@ -74,7 +74,7 @@ export const getServerSideProps = withServerSideTranslations(
       console.error('error fetching topics')
     }
 
-    return { props: { query: q || '', results, services } }
+    return { props: { query: q || '', results, services, env: getPublicEnv() } }
   }
 )
 

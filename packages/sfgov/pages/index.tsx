@@ -1,5 +1,6 @@
 import { HomePage } from '@/components'
 import { ContentAPI } from '@/lib/api'
+import { getPublicEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
 import type { GetServerSideProps } from 'next'
 
@@ -23,7 +24,8 @@ export const getServerSideProps: GetServerSideProps =
 
     return {
       props: {
-        page: data
+        page: data,
+        env: getPublicEnv()
       }
     }
   })

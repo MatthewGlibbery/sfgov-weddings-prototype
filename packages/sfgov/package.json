@@ -13,6 +13,7 @@
     "test-ct": "playwright test -c playwright-ct.config.ts"
   },
   "dependencies": {
+    "@next/third-parties": "^15.1.6",
     "@aws-sdk/client-cloudwatch": "^3.744.0",
     "@react-google-maps/api": "2.19.2",
     "html-react-parser": "3.0.16",

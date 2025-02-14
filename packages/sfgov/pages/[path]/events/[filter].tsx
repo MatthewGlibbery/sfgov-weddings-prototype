@@ -13,7 +13,7 @@ import {
   LabelSm,
   PageTitleSection
 } from '@/design-system'
-import { getenv } from '@/lib/env'
+import { getenv, getPublicEnv } from '@/lib/env'
 import { PageData } from '@/types'
 import { GetServerSidePropsContext } from 'next'
 import { useTranslation } from 'next-i18next'
@@ -265,7 +265,7 @@ export const getServerSideProps = async ({
 
     // append the "base" api url for this list
     // so the client side can make requests for more pages
-    return { props: { ...data, baseUrl: url.href } }
+    return { props: { ...data, baseUrl: url.href, env: getPublicEnv() } }
   } catch (error) {
     return { notFound: true } // 404
   }

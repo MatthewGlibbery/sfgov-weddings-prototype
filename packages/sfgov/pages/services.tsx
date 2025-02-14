@@ -6,7 +6,7 @@ import {
   HeadingLg,
   PageTitleSection
 } from '@/design-system'
-import { requireEnv } from '@/lib/env'
+import { getPublicEnv, requireEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
 import { useTranslation } from 'next-i18next'
 
@@ -31,7 +31,7 @@ export const getServerSideProps = withServerSideTranslations(
     url.searchParams.set('live', 'true')
     const res = await fetch(url.href)
     const topics = await res.json()
-    return { props: { topics } }
+    return { props: { topics, env: getPublicEnv() } }
   }
 )
 
