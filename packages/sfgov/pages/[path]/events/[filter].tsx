@@ -180,7 +180,10 @@ const EventsPage = (props: EventPageData) => {
     <PageWrapper>
       <Container className="grid grid-cols-1 gap-y-60 pb-60 mb-60 border-b-1 border-neutral200">
         <div className="flex flex-col gap-y-28">
-          <PageTitleSection title={agency} label="Calendar"></PageTitleSection>
+          <PageTitleSection
+            title={agency}
+            label={t('calendar', { defaultValue: 'Calendar' })}
+          ></PageTitleSection>
           <div>
             <a
               href={`/${path}/events/upcoming`}
