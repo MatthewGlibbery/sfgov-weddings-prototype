@@ -19,6 +19,7 @@ type ComposedDateProps = {
   endDateInput?: string
   locale?: string
   dateStyle?: 'full' | 'long' | 'medium' | 'short' | FormatOptions | undefined
+  asString: boolean
 }
 
 /**
@@ -43,7 +44,8 @@ export const ComposedDate = ({
   startDateInput,
   endDateInput = '',
   locale = 'en-US',
-  dateStyle = 'full'
+  dateStyle = 'full',
+  asString = false
 }: ComposedDateProps) => {
   if (typeof startDateInput !== 'string' || typeof endDateInput !== 'string') {
     console.warn(
@@ -62,9 +64,11 @@ export const ComposedDate = ({
     const startDate = new Date(`${startDateInput}T00:00:00`)
 
     if (!endDateInput || startDateInput === endDateInput) {
-      return (
-        <time dateTime={startDateInput}>{formatter.format(startDate)}</time>
-      )
+      const formattedDate = formatter.format(startDate)
+      if (asString) {
+        return formattedDate
+      }
+      return <time dateTime={startDateInput}>{formattedDate}</time>
     }
 
     const endDate = new Date(`${endDateInput}T00:00:00`)
@@ -127,6 +131,10 @@ export const ComposedDate = ({
         )
       }
     })
+
+    if (asString) {
+      return output.toString()
+    }
 
     // fragment for consistent return typing
     return <>{output}</>

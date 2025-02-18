@@ -75,6 +75,18 @@ describe('DateTime Component', () => {
     })
 
     it.each([
+      ['2023-11-19', '2023-11-25'],
+      ['2023-11-19', '']
+    ])('returns the date string when specified', (a, b) => {
+      const dateString = ComposedDate({
+        startDateInput: a,
+        endDateInput: b,
+        asString: true
+      })
+      expect(typeof dateString).toBe('string')
+    })
+
+    it.each([
       // invalid first param
       ['2023-11-190', undefined],
       ['', undefined],

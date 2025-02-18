@@ -1,4 +1,4 @@
-import { PageWrapper } from '@/components'
+import { PageWrapper, ComposedDate } from '@/components'
 import {
   BodyText,
   Button,
@@ -11,6 +11,7 @@ import {
   IconClock,
   IconLocation,
   LabelSm,
+  Link,
   PageTitleSection
 } from '@/design-system'
 import { getenv, getPublicEnv } from '@/lib/env'
@@ -34,6 +35,8 @@ type Event = PageData & {
 type EventPageData = {
   agency: string
   total: number
+  meeting_archive_date: string
+  meeting_archive_url: string
   events: Event[]
   baseUrl: string
 }
@@ -133,7 +136,14 @@ const EventItem = (item: Event) => {
 const EventsPage = (props: EventPageData) => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { agency, events: pageEvents, total, baseUrl } = props
+  const {
+    agency,
+    events: pageEvents,
+    meeting_archive_date: meetingArchiveDate,
+    meeting_archive_url: meetingArchiveURL,
+    total,
+    baseUrl
+  } = props
   const { path, filter } = router.query
   const [events, setEvents] = useState(pageEvents)
   const [currentPage, setCurrentPage] = useState(1)
@@ -172,6 +182,12 @@ const EventsPage = (props: EventPageData) => {
     aggregated[monthYear].push(item)
   })
 
+  const archiveDate = ComposedDate({
+    startDateInput: meetingArchiveDate,
+    dateStyle: { month: 'short', year: 'numeric' },
+    asString: true
+  })
+
   const pillCls = 'no-underline px-16 py-[15px]'
   const activePillCls = 'bg-primary500 text-white'
   const inactivePillCls = 'bg-primary100 text-primary700'
@@ -184,7 +200,7 @@ const EventsPage = (props: EventPageData) => {
             title={agency}
             label={t('calendar', { defaultValue: 'Calendar' })}
           ></PageTitleSection>
-          <div>
+          <div className="my-[15px]">
             <a
               href={`/${path}/events/upcoming`}
               className={`rounded-tl-4 rounded-bl-4 ${pillCls}
@@ -200,6 +216,17 @@ const EventsPage = (props: EventPageData) => {
               {t('past-events', { defaultValue: 'Past events' })}
             </a>
           </div>
+          {filter === 'past' && meetingArchiveDate && meetingArchiveURL ? (
+            <div className="flex gap-8 text-primary500">
+              <IconCalendar width={20} />
+              <Link href={meetingArchiveURL}>
+                {t('archived-meetings-link', {
+                  defaultValue: 'See archived meetings before {{archiveDate}}',
+                  archiveDate
+                })}
+              </Link>
+            </div>
+          ) : null}
         </div>
         <div className="flex flex-col gap-y-40">
           <HeadingXXl className="!mb-0">
