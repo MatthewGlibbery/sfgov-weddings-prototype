@@ -26,7 +26,7 @@ export const Video = (props: TypeVideoBlockValues) => {
     base: 'lg:flex lg:flex-col lg:justify-between',
     variants: {
       isTranscriptVisible: {
-        true: 'lg:basis-2/3',
+        true: 'lg:basis-2/3 lg:self-center',
         false: 'w-full'
       }
     }
@@ -50,7 +50,7 @@ export const Video = (props: TypeVideoBlockValues) => {
     const videoId = matcher.length ? matcher[1] : ''
 
     block = (
-      <div className="bg-grey100 py-12 flex flex-col lg:flex-row lg:space-x-28">
+      <div className="py-12 flex flex-col lg:flex-row lg:space-x-28">
         <VideoContainer isTranscriptVisible={showTranscript}>
           <IFrameWrapper isTranscriptVisible={showTranscript}>
             <iframe
@@ -65,7 +65,11 @@ export const Video = (props: TypeVideoBlockValues) => {
             <div className="flex items-center pr-20">
               <Link
                 className="flex gap-8"
-                onClick={() => setShowTrancscript(!showTranscript)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  setShowTrancscript(!showTranscript)
+                }}
+                href=""
               >
                 <IconTranscript className="text-primary500" width={20} />
                 {showTranscript
@@ -76,7 +80,8 @@ export const Video = (props: TypeVideoBlockValues) => {
             <div className="flex items-center pl-20 border-l-1 border-neutral200">
               <Link
                 className="flex gap-8"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault()
                   localStorage.setItem(
                     'transcript',
                     video[0].value.video_transcript
@@ -85,6 +90,7 @@ export const Video = (props: TypeVideoBlockValues) => {
                     pathname: `${router.asPath}/transcript`
                   })
                 }}
+                href=""
               >
                 <IconExternalLink className="text-primary500" width={20} />
                 {t('view-full-transcript', {

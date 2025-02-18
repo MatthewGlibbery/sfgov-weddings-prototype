@@ -1,10 +1,10 @@
 import { RichText } from '@/components'
 import { Button, HeadingXXl, IconArrowLeft } from '@/design-system'
-import { getServerSideTranslations } from '@/lib/translations'
+// import { getServerSideTranslations } from '@/lib/translations'
 import { useTranslation } from 'next-i18next'
 import { useEffect, useState } from 'react'
 
-export const getServerSideProps = getServerSideTranslations
+// export const getServerSideProps = getServerSideTranslations
 
 const TranscriptView = () => {
   const [transcript, setTranscript] = useState<string | null>()
