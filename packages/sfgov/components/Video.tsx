@@ -7,13 +7,15 @@ import {
 } from '@/design-system'
 import { TypeVideoBlockValues } from '@/types'
 import { RichText } from './RichText'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 
 export const Video = (props: TypeVideoBlockValues) => {
   const { title, description, video_type: video, showTitle = true } = props
-  const [showTranscript, setShowTrancscript] = useState(false)
+  const showTrancscriptRef = useRef<HTMLAnchorElement | null>(null)
+  const transcriptRef = useRef<HTMLAnchorElement | null>(null)
+  const [showTranscript, setShowTrancscript] = useState(null)
 
   const videoType = video[0].type
   const videoInfo = video[0].value
@@ -41,6 +43,17 @@ export const Video = (props: TypeVideoBlockValues) => {
     }
   })
 
+  useEffect(() => {
+    if (transcriptRef.current && showTranscript) {
+      // istanbul ignore next
+      transcriptRef.current.focus()
+    }
+    if (showTrancscriptRef.current && showTranscript === false) {
+      // istanbul ignore next
+      showTrancscriptRef.current.focus()
+    }
+  }, [showTranscript])
+
   /* istanbul ignore next */
   if (videoType === 'embed') {
     const matcher = videoInfo.embed_url.match(
@@ -51,8 +64,8 @@ export const Video = (props: TypeVideoBlockValues) => {
 
     block = (
       <div className="py-12 flex flex-col lg:flex-row lg:space-x-28">
-        <VideoContainer isTranscriptVisible={showTranscript}>
-          <IFrameWrapper isTranscriptVisible={showTranscript}>
+        <VideoContainer isTranscriptVisible={!!showTranscript}>
+          <IFrameWrapper isTranscriptVisible={!!showTranscript}>
             <iframe
               className="w-full h-full absolute top-0 left-0"
               src={`https://www.youtube.com/embed/${videoId}`}
@@ -69,6 +82,7 @@ export const Video = (props: TypeVideoBlockValues) => {
                   e.preventDefault()
                   setShowTrancscript(!showTranscript)
                 }}
+                ref={showTrancscriptRef}
                 href=""
               >
                 <IconTranscript className="text-primary500" width={20} />
@@ -101,7 +115,10 @@ export const Video = (props: TypeVideoBlockValues) => {
           </div>
         </VideoContainer>
         {showTranscript ? (
-          <div className="lg:basis-1/3 max-h-[200px] overflow-y-scroll lg:max-h-[650px]">
+          <div
+            className="md:max-w-2/3 lg:basis-1/3 max-h-[200px] overflow-y-scroll lg:max-h-[375px]"
+            ref={transcriptRef}
+          >
             <RichText html={videoInfo.video_transcript} />
           </div>
         ) : null}
