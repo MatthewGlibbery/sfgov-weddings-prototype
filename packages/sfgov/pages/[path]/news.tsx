@@ -39,8 +39,11 @@ const NewsPage = (props: NewsAPIPageData) => {
   const reqOffset = useRef(0)
   const [pageResults, setPageResults] = useState(news.slice(0, ITEMS_PER_PAGE))
   const [currentPage, setCurrentPage] = useState(1)
+  const [focusIndex, setFocusIndex] = useState(null)
+  const focusRef = useRef<HTMLAnchorElement | null>(null)
 
   const loadNews = async () => {
+    setFocusIndex(currentPage * ITEMS_PER_PAGE)
     if (currentPage * ITEMS_PER_PAGE >= news.length) {
       // we've come up against the end of the requested page size,
       // so query for more
@@ -68,6 +71,12 @@ const NewsPage = (props: NewsAPIPageData) => {
   }
 
   useEffect(() => {
+    if (focusRef.current) {
+      focusRef.current.focus()
+    }
+  }, [pageResults])
+
+  useEffect(() => {
     setPageResults(news.slice(0, ITEMS_PER_PAGE))
   }, [news])
   return (
@@ -90,11 +99,11 @@ const NewsPage = (props: NewsAPIPageData) => {
                       key={i}
                     >
                       <div
-                        className={`${
+                        className={`gap-y-8 ${
                           hasImage ? 'md:col-span-10' : 'md:col-span-12'
-                        } grid lg:grid-cols-[158px_1fr] md:grid-cols-1 md:content-start items-baseline gap-x-28`}
+                        } grid lg:grid-cols-[158px_1fr] md:grid-cols-1 md:content-start gap-x-28`}
                       >
-                        <div className="">
+                        <div>
                           <HeadingXs>
                             <ComposedDate
                               startDateInput={item.date}
@@ -103,9 +112,13 @@ const NewsPage = (props: NewsAPIPageData) => {
                           </HeadingXs>
                         </div>
                         <div className="flex flex-col gap-y-8">
-                          <HeadingLgListItem className="!mb-0 text-primary500 flex items-start flex-col gap-y-8 md:flex-row md:gap-x-8 md:items-center">
+                          <HeadingLgListItem
+                            as="h2"
+                            className="!mb-0 text-primary500 flex items-start flex-col gap-y-8 md:flex-row md:gap-x-8 md:items-center"
+                          >
                             <a
                               href={item.meta?.html_url}
+                              ref={i === focusIndex ? focusRef : null}
                               className="no-underline"
                             >
                               {item.title}
@@ -127,9 +140,9 @@ const NewsPage = (props: NewsAPIPageData) => {
                 })}
               </div>
               {pageResults.length < total ? (
-                <div className="flex justify-center">
+                <div className="flex justify-center lg:px-[100px] md:px-80">
                   <Button
-                    className="flex flex-row gap-x-8 px-80 !justify-self-center"
+                    className="w-full flex flex-row gap-x-8 px-80 !justify-self-center"
                     onClick={loadNews}
                     data-testid="load-more-button"
                   >
