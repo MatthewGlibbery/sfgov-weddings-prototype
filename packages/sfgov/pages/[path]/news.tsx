@@ -140,9 +140,9 @@ const NewsPage = (props: NewsAPIPageData) => {
                 })}
               </div>
               {pageResults.length < total ? (
-                <div className="flex justify-center lg:px-[100px] md:px-80">
+                <div className="flex justify-center">
                   <Button
-                    className="w-full flex flex-row gap-x-8 px-80 !justify-self-center"
+                    className="w-full md:w-auto flex flex-row gap-x-8 lg:px-[100px] md:px-80 !justify-self-center"
                     onClick={loadNews}
                     data-testid="load-more-button"
                   >
