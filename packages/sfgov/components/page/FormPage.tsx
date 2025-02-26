@@ -6,13 +6,18 @@ import {
   PageTitleSection
 } from '@/design-system'
 import type { Form, FormSubmission } from '@/design-system/formio'
-import { putEvents, type MetricEvent } from '@/lib/metrics'
+import { putMetricData } from '@/lib/metrics'
 import { getPageURL } from '@/lib/utils'
 import type {
   ConfirmationBodyBlock,
   FormPageData,
   TypeContactFooterBlockValues
 } from '@/types'
+import type {
+  Dimension,
+  PutMetricDataInput,
+  MetricDatum
+} from '@aws-sdk/client-cloudwatch'
 import { useTranslation } from 'next-i18next'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
@@ -27,12 +32,23 @@ export type FormPageProps = {
   page: FormPageData
   submitted?: boolean
   formPage?: number
+  formComponentKey?: string
   warnBeforeLeaving?: boolean
+}
+
+// Form metrics have a fixed namespace and dimensions
+type FormMetricDataInput = Omit<
+  PutMetricDataInput,
+  'Namespace' | 'MetricData'
+> & {
+  MetricData: Array<Omit<MetricDatum, 'Dimensions'>>
 }
 
 export function FormPage({
   page,
   submitted: initialSubmitted,
+  formComponentKey,
+  formPage = 0,
   warnBeforeLeaving = false
 }: FormPageProps) {
   const {
@@ -64,9 +80,16 @@ export function FormPage({
   })
 
   // dimensions to include in all form metrics
-  const formDimensions: Record<string, string> = {
-    'form.schema_url': formSchemaUrl
-  }
+  const metricDimensions: Dimension[] = [
+    {
+      Name: 'page_uri',
+      Value: router.asPath
+    },
+    {
+      Name: 'formio_schema_url',
+      Value: formSchemaUrl
+    }
+  ]
 
   useEffect(() => {
     const handleBeforeUnload = (event: Event) => {
@@ -138,17 +161,7 @@ export function FormPage({
                 warnBeforeLeaving = !form.changed?.instance.pristine
               }}
               formReady={onFormReady}
-              onSubmit={
-                // istanbul ignore next
-                () => putFormSubmit('start')
-              }
-              onSubmitDone={
-                // istanbul ignore next
-                () => {
-                  putFormSubmit('success')
-                  setSubmitted(true)
-                }
-              }
+              onSubmitDone={onSubmitDone}
             />
           </>
         )}
@@ -156,11 +169,25 @@ export function FormPage({
     </PageWrapper>
   )
 
+  // FIXME: get coverage on this!
+  // istanbul ignore next
   async function onFormReady(form: Form) {
-    // istanbul ignore next
-    form.on('submitError', () => putFormSubmit('error'), false)
+    form.on(
+      'submitError',
+      () => {
+        putFormMetrics({
+          MetricData: [
+            {
+              MetricName: 'submit_error',
+              Value: 1,
+              Unit: 'Count'
+            }
+          ]
+        })
+      },
+      false
+    )
 
-    // istanbul ignore next
     if (submissionId && !form.formio.submissionId) {
       /**
        * In the olden days, we handled submission IDs by just appending
@@ -175,7 +202,7 @@ export function FormPage({
        */
       const { formio } = form
       formio.submissionId = submissionId
-      formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
+      formio.submissionUrl = formio.formUrl! + `/submission/${submissionId}`
 
       try {
         const submission: FormSubmission = await formio.loadSubmission()
@@ -191,29 +218,45 @@ export function FormPage({
         )
       }
     }
+    // focusing on a component jumps to the component's page
+    // automatically, so we don't need to call setPage() if a
+    // component key was passed
+    if (formComponentKey) {
+      await form.focusOnComponent(formComponentKey)
+    } else if (formPage > 0) {
+      // setPage() only exists on the Wizard class, so we optionally
+      // chain this both to appease the TypeScript gods and ensure
+      // that we only call it if it exists
+      await form.setPage?.(formPage)
+    }
   }
 
-  /**
-   * Shortcut for sending a submit event with a given status
-   */
-  function putFormSubmit(status: 'start' | 'success' | 'error') {
-    return putFormEvents({
-      type: 'form.submit',
-      dimensions: { status }
+  function onSubmitDone() {
+    putFormMetrics({
+      MetricData: [
+        {
+          MetricName: 'submit',
+          Value: 1,
+          Unit: 'Count'
+        }
+      ]
     })
+    setSubmitted(true)
   }
 
   /**
-   * Shortcut for sending form-specific events that that always include the
-   * form-specific dimensions
+   * Shortcut for putting form-specific metrics that uses a fixed namespace
+   * and adds the form metric dimensions to every MetricData entry
    */
-  function putFormEvents(...events: MetricEvent[]) {
-    return putEvents(
-      events.map(({ dimensions, ...event }) => ({
-        ...event,
-        dimensions: Object.assign({}, dimensions, formDimensions)
+  function putFormMetrics({ MetricData, ...rest }: FormMetricDataInput) {
+    return putMetricData({
+      Namespace: 'web_forms',
+      ...rest,
+      MetricData: MetricData.map((datum) => ({
+        ...datum,
+        Dimensions: metricDimensions
       }))
-    )
+    })
   }
 }
 

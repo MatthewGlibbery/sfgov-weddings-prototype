@@ -1,47 +1,51 @@
-import { putEvents } from './metrics'
-import mockConsole from 'jest-mock-console'
+import { parseMetricData, putMetricData } from './metrics'
 
-describe('putEvents()', () => {
-  let oldDataLayer: Array<object> | undefined
-  let restoreConsole: ReturnType<typeof mockConsole>
+describe('parseMetricData()', () => {
+  it('parses a JSON object', () => {
+    expect(parseMetricData('{"foo":"bar"}')).toEqual({ foo: 'bar' })
+  })
+
+  it.each([undefined, 'wut', {}])(
+    'returns undefined if it fails to parse %s',
+    (value) => {
+      expect(parseMetricData(value)).toEqual(undefined)
+    }
+  )
+})
+
+describe('putMetricData()', () => {
+  const sendBeacon = jest.fn()
+  let actualSendBeacon: Navigator['sendBeacon']
   beforeEach(() => {
-    restoreConsole = mockConsole()
-    oldDataLayer = window.dataLayer
-    window.dataLayer = []
+    actualSendBeacon = navigator.sendBeacon
+    navigator.sendBeacon = sendBeacon
   })
 
   afterEach(() => {
-    restoreConsole?.()
-    window.dataLayer = oldDataLayer
+    navigator.sendBeacon = actualSendBeacon
   })
 
-  it('sets the timestamp of the events if unset', () => {
-    putEvents({
-      type: 'foo'
+  it('calls sendBeacon() with stringified metric data', () => {
+    putMetricData({
+      Namespace: 'foo',
+      MetricData: []
     })
-
-    expect(window.dataLayer).toEqual([
-      {
-        event: 'foo',
-        timestamp: expect.any(Number)
-      }
-    ])
-  })
-
-  it('returns false when window.dataLayer throws', () => {
-    const throwOnPush = jest.fn(() => {
-      throw new Error('derp')
-    })
-    jest.spyOn(window.dataLayer!, 'push').mockImplementationOnce(throwOnPush)
-    expect(
-      putEvents({
-        type: 'error'
-      })
-    ).toEqual(false)
-    expect(throwOnPush).toHaveBeenCalled()
-    expect(console.warn).toHaveBeenCalledWith(
-      'unable to put events:',
-      expect.any(Error)
+    expect(sendBeacon).toHaveBeenCalledWith(
+      '/api/metrics',
+      '{"Namespace":"foo","MetricData":[]}'
     )
+  })
+
+  it('catches serialization errors', () => {
+    const jsonStringify = jest.spyOn(JSON, 'stringify')
+    jsonStringify.mockImplementationOnce(() => {
+      throw new Error('Circular reference')
+    })
+    expect(() =>
+      putMetricData({
+        Namespace: 'test'
+      })
+    ).not.toThrow()
+    jsonStringify.mockRestore()
   })
 })
