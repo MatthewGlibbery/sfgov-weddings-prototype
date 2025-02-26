@@ -44,6 +44,19 @@ export const getServerSideProps = withServerSideTranslations(
       query: { q },
       locale
     } = context
+
+    if (q) {
+      const url = new URL('https://google.com')
+      url.pathname += '/search'
+      url.searchParams.set('q', `site:www.sf.gov ${q}`)
+      return {
+        redirect: {
+          destination: url.href,
+          permanent: false
+        }
+      }
+    }
+
     const searchUrl = new URL('/api/search', requireEnv('API_BASE_URL'))
     searchUrl.searchParams.set('query', q as string)
     searchUrl.searchParams.set('locale', locale as string)
