@@ -31,6 +31,7 @@ const customJestConfig = {
     }
   },
   collectCoverageFrom: [
+    'middleware.ts',
     '<rootDir>/components/**/*.tsx',
     '<rootDir>/lib/**/*.{js,ts,tsx}',
     // FIXME: there's no good way to cover these in tests
