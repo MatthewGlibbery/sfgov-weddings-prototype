@@ -34,12 +34,11 @@ type FormArgs = {
   url: string
   submitted?: boolean
   page?: number
-  component?: string
 }
 
 const meta: Meta<FormArgs> = {
   title: 'pages / Form',
-  render: ({ data, url, submitted, page, component }) => (
+  render: ({ data, url, submitted, page }) => (
     <FormPage
       // seeding the factory "locks" the randomness so we don't get different
       // random data on every page load
@@ -48,15 +47,13 @@ const meta: Meta<FormArgs> = {
         form_schema_url: url
       })}
       submitted={submitted}
-      formComponentKey={component}
       // page indexes are 0-based, but 1-based makes more sense in Storybook
       formPage={page ? page - 1 : 0}
     />
   ),
   args: {
     url: 'feedback',
-    submitted: false,
-    component: ''
+    submitted: false
   },
   argTypes: {
     url: {
@@ -82,10 +79,6 @@ const meta: Meta<FormArgs> = {
         arg: 'submitted',
         neq: true
       }
-    },
-    component: {
-      name: 'Focus on component key',
-      type: 'string'
     },
     submitted: {
       name: 'Submitted',

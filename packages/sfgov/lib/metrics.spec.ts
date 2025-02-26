@@ -1,51 +1,47 @@
-import { parseMetricData, putMetricData } from './metrics'
+import { putEvents } from './metrics'
+import mockConsole from 'jest-mock-console'
 
-describe('parseMetricData()', () => {
-  it('parses a JSON object', () => {
-    expect(parseMetricData('{"foo":"bar"}')).toEqual({ foo: 'bar' })
-  })
-
-  it.each([undefined, 'wut', {}])(
-    'returns undefined if it fails to parse %s',
-    (value) => {
-      expect(parseMetricData(value)).toEqual(undefined)
-    }
-  )
-})
-
-describe('putMetricData()', () => {
-  const sendBeacon = jest.fn()
-  let actualSendBeacon: Navigator['sendBeacon']
+describe('putEvents()', () => {
+  let oldDataLayer: Array<object> | undefined
+  let restoreConsole: ReturnType<typeof mockConsole>
   beforeEach(() => {
-    actualSendBeacon = navigator.sendBeacon
-    navigator.sendBeacon = sendBeacon
+    restoreConsole = mockConsole()
+    oldDataLayer = window.dataLayer
+    window.dataLayer = []
   })
 
   afterEach(() => {
-    navigator.sendBeacon = actualSendBeacon
+    restoreConsole?.()
+    window.dataLayer = oldDataLayer
   })
 
-  it('calls sendBeacon() with stringified metric data', () => {
-    putMetricData({
-      Namespace: 'foo',
-      MetricData: []
+  it('sets the timestamp of the events if unset', () => {
+    putEvents({
+      type: 'foo'
     })
-    expect(sendBeacon).toHaveBeenCalledWith(
-      '/api/metrics',
-      '{"Namespace":"foo","MetricData":[]}'
-    )
+
+    expect(window.dataLayer).toEqual([
+      {
+        event: 'foo',
+        timestamp: expect.any(Number)
+      }
+    ])
   })
 
-  it('catches serialization errors', () => {
-    const jsonStringify = jest.spyOn(JSON, 'stringify')
-    jsonStringify.mockImplementationOnce(() => {
-      throw new Error('Circular reference')
+  it('returns false when window.dataLayer throws', () => {
+    const throwOnPush = jest.fn(() => {
+      throw new Error('derp')
     })
-    expect(() =>
-      putMetricData({
-        Namespace: 'test'
+    jest.spyOn(window.dataLayer!, 'push').mockImplementationOnce(throwOnPush)
+    expect(
+      putEvents({
+        type: 'error'
       })
-    ).not.toThrow()
-    jsonStringify.mockRestore()
+    ).toEqual(false)
+    expect(throwOnPush).toHaveBeenCalled()
+    expect(console.warn).toHaveBeenCalledWith(
+      'unable to put events:',
+      expect.any(Error)
+    )
   })
 })

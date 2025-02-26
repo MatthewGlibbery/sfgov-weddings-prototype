@@ -1,32 +1,34 @@
-import type { PutMetricDataInput } from '@aws-sdk/client-cloudwatch'
-
 /**
- * Send metric data via navigator.sendBeacon
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon
+ * Metric event objects represent a thing that happened at the time they were
+ * sent.
  */
-export function putMetricData(metrics: PutMetricDataInput) {
-  try {
-    return navigator.sendBeacon('/api/metrics', JSON.stringify(metrics))
-  } catch (error) {
-    return false
-  }
+export type MetricEvent = {
+  type: string
+  timestamp?: number
+  dimensions?: Record<string, string>
 }
 
 /**
- * Parse a request body as JSON and cast it as PutMetricDataInput if it parses
- * into an object.
+ * Send metric events to GA
  */
-export function parseMetricData(body: unknown): PutMetricDataInput | undefined {
-  if (typeof body !== 'string') {
-    console.error('parseMetricData() got non-string body:', typeof body)
-    return undefined
-  }
+export function putEvents(...events: MetricEvent[] | MetricEvent[][]) {
   try {
-    const data = JSON.parse(body)
-    if (data && typeof data === 'object') {
-      return data as PutMetricDataInput
+    const now = Date.now()
+    events = events.flat(1)
+    for (const event of events) {
+      // set the timestamp if it's not set
+      event.timestamp = event.timestamp || now
     }
+    window.dataLayer?.push(
+      ...events.map(({ type, timestamp, dimensions }) => ({
+        event: type,
+        timestamp,
+        ...dimensions
+      }))
+    )
+    return true
   } catch (error) {
-    console.error('parseMetricData() failed to parse metric data:', body)
+    console.warn('unable to put events:', error)
+    return false
   }
 }
