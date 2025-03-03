@@ -10,6 +10,7 @@ import {
   IconShare,
   PageTitleSection
 } from '@/design-system'
+import { getPageURL } from '@/lib/utils'
 import type { ProfilePageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 import type { ComponentType, ReactNode } from 'react'
@@ -111,7 +112,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
                       className=" border-neutral200 border-b-1 last-of-type:border-0 md:border-b-0 md:border-r-1 lg:border-b-1 lg:border-r-0"
                     >
                       <a
-                        href={item?.referenced_by?.meta?.html_url}
+                        href={getPageURL(item.referenced_by)}
                         className="flex flex-row justify-between items-start block no-underline text-primary500 px-12 py-16 md:px-16 md:py-12 lg:px-12 lg:py-16"
                       >
                         <div className="flex flex-col gap-8">

@@ -9,6 +9,7 @@ import {
 } from '@/design-system'
 import { requireEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
+import { getPageURL } from '@/lib/utils'
 import { AgencyPageData, NewsPageData, PageData } from '@/types'
 import { GetServerSidePropsContext } from 'next'
 import { useTranslation } from 'next-i18next'
@@ -117,7 +118,7 @@ const NewsPage = (props: NewsAPIPageData) => {
                             className="!mb-0 text-primary500 flex items-start flex-col gap-y-8 md:flex-row md:gap-x-8 md:items-center"
                           >
                             <a
-                              href={item.meta?.html_url}
+                              href={getPageURL(item)}
                               ref={i === focusIndex ? focusRef : null}
                               className="no-underline"
                             >
