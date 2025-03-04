@@ -38,12 +38,16 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     if (window?.dataLayer && pageData) {
       const { type: contentType, locale } = pageData.meta || {}
       const partnerAgencies =
-        pageData.partner_agencies?.map((item) => {
-          return {
-            slug: item.value.meta.slug
-          }
-        }) || []
-      window.dataLayer.push({ contentType, locale, partnerAgencies })
+        pageData.partner_agencies
+          ?.filter((item) => item.value !== null)
+          .map((item) => {
+            return item.value.title
+          }) || []
+      window.dataLayer.push({
+        contentType,
+        locale,
+        partnerAgencies
+      })
     }
   }, [pathname, pageData])
 
