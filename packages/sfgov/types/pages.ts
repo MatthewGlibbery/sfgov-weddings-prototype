@@ -188,6 +188,24 @@ export type AboutPageData = PageData &
     resources: (TypeDownloadableFilesBlock | TypeResourcesSectionBlock)[]
   }
 
+type TypeQLessQueue = {
+  id: number
+  location_id: number
+  name: string
+  state: string
+  wait_time: number
+}
+
+type TypeInnerQLessData = {
+  timestamp: string
+  queues: TypeQLessQueue[]
+}
+
+export type TypeQLessData = {
+  data: TypeInnerQLessData
+  status: string
+}
+
 export type LocationPageData = PageData & {
   location_name: string
   description: string

@@ -2,6 +2,7 @@ import {
   BodyText,
   Container,
   DisplayLg,
+  Grid,
   HeadingXlSans,
   HeadingXXl,
   IconAccessibility,
@@ -13,6 +14,7 @@ import { useTranslation } from 'next-i18next'
 import {
   Accordion,
   Alert,
+  ComposedDate,
   ContactFooter,
   ContentTileList,
   ImageCard,
@@ -21,14 +23,17 @@ import {
   ProfileGroup,
   RelatedContentList,
   RichText,
+  Table,
   ZebraStripedSection
 } from '..'
 import { TileContentSection } from '../TileContentSection'
 import type { LocationPageData, PageProps } from '@/types'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 export type LocationPageProps = PageProps<LocationPageData>
 
-export function LocationPage({ page, env }: LocationPageProps) {
+export function LocationPage({ page, env, qLessData }: LocationPageProps) {
   const {
     title,
     description,
@@ -50,6 +55,109 @@ export function LocationPage({ page, env }: LocationPageProps) {
   } = page
 
   const { t } = useTranslation()
+  const router = useRouter()
+
+  const isPermitCenter = page.id === 2736
+  const columns = []
+  const rows = []
+
+  if (qLessData) {
+    const queuesToDisplay = [
+      1069, // Intake: OTC with plans
+      2510, // SFPlanning
+      1077, // Building: Non-Structural
+      1076, // Building: Structural
+      1079, // Mechanical review
+      1080, // Electrical review
+      1081, // Fire: Plan review
+      1085, // Public Works: Permits and Plan review
+      1087, // PUC: Plan review
+      2586, // Public Health: Plan review
+      1068, // Permit Processing: OTC with plans
+      2395, // Permit Processing: No plans / Trade
+      2718 // OSB Permit Center
+    ]
+
+    columns.push(
+      {
+        type: 'rich_text',
+        heading: t('queue-table-header', { defaultValue: 'Queue' })
+      },
+      {
+        type: 'rich_text',
+        heading: t('queue-wait-time-table-header', {
+          defaultValue: 'Wait time'
+        })
+      }
+    )
+
+    qLessData.data.queues = qLessData.data.queues.filter((item) =>
+      queuesToDisplay.some((id) => id === item.id)
+    )
+
+    const getHoursMinutes = (
+      value: number,
+      label: string,
+      labelPlural: string
+    ) => (value > 0 ? `${value} ${value === 1 ? label : labelPlural}` : '')
+
+    for (const queue of qLessData.data.queues) {
+      const hours = Math.floor(queue.wait_time / 60)
+      const minutes = queue.wait_time % 60
+      const hourText = getHoursMinutes(
+        hours,
+        t('hour', { defaultValue: 'hour' }),
+        t('hours', { defaultValue: 'hours' })
+      )
+      const minText = getHoursMinutes(
+        minutes,
+        t('minute', { defaultValue: 'minute' }),
+        t('minutes', { defaultValue: 'minutes' })
+      )
+      const waitTime = `${hourText} ${minText}`
+      let text
+      switch (queue.state) {
+        case 'ACTIVE':
+          text = `<p class="text-success500 font-bold">${waitTime}</p>`
+          break
+        case 'INACTIVE':
+        case 'CLOSED':
+          text = `<p class="text-neutral500, font-bold">${t('queue-closed', {
+            defaultValue: 'Closed'
+          })}</p>`
+          break
+        case 'CLOSING':
+          text = `<p class="font-bold">${t('queue-full', {
+            defaultValue: 'Full'
+          })}</p>`
+          break
+        // istanbul ignore next
+        default:
+          break
+      }
+      rows.push({ values: [queue.name, text] })
+    }
+  }
+
+  // istanbul ignore next
+  useEffect(() => {
+    if (isPermitCenter) {
+      // This is a hack to refresh server-side props and fetch
+      // QLess data. It causes a full page reset though,
+      // because the page props are re-fetched too.
+      // There are ways around this but would take some QLess tweaking
+      const refreshData = () => {
+        router.replace(router.asPath)
+      }
+
+      const intervalCall = setInterval(() => {
+        refreshData()
+      }, 300000)
+      return () => {
+        clearInterval(intervalCall)
+      }
+    }
+  }, [isPermitCenter, router])
 
   const address = contact?.value.address[0]
 
@@ -86,6 +194,42 @@ export function LocationPage({ page, env }: LocationPageProps) {
               <RichText html={body} />
             </div>
           </PageTitleSection>
+          {isPermitCenter ? (
+            <Grid className="mt-20 md:mt-40 lg:mt-60">
+              <div className="col-span-full lg:col-span-8 space-y-20">
+                <HeadingXXl>
+                  {t('wait-times-header', { defaultValue: 'Wait times' })}
+                </HeadingXXl>
+                <p>
+                  {t('qless-permit-center-desc', {
+                    defaultValue:
+                      'The Permit Center uses QLess to manage customer lines and wait times.'
+                  })}
+                </p>
+                {rows.length ? (
+                  <>
+                    <Table
+                      table_header_options="row"
+                      table={{ rows, columns }}
+                      caption=""
+                    ></Table>
+                    <p className="mt-12 text-neutral500">
+                      {t('qless-timestamp', { defaultValue: 'Last updated: ' })}
+                      <ComposedDate
+                        startDateInput={qLessData?.data.timestamp}
+                        dateStyle={{
+                          month: 'long',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: '2-digit'
+                        }}
+                      />
+                    </p>
+                  </>
+                ) : null}
+              </div>
+            </Grid>
+          ) : null}
         </Container>
         {intro ||
         !!parking.length ||

@@ -4,6 +4,7 @@ import type { GetServerSideProps } from 'next'
 import type { ComponentType } from 'react'
 import safeJsonStringify from 'safe-json-stringify'
 import { getPublicEnv } from './env'
+import { isPermitCenter } from './utils'
 
 // "unknown" page props literally have { page: unknown }
 type UnknownPageProps = PageProps<unknown>
@@ -120,11 +121,17 @@ export class Controller {
             }
           }
         }
+        const props = {
+          page,
+          env: getPublicEnv()
+        } as Props
+        // istanbul ignore next
+        if (isPermitCenter(page)) {
+          const qLessData = await this.api.getQLessData()
+          props.qLessData = qLessData
+        }
         return {
-          props: {
-            page,
-            env: getPublicEnv()
-          } as Props
+          props
         }
       } catch (error) {
         console.error(

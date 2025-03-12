@@ -95,3 +95,7 @@ export function withDefaultProps<P extends object>(
     return <Component {...defaults} {...props} />
   }
 }
+
+export function isPermitCenter(page: PageData): boolean {
+  return page.meta.slug === 'location--san-francisco-permit-center'
+}

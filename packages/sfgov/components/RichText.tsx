@@ -5,6 +5,7 @@ import parse, {
   type HTMLReactParserOptions
 } from 'html-react-parser'
 import {
+  classes,
   HeadingLgListItem,
   HeadingMd,
   HeadingSm,
@@ -168,7 +169,7 @@ export const RichText = (props: RichTextProps) => {
 
       if (tagName === 'p') {
         return (
-          <p className={next ? 'mb-16' : ''}>
+          <p className={classes(next ? 'mb-16' : '', props.class)}>
             {domToReact(node.children, options)}
           </p>
         )
