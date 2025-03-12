@@ -30,6 +30,7 @@ import { TileContentSection } from '../TileContentSection'
 import type { LocationPageData, PageProps } from '@/types'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { isPermitCenter } from '@/lib/utils'
 
 export type LocationPageProps = PageProps<LocationPageData>
 
@@ -57,7 +58,6 @@ export function LocationPage({ page, env, qLessData }: LocationPageProps) {
   const { t } = useTranslation()
   const router = useRouter()
 
-  const isPermitCenter = page.id === 2736
   const columns = []
   const rows = []
 
@@ -141,7 +141,7 @@ export function LocationPage({ page, env, qLessData }: LocationPageProps) {
 
   // istanbul ignore next
   useEffect(() => {
-    if (isPermitCenter) {
+    if (isPermitCenter(page)) {
       // This is a hack to refresh server-side props and fetch
       // QLess data. It causes a full page reset though,
       // because the page props are re-fetched too.
@@ -157,7 +157,7 @@ export function LocationPage({ page, env, qLessData }: LocationPageProps) {
         clearInterval(intervalCall)
       }
     }
-  }, [isPermitCenter, router])
+  }, [page, router])
 
   const address = contact?.value.address[0]
 
@@ -194,7 +194,7 @@ export function LocationPage({ page, env, qLessData }: LocationPageProps) {
               <RichText html={body} />
             </div>
           </PageTitleSection>
-          {isPermitCenter ? (
+          {isPermitCenter(page) ? (
             <Grid className="mt-20 md:mt-40 lg:mt-60">
               <div className="col-span-full lg:col-span-8 space-y-20">
                 <HeadingXXl>
