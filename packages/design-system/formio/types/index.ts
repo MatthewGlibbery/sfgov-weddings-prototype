@@ -43,6 +43,13 @@ export type Form = Override<
     changed: any
     submitted: boolean
     submission?: FormSubmission
+    // override this because the internal argument is optional
+    on(
+      event: string,
+      cb: (...args: any[]) => void,
+      internal?: boolean,
+      once?: boolean
+    ): void
     setAlert(type: string | boolean, message?: string, options?: object): void
     submit(before?: boolean, options?: object): Promise<object>
     // focus on a component by its unique id
