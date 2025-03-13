@@ -75,7 +75,8 @@ export function LocationPage({ page, env, qLessData }: LocationPageProps) {
       2586, // Public Health: Plan review
       1068, // Permit Processing: OTC with plans
       2395, // Permit Processing: No plans / Trade
-      2718 // OSB Permit Center
+      2718, // OSB Permit Center
+      1124 // Intake: No Plans
     ]
 
     columns.push(
@@ -214,7 +215,7 @@ export function LocationPage({ page, env, qLessData }: LocationPageProps) {
                       caption=""
                     ></Table>
                     <p className="mt-12 text-neutral500">
-                      {t('qless-timestamp', { defaultValue: 'Last updated: ' })}
+                      {t('qless-timestamp', { defaultValue: 'Last updated:' })}{' '}
                       <ComposedDate
                         startDateInput={qLessData?.data.timestamp}
                         dateStyle={{
