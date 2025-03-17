@@ -28,7 +28,7 @@ export function form({ t, ...ctx }: ComponentContext) {
     <>
       <label
         ref="label"
-        className={`text-label-md ${ctx.label?.className.replace(
+        className={`text-label-md ${ctx.label?.className?.replace(
           'field-required',
           ''
         )}`}

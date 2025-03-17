@@ -1,22 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+/**
+ * Paths in this list will serve rewrites (proxy) to the API server.
+ */
+const API_REWRITE_PATHS = ['/sitemap.xml']
+
 export async function middleware(request: NextRequest) {
   const { API_BASE_URL } = process.env
+  const reqUrl = request.nextUrl
+  const path = reqUrl.pathname
 
   // Skip any internal routing next does
-  if (request.nextUrl.pathname.includes('_next')) {
+  if (path.startsWith('/_next/')) {
     return NextResponse.next()
+  } else if (API_REWRITE_PATHS.includes(path)) {
+    return NextResponse.rewrite(new URL(path, API_BASE_URL).href)
   }
 
-  const reqUrl = request.nextUrl
-  const resp = await fetch(new URL(reqUrl.pathname, API_BASE_URL).href, {
+  const resp = await fetch(new URL(path, API_BASE_URL).href, {
     redirect: 'manual'
   })
 
   // Not a redirect, continue on
   if (!isRedirectStatus(resp.status)) {
-    if (isFilePath(reqUrl.pathname)) {
-      return fileRewrite(reqUrl.pathname)
+    if (isFilePath(path)) {
+      return fileRewrite(path)
     }
 
     return NextResponse.next()
@@ -35,9 +43,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  if (rawRedirLoc === `${reqUrl.pathname}/`) {
-    if (isFilePath(reqUrl.pathname)) {
-      return fileRewrite(reqUrl.pathname)
+  if (rawRedirLoc === `${path}/`) {
+    if (isFilePath(path)) {
+      return fileRewrite(path)
     }
 
     return NextResponse.next()

@@ -5,7 +5,7 @@ import type {
   IContentAPI,
   WagtailImageData
 } from '../types'
-import { getenv } from './env'
+import { getenv, requireEnv } from './env'
 import { i18n } from '../next.config'
 
 // @ts-expect-error no, it's really not null/undefined
@@ -168,6 +168,15 @@ export class ContentAPI implements IContentAPI {
       }
     }
     return url
+  }
+
+  async getQLessData() {
+    const res = await this.fetch(
+      getenv('NEXT_PUBLIC_QLESS_API_URL') ||
+        'https://qless-microservice.herokuapp.com/api/v1/queues'
+    )
+    const data = await res.json().catch(/* istanbul ignore next */ () => ({}))
+    return data
   }
 }
 

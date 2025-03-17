@@ -63,7 +63,8 @@ import {
   TypeBodyTextBlock,
   TypeContactFooterBlock,
   HomePageData,
-  TypeTableBlock
+  TypeTableBlock,
+  TypeQLessData
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -462,6 +463,43 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
     }
   }),
   about_location: 'blah'
+}))
+
+export const QLessDataFactory = factory<TypeQLessData>((gen) => ({
+  status: 'success',
+  data: {
+    timestamp: '2025-03-06T20:17:37.892Z',
+    queues: [
+      {
+        id: 1081,
+        name: 'Fire: Plan review',
+        state: 'ACTIVE',
+        wait_time: 69,
+        location_id: 188
+      },
+      {
+        id: 1085,
+        name: 'Fire: Operational permits',
+        state: 'ACTIVE',
+        wait_time: 34,
+        location_id: 188
+      },
+      {
+        id: 1087,
+        name: 'PUC: Plan review',
+        state: 'CLOSING',
+        wait_time: 34,
+        location_id: 188
+      },
+      {
+        id: 1079,
+        name: 'Mechanical review',
+        state: 'CLOSED',
+        wait_time: 1,
+        location_id: 188
+      }
+    ]
+  }
 }))
 
 export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({

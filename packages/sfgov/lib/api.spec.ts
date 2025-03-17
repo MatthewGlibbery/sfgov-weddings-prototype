@@ -27,7 +27,8 @@ describe('ContentAPI', () => {
     beforeEach(() => {
       restoreEnv = mockEnv({
         NEXT_PUBLIC_CONTENT_API_BASE_URL: undefined,
-        NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL: undefined
+        NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL: undefined,
+        NEXT_PUBLIC_QLESS_API_URL: undefined
       })
     })
 
@@ -388,6 +389,30 @@ describe('ContentAPI', () => {
         previewURL: 'https://localhost:8000'
       })
       expect(api.getURL('foo')).toStringifyTo('http://localhost:8000/foo')
+    })
+  })
+
+  describe('getQLessData()', () => {
+    it('resolves to page at the expected "api/{id}" path', async () => {
+      const data = {
+        status: 'success',
+        data: {
+          timestamp: '2025-03-06T20:17:37.892Z',
+          queues: [
+            {
+              id: 2566,
+              name: 'Permit Center Help Desk',
+              state: 'ACTIVE',
+              wait_time: 5,
+              location_id: 188
+            }
+          ]
+        }
+      }
+      fetchMock.mockResponseOnce(JSON.stringify(data))
+      const api = example
+      const res = await api.getQLessData()
+      expect(res.status).toEqual('success')
     })
   })
 })

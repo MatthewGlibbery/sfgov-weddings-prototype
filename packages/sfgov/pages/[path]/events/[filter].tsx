@@ -15,6 +15,7 @@ import {
   PageTitleSection
 } from '@/design-system'
 import { getenv, getPublicEnv } from '@/lib/env'
+import { getPageURL } from '@/lib/utils'
 import { PageData } from '@/types'
 import { GetServerSidePropsContext } from 'next'
 import { useTranslation } from 'next-i18next'
@@ -114,7 +115,7 @@ const EventItem = (item: Event) => {
   return (
     <div className="flex flex-col gap-y-8">
       <HeadingLgListItem className="!mb-0 text-primary500 flex items-start flex-col gap-y-8 md:flex-row md:gap-x-8 md:items-center">
-        <a href={item.meta?.html_url} className="no-underline">
+        <a href={getPageURL(item)} className="no-underline">
           {item.title}
         </a>
         {item.cancelled ? (

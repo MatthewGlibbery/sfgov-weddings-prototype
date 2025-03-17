@@ -1,4 +1,4 @@
-import type { PageData } from './pages'
+import type { PageData, TypeQLessData } from './pages'
 
 export * from './pages'
 export * from './blocks'
@@ -27,6 +27,7 @@ export interface IContentAPI {
     params?: QueryParams,
     options?: RequestInit
   ): Promise<T>
+  getQLessData(): unknown
 }
 
 /**
@@ -38,4 +39,5 @@ export interface IContentAPI {
 export type PageProps<T, SpecificData = T extends PageData ? T : unknown> = {
   page: SpecificData
   env?: Record<string, string | undefined>
+  qLessData?: TypeQLessData
 }

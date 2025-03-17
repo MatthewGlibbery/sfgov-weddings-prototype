@@ -1,11 +1,12 @@
 import { TypeOnlineEventBlockValues } from '@/types'
 import { Button } from '@/design-system'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
+import { getPageURL } from '@/lib/utils'
 
 export const OnlineEventBlock = (props: TypeOnlineEventBlockValues) => {
   const { description, link, phone: phoneNumbers } = props
   let url: string | undefined = ''
-  if (link?.link_to === 'page') url = link?.page?.meta?.html_url
+  if (link?.link_to === 'page') url = getPageURL(link.page)
   if (link?.link_to === 'url') url = link?.url
   return (
     <div className="space-y-12">

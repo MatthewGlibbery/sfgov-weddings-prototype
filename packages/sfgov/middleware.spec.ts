@@ -2,10 +2,15 @@ import { NextResponse, NextRequest } from 'next/server'
 import mockEnv from 'mocked-env'
 import { middleware } from './middleware'
 import nextConfig from './next.config'
+import { RequestInit } from 'next/dist/server/web/spec-extension/request'
+
+const MOCK_BASE_URL = 'http://test.url'
 
 describe('Middleware', () => {
   const MOCK_API_BASE_URL = 'https://api.platform.local'
-  let restoreEnv
+
+  let restoreEnv: ReturnType<typeof mockEnv>
+
   const nextSpy = jest.spyOn(NextResponse, 'next')
   const redirectSpy = jest.spyOn(NextResponse, 'redirect')
   const rewriteSpy = jest.spyOn(NextResponse, 'rewrite').mockImplementation(
@@ -27,14 +32,13 @@ describe('Middleware', () => {
     nextSpy.mockReset()
     redirectSpy.mockReset()
     rewriteSpy.mockReset()
+    restoreEnv?.()
   })
 
   describe('Redirects', () => {
     it('should not perform a redirect for internal next resources', async () => {
       await middleware(
-        new NextRequest(
-          'http://test.url/_next/static/media/83d7d13e2307bc53-s.p.woff2'
-        )
+        mockRequest('/_next/static/media/83d7d13e2307bc53-s.p.woff2')
       )
 
       expect(nextSpy).toHaveBeenCalledTimes(1)
@@ -49,9 +53,7 @@ describe('Middleware', () => {
           statusText: 'ok'
         })
 
-        await middleware(
-          new NextRequest('http://test.url/not-a-redirected-source')
-        )
+        await middleware(mockRequest('/not-a-redirected-source'))
 
         expect(nextSpy).toHaveBeenCalledTimes(1)
         expect(redirectSpy).not.toHaveBeenCalled()
@@ -63,7 +65,7 @@ describe('Middleware', () => {
         status: 301,
         statusText: 'ok'
       })
-      await middleware(new NextRequest('http://test.url/redirect-no-location'))
+      await middleware(mockRequest('/redirect-no-location'))
 
       expect(nextSpy).toHaveBeenCalledTimes(1)
       expect(redirectSpy).not.toHaveBeenCalled()
@@ -82,9 +84,7 @@ describe('Middleware', () => {
           statusText: 'ok',
           headers: { location: '/to-the-new-place/' }
         })
-        const resp = await middleware(
-          new NextRequest('http://test.url/redirect-me')
-        )
+        const resp = await middleware(mockRequest('/redirect-me'))
 
         expect(nextSpy).not.toHaveBeenCalled()
         expect(redirectSpy).toHaveBeenCalled()
@@ -101,7 +101,7 @@ describe('Middleware', () => {
         statusText: 'ok',
         headers: { location: '/loopy-redirect/' }
       })
-      await middleware(new NextRequest('http://test.url/loopy-redirect'))
+      await middleware(mockRequest('/loopy-redirect'))
 
       expect(nextSpy).toHaveBeenCalledTimes(1)
       expect(redirectSpy).not.toHaveBeenCalled()
@@ -114,7 +114,7 @@ describe('Middleware', () => {
         headers: { location: '/to-the-new-place/' }
       })
       const resp = await middleware(
-        new NextRequest('http://test.url/es/redirect-me', {
+        mockRequest('/es/redirect-me', {
           nextConfig
         })
       )
@@ -133,7 +133,7 @@ describe('Middleware', () => {
         headers: { location: '/to-the-new-place/' }
       })
       const resp = await middleware(
-        new NextRequest('http://test.url/en/redirect-me', {
+        mockRequest('/en/redirect-me', {
           nextConfig
         })
       )
@@ -152,7 +152,7 @@ describe('Middleware', () => {
         headers: { location: '/to-the-new-place' }
       })
       const resp = await middleware(
-        new NextRequest('http://test.url/en/redirect-me?p1=hi&p2=1', {
+        mockRequest('/en/redirect-me?p1=hi&p2=1', {
           nextConfig
         })
       )
@@ -171,9 +171,7 @@ describe('Middleware', () => {
         headers: { location: absUrl }
       })
 
-      const resp = await middleware(
-        new NextRequest('http://test.url/redirect-me')
-      )
+      const resp = await middleware(mockRequest('/redirect-me'))
 
       expect(nextSpy).not.toHaveBeenCalled()
       expect(redirectSpy).toHaveBeenCalled()
@@ -206,7 +204,7 @@ describe('Middleware', () => {
           }
         })
 
-      await middleware(new NextRequest('http://test.url' + path))
+      await middleware(mockRequest(path))
       expect(fetchMock).toHaveBeenCalledWith(expectedApiUrl, {
         redirect: 'manual'
       })
@@ -233,7 +231,7 @@ describe('Middleware', () => {
           }
         })
 
-      await middleware(new NextRequest('http://test.url' + path))
+      await middleware(mockRequest(path))
       expect(fetchMock).toHaveBeenCalledWith(expectedApiUrl, {
         redirect: 'manual'
       })
@@ -249,9 +247,7 @@ describe('Middleware', () => {
         .once('Not found', {
           status: 404
         })
-      const res = await middleware(
-        new NextRequest('http://test.url/file/missing')
-      )
+      const res = await middleware(mockRequest('/file/missing'))
       expect(rewriteSpy).not.toHaveBeenCalled()
       expect(res).toBeInstanceOf(NextResponse)
       expect(res.status).toBe(404)
@@ -265,11 +261,18 @@ describe('Middleware', () => {
         statusText: 'ok',
         headers: { location: '/to-the-new-place' }
       })
-      await middleware(new NextRequest('http://test.url/redirect-me'))
+      await middleware(mockRequest('/redirect-me'))
 
       expect(nextSpy).not.toHaveBeenCalled()
       expect(redirectSpy).toHaveBeenCalled()
       expect(rewriteSpy).not.toHaveBeenCalled()
+    })
+
+    it('rewrites /sitemap.xml to the API base URL', async () => {
+      await middleware(mockRequest('/sitemap.xml'))
+      expect(rewriteSpy).toHaveBeenCalledWith(
+        new URL('/sitemap.xml', MOCK_API_BASE_URL).href
+      )
     })
 
     it('performs a rewrite after a redirect is not found', async () => {
@@ -283,7 +286,7 @@ describe('Middleware', () => {
           statusText: 'ok',
           headers: { location: '/to-the-new-place' }
         })
-      await middleware(new NextRequest('http://test.url/file/foo'))
+      await middleware(mockRequest('/file/foo'))
 
       expect(nextSpy).not.toHaveBeenCalled()
       expect(redirectSpy).not.toHaveBeenCalled()
@@ -302,7 +305,7 @@ describe('Middleware', () => {
           statusText: 'ok',
           headers: { location: 'http://test.url/fake.pdf' }
         })
-      await middleware(new NextRequest('http://test.url/file/foo'))
+      await middleware(mockRequest('/file/foo'))
 
       expect(nextSpy).not.toHaveBeenCalled()
       expect(redirectSpy).not.toHaveBeenCalled()
@@ -310,6 +313,10 @@ describe('Middleware', () => {
     })
   })
 })
+
+function mockRequest(uri: string, init?: RequestInit) {
+  return new NextRequest(new URL(uri, MOCK_BASE_URL), init)
+}
 
 function randomString() {
   return Date.now().toString(16)

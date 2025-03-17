@@ -13,11 +13,7 @@ import type {
   FormPageData,
   TypeContactFooterBlockValues
 } from '@/types'
-import type {
-  Dimension,
-  PutMetricDataInput,
-  MetricDatum
-} from '@aws-sdk/client-cloudwatch'
+import type { Dimension } from '@aws-sdk/client-cloudwatch'
 import { useTranslation } from 'next-i18next'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
@@ -36,12 +32,8 @@ export type FormPageProps = {
   warnBeforeLeaving?: boolean
 }
 
-// Form metrics have a fixed namespace and dimensions
-type FormMetricDataInput = Omit<
-  PutMetricDataInput,
-  'Namespace' | 'MetricData'
-> & {
-  MetricData: Array<Omit<MetricDatum, 'Dimensions'>>
+type FormEvent = {
+  type: 'submit' | 'submit_invalid' | 'submit_error'
 }
 
 export function FormPage({
@@ -172,21 +164,26 @@ export function FormPage({
   // FIXME: get coverage on this!
   // istanbul ignore next
   async function onFormReady(form: Form) {
-    form.on(
-      'submitError',
-      () => {
-        putFormMetrics({
-          MetricData: [
-            {
-              MetricName: 'submit_error',
-              Value: 1,
-              Unit: 'Count'
-            }
-          ]
-        })
-      },
-      false
-    )
+    let formIsValid = true
+
+    /**
+     * The `change` event appears to be the only reliable way to track the
+     * form's validity. The submission data's validity is checked in the change
+     * handler and sets `isValid` on a copy of the submission object:
+     * @see https://github.com/formio/formio.js/blob/v4.19.2/src/Webform.js#L1399
+     */
+    form.on('change', (event: FormSubmission & { isValid: boolean }) => {
+      formIsValid = event.isValid
+    })
+
+    /**
+     * @see https://github.com/formio/formio.js/blob/v4.19.2/src/Webform.js#L1355
+     */
+    form.on('submitError', () => {
+      putFormEvent({
+        type: formIsValid ? 'submit_error' : 'submit_invalid'
+      })
+    })
 
     if (submissionId && !form.formio.submissionId) {
       /**
@@ -202,7 +199,7 @@ export function FormPage({
        */
       const { formio } = form
       formio.submissionId = submissionId
-      formio.submissionUrl = formio.formUrl! + `/submission/${submissionId}`
+      formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
 
       try {
         const submission: FormSubmission = await formio.loadSubmission()
@@ -218,9 +215,7 @@ export function FormPage({
         )
       }
     }
-    // focusing on a component jumps to the component's page
-    // automatically, so we don't need to call setPage() if a
-    // component key was passed
+
     if (formComponentKey) {
       await form.focusOnComponent(formComponentKey)
     } else if (formPage > 0) {
@@ -232,14 +227,8 @@ export function FormPage({
   }
 
   function onSubmitDone() {
-    putFormMetrics({
-      MetricData: [
-        {
-          MetricName: 'submit',
-          Value: 1,
-          Unit: 'Count'
-        }
-      ]
+    putFormEvent({
+      type: 'submit'
     })
     setSubmitted(true)
   }
@@ -248,14 +237,20 @@ export function FormPage({
    * Shortcut for putting form-specific metrics that uses a fixed namespace
    * and adds the form metric dimensions to every MetricData entry
    */
-  function putFormMetrics({ MetricData, ...rest }: FormMetricDataInput) {
+  function putFormEvent(event: FormEvent) {
+    window.dataLayer?.push({
+      event: event.type
+    })
     return putMetricData({
       Namespace: 'web_forms',
-      ...rest,
-      MetricData: MetricData.map((datum) => ({
-        ...datum,
-        Dimensions: metricDimensions
-      }))
+      MetricData: [
+        {
+          MetricName: event.type,
+          Unit: 'Count',
+          Value: 1,
+          Dimensions: metricDimensions
+        }
+      ]
     })
   }
 }

@@ -1,4 +1,4 @@
-import { LocationPageFactory } from '@/lib/factories'
+import { LocationPageFactory, QLessDataFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
 import { LocationPage } from './LocationPage'
 
@@ -12,6 +12,13 @@ describe('LocationPage', () => {
     })
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(page.title)
+  })
+
+  it('renders the permit center page with QLess data', () => {
+    const page = LocationPageFactory.make({
+      id: 2736
+    })
+    render(<LocationPage page={page} qLessData={QLessDataFactory.make()} />)
   })
 
   it('does not render a map if there is no address', () => {

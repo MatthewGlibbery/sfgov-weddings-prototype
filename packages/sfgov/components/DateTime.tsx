@@ -61,7 +61,9 @@ export const ComposedDate = ({
       dateFormat = { ...dateStyle }
     }
     const formatter = Intl.DateTimeFormat(locale, dateFormat)
-    const startDate = new Date(`${startDateInput}T00:00:00`)
+    const startDate = startDateInput.includes('T')
+      ? new Date(startDateInput)
+      : new Date(`${startDateInput}T00:00:00`)
 
     if (!endDateInput || startDateInput === endDateInput) {
       const formattedDate = formatter.format(startDate)
