@@ -35,7 +35,8 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
     cost: [cost],
     things_to_know: thingsToKnow,
     what_to_do: whatToDo,
-    supporting_information: supporingInformation,
+    special_cases: specialCasesHeader,
+    supporting_information: supportingInformation,
     custom_section: customSection,
     get_help: getHelp,
     good_for_community: goodForCommunity,
@@ -57,25 +58,26 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           ))}
         </div>
       ) : null}
-      {!!supporingInformation.length || !!customSection.length ? (
-        <>
-          <HeadingXXl as="h2" id={`supportingInformation${screen}`}>
-            {t('supporting-information', {
-              defaultValue: 'Supporting information'
+      {!!supportingInformation.length || !!customSection.length ? (
+        <div className="flex flex-col gap-y-28 lg:gap-y-40">
+          <HeadingXXl
+            as="h2"
+            className="!mb-0"
+            id={`supportingInformation${screen}`}
+          >
+            {t('special-cases-header', {
+              defaultValue: '{{ specialCasesHeader }}',
+              specialCasesHeader
             })}
           </HeadingXXl>
-          {supporingInformation.length ? (
+          {supportingInformation.length ? (
             <div data-testid="special_cases-section">
-              <HeadingXl as="h3" id={`specialCases${screen}`} className="mb-20">
-                {t('special-cases', { defaultValue: 'Special cases' })}
-              </HeadingXl>
-              {supporingInformation.map((item, i) => (
+              {supportingInformation.map((item, i) => (
                 <Accordion
                   key={i}
                   title={item.value.title}
                   data-testid={`special-case-${item.id}`}
                   open={i === 0}
-                  as="h4"
                 >
                   <RichText html={item.value.text} />
                 </Accordion>
@@ -91,7 +93,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               />
             </div>
           ))}
-        </>
+        </div>
       ) : null}
       {goodForCommunity.map((block, i) => (
         <div key={i} data-testid="good_for_community-section">

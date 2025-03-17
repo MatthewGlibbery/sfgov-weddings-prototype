@@ -272,6 +272,7 @@ export const TransactionPageFactory = factory<TransactionPageData>((gen) => ({
     })
   ],
   what_to_do: WhatToDoFactory.make(),
+  special_cases: 'Blah title',
   supporting_information: [
     TitleAndTextFactory.make({
       value: {
