@@ -169,7 +169,7 @@ export type ProfilePageData = PageData &
 export type TopicPageData = PageData & {
   description: string
   top_level_topic: boolean
-  fields: TopicFieldTypes[]
+  content_fields: TopicFieldTypes[]
   partner_agencies: RelatedContentData[]
 }
 

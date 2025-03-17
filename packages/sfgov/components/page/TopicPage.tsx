@@ -1,5 +1,4 @@
 import type { ComponentType } from 'react'
-import { When } from 'react-if'
 import { useTranslation } from 'next-i18next'
 
 import type { TopicPageData } from '@/types'
@@ -12,19 +11,19 @@ import {
   TileContentSection
 } from '../TileContentSection'
 
-import {
-  Container,
-  DisplayLg,
-  HeadingXl,
-  PageTitleSection
-} from '@/design-system'
+import { Container, DisplayLg, PageTitleSection } from '@/design-system'
 import { ContentTileList } from '../Tile'
 import { ZebraStripedSection } from '../ZebraStripeSection'
 import { RelatedContentList } from '../RelatedContentList'
 
 export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
   const { t } = useTranslation()
-  const { title, description, fields, partner_agencies: agencies } = page
+  const {
+    title,
+    description,
+    content_fields: fields,
+    partner_agencies: agencies
+  } = page
   return (
     <PageWrapper title={title}>
       <Container className="mb-20">

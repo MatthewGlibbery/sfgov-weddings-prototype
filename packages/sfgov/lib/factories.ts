@@ -1326,7 +1326,7 @@ export const TopicPageFactory = factory<TopicPageData>((gen) => ({
   title: 'Topic',
   description: 'Topic description',
   top_level_topic: false,
-  fields: [
+  content_fields: [
     {
       type: 'child_topics',
       value: {
