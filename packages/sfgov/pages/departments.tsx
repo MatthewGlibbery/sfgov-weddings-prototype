@@ -8,27 +8,30 @@ import {
 } from '@/design-system'
 import { getPublicEnv, requireEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
-import { getPageURL } from '@/lib/utils'
-import { AgencyPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 
+type Department = {
+  title: string
+  description: string
+  url: string
+  translation_key: string
+}
+
 type DepartmentPageData = {
-  departments: AgencyPageData[]
+  departments: Department[]
 }
 
 export const getServerSideProps = withServerSideTranslations(
   async ({ locale }) => {
-    const url = new URL(requireEnv('NEXT_PUBLIC_CONTENT_API_BASE_URL'))
-    url.pathname += '/pages/'
-    url.searchParams.set('type', 'sf.Agency')
-    url.searchParams.set('fields', 'description')
+    const url = new URL(
+      requireEnv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL') + '/sf.Agency'
+    )
     url.searchParams.set('show_agency_list', 'true')
-    url.searchParams.set('locale', locale as string)
-    url.searchParams.set('order', 'title')
-    url.searchParams.set('limit', '1000') // WAGTAILAPI_LIMIT_MAX on platform side
+    url.searchParams.set('locale__language_code', locale as string)
+    url.searchParams.set('live', 'true')
     const res = await fetch(url.href)
-    const data = await res.json()
-    return { props: { departments: data.items, env: getPublicEnv() } }
+    const departments = await res.json()
+    return { props: { departments, env: getPublicEnv() } }
   }
 )
 
@@ -54,10 +57,10 @@ const DepartmentsPage = (props: DepartmentPageData) => {
         <ul className="list-none m-0 p-0 grid grid-cols-1 gap-y-28 mb-60">
           {departments.map((department) => {
             return (
-              <li key={department.id}>
+              <li key={department.translation_key}>
                 <HeadingLg className="font-body text-primary500 !mb-0">
                   <a
-                    href={getPageURL(department)}
+                    href={department.url}
                     className="grid grid-cols-1 gap-y-8 no-underline"
                   >
                     {department.title}
