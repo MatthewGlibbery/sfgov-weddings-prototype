@@ -47,7 +47,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   const { t } = useTranslation()
 
   const TransactionContent = ({ screen = '' }) => (
-    <div className="flex flex-col gap-y-60 mx-20 md:mx-0 col-span-full lg:col-span-7">
+    <div className="flex flex-col mx-20 md:mx-0 col-span-full lg:col-span-7">
       {whatToDo.length ? (
         <div className="flex flex-col gap-y-28">
           <HeadingXXl as="h2" id={`whatToDo${screen}`}>
@@ -59,17 +59,19 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
         </div>
       ) : null}
       {!!supportingInformation.length || !!customSection.length ? (
-        <div className="flex flex-col gap-y-28 lg:gap-y-40">
-          <HeadingXXl
-            as="h2"
-            className="!mb-0"
-            id={`supportingInformation${screen}`}
-          >
-            {t('special-cases-header', {
-              defaultValue: '{{ specialCasesHeader }}',
-              specialCasesHeader
-            })}
-          </HeadingXXl>
+        <div className="flex flex-col gap-y-28 lg:gap-y-40 mt-28">
+          {specialCasesHeader ? (
+            <HeadingXXl
+              as="h2"
+              className="!mb-0"
+              id={`supportingInformation${screen}`}
+            >
+              {t('special-cases-header', {
+                defaultValue: '{{ specialCasesHeader }}',
+                specialCasesHeader
+              })}
+            </HeadingXXl>
+          ) : null}
           {supportingInformation.length ? (
             <div data-testid="special_cases-section">
               {supportingInformation.map((item, i) => (
