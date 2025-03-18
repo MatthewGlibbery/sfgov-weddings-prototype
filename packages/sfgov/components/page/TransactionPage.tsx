@@ -47,56 +47,58 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   const { t } = useTranslation()
 
   const TransactionContent = ({ screen = '' }) => (
-    <div className="flex flex-col mx-20 md:mx-0 col-span-full lg:col-span-7">
-      {whatToDo.length ? (
-        <div className="flex flex-col gap-y-28">
-          <HeadingXXl as="h2" id={`whatToDo${screen}`}>
-            {t('what-to-do', { defaultValue: 'What to do' })}
-          </HeadingXXl>
-          {whatToDo.map((what, i) => (
-            <WhatToDo block={what} key={i} />
-          ))}
-        </div>
-      ) : null}
-      {!!supportingInformation.length || !!customSection.length ? (
-        <div className="flex flex-col gap-y-28 lg:gap-y-40 mt-28">
-          {specialCasesHeader ? (
-            <HeadingXXl
-              as="h2"
-              className="!mb-0"
-              id={`supportingInformation${screen}`}
-            >
-              {t('special-cases-header', {
-                defaultValue: '{{ specialCasesHeader }}',
-                specialCasesHeader
-              })}
+    <div className="flex flex-col gap-y-28 md:gap-y-40 lg:gap-y-60 mx-20 md:mx-0 col-span-full lg:col-span-7">
+      <div>
+        {whatToDo.length ? (
+          <div className="flex flex-col gap-y-28">
+            <HeadingXXl as="h2" id={`whatToDo${screen}`}>
+              {t('what-to-do', { defaultValue: 'What to do' })}
             </HeadingXXl>
-          ) : null}
-          {supportingInformation.length ? (
-            <div data-testid="special_cases-section">
-              {supportingInformation.map((item, i) => (
-                <Accordion
-                  key={i}
-                  title={item.value.title}
-                  data-testid={`special-case-${item.id}`}
-                  open={i === 0}
-                >
-                  <RichText html={item.value.text} />
-                </Accordion>
-              ))}
-            </div>
-          ) : null}
-          {customSection.map((block, i) => (
-            <div key={i} data-testid="custom_section-section">
-              <TitleAndText
-                {...block.value}
-                id={camelCase(block.value.title) + screen}
-                heading={HeadingXl}
-              />
-            </div>
-          ))}
-        </div>
-      ) : null}
+            {whatToDo.map((what, i) => (
+              <WhatToDo block={what} key={i} />
+            ))}
+          </div>
+        ) : null}
+        {!!supportingInformation.length || !!customSection.length ? (
+          <div className="flex flex-col gap-y-28 lg:gap-y-40 mt-28">
+            {specialCasesHeader ? (
+              <HeadingXXl
+                as="h2"
+                className="!mb-0"
+                id={`supportingInformation${screen}`}
+              >
+                {t('special-cases-header', {
+                  defaultValue: '{{ specialCasesHeader }}',
+                  specialCasesHeader
+                })}
+              </HeadingXXl>
+            ) : null}
+            {supportingInformation.length ? (
+              <div data-testid="special_cases-section">
+                {supportingInformation.map((item, i) => (
+                  <Accordion
+                    key={i}
+                    title={item.value.title}
+                    data-testid={`special-case-${item.id}`}
+                    open={i === 0}
+                  >
+                    <RichText html={item.value.text} />
+                  </Accordion>
+                ))}
+              </div>
+            ) : null}
+            {customSection.map((block, i) => (
+              <div key={i} data-testid="custom_section-section">
+                <TitleAndText
+                  {...block.value}
+                  id={camelCase(block.value.title) + screen}
+                  heading={HeadingXl}
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
       {goodForCommunity.map((block, i) => (
         <div key={i} data-testid="good_for_community-section">
           <TitleAndText
