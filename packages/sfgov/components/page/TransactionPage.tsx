@@ -61,18 +61,16 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
         ) : null}
         {!!supportingInformation.length || !!customSection.length ? (
           <div className="flex flex-col gap-y-28 lg:gap-y-40 mt-28">
-            {specialCasesHeader ? (
-              <HeadingXXl
-                as="h2"
-                className="!mb-0"
-                id={`supportingInformation${screen}`}
-              >
-                {t('special-cases-header', {
-                  defaultValue: '{{ specialCasesHeader }}',
-                  specialCasesHeader
-                })}
-              </HeadingXXl>
-            ) : null}
+            <HeadingXXl
+              as="h2"
+              className="!mb-0"
+              id={`supportingInformation${screen}`}
+            >
+              {t('special-cases-header', {
+                defaultValue: '{{ specialCasesHeader }}',
+                specialCasesHeader: specialCasesHeader || 'Special cases'
+              })}
+            </HeadingXXl>
             {supportingInformation.length ? (
               <div data-testid="special_cases-section">
                 {supportingInformation.map((item, i) => (
