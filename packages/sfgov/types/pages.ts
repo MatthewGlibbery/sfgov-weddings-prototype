@@ -137,6 +137,7 @@ export type TransactionPageData = PageData & {
   cost: TypeCostBlock[]
   things_to_know: TypeTitleAndTextBlock[]
   what_to_do: TypeWhatToDoBlock[]
+  special_cases: string
   supporting_information: TypeTitleAndTextBlock[]
   custom_section: TypeTitleAndTextBlock[]
   get_help: GetHelpBlockTypes[]
@@ -168,7 +169,7 @@ export type ProfilePageData = PageData &
 export type TopicPageData = PageData & {
   description: string
   top_level_topic: boolean
-  fields: TopicFieldTypes[]
+  content_fields: TopicFieldTypes[]
   partner_agencies: RelatedContentData[]
 }
 

@@ -35,7 +35,8 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
     cost: [cost],
     things_to_know: thingsToKnow,
     what_to_do: whatToDo,
-    supporting_information: supporingInformation,
+    special_cases: specialCasesHeader,
+    supporting_information: supportingInformation,
     custom_section: customSection,
     get_help: getHelp,
     good_for_community: goodForCommunity,
@@ -46,53 +47,56 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   const { t } = useTranslation()
 
   const TransactionContent = ({ screen = '' }) => (
-    <div className="flex flex-col gap-y-60 mx-20 md:mx-0 col-span-full lg:col-span-7">
-      {whatToDo.length ? (
-        <div className="flex flex-col gap-y-28">
-          <HeadingXXl as="h2" id={`whatToDo${screen}`}>
-            {t('what-to-do', { defaultValue: 'What to do' })}
-          </HeadingXXl>
-          {whatToDo.map((what, i) => (
-            <WhatToDo block={what} key={i} />
-          ))}
-        </div>
-      ) : null}
-      {!!supporingInformation.length || !!customSection.length ? (
-        <>
-          <HeadingXXl as="h2" id={`supportingInformation${screen}`}>
-            {t('supporting-information', {
-              defaultValue: 'Supporting information'
-            })}
-          </HeadingXXl>
-          {supporingInformation.length ? (
-            <div data-testid="special_cases-section">
-              <HeadingXl as="h3" id={`specialCases${screen}`} className="mb-20">
-                {t('special-cases', { defaultValue: 'Special cases' })}
-              </HeadingXl>
-              {supporingInformation.map((item, i) => (
-                <Accordion
-                  key={i}
-                  title={item.value.title}
-                  data-testid={`special-case-${item.id}`}
-                  open={i === 0}
-                  as="h4"
-                >
-                  <RichText html={item.value.text} />
-                </Accordion>
-              ))}
-            </div>
-          ) : null}
-          {customSection.map((block, i) => (
-            <div key={i} data-testid="custom_section-section">
-              <TitleAndText
-                {...block.value}
-                id={camelCase(block.value.title) + screen}
-                heading={HeadingXl}
-              />
-            </div>
-          ))}
-        </>
-      ) : null}
+    <div className="flex flex-col gap-y-28 md:gap-y-40 lg:gap-y-60 mx-20 md:mx-0 col-span-full lg:col-span-7">
+      <div>
+        {whatToDo.length ? (
+          <div className="flex flex-col gap-y-28">
+            <HeadingXXl as="h2" id={`whatToDo${screen}`}>
+              {t('what-to-do', { defaultValue: 'What to do' })}
+            </HeadingXXl>
+            {whatToDo.map((what, i) => (
+              <WhatToDo block={what} key={i} />
+            ))}
+          </div>
+        ) : null}
+        {!!supportingInformation.length || !!customSection.length ? (
+          <div className="flex flex-col gap-y-28 lg:gap-y-40 mt-28">
+            <HeadingXXl
+              as="h2"
+              className="!mb-0"
+              id={`supportingInformation${screen}`}
+            >
+              {t('special-cases-header', {
+                defaultValue: '{{ specialCasesHeader }}',
+                specialCasesHeader: specialCasesHeader || 'Special cases'
+              })}
+            </HeadingXXl>
+            {supportingInformation.length ? (
+              <div data-testid="special_cases-section">
+                {supportingInformation.map((item, i) => (
+                  <Accordion
+                    key={i}
+                    title={item.value.title}
+                    data-testid={`special-case-${item.id}`}
+                    open={i === 0}
+                  >
+                    <RichText html={item.value.text} />
+                  </Accordion>
+                ))}
+              </div>
+            ) : null}
+            {customSection.map((block, i) => (
+              <div key={i} data-testid="custom_section-section">
+                <TitleAndText
+                  {...block.value}
+                  id={camelCase(block.value.title) + screen}
+                  heading={HeadingXl}
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
       {goodForCommunity.map((block, i) => (
         <div key={i} data-testid="good_for_community-section">
           <TitleAndText

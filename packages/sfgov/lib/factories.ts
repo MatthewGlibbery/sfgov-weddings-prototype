@@ -272,6 +272,7 @@ export const TransactionPageFactory = factory<TransactionPageData>((gen) => ({
     })
   ],
   what_to_do: WhatToDoFactory.make(),
+  special_cases: 'Blah title',
   supporting_information: [
     TitleAndTextFactory.make({
       value: {
@@ -1325,7 +1326,7 @@ export const TopicPageFactory = factory<TopicPageData>((gen) => ({
   title: 'Topic',
   description: 'Topic description',
   top_level_topic: false,
-  fields: [
+  content_fields: [
     {
       type: 'child_topics',
       value: {
