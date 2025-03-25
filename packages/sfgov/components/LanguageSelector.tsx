@@ -33,7 +33,7 @@ const localeNames: Record<LocaleCode, string> = {
   es: 'Español',
   'zh-hant': '中文',
   fil: 'Filipino',
-  'vi-vn': 'tiếng Việt'
+  'vi-vn': 'Tiếng Việt'
 }
 
 export type LanguageSelectorProps = ComponentProps<typeof StyledList> & {
