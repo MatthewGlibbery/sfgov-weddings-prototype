@@ -208,9 +208,8 @@ export function FormPage({
       } catch (error) {
         setError(
           t('form-submission-not-found', {
-            defaultValue:
-              'Unable to find the form submssion id "{{ submissionId }}".',
-            submissionId
+            defaultValue: 'Unable to find the form submssion id "{{ zyx }}".',
+            zyx: submissionId
           })
         )
       }
@@ -312,7 +311,7 @@ function Loading(props: DynamicOptionsLoadingProps) {
     >
       {props.isLoading
         ? t('form-loading', { defaultValue: 'Loading...' })
-        : t('form-error', { defaultValue: 'Error: {{error}}', error })}
+        : t('form-error', { defaultValue: 'Error: {{zyx}}', zyx: error })}
     </InfoBox>
   )
 }

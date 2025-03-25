@@ -1,4 +1,4 @@
-import { PageWrapper } from '@/components'
+import { PageWrapper, RichText, TitleAndText } from '@/components'
 import { SearchForm, SearchInputProps } from '@/components/Search'
 import {
   Container,
@@ -11,29 +11,41 @@ import {
   classes,
   IconX,
   LabelXs,
-  IconSearch
+  IconSearch,
+  classed
 } from '@/design-system'
 import { getPublicEnv, requireEnv } from '@/lib/env'
 import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { withServerSideTranslations } from '@/lib/translations'
+import { TopicPageData } from '@/types'
 
-type SearchResult = {
-  id?: string
-  title: string
-  summary: string
-  url: string
-  html_path: string
+export type SearchResult = {
+  id: string
+  document: {
+    name: string
+    id: string
+    derivedStructData: {
+      displayLink: string
+      title: string
+      link: string
+      snippets: {
+        snippet: string
+        snippet_status: string
+      }[]
+      htmlTitle: string
+    }
+  }
 }
 
 export type SearchPageData = {
   query: string
   results: SearchResult[]
-  services: SearchResult[]
+  services: TopicPageData[]
 }
 
 type EmptyStateData = {
-  items: SearchResult[]
+  items: TopicPageData[]
   numColumns: number
   noResults?: boolean
 }
@@ -45,38 +57,51 @@ export const getServerSideProps = withServerSideTranslations(
       locale
     } = context
 
-    if (q) {
-      const url = new URL('https://google.com')
-      url.pathname += '/search'
-      url.searchParams.set('q', `site:www.sf.gov ${q}`)
-      return {
-        redirect: {
-          destination: url.href,
-          permanent: false
-        }
-      }
-    }
-
-    const searchUrl = new URL('/api/search', requireEnv('API_BASE_URL'))
-    searchUrl.searchParams.set('query', q as string)
-    searchUrl.searchParams.set('locale', locale as string)
+    const searchUrl = new URL('https://discoveryengine.googleapis.com')
+    searchUrl.pathname += `v1/projects/${requireEnv(
+      'GOOGLE_PROJECT_ID'
+    )}/locations/global/collections/default_collection/engines/${requireEnv(
+      'GOOGLE_AGENT_BUILDER_SEARCH_APP_ID'
+    )}/servingConfigs/default_search:searchLite`
+    searchUrl.searchParams.set(
+      'key',
+      requireEnv('GOOGLE_AGENT_BUILDER_SEARCH_API_KEY')
+    )
 
     // fetch topics, too, for the empty/no results state
     const topicsUrl = new URL(
       requireEnv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL') + '/sf.Topic'
     )
     topicsUrl.searchParams.set('locale__language_code', locale as string)
+
     let results = []
     let services = []
 
     try {
-      const searchRes = await fetch(searchUrl.href)
+      const searchRes = await fetch(searchUrl.href, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          servingConfig: `projects/${requireEnv(
+            'GOOGLE_PROJECT_ID'
+          )}/locations/global/collections/default_collection/engines/${requireEnv(
+            'GOOGLE_AGENT_BUILDER_SEARCH_APP_ID'
+          )}`,
+          pageSize: 100, // dependent on our indexing type, but will coerce to max
+          safeSearch: true,
+          spellCorrectionSpec: { mode: 'AUTO' },
+          contentSearchSpec: { snippetSpec: { returnSnippet: true } },
+          query: q
+        })
+      })
       if (searchRes.ok) {
         const searchData = await searchRes.json()
         results = searchData.results
       }
     } catch (error) {
-      console.error('error fetching search results')
+      console.error(`error fetching search results: ${error}`)
     }
 
     try {
@@ -113,7 +138,7 @@ const EmptyState = (props: EmptyStateData) => {
       <div className="grid grid-cols-3 gap-x-28">
         {columns.map((column, index) => (
           <ul className="p-0 m-0 list-none" key={index}>
-            {column.map((item: SearchResult) => (
+            {column.map((item) => (
               <li className="mb-20" key={item.html_path}>
                 <a className="text-primary500" href={item.html_path}>
                   {item.title}
@@ -182,6 +207,8 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
 }
 
 const SearchPage = (props: SearchPageData) => {
+  console.log('ant-----')
+  console.log(JSON.stringify(props, null, 2))
   const { t } = useTranslation()
   const { query, results, services } = props
   const itemsPerPage = 10
@@ -192,28 +219,37 @@ const SearchPage = (props: SearchPageData) => {
   )
   let content
 
+  const Bold = classed('strong', 'inline font-bold')
+
   if (query && pageResults.length > 0) {
     // we searched and there are results
     content = (
       <div className="flex flex-col gap-y-40">
         <div className="flex flex-col gap-y-[32px]">
           {pageResults.map((item) => {
-            const itemUrl = item.url
+            const url = item.document.derivedStructData.link
+            const title = item.document.derivedStructData.title
+            const snippet =
+              item.document.derivedStructData?.snippets[0]?.snippet
             return (
-              <div key={itemUrl} className="flex flex-col gap-y-8 no-underline">
+              <div key={url} className="flex flex-col gap-y-8 no-underline">
                 <HeadingLg
                   as="a"
                   className="text-primary500 font-bold font-body !m-0 no-underline hover:underline focus:underline"
-                  href={itemUrl}
+                  href={url}
                 >
-                  {item.title}
+                  {title}
                 </HeadingLg>
-                <p>{item.summary}</p>
+                {snippet ? (
+                  <div>
+                    <RichText components={{ b: Bold }} html={snippet} />
+                  </div>
+                ) : null}
                 <a
-                  href={itemUrl}
+                  href={url}
                   className="flex flex-row gap-x-8 items-center text-primary500"
                 >
-                  <span>{itemUrl}</span>
+                  <span>{url}</span>
                   <IconExternalLink width="20" height="20" />
                 </a>
               </div>

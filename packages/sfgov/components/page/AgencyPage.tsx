@@ -249,22 +249,32 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               />
             </div>
           ) : null}
-          {resources.length || aboutDescription || callToAction.length ? (
+          {resources.length ||
+          aboutDescription ||
+          callToAction.length ||
+          divisionsSubcommittees.length ||
+          partnerAgencies.length ? (
             <Container className="mt-40">
               {resources.length ? (
                 <div className="mb-40">
                   <ResourceSection sections={resources} />
                 </div>
               ) : null}
-              {aboutDescription || !!callToAction.length || aboutPage ? (
+              {aboutDescription ||
+              !!callToAction.length ||
+              aboutPage ||
+              divisionsSubcommittees.length ||
+              partnerAgencies.length ? (
                 <div className="flex flex-col gap-12">
-                  <HeadingXXl as="h2">
-                    {t('about', { defaultValue: 'About' })}
-                  </HeadingXXl>
+                  {aboutDescription ? (
+                    <HeadingXXl as="h2">
+                      {t('about', { defaultValue: 'About' })}
+                    </HeadingXXl>
+                  ) : null}
                   <div className="flex flex-col gap-40">
-                    <div className="flex flex-row gap-40">
-                      {aboutDescription || aboutPage ? (
-                        <div className="flex flex-col gap-y-28 w-1/2">
+                    {aboutDescription || aboutPage || callToAction.length ? (
+                      <div className="flex flex-col md:flex-row gap-40">
+                        <div className="flex flex-col gap-y-28 md:w-2/3 lg:w-1/2">
                           {aboutDescription ? (
                             <RichText html={aboutDescription} />
                           ) : null}
@@ -280,14 +290,14 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                             </Button>
                           ) : null}
                         </div>
-                      ) : null}
-                      {callToAction.length ? (
-                        <div className="w-1/2">
-                          <CallToAction {...callToAction[0].value} />
-                        </div>
-                      ) : null}
-                    </div>
-                    <div className="flex flex-col lg:flex-row gap-28 lg:gap-96">
+                        {callToAction.length ? (
+                          <div className="md:w-1/3 lg:w-1/2">
+                            <CallToAction {...callToAction[0].value} />
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
+                    <div className="flex flex-col gap-28 md:gap-40">
                       {divisionsSubcommittees.length ? (
                         <div className="flex flex-col gap-20 md:gap-12">
                           <HeadingXlSans>

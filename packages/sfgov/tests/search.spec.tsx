@@ -15,7 +15,9 @@ describe('search', () => {
   it('renders a search results page with results', () => {
     const data = SearchResultsPageFactory.make()
     render(<SearchPage {...data} />)
-    expect(screen.getByText(data.results[0].title)).toBeInTheDocument()
+    expect(
+      screen.getByText(data.results[0].document.derivedStructData.title)
+    ).toBeInTheDocument()
   })
 
   it('renders a "no results" search page', () => {

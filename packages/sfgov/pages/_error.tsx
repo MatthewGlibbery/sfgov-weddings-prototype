@@ -24,8 +24,8 @@ export default function ErrorPage({ statusCode }: ErrorPageProps) {
   })
   const description = t('error-page-spotlight-description', {
     defaultValue:
-      '{{statusCode}} internal server issue. Try the site again at a later time.',
-    statusCode
+      '{{zyx}} internal server issue. Try the site again at a later time.',
+    zyx: statusCode
   })
   const altText = t('error-page-image-alt-text', {
     defaultValue: 'City workers doing construction on a street downtown'

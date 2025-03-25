@@ -117,8 +117,8 @@ export const Map: ComponentType<MapProps> = ({
           width={mapSize.width}
           height={mapSize.height}
           alt={t('map-alt-text', {
-            defaultValue: 'Map of {{locationName}}',
-            locationName
+            defaultValue: 'Map of {{zyx}}',
+            zyx: locationName
           })}
           data-testid="map-image"
         />

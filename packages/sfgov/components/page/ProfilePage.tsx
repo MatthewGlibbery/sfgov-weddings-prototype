@@ -152,8 +152,8 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
             <div id="direct-contact">
               <HeadingXXl as="h2" className="!mb-[24px]">
                 {t('contact-title', {
-                  defaultValue: 'Contact {{title}}',
-                  title
+                  defaultValue: 'Contact {{zyx}}',
+                  zyx: title
                 })}
               </HeadingXXl>
               <div className="grid grid-cols-1 gap-y-28 gap-x-0 md:grid-cols-3 md:gap-x-28 md:gap-y-0 md:pb-0">
@@ -180,8 +180,8 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
               <HeadingXXl as="h2" className="!mb-[24px]">
                 {primaryAgency?.title
                   ? t('contact-agency', {
-                      defaultValue: 'Contact {{agency}}',
-                      agency: primaryAgency.title
+                      defaultValue: 'Contact {{zyx}}',
+                      zyx: primaryAgency.title
                     })
                   : t('contact', { defaultValue: 'Contact' })}
               </HeadingXXl>

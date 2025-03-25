@@ -1739,25 +1739,41 @@ export const TableBlockFactory = factory<TypeTableBlock>((gen) => ({
   }
 }))
 
-export const SearchResultsPageFactory = factory<SearchPageData>((gen) => ({
-  query: gen.lorem.word(),
-  results: [
-    {
-      id: '1',
-      title: gen.lorem.sentence(),
-      description: 'Description of topic result 1',
-      html_path: '/path1'
-    }
-  ],
-  services: [
-    {
-      id: '1',
-      title: gen.lorem.sentence(),
-      description: 'Description of topic result 1',
-      html_path: '/path1'
-    }
-  ]
-}))
+export const SearchResultsPageFactory = factory<SearchPageData>((gen) => {
+  const title = gen.lorem.words(5)
+  return {
+    query: gen.lorem.word(),
+    results: [
+      {
+        id: gen.datatype.uuid(),
+        document: {
+          name: gen.lorem.slug(),
+          id: gen.datatype.uuid(),
+          derivedStructData: {
+            displayLink: gen.internet.url(),
+            title,
+            link: gen.internet.url(),
+            snippets: [
+              {
+                snippet: gen.lorem.sentence(),
+                snippet_status: 'SUCCESS'
+              }
+            ],
+            htmlTitle: title
+          }
+        }
+      }
+    ],
+    services: [
+      {
+        id: '1',
+        title: gen.lorem.sentence(),
+        description: 'Description of topic result 1',
+        html_path: '/path1'
+      }
+    ]
+  }
+})
 
 export const ALL_AGENCY_NAMES = [
   '311 Customer Service Center',
