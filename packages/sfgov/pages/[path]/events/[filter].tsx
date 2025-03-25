@@ -222,8 +222,9 @@ const EventsPage = (props: EventPageData) => {
               <IconCalendar width={20} />
               <Link href={meetingArchiveURL}>
                 {t('archived-meetings-link', {
-                  defaultValue: 'See archived meetings before {{archiveDate}}',
-                  archiveDate
+                  skipInterpolation: true,
+                  defaultValue: 'See archived meetings before {{zyx}}',
+                  zyx: archiveDate
                 })}
               </Link>
             </div>

@@ -34,8 +34,8 @@ export const Location = (props: LocationBlockProps) => {
   const { t } = useTranslation()
   const GET_DIRECTIONS = t('get-directions', { defaultValue: 'Get directions' })
   const GET_DIRECTIONS_TO = t('get-directions-to', {
-    defaultValue: 'Get directions to {{locationName}}',
-    locationName
+    defaultValue: 'Get directions to {{zyx}}',
+    zyx: locationName
   })
 
   const boldedTitle =

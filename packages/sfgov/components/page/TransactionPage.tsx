@@ -67,8 +67,8 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               id={`supportingInformation${screen}`}
             >
               {t('special-cases-header', {
-                defaultValue: '{{ specialCasesHeader }}',
-                specialCasesHeader: specialCasesHeader || 'Special cases'
+                defaultValue: '{{ zyx }}',
+                zyx: specialCasesHeader || 'Special cases'
               })}
             </HeadingXXl>
             {supportingInformation.length ? (

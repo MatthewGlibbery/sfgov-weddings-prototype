@@ -26,13 +26,14 @@ const StyledLanguageLink = classed(NextLink, {
 })
 
 // TODO: add 'vi-vn' here when we introduce Vietnamese
-type LocaleCode = 'en' | 'es' | 'zh-hant' | 'fil'
+type LocaleCode = 'en' | 'es' | 'zh-hant' | 'fil' | 'vi-vn'
 
 const localeNames: Record<LocaleCode, string> = {
   en: 'English',
   es: 'Español',
   'zh-hant': '中文',
-  fil: 'Filipino'
+  fil: 'Filipino',
+  'vi-vn': 'tiếng Việt'
 }
 
 export type LanguageSelectorProps = ComponentProps<typeof StyledList> & {

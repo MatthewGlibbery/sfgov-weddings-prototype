@@ -344,8 +344,8 @@ export function LocationPage({ page, env, qLessData }: LocationPageProps) {
               <div className="space-y-20">
                 <HeadingXlSans as="h3" className="my-12 md:my-20">
                   {t('at-this-location', {
-                    defaultValue: 'At {{title}}',
-                    title
+                    defaultValue: 'At {{zyx}}',
+                    zyx: title
                   })}
                 </HeadingXlSans>
                 <RelatedContentList content={atThisLocation} />

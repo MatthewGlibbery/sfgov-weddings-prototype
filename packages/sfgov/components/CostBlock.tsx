@@ -8,6 +8,12 @@ import {
 import { Trans, useTranslation } from 'next-i18next'
 import type { TypeCostBlockValues } from '@/types'
 import { RichText } from './RichText'
+const formatter = new Intl.NumberFormat('default', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2
+})
 
 export type CostBlockProps = TypeCostBlockValues & {
   variant?: string
@@ -37,14 +43,14 @@ export function CostBlock({
 }: CostBlockProps) {
   const { t } = useTranslation()
 
-  let cost = ''
+  let zzyyxx = ''
   if (costType === 'free') {
-    cost = t('cost-free', { defaultValue: 'Free' })
+    zzyyxx = t('cost-free', { defaultValue: 'Free' })
   } else if (costType === 'flat_fee' && flatFee != null) {
-    cost = t('cost-flat-fee', {
+    zzyyxx = t('cost-flat-fee', {
       // eslint-disable-next-line no-template-curly-in-string
-      defaultValue: '${{dollars}}',
-      dollars: flatFee
+      defaultValue: '{{zyx}}',
+      zyx: formatter.format(flatFee)
     })
   } else if (
     costType === 'range' &&
@@ -52,17 +58,20 @@ export function CostBlock({
     range?.maximum != null
   ) {
     const { minimum, maximum } = range
-    cost = t('cost-range', {
+    zzyyxx = t('cost-range', {
       // eslint-disable-next-line no-template-curly-in-string
-      defaultValue: '${{minimum}} to ${{maximum}}',
-      minimum,
-      maximum
+      // The weird tokens here are because google keeps trying to translate
+      // them. For some reason these work
+      defaultValue: '{{zyx}} to {{bcd}}',
+      zyx: formatter.format(minimum),
+      bcd: formatter.format(maximum)
     })
   } else if (costType === 'minimum' && range?.minimum != null) {
-    cost = t('cost-min-and-up', {
+    zzyyxx = t('cost-min-and-up', {
       // eslint-disable-next-line no-template-curly-in-string
-      defaultValue: '${{minimum}} and up',
-      minimum: range.minimum
+      // weird tokens because google translate
+      defaultValue: '{{zyx}} and up',
+      zyx: formatter.format(range.minimum)
     })
   }
 
@@ -71,12 +80,12 @@ export function CostBlock({
     return (
       <div className="flex gap-4 items-start" data-testid="step-cost">
         <IconCash className="text-neutral400 min-w-[20px]" height={20} alt="" />
-        {cost ? (
+        {zzyyxx ? (
           <Trans i18nKey="step-cost">
             <CostText id="costBlock" step={!!variant}>
               Cost:
             </CostText>
-            <span> {{ cost }}.</span>
+            <span> {{ zzyyxx }}.</span>
           </Trans>
         ) : (
           <CostText id="costBlock" step={!!variant}>
@@ -97,7 +106,7 @@ export function CostBlock({
         <HeadingLg as="h3" id={id} transaction={!!variant} className="mb-12">
           {COST_WORD}
         </HeadingLg>
-        <span className="block font-bold mb-12">{cost}</span>
+        <span className="block font-bold mb-12">{zzyyxx}</span>
         {description ? <RichText html={description} /> : null}
       </div>
     )
@@ -108,7 +117,7 @@ export function CostBlock({
       <CostText as="h3" step={!!variant}>
         {COST_WORD}
       </CostText>
-      <HeadingXs className="mb-12">{cost}</HeadingXs>
+      <HeadingXs className="mb-12">{zzyyxx}</HeadingXs>
       {description ? (
         <div>
           <RichText html={description} />
