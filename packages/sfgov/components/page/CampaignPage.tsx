@@ -282,7 +282,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                       <Image
                         key={image?.id}
                         imageRef={image}
-                        className="mb-20 aspect-[3/2]"
+                        className="mb-20 aspect-[3/2] object-cover object-center"
                       />
                     ) : null}
                     {titleAndText ? (
