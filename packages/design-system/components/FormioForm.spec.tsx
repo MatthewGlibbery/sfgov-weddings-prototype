@@ -139,18 +139,18 @@ describe('FormioForm', () => {
     const input1 = screen.getByLabelText(field1.label, { exact: false })
     expect(input1).toBeInTheDocument()
 
-    await click('Get started →')
+    await click('Get started')
 
     const input2 = screen.getByLabelText(field2.label, { exact: false })
     expect(input2).toBeInTheDocument()
   })
 
   describe('nav buttons', () => {
-    it('renders "Get started →" for the first page', async () => {
+    it('renders "Get started" for the first page', async () => {
       // @ts-expect-error derp
       render(<FormioForm form={basicForm} />)
 
-      const button = screen.getByText('Get started →')
+      const button = screen.getByText('Get started')
       expect(button).toBeInTheDocument()
     })
     it('renders "Submit" for the feedback form', async () => {
@@ -396,7 +396,7 @@ describe('FormioForm', () => {
           />
         )
 
-        await click('Get started →')
+        await click('Get started')
 
         const message = screen.getByText(`${label}: ${error}`, { exact: false })
         expect(message).toBeInTheDocument()
