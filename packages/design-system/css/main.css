@@ -35,6 +35,25 @@
     @apply text-body;
   }
 
+  .btn:focus {
+    box-shadow: 0 0 0 0.2rem #2A60AF !important;
+  }
+
+  /* Overrides bootstrap styles for SFDS buttons to match FormIO buttons */
+  .Formio .btn-primary {
+    @apply !items-center !justify-center !shrink-0 !rounded-4 !gap-8 !px-16 !py-[15px] 
+    !border-current !border-solid  !border-1 
+    !font-medium !text-white !text-label-xs !text-center 
+    !bg-primary600 !no-underline !whitespace-nowrap !w-fit !transition-none
+    hover:!bg-primary800 hover:!border-1 hover:!cursor-pointer
+    focus:!bg-primary800 focus:!ring-[3px] focus:!ring-offset-4 focus:!ring-primary500 
+    disabled:!text-neutral300  disabled:!border-neutral100 disabled:!bg-neutral100 disabled:!cursor-not-allowed
+}
+
+  .Formio .btn-link {
+    @apply before:right-arrow-blue !text-primary600 !transition-none disabled:!text-neutral200 disabled:!bg-[transparent] disabled:before:!right-arrow-disabled
+}
+
   .Formio .progress-container {
     @apply flex gap-28 px-4 py-2 border rounded-4;
   }
