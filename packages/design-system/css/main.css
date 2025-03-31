@@ -35,6 +35,11 @@
     @apply text-body;
   }
 
+  /* Adding this temporarily until styling is changed directly  */
+  .Formio .bg-blue-1 {
+    @apply !bg-information100 py-20 px-28 border border-2 border-information600;
+  }
+
   .btn:focus {
     box-shadow: 0 0 0 0.2rem #2A60AF !important;
   }
@@ -47,11 +52,11 @@
     !bg-primary600 !no-underline !whitespace-nowrap !w-fit !transition-none
     hover:!bg-primary800 hover:!border-1 hover:!cursor-pointer
     focus:!bg-primary800 focus:!ring-[3px] focus:!ring-offset-4 focus:!ring-primary500 
-    disabled:!text-neutral300  disabled:!border-neutral100 disabled:!bg-neutral100 disabled:!cursor-not-allowed
+    disabled:!text-neutral300  disabled:!border-neutral100 disabled:!bg-neutral100 disabled:!cursor-not-allowed;
 }
 
   .Formio .btn-link {
-    @apply before:right-arrow-blue !text-primary600 !transition-none disabled:!text-neutral200 disabled:!bg-[transparent] disabled:before:!right-arrow-disabled
+    @apply before:right-arrow-blue !text-primary600 !transition-none disabled:!text-neutral200 disabled:!bg-[transparent] disabled:before:!right-arrow-disabled;
 }
 
   .Formio .progress-container {

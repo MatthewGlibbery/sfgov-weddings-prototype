@@ -171,14 +171,25 @@ export function useFormio(isDev?: boolean) {
     hook(
       form,
       'setAlert',
-      function (this: Form, setAlert, type: string | boolean, ...rest) {
-        debug('form.setAlert(', [type, ...rest], ')')
+      function (
+        this: Form,
+        setAlert,
+        type: string | boolean,
+        message: string,
+        ...rest
+      ) {
+        debug('form.setAlert(', [type, message, ...rest], ')')
 
         // XXX: formio.js immediately hides the success alert; this skips
         // calling form.setAlert(...) if the type is falsy and it's submitted
         if (isDev && !type && this.submitted) return
 
-        setAlert(type, ...rest)
+        if (message.includes('Submission Complete')) {
+          setAlert(type, ...rest)
+        } else {
+          setAlert(type, message, ...rest)
+        }
+
         if (this.alert) {
           this.element.append(this.alert)
         } else {
