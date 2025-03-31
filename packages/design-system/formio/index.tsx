@@ -1,5 +1,4 @@
 import { Components, Form as FormioReactForm, Formio } from '@formio/react'
-import { classed as coreClassed } from '@tw-classed/core'
 import type { ComponentProps } from 'react'
 import { FORM_CLASS } from './constants.mjs'
 import templates from './templates'
@@ -13,7 +12,6 @@ import type {
   Override
 } from './types'
 import { hook } from './utils'
-import { BUTTON_VARIANTS } from '../components/Button'
 import { classed, classes } from '../components/utils'
 
 // @ts-expect-error not typescript
@@ -171,25 +169,14 @@ export function useFormio(isDev?: boolean) {
     hook(
       form,
       'setAlert',
-      function (
-        this: Form,
-        setAlert,
-        type: string | boolean,
-        message: string,
-        ...rest
-      ) {
-        debug('form.setAlert(', [type, message, ...rest], ')')
+      function (this: Form, setAlert, type: string | boolean, ...rest) {
+        debug('form.setAlert(', [type, ...rest], ')')
 
         // XXX: formio.js immediately hides the success alert; this skips
         // calling form.setAlert(...) if the type is falsy and it's submitted
         if (isDev && !type && this.submitted) return
 
-        if (message.includes('Submission Complete')) {
-          setAlert(type, ...rest)
-        } else {
-          setAlert(type, message, ...rest)
-        }
-
+        setAlert(type, ...rest)
         if (this.alert) {
           this.element.append(this.alert)
         } else {
@@ -285,12 +272,10 @@ function once<T extends object>(obj: T, fn: (obj: T) => void) {
   }
 }
 export function modifyComponentClassname(value?: string) {
-  const buttonClass = coreClassed(BUTTON_VARIANTS)
   return value
     ?.replace(/\bd-none\b/g, 'hidden')
     .replace(/\bd-flex\b/g, 'flex')
     .replace(/\bcol-md-1\b/g, '')
-    .replace(/\bbtn-secondary\b/g, buttonClass({ variant: 'link' }))
 }
 
 export function modifyHTMLElementClassname(value?: string) {

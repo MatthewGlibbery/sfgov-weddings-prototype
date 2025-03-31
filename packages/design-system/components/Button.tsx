@@ -1,6 +1,16 @@
 import { classed, classes } from './utils'
 import type { ComponentProps } from 'react'
 
+const focusDropShadow = 'focus:shadow-[0_0_0_4px_#C9CACA]'
+const inverseButtonClasses = classes(`
+  text-primary700
+  bg-primary100
+  hover:text-primary900 hover:bg-primary200 
+  hover:border-primary200
+  focus:text-primary900 focus:bg-primary200
+  focus:border-primary200 ${focusDropShadow}
+`)
+
 export const BUTTON_VARIANTS = {
   base: classes(
     'items-center',
@@ -13,26 +23,18 @@ export const BUTTON_VARIANTS = {
     'border-[transparent]', // FIXME: need transparent in theme.colors
     'border-solid',
     'border-1',
-    '!cursor-pointer',
-    'font-medium',
-    '!text-label-xs',
+    'cursor-pointer',
+    'font-body',
+    'text-body',
     'text-center',
     'no-underline',
     'whitespace-nowrap',
-    'w-fit',
-    'focus:ring',
-    'focus:ring-[3px]',
-    'focus:ring-offset-4',
-    'focus:ring-primary500',
-    'disabled:text-neutral300',
-    'disabled:bg-neutral100',
-    'disabled:!cursor-not-allowed'
+    'w-fit'
   ),
   variants: {
     variant: {
-      large: classes(
-        'text-body',
-        'h-[52px]',
+      primary: classes(
+        'border-current border-1',
         'text-white',
         'bg-primary500',
         'hover:bg-primary800',
@@ -40,26 +42,10 @@ export const BUTTON_VARIANTS = {
         'hover:text-white',
         'focus:bg-primary800',
         'focus:border-primary800',
-        'focus:text-white'
+        'focus:text-white',
+        focusDropShadow
       ),
-      primary: classes(
-        'text-white',
-        'bg-primary500',
-        'hover:bg-primary800',
-        'hover:border-primary800',
-        'focus:bg-primary800',
-        'focus:border-primary800',
-        'disabled:border-neutral100'
-      ),
-      secondary: classes(`
-        text-primary700
-        bg-primary100
-        hover:text-primary900 hover:!bg-primary200 
-        hover:border-primary200
-        focus:text-primary900 focus:!bg-primary200 
-        focus:border-primary200
-        disabled:border-neutral100 disabled:!bg-neutral100
-      `),
+      secondary: classes(inverseButtonClasses),
       tertiary: classes(
         'border-primary500',
         'text-primary500',
@@ -70,16 +56,12 @@ export const BUTTON_VARIANTS = {
         'focus:bg-primary100',
         'focus:border-primary700',
         'focus:text-primary700',
-        'disabled:!bg-[transparent]'
+        focusDropShadow
       ),
       link: classes(
-        '!p-8',
-        '!font-bold',
-        'text-body',
-        '!bg-[transparent]', // FIXME: need transparent in theme.colors,
-        '!underline',
-        '!inline-flex',
-        'hover:!text-primary700'
+        inverseButtonClasses,
+        'bg-[transparent]', // FIXME: need transparent in theme.colors
+        'underline'
       )
     },
     block: {

@@ -225,17 +225,11 @@ export function FormPage({
     }
   }
 
-  function onSubmitDone(submission: FormSubmission) {
-    if (submission.state === 'submitted') {
-      putFormEvent({
-        type: 'submit'
-      })
-      setSubmitted(true)
-    } else if (submission.state === 'draft') {
-      putFormEvent({
-        type: 'save_draft'
-      })
-    }
+  function onSubmitDone() {
+    putFormEvent({
+      type: 'submit'
+    })
+    setSubmitted(true)
   }
 
   /**
