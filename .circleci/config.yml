@@ -15,3 +15,4 @@ workflows:
                 aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
             repo: "sfgov-next"
             account_id: "395833734759"
+            aws_domain: "amazonaws.com"
