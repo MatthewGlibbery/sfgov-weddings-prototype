@@ -17,3 +17,4 @@ workflows:
             account_id: "395833734759"
             aws_domain: "amazonaws.com"
             region: "us-west-1"
+            foo: "bar"
