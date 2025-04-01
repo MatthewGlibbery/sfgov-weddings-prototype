@@ -18,4 +18,4 @@ workflows:
             aws_domain: "amazonaws.com"
             region: "us-west-1"
             tag: "${CIRCLE_SHA1},latest"
-            extra-build-args: --provenance=false
+            extra_build_args: --provenance=false
