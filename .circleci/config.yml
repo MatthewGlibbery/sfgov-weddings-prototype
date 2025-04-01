@@ -14,5 +14,4 @@ workflows:
                 aws_access_key_id: "${$AWS_ACCESS_KEY_ID}"
                 aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
             repo: "395833734759.dkr.ecr.us-west-1.amazonaws.com/sfgov-next"
-            environment:
-              AWS_ECR_STR_ACCOUNT_ID: "395833734759"
+            account_id: "395833734759"
