@@ -11,6 +11,5 @@ RUN sed 's/127.0.0.1/web/g' packages/sfgov/.env.development.example > packages/s
 # RUN sed -i=.bak 's/8000/80/g' packages/sfgov/.env.development
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm install
-RUN npm run build
 
-CMD ["next", "start"]
+CMD ["npm", "run", "dev"]
