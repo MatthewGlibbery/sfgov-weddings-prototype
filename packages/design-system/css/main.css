@@ -75,4 +75,12 @@
   .Formio .formio-choices.is-focused {
     @apply !border-[3px] !border-primary500 !rounded-4;
   }
+
+  .Formio .formio-component-htmlelement > .row {
+    @apply grid grid-cols-2 p-8 !ml-0 border-b-2 border-neutral200;
+  }
+
+  .Formio .table td.cell-align-left {
+    @apply !align-middle !space-y-8 xs:!px-[1px] sm:!px-4 !break-normal;
+  }
 }
