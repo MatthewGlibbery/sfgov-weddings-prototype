@@ -1,113 +1,12 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-jobs:
-  test:
-    docker:
-      - image: cimg/node:20.11.0
-    steps:
-      - checkout
-      - run:
-          command: npm install
-      - run:
-          name: Lint
-          command: npm run lint
-      - run:
-          name: Unit tests
-          command: npm test
-      - run:
-          name: Remove dev dependencies
-          command: npm prune --omit=dev
-      - run:
-          name: SF.gov site build
-          command: npm run build -w @sfgov/next
-
-  deploy_to_aws:
-    # for STAGING deploy
-    docker:
-      - image: continuumio/miniconda3
-    steps:
-      - run:
-          name: install ansible tower cli
-          command: |
-            if [ "$STAGING_JOB_ID" != "" ]; then
-              apt-get update && apt-get install -y vim
-              pip install --root-user-action=ignore ansible-tower-cli
-            fi
-      - run:
-          name: build image via tower-cli
-          # see: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
-          command: |
-            if [ "$STAGING_BUILD_IMAGE_JOB_ID" != "" ]; then
-              export TOWER_HOST=$AWX_HOST
-              export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
-              export TOWER_VERBOSE=true
-              tower-cli workflow_job launch -W $STAGING_BUILD_IMAGE_JOB_ID --extra-vars="" --wait
-            fi
-          no_output_timeout: 30m
-      - run:
-          name: build staging instance via tower-cli
-          # see: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
-          command: |
-            if [ "$STAGING_CREATE_INSTANCE_JOB_ID" != "" ]; then
-              export TOWER_HOST=$AWX_HOST
-              export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
-              export TOWER_VERBOSE=true
-              tower-cli job launch --job-template=$STAGING_CREATE_INSTANCE_JOB_ID --extra-vars="" --wait
-            fi
-          no_output_timeout: 30m
-      - run:
-          name: deploy to staging via tower-cli
-          # see: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
-          command: |
-            if [ "$STAGING_DEPLOY_JOB_ID" != "" ]; then
-              export TOWER_HOST=$AWX_HOST
-              export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
-              export TOWER_VERBOSE=true
-              tower-cli job launch --job-template=$STAGING_DEPLOY_JOB_ID --extra-vars="" --wait
-            fi
-          no_output_timeout: 30m
-  deploy_to_dev:
-    # for DEV instance deploy
-    docker:
-      - image: continuumio/miniconda3
-    parameters:
-      awx_job_env:
-        type: string
-        default: DEVELOP # default deploy to develop env
-    steps:
-      - run:
-          name: install ansible tower cli
-          command: |
-            if [ "$<< parameters.awx_job_env >>_JOB_ID" != "" ]; then
-              apt-get update && apt-get install -y vim
-              pip install --root-user-action=ignore ansible-tower-cli
-            fi
-      - run:
-          name: build image via tower-cli
-          # see: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
-          command: |
-            if [ "$<< parameters.awx_job_env >>_JOB_ID" != "" ]; then
-              export TOWER_HOST=$AWX_HOST
-              export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
-              export TOWER_VERBOSE=true
-              tower-cli workflow_job launch -W $<< parameters.awx_job_env >>_JOB_ID --extra-vars="" --wait
-            fi
-          no_output_timeout: 60m
-
+orbs:
+  aws-ecr: circleci/aws-ecr@x.y.z
+  aws-ecs: circleci/aws-ecs@0x.y.z
 
 workflows:
-  # Docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
-  build_and_test:
+  build-and-deploy:
     jobs:
-      - test
-      - deploy_to_aws:
-          filters:
-            branches:
-              only: main
-      - deploy_to_dev:
-          awx_job_env: 'DEVELOP'
-          filters:
-            branches:
-              only: develop
+      - aws-ecr/build-and-push-image:
+          repo: 395833734759.dkr.ecr.us-west-1.amazonaws.com/sfgov-next
+          tag: "${CIRCLE_SHA1}"
