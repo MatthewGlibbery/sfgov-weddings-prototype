@@ -2,10 +2,14 @@ version: 2.1
 
 orbs:
   aws-ecr: circleci/aws-ecr@9.4.0
+  aws-cli: circleci/aws-cli@5.2.0
 
 workflows:
-  build-and-deploy:
-    jobs:
-      - build_and_push_image:
-          repo: 395833734759.dkr.ecr.us-west-1.amazonaws.com/sfgov-next
-          tag: "${CIRCLE_SHA1}"
+    example-workflow:
+      jobs:
+        - aws-ecr/build_and_push_image:
+            auth: 
+              - aws-cli/setup:
+                aws_access_key_id: $AWS_ACCESS_KEY_ID 
+                aws_secret_access_key: $AWS_SECRET_ACCESS_KEY 
+            repo: '395833734759.dkr.ecr.us-west-1.amazonaws.com/sfgov-next' 
