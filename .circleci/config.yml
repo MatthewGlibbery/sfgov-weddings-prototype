@@ -6,6 +6,6 @@ orbs:
 workflows:
   build-and-deploy:
     jobs:
-      - aws-ecr/build-and-push-image:
+      - build-and-push-image:
           repo: 395833734759.dkr.ecr.us-west-1.amazonaws.com/sfgov-next
           tag: "${CIRCLE_SHA1}"
