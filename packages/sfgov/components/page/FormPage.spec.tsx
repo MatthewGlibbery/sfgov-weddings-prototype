@@ -112,7 +112,7 @@ describe('FormPage', () => {
       // calling the onSubmitDone() callback asynchronously
       MockDynamicComponent.mockImplementationOnce((props: FormProps) => {
         setTimeout(() => {
-          props.onSubmitDone?.call(undefined, { data: {} })
+          props.onSubmitDone?.call(undefined, { state: 'submitted', data: {} })
         }, 10)
         return <div>{expectedMissingText}</div>
       })
@@ -121,6 +121,24 @@ describe('FormPage', () => {
 
       expect(await screen.findByText(submittedLabel)).toBeInTheDocument()
       expect(screen.queryByText(expectedMissingText)).not.toBeInTheDocument()
+    })
+
+    it('does not render the form page confirmation or default alert when the form is submitted as a draft', async () => {
+      const page = FormPageFactory.make()
+      const expectedMissingText = 'Submission Confirmed'
+      const expectedExistingText = 'EXISTING'
+      MockDynamicComponent.mockImplementationOnce((props: FormProps) => {
+        setTimeout(() => {
+          props.onSubmitDone?.call(undefined, { state: 'draft', data: {} })
+        }, 10)
+        return <div>{expectedExistingText}</div>
+      })
+
+      render(<FormPage page={page} />)
+
+      expect(await screen.findByText(expectedExistingText)).toBeInTheDocument()
+      expect(screen.queryByText(expectedMissingText)).not.toBeInTheDocument()
+      expect(screen.queryByText(submittedLabel)).not.toBeInTheDocument()
     })
   })
 

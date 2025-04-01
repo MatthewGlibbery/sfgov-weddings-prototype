@@ -207,8 +207,6 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
 }
 
 const SearchPage = (props: SearchPageData) => {
-  console.log('ant-----')
-  console.log(JSON.stringify(props, null, 2))
   const { t } = useTranslation()
   const { query, results, services } = props
   const itemsPerPage = 10

@@ -18,12 +18,18 @@ export function form({ t, ...ctx }: WizardRenderContext) {
     Record<ButtonType, { text: string; className: string }>
   > = {
     previous: {
-      text: t('back-button', { defaultValue: '← Back' }),
-      className: buttonClass({ variant: 'secondary' })
+      text: t('back-button', { defaultValue: 'Back' }),
+      className: `${buttonClass({ variant: 'secondary' })} 
+      before:right-arrow-blue before:rotate-180
+      disabled:before:right-arrow-disabled disabled:before:rotate-180`
     },
     next: {
-      text: t('next-button', { defaultValue: 'Next →' }),
-      className: buttonClass()
+      text: t('next-button', {
+        defaultValue: 'Next'
+      }),
+      className: `${buttonClass()} 
+      after:!right-arrow-white 
+      disabled:after:!right-arrow-disabled`
     },
     submit: {
       text: t('submit-button', { defaultValue: 'Submit' }),
@@ -43,7 +49,7 @@ export function form({ t, ...ctx }: WizardRenderContext) {
           <li className="m-0 p-0" key={type}>
             <button ref={`${ctx.wizardKey}-${type}`} {...props}>
               {ctx.currentPage === 0 && !isSinglePage
-                ? t('get-started', { defaultValue: 'Get started →' })
+                ? t('get-started', { defaultValue: 'Get started' })
                 : text}
             </button>
           </li>

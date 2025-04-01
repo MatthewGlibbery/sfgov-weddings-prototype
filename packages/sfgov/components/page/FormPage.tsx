@@ -124,13 +124,17 @@ export function FormPage({
             {confirmationBody.map((block) => (
               <ConfirmationContent key={block.id} block={block} />
             ))}
-            <HeadingXXl as="h2" className="flex flex-row gap-8">
-              {t('contact-us', { defaultValue: 'Contact us' })}
-            </HeadingXXl>
-            {/* FIXME is this a problem here or in ContactFooter? */}
-            <ContactFooter
-              items={getHelp as unknown as TypeContactFooterBlockValues[]}
-            />
+            {getHelp.length ? (
+              <div>
+                <HeadingXXl as="h2" className="flex flex-row gap-8">
+                  {t('contact-us', { defaultValue: 'Contact us' })}
+                </HeadingXXl>
+                {/* FIXME is this a problem here or in ContactFooter? */}
+                <ContactFooter
+                  items={getHelp as unknown as TypeContactFooterBlockValues[]}
+                />
+              </div>
+            ) : null}
           </div>
         ) : (
           <>
@@ -225,11 +229,17 @@ export function FormPage({
     }
   }
 
-  function onSubmitDone() {
-    putFormEvent({
-      type: 'submit'
-    })
-    setSubmitted(true)
+  function onSubmitDone(submission: FormSubmission) {
+    if (submission.state === 'submitted') {
+      putFormEvent({
+        type: 'submit'
+      })
+      setSubmitted(true)
+    } else if (submission.state === 'draft') {
+      putFormEvent({
+        type: 'save_draft'
+      })
+    }
   }
 
   /**
