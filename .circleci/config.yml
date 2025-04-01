@@ -1,68 +1,18 @@
-# version: 2.1
-
-# orbs:
-#   aws-ecr: circleci/aws-ecr@9.4.0
-#   aws-cli: circleci/aws-cli@5.2.0
-
 version: 2.1
 
-jobs: # basic units of work in a run
-  build:
-    docker: # use the Docker executor
-      # CircleCI Node images available at: https://circleci.com/developer/images/image/cimg/node
-      - image: cimg/node:18.11.0
-    steps: # steps that comprise the `build` job
-      - checkout # check out source code to working directory
-      # Run a step to setup an environment variable
-      # Redirect MY_ENV_VAR into $BASH_ENV
-      - run:
-          name: "Setup custom environment variables"
-          command: echo 'export MY_ENV_VAR="FOO"' >> "$BASH_ENV"
-      - run: # print the name of the branch we're on
-          name: "What branch am I on?"
-          command: echo ${CIRCLE_BRANCH}
-      # Run another step, the same as above; note that you can
-      # invoke environment variable without curly braces.
-      - run:
-          name: "What branch am I on now?"
-          command: echo $CIRCLE_BRANCH
-      - run:
-          name: "What was my custom environment variable?"
-          command: echo ${MY_ENV_VAR}
-      - run:
-          name: "Print an env var stored in the Project"
-          command: echo ${PROJECT_ENV_VAR}
-      - run:
-          name: "Print an env var stored in a Context"
-          command: echo ${AWS_ECR_STR_REGION}
-      - run:
-          name: "Print AWS_ECR_STR_REGION"
-          command: echo ${AWS_ECR_STR_REGION}
-      - run:
-          name: "Print AWS_ECR_STR_PROFILE_NAME"
-          command: echo ${AWS_ECR_STR_PROFILE_NAME}
-      - run:
-          name: "Print AWS_ECR_STR_ACCOUNT_ID"
-          command: echo ${AWS_ECR_STR_ACCOUNT_ID}
-      - run:
-          name: "Print AWS_ECR_EVAL_ACCOUNT_ID"
-          command: echo ${AWS_ECR_EVAL_ACCOUNT_ID}
-      - run:
-          name: "Print AWS_ECR_BOOL_HELPER"
-          command: echo ${AWS_ECR_BOOL_HELPER}
+orbs:
+  aws-ecr: circleci/aws-ecr@9.4.0
+  aws-cli: circleci/aws-cli@5.2.0
 
-workflows: # a single workflow with a single job called build
-  build:
-    jobs:
-      - build:
-          context: Testing-Env-Vars
-# workflows:
-#     example-workflow:
-#       jobs:
-#         - aws-ecr/build_and_push_image:
-#             auth: 
-#               - aws-cli/setup:
-#                 auth: static
-#                 aws_access_key_id: "${$AWS_ACCESS_KEY_ID}"
-#                 aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
-#             repo: '395833734759.dkr.ecr.us-west-1.amazonaws.com/sfgov-next' 
+workflows:
+    example-workflow:
+      jobs:
+        - aws-ecr/build_and_push_image:
+            auth: 
+              - aws-cli/setup:
+                auth: static
+                aws_access_key_id: "${$AWS_ACCESS_KEY_ID}"
+                aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
+            repo: "395833734759.dkr.ecr.us-west-1.amazonaws.com/sfgov-next"
+            environment:
+              AWS_ECR_STR_ACCOUNT_ID: "395833734759"
