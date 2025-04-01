@@ -10,6 +10,8 @@ workflows:
         - aws-ecr/build_and_push_image:
             auth: 
               - aws-cli/setup:
-                aws_access_key_id: "${$AWS_ACCESS_KEY_ID }"
+                account_id: "${AWS_ECR_EVAL_ACCOUNT_ID}"
+                auth: static
+                aws_access_key_id: "${$AWS_ACCESS_KEY_ID}"
                 aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
             repo: '395833734759.dkr.ecr.us-west-1.amazonaws.com/sfgov-next' 
