@@ -30,6 +30,6 @@ workflows:
                 aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
             # account_id: "395833734759"
             region: "us-west-1"
-            family: 'CMS-889'
-            cluster: 'CMS-899'
+            family: "CMS-889"
+            cluster: "CMS-899"
             container_image_name_updates: 'container=web,tag=latest'
