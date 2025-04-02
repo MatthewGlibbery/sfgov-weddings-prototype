@@ -32,4 +32,4 @@ workflows:
             region: "us-west-1"
             family: 'CMS-889'
             cluster: 'CMS-899'
-            container_image_name_updates: 'container=395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:${CIRCLE_SHA1}'
+            container_image_name_updates: 'image=395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:${CIRCLE_SHA1}'
