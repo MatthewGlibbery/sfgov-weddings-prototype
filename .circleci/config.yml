@@ -31,5 +31,5 @@ workflows:
             # account_id: "395833734759"
             region: "us-west-1"
             family: "CMS-889"
-            cluster: "CMS-899"
+            cluster: "arn:aws:ecs:us-west-1:395833734759:cluster/CMS-889"
             container_image_name_updates: 'container=web,tag=latest'
