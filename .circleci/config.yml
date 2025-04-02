@@ -19,3 +19,14 @@ workflows:
             region: "us-west-1"
             tag: "${CIRCLE_SHA1},latest"
             extra_build_args: --provenance=false
+        - aws-ecs/deploy_service_update: # orb built-in job
+            requires:
+                - aws-ecr/build_and_push_image
+            auth: 
+              - aws-cli/setup:
+                auth: static
+                aws_access_key_id: "${$AWS_ACCESS_KEY_ID}"
+                aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
+            family: 'CMS-889'
+            cluster: 'CMS-899'
+            container_image_name_updates: 'container=395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web,tag=${CIRCLE_SHA1}'
