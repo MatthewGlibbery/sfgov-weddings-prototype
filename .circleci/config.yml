@@ -32,4 +32,4 @@ workflows:
             region: "us-west-1"
             family: "CMS-889"
             cluster: "arn:aws:ecs:us-west-1:395833734759:cluster/CMS-889"
-            container_image_name_updates: 'container=web,tag=latest'
+            container_image_name_updates: "container=web,tag=${CIRCLE_SHA1}"
