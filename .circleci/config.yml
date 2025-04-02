@@ -21,8 +21,8 @@ workflows:
             tag: "${CIRCLE_SHA1},latest"
             extra_build_args: --provenance=false
         - aws-ecs/deploy_service_update: # orb built-in job
-            # requires:
-            #     - aws-ecr/build_and_push_image
+            requires:
+                - aws-ecr/build_and_push_image
             auth: 
               - aws-cli/setup:
                 auth: static
