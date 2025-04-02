@@ -28,9 +28,7 @@ workflows:
                 auth: static
                 aws_access_key_id: "${$AWS_ACCESS_KEY_ID}"
                 aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
-            repo: "platform/web"
             account_id: "395833734759"
-            aws_domain: "amazonaws.com"
             region: "us-west-1"
             family: 'CMS-889'
             cluster: 'CMS-899'
