@@ -8,18 +8,18 @@ orbs:
 workflows:
     example-workflow:
       jobs:
-        # - aws-ecr/build_and_push_image:
-        #     auth: 
-        #       - aws-cli/setup:
-        #         auth: static
-        #         aws_access_key_id: "${$AWS_ACCESS_KEY_ID}"
-        #         aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
-        #     repo: "platform/web"
-        #     account_id: "395833734759"
-        #     aws_domain: "amazonaws.com"
-        #     region: "us-west-1"
-        #     tag: "${CIRCLE_SHA1},latest"
-        #     extra_build_args: --provenance=false
+        - aws-ecr/build_and_push_image:
+            auth: 
+              - aws-cli/setup:
+                auth: static
+                aws_access_key_id: "${$AWS_ACCESS_KEY_ID}"
+                aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
+            repo: "platform/web"
+            account_id: "395833734759"
+            aws_domain: "amazonaws.com"
+            region: "us-west-1"
+            tag: "${CIRCLE_SHA1},latest"
+            extra_build_args: --provenance=false
         - aws-ecs/deploy_service_update: # orb built-in job
             # requires:
             #     - aws-ecr/build_and_push_image
