@@ -30,12 +30,12 @@ export function form({ t, ...ctx }: HTMLElementContext) {
   return (
     <Tag
       {...attrs}
-      ref="html"
-      className={classes(
-        'formio-component-htmlelement',
-        ctx.component.className
-      )}
-      dangerouslySetInnerHTML={{ __html: ctx.content }}
+      // ref="html"
+      // className={classes(
+      //   'formio-component-htmlelement',
+      //   ctx.component.className
+      // )}
+      // dangerouslySetInnerHTML={{ __html: ctx.content }}
     />
   )
 }
