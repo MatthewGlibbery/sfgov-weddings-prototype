@@ -11,10 +11,10 @@ COPY . .
 RUN npm install
 
 # Build the Next.js app  
-RUN npm run build  
+RUN npm run -w @sfgov/next build 
 
 # Expose the port the app will run on  
 EXPOSE 3000  
 
 # Start the app  
-CMD ["node_modules/.bin/next", "start"]
+CMD ["npm", "run", "-w", "@sfgov/next", "start"]
