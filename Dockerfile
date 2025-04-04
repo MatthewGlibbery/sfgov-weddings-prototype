@@ -10,6 +10,8 @@ COPY . .
 # Install dependencies  
 RUN npm install
 
+RUN npm run build
+
 # Build the Next.js app  
 RUN npm run -w @sfgov/next build 
 
