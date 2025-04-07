@@ -92,6 +92,7 @@ export const Spotlight = ({
       theme={theme}
       secondary={secondary}
       data-testid="spotlight"
+      data-gtm-id="spotlight"
     >
       <div className="basis-0 grow">
         {image ? (
