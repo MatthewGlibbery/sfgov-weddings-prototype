@@ -24,7 +24,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
   } = page
   const { t } = useTranslation()
   return (
-    <PageWrapper>
+    <PageWrapper meta={page.meta}>
       <h1 className="sr-only">
         {t('welcome-to-sf-gov', { defaultValue: 'Welcome to SF.gov' })}
       </h1>

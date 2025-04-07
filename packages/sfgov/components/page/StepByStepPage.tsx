@@ -21,7 +21,7 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
   const { t } = useTranslation()
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={{ ...page.meta, description }}>
       <Container className="mb-20 pb-40">
         <PageTitleSection
           title={title}

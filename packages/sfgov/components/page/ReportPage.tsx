@@ -24,7 +24,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
   } = page
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={page.meta}>
       <Container className="mb-20 pb-40">
         <PageTitleSection
           label={t('report', { defaultValue: 'Report' })}
