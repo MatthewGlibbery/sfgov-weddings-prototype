@@ -39,7 +39,7 @@ const DepartmentsPage = (props: DepartmentPageData) => {
   const { t } = useTranslation()
   const { departments } = props
   return (
-    <PageWrapper>
+    <PageWrapper title={t('departments', { defaultValue: 'Departments' })}>
       <Container className="grid grid-cols-1 gap-y-60">
         <div>
           <PageTitleSection

@@ -4,13 +4,13 @@ import {
   HeadingXl,
   IconHamburger,
   IconSearch,
-  IconX
+  IconX,
+  Link
 } from '@/design-system'
 import { useTranslation } from 'next-i18next'
 import { useSearchParams } from 'next/navigation'
 import { LanguageSelector } from './LanguageSelector'
 import { Alert } from './Alert'
-import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../public/static/CCSF-seal-vector.svg'
 import { getHeaderLinks } from '@/lib/utils'
