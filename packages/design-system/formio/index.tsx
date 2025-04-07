@@ -184,7 +184,7 @@ export function useFormio(isDev?: boolean) {
         // calling form.setAlert(...) if the type is falsy and it's submitted
         if (isDev && !type && this.submitted) return
 
-        if (message.includes('Submission Complete')) {
+        if (message?.includes('Submission Complete')) {
           setAlert(type, ...rest)
         } else {
           setAlert(type, message, ...rest)
@@ -295,13 +295,15 @@ export function modifyComponentClassname(value?: string) {
 
 export function modifyHTMLElementClassname(value?: string) {
   const defaultCalloutClasses = [
-    'border',
-    'border-2',
+    'border-1',
     'callout-titles:text-heading-lg',
     'callout-titles:font-bold',
     'link:text-primary500',
+    'link:!underline',
     'py-20',
-    'px-28',
+    'px-20',
+    'before:!inline-flex',
+    'before:!pl-[24px]',
     'callout-titles:inline-block',
     'callout-titles:mb-8',
     'max-md:callout-titles:text-desktop-heading-sm',
@@ -312,9 +314,10 @@ export function modifyHTMLElementClassname(value?: string) {
       /\bbg-blue-1\b/g,
       classes([
         ...defaultCalloutClasses,
-        'bg-information10',
+        'bg-information50',
         'border-information600',
-        'callout-titles:text-information600'
+        'callout-titles:text-information600',
+        'before:!info-icon'
       ])
     )
     .replace(/\bfg-blue-4\b/g, 'text-information400')
@@ -322,9 +325,10 @@ export function modifyHTMLElementClassname(value?: string) {
       /\bbg-green-1\b/g,
       classes([
         ...defaultCalloutClasses,
-        'bg-success10',
+        'bg-success50',
         'border-success600',
-        'callout-titles:text-success600'
+        'callout-titles:text-success600',
+        'before:!success-icon'
       ])
     )
     .replace(/\bfg-green-4\b/g, 'text-success400')
@@ -332,9 +336,10 @@ export function modifyHTMLElementClassname(value?: string) {
       /\bbg-red-1\b/g,
       classes([
         ...defaultCalloutClasses,
-        'bg-danger10',
+        'bg-danger50',
         'border-danger600',
-        'callout-titles:text-danger600'
+        'callout-titles:text-danger600',
+        'before:!alert-icon'
       ])
     )
     .replace(/\bfg-red-4\b/g, 'text-danger400')
