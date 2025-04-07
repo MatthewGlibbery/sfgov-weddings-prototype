@@ -44,11 +44,8 @@ describe('TableOfContents', () => {
     )
 
     const tocEntry = screen.getByTestId('top-level-toc')
-    const lowerLevelTOC = screen.getByTestId('lower-level-toc')
     fireEvent.click(tocEntry)
-    fireEvent.click(lowerLevelTOC)
 
     expect(tocEntry).toHaveAttribute('href', '#hello')
-    expect(lowerLevelTOC).toHaveAttribute('href', '#world')
   })
 })

@@ -141,6 +141,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           <RelatedContentList
             title={t('partner-agencies', { defaultValue: 'Partner agencies' })}
             content={agencies}
+            id={`partnerAgencies${screen}`}
           />
         </div>
       ) : null}

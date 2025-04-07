@@ -47,12 +47,14 @@ const StepContent = (block: TypeStepSpecificsBlock) => {
   }
 }
 
-const WhatToDoStep = (props: TypeWhatToDoStepBlock['value']) => {
-  const { section_title: title, section_specifics: specifics } = props
+const WhatToDoStep = (
+  props: TypeWhatToDoStepBlock['value'] & { screen: string }
+) => {
+  const { section_title: title, section_specifics: specifics, screen } = props
   return (
     <>
       {title ? (
-        <HeadingXl as="h3" id={camelCase(title)}>
+        <HeadingXl as="h3" id={camelCase(title) + screen}>
           {title}
         </HeadingXl>
       ) : null}
@@ -73,13 +75,16 @@ const WhatToDoStep = (props: TypeWhatToDoStepBlock['value']) => {
 
 export const WhatToDo = ({
   block,
+  screen = '',
   ...rest
-}: JSX.IntrinsicAttributes & { block: TypeWhatToDoBlock }) => {
+}: JSX.IntrinsicAttributes & { block: TypeWhatToDoBlock } & {
+  screen: string
+}) => {
   return (
     <div className="flex flex-col gap-y-20" {...rest}>
       {block.type === 'callout' ? <Callout html={block.value} /> : null}
       {block.type === 'what_to_do_step' ? (
-        <WhatToDoStep {...block.value} />
+        <WhatToDoStep screen={screen} {...block.value} />
       ) : null}
     </div>
   )

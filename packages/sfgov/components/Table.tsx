@@ -138,7 +138,11 @@ export const Table = (props: TypeTableBlockValues) => {
   return (
     <div className="space-y-20">
       {table.caption ? (
-        <HeadingXXl as="h2" aria-hidden="true">
+        <HeadingXXl
+          as="h2"
+          aria-hidden="true"
+          id={`tableCaption${table.caption}`}
+        >
           {table.caption}
         </HeadingXXl>
       ) : null}

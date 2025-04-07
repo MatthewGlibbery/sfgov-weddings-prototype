@@ -55,7 +55,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               {t('what-to-do', { defaultValue: 'What to do' })}
             </HeadingXXl>
             {whatToDo.map((what, i) => (
-              <WhatToDo block={what} key={i} />
+              <WhatToDo block={what} key={i} screen={screen} />
             ))}
           </div>
         ) : null}
@@ -111,6 +111,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
         <RelatedContentList
           content={relatedContentPages}
           title={t('related', { defaultValue: 'Related' }) as string}
+          id={`related${screen}`}
         />
       ) : null}
     </div>
@@ -120,7 +121,11 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
     <span className="mx-20 md:mx-0">
       {getHelp.length ? (
         <div className="flex flex-col items-start gap-20">
-          <HeadingXXl as="h2" className="flex flex-row gap-8">
+          <HeadingXXl
+            as="h2"
+            className="flex flex-row gap-8"
+            id={`getHelp${screen}`}
+          >
             <IconQuestion width={32} />
             {t('get-help', { defaultValue: 'Get help' })}
           </HeadingXXl>
@@ -135,6 +140,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               defaultValue: 'Partner agencies'
             }) as string
           }
+          id={`partnerAgencies${screen}`}
         />
       ) : null}
     </span>
@@ -197,7 +203,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           <div className="flex flex-col gap-y-60 col-span-full">
             <TransactionDetails screen="Small" />
             <TransactionContent screen="Small" />
-            <TransactionFooter />
+            <TransactionFooter screen="Small" />
           </div>
         </Grid>
       </span>
@@ -212,7 +218,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               <TransactionContent screen="Large" />
             </div>
           </Grid>
-          <TransactionFooter />
+          <TransactionFooter screen="Large" />
         </Container>
       </span>
     </PageWrapper>
