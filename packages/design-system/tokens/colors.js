@@ -537,17 +537,32 @@ module.exports = {
     10: {
       value: '#F2F8FF',
       type: 'color',
-      description: 'Shade color with 93.6% of lightness',
+      description: 'Shade color with 97.5% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
         value: '#F2F8FF',
         type: 'color',
-        description: 'Shade color with 93.6% of lightness'
+        description: 'Shade color with 97.5% of lightness'
       },
       name: '10',
       attributes: {},
       path: ['Information', '10']
+    },
+    50: {
+      value: '#E5F1FF',
+      type: 'color',
+      description: 'Shade color with 94.9% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#E5F1FF',
+        type: 'color',
+        description: 'Shade color with 94.9% of lightness'
+      },
+      name: '50',
+      attributes: {},
+      path: ['Information', '50']
     },
     100: {
       value: '#daebff',
@@ -704,17 +719,32 @@ module.exports = {
     10: {
       value: '#F3FAF0',
       type: 'color',
-      description: 'Shade color with 93.6% of lightness',
+      description: 'Shade color with 97.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
         value: '#F3FAF0',
         type: 'color',
-        description: 'Shade color with 93.6% of lightness'
+        description: 'Shade color with 97.3% of lightness'
       },
       name: '10',
       attributes: {},
       path: ['Success', '10']
+    },
+    50: {
+      value: '#E8F5E2',
+      type: 'color',
+      description: 'Shade color with 92.4% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#E8F5E2',
+        type: 'color',
+        description: 'Shade color with 92.4% of lightness'
+      },
+      name: '50',
+      attributes: {},
+      path: ['Success', '50']
     },
     100: {
       value: '#def1d6',
@@ -1023,17 +1053,32 @@ module.exports = {
     10: {
       value: '#FFF4F1',
       type: 'color',
-      description: 'Shade color with 93.6% of lightness',
+      description: 'Shade color with 97.3% of lightness',
       filePath: 'tokens/base.json',
       isSource: true,
       original: {
         value: '#FFF4F1',
         type: 'color',
-        description: 'Shade color with 93.6% of lightness'
+        description: 'Shade color with 97.3% of lightness'
       },
       name: '10',
       attributes: {},
       path: ['Danger', '10']
+    },
+    50: {
+      value: '#FFEAE5',
+      type: 'color',
+      description: 'Shade color with 94.9% of lightness',
+      filePath: 'tokens/base.json',
+      isSource: true,
+      original: {
+        value: '#FFF4F1',
+        type: 'color',
+        description: 'Shade color with 94.9% of lightness'
+      },
+      name: '50',
+      attributes: {},
+      path: ['Danger', '50']
     },
     100: {
       value: '#ffe0d9',

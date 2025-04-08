@@ -213,7 +213,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   )
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={page.meta}>
       {cancelled ? (
         <Callout html="This meeting has been cancelled."></Callout>
       ) : null}

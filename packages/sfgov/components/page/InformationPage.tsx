@@ -34,7 +34,7 @@ export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
   const filteredPartOf = partOf.filter((item) => item?.value?.live)
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={{ ...page.meta, description }}>
       <Container>
         <Grid>
           <div className="col-span-full">

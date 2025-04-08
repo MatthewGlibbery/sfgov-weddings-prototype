@@ -46,7 +46,10 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
     <footer role="contentinfo">
       {
         /* istanbul ignore next */ isFeedbackForm ? null : (
-          <Container className="flex flex-col md:flex-row md:items-center py-20 gap-16">
+          <Container
+            className="flex flex-col md:flex-row md:items-center py-20 gap-16"
+            data-gtm-id="feedback-form"
+          >
             <div>
               {t('feedback-footer-text', {
                 defaultValue: 'Was this page helpful?'
@@ -114,7 +117,11 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
             </HeadingMd>
             <div className="flex flex-wrap gap-x-16 md:flex-col md:gap-y-12">
               {links.map((link, i) => (
-                <Link key={i} className="text-white" href={link.href}>
+                <Link
+                  key={i}
+                  className="text-white ga-footer-link"
+                  href={link.href}
+                >
                   {link.text}
                 </Link>
               ))}

@@ -4,13 +4,13 @@ import {
   HeadingXl,
   IconHamburger,
   IconSearch,
-  IconX
+  IconX,
+  Link
 } from '@/design-system'
 import { useTranslation } from 'next-i18next'
 import { useSearchParams } from 'next/navigation'
 import { LanguageSelector } from './LanguageSelector'
 import { Alert } from './Alert'
-import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../public/static/CCSF-seal-vector.svg'
 import { getHeaderLinks } from '@/lib/utils'
@@ -42,7 +42,7 @@ const Links = () => {
             <Link
               href={link.href}
               className="block w-full no-underline font-bold text-label-xs px-28 py-12 text-primary500
-            md:px-8 md:py-15 md:text-black"
+            md:px-8 md:py-15 md:text-black ga-header-link"
             >
               {link.text}
             </Link>

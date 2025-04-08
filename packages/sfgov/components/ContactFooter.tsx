@@ -58,7 +58,7 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
   }
 
   return (
-    <StackedContainer className="gap-28">
+    <StackedContainer className="gap-28" data-gtm-id="contact-footer">
       {footerSections.address.length ? (
         <StackedItem
           className="md:max-w-[400px]"

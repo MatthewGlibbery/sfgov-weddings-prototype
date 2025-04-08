@@ -32,7 +32,7 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
   const { t } = useTranslation()
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={{ ...page.meta, description: abstract }}>
       <Container className="mb-20 pb-40">
         <PageTitleSection label={type} title={title}>
           <PageLinksList pageLinks={agencies} />

@@ -93,7 +93,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   )
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={{ ...page.meta, description }}>
       {alert?.[0]?.value ? <Alert {...alert[0].value} /> : null}
       {mainImage ? (
         <div className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0">

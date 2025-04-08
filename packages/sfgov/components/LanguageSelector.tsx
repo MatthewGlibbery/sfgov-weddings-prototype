@@ -31,7 +31,7 @@ type LocaleCode = 'en' | 'es' | 'zh-hant' | 'fil' | 'vi-vn'
 const localeNames: Record<LocaleCode, string> = {
   en: 'English',
   es: 'Español',
-  'zh-hant': '中文',
+  'zh-hant': '繁體中文',
   fil: 'Filipino',
   'vi-vn': 'Tiếng Việt'
 }

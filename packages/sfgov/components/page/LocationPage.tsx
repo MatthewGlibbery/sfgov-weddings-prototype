@@ -163,7 +163,7 @@ export function LocationPage({ page, env, qLessData }: LocationPageProps) {
   const address = contact?.value.address[0]
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={{ ...page.meta, description }}>
       {alert ? (
         <div className="mx-12 md:mx-28 lg:mx-96">
           <Alert {...alert.value} />
