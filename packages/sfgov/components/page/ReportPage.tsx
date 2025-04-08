@@ -8,7 +8,6 @@ import { RelatedContentList } from '../RelatedContentList'
 import { RichText } from '../RichText'
 import { Spotlight } from '../Spotlight'
 import { Table } from '../Table'
-import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
 import { PageWrapper } from './PageWrapper'
 
 export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
@@ -42,10 +41,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
       ) : null}
       <Container className="mb-60">
         <Grid>
-          <div className={tocWrapperClasses}>
-            <TableOfContents />
-          </div>
-          <div className="col-span-full lg:col-span-7 space-y-40 lg:space-y-60 lg:order-1">
+          <div className="col-span-full lg:col-span-7 space-y-40 lg:space-y-60">
             {content?.map((contentSection) => {
               switch (contentSection.type) {
                 case 'body':
@@ -63,7 +59,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
             })}
             {printVersion ? (
               <div>
-                <HeadingXl as="h3" className="mb-20" id="printVersion">
+                <HeadingXl as="h3" className="mb-20">
                   {t('print-version', { defaultValue: 'Print version' })}
                 </HeadingXl>
                 <DocumentLink document={printVersion} />
