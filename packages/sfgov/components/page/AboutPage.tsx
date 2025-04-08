@@ -2,7 +2,6 @@ import {
   Container,
   Grid,
   HeadingXXl,
-  HeadingXl,
   IconArrowLeft,
   IconDownload,
   Link,
@@ -26,7 +25,7 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
   } = page
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={page.meta}>
       <Container>
         <Grid>
           <div className="col-span-full">

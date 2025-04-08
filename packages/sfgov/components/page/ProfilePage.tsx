@@ -69,7 +69,7 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
   })
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={page.meta}>
       <Container className="mb-20 pb-40">
         <PageTitleSection label={t('profile', { defaultValue: 'Profile' })} />
         <div className="flex flex-col gap-y-20 md:gap-y-40 lg:gap-y-60 scroll-smooth">

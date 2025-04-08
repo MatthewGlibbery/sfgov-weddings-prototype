@@ -45,7 +45,7 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
   const { t } = useTranslation()
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={{ ...page.meta, description }}>
       <Container className="flex flex-col gap-y-60">
         <div className="flex flex-col">
           <PageTitleSection

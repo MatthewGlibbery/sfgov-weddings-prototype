@@ -33,7 +33,7 @@ const StepContent = (block: TypeStepSpecificsBlock) => {
     case 'email':
       return <EmailBlock {...block.value} />
     case 'button_link':
-      return <ButtonLink link={block.value} />
+      return <ButtonLink link={block.value} data-gtm-id="what-to-do-button" />
     case 'phone_number':
       return <PhoneNumberBlock {...block.value} />
     case 'text':

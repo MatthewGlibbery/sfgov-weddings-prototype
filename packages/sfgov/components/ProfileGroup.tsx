@@ -26,7 +26,10 @@ export const ProfileGroup = ({
   profiles,
   isHomePage = false
 }: ProfileGroupProps) => (
-  <div className={`${isHomePage ? 'mb-60 last:mb-0' : ''}`}>
+  <div
+    className={`${isHomePage ? 'mb-60 last:mb-0' : ''}`}
+    data-gtm-id="profile-group"
+  >
     <HeadingXl as="h3" className="my-12 md:my-20" romanType="sans">
       {title}
     </HeadingXl>

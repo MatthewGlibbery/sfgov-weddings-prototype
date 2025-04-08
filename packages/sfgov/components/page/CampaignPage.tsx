@@ -220,7 +220,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   const label = t('campaign', { defaultValue: 'Campaign' })
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={page.meta}>
       {headerImage ? (
         <div className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0">
           <Image imageRef={headerImage} className="object-cover w-1/1" />

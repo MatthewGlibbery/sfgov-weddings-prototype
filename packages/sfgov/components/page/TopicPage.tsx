@@ -25,7 +25,7 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
     partner_agencies: agencies
   } = page
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={{ ...page.meta, description }}>
       <Container className="mb-20">
         <PageTitleSection label={t('Topic')} title={title}>
           {description ? (

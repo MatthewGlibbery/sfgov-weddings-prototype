@@ -111,7 +111,7 @@ export function FormPage({
   }, [warnBeforeLeaving, router.events])
 
   return (
-    <PageWrapper title={title}>
+    <PageWrapper title={title} meta={page.meta}>
       <Container>
         <div className="space-y-12 mb-40">
           <PageTitleSection
