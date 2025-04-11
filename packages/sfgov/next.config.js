@@ -44,8 +44,8 @@ module.exports = {
     // this pattern matches any path
     const ANY_PATH = '/:path*'
     const CACHE_CONTROL = 'cache-control'
-    // by default, cache responses for 10 minutes
-    const TTL_DEFAULT = 10 * 60
+    // by default, cache responses for 1 day
+    const TTL_DEFAULT = 60 * 60 * 24
     return [
       {
         source: ANY_PATH,
