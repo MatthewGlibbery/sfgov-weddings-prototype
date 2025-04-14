@@ -16,4 +16,11 @@
     padding-left: 40px;
   }
 
+  a {
+    @apply underline text-primary500;
+  }
+
+  h2 {
+    @apply text-desktop-heading-xxl;
+  }
 }
