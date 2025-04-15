@@ -15,11 +15,12 @@ import {
   classed
 } from '@/design-system'
 import { getPublicEnv, requireEnv } from '@/lib/env'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { withServerSideTranslations } from '@/lib/translations'
 import { TopicPageData } from '@/types'
 import { sendGTMEvent } from '@next/third-parties/google'
+import { useRouter } from 'next/router'
 
 export type SearchResult = {
   id: string
@@ -216,9 +217,25 @@ const SearchPage = (props: SearchPageData) => {
     0,
     currentPage * itemsPerPage + itemsPerPage
   )
-  let content
-
+  const router = useRouter()
+  const lastSearchTerm = useRef<string | null>(null)
   const Bold = classed('strong', 'inline font-bold')
+  const urlQuery = router.query.q ?? ''
+  let content
+  useEffect(() => {
+    // need to compare q param with last search term
+    // otherwise, a new search event is sent with
+    // "show more" state changes
+    if (urlQuery !== lastSearchTerm.current) {
+      sendGTMEvent({
+        event: 'view_search_results',
+        search_term: query,
+        contentType: undefined, // clear out irrelevant datalayer things
+        partnerAgencies: undefined
+      })
+    }
+    lastSearchTerm.current = query
+  }, [urlQuery, query])
 
   if (query && pageResults.length > 0) {
     // we searched and there are results
@@ -278,13 +295,6 @@ const SearchPage = (props: SearchPageData) => {
     content = <EmptyState items={services} numColumns={3} />
   }
 
-  sendGTMEvent({
-    event: 'view_search_results',
-    search_term: query,
-    contentType: undefined, // clear out irrelevant datalayer things
-    partnerAgencies: undefined
-  })
-
   return (
     <PageWrapper>
       <Container className="grid grid-cols-1 gap-y-60 mb-60">
@@ -294,7 +304,6 @@ const SearchPage = (props: SearchPageData) => {
             <SearchInput onChange={setSearchTerm} value={value} />
           )}
         />
-
         {content}
       </Container>
     </PageWrapper>
