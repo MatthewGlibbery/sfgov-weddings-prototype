@@ -19,6 +19,7 @@ import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { withServerSideTranslations } from '@/lib/translations'
 import { TopicPageData } from '@/types'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 export type SearchResult = {
   id: string
@@ -276,6 +277,13 @@ const SearchPage = (props: SearchPageData) => {
   } else {
     content = <EmptyState items={services} numColumns={3} />
   }
+
+  sendGTMEvent({
+    event: 'view_search_results',
+    search_term: query,
+    contentType: undefined, // clear out irrelevant datalayer things
+    partnerAgencies: undefined
+  })
 
   return (
     <PageWrapper>
