@@ -21,6 +21,8 @@ import { withServerSideTranslations } from '@/lib/translations'
 import { TopicPageData } from '@/types'
 import { sendGTMEvent } from '@next/third-parties/google'
 import { useRouter } from 'next/router'
+import { getPageURL } from '@/lib/utils'
+import { TOPIC_PAGE_TYPE } from '@/constants'
 
 export type SearchResult = {
   id: string
@@ -71,10 +73,12 @@ export const getServerSideProps = withServerSideTranslations(
     )
 
     // fetch topics, too, for the empty/no results state
-    const topicsUrl = new URL(
-      requireEnv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL') + '/sf.Topic'
-    )
-    topicsUrl.searchParams.set('locale__language_code', locale as string)
+    const topicsUrl = new URL(requireEnv('NEXT_PUBLIC_CONTENT_API_BASE_URL'))
+    topicsUrl.pathname += '/pages'
+    topicsUrl.searchParams.set('type', TOPIC_PAGE_TYPE)
+    topicsUrl.searchParams.set('locale', locale as string)
+    topicsUrl.searchParams.set('limit', '100')
+    topicsUrl.searchParams.set('order', 'title')
 
     let results = []
     let services = []
@@ -108,8 +112,10 @@ export const getServerSideProps = withServerSideTranslations(
 
     try {
       const topicsRes = await fetch(topicsUrl.href)
-      const topicsData = await topicsRes.json()
-      services = topicsData
+      if (topicsRes.ok) {
+        const topicsData = await topicsRes.json()
+        services = topicsData.items
+      }
     } catch (error) {
       console.error('error fetching topics')
     }
@@ -125,7 +131,7 @@ const EmptyState = (props: EmptyStateData) => {
   const columns = Array.from({ length: numColumns }, (_, i) =>
     items.slice(i * itemsPerColumn, i * itemsPerColumn + itemsPerColumn)
   )
-  return columns ? (
+  return columns && items.length ? (
     <div className="flex flex-col gap-y-20">
       {noResults ? (
         <HeadingXlSans>
@@ -140,13 +146,16 @@ const EmptyState = (props: EmptyStateData) => {
       <div className="grid grid-cols-3 gap-x-28">
         {columns.map((column, index) => (
           <ul className="p-0 m-0 list-none" key={index}>
-            {column.map((item) => (
-              <li className="mb-20" key={item.html_path}>
-                <a className="text-primary500" href={item.html_path}>
-                  {item.title}
-                </a>
-              </li>
-            ))}
+            {column.map((item) => {
+              const href = getPageURL(item)
+              return (
+                <li className="mb-20" key={item.meta?.slug}>
+                  <a className="text-primary500" href={href}>
+                    {item.title}
+                  </a>
+                </li>
+              )
+            })}
           </ul>
         ))}
       </div>
