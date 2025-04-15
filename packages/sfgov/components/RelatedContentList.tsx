@@ -10,6 +10,7 @@ type PageLinkProps = Omit<JSX.IntrinsicElements['div'], 'className'> & {
 type RelatedContentProps = Omit<JSX.IntrinsicElements['div'], 'content'> & {
   content: RelatedContentData[]
   component?: ComponentType<PageLinkProps>
+  anchorId?: string
 }
 
 const PageLinkWithBorder = ({ item, ...rest }: PageLinkProps) => (
@@ -32,11 +33,13 @@ export const RelatedContentList = ({
   content,
   title,
   component,
+  id = '',
   ...rest
 }: RelatedContentProps) => {
   if (!content?.length) return null
 
   const Content = component || PageLinkWithBorder
+  const anchorId = id || title
 
   const gridClass =
     !component && content.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'
@@ -44,7 +47,7 @@ export const RelatedContentList = ({
   return (
     <div {...rest}>
       {title ? (
-        <HeadingXXl as="h2" className="!mb-20">
+        <HeadingXXl as="h2" className="!mb-20" id={anchorId}>
           {title}
         </HeadingXXl>
       ) : null}

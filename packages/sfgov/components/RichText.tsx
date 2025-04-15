@@ -136,9 +136,19 @@ export const RichText = (props: RichTextProps) => {
         )
       }
 
+      const getInnerText = (child) => {
+        if (child.props) {
+          // istanbul ignore next
+          return getInnerText(child.props)
+        } else if (typeof child === 'string') {
+          return child
+        }
+      }
+
       if (tagName === 'h2') {
+        const id = getInnerText(domToReact(node.children))
         return (
-          <HeadingXl as="h2" {...props}>
+          <HeadingXl as="h2" id={id} {...props}>
             {domToReact(node.children, options)}
           </HeadingXl>
         )
@@ -152,8 +162,9 @@ export const RichText = (props: RichTextProps) => {
             </HeadingLgListItem>
           )
         }
+        const id = getInnerText(domToReact(node.children))
         return (
-          <HeadingMd as="h3" {...props}>
+          <HeadingMd as="h3" {...props} id={id}>
             {domToReact(node.children, options)}
           </HeadingMd>
         )
