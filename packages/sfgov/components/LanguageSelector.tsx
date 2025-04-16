@@ -14,10 +14,13 @@ const StyledList = classed(
   'ul',
   'm-0 px-0 py-20 list-none absolute top-full left-0 w-full bg-neutral50 z-10 shadow-[rgba(0,0,0,0.12)_0px_2px_4px_-2px] md:rounded-4 md:border-1 md:border-neutral200 md:bg-white md:mt-8 md:py-0 md:shadow'
 )
-const StyledDiv = classed('div', 'flex gap-x-28 md:flex-col md:gap-y-12')
+const StyledDiv = classed(
+  'div',
+  'flex flex-wrap gap-x-16 gap-y-4 md:flex-col md:gap-y-12'
+)
 
 const StyledLanguageLink = classed(NextLink, {
-  base: 'block w-full no-underline text-primary500 text-label-xs px-28 py-12 font-bold md:px-16 md:py-15',
+  base: 'block md:w-full no-underline text-primary500 text-label-xs px-28 py-12 font-bold md:px-16 md:py-15',
   variants: {
     current: {
       true: 'font-bold'
@@ -63,7 +66,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
         {links.map((link) => (
           <StyledLanguageLink
             key={link.locale}
-            className="text-slate300 text-white underline p-0 md:p-0 font-normal text-label-sm"
+            className="text-slate300 text-white underline p-0 md:p-0 font-normal text-label-sm break-keep"
             {...link}
           />
         ))}

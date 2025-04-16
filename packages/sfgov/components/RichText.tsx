@@ -93,6 +93,11 @@ export const RichText = (props: RichTextProps) => {
         )
       )
 
+      const tocHeadingId =
+        attribs['data-block-key'] +
+        (next?.attribs?.['data-block-key'] ||
+          Math.floor(Math.random() * 200).toString())
+
       // I'm not sure why this works, but if we don't
       // short-circuit here, next/react throws a bunch of errors
       // about not liking self-closing tags. We can be more
@@ -138,7 +143,7 @@ export const RichText = (props: RichTextProps) => {
 
       if (tagName === 'h2') {
         return (
-          <HeadingXl as="h2" {...props}>
+          <HeadingXl as="h2" id={tocHeadingId} {...props}>
             {domToReact(node.children, options)}
           </HeadingXl>
         )
@@ -153,7 +158,7 @@ export const RichText = (props: RichTextProps) => {
           )
         }
         return (
-          <HeadingMd as="h3" {...props}>
+          <HeadingMd as="h3" {...props} id={tocHeadingId}>
             {domToReact(node.children, options)}
           </HeadingMd>
         )

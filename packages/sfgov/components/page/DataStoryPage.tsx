@@ -2,7 +2,13 @@ import { Container, DisplayLg, Grid, PageTitleSection } from '@/design-system'
 import { DataStoryPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 import { ComponentType } from 'react'
-import { ContentSection, PageWrapper, RelatedContentList } from '..'
+import {
+  ContentSection,
+  PageWrapper,
+  RelatedContentList,
+  TableOfContents,
+  tocWrapperClasses
+} from '..'
 
 export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
   page
@@ -27,7 +33,10 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
               ) : null}
             </PageTitleSection>
           </div>
-          <div className="col-span-full lg:col-span-7">
+          <div className={tocWrapperClasses}>
+            <TableOfContents />
+          </div>
+          <div className="col-span-full lg:col-span-7 lg:order-1">
             {content.length ? (
               <div className="mt-28 mb-20 flex flex-col gap-28">
                 {content.map((section) => (
@@ -41,15 +50,13 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
               </div>
             ) : null}
           </div>
-          <div className="col-span-full">
-            <RelatedContentList
-              title={t('partner-agencies', {
-                defaultValue: 'Partner agencies'
-              })}
-              content={agencies}
-            />
-          </div>
         </Grid>
+        <RelatedContentList
+          title={t('partner-agencies', {
+            defaultValue: 'Partner agencies'
+          })}
+          content={agencies}
+        />
       </Container>
     </PageWrapper>
   )

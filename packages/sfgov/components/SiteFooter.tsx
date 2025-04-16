@@ -3,6 +3,7 @@ import {
   classed,
   Container,
   HeadingMd,
+  IconBluesky,
   IconFacebook,
   IconInstagram,
   IconThreads,
@@ -83,31 +84,38 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
             <div className="flex gap-28 ml-12 mb-40">
               <Link
                 className="text-white"
-                href="/#"
+                href="https://www.facebook.com/SF"
                 aria-label="link to sf.gov facebook"
               >
                 <IconFacebook width={24} />
               </Link>
               <Link
                 className="text-white"
-                href="/#"
+                href="https://www.instagram.com/sfgov"
                 aria-label="link to sf.gov instagram"
               >
                 <IconInstagram width={24} />
               </Link>
               <Link
                 className="text-white"
-                href="/#"
+                href="https://www.threads.net/@sfgov"
                 aria-label="link to sf.gov threads"
               >
                 <IconThreads width={24} />
               </Link>
               <Link
                 className="text-white"
-                href="/#"
-                aria-label="link to sf.gov twitter"
+                href="https://x.com/sfgov"
+                aria-label="link to sf.gov x"
               >
                 <IconTwitter width={24} />
+              </Link>
+              <Link
+                className="text-white"
+                href="https://bsky.app/profile/sfgov.sf.gov"
+                aria-label="link to sf.gov bluesky"
+              >
+                <IconBluesky width={24} />
               </Link>
             </div>
           </div>
@@ -160,7 +168,7 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
             aria-hidden="true"
             width={215}
             height={73}
-            className="absolute bottom-0 left-[-120px] md:left-0"
+            className="absolute bottom-0 left-0"
           />
           <Image
             src={frontFog}
@@ -168,7 +176,7 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
             aria-hidden="true"
             width={324}
             height={73}
-            className="absolute bottom-0 left-[-60px] md:left-[55px] md:z-20"
+            className="absolute bottom-0 left-[55px] z-20"
           />
           <Image
             src={sutro}
@@ -176,7 +184,7 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
             aria-hidden="true"
             width={16}
             height={52}
-            className="hidden md:block absolute bottom-0 left-[95px] z-10"
+            className="absolute bottom-0 left-[95px] z-10"
           />
           <Image
             src={transamerica}
@@ -184,7 +192,7 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
             aria-hidden="true"
             width={24}
             height={128}
-            className="absolute top-[29px] right-[183px] md:top-[33px] md:right-[259px] z-10"
+            className="hidden md:block absolute top-[29px] right-[183px] md:top-[33px] md:right-[259px] z-10"
           />
           <Image
             src={salesforce}
@@ -200,7 +208,7 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
             aria-hidden="true"
             width={220}
             height={103}
-            className="absolute right-[-70px] bottom-[-6px] md:right-0 md:bottom-0"
+            className="hidden md:block absolute right-[-70px] bottom-[-6px] md:right-0 md:bottom-0"
           />
           <Image
             src={frontFogRight}
@@ -208,7 +216,7 @@ export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
             aria-hidden="true"
             width={341}
             height={81}
-            className="absolute bottom-0 right-[-60px] md:right-0 z-20"
+            className="hidden md:block absolute bottom-0 right-[-60px] md:right-0 z-20"
           />
         </div>
       </StyledFooter>
