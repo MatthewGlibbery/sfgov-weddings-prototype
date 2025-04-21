@@ -44,6 +44,7 @@ export type SearchResult = {
 
 export type SearchPageData = {
   query: string
+  normalizedQuery: string
   results: SearchResult[]
   services: TopicPageData[]
 }
@@ -123,7 +124,8 @@ export const getServerSideProps = withServerSideTranslations(
 
     return {
       props: {
-        query: normalizedQuery || '',
+        query: q || '',
+        normalizedQuery,
         results,
         services,
         env: getPublicEnv()
@@ -227,7 +229,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
 
 const SearchPage = (props: SearchPageData) => {
   const { t } = useTranslation()
-  const { query, results, services } = props
+  const { query, normalizedQuery, results, services } = props
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(0)
   const pageResults = results.slice(
@@ -246,13 +248,13 @@ const SearchPage = (props: SearchPageData) => {
     if (urlQuery !== lastSearchTerm.current) {
       sendGTMEvent({
         event: 'view_search_results',
-        search_term: query,
+        search_term: normalizedQuery,
         contentType: undefined, // clear out irrelevant datalayer things
         partnerAgencies: undefined
       })
     }
     lastSearchTerm.current = query
-  }, [urlQuery, query])
+  }, [urlQuery, query, normalizedQuery])
 
   if (query && pageResults.length > 0) {
     // we searched and there are results
