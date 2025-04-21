@@ -61,6 +61,7 @@ export const getServerSideProps = withServerSideTranslations(
       locale
     } = context
 
+    const normalizedQuery = (q || '').trim().toLowerCase().replace(/\s+/g, ' ')
     const searchUrl = new URL('https://discoveryengine.googleapis.com')
     searchUrl.pathname += `v1/projects/${requireEnv(
       'GOOGLE_PROJECT_ID'
@@ -95,11 +96,11 @@ export const getServerSideProps = withServerSideTranslations(
           )}/locations/global/collections/default_collection/engines/${requireEnv(
             'GOOGLE_AGENT_BUILDER_SEARCH_APP_ID'
           )}`,
-          pageSize: 100, // dependent on our indexing type, but will coerce to max
+          pageSize: 100, // depends on indexing type, but will coerce to max
           safeSearch: true,
           spellCorrectionSpec: { mode: 'AUTO' },
           contentSearchSpec: { snippetSpec: { returnSnippet: true } },
-          query: q
+          query: normalizedQuery
         })
       })
       if (searchRes.ok) {
@@ -120,7 +121,14 @@ export const getServerSideProps = withServerSideTranslations(
       console.error('error fetching topics')
     }
 
-    return { props: { query: q || '', results, services, env: getPublicEnv() } }
+    return {
+      props: {
+        query: normalizedQuery || '',
+        results,
+        services,
+        env: getPublicEnv()
+      }
+    }
   }
 )
 
