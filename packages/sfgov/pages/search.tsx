@@ -44,6 +44,7 @@ export type SearchResult = {
 
 export type SearchPageData = {
   query: string
+  normalizedQuery: string
   results: SearchResult[]
   services: TopicPageData[]
 }
@@ -61,6 +62,7 @@ export const getServerSideProps = withServerSideTranslations(
       locale
     } = context
 
+    const normalizedQuery = (q || '').trim().toLowerCase().replace(/\s+/g, ' ')
     const searchUrl = new URL('https://discoveryengine.googleapis.com')
     searchUrl.pathname += `v1/projects/${requireEnv(
       'GOOGLE_PROJECT_ID'
@@ -95,11 +97,11 @@ export const getServerSideProps = withServerSideTranslations(
           )}/locations/global/collections/default_collection/engines/${requireEnv(
             'GOOGLE_AGENT_BUILDER_SEARCH_APP_ID'
           )}`,
-          pageSize: 100, // dependent on our indexing type, but will coerce to max
+          pageSize: 100, // depends on indexing type, but will coerce to max
           safeSearch: true,
           spellCorrectionSpec: { mode: 'AUTO' },
           contentSearchSpec: { snippetSpec: { returnSnippet: true } },
-          query: q
+          query: normalizedQuery
         })
       })
       if (searchRes.ok) {
@@ -120,7 +122,15 @@ export const getServerSideProps = withServerSideTranslations(
       console.error('error fetching topics')
     }
 
-    return { props: { query: q || '', results, services, env: getPublicEnv() } }
+    return {
+      props: {
+        query: q || '',
+        normalizedQuery,
+        results,
+        services,
+        env: getPublicEnv()
+      }
+    }
   }
 )
 
@@ -219,7 +229,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
 
 const SearchPage = (props: SearchPageData) => {
   const { t } = useTranslation()
-  const { query, results, services } = props
+  const { query, normalizedQuery, results, services } = props
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(0)
   const pageResults = results.slice(
@@ -238,13 +248,13 @@ const SearchPage = (props: SearchPageData) => {
     if (urlQuery !== lastSearchTerm.current) {
       sendGTMEvent({
         event: 'view_search_results',
-        search_term: query,
+        search_term: normalizedQuery,
         contentType: undefined, // clear out irrelevant datalayer things
         partnerAgencies: undefined
       })
     }
     lastSearchTerm.current = query
-  }, [urlQuery, query])
+  }, [urlQuery, query, normalizedQuery])
 
   if (query && pageResults.length > 0) {
     // we searched and there are results
