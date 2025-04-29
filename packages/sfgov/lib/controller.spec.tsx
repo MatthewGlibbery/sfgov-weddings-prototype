@@ -1,10 +1,10 @@
 import { Controller, WagtailPageTemplate } from './controller'
-import { FixtureAPI } from './api'
+import { FixtureAPI, RequestError } from './api'
 import { render } from '@testing-library/react'
 import mockConsole from 'jest-mock-console'
 import type { GetServerSidePropsContext } from 'next'
-import type { IContentAPI, MinimalPageData, PageData } from '@/types'
-import type { ComponentType } from 'react'
+import type { IContentAPI, PageData } from '@/types'
+import type { ComponentProps, ComponentType } from 'react'
 import mockedEnv from 'mocked-env'
 
 type MockedFunction = ReturnType<typeof jest.fn>
@@ -34,10 +34,11 @@ describe('Controller', () => {
       type: mockMetaType,
       url_path: mockPath
     },
-    title: 'Mock page'
-  } as MinimalPageData
+    title: 'Mock page',
+    html_path: '/test'
+  }
 
-  const api = new FixtureAPI({
+  const fixtureAPI = new FixtureAPI({
     pages: [mockPage]
   })
 
@@ -62,15 +63,15 @@ describe('Controller', () => {
       ).toThrow(/ContentAPI.+required/)
       expect(
         // @ts-expect-error testing without a template map
-        () => new Controller(api)
+        () => new Controller(fixtureAPI)
       ).toThrow(/templates.+required/)
-      expect(() => new Controller(api, [])).not.toThrow()
+      expect(() => new Controller(fixtureAPI, [])).not.toThrow()
     })
   })
 
   describe('getTemplateForType()', () => {
     it('finds exact matches', () => {
-      const controller = new Controller(api, mockTemplates)
+      const controller = new Controller(fixtureAPI, mockTemplates)
       expect(
         controller.getViewComponent({
           page: mockPage
@@ -80,7 +81,7 @@ describe('Controller', () => {
   })
 
   describe('makeGetServerSideProps()', () => {
-    const controller = new Controller(api, [])
+    const controller = new Controller(fixtureAPI, [])
 
     it('returns a function', () => {
       expect(typeof controller.makeGetServerSideProps()).toBe('function')
@@ -129,11 +130,11 @@ describe('Controller', () => {
     })
 
     it('catches 404s', async () => {
-      const stubAPI = {
-        getPageByPath: jest.fn(() => Promise.reject(new Error('not found')))
-      } as unknown as IContentAPI
+      const api = stubAPI({
+        getPageByPath: jest.fn(() => undefined)
+      })
 
-      const controller = new Controller(stubAPI, [])
+      const controller = new Controller(api, [])
       const getServerSideProps = controller.makeGetServerSideProps()
       const context = stubContext({
         resolvedUrl: mockPath
@@ -143,17 +144,39 @@ describe('Controller', () => {
       })
     })
 
+    it('does not catch other errors', async () => {
+      const api = stubAPI({
+        getPageByPath: jest.fn(() => {
+          throw new RequestError(
+            new Response('', {
+              status: 500,
+              statusText: 'Server Error'
+            })
+          )
+        })
+      })
+
+      const controller = new Controller(api as unknown as IContentAPI, [])
+      const getServerSideProps = controller.makeGetServerSideProps()
+      const context = stubContext({
+        resolvedUrl: mockPath
+      })
+      await expect(getServerSideProps(context)).rejects.toThrow(
+        /500 Server Error/
+      )
+    })
+
     it('redirects when the data calls for it', async () => {
-      const stubAPI = {
+      const api = stubAPI({
         getPageByPath: jest.fn(() =>
           Promise.resolve({
             ...mockPage,
             redirect_url: 'http://www.sf.gov'
           })
         )
-      } as unknown as IContentAPI
+      })
 
-      const controller = new Controller(stubAPI, [])
+      const controller = new Controller(api, [])
       const getServerSideProps = controller.makeGetServerSideProps()
       const context = stubContext({
         resolvedUrl: mockPath,
@@ -169,25 +192,22 @@ describe('Controller', () => {
   })
 
   describe('makeViewComponent()', () => {
-    const controller = new Controller(api, mockTemplates)
+    const controller = new Controller(fixtureAPI, mockTemplates)
 
     it('returns a function', () => {
       expect(typeof controller.makeViewComponent()).toBe('function')
     })
 
-    it('throws if page.meta.type is missing in props', () => {
+    it.each([
+      {},
+      { page: null },
+      { page: { meta: null } },
+      { page: { meta: { type: null } } }
+    ])('throws if page.meta.type is missing in props', (props) => {
       const View = controller.makeViewComponent()
-      for (const props in [
-        {},
-        { page: null },
-        { page: { meta: null } },
-        { page: { meta: { type: null } } }
-      ]) {
-        // @ts-expect-error not sure what either of these errors is about, tbh
-        expect(() => render(<View {...props} />)).toThrow(
-          /No template found for page:/
-        )
-      }
+      expect(() =>
+        render(<View {...(props as unknown as ComponentProps<typeof View>)} />)
+      ).toThrow(/No template found for page:/)
     })
 
     it('throws if it gets a page.meta.type with no matching template', () => {
@@ -195,15 +215,14 @@ describe('Controller', () => {
       expect(() =>
         render(
           <View
-            page={
-              {
-                id: 1,
-                meta: {
-                  type: 'wut'
-                },
-                title: 'Hi'
-              } as MinimalPageData
-            }
+            page={{
+              id: 1,
+              meta: {
+                type: 'wut'
+              },
+              title: 'Hi',
+              html_path: '/test'
+            }}
           />
         )
       ).toThrow(/No template found for page/)
@@ -211,6 +230,10 @@ describe('Controller', () => {
   })
 })
 
+/**
+ * Create a stub GetServerSidePropsContext for passing to getServerSideProps().
+ * Any property of the context can be overridden.
+ */
 function stubContext(
   c: Partial<GetServerSidePropsContext>
 ): GetServerSidePropsContext {
@@ -223,4 +246,27 @@ function stubContext(
     },
     ...c
   } as unknown as GetServerSidePropsContext
+}
+
+/**
+ * Create a stub IContentAPI for passing Controller instances. Usually you'll
+ * want to override methods with a jest mock function:
+ *
+ * ```ts
+ * const api = stubAPI({
+ *   getPageByPath: jest.fn(() => pageFixture)
+ * })
+ * const controller = new Controller(api, [])
+ * ```
+ */
+function stubAPI(methods: object): IContentAPI {
+  return {
+    getData<T = unknown>() {
+      return Promise.resolve({} as T)
+    },
+    getPageByPath() {
+      return Promise.resolve(undefined)
+    },
+    ...methods
+  }
 }

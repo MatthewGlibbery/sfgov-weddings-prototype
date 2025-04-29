@@ -1,7 +1,8 @@
-import { ContentAPI, FixtureAPI } from './api'
-import mockEnv from 'mocked-env'
+import type { MinimalPageData } from '@/types'
 import fetchMock from 'jest-fetch-mock'
 import mockConsole from 'jest-mock-console'
+import mockEnv from 'mocked-env'
+import { ContentAPI, FixtureAPI, RequestError } from './api'
 
 let restoreConsole: ReturnType<typeof mockConsole>
 beforeAll(() => {
@@ -106,6 +107,32 @@ describe('ContentAPI', () => {
       )
     })
 
+    it('falls back to the English page if the translation list fails', async () => {
+      const english = {
+        id: 1,
+        meta: { type: 'foo.Bar' },
+        title: 'English'
+      }
+      fetchMock
+        .once(JSON.stringify(english))
+        .once(JSON.stringify({ message: 'oops' }), {
+          status: 500
+        })
+      const res = await example.getPageByPath('foo', { locale: 'es' })
+      expect(res).toEqual(english)
+      expect(fetchMock).toHaveBeenCalledTimes(2)
+      expect(fetchMock).toHaveBeenNthCalledWith(
+        1,
+        'https://api.example.com/api/v3/pages/find/?html_path=foo',
+        undefined
+      )
+      expect(fetchMock).toHaveBeenNthCalledWith(
+        2,
+        'https://api.example.com/api/v3/pages/?translation_of=1&locale=es',
+        undefined
+      )
+    })
+
     it('finds translations with translation_of={english.id}', async () => {
       const english = {
         id: 1,
@@ -173,6 +200,43 @@ describe('ContentAPI', () => {
         )
       }
     )
+
+    it('returns undefined if the English page 404s', async () => {
+      fetchMock.mockResponseOnce(
+        JSON.stringify({
+          message: 'not found'
+        }),
+        {
+          status: 404,
+          statusText: 'Not Found'
+        }
+      )
+      const res = await example.getPageByPath('foo')
+      expect(res).toEqual(undefined)
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(fetchMock).toHaveBeenLastCalledWith(
+        'https://api.example.com/api/v3/pages/find/?html_path=foo',
+        undefined
+      )
+    })
+
+    it('throws if the English page 500s', async () => {
+      fetchMock.mockResponseOnce(
+        JSON.stringify({
+          message: 'oops'
+        }),
+        {
+          status: 500,
+          statusText: 'Server Error'
+        }
+      )
+      expect(example.getPageByPath('foo')).rejects.toThrow(/500 Server Error/)
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(fetchMock).toHaveBeenLastCalledWith(
+        'https://api.example.com/api/v3/pages/find/?html_path=foo',
+        undefined
+      )
+    })
   })
 
   describe('load()', () => {
@@ -203,65 +267,47 @@ describe('ContentAPI', () => {
     })
 
     it('rejects on 4xx statuses', async () => {
-      fetchMock.mockResponseOnce(() =>
-        Promise.resolve({
-          body: JSON.stringify({
-            message: 'not found'
-          }),
-          init: {
-            status: 404
-          }
-        })
+      fetchMock.mockResponseOnce(
+        JSON.stringify({
+          message: 'not found'
+        }),
+        {
+          status: 404
+        }
       )
-      await expect(example.getData('derp')).rejects.toThrow('not found')
+      await expect(example.getData('derp')).rejects.toThrow(
+        /404 Not Found: not found/
+      )
     })
 
     it('rejects on 4xx statuses with "not found" if no message is provided', async () => {
-      fetchMock.mockResponseOnce(() =>
-        Promise.resolve({
-          body: JSON.stringify({}),
-          init: {
-            status: 404
-          }
-        })
-      )
-      await expect(example.getData('derp')).rejects.toThrow('not found')
+      fetchMock.mockResponseOnce(JSON.stringify({}), {
+        status: 404
+      })
+      await expect(example.getData('derp')).rejects.toThrow(/404 Not Found/)
     })
 
-    it('rejects on other non-200 statuses', async () => {
-      const statuses = {
-        400: 'Bad request',
-        401: 'Unauthorized',
-        403: 'Forbidden',
-        500: 'Server error'
-      }
-      for (const [status, statusText] of Object.entries(statuses)) {
-        fetchMock.mockResponseOnce(() =>
-          Promise.resolve({
-            body: '',
-            init: {
-              status: Number(status),
-              statusText
-            }
-          })
-        )
-        await expect(example.getData('derp')).rejects.toThrow(
-          `${status} ${statusText}`
-        )
-      }
+    it.each([
+      [400, 'Bad Request'],
+      [401, 'Unauthorized'],
+      [403, 'Forbidden'],
+      [500, 'Server Error']
+    ])('rejects on %s %s', async (status, statusText) => {
+      fetchMock.mockResponseOnce('', {
+        status,
+        statusText
+      })
+      await expect(example.getData('derp')).rejects.toThrow(
+        `${status} ${statusText}`
+      )
     })
 
     it('includes the JSON data "message" in the error', async () => {
       const message = 'invalid query parameter: derp'
-      fetchMock.mockResponseOnce(() =>
-        Promise.resolve({
-          body: JSON.stringify({ message }),
-          init: {
-            status: 400,
-            statusText: 'Bad Request'
-          }
-        })
-      )
+      fetchMock.mockResponseOnce(JSON.stringify({ message }), {
+        status: 400,
+        statusText: 'Bad Request'
+      })
       await expect(example.getData('derp')).rejects.toThrow(
         `400 Bad Request: ${message}`
       )
@@ -288,65 +334,47 @@ describe('ContentAPI', () => {
     })
 
     it('rejects on 4xx statuses', async () => {
-      fetchMock.mockResponseOnce(() =>
-        Promise.resolve({
-          body: JSON.stringify({
-            message: 'not found'
-          }),
-          init: {
-            status: 404
-          }
-        })
+      fetchMock.mockResponseOnce(
+        JSON.stringify({
+          message: 'not found'
+        }),
+        {
+          status: 404
+        }
       )
-      await expect(example.getPreviewData('derp')).rejects.toThrow('not found')
+      await expect(example.getPreviewData('derp')).rejects.toThrow(
+        /404 Not Found/
+      )
     })
 
     it('rejects on 4xx statuses with "not found" if no message is provided', async () => {
-      fetchMock.mockResponseOnce(() =>
-        Promise.resolve({
-          body: JSON.stringify({}),
-          init: {
-            status: 404
-          }
-        })
+      fetchMock.mockResponseOnce(JSON.stringify({}), { status: 404 })
+      await expect(example.getPreviewData('derp')).rejects.toThrow(
+        /404 Not Found/
       )
-      await expect(example.getPreviewData('derp')).rejects.toThrow('not found')
     })
 
-    it('rejects on other non-200 statuses', async () => {
-      const statuses = {
-        400: 'Bad request',
-        401: 'Unauthorized',
-        403: 'Forbidden',
-        500: 'Server error'
-      }
-      for (const [status, statusText] of Object.entries(statuses)) {
-        fetchMock.mockResponseOnce(() =>
-          Promise.resolve({
-            body: '',
-            init: {
-              status: Number(status),
-              statusText
-            }
-          })
-        )
-        await expect(example.getPreviewData('derp')).rejects.toThrow(
-          `${status} ${statusText}`
-        )
-      }
+    it.each([
+      [400, 'Bad request'],
+      [401, 'Unauthorized'],
+      [403, 'Forbidden'],
+      [500, 'Server error']
+    ])('rejects on other %d %s', async (status, statusText) => {
+      fetchMock.mockResponseOnce('', {
+        status: Number(status),
+        statusText
+      })
+      await expect(example.getPreviewData('derp')).rejects.toThrow(
+        `${status} ${statusText}`
+      )
     })
 
     it('includes the JSON data "message" in the error', async () => {
       const message = 'invalid query parameter: derp'
-      fetchMock.mockResponseOnce(() =>
-        Promise.resolve({
-          body: JSON.stringify({ message }),
-          init: {
-            status: 400,
-            statusText: 'Bad Request'
-          }
-        })
-      )
+      fetchMock.mockResponseOnce(JSON.stringify({ message }), {
+        status: 400,
+        statusText: 'Bad Request'
+      })
       await expect(example.getPreviewData('derp')).rejects.toThrow(
         `400 Bad Request: ${message}`
       )
@@ -436,13 +464,14 @@ describe('FixtureAPI', () => {
   })
 
   describe('getPageByPath()', () => {
-    const page = {
+    const page: MinimalPageData = {
       id: 10,
       meta: {
         type: 'huh.Wut',
         url_path: 'wut'
       },
-      title: 'Yo'
+      title: 'Yo',
+      html_path: '/test'
     }
     const api = new FixtureAPI({
       pages: [page]
@@ -453,18 +482,19 @@ describe('FixtureAPI', () => {
     })
 
     it('rejects on missing pages', async () => {
-      await expect(api.getPageByPath('nope')).rejects.toThrow(/not found/)
+      await expect(api.getPageByPath('nope')).resolves.toEqual(undefined)
     })
   })
 
   describe('getData()', () => {
-    const page = {
+    const page: MinimalPageData = {
       id: 99,
       meta: {
         type: 'huh.Wut',
         url_path: 'wut'
       },
-      title: 'Hi'
+      title: 'Hi',
+      html_path: '/test'
     }
     const api = new FixtureAPI({
       pages: [page]
@@ -475,7 +505,46 @@ describe('FixtureAPI', () => {
     })
 
     it('rejects on missing pages', async () => {
-      await expect(api.getData('page/100')).rejects.toThrow(/not found/)
+      await expect(api.getData('page/100')).rejects.toThrow(/404 Not Found/)
+    })
+  })
+})
+
+describe('RequestError', () => {
+  it('defaults the message to "{status} {statusText}"', () => {
+    const error = new RequestError(
+      new Response('', {
+        status: 404,
+        statusText: 'Not Found'
+      })
+    )
+    expect(error.message).toBe('404 Not Found')
+  })
+
+  it('adds the message suffix if provided', () => {
+    const error = new RequestError(
+      new Response('', {
+        status: 404,
+        statusText: 'Not Found'
+      }),
+      'oops'
+    )
+    expect(error.message).toBe('404 Not Found: oops')
+  })
+
+  describe('RequestError.fromResponse()', () => {
+    it('gets the message from a JSON response', async () => {
+      const response = new Response('', {
+        status: 403,
+        statusText: 'Unauthorized'
+      })
+      jest.spyOn(response, 'json').mockImplementation(() =>
+        Promise.resolve({
+          message: 'not allowed'
+        })
+      )
+      const error = await RequestError.fromResponse(response)
+      expect(error.message).toBe('403 Unauthorized: not allowed')
     })
   })
 })

@@ -1,8 +1,8 @@
-import { NextResponse, NextRequest } from 'next/server'
 import mockEnv from 'mocked-env'
+import type { RequestInit } from 'next/dist/server/web/spec-extension/request'
+import { NextRequest, NextResponse } from 'next/server'
 import { middleware } from './middleware'
 import nextConfig from './next.config'
-import { RequestInit } from 'next/dist/server/web/spec-extension/request'
 
 const MOCK_BASE_URL = 'http://test.url'
 

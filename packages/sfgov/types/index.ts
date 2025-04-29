@@ -26,8 +26,8 @@ export interface IContentAPI {
     path: string,
     params?: QueryParams,
     options?: RequestInit
-  ): Promise<T>
-  getQLessData(): unknown
+  ): Promise<T | undefined>
+  getQLessData?: () => Promise<TypeQLessData | undefined>
 }
 
 /**
