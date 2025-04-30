@@ -3,7 +3,7 @@ import { Container, Grid } from '@/design-system'
 import { useTranslation } from 'next-i18next'
 import bridgeFog from '../public/static/404.jpg'
 
-const NotFoundPage = () => {
+export default function NotFoundPage() {
   const { t } = useTranslation()
 
   const links = [
@@ -24,7 +24,7 @@ const NotFoundPage = () => {
   ]
 
   return (
-    <PageWrapper>
+    <PageWrapper title={t('404-page-title', { defaultValue: 'Not Found' })}>
       <Container className="mx-0 md:mx-28 space-y-20 md:space-y-28 lg:space-y-40 mb-20 md:mb-28 lg:mb-40">
         <Spotlight
           type="spotlight"
@@ -66,5 +66,3 @@ const NotFoundPage = () => {
     </PageWrapper>
   )
 }
-
-export default NotFoundPage

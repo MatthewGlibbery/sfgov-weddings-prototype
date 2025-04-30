@@ -93,55 +93,46 @@ export class Controller {
   >(): GetServerSideProps<Props> {
     return async (context) => {
       const { resolvedUrl, locale, query, req } = context
-      const { cookie } = req.headers
-      const options: RequestInit = {
-        headers: {
-          cookie: cookie!
-        }
-      }
-
       const path = resolvedUrl.split('?')[0]
-      try {
-        const page = await this.api.getPageByPath<Page>(
-          path,
-          {
-            locale,
-            preview: query.preview === 'true'
-          },
-          options
-        )
-        // redirect based off field in the model
-        // @ts-expect-error page may be AgencyPageData
-        const redirect = page.redirect_url || page.agency_redirect
-        if (redirect) {
-          return {
-            redirect: {
-              destination: redirect,
-              permanent: false
-            }
+      const page = await this.api.getPageByPath<Page>(
+        path,
+        {
+          locale,
+          preview: query.preview === 'true'
+        },
+        {
+          headers: {
+            cookie: req.headers.cookie as string
           }
         }
-        const props = {
-          page,
-          env: getPublicEnv()
-        } as Props
-        // istanbul ignore next
-        if (isPermitCenter(page)) {
-          const qLessData = await this.api.getQLessData()
-          props.qLessData = qLessData
-        }
-        return {
-          props
-        }
-      } catch (error) {
-        console.error(
-          'No page found for path: "%s", locale: "%s"',
-          path,
-          locale
-        )
+      )
+      if (!page) {
+        return { notFound: true }
       }
+
+      // redirect based off field in the model
+      // @ts-expect-error page may be AgencyPageData
+      const redirect = page.redirect_url || page.agency_redirect
+      if (redirect) {
+        return {
+          redirect: {
+            destination: redirect,
+            permanent: false
+          }
+        }
+      }
+      const props = {
+        page,
+        env: getPublicEnv()
+      } as Props
+
+      // istanbul ignore next
+      if (isPermitCenter(page)) {
+        props.qLessData = await this.api.getQLessData?.()
+      }
+
       return {
-        notFound: true
+        props
       }
     }
   }
