@@ -122,7 +122,7 @@ export const Table = (props: TypeTableBlockValues) => {
         )
       }
 
-      rows.push(<tr>{rowBody}</tr>)
+      rows.push(<tr key={rowData.values[0]}>{rowBody}</tr>)
     }
 
     return (

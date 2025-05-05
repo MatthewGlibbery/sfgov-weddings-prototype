@@ -27,7 +27,6 @@ export interface IContentAPI {
     params?: QueryParams,
     options?: RequestInit
   ): Promise<T | undefined>
-  getQLessData?: () => Promise<TypeQLessData | undefined>
 }
 
 /**
@@ -39,5 +38,4 @@ export interface IContentAPI {
 export type PageProps<T, SpecificData = T extends PageData ? T : unknown> = {
   page: SpecificData
   env?: Record<string, string | undefined>
-  qLessData?: TypeQLessData
 }

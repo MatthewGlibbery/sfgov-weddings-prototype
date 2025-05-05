@@ -152,15 +152,6 @@ export class ContentAPI implements IContentAPI {
     }
     return url
   }
-
-  async getQLessData() {
-    const res = await this.fetch(
-      getenv('NEXT_PUBLIC_QLESS_API_URL') ||
-        'https://qless-microservice.herokuapp.com/api/v1/queues'
-    )
-    const data = await res.json().catch(/* istanbul ignore next */ () => ({}))
-    return data
-  }
 }
 
 export class FixtureAPI implements IContentAPI {
