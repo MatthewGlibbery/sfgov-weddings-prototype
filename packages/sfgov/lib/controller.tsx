@@ -113,7 +113,7 @@ export class Controller {
       // redirect based off field in the model
       // @ts-expect-error page may be AgencyPageData
       const redirect = page.redirect_url || page.agency_redirect
-      if (redirect) {
+      if (redirect && query.preview !== 'true') {
         return {
           redirect: {
             destination: redirect,

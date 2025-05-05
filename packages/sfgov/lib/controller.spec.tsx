@@ -189,6 +189,34 @@ describe('Controller', () => {
         }
       })
     })
+
+    test.each(['redirect_url', 'agency_redirect'])(
+      'does not redirect for page previews even if a page level redirect is present: %s',
+      async (propName) => {
+        const api = stubAPI({
+          getPageByPath: jest.fn(() =>
+            Promise.resolve({
+              ...mockPage,
+              [propName]: 'http://www.sf.gov'
+            })
+          )
+        })
+
+        const controller = new Controller(api, [])
+        const getServerSideProps = controller.makeGetServerSideProps()
+        const context = stubContext({
+          resolvedUrl: mockPath,
+          query: {
+            preview: 'true'
+          }
+        })
+        await expect(getServerSideProps(context)).resolves.toMatchObject({
+          props: {
+            page: mockPage
+          }
+        })
+      }
+    )
   })
 
   describe('makeViewComponent()', () => {
