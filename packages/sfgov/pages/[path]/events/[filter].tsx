@@ -42,7 +42,11 @@ type EventPageData = {
   baseUrl: string
 }
 
-function formatDateTimeRange(start: string, end: string) {
+function formatDateTimeRange(
+  start: string,
+  end: string,
+  includeEndDateTime: boolean
+) {
   const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     month: 'long',
@@ -64,13 +68,16 @@ function formatDateTimeRange(start: string, end: string) {
           'default',
           dateOptions
         )}`
-  const timeRange =
-    startDateTime.toTimeString() === endDateTime.toTimeString()
-      ? startTimeStr
-      : `${startTimeStr} to ${endDateTime.toLocaleString(
-          'default',
-          timeOptions
-        )}`
+  let timeRange = `${startTimeStr} to ${endDateTime.toLocaleString(
+    'default',
+    timeOptions
+  )}`
+  if (
+    startDateTime.toTimeString() === endDateTime.toTimeString() ||
+    includeEndDateTime
+  ) {
+    timeRange = startTimeStr
+  }
 
   return { dateRange, timeRange }
 }
@@ -108,9 +115,12 @@ const EventItem = (item: Event) => {
     eventDescription =
       truncated.substring(0, truncated.lastIndexOf(' ') || descMax) + ' ...'
   }
+
   const dateTimeRange = formatDateTimeRange(
     item.start_datetime,
-    item.end_datetime
+    item.end_datetime,
+    !!item.date_time?.length &&
+      item.date_time?.[0]?.value?.include_end_date_time === 'no'
   )
   return (
     <div className="flex flex-col gap-y-8">
@@ -126,7 +136,9 @@ const EventItem = (item: Event) => {
       </HeadingLgListItem>
       <div className="flex flex-col gap-y-4 lg:flex-row lg:gap-x-20">
         <EventInfo Icon={IconCalendar} content={dateTimeRange.dateRange} />
-        <EventInfo Icon={IconClock} content={dateTimeRange.timeRange} />
+        {!item?.date_time?.[0]?.value?.is_all_day ? (
+          <EventInfo Icon={IconClock} content={dateTimeRange.timeRange} />
+        ) : null}
         <EventInfo Icon={IconLocation} content={getLocation(eventLocation)} />
       </div>
       {eventDescription ? <p>{eventDescription}</p> : null}
