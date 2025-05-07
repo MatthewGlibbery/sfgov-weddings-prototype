@@ -6,6 +6,6 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
   )
   // error handling here
   const data = await response.json().catch(() => ({}))
-  // any transformations here, e.g. filter by queue ID
+  res.setHeader('cache-control', 'public, max-age=60')
   res.status(200).json(data)
 }
