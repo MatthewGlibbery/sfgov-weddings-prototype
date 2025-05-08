@@ -9,6 +9,7 @@ import {
   SiteHeader
 } from '@/components'
 import { MainContent } from '@/design-system'
+import { useRouter } from 'next/router'
 
 type PageWrapperMetaProps = {
   type?: string
@@ -23,6 +24,8 @@ export type PageWrapperProps = {
 }
 
 export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
+  const router = useRouter()
+  const isSearchPage = router.pathname === '/search'
   const metaKeys = ['type', 'locale', 'description'] // the meta things we care about
   return (
     <>
@@ -43,6 +46,13 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
                 ) : null
               )
           : null}
+        {isSearchPage ? (
+          <meta
+            name="robots"
+            content="noindex, follow"
+            data-testid="meta-robots"
+          />
+        ) : null}
       </Head>
       <SiteHeader />
       <MainContent>
