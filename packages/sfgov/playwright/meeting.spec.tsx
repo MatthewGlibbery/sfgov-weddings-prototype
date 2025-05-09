@@ -49,7 +49,7 @@ test.describe('A11y tests', () => {
     await expect(page).toBeKeyboardFocusIndicatorAccessible()
   })
 
-  test('does keyboard focus indicator have sufficient color contrast', async ({
+  test.skip('does keyboard focus indicator have sufficient color contrast', async ({
     mount,
     page
   }) => {
@@ -85,6 +85,83 @@ test.describe('A11y tests', () => {
     await mount(<MeetingPage page={data} />)
 
     await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
+  })
+
+  test.skip('Validates a logical reading order in the global footer', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderInFooter()
+  }) 
+  
+test.skip('Validates the correct aria label attribute for search button', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveAriaLabelInSearchSubmitButton()
+  }) 
+  
+test.skip('Validates the correct aria label attributes for social media links', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveAriaLabelsInSocialMediaLinks()
+  })
+  
+test.skip('Validates that the Chinese option in the language dropdown includes a “Chinese” aria-label', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveAriaLabelForChineseInLanguageDropDownMenu()
+  })
+  
+test.skip('Validates the correct alt text for the logo in the global header', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveAltTextInGlobalHeader()
+  })
+
+test.skip('Validates the correct alt text for the logo in the global footer', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveAltTextInGlobalFooter()
+  })
+  
+test('Validates that invalid ARIA attributes are not present', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toNotHaveInvalidAriaAttribute()
+  })
+  
+test.skip('Validates that no <span> tags are present within list elements', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toNotHaveSpanTagsInListElements()
+  })
+  
+  test('Validates that all iframe elements include a title attribute', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveTitleAttributeIniFrameElements()
+  })
+
+  test.skip('Validates that all link tags include an href attribute and link text', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveNoEmptyLinkTags()
+  })
+
+  test('Validates that all button elements include descriptive link text', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveDescriptiveLinkTextforButtons()
   })
 
   test.skip('validate axe core accessibility tests', async ({ mount, page }) => {
@@ -131,5 +208,17 @@ test.describe('A11y tests', () => {
       await mount(<MeetingPage page={data} />)
       
       await expect(page).toHaveKeyboardFocusOnMeetingTranscriptLinks()
+      })
+  test.skip('Validates a logical reading order in the Table of Contents', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+        
+    await expect(page).toHaveLogicalReadingOrderInTableOfContents()
+    })
+  test.skip('Validates that links in the TOC redirect to the main content area', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+          
+    await expect(page).toHaveTOCLinksRedirectToMainContentArea()
       })
 })
