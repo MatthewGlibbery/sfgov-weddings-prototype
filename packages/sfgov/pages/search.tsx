@@ -239,14 +239,19 @@ const SearchPage = (props: SearchPageData) => {
   const router = useRouter()
   const lastSearchTerm = useRef<string | null>(null)
   const Bold = classed('strong', 'inline font-bold')
-  const urlQuery = router.query.q ?? ''
+  const urlQuery = router.query.q ?? undefined
   let content
   useEffect(() => {
     // need to compare q param with last search term
     // otherwise, a new search event is sent with
     // "show more" state changes
-    if (urlQuery !== lastSearchTerm.current) {
-      sendGTMEvent({
+    if (window.dataLayer && urlQuery && urlQuery !== lastSearchTerm.current) {
+      // https://developers.google.com/tag-platform/devguides/datalayer#reset
+      window.dataLayer.push(function () {
+        this.reset()
+      })
+
+      window.dataLayer.push({
         event: 'view_search_results',
         search_term: normalizedQuery,
         contentType: undefined, // clear out irrelevant datalayer things

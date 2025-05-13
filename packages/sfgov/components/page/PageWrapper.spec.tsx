@@ -1,7 +1,15 @@
 import { render, screen } from '@testing-library/react'
+
 import { PageWrapper } from './PageWrapper'
+import { useRouter } from 'next/router'
+
+jest.mock('next/router', () => ({ useRouter: jest.fn() }))
 
 describe('<PageWrapper>', () => {
+  beforeEach(() => {
+    useRouter.mockReturnValue({ pathname: '/' })
+  })
+
   it('renders a <title> as "SF.gov" by default', async () => {
     render(<PageWrapper />)
     const title = screen.getAllByText('SF.gov')
@@ -39,5 +47,15 @@ describe('<PageWrapper>', () => {
       meta.description
     )
     expect(screen.queryByTestId('meta-test-html_url')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('meta-robots')).not.toBeInTheDocument()
+  })
+
+  it('renders a noindex meta tag for search results page', async () => {
+    useRouter.mockReturnValue({ pathname: '/search' })
+    render(<PageWrapper title="Page title" />)
+    expect(screen.getByTestId('meta-robots')).toHaveAttribute(
+      'content',
+      'noindex, follow'
+    )
   })
 })

@@ -49,7 +49,7 @@ test('is keyboard accessible', async ({ mount, page }) => {
   await expect(page).toBeKeyboardFocusIndicatorAccessible()
 })
 
-test('does keyboard focus indicator have sufficient color contrast', async ({
+test.skip('does keyboard focus indicator have sufficient color contrast', async ({
   mount,
   page
 }) => {

@@ -71,10 +71,12 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
               ) : null
             case 'spotlight':
               return section.value.spotlight?.length ? (
-                <Spotlight
-                  backgroundcolor="white"
-                  {...section.value.spotlight[0]}
-                />
+                <div className="mb-20 max-w-xl md:mx-16 lg:mx-auto">
+                  <Spotlight
+                    backgroundcolor="white"
+                    {...section.value.spotlight[0]}
+                  />
+                </div>
               ) : null
             case 'resources':
               return section.value.resources?.length ? (
