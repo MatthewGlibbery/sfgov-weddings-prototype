@@ -54,7 +54,11 @@ export const ContentSection = ({
               )
 
             case 'spotlight':
-              return <Spotlight {...props} {...block} />
+              return (
+                <div className="mb-20 max-w-xl md:mx-16 lg:mx-auto">
+                  <Spotlight {...props} {...block} />
+                </div>
+              )
             case 'timeline':
               return (
                 <Wrapper {...props}>
