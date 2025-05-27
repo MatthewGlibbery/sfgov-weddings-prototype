@@ -257,6 +257,17 @@ const SearchPage = (props: SearchPageData) => {
         contentType: undefined, // clear out irrelevant datalayer things
         partnerAgencies: undefined
       })
+
+      // push for vertex search analytics
+
+      window.dataLayer.push({
+        event: 'vertex_search',
+        cloud_retail: {
+          eventType: 'search',
+          visitorId: 'id-replaced-in-gtm',
+          searchQuery: query
+        }
+      })
     }
     lastSearchTerm.current = query
   }, [urlQuery, query, normalizedQuery])
