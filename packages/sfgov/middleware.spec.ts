@@ -163,6 +163,7 @@ describe('Middleware', () => {
         'http://test.url/to-the-new-place?p1=hi&p2=1'
       )
     })
+
     it('redirects with absolute URLs appropriately', async () => {
       const absUrl = 'https://www.thisisatest.com/with/path'
       fetchMock.mockResponseOnce('', {
@@ -176,6 +177,19 @@ describe('Middleware', () => {
       expect(nextSpy).not.toHaveBeenCalled()
       expect(redirectSpy).toHaveBeenCalled()
       expect(resp.headers.get('location')).toEqual(absUrl)
+    })
+
+    it('should skip redirect lookups for page previews', async () => {
+      fetchMock.mockResponseOnce('', {
+        status: 301,
+        statusText: 'ok',
+        headers: { location: '/to-the-new-place' }
+      })
+
+      await middleware(mockRequest('/do-not-redirect-me?preview=true'))
+
+      expect(nextSpy).toHaveBeenCalled()
+      expect(redirectSpy).not.toHaveBeenCalled()
     })
   })
 

@@ -17,6 +17,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(path, API_BASE_URL).href)
   }
 
+  // Skip lookup if the page is a preview
+  if (reqUrl.searchParams.get('preview')) {
+    return NextResponse.next()
+  }
+
   const resp = await fetch(new URL(path, API_BASE_URL).href, {
     redirect: 'manual'
   })
