@@ -2622,14 +2622,32 @@ expect(focusFailures, `The following links did not receive focus: ${focusFailure
     let matcherResult: any
     try {
 
-    // Locate the element with the text 'Services' within the <main> landmark
-const servicesElement = page.locator('main', { hasText: 'Services' }).locator(':text("Services")');
+    // Find an h1 element with the text 'Welcome to SF.gov' inside the <main> landmark
+const welcomeH1 = page.locator('main h1', { hasText: 'Welcome to SF.gov' });
 
 // Validate the element is visible
-baseExpect(await servicesElement.isVisible()).toBeTruthy();
+baseExpect(await welcomeH1.isVisible()).toBeTruthy();
 
-// Validate that the element with text 'Services' is an h2 heading
-baseExpect(await servicesElement.evaluate(node => node.tagName === 'H2')).toBeTruthy();
+// Validate the tag name is H1 
+baseExpect(await welcomeH1.evaluate(node => node.tagName)).toBe('H1');
+
+// Locate the second h2 with the text "Services" inside the <main> landmark
+const servicesH2 = page.locator('main h2', { hasText: 'Services' }).nth(1);
+
+// Validate the element is visible
+baseExpect(await servicesH2.isVisible()).toBeTruthy();
+
+// Validate the tag name is H2
+baseExpect(await servicesH2.evaluate(node => node.tagName)).toBe('H2');  
+      
+// Find an h2 element with the text 'San Francisco elected officials' inside the <main> landmark
+const sfelectedofficialsH2 = page.locator('main h2', { hasText: 'San Francisco elected officials' });
+
+// Validate the element is visible
+baseExpect(await sfelectedofficialsH2.isVisible()).toBeTruthy();
+
+// Validate the tag name is H2 
+baseExpect(await sfelectedofficialsH2.evaluate(node => node.tagName)).toBe('H2');
       
 pass = true
     } catch (e: any) {
@@ -6590,6 +6608,79 @@ for (const text of nonDescriptiveButtonTexts) {
       actual: matcherResult?.actual
     }
   },  
+
+  async toHaveScreenReaderFriendlyURLInOverviewSectionOnMeetingContentType(page: Page) {
+    const assertionName = 'toHaveScreenReaderFriendlyURLInOverviewSectionOnMeetingContentType'
+    let pass: boolean
+    let matcherResult: any
+    try {  
+  
+  // Step 1: Check if the page contains a paragraph element with the text "MEETING"
+const meetingParagraphExists =
+  (await page.locator('p').filter({ hasText: 'MEETING' }).count()) > 0;
+
+if (meetingParagraphExists) {
+  // Step 2: Locate the "Overview" and "Agenda" <h2> headings
+  const overviewLocator = page.locator('h2#overviewLarge');
+  const agendaLocator = page.locator('h2#agendaLarge');
+
+  if (await overviewLocator.count() && await agendaLocator.count()) {
+    // Step 3: Get the parent container (the <span> that contains both headings)
+    const wrapper = overviewLocator.locator('xpath=ancestor::span[1]');
+
+    // Step 4: Extract all inner text from that wrapper
+    const wrapperText = await wrapper.innerText();
+
+    // Step 5: Isolate the text between "Overview" and "Agenda"
+    const overviewIndex = wrapperText.indexOf('Overview');
+    const agendaIndex = wrapperText.indexOf('Agenda');
+
+    const textBetween = wrapperText.slice(
+      overviewIndex + 'Overview'.length,
+      agendaIndex
+    );
+
+    // Step 6: Check if it contains any absolute URLs
+    const hasAbsoluteUrl = /https?:\/\/\S+/gi.test(textBetween);
+
+    // Final assertion: no absolute URLs allowed
+    expect(hasAbsoluteUrl).toBe(false);
+  }
+}
+
+   pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
 
   async toPassAxeCoreTests(page: Page) {
     const assertionName = 'toPassAxeCoreTests'

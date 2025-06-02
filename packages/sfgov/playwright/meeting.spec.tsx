@@ -214,11 +214,5 @@ test.skip('Validates that no <span> tags are present within list elements', asyn
     await mount(<MeetingPage page={data} />)
         
     await expect(page).toHaveLogicalReadingOrderInTableOfContents()
-    })
-  test.skip('Validates that links in the TOC redirect to the main content area', async ({ mount, page }) => {
-    const data = MeetingPageFactory.make()
-    await mount(<MeetingPage page={data} />)
-          
-    await expect(page).toHaveTOCLinksRedirectToMainContentArea()
-      })
+    })  
 })

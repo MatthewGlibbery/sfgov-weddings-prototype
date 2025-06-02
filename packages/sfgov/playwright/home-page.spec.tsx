@@ -96,7 +96,7 @@ test('validate axe core accessibility tests', async ({ mount, page }) => {
 
 // Content Type Specific Tests
 
-test.skip('logical reading order on the homepage', async ({ mount, page }) => {
+test('logical reading order on the homepage', async ({ mount, page }) => {
   const data = HomePageFactory.make()
   await mount(<HomePage page={data} />)
 
