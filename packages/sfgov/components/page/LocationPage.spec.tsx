@@ -1,4 +1,4 @@
-import { LocationPageFactory, QLessDataFactory } from '@/lib/factories'
+import { LocationPageFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
 import { LocationPage } from './LocationPage'
 
@@ -18,7 +18,7 @@ describe('LocationPage', () => {
     const page = LocationPageFactory.make({
       id: 2736
     })
-    render(<LocationPage page={page} qLessData={QLessDataFactory.make()} />)
+    render(<LocationPage page={page} />)
   })
 
   it('does not render a map if there is no address', () => {

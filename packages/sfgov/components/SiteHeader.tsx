@@ -41,8 +41,8 @@ const Links = () => {
           <li key={link.text}>
             <Link
               href={link.href}
-              className="block w-full no-underline font-bold text-label-xs px-28 py-12 text-primary500
-            md:px-8 md:py-15 md:text-black ga-header-link"
+              className="ga-header-link block w-full no-underline font-bold text-label-xs px-28 py-12 text-primary500
+            md:px-8 md:py-15 md:text-black"
             >
               {link.text}
             </Link>

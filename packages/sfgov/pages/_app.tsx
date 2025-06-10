@@ -9,8 +9,10 @@ import nextI18nextConfig from '../next-i18next.config'
 import { BlockType, PageData, TypeAgencyPageBlock } from '@/types'
 import { ComponentProps, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { AGENCY_PAGE_TYPE } from '@/constants'
 
 type PageWithPartnerAgencies = PageData & {
+  primary_agency?: PageData
   partner_agencies?: BlockType<'agency', PageData>[]
 }
 
@@ -37,12 +39,18 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     if (window?.dataLayer && pageData) {
       const { type: contentType, locale } = pageData.meta || {}
-      const partnerAgencies =
-        pageData.partner_agencies
-          ?.filter((item) => item.value !== null)
-          .map((item) => {
-            return item.value.title
-          }) || []
+      const partnerAgencies = []
+      if (pageData.primary_agency) {
+        partnerAgencies.push(pageData.primary_agency.title)
+      }
+      if (contentType === AGENCY_PAGE_TYPE) {
+        partnerAgencies.push(pageData.title)
+      }
+      pageData.partner_agencies
+        ?.filter((item) => item.value !== null)
+        .forEach((item) => {
+          partnerAgencies.push(item.value.title)
+        })
       window.dataLayer.push({
         contentType,
         locale,

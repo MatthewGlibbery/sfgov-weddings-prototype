@@ -33,7 +33,13 @@ export type FormPageProps = {
 }
 
 type FormEvent = {
-  type: 'submit' | 'submit_invalid' | 'submit_error'
+  type:
+    | 'submit'
+    | 'submit_invalid'
+    | 'submit_error'
+    | 'save_draft'
+    | 'form_get_started'
+  dataLayer?: Record<string, unknown>
 }
 
 export function FormPage({
@@ -189,6 +195,23 @@ export function FormPage({
       })
     })
 
+    /**
+     * @see https://github.com/formio/formio.js/blob/v4.19.2/src/Wizard.js#L766
+     */
+    form.on(
+      'nextPage',
+      (event: { page: number; submission: FormSubmission }) => {
+        if (event.page === 1) {
+          putFormEvent({
+            type: 'form_get_started',
+            dataLayer: {
+              slug: page.meta.slug
+            }
+          })
+        }
+      }
+    )
+
     if (submissionId && !form.formio.submissionId) {
       /**
        * In the olden days, we handled submission IDs by just appending
@@ -230,14 +253,19 @@ export function FormPage({
   }
 
   function onSubmitDone(submission: FormSubmission) {
+    const eventData = {
+      formio_submission_id: submission._id
+    }
     if (submission.state === 'submitted') {
       putFormEvent({
-        type: 'submit'
+        type: 'submit',
+        dataLayer: eventData
       })
       setSubmitted(true)
     } else if (submission.state === 'draft') {
       putFormEvent({
-        type: 'save_draft'
+        type: 'save_draft',
+        dataLayer: eventData
       })
     }
   }
@@ -246,15 +274,16 @@ export function FormPage({
    * Shortcut for putting form-specific metrics that uses a fixed namespace
    * and adds the form metric dimensions to every MetricData entry
    */
-  function putFormEvent(event: FormEvent) {
+  function putFormEvent({ type, dataLayer }: FormEvent) {
     window.dataLayer?.push({
-      event: event.type
+      event: type,
+      ...dataLayer
     })
     return putMetricData({
       Namespace: 'web_forms',
       MetricData: [
         {
-          MetricName: event.type,
+          MetricName: type,
           Unit: 'Count',
           Value: 1,
           Dimensions: metricDimensions

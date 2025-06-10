@@ -40,7 +40,7 @@ const NavHeader = classed(
 const LowerLevelTOC = classed(TopLevelTOC, 'font-normal ps-16')
 
 const scrollToHeading = (target) => {
-  const element = document.querySelector(target)
+  const element = document.getElementById(target)
   const headerOffset = 45
   const elementPosition = element.getBoundingClientRect().top
   const offsetPosition = elementPosition + window.pageYOffset - headerOffset
@@ -66,15 +66,18 @@ const Headings = ({ headings, activeId, id = '' }) => (
             href={`#${heading.id}`}
             onClick={(e) => {
               e.preventDefault()
-              scrollToHeading(`#${heading.id}`)
+              scrollToHeading(heading.id)
             }}
             isactive={heading.id === activeId ? 'true' : 'false'}
             data-testid={`top-level-toc${id}`}
+            tabIndex={-1}
           >
             {heading.title}
           </TopLevelTOC>
         </ListItem>
         {!!heading.items.length &&
+          (heading.id === activeId ||
+            heading.items.some((child) => child.id === activeId)) &&
           heading.items.map((child) => (
             <ListItem
               key={child.id}
@@ -84,10 +87,11 @@ const Headings = ({ headings, activeId, id = '' }) => (
                 href={`#${child.id}`}
                 onClick={(e) => {
                   e.preventDefault()
-                  scrollToHeading(`#${child.id}`)
+                  scrollToHeading(child.id)
                 }}
                 isactive={child.id === activeId ? 'true' : 'false'}
                 data-testid={`lower-level-toc${id}`}
+                tabIndex={-1}
               >
                 {child.title}
               </LowerLevelTOC>
@@ -159,6 +163,7 @@ const getNestedHeadings = (headingElements) => {
   const nestedHeadings = []
 
   headingElements.forEach((heading) => {
+    heading.id = heading.id.replace(/\s+/g, '')
     const { innerText: title, id } = heading
 
     if (heading.nodeName === 'H2') {
@@ -205,7 +210,7 @@ const useIntersectionObserver = (activeNode, setActiveNode, screen) => {
     }
 
     const observer = new IntersectionObserver(callback, {
-      rootMargin: '-30% 0% 0% 0px'
+      rootMargin: '-5% 0% 0% 0px'
     })
 
     let headingElements = Array.from(
@@ -234,7 +239,12 @@ export const TableOfContents = ({ screen = '' }) => {
   const activeId = activeNode ? activeNode.id : ''
 
   return (
-    <nav role="navigation" aria-label="Table of contents">
+    <nav
+      role="navigation"
+      aria-label="Table of contents"
+      aria-hidden="true"
+      tabIndex={-1}
+    >
       <span className="hidden lg:block">
         <TOCDesktop headings={nestedHeadings} activeId={activeId} />
       </span>

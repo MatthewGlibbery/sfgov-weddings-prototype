@@ -1,12 +1,12 @@
 import { join } from 'path'
+import { i18n } from '../next.config'
 import type {
+  IContentAPI,
   PageData,
   QueryParams,
-  IContentAPI,
   WagtailImageData
 } from '../types'
-import { getenv, requireEnv } from './env'
-import { i18n } from '../next.config'
+import { getenv } from './env'
 
 // @ts-expect-error no, it's really not null/undefined
 const DEFAULT_LOCALE = i18n.defaultLocale
@@ -56,7 +56,7 @@ export class ContentAPI implements IContentAPI {
   ) {
     path = path.split('?')[0]
     if (params?.preview) {
-      const page = await this.getPreviewData<T>(
+      return this.getPreviewData<T>(
         path,
         {
           locale: params?.locale,
@@ -64,8 +64,6 @@ export class ContentAPI implements IContentAPI {
         },
         options
       )
-
-      return page
     }
 
     const english = await this.getData<T>(
@@ -74,28 +72,31 @@ export class ContentAPI implements IContentAPI {
         html_path: path
       },
       options
-    )
-    if (params?.locale && params.locale !== DEFAULT_LOCALE) {
-      let translation: PageData
-      try {
-        const list = await this.getData<ListData<T>>(
-          'pages/',
-          {
-            translation_of: english.id,
-            locale: params.locale
-          },
-          options
+    ).catch(undefinedIfNotFound)
+
+    if (english && params?.locale && params.locale !== DEFAULT_LOCALE) {
+      const pages = await this.getData<ListData<T>>(
+        'pages/',
+        {
+          translation_of: english.id,
+          locale: params.locale
+        },
+        options
+      ).catch((error: Error) => {
+        console.error(
+          'ContentAPI.getPageByPath(%s, %s) list failed: %s',
+          JSON.stringify(path),
+          JSON.stringify(params),
+          error.message
         )
-        if (list?.items?.length) {
-          translation = await this.getData<T>(`pages/${list.items[0].id}/`)
-        }
-      } catch (error) {
-        // TODO: log errors
-      }
-      // @ts-expect-error uh no
-      if (translation) {
-        return translation as T
-      }
+        // TODO: re-throw the error?
+        return undefined
+      })
+
+      // TODO: throw an error if there are no items?
+      return pages?.items.length
+        ? this.getData<T>(`pages/${pages.items[0].id}/`)
+        : english
     }
     return english
   }
@@ -111,21 +112,13 @@ export class ContentAPI implements IContentAPI {
     url.searchParams.set('locale', params?.locale || 'en')
 
     const res = await this.fetch(url.href, options)
-    const previewData = await res.json().catch(() => {
-      return {}
-    })
-
-    if (res.status === 404) {
-      throw new Error(previewData?.message || 'not found')
-    } else if (!res.ok) {
-      let error = `${res.status} ${res.statusText}`
-      if (previewData?.message) {
-        error = `${error}: ${previewData.message}`
-      }
-      throw new Error(error)
+    if (!res.ok) {
+      throw await RequestError.fromResponse(res)
     }
-
-    return previewData as T
+    return res.json().catch(
+      // istanbul ignore next
+      () => ({})
+    ) as Promise<T>
   }
 
   async getData<T = unknown>(
@@ -134,20 +127,10 @@ export class ContentAPI implements IContentAPI {
     options?: RequestInit
   ) {
     const res = await this.load(path, params, options)
-    // eslint-disable-next-line n/handle-callback-err
-    const data = await res.json().catch(() => {
-      return {}
-    })
-    if (res.status === 404) {
-      throw new Error(data?.message || 'not found')
-    } else if (!res.ok) {
-      let error = `${res.status} ${res.statusText}`
-      if (data?.message) {
-        error = `${error}: ${data.message}`
-      }
-      throw new Error(error)
+    if (!res.ok) {
+      throw await RequestError.fromResponse(res)
     }
-    return data as T
+    return res.json() as Promise<T>
   }
 
   load(path: string, params?: QueryParams, options?: RequestInit) {
@@ -168,15 +151,6 @@ export class ContentAPI implements IContentAPI {
       }
     }
     return url
-  }
-
-  async getQLessData() {
-    const res = await this.fetch(
-      getenv('NEXT_PUBLIC_QLESS_API_URL') ||
-        'https://qless-microservice.herokuapp.com/api/v1/queues'
-    )
-    const data = await res.json().catch(/* istanbul ignore next */ () => ({}))
-    return data
   }
 }
 
@@ -204,28 +178,65 @@ export class FixtureAPI implements IContentAPI {
     )
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getData<T = unknown>(
-    path: string,
-    params?: QueryParams,
-    options?: RequestInit
-  ): Promise<T> {
+  getData<T = unknown>(path: string): Promise<T> {
     const page = (this.dataByApiPath[path] ||
       this.dataByApiPath[`/${path}`]) as T
     return page
       ? Promise.resolve(page)
-      : Promise.reject(new Error(`not found: ${path}`))
+      : Promise.reject(
+          new RequestError(
+            new Response('', {
+              status: 404,
+              statusText: 'Not Found'
+            })
+          )
+        )
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getPageByPath<T extends PageData = PageData>(
-    path: string,
-    params?: QueryParams,
-    options?: RequestInit
-  ): Promise<T> {
-    const page = this.pagesByUrlPath[path] as T
-    return page
-      ? Promise.resolve(page)
-      : Promise.reject(new Error(`not found: ${path}`))
+    path: string
+  ): Promise<T | undefined> {
+    const page = this.pagesByUrlPath[path]
+    return Promise.resolve((page as T) || undefined)
+  }
+}
+
+export class RequestError extends Error {
+  response: Response
+  constructor(response: Response, message?: string) {
+    super(
+      `${response.status} ${response.statusText}${
+        message ? `: ${message}` : ''
+      }`
+    )
+    this.response = response
+  }
+
+  /**
+   * Attempt to extract the message from a JSON response and include it in the
+   * error message. This function is async because Response.json() is, so you
+   * need to await it before throwing:
+   *
+   * ```ts
+   * throw await RequestError.fromResponse(res)
+   * ```
+   */
+  static async fromResponse(response: Response) {
+    const data = (await response.json().catch(() => undefined)) as
+      | { message?: string }
+      | undefined
+    return new RequestError(response, data?.message as string)
+  }
+}
+
+/**
+ * This is a Promise.catch() callback that returns undefined if the thrown error
+ * is a RequestError with a 404 response status. Otherwise it throws the error.
+ */
+function undefinedIfNotFound(error: Error) {
+  if (error instanceof RequestError && error.response.status === 404) {
+    return undefined
+  } else {
+    throw error
   }
 }

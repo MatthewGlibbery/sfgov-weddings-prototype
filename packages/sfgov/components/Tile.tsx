@@ -218,12 +218,13 @@ export const MeetingTile = ({ link }: TileProps) => {
             >
               {title}
             </HeadingMd>
-            <div className="flex flex-col lg:flex-row gap-8 lg:gap-20">
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-x-20 lg:flex-wrap">
               <div className="flex space-x-8">
                 <IconCalendar className="text-neutral400" width={20} />
                 <BodyText>
                   <ComposedDate
                     startDateInput={startDate}
+                    endDateInput={dateTime?.[0].value.end_date || ''}
                     dateStyle={{
                       weekday: 'long',
                       month: 'long',

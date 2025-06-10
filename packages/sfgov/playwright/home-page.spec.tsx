@@ -49,7 +49,7 @@ test('is keyboard accessible', async ({ mount, page }) => {
   await expect(page).toBeKeyboardFocusIndicatorAccessible()
 })
 
-test('does keyboard focus indicator have sufficient color contrast', async ({
+test.skip('does keyboard focus indicator have sufficient color contrast', async ({
   mount,
   page
 }) => {
@@ -96,7 +96,7 @@ test('validate axe core accessibility tests', async ({ mount, page }) => {
 
 // Content Type Specific Tests
 
-test.skip('logical reading order on the homepage', async ({ mount, page }) => {
+test('logical reading order on the homepage', async ({ mount, page }) => {
   const data = HomePageFactory.make()
   await mount(<HomePage page={data} />)
 

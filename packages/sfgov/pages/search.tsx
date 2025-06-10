@@ -15,10 +15,14 @@ import {
   classed
 } from '@/design-system'
 import { getPublicEnv, requireEnv } from '@/lib/env'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { withServerSideTranslations } from '@/lib/translations'
 import { TopicPageData } from '@/types'
+import { sendGTMEvent } from '@next/third-parties/google'
+import { useRouter } from 'next/router'
+import { getPageURL } from '@/lib/utils'
+import { TOPIC_PAGE_TYPE } from '@/constants'
 
 export type SearchResult = {
   id: string
@@ -40,6 +44,7 @@ export type SearchResult = {
 
 export type SearchPageData = {
   query: string
+  normalizedQuery: string
   results: SearchResult[]
   services: TopicPageData[]
 }
@@ -57,6 +62,7 @@ export const getServerSideProps = withServerSideTranslations(
       locale
     } = context
 
+    const normalizedQuery = (q || '').trim().toLowerCase().replace(/\s+/g, ' ')
     const searchUrl = new URL('https://discoveryengine.googleapis.com')
     searchUrl.pathname += `v1/projects/${requireEnv(
       'GOOGLE_PROJECT_ID'
@@ -69,10 +75,12 @@ export const getServerSideProps = withServerSideTranslations(
     )
 
     // fetch topics, too, for the empty/no results state
-    const topicsUrl = new URL(
-      requireEnv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL') + '/sf.Topic'
-    )
-    topicsUrl.searchParams.set('locale__language_code', locale as string)
+    const topicsUrl = new URL(requireEnv('NEXT_PUBLIC_CONTENT_API_BASE_URL'))
+    topicsUrl.pathname += '/pages'
+    topicsUrl.searchParams.set('type', TOPIC_PAGE_TYPE)
+    topicsUrl.searchParams.set('locale', locale as string)
+    topicsUrl.searchParams.set('limit', '100')
+    topicsUrl.searchParams.set('order', 'title')
 
     let results = []
     let services = []
@@ -89,11 +97,11 @@ export const getServerSideProps = withServerSideTranslations(
           )}/locations/global/collections/default_collection/engines/${requireEnv(
             'GOOGLE_AGENT_BUILDER_SEARCH_APP_ID'
           )}`,
-          pageSize: 100, // dependent on our indexing type, but will coerce to max
+          pageSize: 100, // depends on indexing type, but will coerce to max
           safeSearch: true,
           spellCorrectionSpec: { mode: 'AUTO' },
           contentSearchSpec: { snippetSpec: { returnSnippet: true } },
-          query: q
+          query: normalizedQuery
         })
       })
       if (searchRes.ok) {
@@ -106,13 +114,23 @@ export const getServerSideProps = withServerSideTranslations(
 
     try {
       const topicsRes = await fetch(topicsUrl.href)
-      const topicsData = await topicsRes.json()
-      services = topicsData
+      if (topicsRes.ok) {
+        const topicsData = await topicsRes.json()
+        services = topicsData.items
+      }
     } catch (error) {
       console.error('error fetching topics')
     }
 
-    return { props: { query: q || '', results, services, env: getPublicEnv() } }
+    return {
+      props: {
+        query: q || '',
+        normalizedQuery,
+        results,
+        services,
+        env: getPublicEnv()
+      }
+    }
   }
 )
 
@@ -123,7 +141,7 @@ const EmptyState = (props: EmptyStateData) => {
   const columns = Array.from({ length: numColumns }, (_, i) =>
     items.slice(i * itemsPerColumn, i * itemsPerColumn + itemsPerColumn)
   )
-  return columns ? (
+  return columns && items.length ? (
     <div className="flex flex-col gap-y-20">
       {noResults ? (
         <HeadingXlSans>
@@ -138,13 +156,16 @@ const EmptyState = (props: EmptyStateData) => {
       <div className="grid grid-cols-3 gap-x-28">
         {columns.map((column, index) => (
           <ul className="p-0 m-0 list-none" key={index}>
-            {column.map((item) => (
-              <li className="mb-20" key={item.html_path}>
-                <a className="text-primary500" href={item.html_path}>
-                  {item.title}
-                </a>
-              </li>
-            ))}
+            {column.map((item) => {
+              const href = getPageURL(item)
+              return (
+                <li className="mb-20" key={item.meta?.slug}>
+                  <a className="text-primary500" href={href}>
+                    {item.title}
+                  </a>
+                </li>
+              )
+            })}
           </ul>
         ))}
       </div>
@@ -208,16 +229,48 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
 
 const SearchPage = (props: SearchPageData) => {
   const { t } = useTranslation()
-  const { query, results, services } = props
+  const { query, normalizedQuery, results, services } = props
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(0)
   const pageResults = results.slice(
     0,
     currentPage * itemsPerPage + itemsPerPage
   )
-  let content
-
+  const router = useRouter()
+  const lastSearchTerm = useRef<string | null>(null)
   const Bold = classed('strong', 'inline font-bold')
+  const urlQuery = router.query.q ?? undefined
+  let content
+  useEffect(() => {
+    // need to compare q param with last search term
+    // otherwise, a new search event is sent with
+    // "show more" state changes
+    if (window.dataLayer && urlQuery && urlQuery !== lastSearchTerm.current) {
+      // https://developers.google.com/tag-platform/devguides/datalayer#reset
+      window.dataLayer.push(function () {
+        this.reset()
+      })
+
+      window.dataLayer.push({
+        event: 'view_search_results',
+        search_term: normalizedQuery,
+        contentType: undefined, // clear out irrelevant datalayer things
+        partnerAgencies: undefined
+      })
+
+      // push for vertex search analytics
+
+      window.dataLayer.push({
+        event: 'vertex_search',
+        cloud_retail: {
+          eventType: 'search',
+          visitorId: 'id-replaced-in-gtm',
+          searchQuery: query
+        }
+      })
+    }
+    lastSearchTerm.current = query
+  }, [urlQuery, query, normalizedQuery])
 
   if (query && pageResults.length > 0) {
     // we searched and there are results
@@ -286,7 +339,6 @@ const SearchPage = (props: SearchPageData) => {
             <SearchInput onChange={setSearchTerm} value={value} />
           )}
         />
-
         {content}
       </Container>
     </PageWrapper>

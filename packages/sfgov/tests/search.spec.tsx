@@ -2,6 +2,12 @@ import { render, screen } from '@testing-library/react'
 import { SearchResultsPageFactory } from '@/lib/factories'
 import SearchPage from '../pages/search'
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    query: { q: '' }
+  })
+}))
+
 describe('search', () => {
   it('renders a default search results page with a services list', () => {
     const data = SearchResultsPageFactory.make({ query: '', results: [] })

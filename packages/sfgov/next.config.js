@@ -46,13 +46,30 @@ module.exports = {
     const CACHE_CONTROL = 'cache-control'
     // by default, cache responses for 1 day
     const TTL_DEFAULT = 60 * 60 * 24
+    // allow the stale cached page to be served for two weeks (while
+    // revalidating or if error)
+    const STALE_TTL = 60 * 60 * 24 * 14
     return [
       {
         source: ANY_PATH,
         headers: [
           {
             key: CACHE_CONTROL,
-            value: `public, max-age=${TTL_DEFAULT}`
+            value: [
+              'public',
+              // the number of seconds after which a fresh response will be
+              // marked as stale; see:
+              // https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control#max-age
+              `max-age=${TTL_DEFAULT}`,
+              // the number of seconds for which to serve a stale response while
+              // the fresh response is being fetched; see:
+              // https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control#stale-while-revalidate
+              `stale-while-revalidate=${STALE_TTL}`,
+              // if the origin returns an error response, serve the stale
+              // response for this number of seconds; see:
+              // https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control#stale-if-error
+              `stale-if-error=${STALE_TTL}`
+            ].join(', ')
           }
         ]
       },
