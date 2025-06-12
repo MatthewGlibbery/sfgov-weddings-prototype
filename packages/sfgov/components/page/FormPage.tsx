@@ -160,7 +160,10 @@ export function FormPage({
                 language: i18n.language
               }}
               onChange={(form: Form) => {
-                warnBeforeLeaving = !form.changed?.instance.pristine
+                warnBeforeLeaving =
+                  form.changed?.instance.pristine === undefined
+                    ? false
+                    : !form.changed.instance.pristine
               }}
               formReady={onFormReady}
               onSubmitDone={onSubmitDone}
@@ -195,12 +198,18 @@ export function FormPage({
       })
     })
 
+    form.on('prevPage', () => {
+      form.element.scrollIntoView()
+    })
+
     /**
      * @see https://github.com/formio/formio.js/blob/v4.19.2/src/Wizard.js#L766
      */
     form.on(
       'nextPage',
       (event: { page: number; submission: FormSubmission }) => {
+        form.element.scrollIntoView()
+
         if (event.page === 1) {
           putFormEvent({
             type: 'form_get_started',

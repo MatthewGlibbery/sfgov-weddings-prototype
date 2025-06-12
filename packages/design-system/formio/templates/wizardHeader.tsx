@@ -33,7 +33,6 @@ export function form({ ...ctx }: WizardRenderContext) {
       className="shrink-0 sticky lg:ml-96 lg:top-space-xl lg:leading-24"
       id={`${ctx.wizardKey}-header`}
       hidden={hideNav}
-      aria-label="navigation"
       aria-hidden={hideNav}
     >
       <details
