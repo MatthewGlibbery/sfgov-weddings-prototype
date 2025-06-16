@@ -79,7 +79,6 @@ export const BUTTON_VARIANTS = {
         '!bg-[transparent]', // FIXME: need transparent in theme.colors,
         '!underline',
         '!inline-flex',
-        'text-primary600',
         'hover:!text-primary700'
       )
     },

@@ -19,7 +19,9 @@ import {
   CostBlock,
   RelatedContentList,
   RichText,
+  TableOfContents,
   TitleAndText,
+  tocWrapperClasses,
   WhatToDo
 } from '../'
 import { PageWrapper } from './PageWrapper'
@@ -45,54 +47,56 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   const { t } = useTranslation()
 
   const TransactionContent = ({ screen = '' }) => (
-    <div className="flex flex-col space-y-28 md:space-y-40 lg:space-y-60">
-      {whatToDo.length ? (
-        <div className="flex flex-col space-y-28 mt-20">
-          <HeadingXXl as="h2" id={`whatToDo${screen}`}>
-            {t('what-to-do', { defaultValue: 'What to do' })}
-          </HeadingXXl>
-          {whatToDo.map((what, i) => (
-            <WhatToDo block={what} key={i} screen={screen} />
-          ))}
-        </div>
-      ) : null}
-      {!!supportingInformation.length || !!customSection.length ? (
-        <div className="flex flex-col space-y-28 lg:space-y-40 mt-28">
-          <HeadingXXl
-            as="h2"
-            className="!mb-0"
-            id={`supportingInformation${screen}`}
-          >
-            {t('special-cases-header', {
-              defaultValue: '{{ zyx }}',
-              zyx: specialCasesHeader || 'Special cases'
-            })}
-          </HeadingXXl>
-          {supportingInformation.length ? (
-            <div data-testid="special_cases-section">
-              {supportingInformation.map((item, i) => (
-                <Accordion
-                  key={i}
-                  title={item.value.title}
-                  data-testid={`special-case-${item.id}`}
-                  open={i === 0}
-                >
-                  <RichText html={item.value.text} />
-                </Accordion>
-              ))}
-            </div>
-          ) : null}
-          {customSection.map((block, i) => (
-            <div key={i} data-testid="custom_section-section">
-              <TitleAndText
-                {...block.value}
-                id={camelCase(block.value.title) + screen}
-                heading={HeadingXl}
-              />
-            </div>
-          ))}
-        </div>
-      ) : null}
+    <div className="flex flex-col gap-y-28 md:gap-y-40 lg:gap-y-60 mx-20 md:mx-0 col-span-full lg:col-span-7">
+      <div>
+        {whatToDo.length ? (
+          <div className="flex flex-col gap-y-28">
+            <HeadingXXl as="h2" id={`whatToDo${screen}`}>
+              {t('what-to-do', { defaultValue: 'What to do' })}
+            </HeadingXXl>
+            {whatToDo.map((what, i) => (
+              <WhatToDo block={what} key={i} screen={screen} />
+            ))}
+          </div>
+        ) : null}
+        {!!supportingInformation.length || !!customSection.length ? (
+          <div className="flex flex-col gap-y-28 lg:gap-y-40 mt-28">
+            <HeadingXXl
+              as="h2"
+              className="!mb-0"
+              id={`supportingInformation${screen}`}
+            >
+              {t('special-cases-header', {
+                defaultValue: '{{ zyx }}',
+                zyx: specialCasesHeader || 'Special cases'
+              })}
+            </HeadingXXl>
+            {supportingInformation.length ? (
+              <div data-testid="special_cases-section">
+                {supportingInformation.map((item, i) => (
+                  <Accordion
+                    key={i}
+                    title={item.value.title}
+                    data-testid={`special-case-${item.id}`}
+                    open={i === 0}
+                  >
+                    <RichText html={item.value.text} />
+                  </Accordion>
+                ))}
+              </div>
+            ) : null}
+            {customSection.map((block, i) => (
+              <div key={i} data-testid="custom_section-section">
+                <TitleAndText
+                  {...block.value}
+                  id={camelCase(block.value.title) + screen}
+                  heading={HeadingXl}
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
       {goodForCommunity.map((block, i) => (
         <div key={i} data-testid="good_for_community-section">
           <TitleAndText
@@ -110,17 +114,6 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           id={`related${screen}`}
         />
       ) : null}
-      {agencies.length ? (
-        <RelatedContentList
-          content={agencies}
-          title={
-            t('partner-agencies', {
-              defaultValue: 'Partner agencies'
-            }) as string
-          }
-          id={`partnerAgencies${screen}`}
-        />
-      ) : null}
     </div>
   )
 
@@ -133,13 +126,22 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             className="flex flex-row gap-8"
             id={`getHelp${screen}`}
           >
-            {t('contact-us', {
-              defaultValue: 'Contact us'
-            })}
+            <IconQuestion width={32} />
+            {t('get-help', { defaultValue: 'Get help' })}
           </HeadingXXl>
-
           <ContactFooter items={getHelp} />
         </div>
+      ) : null}
+      {agencies.length ? (
+        <RelatedContentList
+          content={agencies}
+          title={
+            t('partner-agencies', {
+              defaultValue: 'Partner agencies'
+            }) as string
+          }
+          id={`partnerAgencies${screen}`}
+        />
       ) : null}
     </span>
   )
@@ -148,8 +150,8 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
     cost || thingsToKnow.length ? (
       <div className="flex flex-col gap-y-28 p-28 bg-neutral50 rounded-[8px]">
         <div className="flex gap-x-8">
-          <IconInfo aria-hidden="true" width={24} className="md:w-40" />
-          <HeadingXXl as="h2" className="!m-0" id={`whatToKnow${screen}`}>
+          <IconInfo width={40} />
+          <HeadingXXl as="h2" id={`whatToKnow${screen}`}>
             {t('what-to-know', { defaultValue: 'What to know' })}
           </HeadingXXl>
         </div>
@@ -174,8 +176,8 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
 
   return (
     <PageWrapper title={title} meta={{ ...page.meta, description }}>
-      <Container className="flex flex-col">
-        <div className="mb-20 md:mb-40 lg:mb-60 flex flex-col space-y-20">
+      <Container className="flex flex-col gap-y-60">
+        <div className="flex flex-col">
           <PageTitleSection
             title={title}
             label={t('service', { defaultValue: 'Service' })}
@@ -193,22 +195,32 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
           </PageTitleSection>
         </div>
       </Container>
-      <div className="md:hidden">
-        <TransactionDetails />
-      </div>
-      <Container>
+      <span className="md:hidden">
         <Grid>
-          <div className="hidden md:block gap-y-60 col-span-full lg:col-span-7">
-            <TransactionDetails />
+          <div className={tocWrapperClasses}>
+            <TableOfContents screen="Small" />
           </div>
-          <div className="col-span-full lg:col-span-7">
-            <TransactionContent />
+          <div className="flex flex-col gap-y-60 col-span-full">
+            <TransactionDetails screen="Small" />
+            <TransactionContent screen="Small" />
+            <TransactionFooter screen="Small" />
           </div>
         </Grid>
-        <div className="lg:mt-60">
-          <TransactionFooter />
-        </div>
-      </Container>
+      </span>
+      <span className="hidden md:block">
+        <Container className="flex flex-col gap-y-60 lg:mt-60">
+          <Grid>
+            <div className={tocWrapperClasses}>
+              <TableOfContents screen="Large" />
+            </div>
+            <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
+              <TransactionDetails screen="Large" />
+              <TransactionContent screen="Large" />
+            </div>
+          </Grid>
+          <TransactionFooter screen="Large" />
+        </Container>
+      </span>
     </PageWrapper>
   )
 }

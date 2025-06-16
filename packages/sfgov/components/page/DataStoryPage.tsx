@@ -33,10 +33,10 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
               ) : null}
             </PageTitleSection>
           </div>
-          <div className="col-span-4">
+          <div className={tocWrapperClasses}>
             <TableOfContents />
           </div>
-          <div className="col-span-full lg:col-start-1 lg:col-end-8">
+          <div className="col-span-full lg:col-span-7 lg:order-1">
             {content.length ? (
               <div className="mt-28 mb-20 flex flex-col gap-28">
                 {content.map((section) => (

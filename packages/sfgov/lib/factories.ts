@@ -1536,18 +1536,7 @@ export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
   }),
   title: 'Data story page title',
   description: 'Data story page description',
-  content: [
-    ContentSectionFactory.make({
-      value: {
-        section_content: [
-          TextBlockFactory.make({
-            value:
-              '<h2>Hi!</h2><h2>Hello!</h2><h2>Hiii!</h2><h2>Hiya!</h2><h2>Heyyy!</h2><h2>Sup!</h2><h2>Greeting!</h2><h2>Hiiii!</h2><h2>Yo!</h2><h2>Yoooo!</h2>'
-          })
-        ]
-      }
-    })
-  ],
+  content: [ContentSectionFactory.make()],
   partner_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sf.RelatedContentAgency'
@@ -1558,8 +1547,7 @@ export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
 export const BodyTextBlockFactory = factory<TypeBodyTextBlock>((gen) => ({
   type: 'body',
   id: gen.datatype.uuid(),
-  value:
-    '<h2>Hi!</h2><h2>Hello!</h2><h2>Hiii!</h2><h2>Hiya!</h2><h2>Heyyy!</h2><h2>Sup!</h2><h2>Greeting!</h2><h2>Hiiii!</h2><h2>Yo!</h2><h2>Yoooo!</h2>'
+  value: gen.lorem.sentence()
 }))
 
 export const ReportPageFactory = factory<ReportPageData>((gen) => ({

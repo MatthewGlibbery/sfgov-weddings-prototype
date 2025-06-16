@@ -42,10 +42,10 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
       ) : null}
       <Container className="mb-60">
         <Grid>
-          <div className="col-span-4">
+          <div className={tocWrapperClasses}>
             <TableOfContents />
           </div>
-          <div className="col-span-full lg:col-start-1 lg:col-end-8 space-y-40 lg:space-y-60">
+          <div className="col-span-full lg:col-span-7 space-y-40 lg:space-y-60 lg:order-1">
             {content?.map((contentSection) => {
               switch (contentSection.type) {
                 case 'body':
