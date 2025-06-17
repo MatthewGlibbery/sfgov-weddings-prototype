@@ -50,32 +50,41 @@ export function form(ctx: WizardContext) {
       data-formio-template="wizard"
       className={`
         flex flex-col
-        lg:flex-row-reverse lg:flex-auto lg:justify-between
+        lg:grid lg:grid-cols-3
         ${ctx.className}
       `}
     >
-      <h1 className="my-space-desktop-md text-desktop-display-xxxl font-slab lg:hidden">
-        {title}
-      </h1>
-      <div
-        dangerouslySetInnerHTML={{ __html: ctx.wizardHeader ?? '' }}
-        className="w-full basis-1/3"
-      />
-      <div className="w-full basis-2/3">
-        <h1 className="text-desktop-display-xxxl font-slab max-lg:hidden lg:block">
+      <div className="col-span-2 flex flex-col">
+        <h1 className="my-space-desktop-md text-desktop-display-xxxl font-slab lg:hidden">
           {title}
         </h1>
+        <div
+          dangerouslySetInnerHTML={{ __html: ctx.wizardHeader ?? '' }}
+          className="lg:hidden"
+        />
 
-        <div
-          ref={ctx.wizardKey}
-          dangerouslySetInnerHTML={{ __html: ctx.components ?? '' }}
-          className="my-space-desktop-xxl"
-        />
-        <div
-          dangerouslySetInnerHTML={{ __html: ctx.wizardNav ?? '' }}
-          className="mb-space-desktop-xxl"
-        />
+        <div>
+          <h1 className="text-desktop-display-xxxl font-slab max-lg:hidden lg:block">
+            {title}
+          </h1>
+
+          <div
+            ref={ctx.wizardKey}
+            dangerouslySetInnerHTML={{ __html: ctx.components ?? '' }}
+            className="my-space-desktop-xxl"
+          />
+
+          <div
+            dangerouslySetInnerHTML={{ __html: ctx.wizardNav ?? '' }}
+            className="mb-space-desktop-xxl"
+          />
+        </div>
       </div>
+
+      <div
+        dangerouslySetInnerHTML={{ __html: ctx.wizardHeader ?? '' }}
+        className="xs:hidden md:block"
+      />
     </div>
   )
 }

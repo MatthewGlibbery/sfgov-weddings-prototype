@@ -27,17 +27,17 @@
         }
 
         [data-icon="pencil"] {
-            @apply !pencil-icon;
+            @apply inline-block !w-[24px] pencil-icon !translate-y-[3px];
         }
     
         [data-testid='formio-sfds-fieldset'] label {
             @apply text-body;
         }
 
-        [symbol="clock"] {
-            @apply before:!clock-icon inline-flex gap-8;
+        .formio-component-introFormDuration strong {
+            @apply inline-flex gap-8 !items-baseline !font-normal before:!clock-icon before:!pl-[24px] before:translate-y-[6px];
         }
-        
+
         /* Overrides bootstrap styles for SFDS custom components to match design system */
         .bg-blue-1 {
             @apply  w-full !inline-flex p-20 md:px-28 lg:p-28
