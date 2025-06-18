@@ -58,4 +58,16 @@ describe('<PageWrapper>', () => {
       'noindex, follow'
     )
   })
+
+  it('renders the google site verification meta tag', async () => {
+    render(
+      <PageWrapper title="some page title">
+        <div>Test content</div>
+      </PageWrapper>
+    )
+    expect(screen.getByTestId('meta-google-site-verification')).toHaveAttribute(
+      'name',
+      'google-site-verification'
+    )
+  })
 })
