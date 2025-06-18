@@ -21,7 +21,6 @@ import { OnlineEventBlock } from '../OnlineEventBlock'
 import { PageLinksList } from '../PageLinksList'
 import { RelatedContentList } from '../RelatedContentList'
 import { RichText } from '../RichText'
-import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
 import { Video } from '../Video'
 import { PageWrapper } from './PageWrapper'
 
@@ -44,7 +43,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   } = page
 
   const MeetingContent = ({ screen = '' }) => (
-    <span className="flex flex-col gap-16 mx-20 md:mx-0 lg:mx-0">
+    <span className="flex flex-col gap-16 md:mx-0 lg:mx-0">
       {overview ? (
         <>
           <HeadingXXl
@@ -150,15 +149,17 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
 
   const MeetingDetails = ({ screen = '' }) => (
     <div className="bg-neutral50 flex flex-col space-y-20 p-28 md:rounded-4">
-      <HeadingXXl as="h2" className="flex gap-4" id={`meetingDetails${screen}`}>
+      <div className="flex gap-8 items-center">
         <IconInfo
           aria-hidden="true"
           width={24}
           data-testid="info-icon"
-          className="inline md:w-40"
+          className="md:w-40"
         />
-        {t('meeting-details', { defaultValue: 'Meeting details' })}
-      </HeadingXXl>
+        <HeadingXXl as="h2" className="!m-0" id={`meetingDetails${screen}`}>
+          {t('meeting-details', { defaultValue: 'Meeting details' })}
+        </HeadingXXl>
+      </div>
       <HeadingLg as="h3" id={`dateTime${screen}`}>
         {t('date-and-time', { defaultValue: 'Date and time' })}
       </HeadingLg>
@@ -230,30 +231,19 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           </PageTitleSection>
         </div>
       </Container>
-      <span className="md:hidden">
+      <div className="md:hidden">
+        <MeetingDetails />
+      </div>
+      <Container>
         <Grid>
-          <div className={tocWrapperClasses}>
-            <TableOfContents screen="Small" />
+          <div className="hidden md:block col-span-full lg:col-span-6">
+            <MeetingDetails />
           </div>
-          <div className="flex flex-col gap-y-60 col-span-full">
-            <MeetingDetails screen="Small" />
-            <MeetingContent screen="Small" />
+          <div className="col-span-full lg:col-span-7">
+            <MeetingContent />
           </div>
         </Grid>
-      </span>
-      <span className="hidden md:block">
-        <Container>
-          <Grid>
-            <div className={tocWrapperClasses}>
-              <TableOfContents screen="Large" />
-            </div>
-            <div className="flex flex-col gap-y-60 col-span-full lg:col-span-7 lg:order-1">
-              <MeetingDetails screen="Large" />
-              <MeetingContent screen="Large" />
-            </div>
-          </Grid>
-        </Container>
-      </span>
+      </Container>
     </PageWrapper>
   )
 }

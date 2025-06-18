@@ -36,14 +36,23 @@ describe('TableOfContents', () => {
         <HeadingXXl as="h2" id="hello">
           Hello
         </HeadingXXl>
-        <HeadingXl as="h3" id="world">
+        <HeadingXXl as="h2" id="hello1">
+          Hello
+        </HeadingXXl>
+        <HeadingXXl as="h2" id="hello2">
+          Hello
+        </HeadingXXl>
+        <HeadingXXl as="h2" id="hello3">
+          Hello
+        </HeadingXXl>
+        <HeadingXl as="h3" id="world4">
           World
         </HeadingXl>
         <TableOfContents />
       </div>
     )
 
-    const tocEntry = screen.getByTestId('top-level-toc')
+    const tocEntry = screen.getAllByTestId('top-level-toc')[0]
     fireEvent.click(tocEntry)
 
     expect(tocEntry).toHaveAttribute('href', '#hello')
