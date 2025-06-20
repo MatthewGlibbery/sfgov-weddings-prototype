@@ -86,6 +86,13 @@ test.describe('A11y tests', () => {
   
       await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
     })
+
+    test.skip('validate search autocomplete features', async ({ mount, page }) => {
+      const data = EventPageFactory.make()
+      await mount(<EventPage page={data} />)
+    
+      await expect(page).toHaveSearchAutoComplete()
+    })
   
     test('validate axe core accessibility tests', async ({ mount, page }) => {
       const data = EventPageFactory.make()

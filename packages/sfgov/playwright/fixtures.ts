@@ -4662,42 +4662,54 @@ for (let i = 0; i < linksCount; i++) {
     let matcherResult: any
     try {
      
-     // Check if the page title is "Services | San Francisco"
-const title = await page.title();
+     // 1. Locate the <main> landmark
+const main = page.locator('main');
 
-if (title === 'Services | San Francisco') {
-  // If the title matches, perform the additional checks
+// 2. Find the <h1> with the text "Services"
+const servicesH1 = main.locator('h1', { hasText: 'Services' }).first();
+await expect(servicesH1).toBeVisible();
 
-// Find the <main> element
-  const main = page.locator('main');
+// 3. Get all <a> elements inside <main>
+const allLinks = main.locator('a');
+const linkCount = await allLinks.count();
 
-  // Check that there is exactly one <h1> within <main>
-  const h1Count = await main.locator('h1').count();
-  expect(h1Count).toBe(1); // Ensure exactly one <h1>
+const foundH1 = false;
 
-  // Find the <h1> within <main> containing the word "Services"
-  const h1WithServices = main.locator('h1:has-text("Services")').first();
+for (let i = 0; i < linkCount; i++) {
+  const link = allLinks.nth(i);
 
-  // Ensure that the first "Services" within <main> is indeed inside an <h1>
-  const textContent = await h1WithServices.textContent();
-  expect(textContent).toContain('Services');
+  // Check if this <a> comes after the <h1>
+  const isAfterH1 = await link.evaluate((el, h1Text) => {
+    const main = el.closest('main');
+    if (!main) return false;
 
-  // Check that all following elements with <a> tags are inside <h2>
-  const links = main.locator('h1:has-text("Services") ~ h2 a'); // Select links following <h1> within <h2> elements
-  const linksCount = await links.count();
+    const elements = Array.from(main.querySelectorAll('*'));
+    let h1Found = false;
 
- // Ensure all the links following <h1> "Services" are inside <h2>
-for (let i = 0; i < linksCount; i++) {
-  const link = links.nth(i);
-  
-  // Check if the parent element of the link is an <h2>
-  const parentTag = await link.evaluate(el => el.parentElement?.tagName);
-  
-  // Validate that the parent tag is 'H2'
-  expect(parentTag).toBe('H2');
-}
-} else {
-  // The page title is not "Services | San Francisco". Passing the test. 
+    for (const elem of elements) {
+      if (elem.tagName === 'H1' && elem.textContent?.includes(h1Text)) {
+        h1Found = true;
+      } else if (h1Found && elem === el) {
+        return true;
+      }
+    }
+
+    return false;
+  }, 'Services');
+
+  if (isAfterH1) {
+    // Check that the <a> is inside an <h2> heading
+    const isInsideH2 = await link.evaluate((el) => {
+      let current = el.parentElement;
+      while (current) {
+        if (current.tagName === 'H2') return true;
+        current = current.parentElement;
+      }
+      return false;
+    });
+
+    expect(isInsideH2).toBeTruthy();
+  }
 }
       pass = true
     } catch (e: any) {
@@ -6649,6 +6661,244 @@ if (meetingParagraphExists) {
 }
 
    pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderInMeetingDetailsModule(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderInMeetingDetailsModule'
+    let pass: boolean
+    let matcherResult: any
+    try {
+
+  // Validate the correct <h2 id="meetingDetailsLarge">Meeting details</h2>
+const meetingDetailsH2 = page.locator('main h2#meetingDetailsLarge');
+baseExpect(await meetingDetailsH2.isVisible()).toBeTruthy();
+baseExpect(await meetingDetailsH2.evaluate(node => node.tagName)).toBe('H2');
+
+// Validate the correct <h3 id="howToParticipateLarge">How to participate</h3>
+const dateAndTimeH3 = page.locator('main h3#dateTimeLarge');
+baseExpect(await dateAndTimeH3.isVisible()).toBeTruthy();
+baseExpect(await dateAndTimeH3.evaluate(node => node.tagName)).toBe('H3');
+      
+// Validate the correct <h3 id="howToParticipateLarge">How to participate</h3>
+const howToParticipateH3 = page.locator('main h3#howToParticipateLarge');
+baseExpect(await howToParticipateH3.isVisible()).toBeTruthy();
+baseExpect(await howToParticipateH3.evaluate(node => node.tagName)).toBe('H3');
+      
+pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveSearchAutoComplete(page: Page) {
+    const assertionName = 'toHaveSearchAutoComplete'
+    let pass: boolean
+    let matcherResult: any
+    try {
+
+// Locate the input using the placeholder text
+  const searchInput = page.locator('input[placeholder="Search"]');
+
+  // Validate the input is visible
+  await expect(searchInput).toBeVisible();
+
+  // Validate role="combobox"
+  await expect(searchInput).toHaveAttribute('role', 'combobox');
+
+  // Validate aria-autocomplete="both"
+  await expect(searchInput).toHaveAttribute('aria-autocomplete', 'both');
+  
+  pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveCorrectLinkTargetInProfileModule(page: Page) {
+    const assertionName = 'toHaveCorrectLinkTargetInProfileModule'
+    let pass: boolean
+    let matcherResult: any
+    try {
+	
+  const profileGroups = page.locator('div[data-gtm-id="profile-group"]');
+  const groupCount = await profileGroups.count();
+
+  for (let i = 0; i < groupCount; i++) {
+    const group = profileGroups.nth(i);
+
+    // Get all unique profile links
+    const profileLinks = group.locator('a[aria-label^="profile page of"]');
+    const linkCount = await profileLinks.count();
+
+    for (let j = 0; j < linkCount; j++) {
+      const link = profileLinks.nth(j);
+      const ariaLabel = await link.getAttribute('aria-label');
+      const href = await link.getAttribute('href');
+
+      // Find all links in the group with same aria-label and href
+      const duplicateLinks = group.locator(`a[aria-label="${ariaLabel}"][href="${href}"]`);
+      const duplicateCount = await duplicateLinks.count();
+
+      // Fail the test if more than one such link exists
+      expect(duplicateCount, `More than one link for "${ariaLabel}" with href="${href}"`).toBe(1);
+
+      // Ensure it includes both image and visible text
+      const img = link.locator('img');
+      await expect(img).toHaveCount(1);
+
+      const visibleText = (await link.innerText()).trim();
+      expect(visibleText.length, `Link for "${ariaLabel}" should include visible text`).toBeGreaterThan(0);
+    }
+  }
+	
+pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveLogicalReadingOrderInSpotlightModule(page: Page) {
+    const assertionName = 'toHaveLogicalReadingOrderInSpotlightModule'
+    let pass: boolean
+    let matcherResult: any
+    try {
+
+// Locate all spotlight modules
+const spotlightModules = page.locator('[data-testid="spotlight"]');
+
+// Count how many spotlight modules are on the page
+const spotlightCount = await spotlightModules.count();
+
+// Loop through each spotlight module
+for (let i = 0; i < spotlightCount; i++) {
+  const spotlight = spotlightModules.nth(i);
+
+  // Locate the first heading in this spotlight
+  const spotlightHeading = spotlight.locator('h2').first();
+
+  // Validate it's visible
+  await baseExpect(await spotlightHeading.isVisible()).toBeTruthy();
+
+  // Validate it is an H2
+  baseExpect(await spotlightHeading.evaluate(node => node.tagName)).toBe('H2');
+}
+
+pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
       pass = false
