@@ -46,6 +46,8 @@ const scrollToHeading = (target) => {
     top: offsetPosition,
     behavior: 'smooth'
   })
+
+  element?.focus()
 }
 /**
  * This renders an item in the table of contents list.
@@ -60,25 +62,42 @@ const Headings = ({ headings }) => {
   const [headingsList, setHeadingsList] = useState(
     hideHeadings ? headings.slice(0, 9) : headings
   )
+  const [focusNextLink, setFocusNextLink] = useState(false)
+  const lastFocusedLink = useRef(null)
+
+  function handleLinkFocus(e) {
+    lastFocusedLink.current = e.target
+  }
 
   useEffect(() => {
     if (showAll) {
       setHeadingsList(headings)
+      setFocusNextLink(true)
     } else {
       setHeadingsList(headings.slice(0, 9))
     }
   }, [headings, setHeadingsList, showAll])
 
+  // because the list of toc links is conditionally rendered,
+  // we don't actually have a next link to focus on until the
+  // full list is rendered.  use headingsList as a dependency
+  // so this effect runs after expansion, then focus on the
+  // link following the last focused one, or fallback
+  useEffect(() => {
+    if (!focusNextLink) return
+    const nextLink =
+      lastFocusedLink.current
+        ?.closest('li')
+        ?.nextElementSibling?.querySelector('a') ?? lastFocusedLink.current
+    nextLink?.focus()
+    setFocusNextLink(false)
+  }, [headingsList, focusNextLink])
+
   const { t } = useTranslation()
 
   const gradientStyles = {
-    '-webkit-mask-image':
-      '-webkit-gradient(linear, left top, left bottom, from(black), to(transparent))',
-    '-webkit-mask-image':
-      'linear-gradient(to bottom, black 70%, transparent 100%)',
-    'mask-image':
-      '-webkit-gradient(linear, left top, left bottom, from(black), to(transparent))',
-    'mask-image': 'linear-gradient(to bottom, black 70%, transparent 120%)'
+    WebkitMaskImage: 'linear-gradient(to bottom, black 70%, transparent 100%)',
+    maskImage: 'linear-gradient(to bottom, black 70%, transparent 120%)'
   }
 
   return (
@@ -93,6 +112,7 @@ const Headings = ({ headings }) => {
                   e.preventDefault()
                   scrollToHeading(heading.id)
                 }}
+                onFocus={handleLinkFocus}
                 data-testid="top-level-toc"
                 tabIndex={0}
               >
@@ -107,6 +127,16 @@ const Headings = ({ headings }) => {
           variant="link"
           className="!px-0 !no-underline"
           onClick={() => setShowAll(!showAll)}
+          aria-label={
+            showAll
+              ? t('show-less-toc-aria', {
+                  defaultValue: 'Show less table of content links'
+                })
+              : t('show-more-toc-aria', {
+                  defaultValue: 'Show all table of content links'
+                })
+          }
+          data-testid="show-more-less-button"
         >
           {showAll
             ? t('show-less-toc', { defaultValue: 'Show less' })
@@ -145,6 +175,8 @@ const useHeadingsData = () => {
     const newHeadings = []
     headingElements.forEach((heading) => {
       heading.id = heading.id.replace(/\s+/g, '')
+      // setting a -1 tabIndex so we can focus it when needed
+      heading.setAttribute('tabIndex', -1)
       const { innerText: title, id } = heading
 
       newHeadings.push({ id, title })

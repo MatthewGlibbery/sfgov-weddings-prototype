@@ -42,15 +42,18 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
       ) : null}
       <Container className="mb-60">
         <Grid>
-          <div className="col-span-4">
+          <div className="col-span-full">
             <TableOfContents />
           </div>
           <div className="col-span-full lg:col-start-1 lg:col-end-8 space-y-40 lg:space-y-60">
-            {content?.map((contentSection) => {
+            {content?.map((contentSection, i) => {
               switch (contentSection.type) {
                 case 'body':
                   return (
-                    <div className="flex flex-col gap-y-28">
+                    <div
+                      className="flex flex-col gap-y-28"
+                      key={`content-section-${i}`}
+                    >
                       <RichText html={contentSection.value} />
                     </div>
                   )
