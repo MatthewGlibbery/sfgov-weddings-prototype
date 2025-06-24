@@ -86,6 +86,13 @@ test.describe('A11y tests', () => {
 
     await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
   })
+  
+  test.skip('validate search autocomplete features', async ({ mount, page }) => {
+    const data = AgencyPageFactory.make()
+    await mount(<AgencyPage page={data} />)
+  
+    await expect(page).toHaveSearchAutoComplete()
+  })
 
   test('validate axe core accessibility tests', async ({ mount, page }) => {
     const data = AgencyPageFactory.make()
@@ -125,5 +132,12 @@ test.describe('A11y tests', () => {
 
     await expect(page).toHaveLogicalReadingOrderContactInfo()
   })  
+
+  test('logical reading order in spotlight module', async ({ mount, page }) => {
+    const data = AgencyPageFactory.make()
+    await mount(<AgencyPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderInSpotlightModule()
+  }) 
 
 })

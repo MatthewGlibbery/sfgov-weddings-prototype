@@ -53,6 +53,11 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
             data-testid="meta-robots"
           />
         ) : null}
+        <meta
+          name="google-site-verification"
+          content="8etBKQyyqG3GiT-xNuZVwr27VA0zgbwiyVFTLJBv_jE"
+          data-testid="meta-google-site-verification"
+        />
       </Head>
       <SiteHeader />
       <MainContent>

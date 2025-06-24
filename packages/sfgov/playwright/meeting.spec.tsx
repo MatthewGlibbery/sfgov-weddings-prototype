@@ -164,6 +164,13 @@ test.skip('Validates that no <span> tags are present within list elements', asyn
     await expect(page).toHaveDescriptiveLinkTextforButtons()
   })
 
+  test.skip('validate search autocomplete features', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+  
+    await expect(page).toHaveSearchAutoComplete()
+  })
+
   test.skip('validate axe core accessibility tests', async ({ mount, page }) => {
     const data = MeetingPageFactory.make()
     await mount(<MeetingPage page={data} />)
@@ -214,5 +221,12 @@ test.skip('Validates that no <span> tags are present within list elements', asyn
     await mount(<MeetingPage page={data} />)
         
     await expect(page).toHaveLogicalReadingOrderInTableOfContents()
+    }) 
+    
+    test.skip('Validates a logical reading order in the meeting details module', async ({ mount, page }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+        
+    await expect(page).toHaveLogicalReadingOrderInMeetingDetailsModule()
     })  
 })

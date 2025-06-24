@@ -164,6 +164,13 @@ test.skip('Validates that no <span> tags are present within list elements', asyn
     await expect(page).toHaveDescriptiveLinkTextforButtons()
   })
 
+  test.skip('validate search autocomplete features', async ({ mount, page }) => {
+    const data = TransactionPageFactory.make()
+    await mount(<TransactionPage page={data} />)
+  
+    await expect(page).toHaveSearchAutoComplete()
+  })
+
   test.skip('validate axe core accessibility tests', async ({ mount, page }) => {
     const data = TransactionPageFactory.make()
     await mount(<TransactionPage page={data} />)

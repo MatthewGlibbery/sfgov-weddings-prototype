@@ -87,11 +87,27 @@ test.skip('validate presence of aria labels in the primary and secondary navigat
   await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
 })
 
+test.skip('validate search autocomplete features', async ({ mount, page }) => {
+  const data = HomePageFactory.make()
+  await mount(<HomePage page={data} />)
+
+  await expect(page).toHaveSearchAutoComplete()
+})
+
 test('validate axe core accessibility tests', async ({ mount, page }) => {
   const data = HomePageFactory.make()
   await mount(<HomePage page={data} />)
 
   await expect(page).toPassAxeCoreTests()
+})
+
+// Module Specific Tests
+
+test.skip('validate correct link target in Profile module', async ({ mount, page }) => {
+  const data = HomePageFactory.make()
+  await mount(<HomePage page={data} />)
+
+  await expect(page).toHaveCorrectLinkTargetInProfileModule()
 })
 
 // Content Type Specific Tests

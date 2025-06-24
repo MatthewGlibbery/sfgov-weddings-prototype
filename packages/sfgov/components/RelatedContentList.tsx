@@ -39,7 +39,6 @@ export const RelatedContentList = ({
   if (!content?.length) return null
 
   const Content = component || PageLinkWithBorder
-  const anchorId = id || title
 
   const gridClass =
     !component && content.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'
@@ -47,7 +46,7 @@ export const RelatedContentList = ({
   return (
     <div {...rest}>
       {title ? (
-        <HeadingXXl as="h2" className="!mb-20" id={anchorId}>
+        <HeadingXXl as="h2" className="!mb-20" id={id}>
           {title}
         </HeadingXXl>
       ) : null}

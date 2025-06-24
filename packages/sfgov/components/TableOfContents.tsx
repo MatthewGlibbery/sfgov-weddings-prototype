@@ -2,13 +2,16 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react'
 import {
+  Button,
   classed,
   classes,
+  HeadingLg,
+  IconArrowUp,
   IconChevronDown,
   IconChevronUp,
   Link
 } from '@/design-system'
-import { StyledDetails } from './Accordion'
+import { useTranslation } from 'next-i18next'
 
 export const tocWrapperClasses = classes(
   'z-50',
@@ -16,28 +19,22 @@ export const tocWrapperClasses = classes(
   'px-20 py-28 md:px-0 mb-20',
   'lg:pt-0 lg:pb-40 lg:order-2'
 )
-const TOCWrapper = classed('ul', 'list-none my-0 ps-0')
+const TOCWrapper = classed(
+  'ul',
+  'list-none ps-20 border-l-1 border-l-neutral200'
+)
 
 const ListItem = classed('li', 'mb-16')
 
-const TopLevelTOC = classed(Link, 'block font-bold no-underline', {
-  variants: {
-    isactive: {
-      true: 'text-white bg-primary500 rounded-[40px] px-12 py-8'
-    }
-  }
-})
+const TopLevelTOC = classed(Link, 'line-clamp-2')
 
-const NavHeader = classed(
-  'summary',
-  classes(
-    'flex py-8 px-20 justify-between',
-    'text-primary500 bg-white',
-    'border-1 border-solid border-neutral400 rounded-[24px]'
-  )
-)
-
-const LowerLevelTOC = classed(TopLevelTOC, 'font-normal ps-16')
+// istanbul ignore next
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
 
 const scrollToHeading = (target) => {
   const element = document.getElementById(target)
@@ -49,6 +46,8 @@ const scrollToHeading = (target) => {
     top: offsetPosition,
     behavior: 'smooth'
   })
+
+  element?.focus()
 }
 /**
  * This renders an item in the table of contents list.
@@ -57,204 +56,197 @@ const scrollToHeading = (target) => {
  */
 
 // istanbul ignore next
-const Headings = ({ headings, activeId, id = '' }) => (
-  <>
-    {headings.map((heading) => (
-      <span key={heading.id}>
-        <ListItem isactive={heading.id === activeId ? 'true' : 'false'}>
-          <TopLevelTOC
-            href={`#${heading.id}`}
-            onClick={(e) => {
-              e.preventDefault()
-              scrollToHeading(heading.id)
-            }}
-            isactive={heading.id === activeId ? 'true' : 'false'}
-            data-testid={`top-level-toc${id}`}
-            tabIndex={-1}
-          >
-            {heading.title}
-          </TopLevelTOC>
-        </ListItem>
-        {!!heading.items.length &&
-          (heading.id === activeId ||
-            heading.items.some((child) => child.id === activeId)) &&
-          heading.items.map((child) => (
-            <ListItem
-              key={child.id}
-              isactive={child.id === activeId ? 'true' : 'false'}
-            >
-              <LowerLevelTOC
-                href={`#${child.id}`}
-                onClick={(e) => {
-                  e.preventDefault()
-                  scrollToHeading(child.id)
-                }}
-                isactive={child.id === activeId ? 'true' : 'false'}
-                data-testid={`lower-level-toc${id}`}
-                tabIndex={-1}
-              >
-                {child.title}
-              </LowerLevelTOC>
-            </ListItem>
-          ))}
-      </span>
-    ))}
-  </>
-)
+const Headings = ({ headings }) => {
+  const hideHeadings = headings.length > 10
+  const [showAll, setShowAll] = useState(false)
+  const [headingsList, setHeadingsList] = useState(
+    hideHeadings ? headings.slice(0, 9) : headings
+  )
+  const [focusNextLink, setFocusNextLink] = useState(false)
+  const lastFocusedLink = useRef(null)
 
-const TOC = ({ headings, activeNode, activeId }) => {
-  const OpenedIcon = IconChevronUp
-  const ClosedIcon = IconChevronDown
+  function handleLinkFocus(e) {
+    lastFocusedLink.current = e.target
+  }
 
-  const [isOpen, setOpen] = useState(false)
-  const Icon = isOpen ? OpenedIcon : ClosedIcon
+  useEffect(() => {
+    if (showAll) {
+      setHeadingsList(headings)
+      setFocusNextLink(true)
+    } else {
+      setHeadingsList(headings.slice(0, 9))
+    }
+  }, [headings, setHeadingsList, showAll])
 
-  /* istanbul ignore next */
-  const toggleOpen = (e) => {
-    e.preventDefault()
-    setOpen(!isOpen)
+  // because the list of toc links is conditionally rendered,
+  // we don't actually have a next link to focus on until the
+  // full list is rendered.  use headingsList as a dependency
+  // so this effect runs after expansion, then focus on the
+  // link following the last focused one, or fallback
+  useEffect(() => {
+    if (!focusNextLink) return
+    const nextLink =
+      lastFocusedLink.current
+        ?.closest('li')
+        ?.nextElementSibling?.querySelector('a') ?? lastFocusedLink.current
+    nextLink?.focus()
+    setFocusNextLink(false)
+  }, [headingsList, focusNextLink])
+
+  const { t } = useTranslation()
+
+  const gradientStyles = {
+    WebkitMaskImage: 'linear-gradient(to bottom, black 70%, transparent 100%)',
+    maskImage: 'linear-gradient(to bottom, black 70%, transparent 120%)'
   }
 
   return (
-    <StyledDetails open={isOpen} onClick={toggleOpen}>
-      <NavHeader>
-        <span>{activeNode?.textContent || '...Loading'}</span>
-        <Icon width={24} />
-      </NavHeader>
-      <div className="mt-12 py-28 px-20 bg-white border-1 border-solid border-neutral400 rounded-[26px]">
-        <Headings headings={headings} activeId={activeId} />
+    <>
+      <div style={!showAll && hideHeadings ? gradientStyles : {}}>
+        <TOCWrapper>
+          {headingsList.map((heading) => (
+            <ListItem key={heading.id}>
+              <TopLevelTOC
+                href={`#${heading.id}`}
+                onClick={(e) => {
+                  e.preventDefault()
+                  scrollToHeading(heading.id)
+                }}
+                onFocus={handleLinkFocus}
+                data-testid="top-level-toc"
+                tabIndex={0}
+              >
+                {heading.title}
+              </TopLevelTOC>
+            </ListItem>
+          ))}
+        </TOCWrapper>
       </div>
-    </StyledDetails>
+      {hideHeadings ? (
+        <Button
+          variant="link"
+          className="!px-0 !no-underline"
+          onClick={() => setShowAll(!showAll)}
+          aria-label={
+            showAll
+              ? t('show-less-toc-aria', {
+                  defaultValue: 'Show less table of content links'
+                })
+              : t('show-more-toc-aria', {
+                  defaultValue: 'Show all table of content links'
+                })
+          }
+          data-testid="show-more-less-button"
+        >
+          {showAll
+            ? t('show-less-toc', { defaultValue: 'Show less' })
+            : t('show-all-toc', { defaultValue: 'Show all' })}
+          {showAll ? (
+            <IconChevronUp width={20} />
+          ) : (
+            <IconChevronDown width={20} />
+          )}
+        </Button>
+      ) : null}
+    </>
   )
 }
 
-const TOCDesktop = ({ headings, activeId }) => (
-  <TOCWrapper>
-    <Headings headings={headings} activeId={activeId} id="desktop" />
-  </TOCWrapper>
-)
+const TOC = ({ headings }) => <Headings headings={headings} />
 
 /**
  * Dynamically generates the table of contents list,
- * using any H2s and H3s it can find in the main text
+ * using any H2s it can find in the main text
  */
-const useHeadingsData = (screen) => {
-  const [nestedHeadings, setNestedHeadings] = useState([])
+const useHeadingsData = () => {
+  const [headings, setHeadings] = useState([])
 
   useEffect(() => {
     const headingElements = Array.from(
-      document.querySelectorAll('h2[id], h3[id]:not([id=""])')
+      document.querySelectorAll('h2[id]:not([id=""])')
     )
 
-    let headings = headingElements
-    if (screen) {
-      headings = headingElements.filter((el) => el.id.includes(screen))
+    // istanbul ignore next
+    if (headingElements.length < 3) {
+      // istanbul ignore next
+      return { headings: [] }
     }
+    // Created a list of headings
+    const newHeadings = []
+    headingElements.forEach((heading) => {
+      heading.id = heading.id.replace(/\s+/g, '')
+      // setting a -1 tabIndex so we can focus it when needed
+      heading.setAttribute('tabIndex', -1)
+      const { innerText: title, id } = heading
 
-    // Created a list of headings, with H3s nested
-    const newNestedHeadings = getNestedHeadings(headings)
-    setNestedHeadings(newNestedHeadings)
-  }, [screen])
+      newHeadings.push({ id, title })
+    })
+    setHeadings(newHeadings)
+  }, [])
 
-  return { nestedHeadings }
+  return { headings }
 }
 
-const getNestedHeadings = (headingElements) => {
-  const nestedHeadings = []
-
-  headingElements.forEach((heading) => {
-    heading.id = heading.id.replace(/\s+/g, '')
-    const { innerText: title, id } = heading
-
-    if (heading.nodeName === 'H2') {
-      nestedHeadings.push({ id, title, items: [] })
-    } else if (
-      heading.nodeName === 'H3' &&
-      !!nestedHeadings.length &&
-      nestedHeadings[nestedHeadings.length - 1].id !== 'getHelp'
-    ) {
-      nestedHeadings[nestedHeadings.length - 1].items.push({
-        id,
-        title
-      })
-    }
-  })
-
-  return nestedHeadings
-}
-
-const useIntersectionObserver = (activeNode, setActiveNode, screen) => {
-  const headingElementsRef = useRef({})
+const useIntersectionObserver = (showBackToTop, setShowBackToTop) => {
   useEffect(() => {
     // istanbul ignore next
-    const callback = (headings) => {
-      headingElementsRef.current = headings.reduce((map, headingElement) => {
-        map[headingElement.target.id] = headingElement
-        return map
-      }, headingElementsRef.current)
-
-      // Get all headings that are currently visible on the page
-      const visibleHeadings = []
-      Object.keys(headingElementsRef.current).forEach((key) => {
-        const headingElement = headingElementsRef.current[key]
-        if (headingElement.isIntersecting) visibleHeadings.push(headingElement)
-      })
-
-      // If there is only one visible heading, this is our "active" heading
-      // otherwise, the heading closest to the top of the page is active
-      if (visibleHeadings.length >= 1) {
-        setActiveNode(visibleHeadings[0].target)
-      } else if (!activeNode) {
-        setActiveNode(headingElements[0])
+    const callback = ([firstHeading]) => {
+      if (firstHeading.boundingClientRect.top < 32) {
+        setShowBackToTop(true)
+      } else {
+        setShowBackToTop(false)
       }
     }
 
-    const observer = new IntersectionObserver(callback, {
-      rootMargin: '-5% 0% 0% 0px'
-    })
+    const observer = new IntersectionObserver(callback)
 
-    let headingElements = Array.from(
-      document.querySelectorAll('h2[id], h3[id]:not([id=""])')
+    const headingElements = Array.from(
+      document.querySelectorAll('h2[id]:not([id=""])')
     )
 
-    if (screen) {
-      headingElements = headingElements.filter((el) => el.id.includes(screen))
+    // We don't have ToC if there are fewer than 3 headings
+    // don't observe if this is the case
+    if (headingElements.length >= 3) {
+      observer.observe(headingElements[0])
     }
 
-    headingElements.forEach((element) => observer.observe(element))
-
     return () => observer.disconnect()
-  }, [activeNode, setActiveNode, screen])
+  }, [showBackToTop, setShowBackToTop])
 }
 
 /**
  * Renders the table of contents.
  */
-export const TableOfContents = ({ screen = '' }) => {
-  const [activeNode, setActiveNode] = useState()
-  const { nestedHeadings } = useHeadingsData(screen)
-  useIntersectionObserver(activeNode, setActiveNode, screen)
+export const TableOfContents = () => {
+  const [showBackToTop, setShowBackToTop] = useState(false)
+  const { headings } = useHeadingsData()
+  useIntersectionObserver(showBackToTop, setShowBackToTop)
 
-  // istanbul ignore next
-  const activeId = activeNode ? activeNode.id : ''
+  const { t } = useTranslation()
 
-  return (
-    <nav
-      role="navigation"
-      aria-label="Table of contents"
-      aria-hidden="true"
-      tabIndex={-1}
-    >
-      <span className="hidden lg:block">
-        <TOCDesktop headings={nestedHeadings} activeId={activeId} />
-      </span>
-      <span className="block lg:hidden">
-        <TOC
-          headings={nestedHeadings}
-          activeNode={activeNode}
-          activeId={activeId}
-        />
-      </span>
-    </nav>
-  )
+  if (headings.length >= 3) {
+    return (
+      <nav role="navigation" aria-label="Table of contents" tabIndex={0}>
+        <HeadingLg as="p" className="mb-[24px]">
+          {t('table-of-contents-heading', { defaultValue: 'On this page' })}
+        </HeadingLg>
+        <TOC headings={headings} />
+        {/* istanbul ignore next */}
+        {showBackToTop ? (
+          <Button
+            variant="secondary"
+            className="fixed bottom-16 right-16 md:bottom-[50px] md:right-[50px] z-50"
+            onClick={
+              /* istanbul ignore next */ () =>
+                /* istanbul ignore next */ scrollToTop()
+            }
+          >
+            <IconArrowUp width={20} />
+            {t('back-to-top-button', { defaultValue: 'Back to top' })}
+          </Button>
+        ) : null}
+      </nav>
+    )
+  }
+  return null
 }
