@@ -62,7 +62,7 @@ type BaseTileProps = {
 }
 
 const BaseTile = ({ className, href, children }: BaseTileProps) => (
-  <TileContainer href={href} className={className}>
+  <TileContainer href={href} className={className} data-analytics="tile">
     <div className="flex flex-col space-y-8">{children}</div>
   </TileContainer>
 )
