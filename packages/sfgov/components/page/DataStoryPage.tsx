@@ -33,7 +33,7 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
               ) : null}
             </PageTitleSection>
           </div>
-          <div className="col-span-full">
+          <div className="col-span-full lg:col-start-1 lg:col-end-8">
             <TableOfContents />
           </div>
           <div className="col-span-full lg:col-start-1 lg:col-end-8">

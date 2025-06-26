@@ -42,7 +42,7 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
       ) : null}
       <Container className="mb-60">
         <Grid>
-          <div className="col-span-full">
+          <div className="col-span-full lg:col-start-1 lg:col-end-8">
             <TableOfContents />
           </div>
           <div className="col-span-full lg:col-start-1 lg:col-end-8 space-y-40 lg:space-y-60">
