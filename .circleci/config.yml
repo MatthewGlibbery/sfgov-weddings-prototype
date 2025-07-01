@@ -131,4 +131,4 @@ workflows:
             branches:
               only: main
           requires:
-            - build_and_test
+            - test
