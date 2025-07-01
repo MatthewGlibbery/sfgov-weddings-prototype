@@ -12,6 +12,7 @@ import {
   Link
 } from '@/design-system'
 import { useTranslation } from 'next-i18next'
+import { createPortal } from 'react-dom'
 
 export const tocWrapperClasses = classes(
   'z-50',
@@ -38,6 +39,10 @@ const scrollToTop = () => {
 
 const scrollToHeading = (target) => {
   const element = document.getElementById(target)
+  if (!element) return
+  // setting a -1 tabIndex so we can focus it via js
+  element.setAttribute('tabIndex', -1)
+
   const headerOffset = 45
   const elementPosition = element.getBoundingClientRect().top
   const offsetPosition = elementPosition + window.pageYOffset - headerOffset
@@ -47,7 +52,8 @@ const scrollToHeading = (target) => {
     behavior: 'smooth'
   })
 
-  element?.focus()
+  // prevent auto scrolling to element (we handle ourselves)
+  element.focus({ preventScroll: true })
 }
 /**
  * This renders an item in the table of contents list.
@@ -175,8 +181,6 @@ const useHeadingsData = () => {
     const newHeadings = []
     headingElements.forEach((heading) => {
       heading.id = heading.id.replace(/\s+/g, '')
-      // setting a -1 tabIndex so we can focus it when needed
-      heading.setAttribute('tabIndex', -1)
       const { innerText: title, id } = heading
 
       newHeadings.push({ id, title })
@@ -232,19 +236,22 @@ export const TableOfContents = () => {
         </HeadingLg>
         <TOC headings={headings} />
         {/* istanbul ignore next */}
-        {showBackToTop ? (
-          <Button
-            variant="secondary"
-            className="fixed bottom-16 right-16 md:bottom-[50px] md:right-[50px] z-50"
-            onClick={
-              /* istanbul ignore next */ () =>
-                /* istanbul ignore next */ scrollToTop()
-            }
-          >
-            <IconArrowUp width={20} />
-            {t('back-to-top-button', { defaultValue: 'Back to top' })}
-          </Button>
-        ) : null}
+        {showBackToTop
+          ? createPortal(
+              <Button
+                variant="secondary"
+                className="fixed bottom-16 right-16 md:bottom-[50px] md:right-[50px] z-50"
+                onClick={
+                  /* istanbul ignore next */ () =>
+                    /* istanbul ignore next */ scrollToTop()
+                }
+              >
+                <IconArrowUp width={20} />
+                {t('back-to-top-button', { defaultValue: 'Back to top' })}
+              </Button>,
+              document.body
+            )
+          : null}
       </nav>
     )
   }
