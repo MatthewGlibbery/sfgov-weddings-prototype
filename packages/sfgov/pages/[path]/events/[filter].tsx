@@ -15,12 +15,13 @@ import {
   PageTitleSection
 } from '@/design-system'
 import { getenv, getPublicEnv } from '@/lib/env'
+import { withServerSideTranslations } from '@/lib/translations'
 import { getPageURL } from '@/lib/utils'
 import { PageData } from '@/types'
 import { GetServerSidePropsContext } from 'next'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type Event = PageData & {
   date_time: []
@@ -157,7 +158,8 @@ const EventsPage = (props: EventPageData) => {
     total,
     baseUrl
   } = props
-  const { path, filter } = router.query
+  const { locale, query } = router
+  const { path, filter } = query
   const [events, setEvents] = useState(pageEvents)
   const [currentPage, setCurrentPage] = useState(1)
   const aggregated: { [key: string]: Event[] } = {}
@@ -168,7 +170,7 @@ const EventsPage = (props: EventPageData) => {
     if (events.length >= total) return
     try {
       const url = new URL(baseUrl)
-      url.searchParams.set('page', currentPage + 1)
+      url.searchParams.set('page', `${currentPage + 1}`)
       const response = await fetch(url.href)
       const data = await response.json()
 
@@ -204,6 +206,12 @@ const EventsPage = (props: EventPageData) => {
   const pillCls = 'no-underline px-16 py-[15px]'
   const activePillCls = 'bg-primary500 text-white'
   const inactivePillCls = 'bg-primary100 text-primary700'
+
+  // locale change
+  useEffect(() => {
+    setEvents(pageEvents)
+    setCurrentPage(1)
+  }, [pageEvents, locale])
 
   return (
     <PageWrapper>
@@ -277,7 +285,11 @@ const EventsPage = (props: EventPageData) => {
                     onClick={loadEvents}
                     data-testid="load-more-button"
                   >
-                    <span>Show more events</span>
+                    <span>
+                      {t('show-more-events', {
+                        defaultValue: 'Show more events'
+                      })}
+                    </span>
                     <IconChevronDown className="w-20 h-20" />
                   </Button>
                 </div>
@@ -294,25 +306,26 @@ const EventsPage = (props: EventPageData) => {
   )
 }
 
-export const getServerSideProps = async ({
-  params,
-  query
-}: GetServerSidePropsContext) => {
-  const { path, filter } = params!
-  const url = new URL(getenv('NEXT_PUBLIC_CONTENT_API_BASE_URL'))
-  url.pathname += `/pages/events/${filter}/`
-  url.searchParams.set('path', path)
-  url.searchParams.set('page', query?.page || 1)
-  try {
-    const res = await fetch(url.href)
-    const data = await res.json()
+export const getServerSideProps = withServerSideTranslations(
+  async ({ params, locale, query }: GetServerSidePropsContext) => {
+    const { path, filter } = params!
+    const url = new URL(getenv('API_BASE_URL'))
+    url.pathname += 'api/related-events/'
+    url.searchParams.set('list', filter)
+    url.searchParams.set('locale', locale)
+    url.searchParams.set('path', path)
+    url.searchParams.set('page', query?.page || 1)
+    try {
+      const res = await fetch(url.href)
+      const data = await res.json()
 
-    // append the "base" api url for this list
-    // so the client side can make requests for more pages
-    return { props: { ...data, baseUrl: url.href, env: getPublicEnv() } }
-  } catch (error) {
-    return { notFound: true } // 404
+      // append the "base" api url for this list
+      // so the client side can make requests for more pages
+      return { props: { ...data, baseUrl: url.href, env: getPublicEnv() } }
+    } catch (error) {
+      return { notFound: true } // 404
+    }
   }
-}
+)
 
 export default EventsPage
