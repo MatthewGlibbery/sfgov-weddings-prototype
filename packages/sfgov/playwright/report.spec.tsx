@@ -109,4 +109,11 @@ test.describe('A11y tests', () => {
 
   await expect(page).toSuppressInPageSearchModuleOnReportContentType()
   })   
+
+  test('Table of contents has nav landmark attributes', async ({ mount, page }) => {
+  const data = ReportPageFactory.make()
+  await mount(<ReportPage page={data} />)
+
+  await expect(page).toHaveNavLandmarkAttributesInTOC()
+  }) 
 })

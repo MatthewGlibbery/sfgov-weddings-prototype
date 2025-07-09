@@ -216,13 +216,7 @@ test.skip('Validates that no <span> tags are present within list elements', asyn
       
       await expect(page).toHaveKeyboardFocusOnMeetingTranscriptLinks()
       })
-  test.skip('Validates a logical reading order in the Table of Contents', async ({ mount, page }) => {
-    const data = MeetingPageFactory.make()
-    await mount(<MeetingPage page={data} />)
-        
-    await expect(page).toHaveLogicalReadingOrderInTableOfContents()
-    }) 
-    
+      
     test.skip('Validates a logical reading order in the meeting details module', async ({ mount, page }) => {
     const data = MeetingPageFactory.make()
     await mount(<MeetingPage page={data} />)

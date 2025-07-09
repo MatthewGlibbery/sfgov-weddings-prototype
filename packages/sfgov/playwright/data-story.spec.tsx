@@ -119,4 +119,11 @@ test('Power BI Dashboard is accessible', async ({ mount, page }) => {
   await expect(page).toMakePowerBiDashboardAccessible()
 })
 
+test('Table of contents has nav landmark attributes', async ({ mount, page }) => {
+  const data = DataStoryPageFactory.make()
+  await mount(<DataStoryPage page={data} />)
+
+  await expect(page).toHaveNavLandmarkAttributesInTOC()
+})
+
 })

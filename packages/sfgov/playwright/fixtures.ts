@@ -5227,23 +5227,23 @@ if (title === 'Contact SF.gov | San Francisco') {
     }
   },
 
-  async toHaveLogicalReadingOrderInTableOfContents(page: Page) {
-    const assertionName = 'toHaveLogicalReadingOrderInTableOfContents'
+  async toHaveNavLandmarkAttributesInTOC(page: Page) {
+    const assertionName = 'toHaveNavLandmarkAttributesInTOC'
     let pass: boolean
     let matcherResult: any
 
     try {
-        // Select the navigation section with the required role and aria-label
-        const tocNav = page.locator('nav[role="navigation"][aria-label="Table of contents"]')
+       // 1. Find the visible text “On this page”
+const onThisPage = page.getByText('On this page', { exact: true });
+await expect(onThisPage).toBeVisible();
 
-        // Check if the Table of Contents navigation exists
-        const isTocPresent = await tocNav.count() > 0
+// 2. Find a <nav> element that contains the "On this page" text
+const tocNav = page.locator('nav', { hasText: 'On this page' });
+await expect(tocNav).toBeVisible();
 
-        if (isTocPresent) {
-            // Validate that it includes an <h2>Table of contents</h2>
-            const tocHeading = tocNav.locator('h2', { hasText: 'Table of contents' })
-            await expect(tocHeading).toBeVisible()
-        }
+// 3. Validate landmark attributes
+await expect(tocNav).toHaveAttribute('role', 'navigation');
+await expect(tocNav).toHaveAttribute('aria-label', 'Table of contents');       
 
         pass = true
     } catch (e: any) {
