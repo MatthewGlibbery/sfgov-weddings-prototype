@@ -1,27 +1,52 @@
-import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { EventPageFactory, MeetingPageFactory } from '@/lib/factories'
 import EventPage from '../pages/[path]/events/[filter]'
 import fetchMock from 'jest-fetch-mock'
+import { useRouter } from 'next/router'
 
 jest.mock('next/router', () => ({
-  useRouter: jest.fn().mockReturnValue({
-    query: { path: 'agency-name', filter: 'upcoming' }
-  })
+  useRouter: jest.fn()
 }))
 describe('events', () => {
-  it('renders an events listing page with events', () => {
+  it('renders an events listing page with events and updates with locale change', () => {
+    const mockUseRouter = useRouter
     const eventPage = EventPageFactory.make()
     const meetingPage = MeetingPageFactory.make()
+    const esEventPage = EventPageFactory.make({
+      title: 'Event title in Spanish'
+    })
+    const esMeetingPage = EventPageFactory.make({
+      title: 'Meeting title in Spanish'
+    })
     const data = {
       agency: 'An agency page title',
       total: 2,
       events: [eventPage, meetingPage],
       baseUrl: 'http://a-fake-url'
     }
-    render(<EventPage {...data} />)
+    mockUseRouter.mockReturnValue({
+      query: { path: 'agency-name', filter: 'upcoming' },
+      locale: 'en'
+    })
+    const { rerender } = render(<EventPage {...data} />)
     expect(screen.getByText(eventPage.title)).toBeInTheDocument()
     expect(screen.getByText(meetingPage.title)).toBeInTheDocument()
+
+    const translationData = {
+      agency: 'An agency page title',
+      total: 2,
+      events: [esEventPage, esMeetingPage],
+      baseUrl: 'http://a-fake-url'
+    }
+    mockUseRouter.mockReturnValue({
+      query: { path: 'agency-name', filter: 'upcoming' },
+      locale: 'es'
+    })
+    rerender(<EventPage {...translationData} />)
+    expect(screen.getByText(esEventPage.title)).toBeInTheDocument()
+    expect(screen.getByText(esMeetingPage.title)).toBeInTheDocument()
+    expect(screen.queryByText(eventPage.title)).not.toBeInTheDocument()
+    expect(screen.queryByText(meetingPage.title)).not.toBeInTheDocument()
   })
 
   it('renders an events listing page with events aggregated by month and year', () => {

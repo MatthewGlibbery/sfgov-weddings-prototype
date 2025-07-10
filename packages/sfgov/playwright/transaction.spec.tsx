@@ -208,25 +208,4 @@ test.skip('Validates that no <span> tags are present within list elements', asyn
 
     await expect(page).toHaveLogicalReadingOrderGetHelp()
   }) 
-
-  test.skip('Validates a logical reading order in the Table of Contents', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderInTableOfContents()
-  }) 
-
-  test.skip('Validates that links within the TOC redirect to the main content area', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveTOCLinksRedirectToMainContentArea()
-  }) 
-
 })
