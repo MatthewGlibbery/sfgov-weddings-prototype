@@ -45,24 +45,24 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
               </HeadingXXl>
               <div className="lg:hidden">
                 <ContentTileList
-                  isHomePage={true}
+                  full={true}
                   links={services}
                   noDescription={true}
                 />
               </div>
               <div className="lg:hidden">
-                <FeaturedTopicTileList isHomePage={true} links={topics} />
+                <FeaturedTopicTileList full={true} links={topics} />
               </div>
               <div className="hidden lg:flex gap-x-96">
                 <div className="basis-[36%]">
                   <ContentTileList
-                    isHomePage={true}
+                    full={true}
                     links={services}
                     noDescription={true}
                   />
                 </div>
                 <div className="basis-[53%]">
-                  <FeaturedTopicTileList isHomePage={true} links={topics} />
+                  <FeaturedTopicTileList links={topics} />
                 </div>
               </div>
             </div>

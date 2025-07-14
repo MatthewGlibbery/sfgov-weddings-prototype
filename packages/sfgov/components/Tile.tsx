@@ -23,7 +23,7 @@ import { RichText } from './RichText'
 
 export type TileSectionProps = {
   links?: TypeTileBlock[]
-  isHomePage?: boolean
+  full?: boolean
   noDescription?: boolean
 }
 
@@ -33,25 +33,12 @@ export type TileProps = {
 } & JSX.IntrinsicAttributes
 
 export const TileSection = classed('div', {
-  base: classes('space-y-20'),
+  base: classes('grid grid-cols-1 gap-28 md:grid-cols-2 gap-x-28 gap-y-20'),
   variants: {
-    isGrid: {
-      true: 'grid grid-cols-1 gap-28 md:grid-cols-2 md:space-y-0'
-    },
-    isContentTile: {
-      true: 'divide-y-1 divide-neutral200'
-    },
-    isHomePage: {
-      true: 'grid grid-cols-1 lg:grid-cols-2 space-y-0 gap-x-28 gap-y-20'
+    full: {
+      true: 'gap-y-0 md:grid-cols-1'
     }
-  },
-  compoundVariants: [
-    {
-      isContentTile: true,
-      isHomePage: true,
-      className: 'block p-12 divide-y-0 space-y-12'
-    }
-  ]
+  }
 })
 
 const TileContainer = ({ className, ...rest }: JSX.IntrinsicElements['a']) => (
@@ -101,62 +88,40 @@ export const NewsTile = ({ link }: TileProps) =>
 
 export const ContentTile = ({
   link,
-  className = 'group',
-  icon,
-  isQuicklink = false
-}: TileProps & {
-  className?: string
-  icon?: ReactElement
-  isQuicklink?: boolean
-  isList?: boolean
-}) => {
-  const TitleComponent = isQuicklink ? HeadingLg : HeadingMd
+  className = 'group p-12 hover:bg-primary50 hover:rounded-4',
+  icon
+}: TileProps & { className?: string; icon?: ReactElement }) => {
   return (
-    <BaseTile href={link.url}>
-      <div
-        className={classes(
-          'flex',
-          isQuicklink ? 'gap-x-16' : 'items-start gap-x-8 lg:gap-x-16 pt-20'
-        )}
-      >
-        {icon || null}
-        {isQuicklink ? (
-          <div className="rounded-full w-[30px] h-[30px] bg-primary50 justify-items-center pt-4">
-            <IconArrowRight
-              aria-hidden="true"
-              className="shrink-0 text-primary500 group-hover:text-primary800"
-              width={20}
-            />
-          </div>
-        ) : (
-          <IconArrowRight
-            aria-hidden="true"
-            className="order-last mt-2 shrink-0 text-primary500 group-hover:text-primary800"
-            width={20}
-          />
-        )}
-        <div className="mr-12 space-y-12 grow">
-          <TitleComponent
-            className={classes(
-              'm-0 mb-12 text-primary500 group-hover:text-primary800',
-              isQuicklink ? 'group-hover:underline' : 'underline'
-            )}
-          >
+    <BaseTile href={link.url} className={className}>
+      <div className="flex items-start justify-between">
+        <div className="mr-12 space-y-12">
+          {icon || null}
+          <HeadingMd className="m-0 mb-12 text-primary500 group-hover:text-primary900">
             {link.title}
-          </TitleComponent>
+          </HeadingMd>
           {link.description ? (
             <div>
               <RichText html={link.description} />
             </div>
           ) : null}
         </div>
+        {!icon ? (
+          <IconArrowRight
+            className="mt-2 shrink-0 text-primary500 group-hover:text-primary900"
+            width={20}
+          />
+        ) : null}
       </div>
     </BaseTile>
   )
 }
 
 export const QuickLink = ({ link }: TileProps) => (
-  <ContentTile link={link} isQuicklink={true} />
+  <BaseTile href={link.url} className="p-12 relative">
+    <HeadingLg className="my-12 text-primary500">{link.title}</HeadingLg>
+    <div>{link.description}</div>
+    <IconArrowRight className="text-primary500 self-end" width={20} />
+  </BaseTile>
 )
 
 export const EventTile = ({ link }: TileProps) => (
@@ -164,7 +129,7 @@ export const EventTile = ({ link }: TileProps) => (
     {/* <img src={imgSrc ? imgSrc : placeholder} /> */}
     <div>an image will go here</div>
     <div className="flex">
-      <IconCalendar aria-hidden="true" />
+      <IconCalendar />
       <SmallText>{link.event_type}</SmallText>
     </div>
     <HeadingMd className="my-12">{link.title}</HeadingMd>
@@ -173,29 +138,24 @@ export const EventTile = ({ link }: TileProps) => (
 )
 
 export const DocumentTile = ({ link }: TileProps) => (
-  <ContentTile
-    link={link}
-    icon={
-      <IconDocument
-        aria-hidden="true"
-        width={20}
-        className="shrink-0 text-primary500 group-hover:text-primary800"
-      />
-    }
-  />
+  <BaseTile href={link.url} className="p-12">
+    <IconDocument width={20} className="text-primary500" />
+    <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
+      {link.title}
+    </HeadingMd>
+    {link.description ? <RichText html={link.description} /> : null}
+    {link.publishedDate ? <div>{link.publishedDate}</div> : null}
+  </BaseTile>
 )
 
 export const DataStoryTile = ({ link }: TileProps) => (
-  <ContentTile
-    link={link}
-    icon={
-      <IconData
-        aria-hidden="true"
-        width={20}
-        className="shrink-0 text-primary500 group-hover:text-primary800"
-      />
-    }
-  />
+  <BaseTile href={link.url} className="p-12">
+    <IconData width={20} className="text-primary500" />
+    <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
+      {link.title}
+    </HeadingMd>
+    {link.description ? <RichText html={link.description} /> : null}
+  </BaseTile>
 )
 
 export const MeetingTile = ({ link }: TileProps) => {
@@ -260,11 +220,7 @@ export const MeetingTile = ({ link }: TileProps) => {
             </HeadingMd>
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-x-20 lg:flex-wrap">
               <div className="flex space-x-8">
-                <IconCalendar
-                  className="text-neutral400"
-                  width={20}
-                  aria-hidden="true"
-                />
+                <IconCalendar className="text-neutral400" width={20} />
                 <BodyText>
                   <ComposedDate
                     startDateInput={startDate}
@@ -280,11 +236,7 @@ export const MeetingTile = ({ link }: TileProps) => {
               </div>
               {startTime ? (
                 <div className="flex space-x-8 lg:shrink-0 lg:self-center">
-                  <IconClock
-                    className="text-neutral400"
-                    width={20}
-                    aria-hidden="true"
-                  />
+                  <IconClock className="text-neutral400" width={20} />
                   <BodyText>
                     <ComposedTime
                       startDateTimeInput={`${startDate}T${startTime}`}
@@ -303,11 +255,7 @@ export const MeetingTile = ({ link }: TileProps) => {
 }
 
 export const MeetingTileList = ({ links }) => (
-  <TileSection
-    className="gap-x-28 gap-y-20"
-    isGrid={true}
-    data-testid="tile-section"
-  >
+  <TileSection className="gap-x-28 gap-y-20" data-testid="tile-section">
     {links.map((link) => (
       <MeetingTile key={link.id} link={link} />
     ))}
@@ -318,11 +266,11 @@ export const FeaturedTopicTile = ({ link }) => (
   <div
     className={classes(
       'border-solid border-1 border-neutral200',
-      'rounded-4 pb-[24px] px-20',
-      'lg:px-[32px] lg:py-40'
+      'rounded-4 py-[24px] px-20',
+      'lg:px-[32px] lg:py-40 mb-12'
     )}
   >
-    <ContentTile link={link} />
+    <ContentTile className="" link={link} />
   </div>
 )
 
@@ -374,17 +322,7 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
       }
     })
     return (
-      <TileSection
-        isGrid={TileComponent === QuickLink}
-        isContentTile={
-          TileComponent === ContentTile ||
-          TileComponent === DocumentTile ||
-          TileComponent === DataStoryTile
-        }
-        isHomePage={props.isHomePage}
-        data-testid="tile-section"
-        {...rest}
-      >
+      <TileSection full={props.full} data-testid="tile-section" {...rest}>
         {items
           .filter((link) => link)
           .map((link) => (
@@ -396,7 +334,7 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
 }
 
 export const NewsTileList = createTileList(NewsTile)
-export const QuickLinkList = createTileList(QuickLink)
+export const QuickLinkList = createTileList(ContentTile)
 export const EventTileList = createTileList(EventTile)
 export const ContentTileList = createTileList(ContentTile)
 export const FeaturedTopicTileList = createTileList(FeaturedTopicTile)
