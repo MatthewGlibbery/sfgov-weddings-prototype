@@ -6932,6 +6932,67 @@ pass = true
     }
   },
 
+  async toNotHaveDuplicateIds(page: Page) {
+    const assertionName = 'toNotHaveDuplicateIds'
+    let pass: boolean
+    let matcherResult: any
+    try {
+	
+ const ids: string[] = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('[id]'))
+      .map(el => el.id)
+      .filter(id => id.trim() !== '') // Exclude empty or whitespace-only IDs
+  );
+
+  // 2. Detect duplicates
+  const seen = new Map<string, number>();
+  const duplicates: string[] = [];
+
+  for (const id of ids) {
+    const count = seen.get(id) || 0;
+    seen.set(id, count + 1);
+    if (count === 1) {
+      duplicates.push(id); // Only push the ID once (on second encounter)
+    }
+  }
+
+  // 3. Assert: no duplicate non-empty IDs
+  expect(duplicates.length, `Duplicate IDs found: ${duplicates.join(', ')}`).toBe(0);
+
+pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
   async toPassAxeCoreTests(page: Page) {
     const assertionName = 'toPassAxeCoreTests'
     let pass: boolean

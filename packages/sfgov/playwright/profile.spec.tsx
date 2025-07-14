@@ -94,6 +94,13 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveSearchAutoComplete()
   })
 
+  test('validate that all ids are unique', async ({ mount, page }) => {
+      const data = ProfilePageFactory.make()
+      await mount(<ProfilePage page={data} />)
+  
+      await expect(page).toNotHaveDuplicateIds()
+    }) 
+
   test('validate axe core accessibility tests', async ({ mount, page }) => {
     const data = ProfilePageFactory.make()
     await mount(<ProfilePage page={data} />)

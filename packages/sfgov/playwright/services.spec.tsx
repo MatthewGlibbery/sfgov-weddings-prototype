@@ -97,6 +97,12 @@ test.skip('validate search autocomplete features', async ({ mount, page }) => {
   await expect(page).toHaveSearchAutoComplete()
 })
 
+test('validate that all ids are unique', async ({ mount, page }) => {
+    await mount(<ServicesPage {...props} />)
+
+    await expect(page).toNotHaveDuplicateIds()
+  }) 
+
 test('validate axe core accessibility tests', async ({ mount, page }) => {
    await mount(<ServicesPage {...props} />)
 
