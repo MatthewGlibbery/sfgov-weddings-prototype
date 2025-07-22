@@ -23,7 +23,7 @@ import { RichText } from './RichText'
 
 export type TileSectionProps = {
   links?: TypeTileBlock[]
-  full?: boolean
+  isHomePage?: boolean
   noDescription?: boolean
 }
 
@@ -33,12 +33,25 @@ export type TileProps = {
 } & JSX.IntrinsicAttributes
 
 export const TileSection = classed('div', {
-  base: classes('grid grid-cols-1 gap-28 md:grid-cols-2 gap-x-28 gap-y-20'),
+  base: classes('space-y-20'),
   variants: {
-    full: {
-      true: 'gap-y-0 md:grid-cols-1'
+    isGrid: {
+      true: 'grid grid-cols-1 gap-28 md:grid-cols-2 md:space-y-0'
+    },
+    isContentTile: {
+      true: ''
+    },
+    isHomePage: {
+      true: 'grid grid-cols-1 lg:grid-cols-2 space-y-0 gap-x-28 gap-y-12 lg:gap-y-[32px]'
     }
-  }
+  },
+  compoundVariants: [
+    {
+      isContentTile: true,
+      isHomePage: true,
+      className: 'block'
+    }
+  ]
 })
 
 const TileContainer = ({ className, ...rest }: JSX.IntrinsicElements['a']) => (
@@ -88,40 +101,73 @@ export const NewsTile = ({ link }: TileProps) =>
 
 export const ContentTile = ({
   link,
-  className = 'group p-12 hover:bg-primary50 hover:rounded-4',
-  icon
-}: TileProps & { className?: string; icon?: ReactElement }) => {
+  icon,
+  isQuicklink = false,
+  isHomePage = false,
+  isTopic = false
+}: TileProps & {
+  icon?: ReactElement
+  isQuicklink?: boolean
+  isHomePage?: boolean
+  isTopic?: boolean
+}) => {
+  const TitleComponent = isQuicklink ? HeadingLg : HeadingMd
   return (
-    <BaseTile href={link.url} className={className}>
-      <div className="flex items-start justify-between">
-        <div className="mr-12 space-y-12">
-          {icon || null}
-          <HeadingMd className="m-0 mb-12 text-primary500 group-hover:text-primary900">
+    <BaseTile
+      href={link.url}
+      className={classes(
+        isQuicklink
+          ? ''
+          : 'border-b-1 border-solid border-neutral200 pb-20 md:pb-[24px] last:border-b-0 last:pb-0',
+        isHomePage ? 'border-b-0 p-12 md:pb-12 last:pb-12' : '',
+        isTopic ? 'p-0' : ''
+      )}
+    >
+      <div
+        className={classes(
+          'flex group',
+          isQuicklink ? 'gap-x-16' : 'items-start gap-x-8 lg:gap-x-16'
+        )}
+      >
+        {icon || null}
+        {isQuicklink ? (
+          <div className="rounded-full w-[30px] h-[30px] lg:w-[46px] lg:h-[46px] bg-primary50 justify-items-center pt-4 shrink-0">
+            <IconArrowRight
+              aria-hidden="true"
+              className="shrink-0 text-primary500 group-hover:text-primary800 lg:w-[24px] lg:mt-[7px]"
+              width={20}
+            />
+          </div>
+        ) : (
+          <IconArrowRight
+            aria-hidden="true"
+            className="order-last mt-2 shrink-0 text-primary500 group-hover:text-primary800"
+            width={20}
+          />
+        )}
+        <div className="mr-12 space-y-12 grow">
+          <TitleComponent
+            className={classes(
+              'm-0 mb-12 text-primary500 group-hover:text-primary800',
+              isQuicklink ? 'group-hover:underline' : 'underline',
+              isHomePage ? 'no-underline' : ''
+            )}
+          >
             {link.title}
-          </HeadingMd>
+          </TitleComponent>
           {link.description ? (
             <div>
               <RichText html={link.description} />
             </div>
           ) : null}
         </div>
-        {!icon ? (
-          <IconArrowRight
-            className="mt-2 shrink-0 text-primary500 group-hover:text-primary900"
-            width={20}
-          />
-        ) : null}
       </div>
     </BaseTile>
   )
 }
 
 export const QuickLink = ({ link }: TileProps) => (
-  <BaseTile href={link.url} className="p-12 relative">
-    <HeadingLg className="my-12 text-primary500">{link.title}</HeadingLg>
-    <div>{link.description}</div>
-    <IconArrowRight className="text-primary500 self-end" width={20} />
-  </BaseTile>
+  <ContentTile link={link} isQuicklink={true} />
 )
 
 export const EventTile = ({ link }: TileProps) => (
@@ -129,7 +175,7 @@ export const EventTile = ({ link }: TileProps) => (
     {/* <img src={imgSrc ? imgSrc : placeholder} /> */}
     <div>an image will go here</div>
     <div className="flex">
-      <IconCalendar />
+      <IconCalendar aria-hidden="true" />
       <SmallText>{link.event_type}</SmallText>
     </div>
     <HeadingMd className="my-12">{link.title}</HeadingMd>
@@ -138,24 +184,29 @@ export const EventTile = ({ link }: TileProps) => (
 )
 
 export const DocumentTile = ({ link }: TileProps) => (
-  <BaseTile href={link.url} className="p-12">
-    <IconDocument width={20} className="text-primary500" />
-    <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
-      {link.title}
-    </HeadingMd>
-    {link.description ? <RichText html={link.description} /> : null}
-    {link.publishedDate ? <div>{link.publishedDate}</div> : null}
-  </BaseTile>
+  <ContentTile
+    link={link}
+    icon={
+      <IconDocument
+        aria-hidden="true"
+        width={20}
+        className="shrink-0 text-primary500 group-hover:text-primary800 lg:w-[24px]"
+      />
+    }
+  />
 )
 
 export const DataStoryTile = ({ link }: TileProps) => (
-  <BaseTile href={link.url} className="p-12">
-    <IconData width={20} className="text-primary500" />
-    <HeadingMd className="m-0 mb-8 pr-20 text-primary500">
-      {link.title}
-    </HeadingMd>
-    {link.description ? <RichText html={link.description} /> : null}
-  </BaseTile>
+  <ContentTile
+    link={link}
+    icon={
+      <IconData
+        aria-hidden="true"
+        width={20}
+        className="shrink-0 text-primary500 group-hover:text-primary800 lg:w-[24px]"
+      />
+    }
+  />
 )
 
 export const MeetingTile = ({ link }: TileProps) => {
@@ -220,7 +271,11 @@ export const MeetingTile = ({ link }: TileProps) => {
             </HeadingMd>
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-x-20 lg:flex-wrap">
               <div className="flex space-x-8">
-                <IconCalendar className="text-neutral400" width={20} />
+                <IconCalendar
+                  className="text-neutral400"
+                  width={20}
+                  aria-hidden="true"
+                />
                 <BodyText>
                   <ComposedDate
                     startDateInput={startDate}
@@ -236,7 +291,11 @@ export const MeetingTile = ({ link }: TileProps) => {
               </div>
               {startTime ? (
                 <div className="flex space-x-8 lg:shrink-0 lg:self-center">
-                  <IconClock className="text-neutral400" width={20} />
+                  <IconClock
+                    className="text-neutral400"
+                    width={20}
+                    aria-hidden="true"
+                  />
                   <BodyText>
                     <ComposedTime
                       startDateTimeInput={`${startDate}T${startTime}`}
@@ -255,7 +314,11 @@ export const MeetingTile = ({ link }: TileProps) => {
 }
 
 export const MeetingTileList = ({ links }) => (
-  <TileSection className="gap-x-28 gap-y-20" data-testid="tile-section">
+  <TileSection
+    className="gap-x-28 gap-y-20"
+    isGrid={true}
+    data-testid="tile-section"
+  >
     {links.map((link) => (
       <MeetingTile key={link.id} link={link} />
     ))}
@@ -267,10 +330,10 @@ export const FeaturedTopicTile = ({ link }) => (
     className={classes(
       'border-solid border-1 border-neutral200',
       'rounded-4 py-[24px] px-20',
-      'lg:px-[32px] lg:py-40 mb-12'
+      'lg:py-[32px] lg:px-40'
     )}
   >
-    <ContentTile className="" link={link} />
+    <ContentTile link={link} isHomePage={true} isTopic={true} />
   </div>
 )
 
@@ -322,11 +385,25 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
       }
     })
     return (
-      <TileSection full={props.full} data-testid="tile-section" {...rest}>
+      <TileSection
+        isGrid={TileComponent === QuickLink}
+        isContentTile={
+          TileComponent === ContentTile ||
+          TileComponent === DocumentTile ||
+          TileComponent === DataStoryTile
+        }
+        isHomePage={props.isHomePage}
+        data-testid="tile-section"
+        {...rest}
+      >
         {items
           .filter((link) => link)
           .map((link) => (
-            <TileComponent key={link.id} link={link} />
+            <TileComponent
+              key={link.id}
+              link={link}
+              isHomePage={props.isHomePage}
+            />
           ))}
       </TileSection>
     )
@@ -334,7 +411,7 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
 }
 
 export const NewsTileList = createTileList(NewsTile)
-export const QuickLinkList = createTileList(ContentTile)
+export const QuickLinkList = createTileList(QuickLink)
 export const EventTileList = createTileList(EventTile)
 export const ContentTileList = createTileList(ContentTile)
 export const FeaturedTopicTileList = createTileList(FeaturedTopicTile)

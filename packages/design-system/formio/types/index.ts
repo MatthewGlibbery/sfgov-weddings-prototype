@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Formio, Components, Form as _Form } from 'formiojs'
+import type { Component } from 'formiojs/types/components/_classes/component/component'
 import type { EventEmitter } from 'formiojs/types/eventEmitter'
 import type { i18n } from 'i18next'
 import type { AnyComponentSchema } from './components'
@@ -43,6 +44,8 @@ export type Form = Override<
     changed: any
     submitted: boolean
     submission?: FormSubmission
+    checkValidity(data?: any, dirty?: boolean, row?: any): void
+    getComponent(key: string): Component
     // override this because the internal argument is optional
     on(
       event: string,
@@ -59,6 +62,7 @@ export type Form = Override<
      * class: https://github.com/formio/formio.js/blob/v4.21.3/src/Wizard.js#L642
      */
     setPage?: (page: number) => Promise<void>
+    setPristine(pristine: boolean): void
   }
 >
 

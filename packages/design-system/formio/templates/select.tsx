@@ -21,10 +21,7 @@ export type SelectContext = ComponentContext<SelectSchema> & {
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/select/form.ejs
  */
 export function form({ t, ...ctx }: SelectContext) {
-  const isMultiple = ctx.input.multiple ? 'multiple' : null
-  const isDescribed = ctx.component.description
-    ? `aria-describedby="d-${ctx.instance.id}-${ctx.component.key}`
-    : ''
+  const uniqueId = `${ctx.instance.id}-${ctx.component.key}`
   return (
     <>
       <select
@@ -36,13 +33,16 @@ export function form({ t, ...ctx }: SelectContext) {
           'focus:!border-primary500',
           'focus:!ring focus:!ring-2 focus:!ring-primary500'
         )}
-        {...{ isMultiple, isDescribed }}
         ref={ctx.input.ref || 'selectContainer'}
-        {...Object.entries(ctx.input.attr).map(([key, value]) => (
-          <div key={key}>
-            {key}={value}
-          </div>
-        ))}
+        /**
+         * @see https://github.com/SFDigitalServices/sfgov-next/blob/main/packages/design-system/formio/templates/field.tsx#L23
+         * @see https://github.com/SFDigitalServices/sfgov-next/blob/main/packages/design-system/formio/templates/field.tsx#L28
+         */
+        aria-labelledby={`l-${uniqueId} d-${uniqueId}`}
+        /**
+         * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/message/form.ejs#L1
+         * */
+        aria-describedby={`e-${uniqueId}`}
         aria-required={ctx.component.validate?.required}
         data-testid="formio-sfds-select"
       >

@@ -179,6 +179,14 @@ export function FormPage({
   async function onFormReady(form: Form) {
     let formIsValid = true
 
+    form.on('blur', (event) => {
+      const component = form.getComponent(event.component.key)
+      if (component) {
+        component.setPristine(false)
+        component.checkValidity()
+      }
+    })
+
     /**
      * The `change` event appears to be the only reliable way to track the
      * form's validity. The submission data's validity is checked in the change

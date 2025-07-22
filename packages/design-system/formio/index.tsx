@@ -191,7 +191,12 @@ export function useFormio(isDev?: boolean) {
         }
 
         if (this.alert) {
+          this.alert.role = 'alert'
           this.element.append(this.alert)
+          this.element.scrollIntoView({
+            behavior: 'auto',
+            block: 'end'
+          })
         } else {
           warn('form.setAlert() did not set this.alert')
         }

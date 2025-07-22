@@ -87,6 +87,7 @@ export function form({ component, input, ...ctx }: InputContext) {
           ref={input.ref || 'input'}
           id={uniqueId}
           aria-labelledby={`l-${uniqueId} d-${uniqueId}`}
+          aria-describedby={`e-${uniqueId}`}
           required={required}
           aria-required={required}
           className={[
