@@ -34,8 +34,8 @@
             @apply text-body;
         }
 
-        .formio-component-introFormDuration strong {
-            @apply inline-flex gap-8 !items-baseline !font-normal before:!clock-icon before:!pl-[24px] before:translate-y-[6px];
+        .formio-component-introFormDuration:not(:has([data-icon="pencil"])) {
+            @apply inline-flex gap-8 !items-baseline before:!clock-icon before:!pl-[24px] before:translate-y-[6px];
         }
 
         /* Overrides bootstrap styles for SFDS custom components to match design system */
