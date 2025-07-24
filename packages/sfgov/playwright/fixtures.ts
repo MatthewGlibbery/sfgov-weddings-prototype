@@ -6993,6 +6993,64 @@ pass = true
     }
   },
 
+  async toOnlyHaveH2HeadingsInStepbyStepModule(page: Page) {
+    const assertionName = 'toOnlyHaveH2HeadingsInStepbyStepModule'
+    let pass: boolean
+    let matcherResult: any
+    try {
+	
+ // Find all step containers where data-testid starts with "step-"
+const stepContainers = page.locator('div[data-testid^="step-"]');
+
+const count = await stepContainers.count();
+for (let i = 0; i < count; i++) {
+  const stepContainer = stepContainers.nth(i);
+
+  // Use getByRole to find the heading within the stepContainer
+  const heading = stepContainer.getByRole('heading');
+
+  // Ensure exactly 1 heading exists within this container
+  await expect(heading).toHaveCount(1);
+
+  // Check that the heading is specifically an h2
+  const tagName = await heading.evaluate(node => node.tagName);
+  expect(tagName).toBe('H2');
+}
+ 
+pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
   async toPassAxeCoreTests(page: Page) {
     const assertionName = 'toPassAxeCoreTests'
     let pass: boolean

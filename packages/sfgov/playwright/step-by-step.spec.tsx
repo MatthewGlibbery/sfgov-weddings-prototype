@@ -108,6 +108,15 @@ test.describe('A11y tests', () => {
     await expect(page).toPassAxeCoreTests()
   })
 
+// Module Specific Tests
+
+  test('validate that the heading in the step by step module is an h2 heading', async ({ mount, page }) => {
+    const data = StepByStepPageFactory.make()
+    await mount(<StepByStepPage page={data} />)
+
+    await expect(page).toOnlyHaveH2HeadingsInStepbyStepModule()
+  })
+
 // Content Type Specific Tests
 
   test('create logical reading order on step by step page', async ({ mount, page }) => {
