@@ -688,6 +688,19 @@ describe('FormioForm', () => {
       const select = screen.getByTestId('formio-sfds-select')
       expect(select).toBeInTheDocument()
     })
+    it('renders the expected aria attributes', async () => {
+      render(
+        <FormioForm
+          form={FormFactory.make({
+            components: [SelectFactory.make({ label: 'Choose an option' })]
+          })}
+        />
+      )
+      const select = await screen.findByLabelText('Choose an option')
+      expect(select).toBeInTheDocument()
+      expect(select).toHaveAttribute('aria-describedby')
+      expect(select).toHaveAttribute('aria-labelledby')
+    })
   })
   describe('select boxes', () => {
     it('renders select boxes in the DOM', async () => {

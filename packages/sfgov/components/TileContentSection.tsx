@@ -53,7 +53,7 @@ export const ServiceSection = ({ sections }: ServiceSectionProps) => {
       <HeadingXXl as="h2" className="!mb-28">
         {t('services', { defaultValue: 'Services' })}
       </HeadingXXl>
-      <div className="flex flex-col space-y-12">
+      <div className="flex flex-col space-y-40 lg:space-y-60">
         {sections.map((serviceSection) => (
           <TileSectionWrapper
             key={serviceSection.id}
@@ -74,7 +74,7 @@ export const ResourceSection = ({ sections }: ResourceSectionProps) => {
       <HeadingXXl as="h2" className="!mb-28">
         {t('resources', { defaultValue: 'Resources' })}
       </HeadingXXl>
-      <div className="flex flex-col space-y-12">
+      <div className="flex flex-col space-y-40 lg:space-y-60">
         {sections.map((resourceSection) => (
           <TileSectionWrapper
             key={resourceSection.id}
