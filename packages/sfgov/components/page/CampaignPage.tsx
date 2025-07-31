@@ -4,9 +4,7 @@ import {
   DisplayXXXl,
   Grid,
   HeadingLg,
-  HeadingXl,
   HeadingXXl,
-  IconDownload,
   Link,
   PageLabel,
   PageTitleSection
@@ -77,7 +75,8 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       themeBackground.video = 'bg-neutral10'
       themeText.spotlight1 = 'text-white'
       themeText.spotlight2 = 'text-white'
-      themeButton.spotlight1 = 'bg-white text-primary500'
+      themeButton.spotlight1 =
+        'bg-primary100 text-primary700 hover:bg-primary200 hover:text-primary900'
       break
     // istanbul ignore next
     case 'green':
