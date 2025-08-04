@@ -10,7 +10,7 @@ import { classed } from '@tw-classed/core'
 
 export default { form }
 
-type InputType = 'input' | 'select'
+type InputType = 'input' | 'select' | 'textarea'
 
 // https://github.com/formio/formio.js/blob/v4.21.3/src/components/_classes/input/Input.js#L157-L164
 export type InputContext = ComponentContext<InputComponentSchema> & {
@@ -91,7 +91,7 @@ export function form({ component, input, ...ctx }: InputContext) {
           required={required}
           aria-required={required}
           className={[
-            'h-[56px]',
+            Tag === 'textarea' ? 'h-auto' : 'h-[56px]',
             'w-full',
             'rounded-4 px-8 py-4',
             'text-neutral800',
