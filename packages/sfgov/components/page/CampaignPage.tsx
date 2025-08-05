@@ -62,37 +62,30 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
     video: 'bg-primary10'
   }
   const themeText = {
-    spotlight1: 'text-primary800',
-    spotlight2: 'text-white'
+    spotlight1: 'text-black'
   }
   const themeButton = {
-    spotlight1: '',
-    spotlight2: 'bg-white text-primary500'
+    spotlight1: ''
   }
   switch (theme) {
     case 'black':
       themeBackground.imageWithText = 'bg-neutral800'
       themeBackground.video = 'bg-neutral10'
       themeText.spotlight1 = 'text-white'
-      themeText.spotlight2 = 'text-white'
       themeButton.spotlight1 =
-        'bg-primary100 text-primary700 hover:bg-primary200 hover:text-primary900'
+        'bg-primary100 text-primary700 hover:bg-primary200 hover:text-primary900 focus:bg-primary200 focus:border-primary200 focus:text-primary900'
       break
     // istanbul ignore next
     case 'green':
       themeBackground.imageWithText = 'bg-secondary600'
       themeBackground.accordion = 'bg-secondary10 border-secondary200'
       themeBackground.video = 'bg-secondary10'
-      themeText.spotlight1 = 'text-secondary800'
-      themeText.spotlight2 = 'text-white'
       break
     // istanbul ignore next
     case 'orange':
       themeBackground.imageWithText = 'bg-accent600'
       themeBackground.accordion = 'bg-accent10 border-accent200'
       themeBackground.video = 'bg-accent10'
-      themeText.spotlight1 = 'text-accent800'
-      themeText.spotlight2 = 'text-white'
       break
     // istanbul ignore next
     default:
@@ -308,9 +301,8 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           <div className="mb-20 max-w-xl lg:mx-auto">
             <Spotlight
               theme={theme}
-              secondary="true"
-              themeClasses={themeText.spotlight2}
-              buttonClasses={themeButton.spotlight2}
+              themeClasses={themeText.spotlight1}
+              buttonClasses={themeButton.spotlight1}
               {...spotlight2[0]}
             />
           </div>
