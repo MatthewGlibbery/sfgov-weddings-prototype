@@ -1,15 +1,18 @@
 import { AgencyPageFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
 import { AgencyPage } from './AgencyPage'
+import { useRouter } from 'next/router'
 
 jest.mock('next/router', () => ({
-  useRouter: jest.fn().mockReturnValue({
-    query: { path: 'agency-name', filter: 'upcoming' }
-  })
+  useRouter: jest.fn()
 }))
 
 describe('AgencyPage', () => {
   const page = AgencyPageFactory.make()
+  const mockUseRouter = useRouter
+  mockUseRouter.mockReturnValue({
+    query: { path: 'agency-name' }
+  })
 
   it('renders a full agency page', () => {
     render(<AgencyPage page={page} />)
@@ -87,4 +90,38 @@ describe('AgencyPage', () => {
       expect(link).toHaveAttribute('href', expected)
     }
   )
+
+  it('properly links an english full calendar button if there are related events', () => {
+    const mockUseRouter = useRouter
+    mockUseRouter.mockReturnValue({
+      asPath: '/agency-name',
+      locale: 'en'
+    })
+    const page = AgencyPageFactory.make()
+    render(<AgencyPage page={page} />)
+    const fullCalendarButtonLink = screen.getByRole('link', {
+      name: 'Full calendar'
+    })
+    expect(fullCalendarButtonLink).toBeInTheDocument()
+    expect(fullCalendarButtonLink.getAttribute('href')).toBe(
+      '/agency-name/events/upcoming'
+    )
+  })
+
+  it('properly links a non-english full calendar button if there are related events', () => {
+    const mockUseRouter = useRouter
+    mockUseRouter.mockReturnValue({
+      asPath: '/agency-name',
+      locale: 'es'
+    })
+    const page = AgencyPageFactory.make()
+    render(<AgencyPage page={page} />)
+    const fullCalendarButtonLink = screen.getByRole('link', {
+      name: 'Full calendar'
+    })
+    expect(fullCalendarButtonLink).toBeInTheDocument()
+    expect(fullCalendarButtonLink.getAttribute('href')).toBe(
+      '/es/agency-name/events/upcoming'
+    )
+  })
 })

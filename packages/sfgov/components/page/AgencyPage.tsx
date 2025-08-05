@@ -71,6 +71,10 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   } = page
 
   const { t } = useTranslation()
+  const { locale, asPath } = useRouter()
+  const upcomingEventsUrl = `${
+    locale !== 'en' ? `/${locale}` : ''
+  }${asPath}/events/upcoming`
 
   let divisionSubcommitteeTitle = t('divisions', { defaultValue: 'Divisions' })
 
@@ -159,7 +163,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                 <ButtonLink
                   link={{
                     button: {
-                      url: `${slug}/events/upcoming`,
+                      url: upcomingEventsUrl,
                       link_text: t('full-calendar', {
                         defaultValue: 'Full calendar'
                       })
