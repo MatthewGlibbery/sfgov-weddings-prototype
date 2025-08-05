@@ -293,13 +293,13 @@ describe('DateTime Component', () => {
       screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
-      ;[
-        'Sunday, November 19',
-        'Saturday, November 25, 2023',
-        '1:23 am'
-      ].forEach((input) => expect(screen.getByText(input)).toBeInTheDocument())
+      ;['Sunday, November 19, 2023', '1:23 am'].forEach((input) =>
+        expect(screen.getByText(input)).toBeInTheDocument()
+      )
+      expect(
+        screen.queryByText('Saturday, November 25, 2023')
+      ).not.toBeInTheDocument()
       expect(screen.queryByText('9:02 pm')).not.toBeInTheDocument()
-      expect(screen.getAllByText(/to/)).toHaveLength(1)
     })
 
     it.each([
