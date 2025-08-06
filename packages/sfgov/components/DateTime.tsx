@@ -49,6 +49,9 @@ export const ComposedDate = ({
   includeEndDateTime = 'yes',
   asString = false
 }: ComposedDateProps) => {
+  console.log(`startDateInput: ${startDateInput}`)
+  console.log(`endDateInput: ${endDateInput}`)
+  console.log(`includeEndDateTime: ${includeEndDateTime}`)
   if (typeof startDateInput !== 'string' || typeof endDateInput !== 'string') {
     console.warn(
       `Input is an invalid type. Expected a
@@ -171,14 +174,22 @@ type ComposedTimeProps = {
 export const ComposedTime = ({
   startDateTimeInput,
   endDateTimeInput = '',
+  includeEndDateTime = 'yes',
   locale = 'en-US'
 }: ComposedTimeProps) => {
+  console.log(`ComposedTime.startDateTimeInput: ${startDateTimeInput}`)
+  console.log(`ComposedTime.endDateTimeInput: ${endDateTimeInput}`)
+  // console.log(`ComposedTime.includeEndDateTime: ${includeEndDateTime}`)
+
   if (
     typeof startDateTimeInput !== 'string' ||
     typeof endDateTimeInput !== 'string'
   ) {
     console.warn('Input is an invalid type. Expected a string.')
     return null
+  }
+  if (includeEndDateTime === 'no') {
+    endDateTimeInput = ''
   }
 
   try {
