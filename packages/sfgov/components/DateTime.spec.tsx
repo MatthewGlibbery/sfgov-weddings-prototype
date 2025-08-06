@@ -296,7 +296,7 @@ describe('DateTime Component', () => {
         expect(screen.getByText(input)).toBeInTheDocument()
       )
       ;['1:23 am'].forEach((input) =>
-        expect(screen.queryByText(input)).toBeInTheDocument()
+        expect(screen.getByText(input)).toBeInTheDocument()
       )
       ;['Saturday, November 25, 2023'].forEach((input) =>
         expect(screen.queryByText(input)).not.toBeInTheDocument()
