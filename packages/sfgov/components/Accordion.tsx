@@ -10,7 +10,7 @@ import {
   Label
 } from '@/design-system'
 
-export const StyledDetails = classed('details', 'block list-none')
+export const StyledDetails = classed('details', 'block list-none group')
 
 const StyledSummary = classed('summary', {
   base: classes(
@@ -22,6 +22,9 @@ const StyledSummary = classed('summary', {
   variants: {
     datastory: {
       true: 'justify-center space-x-4 py-12 border-solid border-b-1 border-neutral300'
+    },
+    filter: {
+      true: 'border-b-1 border-solid border-neutral300 py-12 group-open:border-b-0'
     }
   }
 })
@@ -31,6 +34,9 @@ const StyledContent = classed('div', {
   variants: {
     datastory: {
       true: 'bg-white text-grey500'
+    },
+    filter: {
+      true: 'p-0 pb-20 bg-white text-black border-b-1 border-solid border-neutral300'
     }
   }
 })
@@ -38,6 +44,7 @@ const StyledContent = classed('div', {
 export type AccordionProps = ComponentProps<typeof StyledDetails> & {
   title: string
   dataStory?: boolean
+  filter?: boolean
   as?: string
   classes?: string
 }
@@ -48,6 +55,7 @@ export const Accordion = (props: AccordionProps) => {
     open,
     children,
     dataStory,
+    filter,
     as = 'h3',
     classes,
     ...rest
@@ -70,7 +78,11 @@ export const Accordion = (props: AccordionProps) => {
       onToggle={(e) => setOpen(e.currentTarget.open)}
       {...rest}
     >
-      <StyledSummary data-testid="accordion-summary" datastory={dataStory}>
+      <StyledSummary
+        data-testid="accordion-summary"
+        datastory={dataStory}
+        filter={filter}
+      >
         {dataStory ? (
           <Label
             className="text-primary500 font-medium"
@@ -100,6 +112,7 @@ export const Accordion = (props: AccordionProps) => {
         className={classes}
         data-testid="accordion-content"
         datastory={dataStory}
+        filter={filter}
       >
         {children}
       </StyledContent>
