@@ -171,6 +171,7 @@ type ComposedTimeProps = {
 export const ComposedTime = ({
   startDateTimeInput,
   endDateTimeInput = '',
+  includeEndDateTime = 'yes',
   locale = 'en-US'
 }: ComposedTimeProps) => {
   if (
@@ -179,6 +180,9 @@ export const ComposedTime = ({
   ) {
     console.warn('Input is an invalid type. Expected a string.')
     return null
+  }
+  if (includeEndDateTime === 'no') {
+    endDateTimeInput = ''
   }
 
   try {
