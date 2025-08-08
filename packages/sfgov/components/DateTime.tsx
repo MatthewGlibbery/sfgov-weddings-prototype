@@ -156,6 +156,7 @@ type ComposedTimeProps = {
   startDateTimeInput: string
   endDateTimeInput?: string
   locale?: string
+  includeEndDateTime?: string
 }
 /**
  * Handles formatting for a single or range time section

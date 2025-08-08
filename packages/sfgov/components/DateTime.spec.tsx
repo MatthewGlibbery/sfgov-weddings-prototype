@@ -120,6 +120,18 @@ describe('DateTime Component', () => {
       expect(screen.getByText('1:23 am')).toBeInTheDocument()
     })
 
+    it('does not render end time if end time is explicitly excluded', () => {
+      render(
+        <ComposedTime
+          startDateTimeInput="2023-11-19T01:23:45"
+          endDateTimeInput="2023-11-25T02:01:23"
+          includeEndDateTime="no"
+        />
+      )
+      expect(screen.getByText('1:23 am')).toBeInTheDocument()
+      expect(screen.queryByText('2:01')).not.toBeInTheDocument()
+    })
+
     it('constructs the proper time range', () => {
       render(
         <ComposedTime
