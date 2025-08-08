@@ -319,7 +319,7 @@ const EventsPage = (props: EventPageData) => {
       )
       setTotal(data.total)
       setCurrentPage(page)
-      toggleFiltersContainer(true)
+      toggleFiltersContainer(null, true)
     } catch (error) {
       console.error('Error loading more events:', error)
     }
@@ -407,7 +407,11 @@ const EventsPage = (props: EventPageData) => {
   // - collapse the filters on any screen size less than large screens
   // (as defined in packages/design-system/theme/breakpoints.js)
   // - collapse the filter explicitly if justCloseIt = true (after form submit)
-  const toggleFiltersContainer = (justCloseIt = false) => {
+  // also used as a callback for window resize, hence the first event argument
+  const toggleFiltersContainer = (
+    event: UIEvent | null = null,
+    justCloseIt = false
+  ) => {
     const filtersDetails = filtersRef.current
     const currentWindowWidth = window.innerWidth
     const lastWindowWidth = lastWindowWidthRef.current
