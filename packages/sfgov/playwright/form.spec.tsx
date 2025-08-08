@@ -4,9 +4,8 @@ import { test, expect } from './fixtures'
 import React from 'react'
 
 test.describe('A11y tests', () => {
-  
   // Required Global Tests
-  
+
   test('has accessible landmarks', async ({ mount, page }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
@@ -26,7 +25,7 @@ test.describe('A11y tests', () => {
     await mount(<FormPage page={data} />)
 
     await expect(page).toHaveSearchLandmark()
-  })  
+  })
 
   test('has language interaction', async ({ mount, page }) => {
     const data = FormPageFactory.make()
@@ -66,62 +65,92 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveDescriptiveLinkText()
   })
 
-  test('create accessible data tables for screen reader users', async ({ mount, page }) => {
+  test('create accessible data tables for screen reader users', async ({
+    mount,
+    page
+  }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
     await expect(page).toHaveScopeAttributesInDataTables()
   })
 
- test('all links have keyboard focus', async ({ mount, page }) => {
+  test('all links have keyboard focus', async ({ mount, page }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
     await expect(page).toHaveKeyboardFocusInLinks()
-  })  
+  })
 
-  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({ mount, page }) => {
+  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({
+    mount,
+    page
+  }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
     await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
   })
 
-  test.skip('validate search autocomplete features', async ({ mount, page }) => {
+  test.skip('validate search autocomplete features', async ({
+    mount,
+    page
+  }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
-  
+
     await expect(page).toHaveSearchAutoComplete()
   })
 
   test('validate that all ids are unique', async ({ mount, page }) => {
-      const data = FormPageFactory.make()
-      await mount(<FormPage page={data} />)
-  
-      await expect(page).toNotHaveDuplicateIds()
-    }) 
+    const data = FormPageFactory.make()
+    await mount(<FormPage page={data} />)
 
-  test.skip('validate axe core accessibility tests', async ({ mount, page }) => {
+    await expect(page).toNotHaveDuplicateIds()
+  })
+
+  test('validate that lang attributes are present in header and footer', async ({
+    mount,
+    page
+  }) => {
+    const data = FormPageFactory.make()
+    await mount(<FormPage page={data} />)
+
+    await expect(page).toHaveLangAttributes()
+  })
+
+  test.skip('validate axe core accessibility tests', async ({
+    mount,
+    page
+  }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
 
     await expect(page).toPassAxeCoreTests()
   })
 
-// Content Type Specific Tests
+  // Content Type Specific Tests
 
-  test.skip('create a logical tab order on the Form content type', async ({ mount, page }) => {
-  const data = FormPageFactory.make()
-  await mount(<FormPage page={data} />)
-
-  await expect(page).toCreateLogicalTabOrderOnFormContentType()
-  })
-
-  test.skip('the progress indicator nav landmark on the forms content type should have an aria label', async ({ mount, page }) => {
+  test.skip('create a logical tab order on the Form content type', async ({
+    mount,
+    page
+  }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)
-  
-    await expect(page).toHaveAriaLabelInProgressBarNavLandmarkOnFormsContentType()
+
+    await expect(page).toCreateLogicalTabOrderOnFormContentType()
+  })
+
+  test.skip('the progress indicator nav landmark on the forms content type should have an aria label', async ({
+    mount,
+    page
+  }) => {
+    const data = FormPageFactory.make()
+    await mount(<FormPage page={data} />)
+
+    await expect(
+      page
+    ).toHaveAriaLabelInProgressBarNavLandmarkOnFormsContentType()
   })
 
   // Forms Related Tests
@@ -212,5 +241,4 @@ test.describe('A11y tests', () => {
 
     await expect(page).toIncludeFieldsetandLegend()
   })
-
 })

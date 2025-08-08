@@ -4,10 +4,9 @@ import { test, expect } from './fixtures'
 import React from 'react'
 
 test.describe('A11y tests', () => {
+  // Required Global Tests
 
-   // Required Global Tests
-  
-   test('has accessible landmarks', async ({ mount, page }) => {
+  test('has accessible landmarks', async ({ mount, page }) => {
     const data = StepByStepPageFactory.make()
     await mount(<StepByStepPage page={data} />)
 
@@ -26,7 +25,7 @@ test.describe('A11y tests', () => {
     await mount(<StepByStepPage page={data} />)
 
     await expect(page).toHaveSearchLandmark()
-  })  
+  })
 
   test('has language interaction', async ({ mount, page }) => {
     const data = StepByStepPageFactory.make()
@@ -66,7 +65,10 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveDescriptiveLinkText()
   })
 
-  test('create accessible data tables for screen reader users', async ({ mount, page }) => {
+  test('create accessible data tables for screen reader users', async ({
+    mount,
+    page
+  }) => {
     const data = StepByStepPageFactory.make()
     await mount(<StepByStepPage page={data} />)
 
@@ -78,28 +80,44 @@ test.describe('A11y tests', () => {
     await mount(<StepByStepPage page={data} />)
 
     await expect(page).toHaveKeyboardFocusInLinks()
-  }) 
+  })
 
-  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({ mount, page }) => {
+  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({
+    mount,
+    page
+  }) => {
     const data = StepByStepPageFactory.make()
     await mount(<StepByStepPage page={data} />)
 
     await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
   })
 
-  test.skip('validate search autocomplete features', async ({ mount, page }) => {
+  test.skip('validate search autocomplete features', async ({
+    mount,
+    page
+  }) => {
     const data = StepByStepPageFactory.make()
     await mount(<StepByStepPage page={data} />)
-  
+
     await expect(page).toHaveSearchAutoComplete()
   })
 
   test('validate that all ids are unique', async ({ mount, page }) => {
-      const data = StepByStepPageFactory.make()
-      await mount(<StepByStepPage page={data} />)
-  
-      await expect(page).toNotHaveDuplicateIds()
-    }) 
+    const data = StepByStepPageFactory.make()
+    await mount(<StepByStepPage page={data} />)
+
+    await expect(page).toNotHaveDuplicateIds()
+  })
+
+  test('validate that lang attributes are present in header and footer', async ({
+    mount,
+    page
+  }) => {
+    const data = StepByStepPageFactory.make()
+    await mount(<StepByStepPage page={data} />)
+
+    await expect(page).toHaveLangAttributes()
+  })
 
   test('validate axe core accessibility tests', async ({ mount, page }) => {
     const data = StepByStepPageFactory.make()
@@ -108,25 +126,34 @@ test.describe('A11y tests', () => {
     await expect(page).toPassAxeCoreTests()
   })
 
-// Module Specific Tests
+  // Module Specific Tests
 
-  test('validate that the heading in the step by step module is an h2 heading', async ({ mount, page }) => {
+  test('validate that the heading in the step by step module is an h2 heading', async ({
+    mount,
+    page
+  }) => {
     const data = StepByStepPageFactory.make()
     await mount(<StepByStepPage page={data} />)
 
     await expect(page).toOnlyHaveH2HeadingsInStepbyStepModule()
   })
 
-// Content Type Specific Tests
+  // Content Type Specific Tests
 
-  test('create logical reading order on step by step page', async ({ mount, page }) => {
+  test('create logical reading order on step by step page', async ({
+    mount,
+    page
+  }) => {
     const data = StepByStepPageFactory.make()
     await mount(<StepByStepPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderOnStepByStepContentType()
   })
 
-  test('and or aria labels are present on step by step page', async ({ mount, page }) => {
+  test('and or aria labels are present on step by step page', async ({
+    mount,
+    page
+  }) => {
     const data = StepByStepPageFactory.make()
     await mount(<StepByStepPage page={data} />)
 

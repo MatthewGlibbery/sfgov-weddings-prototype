@@ -4,132 +4,156 @@ import { test, expect } from './fixtures'
 import React from 'react'
 
 test.describe('A11y tests', () => {
-  
- // Required Global Tests
-  
- test('has accessible landmarks', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+  // Required Global Tests
 
-  await expect(page).toHaveLandmarks()
-})
+  test('has accessible landmarks', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test('has accessible landmark roles', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveLandmarks()
+  })
 
-  await expect(page).toHaveLandmarkRoles()
-})
+  test('has accessible landmark roles', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test.skip('has search landmark', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveLandmarkRoles()
+  })
 
-  await expect(page).toHaveSearchLandmark()
-})
+  test.skip('has search landmark', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test('has language interaction', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveSearchLandmark()
+  })
 
-  await expect(page).toHaveLanguageInteraction()
-})
+  test('has language interaction', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test('has language access in dropdown menu', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveLanguageInteraction()
+  })
 
-  await expect(page).toHaveLanguageAccessInDropdownmenu()
-})
+  test('has language access in dropdown menu', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test('is keyboard accessible', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveLanguageAccessInDropdownmenu()
+  })
 
-  await expect(page).toBeKeyboardFocusIndicatorAccessible()
-})
+  test('is keyboard accessible', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test.skip('does keyboard focus indicator have sufficient color contrast', async ({
-  mount,
-  page
-}) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toBeKeyboardFocusIndicatorAccessible()
+  })
 
-  await expect(page).keyboardFocusIndicatorToHaveColorContrast()
-})
+  test.skip('does keyboard focus indicator have sufficient color contrast', async ({
+    mount,
+    page
+  }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test('do links have descriptive aria label text', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).keyboardFocusIndicatorToHaveColorContrast()
+  })
 
-  await expect(page).toHaveDescriptiveLinkText()
-})
+  test('do links have descriptive aria label text', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test('create accessible data tables for screen reader users', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveDescriptiveLinkText()
+  })
 
-  await expect(page).toHaveScopeAttributesInDataTables()
-})
+  test('create accessible data tables for screen reader users', async ({
+    mount,
+    page
+  }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test('all links have keyboard focus', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveScopeAttributesInDataTables()
+  })
 
-  await expect(page).toHaveKeyboardFocusInLinks()
-}) 
+  test('all links have keyboard focus', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveKeyboardFocusInLinks()
+  })
 
-  await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
-})
+  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({
+    mount,
+    page
+  }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test.skip('validate search autocomplete features', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
+  })
 
-  await expect(page).toHaveSearchAutoComplete()
-})
+  test.skip('validate search autocomplete features', async ({
+    mount,
+    page
+  }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test('validate that all ids are unique', async ({ mount, page }) => {
+    await expect(page).toHaveSearchAutoComplete()
+  })
+
+  test('validate that all ids are unique', async ({ mount, page }) => {
     const data = HomePageFactory.make()
     await mount(<HomePage page={data} />)
 
     await expect(page).toNotHaveDuplicateIds()
-  }) 
+  })
 
-test('validate axe core accessibility tests', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+  test('validate that lang attributes are present in header and footer', async ({
+    mount,
+    page
+  }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-  await expect(page).toPassAxeCoreTests()
-})
+    await expect(page).toHaveLangAttributes()
+  })
 
-// Module Specific Tests
+  test('validate axe core accessibility tests', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test.skip('validate correct link target in Profile module', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toPassAxeCoreTests()
+  })
 
-  await expect(page).toHaveCorrectLinkTargetInProfileModule()
-})
+  // Module Specific Tests
 
-// Content Type Specific Tests
+  test.skip('validate correct link target in Profile module', async ({
+    mount,
+    page
+  }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-test('logical reading order on the homepage', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+    await expect(page).toHaveCorrectLinkTargetInProfileModule()
+  })
 
-  await expect(page).toHaveLogicalReadingOrderonHomePage()
-})
+  // Content Type Specific Tests
 
-test('article landmarks are present in the news section on the Homepage', async ({ mount, page }) => {
-  const data = HomePageFactory.make()
-  await mount(<HomePage page={data} />)
+  test('logical reading order on the homepage', async ({ mount, page }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
 
-  await expect(page).toHaveArticleLandmarkInNewsSectionOnHomepage()
-})
+    await expect(page).toHaveLogicalReadingOrderonHomePage()
+  })
+
+  test('article landmarks are present in the news section on the Homepage', async ({
+    mount,
+    page
+  }) => {
+    const data = HomePageFactory.make()
+    await mount(<HomePage page={data} />)
+
+    await expect(page).toHaveArticleLandmarkInNewsSectionOnHomepage()
+  })
 })

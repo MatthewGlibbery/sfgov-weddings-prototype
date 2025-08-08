@@ -4,9 +4,8 @@ import { test, expect } from './fixtures'
 import React from 'react'
 
 test.describe('A11y tests', () => {
-  
   // Required Global Tests
-  
+
   test('has accessible landmarks', async ({ mount, page }) => {
     const data = ReportPageFactory.make()
     await mount(<ReportPage page={data} />)
@@ -26,7 +25,7 @@ test.describe('A11y tests', () => {
     await mount(<ReportPage page={data} />)
 
     await expect(page).toHaveSearchLandmark()
-  }) 
+  })
 
   test('has language interaction', async ({ mount, page }) => {
     const data = ReportPageFactory.make()
@@ -66,7 +65,10 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveDescriptiveLinkText()
   })
 
-  test('create accessible data tables for screen reader users', async ({ mount, page }) => {
+  test('create accessible data tables for screen reader users', async ({
+    mount,
+    page
+  }) => {
     const data = ReportPageFactory.make()
     await mount(<ReportPage page={data} />)
 
@@ -78,28 +80,44 @@ test.describe('A11y tests', () => {
     await mount(<ReportPage page={data} />)
 
     await expect(page).toHaveKeyboardFocusInLinks()
-  }) 
+  })
 
-  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({ mount, page }) => {
+  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({
+    mount,
+    page
+  }) => {
     const data = ReportPageFactory.make()
     await mount(<ReportPage page={data} />)
 
     await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
   })
 
-  test.skip('validate search autocomplete features', async ({ mount, page }) => {
+  test.skip('validate search autocomplete features', async ({
+    mount,
+    page
+  }) => {
     const data = ReportPageFactory.make()
     await mount(<ReportPage page={data} />)
-  
+
     await expect(page).toHaveSearchAutoComplete()
   })
 
   test.skip('validate that all ids are unique', async ({ mount, page }) => {
-      const data = ReportPageFactory.make()
-      await mount(<ReportPage page={data} />)
-  
-      await expect(page).toNotHaveDuplicateIds()
-    }) 
+    const data = ReportPageFactory.make()
+    await mount(<ReportPage page={data} />)
+
+    await expect(page).toNotHaveDuplicateIds()
+  })
+
+  test('validate that lang attributes are present in header and footer', async ({
+    mount,
+    page
+  }) => {
+    const data = ReportPageFactory.make()
+    await mount(<ReportPage page={data} />)
+
+    await expect(page).toHaveLangAttributes()
+  })
 
   test('validate axe core accessibility tests', async ({ mount, page }) => {
     const data = ReportPageFactory.make()
@@ -108,19 +126,25 @@ test.describe('A11y tests', () => {
     await expect(page).toPassAxeCoreTests()
   })
 
-// Content Type Specific Tests
+  // Content Type Specific Tests
 
-  test('suppress the In-Page Search Function for screen reader users on the Report content type', async ({ mount, page }) => {
-  const data = ReportPageFactory.make()
-  await mount(<ReportPage page={data} />)
+  test('suppress the In-Page Search Function for screen reader users on the Report content type', async ({
+    mount,
+    page
+  }) => {
+    const data = ReportPageFactory.make()
+    await mount(<ReportPage page={data} />)
 
-  await expect(page).toSuppressInPageSearchModuleOnReportContentType()
-  })   
+    await expect(page).toSuppressInPageSearchModuleOnReportContentType()
+  })
 
-  test('Table of contents has nav landmark attributes', async ({ mount, page }) => {
-  const data = ReportPageFactory.make()
-  await mount(<ReportPage page={data} />)
+  test('Table of contents has nav landmark attributes', async ({
+    mount,
+    page
+  }) => {
+    const data = ReportPageFactory.make()
+    await mount(<ReportPage page={data} />)
 
-  await expect(page).toHaveNavLandmarkAttributesInTOC()
-  }) 
+    await expect(page).toHaveNavLandmarkAttributesInTOC()
+  })
 })

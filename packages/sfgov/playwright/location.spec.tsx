@@ -4,9 +4,8 @@ import { test, expect } from './fixtures'
 import React from 'react'
 
 test.describe('A11y tests', () => {
-
   // Required Global Tests
-  
+
   test('has accessible landmarks', async ({ mount, page }) => {
     const data = LocationPageFactory.make()
     await mount(<LocationPage page={data} />)
@@ -27,7 +26,7 @@ test.describe('A11y tests', () => {
 
     await expect(page).toHaveSearchLandmark()
   })
- 
+
   test('has language interaction', async ({ mount, page }) => {
     const data = LocationPageFactory.make()
     await mount(<LocationPage page={data} />)
@@ -66,40 +65,59 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveDescriptiveLinkText()
   })
 
-  test('create accessible data tables for screen reader users', async ({ mount, page }) => {
+  test('create accessible data tables for screen reader users', async ({
+    mount,
+    page
+  }) => {
     const data = LocationPageFactory.make()
     await mount(<LocationPage page={data} />)
 
     await expect(page).toHaveScopeAttributesInDataTables()
   })
 
- test('all links have keyboard focus', async ({ mount, page }) => {
+  test('all links have keyboard focus', async ({ mount, page }) => {
     const data = LocationPageFactory.make()
     await mount(<LocationPage page={data} />)
 
     await expect(page).toHaveKeyboardFocusInLinks()
-  }) 
+  })
 
-  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({ mount, page }) => {
+  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({
+    mount,
+    page
+  }) => {
     const data = LocationPageFactory.make()
     await mount(<LocationPage page={data} />)
 
     await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
   })
 
-  test.skip('validate search autocomplete features', async ({ mount, page }) => {
+  test.skip('validate search autocomplete features', async ({
+    mount,
+    page
+  }) => {
     const data = LocationPageFactory.make()
     await mount(<LocationPage page={data} />)
-  
+
     await expect(page).toHaveSearchAutoComplete()
   })
 
   test('validate that all ids are unique', async ({ mount, page }) => {
-      const data = LocationPageFactory.make()
-      await mount(<LocationPage page={data} />)
-  
-      await expect(page).toNotHaveDuplicateIds()
-    }) 
+    const data = LocationPageFactory.make()
+    await mount(<LocationPage page={data} />)
+
+    await expect(page).toNotHaveDuplicateIds()
+  })
+
+  test('validate that lang attributes are present in header and footer', async ({
+    mount,
+    page
+  }) => {
+    const data = LocationPageFactory.make()
+    await mount(<LocationPage page={data} />)
+
+    await expect(page).toHaveLangAttributes()
+  })
 
   test('validate axe core accessibility tests', async ({ mount, page }) => {
     const data = LocationPageFactory.make()
@@ -108,28 +126,41 @@ test.describe('A11y tests', () => {
     await expect(page).toPassAxeCoreTests()
   })
 
-// Content Type Specific Tests
+  // Content Type Specific Tests
 
-test('create a logical reading order in the accordion on the Location content type', async ({ mount, page }) => {
-  const data = LocationPageFactory.make()
-  await mount(<LocationPage page={data} />)
+  test('create a logical reading order in the accordion on the Location content type', async ({
+    mount,
+    page
+  }) => {
+    const data = LocationPageFactory.make()
+    await mount(<LocationPage page={data} />)
 
-  await expect(page).toHaveALogicalReadingOrderInAccordionOnLocationContentType()
-})
+    await expect(
+      page
+    ).toHaveALogicalReadingOrderInAccordionOnLocationContentType()
+  })
 
-test('create a logical reading order in the Getting Here section on the Location content type', async ({ mount, page }) => {
-  const data = LocationPageFactory.make()
-  await mount(<LocationPage page={data} />)
+  test('create a logical reading order in the Getting Here section on the Location content type', async ({
+    mount,
+    page
+  }) => {
+    const data = LocationPageFactory.make()
+    await mount(<LocationPage page={data} />)
 
-  await expect(page).toHaveALogicalReadingOrderInGettingHereSectionOnLocationContentType()
-})
+    await expect(
+      page
+    ).toHaveALogicalReadingOrderInGettingHereSectionOnLocationContentType()
+  })
 
-// Module Specific Tests
+  // Module Specific Tests
 
-test('logical reading order in the contact us section', async ({ mount, page }) => {
-  const data = LocationPageFactory.make()
-  await mount(<LocationPage page={data} />)
+  test('logical reading order in the contact us section', async ({
+    mount,
+    page
+  }) => {
+    const data = LocationPageFactory.make()
+    await mount(<LocationPage page={data} />)
 
-  await expect(page).toHaveLogicalReadingOrderContactUs()
-})
+    await expect(page).toHaveLogicalReadingOrderContactUs()
+  })
 })
