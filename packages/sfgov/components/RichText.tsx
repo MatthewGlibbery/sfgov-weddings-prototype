@@ -44,6 +44,7 @@ export type RichTextProps = {
   isNews?: boolean
   isHomePage?: boolean
   isDarkBg?: boolean
+  headingClasses?: string
   'data-testid'?: never
 }
 
@@ -63,7 +64,14 @@ export type RichTextProps = {
  * ```
  */
 export const RichText = (props: RichTextProps) => {
-  const { html, components = {}, isNews, isHomePage, isDarkBg = false } = props
+  const {
+    html,
+    components = {},
+    isNews,
+    isHomePage,
+    isDarkBg = false,
+    headingClasses = ''
+  } = props
 
   const options: HTMLReactParserOptions = {
     replace(node) {
@@ -143,22 +151,25 @@ export const RichText = (props: RichTextProps) => {
 
       if (tagName === 'h2') {
         return (
-          <HeadingXl as="h2" id={tocHeadingId} {...props}>
+          <HeadingXl
+            as="h2"
+            id={tocHeadingId}
+            className={headingClasses}
+            {...props}
+          >
             {domToReact(node.children, options)}
           </HeadingXl>
         )
       }
 
       if (tagName === 'h3') {
-        if (isHomePage) {
-          return (
-            <HeadingLgListItem as="h3" className="mt-40">
-              {domToReact(node.children, options)}
-            </HeadingLgListItem>
-          )
-        }
         return (
-          <HeadingMd as="h3" {...props} id={tocHeadingId}>
+          <HeadingMd
+            as="h3"
+            id={tocHeadingId}
+            className={headingClasses}
+            {...props}
+          >
             {domToReact(node.children, options)}
           </HeadingMd>
         )
@@ -166,7 +177,7 @@ export const RichText = (props: RichTextProps) => {
 
       if (tagName === 'h4') {
         return (
-          <HeadingSm as="h4" {...props}>
+          <HeadingSm as="h4" className={headingClasses} {...props}>
             {domToReact(node.children, options)}
           </HeadingSm>
         )
@@ -181,15 +192,13 @@ export const RichText = (props: RichTextProps) => {
       }
 
       if (tagName === 'a') {
-        if (isDarkBg) {
-          return (
-            <Link className="text-white" href={attribs.href}>
-              {domToReact(node.children, options)}
-            </Link>
-          )
-        }
         return (
-          <Link href={attribs.href}>{domToReact(node.children, options)}</Link>
+          <Link
+            className={`${isDarkBg ? 'text-primary400' : 'text-primary600'}`}
+            href={attribs.href}
+          >
+            {domToReact(node.children, options)}
+          </Link>
         )
       }
 
