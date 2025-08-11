@@ -32,6 +32,20 @@
                 "uriFormat": "%s",
                 "webRoot": "${workspaceFolder}/packages/sfgov"
             }
+        }, {
+          "type": "node",
+          "request": "launch",
+          "name": "Jest Current File",
+          "cwd": "${workspaceFolder}/packages/sfgov",
+          "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+          "args": [
+            "--runInBand",
+            "${fileBasenameNoExtension}",
+            "--verbose"
+          ],
+          "console": "integratedTerminal",
+          "internalConsoleOptions": "neverOpen",
+          "disableOptimisticBPs": true
         }
     ]
 }
