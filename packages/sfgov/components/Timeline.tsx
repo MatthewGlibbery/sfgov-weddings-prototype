@@ -20,7 +20,7 @@ const TimelineItemContainer = classed('div', {
   base: classes(
     'flex py-20 md:pt-12 md:pl-20 md:pr-40 ml-12 md:ml-0 border-solid',
     'max-w-[859px]', // hack: we add 25px for tablet and up to account for the hack to get the badge alignment correct
-    'border-l-[4px] border-secondary600',
+    'border-l-[4px] border-secondary500',
     'md:border-l-0 md:border-t-[4px]'
   ),
   variants: {
@@ -31,7 +31,7 @@ const TimelineItemContainer = classed('div', {
       true: classes(
         'border-l-0 before:relative',
         'before:top-[-20px] before:h-20',
-        'before:border-solid before:border-l-[4px] before:border-secondary600',
+        'before:border-solid before:border-l-[4px] before:border-secondary500',
         'md:before:border-l-0 md:border-t-0 md:pl-0 md:pt-[15px]'
       )
     },
@@ -46,7 +46,7 @@ const TimelineMarker = classed('div', {
     'flex items-center justify-center shrink-0',
     'w-[23px] h-[23px] mr-20',
     'md:relative md:top-[-25px]',
-    'bg-secondary600',
+    'bg-secondary500',
     'rounded-full ml-[-13.5px] md:ml-0'
   )
 })
@@ -62,14 +62,14 @@ const TimelineItem = ({
       <div className="flex md:hidden">
         <TimelineMarker />
         <div className="flex flex-col md:flex-row gap-4 md:gap-8 md:items-baseline">
-          <BodyText className="font-bold text-secondary600">{title}</BodyText>
+          <BodyText className="font-bold text-secondary500">{title}</BodyText>
           <BodyText>{text}</BodyText>
         </div>
       </div>
       <div className="hidden md:flex md:flex-col">
         <TimelineMarker />
         <div className="flex flex-col gap-4 md:gap-8 md:items-baseline">
-          <BodyText className="font-bold text-secondary600">{title}</BodyText>
+          <BodyText className="font-bold text-secondary500">{title}</BodyText>
           <BodyText>{text}</BodyText>
         </div>
       </div>
