@@ -23,4 +23,8 @@
   h2 {
     @apply text-desktop-heading-xxl;
   }
+
+  input::placeholder {
+    @apply text-neutral600
+  }
 }
