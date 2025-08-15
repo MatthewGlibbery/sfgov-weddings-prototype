@@ -35,6 +35,24 @@ describe('<Image>', () => {
     expect(img).toHaveAttribute('alt', data.alt_text)
   })
 
+  it('renders an <img> with alt text an empty string if none provided', async () => {
+    const noAltTextData = ImageFactory.make({
+      title: 'title',
+      width: 500,
+      height: 500,
+      meta: {
+        download_url: src
+      },
+      alt_text: undefined
+    })
+    // eslint-disable-next-line jsx-a11y/alt-text
+    render(<Image imageRef={noAltTextData} />)
+
+    const img = (await screen.findByRole('img')) as HTMLImageElement
+    expect(img).toBeInTheDocument()
+    expect(img).toHaveAttribute('alt', '')
+  })
+
   it('works with NextImage', async () => {
     // eslint-disable-next-line jsx-a11y/alt-text
     render(<Image imageRef={data} />)
