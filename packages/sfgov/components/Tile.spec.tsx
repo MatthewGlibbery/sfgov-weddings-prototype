@@ -16,6 +16,7 @@ import {
   FeaturedTopicTile
 } from './Tile'
 import {
+  DocumentValueFactory,
   EventTileFactory,
   GenericTileFactory,
   NewsTileFactory,
@@ -127,13 +128,24 @@ describe('Tile', () => {
   })
 
   it('renders a DocumentTile', () => {
-    render(<DocumentTile link={linkValue} />)
+    const link = DocumentValueFactory.make()
+    // Do this because the "raw" data, which DocumentValueFactory produces is
+    // not how the component expects it to be shaped. It instead expects a similar
+    // object but with the following transformations
+    // published_date --> publishDate
+    // file --> url
+    link.publishedDate = link.published_date
+    link.url = link.file
+
+    render(<DocumentTile link={link} />)
 
     const docTile = screen.getByRole('link')
-    const title = screen.getByText(linkValue.title)
+    const title = screen.getByText(link.title)
+    const publishDate = screen.getByRole('time')
 
     expect(docTile).toBeInTheDocument()
     expect(docTile).toContainElement(title)
+    expect(publishDate).toBeInTheDocument()
   })
 
   it('renders a DataStoryTile', () => {

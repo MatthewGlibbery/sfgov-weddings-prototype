@@ -160,6 +160,15 @@ export const ContentTile = ({
               <RichText html={link.description} />
             </div>
           ) : null}
+          {link.publishedDate ? (
+            <div className="text-label-xs text-neutral500">
+              Published{' '}
+              <ComposedDate
+                startDateInput={link.publishedDate}
+                dateStyle={{ month: 'long', day: 'numeric', year: 'numeric' }}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     </BaseTile>

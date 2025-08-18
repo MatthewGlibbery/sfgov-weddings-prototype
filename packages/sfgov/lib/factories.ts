@@ -878,7 +878,8 @@ export const DocumentValueFactory = factory<TypeDocumentBlockValues>((gen) => ({
   title: gen.lorem.sentence(),
   file: gen.internet.url(),
   description: gen.lorem.sentence(),
-  published_date: gen.date.past().toDateString()
+  published_date: gen.date.past().toISOString().split('T')[0],
+  collection: gen.datatype.number()
 }))
 
 export const DocumentBlockFactory = factory<TypeDocumentBlock>((gen) => ({
