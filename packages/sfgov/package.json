@@ -31,8 +31,8 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.7.3",
-    "@playwright/experimental-ct-react": "^1.51.1",
-    "@playwright/test": "^1.51.1",
+    "@playwright/experimental-ct-react": "^1.54.2",
+    "@playwright/test": "^1.54.2",
     "@types/safe-json-stringify": "^1.1.2",
     "@types/tinycolor2": "^1.4.6",
     "dotenv": "^16.4.5",

@@ -121,6 +121,18 @@ export class ContentAPI implements IContentAPI {
     ) as Promise<T>
   }
 
+  async getAlerts<T = unknown>(params?: QueryParams, options?: RequestInit) {
+    // TODO: translations
+    const res = await this.load('/alerts')
+    if (!res.ok) {
+      throw await RequestError.fromResponse(res)
+    }
+    return res.json().catch(
+      // istanbul ignore next
+      () => ({})
+    ) as Promise<T>
+  }
+
   async getData<T = unknown>(
     path: string,
     params?: QueryParams,
@@ -198,6 +210,11 @@ export class FixtureAPI implements IContentAPI {
   ): Promise<T | undefined> {
     const page = this.pagesByUrlPath[path]
     return Promise.resolve((page as T) || undefined)
+  }
+
+  // istanbul ignore next
+  getAlerts<T = unknown>(): Promise<T> {
+    return Promise.resolve({} as T)
   }
 }
 

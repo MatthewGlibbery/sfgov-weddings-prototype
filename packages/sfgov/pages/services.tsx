@@ -31,7 +31,9 @@ export const getServerSideProps = withServerSideTranslations(
     url.searchParams.set('live', 'true')
     const res = await fetch(url.href)
     const topics = await res.json()
-    return { props: { topics, env: getPublicEnv() } }
+    return {
+      props: { topics, env: getPublicEnv() }
+    }
   }
 )
 

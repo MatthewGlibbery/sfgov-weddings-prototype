@@ -771,7 +771,13 @@ export const getServerSideProps = withServerSideTranslations(
 
       // append the "base" api url for this list
       // so the client side can make requests for more pages
-      return { props: { ...data, baseUrl: url.href, env: getPublicEnv() } }
+      return {
+        props: {
+          ...data,
+          baseUrl: url.href,
+          env: getPublicEnv()
+        }
+      }
     } catch (error) {
       return { notFound: true } // 404
     }

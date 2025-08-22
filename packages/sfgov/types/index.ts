@@ -1,4 +1,4 @@
-import type { PageData, TypeQLessData } from './pages'
+import type { AlertData, PageData } from './pages'
 
 export * from './pages'
 export * from './blocks'
@@ -27,6 +27,10 @@ export interface IContentAPI {
     params?: QueryParams,
     options?: RequestInit
   ): Promise<T | undefined>
+  getAlerts<T = unknown>(
+    params?: QueryParams,
+    options?: RequestInit
+  ): Promise<T>
 }
 
 /**
@@ -37,5 +41,6 @@ export interface IContentAPI {
  */
 export type PageProps<T, SpecificData = T extends PageData ? T : unknown> = {
   page: SpecificData
+  alerts: AlertData
   env?: Record<string, string | undefined>
 }

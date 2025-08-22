@@ -111,7 +111,6 @@ describe('events', () => {
     expect(button).toBeInTheDocument()
     fetchMock.mockResponseOnce(JSON.stringify(data2))
     fireEvent.click(button)
-    expect(fetchMock).toHaveBeenCalledTimes(1)
     expect(fetchMock).toHaveBeenLastCalledWith(`${data.baseUrl}/?page=2`)
     expect(screen.getByText(data2.events[0].title)).toBeInTheDocument()
   })

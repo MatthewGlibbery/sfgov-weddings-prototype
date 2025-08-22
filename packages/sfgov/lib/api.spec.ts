@@ -418,6 +418,35 @@ describe('ContentAPI', () => {
       expect(api.getURL('foo')).toStringifyTo('http://localhost:8000/foo')
     })
   })
+
+  describe('getAlerts()', () => {
+    it('fetches alerts', async () => {
+      const data = {
+        items: [
+          {
+            alert_style: 'information',
+            alert_text: '<p>hi</p>',
+            expiration_date: '2225-11-05T11:20:00-08:00'
+          }
+        ]
+      }
+      fetchMock.mockResponseOnce(JSON.stringify(data))
+      const res = await example.getAlerts<typeof data>()
+      expect(res).toEqual(data)
+    })
+  })
+
+  it('rejects on 4xx statuses', async () => {
+    fetchMock.mockResponseOnce(
+      JSON.stringify({
+        message: 'not found'
+      }),
+      {
+        status: 404
+      }
+    )
+    await expect(example.getAlerts()).rejects.toThrow(/404 Not Found/)
+  })
 })
 
 describe('FixtureAPI', () => {

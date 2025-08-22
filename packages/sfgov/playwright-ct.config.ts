@@ -60,6 +60,7 @@ export default defineConfig({
             __dirname,
             './__mocks__/next/font/google/index.ts'
           ),
+          path: 'path-browserify',
           '../../tailwind.config.js': path.resolve(
             __dirname,
             './__mocks__/tailwind.config.ts'

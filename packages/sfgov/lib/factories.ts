@@ -747,6 +747,14 @@ export const AlertBlockFactory = factory<TypeAlertBlock>((gen) => ({
   }
 }))
 
+export const SitewideAlertBlockFactory = factory<{
+  alert_style: 'information' | 'critical'
+  alert_text: string
+}>(() => ({
+  alert_style: 'information',
+  alert_text: 'some text'
+}))
+
 export const StepBlockFactory = factory<TypeStepBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'step',

@@ -1,4 +1,4 @@
-import { classed, IconInfo } from '@/design-system'
+import { classed, classes, IconInfo } from '@/design-system'
 import { TypeAlertBlockValues } from '@/types'
 import { ComponentProps } from 'react'
 import { RichText } from './RichText'
@@ -7,6 +7,17 @@ const PreviewAlert = classed(
   'div',
   'w-full bg-[#1F7E9A] flex space-x-20 mb-28 py-28 px-20 md:px-28 lg:px-96 text-white'
 )
+
+const SitewideAlertWrapper = classed('div', {
+  base: 'flex border-1 items-start',
+  variants: {
+    variant: {
+      information: 'bg-information10 border-information600',
+      critical: 'bg-danger10 border-danger600'
+    }
+  }
+})
+
 const InfoAlert = classed(
   'div',
   'w-full bg-information10 border-1 border-information600 flex items-start md:items-center space-x-20 mb-28 py-28 px-20 md:px-28 lg:px-96'
@@ -34,3 +45,26 @@ export const Alert = ({
       <RichText html={description} />
     </InfoAlert>
   ) : null
+
+export const SitewideAlert = ({
+  alert_style: style,
+  alert_text: text
+}: {
+  alert_style: 'information' | 'critical'
+  alert_text: string
+}) => (
+  <SitewideAlertWrapper variant={style}>
+    <div className="flex items-start space-x-20 m-20 max-w-xl md:mx-28 lg:mx-96 xl:mx-auto">
+      <IconInfo
+        className={classes(
+          style === 'information' ? 'text-information600' : 'text-danger600',
+          'shrink-0'
+        )}
+        width={20}
+      />
+      <div className="xl:w-[1280px]">
+        <RichText html={text} />
+      </div>
+    </div>
+  </SitewideAlertWrapper>
+)
