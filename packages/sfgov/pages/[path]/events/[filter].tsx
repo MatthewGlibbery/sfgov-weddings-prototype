@@ -211,34 +211,35 @@ const PageTabs = (props: TypePageTabData) => {
   const upcomingEventsUrl = `${localePath}${eventsPath}/upcoming`
   const pastEventsUrl = `${localePath}${eventsPath}/past`
   return (
-    <div className="my-[15px]">
-      <a
-        href={upcomingEventsUrl}
-        className={`rounded-tl-4 rounded-bl-4 ${pillCls}
+    <>
+      <div className="my-[15px]">
+        <a
+          href={upcomingEventsUrl}
+          className={`rounded-tl-4 rounded-bl-4 ${pillCls}
               ${filter === 'upcoming' ? activePillCls : inactivePillCls}`}
-      >
-        {t('upcoming-events', { defaultValue: 'Upcoming events' })}
-      </a>
-      <a
-        className={`rounded-tr-4 rounded-br-4 no-underline px-16 py-[15px]
+        >
+          {t('upcoming-events', { defaultValue: 'Upcoming events' })}
+        </a>
+        <a
+          className={`rounded-tr-4 rounded-br-4 no-underline px-16 py-[15px]
               ${filter === 'past' ? activePillCls : inactivePillCls}`}
-        href={pastEventsUrl}
-      >
-        {t('past-events', { defaultValue: 'Past events' })}
-      </a>
+          href={pastEventsUrl}
+        >
+          {t('past-events', { defaultValue: 'Past events' })}
+        </a>
+      </div>
       {filter === 'past' && meetingArchiveDate && meetingArchiveURL ? (
         <div className="flex gap-8 text-primary500">
           <IconCalendar width={20} />
           <Link href={meetingArchiveURL}>
             {t('archived-meetings-link', {
-              skipInterpolation: true,
               defaultValue: 'See archived meetings before {{zyx}}',
               zyx: archiveDate
             })}
           </Link>
         </div>
       ) : null}
-    </div>
+    </>
   )
 }
 
