@@ -314,6 +314,9 @@ const SearchPage = (props: SearchPageData) => {
           <div className="flex items-center justify-center border-b-1 border-neutral300">
             <button
               className="px-16 py-[15px] flex items-center self-center gap-x-4 text-primary500"
+              aria-label={t('show-more-search-results', {
+                defaultValue: 'Show more search results'
+              })}
               onClick={(e) => {
                 e.preventDefault()
                 setCurrentPage(currentPage + 1)
