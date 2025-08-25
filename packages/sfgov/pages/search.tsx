@@ -322,7 +322,11 @@ const SearchPage = (props: SearchPageData) => {
                 setCurrentPage(currentPage + 1)
               }}
             >
-              <span>{t('show-more', { defaultValue: 'Show more' })}</span>
+              <span>
+                {t('show-more-search-results', {
+                  defaultValue: 'Show more search results'
+                })}
+              </span>
               <IconChevronDown width="20" height="20" />
             </button>
           </div>
