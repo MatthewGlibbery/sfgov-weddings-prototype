@@ -1,6 +1,5 @@
 import { Image } from './Image'
 import { render, screen } from '@testing-library/react'
-import { act } from 'react-dom/test-utils'
 import { ImageFactory } from '@/lib/factories'
 import fetchMock from 'jest-fetch-mock'
 
@@ -15,6 +14,7 @@ describe('<Image>', () => {
     title: 'title',
     width: 500,
     height: 500,
+    original: { url: src, full_url: src },
     meta: {
       download_url: src
     }

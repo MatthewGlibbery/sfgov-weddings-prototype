@@ -1,5 +1,5 @@
 import { AgencyPageFactory } from '@/lib/factories'
-import { render, screen } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
 import { AgencyPage } from './AgencyPage'
 import { useRouter } from 'next/router'
 
@@ -123,5 +123,27 @@ describe('AgencyPage', () => {
     expect(fullCalendarButtonLink.getAttribute('href')).toBe(
       '/es/agency-name/events/upcoming'
     )
+  })
+
+  it('handles main image rendering appropriately', () => {
+    const page = AgencyPageFactory.make()
+    render(<AgencyPage page={page} />)
+    expect(screen.getByTestId('main-image')).toBeInTheDocument()
+    cleanup()
+    const pageNoMainImage = AgencyPageFactory.make({ main_image: undefined })
+    render(<AgencyPage page={pageNoMainImage} />)
+    expect(screen.queryByTestId('main-image')).not.toBeInTheDocument()
+  })
+
+  it('handles news section rendering appropriately', () => {
+    const page = AgencyPageFactory.make()
+    render(<AgencyPage page={page} />)
+    expect(screen.getByRole('heading', { name: 'News' })).toBeInTheDocument()
+    cleanup()
+    const pageNoNews = AgencyPageFactory.make({ news: [] })
+    render(<AgencyPage page={pageNoNews} />)
+    expect(
+      screen.queryByRole('heading', { name: 'News' })
+    ).not.toBeInTheDocument()
   })
 })

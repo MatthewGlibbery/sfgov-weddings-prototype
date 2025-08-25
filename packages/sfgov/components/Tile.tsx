@@ -12,7 +12,8 @@ import {
   IconClock,
   LabelXs,
   DisplayXXXl,
-  classed
+  classed,
+  HeadingXs
 } from '@/design-system'
 import type { ComponentType, ReactElement, ReactNode } from 'react'
 import type { TypeTileBlock } from '@/types'
@@ -20,6 +21,7 @@ import { getPageURL } from '@/lib/utils'
 import { ComposedDate, ComposedTime } from './DateTime'
 import { useTranslation } from 'next-i18next'
 import { RichText } from './RichText'
+import { Image } from './Image'
 
 export type TileSectionProps = {
   links?: TypeTileBlock[]
@@ -75,29 +77,103 @@ type BaseTileProps = {
 }
 
 const BaseTile = ({ className, href, children }: BaseTileProps) => (
-  <TileContainer href={href} className={className} data-analytics="tile">
+  <TileContainer
+    href={href}
+    className={className}
+    data-analytics="tile"
+    data-testid="tile"
+  >
     <div className="flex flex-col space-y-8">{children}</div>
   </TileContainer>
 )
 
-export const NewsTile = ({ link }: TileProps) =>
-  link.date ? (
-    <BaseTile href={link.url}>
-      <Label>
-        {Intl.DateTimeFormat('en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric'
-        }).format(new Date(link.date))}
-      </Label>
-      <TileTitle>
-        <HeadingLg>{link.title}</HeadingLg>
-      </TileTitle>
+export const NewsTile = ({ link }: TileProps) => {
+  const { t } = useTranslation()
+  return link ? (
+    <BaseTile
+      href={getPageURL(link)}
+      className="!mt-0 pb-20 border-b-1 border-neutral200 last-of-type:border-b-0"
+    >
+      <div className="flex flex-col gap-y-8">
+        {link?.news_type === 'press_release' ? (
+          <HeadingXs className="text-neutral500 !m-0 p-0">
+            {t('press-release', { defaultValue: 'Press release' })}
+          </HeadingXs>
+        ) : null}
+        <span className="flex flex-row gap-x-20 justify-between">
+          <TileTitle className="!m-0 flex flex-col gap-y-8">
+            <HeadingMd className="font-body !m-0 text-primary600">
+              {link.title}
+            </HeadingMd>
+            {link?.date ? (
+              <LabelXs className="text-black !mb-0">
+                <ComposedDate
+                  startDateInput={link.date}
+                  dateStyle={{
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                  }}
+                />
+              </LabelXs>
+            ) : null}
+          </TileTitle>
+
+          {link?.image ? (
+            <Image
+              imageRef={link.image}
+              className="hidden md:block w-[158px] h-[158px]"
+            />
+          ) : null}
+        </span>
+      </div>
     </BaseTile>
   ) : (
     /* istanbul ignore next */
     <></>
   )
+}
+
+export const NewsTileList = ({ links }) => {
+  if (!links || !links.length) return
+
+  // going for that masonry feel, but have some
+  // defined requirements:
+  // 6 items, 2 columns, evenly split (1-1,2-2,3-3,2-1,etc)
+  const mid = Math.ceil(links.length / 2)
+  const left = links.slice(0, mid)
+  const right = links.slice(mid)
+
+  return links ? (
+    <TileSection
+      className="columns-1 lg:columns-2 gap-28"
+      data-testid="tile-section"
+    >
+      {left.length ? (
+        <div
+          className={`flex flex-col gap-y-20 border-neutral200 ${
+            !right.length ? 'border-0' : 'border-b-1'
+          }`}
+          data-testid="news-left"
+        >
+          {left?.map((link) => (
+            <NewsTile key={link.di} link={link} />
+          ))}
+        </div>
+      ) : null}
+      {right.length ? (
+        <div
+          className="flex flex-col gap-y-20 border-b-0 border-neutral200 lg:border-b-1"
+          data-testid="news-right"
+        >
+          {right?.map((link) => (
+            <NewsTile key={link.di} link={link} />
+          ))}
+        </div>
+      ) : null}
+    </TileSection>
+  ) : null
+}
 
 export const ContentTile = ({
   link,
@@ -419,7 +495,6 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
   }
 }
 
-export const NewsTileList = createTileList(NewsTile)
 export const QuickLinkList = createTileList(QuickLink)
 export const EventTileList = createTileList(EventTile)
 export const ContentTileList = createTileList(ContentTile)

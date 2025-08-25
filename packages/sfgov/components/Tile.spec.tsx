@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import {
   TileSection,
   NewsTile,
@@ -162,9 +162,28 @@ describe('Tile', () => {
 
   it('renders a list of news tiles inside a TileSection', () => {
     render(<NewsTileList links={NewsTileFactory.make(3)} />)
-
     const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()
+  })
+
+  it('renders an odd number of news items appropriately', () => {
+    render(<NewsTileList links={NewsTileFactory.make(5)} />)
+    const tileSection = screen.getByTestId('tile-section')
+    const newsLeft = screen.getByTestId('news-left')
+    const newsRight = screen.getByTestId('news-right')
+    expect(tileSection).toBeInTheDocument()
+    expect(within(newsLeft).getAllByTestId('tile')).toHaveLength(3)
+    expect(within(newsRight).getAllByTestId('tile')).toHaveLength(2)
+  })
+
+  it('renders an even number of news items appropriately', () => {
+    render(<NewsTileList links={NewsTileFactory.make(6)} />)
+    const tileSection = screen.getByTestId('tile-section')
+    const newsLeft = screen.getByTestId('news-left')
+    const newsRight = screen.getByTestId('news-right')
+    expect(tileSection).toBeInTheDocument()
+    expect(within(newsLeft).getAllByTestId('tile')).toHaveLength(3)
+    expect(within(newsRight).getAllByTestId('tile')).toHaveLength(3)
   })
 
   it('renders a list of service tiles inside a TileSection', () => {
