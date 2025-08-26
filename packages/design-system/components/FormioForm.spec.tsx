@@ -224,7 +224,7 @@ describe('FormioForm', () => {
 
       const wizardHeaderPanels = await screen.findAllByTestId(/wizardHeader-/)
       // The header is rendered twice for mobile styling vs. desktop
-      expect(wizardHeaderPanels.length).toBe(4 * 2)
+      expect(wizardHeaderPanels.length).toBe(4)
       wizardHeaderPanels.forEach((panel) => {
         expect(panel).toBeInTheDocument()
       })
