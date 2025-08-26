@@ -7,10 +7,11 @@ WORKDIR /app
 # Copy the app source code to the container  
 COPY . .  
 
-# Install dependencies  
-RUN npm install
+# tell npm and next to build for production
+ENV NODE_ENV=production
 
-RUN npm run build
+# Install dependencies
+RUN npm install
 
 # Build the Next.js app  
 RUN npm run -w @sfgov/next build 
