@@ -19,6 +19,7 @@ type ComposedDateProps = {
   endDateInput?: string
   locale?: string
   dateStyle?: 'full' | 'long' | 'medium' | 'short' | FormatOptions | undefined
+  include_end_date_time?: 'yes' | 'no'
   asString: boolean
 }
 
@@ -45,6 +46,7 @@ export const ComposedDate = ({
   endDateInput = '',
   locale = 'en-US',
   dateStyle = 'full',
+  includeEndDateTime = 'yes',
   asString = false
 }: ComposedDateProps) => {
   if (typeof startDateInput !== 'string' || typeof endDateInput !== 'string') {
@@ -65,7 +67,11 @@ export const ComposedDate = ({
       ? new Date(startDateInput)
       : new Date(`${startDateInput}T00:00:00`)
 
-    if (!endDateInput || startDateInput === endDateInput) {
+    if (
+      !endDateInput ||
+      startDateInput === endDateInput ||
+      includeEndDateTime === 'no'
+    ) {
       const formattedDate = formatter.format(startDate)
       if (asString) {
         return formattedDate
@@ -150,6 +156,7 @@ type ComposedTimeProps = {
   startDateTimeInput: string
   endDateTimeInput?: string
   locale?: string
+  includeEndDateTime?: string
 }
 /**
  * Handles formatting for a single or range time section
@@ -165,6 +172,7 @@ type ComposedTimeProps = {
 export const ComposedTime = ({
   startDateTimeInput,
   endDateTimeInput = '',
+  includeEndDateTime = 'yes',
   locale = 'en-US'
 }: ComposedTimeProps) => {
   if (
@@ -173,6 +181,9 @@ export const ComposedTime = ({
   ) {
     console.warn('Input is an invalid type. Expected a string.')
     return null
+  }
+  if (includeEndDateTime === 'no') {
+    endDateTimeInput = ''
   }
 
   try {
@@ -246,7 +257,11 @@ export const DateTimeBlock = ({
         {t('date-and-time', { defaultValue: 'Date and time' })}
       </HeadingLg>
       <BodyText>
-        <ComposedDate startDateInput={start_date} endDateInput={end_date} />
+        <ComposedDate
+          startDateInput={start_date}
+          endDateInput={end_date}
+          includeEndDateTime={include_end_date_time}
+        />
         {hasComposedTime ? (
           <div>
             <ComposedTime {...composedTimeProps} />

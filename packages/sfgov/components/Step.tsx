@@ -26,7 +26,7 @@ type StepType = {
 export const StepList = ({ steps }: { steps: TypeStepBlock[] }) => {
   let index = 0
   return (
-    <ZebraStripedSection noPadding>
+    <>
       {steps.map((step: TypeStepBlock, i: number) => {
         if (step.value.step_type === 'number') {
           index++
@@ -42,15 +42,15 @@ export const StepList = ({ steps }: { steps: TypeStepBlock[] }) => {
           />
         )
       })}
-    </ZebraStripedSection>
+    </>
   )
 }
 
 const StepContainer = classed('div', {
   base: classes(
-    'flex py-20 md:mb-2 md:ml-28 md:border-dashed',
+    'flex py-20 md:ml-28 md:border-solid',
     'mx-20 max-w-[859px] md:mx-[45px] lg:mx-[121px] xl:mx-auto', // hack: we add 25px for tablet and up to account for the hack to get the badge alignment correct
-    'md:border-l-2 md:border-neutral200'
+    'md:border-l-2 md:border-secondary300'
   ),
   variants: {
     first: {
@@ -60,7 +60,7 @@ const StepContainer = classed('div', {
       true: classes(
         'md:border-l-0 md:before:relative',
         'md:before:top-[-20px] md:before:h-20',
-        'md:before:border-dashed md:before:border-l-2 md:before:border-neutral200'
+        'md:before:border-solid md:before:border-l-2 md:before:border-secondary300'
       )
     },
     only: {
@@ -78,7 +78,7 @@ export const StepBadge = classed('div', {
   ),
   variants: {
     isAndOr: {
-      true: 'bg-neutral10 border-solid border-2 border-secondary300',
+      true: 'bg-white border-solid border-2 border-secondary300',
       false: 'bg-secondary100'
     },
     isAgenda: {
@@ -104,7 +104,7 @@ export const Step = ({
     <StepBadge isAndOr={isAndOr} data-testid="step-badge">
       {isAndOr ? (
         <BodyText
-          className="text-secondary500 font-bold"
+          className="text-secondary600 font-bold"
           aria-label={
             // istanbul ignore next
             step.step_type === 'and' ? 'additional step' : 'optional step'
@@ -113,7 +113,7 @@ export const Step = ({
           {step.step_type}
         </BodyText>
       ) : (
-        <HeadingXl className="text-secondary600">{index}</HeadingXl>
+        <HeadingXl className="text-secondary600 mt-8">{index}</HeadingXl>
       )}
     </StepBadge>
   )

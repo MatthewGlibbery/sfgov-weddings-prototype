@@ -8,6 +8,7 @@ import {
 } from '@/design-system'
 import { getPublicEnv, requireEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
+import { getPageURL } from '@/lib/utils'
 import { useTranslation } from 'next-i18next'
 
 type Department = {
@@ -23,15 +24,19 @@ type DepartmentPageData = {
 
 export const getServerSideProps = withServerSideTranslations(
   async ({ locale }) => {
-    const url = new URL(
-      requireEnv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL') + '/sf.Agency'
-    )
+    const url = new URL(requireEnv('NEXT_PUBLIC_CONTENT_API_BASE_URL'))
+    url.pathname += '/pages'
+    url.searchParams.set('type', 'sf.Agency')
+    url.searchParams.set('locale', locale as string)
     url.searchParams.set('show_agency_list', 'true')
-    url.searchParams.set('locale__language_code', locale as string)
-    url.searchParams.set('live', 'true')
+    url.searchParams.set('fields', 'description')
+    url.searchParams.set('order', 'title')
+    url.searchParams.set('limit', '200')
     const res = await fetch(url.href)
     const departments = await res.json()
-    return { props: { departments, env: getPublicEnv() } }
+    return {
+      props: { departments, env: getPublicEnv() }
+    }
   }
 )
 
@@ -55,12 +60,12 @@ const DepartmentsPage = (props: DepartmentPageData) => {
           </PageTitleSection>
         </div>
         <ul className="list-none m-0 p-0 grid grid-cols-1 gap-y-28 mb-60">
-          {departments.map((department) => {
+          {departments?.items?.map((department) => {
             return (
-              <li key={department.translation_key}>
+              <li key={department?.meta?.slug}>
                 <HeadingLg className="font-body text-primary500 !mb-0">
                   <a
-                    href={department.url}
+                    href={getPageURL(department)}
                     className="grid grid-cols-1 gap-y-8 no-underline"
                   >
                     {department.title}

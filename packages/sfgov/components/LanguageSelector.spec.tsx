@@ -1,8 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { LanguageSelector } from './LanguageSelector'
+import { LanguageSelector, localeNames } from './LanguageSelector'
 import { useRouter } from 'next/router'
 import { MockedRouter } from '__mocks__/next/router'
-
 jest.mock('next/router')
 
 describe('LanguageSelector', () => {
@@ -12,6 +11,24 @@ describe('LanguageSelector', () => {
     fireEvent.click(details)
     const list = screen.getByRole('list')
     expect(list).toBeInTheDocument()
+  })
+
+  it('renders the appropriate links with the correct lang attribute', () => {
+    render(<LanguageSelector />)
+    const details = screen.getByRole('group', { name: 'language selector' })
+    fireEvent.click(details)
+    const links = screen.getAllByRole('link')
+    const { locale } = useRouter()
+    expect(
+      screen.queryByRole('link', { name: localeNames[locale] })
+    ).not.toBeInTheDocument()
+    expect(links).toHaveLength(Object.keys(localeNames).length - 1)
+    Object.entries(localeNames).forEach(([langCode, label]) => {
+      if (langCode !== locale) {
+        const link = screen.getByRole('link', { name: label })
+        expect(link).toHaveAttribute('lang', langCode)
+      }
+    })
   })
 
   it('renders does not render a list if there are no locales', () => {

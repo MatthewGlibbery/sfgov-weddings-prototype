@@ -1,4 +1,4 @@
-import { PageWrapper, RichText, TitleAndText } from '@/components'
+import { PageWrapper, RichText } from '@/components'
 import { SearchForm, SearchInputProps } from '@/components/Search'
 import {
   Container,
@@ -19,7 +19,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { withServerSideTranslations } from '@/lib/translations'
 import { TopicPageData } from '@/types'
-import { sendGTMEvent } from '@next/third-parties/google'
 import { useRouter } from 'next/router'
 import { getPageURL } from '@/lib/utils'
 import { TOPIC_PAGE_TYPE } from '@/constants'
@@ -47,6 +46,7 @@ export type SearchPageData = {
   normalizedQuery: string
   results: SearchResult[]
   services: TopicPageData[]
+  attributionToken: string
 }
 
 type EmptyStateData = {
@@ -84,6 +84,7 @@ export const getServerSideProps = withServerSideTranslations(
 
     let results = []
     let services = []
+    let attributionToken = ''
 
     try {
       const searchRes = await fetch(searchUrl.href, {
@@ -107,6 +108,7 @@ export const getServerSideProps = withServerSideTranslations(
       if (searchRes.ok) {
         const searchData = await searchRes.json()
         results = searchData.results
+        attributionToken = searchData.attributionToken
       }
     } catch (error) {
       console.error(`error fetching search results: ${error}`)
@@ -128,7 +130,8 @@ export const getServerSideProps = withServerSideTranslations(
         normalizedQuery,
         results,
         services,
-        env: getPublicEnv()
+        env: getPublicEnv(),
+        attributionToken
       }
     }
   }
@@ -229,7 +232,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
 
 const SearchPage = (props: SearchPageData) => {
   const { t } = useTranslation()
-  const { query, normalizedQuery, results, services } = props
+  const { query, normalizedQuery, results, services, attributionToken } = props
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(0)
   const pageResults = results.slice(
@@ -259,13 +262,13 @@ const SearchPage = (props: SearchPageData) => {
       })
 
       // push for vertex search analytics
-
       window.dataLayer.push({
         event: 'vertex_search',
         cloud_retail: {
           eventType: 'search',
           visitorId: 'id-replaced-in-gtm',
-          searchQuery: query
+          searchQuery: query,
+          attributionToken
         }
       })
     }
@@ -311,12 +314,19 @@ const SearchPage = (props: SearchPageData) => {
           <div className="flex items-center justify-center border-b-1 border-neutral300">
             <button
               className="px-16 py-[15px] flex items-center self-center gap-x-4 text-primary500"
+              aria-label={t('show-more-search-results', {
+                defaultValue: 'Show more search results'
+              })}
               onClick={(e) => {
                 e.preventDefault()
                 setCurrentPage(currentPage + 1)
               }}
             >
-              <span>{t('show-more', { defaultValue: 'Show more' })}</span>
+              <span>
+                {t('show-more-search-results', {
+                  defaultValue: 'Show more search results'
+                })}
+              </span>
               <IconChevronDown width="20" height="20" />
             </button>
           </div>

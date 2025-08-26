@@ -30,7 +30,13 @@ export const TitleAndText = ({
           {title}
         </TitleComponent>
       ) : null}
-      {text ? <RichText html={text} isDarkBg={isDarkBg} /> : null}
+      {text ? (
+        <RichText
+          html={text}
+          isDarkBg={isDarkBg}
+          headingClasses={headingClasses}
+        />
+      ) : null}
     </section>
   )
 }

@@ -14,15 +14,18 @@ export type ImageOwnProps = ComponentProps<typeof ImageBase> & {
 }
 
 /* istanbul ignore */
-export const Image = ({ imageRef, ...rest }: ImageOwnProps) => {
-  return (
-    <ImageBase
-      src={imageRef?.meta?.download_url}
-      className="w-full"
-      width={imageRef?.original?.width || 50}
-      height={imageRef?.original?.height || 50}
-      alt={imageRef?.alt_text}
-      {...rest}
-    />
-  )
-}
+export const Image = classed(
+  ({ className, imageRef, ...rest }: ImageOwnProps) => {
+    return (
+      <ImageBase
+        src={imageRef?.meta?.download_url}
+        className={className}
+        width={imageRef?.original?.width || 50}
+        height={imageRef?.original?.height || 50}
+        alt={imageRef?.alt_text || ''}
+        {...rest}
+      />
+    )
+  },
+  'w-full'
+)

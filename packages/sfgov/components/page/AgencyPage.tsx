@@ -9,7 +9,7 @@ import {
   HeadingSm,
   HeadingXlSans,
   HeadingXXl,
-  IconChevronRight,
+  IconArrowRight,
   LabelMd,
   Link,
   PageLabel,
@@ -58,7 +58,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     resources,
     about_description: aboutDescription,
     events,
-    // news,
+    news,
     partner_agencies: partnerAgencies,
     call_to_action: callToAction,
     divisions_subcommittees: divisionsSubcommittees,
@@ -71,6 +71,11 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   } = page
 
   const { t } = useTranslation()
+  const { locale, asPath } = useRouter()
+  const upcomingEventsUrl = `${
+    locale !== 'en' ? `/${locale}` : ''
+  }${asPath}/events/upcoming`
+  const allNewsUrl = `${locale !== 'en' ? `/${locale}` : ''}${asPath}/news`
 
   let divisionSubcommitteeTitle = t('divisions', { defaultValue: 'Divisions' })
 
@@ -96,7 +101,10 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     <PageWrapper title={title} meta={{ ...page.meta, description }}>
       {alert?.[0]?.value ? <Alert {...alert[0].value} /> : null}
       {mainImage ? (
-        <div className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0">
+        <div
+          className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0"
+          data-testid="main-image"
+        >
           <Image imageRef={mainImage} className="object-cover w-1/1" />
         </div>
       ) : null}
@@ -159,14 +167,14 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
                 <ButtonLink
                   link={{
                     button: {
-                      url: `${slug}/events/upcoming`,
+                      url: upcomingEventsUrl,
                       link_text: t('full-calendar', {
                         defaultValue: 'Full calendar'
                       })
                     }
                   }}
                 >
-                  <IconChevronRight className="w-20 h=20" />
+                  <IconArrowRight className="w-20 h=20" />
                 </ButtonLink>
               </div>
               {meetingInformation?.length ? (
@@ -212,34 +220,30 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               <ServiceSection sections={services} />
             </Container>
           ) : null}
-          {/* TODO: implement news */}
-          {/* {news?.length ? (
-            <Container className="space-y-20">
+          {news?.length ? (
+            <Container className="flex flex-col gap-20">
               <div className="flex items-center justify-between">
                 <HeadingXXl as="h2">
                   {t('news', { defaultValue: 'News' })}
                 </HeadingXXl>
-                <Button as="a" href={`/#`} variant="secondary">
-                  <Label className="hidden md:block">
-                    {t('full-calendar', { defaultValue: 'Full calendar' })}
-                  </Label>
-                  <IconArrowRight width={16} />
-                </Button>
+                <ButtonLink
+                  link={{
+                    button: {
+                      url: allNewsUrl,
+                      link_text: t('see-all-news', {
+                        defaultValue: 'See all news'
+                      })
+                    }
+                  }}
+                >
+                  <IconArrowRight className="w-20 h=20" />
+                </ButtonLink>
               </div>
-              <NewsTileList
-                links={news?.map((item) => ({
-                  id: item?.page_content?.id,
-                  type: 'page',
-                  value: { ...item.page_content }
-                }))}
-              />
-              {spotlight2.length ? (
-                <div className="mb-80">
-                  <Spotlight {...spotlight2[0]} />
-                </div>
-              ) : null}
+              <div className="col-span-full">
+                <NewsTileList links={news} />
+              </div>
             </Container>
-          ) : null} */}
+          ) : null}
           {spotlight2?.length ? (
             <div className="mb-20 max-w-xl md:mx-16 lg:mx-auto">
               <Spotlight

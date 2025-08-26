@@ -2,10 +2,14 @@ import { render, screen } from '@testing-library/react'
 
 import { PageWrapper } from './PageWrapper'
 import { useRouter } from 'next/router'
+import { SitewideAlertBlockFactory } from '@/lib/factories'
 
 jest.mock('next/router', () => ({ useRouter: jest.fn() }))
 
 describe('<PageWrapper>', () => {
+  const data = {
+    items: [SitewideAlertBlockFactory.make()]
+  }
   beforeEach(() => {
     useRouter.mockReturnValue({ pathname: '/' })
   })

@@ -1,6 +1,6 @@
-import { AlertBlockFactory } from '@/lib/factories'
+import { AlertBlockFactory, SitewideAlertBlockFactory } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
-import { Alert } from './Alert'
+import { Alert, SitewideAlert } from './Alert'
 
 describe('Alert', () => {
   const alert = AlertBlockFactory.make({
@@ -38,5 +38,21 @@ describe('Alert', () => {
     render(<Alert {...alert.value} />)
 
     expect(screen.getByText(alert.value.description)).toBeInTheDocument()
+  })
+
+  it('renders a sitewide alert banner', () => {
+    const alert = SitewideAlertBlockFactory.make()
+
+    render(<SitewideAlert {...alert} />)
+
+    expect(screen.getByText(alert.alert_text)).toBeInTheDocument()
+  })
+
+  it('renders a critical sitewide alert banner', () => {
+    const alert = SitewideAlertBlockFactory.make({ alert_style: 'critical' })
+
+    render(<SitewideAlert {...alert} />)
+
+    expect(screen.getByText(alert.alert_text)).toBeInTheDocument()
   })
 })

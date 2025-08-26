@@ -120,6 +120,18 @@ describe('DateTime Component', () => {
       expect(screen.getByText('1:23 am')).toBeInTheDocument()
     })
 
+    it('does not render end time if end time is explicitly excluded', () => {
+      render(
+        <ComposedTime
+          startDateTimeInput="2023-11-19T01:23:45"
+          endDateTimeInput="2023-11-25T02:01:23"
+          includeEndDateTime="no"
+        />
+      )
+      expect(screen.getByText('1:23 am')).toBeInTheDocument()
+      expect(screen.queryByText('2:01')).not.toBeInTheDocument()
+    })
+
     it('constructs the proper time range', () => {
       render(
         <ComposedTime
@@ -283,6 +295,29 @@ describe('DateTime Component', () => {
       )
       expect(screen.getAllByText(/to/)).toHaveLength(1)
     })
+    it('does not render an end time range with include_end_date_time false', () => {
+      const props = {
+        ...baseProps,
+        ...{ include_end_date_time: 'no' }
+      }
+      render(<DateTimeBlock {...props} />)
+      screen.getByRole('heading')
+
+      expect(screen.getByRole('heading')).toHaveTextContent('Date')
+      ;['Sunday, November 19, 2023'].forEach((input) =>
+        expect(screen.getByText(input)).toBeInTheDocument()
+      )
+      ;['1:23 am'].forEach((input) =>
+        expect(screen.getByText(input)).toBeInTheDocument()
+      )
+      ;['Saturday, November 25, 2023'].forEach((input) =>
+        expect(screen.queryByText(input)).not.toBeInTheDocument()
+      )
+      ;['9:02 pm'].forEach((input) =>
+        expect(screen.queryByText(input)).not.toBeInTheDocument()
+      )
+      expect(screen.queryAllByText(/to/)).toHaveLength(0)
+    })
 
     it('renders a date range with a start time only', () => {
       const props = {
@@ -293,13 +328,13 @@ describe('DateTime Component', () => {
       screen.getByRole('heading')
 
       expect(screen.getByRole('heading')).toHaveTextContent('Date')
-      ;[
-        'Sunday, November 19',
-        'Saturday, November 25, 2023',
-        '1:23 am'
-      ].forEach((input) => expect(screen.getByText(input)).toBeInTheDocument())
+      ;['Sunday, November 19, 2023', '1:23 am'].forEach((input) =>
+        expect(screen.getByText(input)).toBeInTheDocument()
+      )
+      expect(
+        screen.queryByText('Saturday, November 25, 2023')
+      ).not.toBeInTheDocument()
       expect(screen.queryByText('9:02 pm')).not.toBeInTheDocument()
-      expect(screen.getAllByText(/to/)).toHaveLength(1)
     })
 
     it.each([

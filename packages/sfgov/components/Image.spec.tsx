@@ -1,6 +1,5 @@
 import { Image } from './Image'
 import { render, screen } from '@testing-library/react'
-import { act } from 'react-dom/test-utils'
 import { ImageFactory } from '@/lib/factories'
 import fetchMock from 'jest-fetch-mock'
 
@@ -15,6 +14,7 @@ describe('<Image>', () => {
     title: 'title',
     width: 500,
     height: 500,
+    original: { url: src, full_url: src },
     meta: {
       download_url: src
     }
@@ -33,6 +33,24 @@ describe('<Image>', () => {
     expect(img).toBeInTheDocument()
     expect(img.src).toContain(encodeURIComponent(src))
     expect(img).toHaveAttribute('alt', data.alt_text)
+  })
+
+  it('renders an <img> with alt text an empty string if none provided', async () => {
+    const noAltTextData = ImageFactory.make({
+      title: 'title',
+      width: 500,
+      height: 500,
+      meta: {
+        download_url: src
+      },
+      alt_text: undefined
+    })
+    // eslint-disable-next-line jsx-a11y/alt-text
+    render(<Image imageRef={noAltTextData} />)
+
+    const img = (await screen.findByRole('img')) as HTMLImageElement
+    expect(img).toBeInTheDocument()
+    expect(img).toHaveAttribute('alt', '')
   })
 
   it('works with NextImage', async () => {

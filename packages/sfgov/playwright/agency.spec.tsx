@@ -4,9 +4,8 @@ import { test, expect } from './fixtures'
 import React from 'react'
 
 test.describe('A11y tests', () => {
-  
   // Required Global Tests
-  
+
   test('has accessible landmarks', async ({ mount, page }) => {
     const data = AgencyPageFactory.make()
     await mount(<AgencyPage page={data} />)
@@ -26,7 +25,7 @@ test.describe('A11y tests', () => {
     await mount(<AgencyPage page={data} />)
 
     await expect(page).toHaveSearchLandmark()
-  })  
+  })
 
   test('has language interaction', async ({ mount, page }) => {
     const data = AgencyPageFactory.make()
@@ -66,12 +65,15 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveDescriptiveLinkText()
   })
 
-  test('create accessible data tables for screen reader users', async ({ mount, page }) => {
+  test('create accessible data tables for screen reader users', async ({
+    mount,
+    page
+  }) => {
     const data = AgencyPageFactory.make()
     await mount(<AgencyPage page={data} />)
 
     await expect(page).toHaveScopeAttributesInDataTables()
-  }) 
+  })
 
   test('all links have keyboard focus', async ({ mount, page }) => {
     const data = AgencyPageFactory.make()
@@ -79,27 +81,43 @@ test.describe('A11y tests', () => {
 
     await expect(page).toHaveKeyboardFocusInLinks()
   })
-  
-  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({ mount, page }) => {
+
+  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({
+    mount,
+    page
+  }) => {
     const data = AgencyPageFactory.make()
     await mount(<AgencyPage page={data} />)
 
     await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
   })
-  
-  test.skip('validate search autocomplete features', async ({ mount, page }) => {
+
+  test.skip('validate search autocomplete features', async ({
+    mount,
+    page
+  }) => {
     const data = AgencyPageFactory.make()
     await mount(<AgencyPage page={data} />)
-  
+
     await expect(page).toHaveSearchAutoComplete()
   })
 
   test('validate that all ids are unique', async ({ mount, page }) => {
-      const data = AgencyPageFactory.make()
-      await mount(<AgencyPage page={data} />)
-  
-      await expect(page).toNotHaveDuplicateIds()
-    }) 
+    const data = AgencyPageFactory.make()
+    await mount(<AgencyPage page={data} />)
+
+    await expect(page).toNotHaveDuplicateIds()
+  })
+
+  test('validate that lang attributes are present in header and footer', async ({
+    mount,
+    page
+  }) => {
+    const data = AgencyPageFactory.make()
+    await mount(<AgencyPage page={data} />)
+
+    await expect(page).toHaveLangAttributes()
+  })
 
   test('validate axe core accessibility tests', async ({ mount, page }) => {
     const data = AgencyPageFactory.make()
@@ -110,41 +128,58 @@ test.describe('A11y tests', () => {
 
   // Content Type Specific Tests
 
-  test('create a logical reading order in the Services section on the Agency content type', async ({ mount, page }) => {
+  test('create a logical reading order in the Services section on the Agency content type', async ({
+    mount,
+    page
+  }) => {
     const data = AgencyPageFactory.make()
     await mount(<AgencyPage page={data} />)
 
-    await expect(page).toCreateLogicalReadingOrderInServicesSectionOnAgencyContentType()
+    await expect(
+      page
+    ).toCreateLogicalReadingOrderInServicesSectionOnAgencyContentType()
   })
 
-  test('create a logical reading order in the Resources section on the Agency content type', async ({ mount, page }) => {
+  test('create a logical reading order in the Resources section on the Agency content type', async ({
+    mount,
+    page
+  }) => {
     const data = AgencyPageFactory.make()
     await mount(<AgencyPage page={data} />)
 
-    await expect(page).toCreateLogicalReadingOrderInResourcesSectionOnAgencyContentType()
+    await expect(
+      page
+    ).toCreateLogicalReadingOrderInResourcesSectionOnAgencyContentType()
   })
 
-  test('create a logical reading order in the About section on the Agency content type', async ({ mount, page }) => {
+  test('create a logical reading order in the About section on the Agency content type', async ({
+    mount,
+    page
+  }) => {
     const data = AgencyPageFactory.make()
     await mount(<AgencyPage page={data} />)
 
-    await expect(page).toCreateLogicalReadingOrderInAboutSectionOnAgencyContentType()
+    await expect(
+      page
+    ).toCreateLogicalReadingOrderInAboutSectionOnAgencyContentType()
   })
 
   // Module Specific Tests
 
-  test('logical reading order in contact information section', async ({ mount, page }) => {
+  test('logical reading order in contact information section', async ({
+    mount,
+    page
+  }) => {
     const data = AgencyPageFactory.make()
     await mount(<AgencyPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderContactInfo()
-  })  
+  })
 
   test('logical reading order in spotlight module', async ({ mount, page }) => {
     const data = AgencyPageFactory.make()
     await mount(<AgencyPage page={data} />)
 
     await expect(page).toHaveLogicalReadingOrderInSpotlightModule()
-  }) 
-
+  })
 })

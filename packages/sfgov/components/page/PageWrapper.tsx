@@ -1,15 +1,17 @@
 'use client'
 
 import Head from 'next/head'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import {
   ErrorBoundary,
   ErrorFallbackReport,
   SiteFooter,
-  SiteHeader
+  SiteHeader,
+  SitewideAlert
 } from '@/components'
 import { MainContent } from '@/design-system'
 import { useRouter } from 'next/router'
+import { AlertData } from '@/types'
 
 type PageWrapperMetaProps = {
   type?: string
@@ -23,10 +25,32 @@ export type PageWrapperProps = {
   children?: ReactNode
 }
 
+export type TypeAlertData = {
+  items?: AlertData[]
+}
+
 export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
   const router = useRouter()
+  const hasFetched = useRef(false)
+  const [alertData, setAlertData] = useState<TypeAlertData | null>(null)
+
   const isSearchPage = router.pathname === '/search'
   const metaKeys = ['type', 'locale', 'description'] // the meta things we care about
+
+  // istanbul ignore next
+  useEffect(() => {
+    if (!hasFetched.current) {
+      const loadData = async () => {
+        const res = await fetch('/api/alerts')
+        const data = await res.json().catch(() => ({}))
+        setAlertData(data)
+        hasFetched.current = true
+      }
+
+      loadData()
+    }
+  }, [alertData])
+
   return (
     <>
       <Head>
@@ -59,6 +83,9 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
           data-testid="meta-google-site-verification"
         />
       </Head>
+      {alertData?.items?.length ? (
+        <SitewideAlert {...alertData?.items[0]} />
+      ) : null}
       <SiteHeader />
       <MainContent>
         <ErrorBoundary FallbackComponent={ErrorFallbackReport}>

@@ -4,9 +4,7 @@ import {
   DisplayXXXl,
   Grid,
   HeadingLg,
-  HeadingXl,
   HeadingXXl,
-  IconDownload,
   Link,
   PageLabel,
   PageTitleSection
@@ -59,41 +57,41 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   const { t } = useTranslation()
 
   const themeBackground = {
-    imageWithText: 'bg-primary700',
+    imageWithText: 'bg-primary50',
     accordion: '',
     video: 'bg-primary10'
   }
   const themeText = {
-    spotlight1: 'text-primary800',
-    spotlight2: 'text-white'
+    imageWithTextHeading: 'text-primary600',
+    imageWithTextBody: 'text-black',
+    spotlight1: 'text-black'
   }
   const themeButton = {
-    spotlight1: '',
-    spotlight2: 'bg-white text-primary500'
+    spotlight1: ''
   }
   switch (theme) {
     case 'black':
       themeBackground.imageWithText = 'bg-neutral800'
       themeBackground.video = 'bg-neutral10'
       themeText.spotlight1 = 'text-white'
-      themeText.spotlight2 = 'text-white'
-      themeButton.spotlight1 = 'bg-white text-primary500'
+      themeText.imageWithTextHeading = 'text-white'
+      themeText.imageWithTextBody = 'text-white'
+      themeButton.spotlight1 =
+        'bg-primary100 text-primary700 hover:bg-primary200 hover:text-primary900 focus:bg-primary200 focus:border-primary200 focus:text-primary900'
       break
     // istanbul ignore next
     case 'green':
-      themeBackground.imageWithText = 'bg-secondary600'
+      themeBackground.imageWithText = 'bg-secondary50'
       themeBackground.accordion = 'bg-secondary10 border-secondary200'
       themeBackground.video = 'bg-secondary10'
-      themeText.spotlight1 = 'text-secondary800'
-      themeText.spotlight2 = 'text-white'
+      themeText.imageWithTextHeading = 'text-secondary800'
       break
     // istanbul ignore next
     case 'orange':
-      themeBackground.imageWithText = 'bg-accent600'
+      themeBackground.imageWithText = 'bg-accent50'
       themeBackground.accordion = 'bg-accent10 border-accent200'
       themeBackground.video = 'bg-accent10'
-      themeText.spotlight1 = 'text-accent800'
-      themeText.spotlight2 = 'text-white'
+      themeText.imageWithTextHeading = 'text-accent800'
       break
     // istanbul ignore next
     default:
@@ -113,7 +111,8 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           <div
             className={classes(
               themeBackground.imageWithText,
-              'text-white md:rounded-4 max-w-xl lg:mx-auto'
+              themeText.imageWithTextBody,
+              'md:rounded-4 max-w-xl lg:mx-auto'
             )}
           >
             <div className="flex flex-col md:rounded-4 p-20 md:p-28 lg:p-40 gap-x-28 gap-y-20 max-w-xl lg:mx-auto">
@@ -124,8 +123,8 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                 title={content.value.title}
                 heading={HeadingXXl}
                 as="h2"
-                headingClasses="text-white"
-                isDarkBg={true}
+                headingClasses={themeText.imageWithTextHeading}
+                isDarkBg={theme === 'black'}
                 text={content.value.description}
               />
             </div>
@@ -309,9 +308,8 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           <div className="mb-20 max-w-xl lg:mx-auto">
             <Spotlight
               theme={theme}
-              secondary="true"
-              themeClasses={themeText.spotlight2}
-              buttonClasses={themeButton.spotlight2}
+              themeClasses={themeText.spotlight1}
+              buttonClasses={themeButton.spotlight1}
               {...spotlight2[0]}
             />
           </div>

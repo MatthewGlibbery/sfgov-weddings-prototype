@@ -295,6 +295,9 @@ function stubAPI(methods: object): IContentAPI {
     getPageByPath() {
       return Promise.resolve(undefined)
     },
+    getAlerts<T = unknown>() {
+      return Promise.resolve({} as T)
+    },
     ...methods
   }
 }

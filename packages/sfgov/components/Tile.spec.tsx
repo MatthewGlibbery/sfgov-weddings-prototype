@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import {
   TileSection,
   NewsTile,
@@ -16,6 +16,7 @@ import {
   FeaturedTopicTile
 } from './Tile'
 import {
+  DocumentValueFactory,
   EventTileFactory,
   GenericTileFactory,
   NewsTileFactory,
@@ -127,13 +128,24 @@ describe('Tile', () => {
   })
 
   it('renders a DocumentTile', () => {
-    render(<DocumentTile link={linkValue} />)
+    const link = DocumentValueFactory.make()
+    // Do this because the "raw" data, which DocumentValueFactory produces is
+    // not how the component expects it to be shaped. It instead expects a similar
+    // object but with the following transformations
+    // published_date --> publishDate
+    // file --> url
+    link.publishedDate = link.published_date
+    link.url = link.file
+
+    render(<DocumentTile link={link} />)
 
     const docTile = screen.getByRole('link')
-    const title = screen.getByText(linkValue.title)
+    const title = screen.getByText(link.title)
+    const publishDate = screen.getByRole('time')
 
     expect(docTile).toBeInTheDocument()
     expect(docTile).toContainElement(title)
+    expect(publishDate).toBeInTheDocument()
   })
 
   it('renders a DataStoryTile', () => {
@@ -150,9 +162,28 @@ describe('Tile', () => {
 
   it('renders a list of news tiles inside a TileSection', () => {
     render(<NewsTileList links={NewsTileFactory.make(3)} />)
-
     const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()
+  })
+
+  it('renders an odd number of news items appropriately', () => {
+    render(<NewsTileList links={NewsTileFactory.make(5)} />)
+    const tileSection = screen.getByTestId('tile-section')
+    const newsLeft = screen.getByTestId('news-left')
+    const newsRight = screen.getByTestId('news-right')
+    expect(tileSection).toBeInTheDocument()
+    expect(within(newsLeft).getAllByTestId('tile')).toHaveLength(3)
+    expect(within(newsRight).getAllByTestId('tile')).toHaveLength(2)
+  })
+
+  it('renders an even number of news items appropriately', () => {
+    render(<NewsTileList links={NewsTileFactory.make(6)} />)
+    const tileSection = screen.getByTestId('tile-section')
+    const newsLeft = screen.getByTestId('news-left')
+    const newsRight = screen.getByTestId('news-right')
+    expect(tileSection).toBeInTheDocument()
+    expect(within(newsLeft).getAllByTestId('tile')).toHaveLength(3)
+    expect(within(newsRight).getAllByTestId('tile')).toHaveLength(3)
   })
 
   it('renders a list of service tiles inside a TileSection', () => {

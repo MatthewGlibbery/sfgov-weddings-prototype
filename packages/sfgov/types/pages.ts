@@ -77,6 +77,12 @@ export type PageData = object &
 
 export type RelatedContentData = MinimalPageData
 
+export type AlertData = {
+  alert_style: string
+  alert_text: string
+  expiration_date: string
+}
+
 export type PrimaryAgencyData = {
   primary_agency: RelatedContentData
 }

@@ -31,7 +31,7 @@ const StyledLanguageLink = classed(NextLink, {
 // TODO: add 'vi-vn' here when we introduce Vietnamese
 type LocaleCode = 'en' | 'es' | 'zh-hant' | 'fil' | 'vi-vn'
 
-const localeNames: Record<LocaleCode, string> = {
+export const localeNames: Record<LocaleCode, string> = {
   en: 'English',
   es: 'Español',
   'zh-hant': '繁體中文',
@@ -55,7 +55,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
       .map((locale) => ({
         href: currentPath,
         locale,
-        language: localeNames[locale],
+        lang: locale,
         children: localeNames[locale]
       })) || []
   const detailsRef = useRef<HTMLDetailsElement>(null)

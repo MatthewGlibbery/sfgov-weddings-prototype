@@ -168,6 +168,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           <ComposedDate
             startDateInput={date[0]?.value.start_date}
             endDateInput={/* istanbul ignore */ date[0]?.value.end_date || ''}
+            includeEndDateTime={date[0]?.value.include_end_date_time}
           />
           {date[0]?.value.start_time ? (
             <ComposedTime
@@ -178,6 +179,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                   ? `1969-01-01T${date[0].value.end_time}`
                   : ''
               }
+              includeEndDateTime={date[0]?.value.include_end_date_time}
             />
           ) : null}
         </div>
