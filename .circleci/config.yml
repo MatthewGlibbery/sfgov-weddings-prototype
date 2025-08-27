@@ -130,4 +130,4 @@ workflows:
           extra_build_args: --provenance=false
           filters:
             branches:
-              only: main
+              only: /^CMS.*/
