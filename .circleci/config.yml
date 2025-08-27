@@ -124,6 +124,7 @@ workflows:
           repo: "platform/web"
           account_id: "395833734759"
           aws_domain: "amazonaws.com"
+          platform: "linux/amd64/v4"
           region: "us-west-1"
           tag: "${CIRCLE_SHA1},latest"
           extra_build_args: --provenance=false
