@@ -107,7 +107,7 @@ export const getServerSideProps = withServerSideTranslations(
       })
       if (searchRes.ok) {
         const searchData = await searchRes.json()
-        results = searchData.results
+        results = searchData?.results ?? []
         attributionToken = searchData.attributionToken
       }
     } catch (error) {
@@ -235,7 +235,7 @@ const SearchPage = (props: SearchPageData) => {
   const { query, normalizedQuery, results, services, attributionToken } = props
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(0)
-  const pageResults = results.slice(
+  const pageResults = (results || []).slice(
     0,
     currentPage * itemsPerPage + itemsPerPage
   )
