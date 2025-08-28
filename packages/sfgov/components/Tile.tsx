@@ -134,8 +134,8 @@ export const NewsTile = ({ link }: TileProps) => {
   )
 }
 
-export const NewsTileList = ({ links }) => {
-  if (!links || !links.length) return
+export const NewsTileList = ({ links }: TileSectionProps) => {
+  if (!links || !links.length) return null
 
   // going for that masonry feel, but have some
   // defined requirements:
@@ -157,7 +157,7 @@ export const NewsTileList = ({ links }) => {
           data-testid="news-left"
         >
           {left?.map((link) => (
-            <NewsTile key={link.di} link={link} />
+            <NewsTile key={link.id} link={link} />
           ))}
         </div>
       ) : null}
@@ -167,7 +167,7 @@ export const NewsTileList = ({ links }) => {
           data-testid="news-right"
         >
           {right?.map((link) => (
-            <NewsTile key={link.di} link={link} />
+            <NewsTile key={link.id} link={link} />
           ))}
         </div>
       ) : null}
