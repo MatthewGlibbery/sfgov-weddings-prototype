@@ -40,10 +40,6 @@ type WizardContext = WizardRenderContext & {
   wizardNav: string
 }
 
-function isMobile() {
-  return window.innerWidth <= 1024
-}
-
 /**
  * @see https://github.com/formio/bootstrap/blob/main/src/templates/bootstrap5/input/form.ejs
  */
@@ -62,12 +58,10 @@ export function form(ctx: WizardContext) {
         <h1 className="my-space-desktop-md text-desktop-display-xxxl font-slab lg:hidden">
           {title}
         </h1>
-
-        {!isMobile() ? (
-          ''
-        ) : (
-          <div dangerouslySetInnerHTML={{ __html: ctx.wizardHeader ?? '' }} />
-        )}
+        <div
+          dangerouslySetInnerHTML={{ __html: ctx.wizardHeader ?? '' }}
+          className="lg:hidden"
+        />
 
         <div>
           <h1 className="text-desktop-display-xxxl font-slab max-lg:hidden lg:block">
@@ -86,11 +80,11 @@ export function form(ctx: WizardContext) {
           />
         </div>
       </div>
-      {isMobile() ? (
-        ''
-      ) : (
-        <div dangerouslySetInnerHTML={{ __html: ctx.wizardHeader ?? '' }} />
-      )}
+
+      <div
+        dangerouslySetInnerHTML={{ __html: ctx.wizardHeader ?? '' }}
+        className="xs:hidden md:block"
+      />
     </div>
   )
 }
