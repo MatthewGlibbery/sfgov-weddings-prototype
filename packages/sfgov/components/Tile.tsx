@@ -122,7 +122,7 @@ export const NewsTile = ({ link }: TileProps) => {
           {link?.image ? (
             <Image
               imageRef={link.image}
-              className="hidden md:block w-[158px] h-[158px]"
+              className="hidden md:block w-[158px] h-[158px] object-cover"
             />
           ) : null}
         </span>
