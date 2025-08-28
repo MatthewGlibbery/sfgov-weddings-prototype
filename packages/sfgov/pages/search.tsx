@@ -302,6 +302,7 @@ const SearchPage = (props: SearchPageData) => {
                 <a
                   href={url}
                   className="flex flex-row gap-x-8 items-center text-primary500"
+                  aria-hidden="true"
                 >
                   <span>{url}</span>
                   <IconExternalLink width="20" height="20" />
