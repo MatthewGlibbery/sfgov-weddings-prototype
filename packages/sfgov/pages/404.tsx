@@ -21,7 +21,7 @@ export default function NotFoundPage() {
       title: t('find-a-city-service', { defaultValue: 'Find a City service' })
     },
     {
-      url: `${localePathPart}/topics--problems-and-complaints}`,
+      url: `${localePathPart}/topics--problems-and-complaints`,
       title: t('report-a-problem', { defaultValue: 'Report a problem' })
     }
   ]
