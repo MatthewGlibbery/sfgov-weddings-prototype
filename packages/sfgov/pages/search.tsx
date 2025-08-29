@@ -184,7 +184,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
   return (
     <div className="w-full">
       <label htmlFor="search" className="block mb-28">
-        <DisplayXXXl>Search</DisplayXXXl>
+        <DisplayXXXl as="h1">Search</DisplayXXXl>
       </label>
       <div className="relative flex items-center">
         <input
@@ -288,11 +288,10 @@ const SearchPage = (props: SearchPageData) => {
             return (
               <div key={url} className="flex flex-col gap-y-8 no-underline">
                 <HeadingLg
-                  as="a"
+                  as="h2"
                   className="text-primary500 font-bold font-body !m-0 no-underline hover:underline focus:underline"
-                  href={url}
                 >
-                  {title}
+                  <a href={url}>{title}</a>
                 </HeadingLg>
                 {snippet ? (
                   <div>
