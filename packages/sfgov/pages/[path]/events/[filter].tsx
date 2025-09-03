@@ -24,7 +24,7 @@ import { PageData } from '@/types'
 import { GetServerSidePropsContext } from 'next'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState } from 'react'
 import { breakpoints } from '@/design-system/theme/breakpoints'
 
 type Event = PageData & {
@@ -137,7 +137,7 @@ const EventInfo = ({
   </div>
 )
 
-const EventItem = (item: Event) => {
+const EventItem = forwardRef(function EventItem(item: Event, ref: any) {
   const { t } = useTranslation()
   const descMax = 600
   const eventLocation = item.location || item.meeting_location || ''
@@ -158,7 +158,7 @@ const EventItem = (item: Event) => {
   return (
     <div className="flex flex-col gap-y-8">
       <HeadingLgListItem className="!mb-0 text-primary500 flex items-start flex-col gap-y-8 md:flex-row md:gap-x-8 md:items-center">
-        <a href={getPageURL(item)} className="no-underline">
+        <a href={getPageURL(item)} className="no-underline" ref={ref}>
           {item.title}
         </a>
         {item.cancelled ? (
@@ -177,7 +177,7 @@ const EventItem = (item: Event) => {
       {eventDescription ? <p>{eventDescription}</p> : null}
     </div>
   )
-}
+})
 
 const ActiveFilterButton = (props: TypeActiveFilterButton) => {
   const { label, ariaLabel, removeHandler } = props
@@ -243,6 +243,8 @@ const PageTabs = (props: TypePageTabData) => {
   )
 }
 
+const ITEMS_PER_PAGE = 10 // the number of items per "page"
+
 const EventsPage = (props: EventPageData) => {
   const router = useRouter()
   const { t } = useTranslation()
@@ -261,9 +263,12 @@ const EventsPage = (props: EventPageData) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(props.total)
   const [inPageFilters, setInPageFilters] = useState<InPageFilter>({})
+  const [focusIndex, setFocusIndex] = useState(null)
   const filtersRef = useRef<HTMLDetailsElement | null>(null)
+  const focusRef = useRef<HTMLAnchorElement | null>(null)
   const lastWindowWidthRef = useRef(0)
   const lg = parseInt(breakpoints.lg, 10)
+  let eventsCount = 0
 
   const months = [
     { label: 'January', value: '01' },
@@ -294,10 +299,12 @@ const EventsPage = (props: EventPageData) => {
     page: number = currentPage + 1,
     filters: InPageFilter = inPageFilters
   ) => {
+    setFocusIndex(currentPage * ITEMS_PER_PAGE)
     if (events.length >= total && page !== 1) return
     try {
       const url = new URL(baseUrl)
       url.searchParams.set('page', page.toString())
+      url.searchParams.set('page_size', ITEMS_PER_PAGE)
       if (filters.childAgencies?.length) {
         url.searchParams.set(
           'child_agencies',
@@ -472,6 +479,13 @@ const EventsPage = (props: EventPageData) => {
     window.addEventListener('resize', toggleFiltersContainer)
     return () => window.removeEventListener('resize', toggleFiltersContainer)
   })
+
+  // set keyboard focus on loading additional pages
+  useEffect(() => {
+    if (focusRef.current) {
+      focusRef.current.focus()
+    }
+  }, [events])
 
   return (
     <PageWrapper>
@@ -712,9 +726,13 @@ const EventsPage = (props: EventPageData) => {
                           <HeadingXl className="!mb-0">{monthYear}</HeadingXl>
                           <div className="flex flex-col gap-y-[32px]">
                             {monthEvents.map((event: Event, i) => {
+                              eventsCount++
                               return (
                                 <EventItem
                                   key={`${monthYearKey}-${i}`}
+                                  ref={
+                                    eventsCount === focusIndex ? focusRef : null
+                                  }
                                   {...event}
                                 />
                               )

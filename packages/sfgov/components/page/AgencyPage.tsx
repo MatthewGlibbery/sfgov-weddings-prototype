@@ -215,11 +215,6 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               ) : null}
             </Container>
           ) : null}
-          {services.length ? (
-            <Container>
-              <ServiceSection sections={services} />
-            </Container>
-          ) : null}
           {news?.length ? (
             <Container className="flex flex-col gap-20">
               <div className="flex items-center justify-between">
@@ -242,6 +237,11 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               <div className="col-span-full">
                 <NewsTileList links={news} />
               </div>
+            </Container>
+          ) : null}
+          {services.length ? (
+            <Container>
+              <ServiceSection sections={services} />
             </Container>
           ) : null}
           {spotlight2?.length ? (

@@ -36,4 +36,17 @@ describe('search', () => {
       screen.getByText('Services', { selector: '.text-heading-lg-li' })
     ).toBeInTheDocument()
   })
+
+  it('renders a "no results" search page if the response contains undefined results', () => {
+    const data = SearchResultsPageFactory.make({
+      results: undefined
+    })
+    render(<SearchPage {...data} />)
+    expect(
+      screen.getByText("We don't have anything that matches your search")
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('Services', { selector: '.text-heading-lg-li' })
+    ).toBeInTheDocument()
+  })
 })

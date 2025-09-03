@@ -1,25 +1,28 @@
 import { ContentTile, PageWrapper, Spotlight } from '@/components'
-import { Container, Grid } from '@/design-system'
+import { Container, Grid, HeadingMd, IconArrowRight } from '@/design-system'
 import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 import bridgeFog from '../public/static/404.jpg'
 
 export default function NotFoundPage() {
   const { t } = useTranslation()
+  const { locale } = useRouter()
+  const localePathPart = locale !== 'en' ? `/${locale}` : ''
 
   const links = [
     {
-      url: '/departments',
-      title: t('404-contact-department', {
+      url: `${localePathPart}/departments`,
+      title: t('contact-a-city-department', {
         defaultValue: 'Contact a City department'
       })
     },
     {
-      url: '/services',
-      title: t('404-find-service', { defaultValue: 'Find a City service' })
+      url: `${localePathPart}/services`,
+      title: t('find-a-city-service', { defaultValue: 'Find a City service' })
     },
     {
-      url: '/topics--problems-and-complaints',
-      title: t('404-report-problem', { defaultValue: 'Report a problem' })
+      url: `${localePathPart}/topics--problems-and-complaints`,
+      title: t('report-a-problem', { defaultValue: 'Report a problem' })
     }
   ]
 
@@ -53,13 +56,22 @@ export default function NotFoundPage() {
           }}
           id="1"
         />
-        <Grid>
-          {links.map((tile, i) => (
-            <ContentTile
-              className="col-span-full md:col-span-4 p-12"
+        <Grid className="justify-between px-20 md:px-0">
+          {links.map((link, i) => (
+            <a
               key={i}
-              link={tile}
-            />
+              className="flex items-start gap-x-12 no-underline col-span-full md:col-span-4"
+              href={link.url}
+            >
+              <HeadingMd className="!mb-0 text-primary500">
+                {link.title}
+              </HeadingMd>
+              <IconArrowRight
+                className="ml-auto flex-shrink-0 mt-4"
+                width="20"
+                height="20"
+              />
+            </a>
           ))}
         </Grid>
       </Container>

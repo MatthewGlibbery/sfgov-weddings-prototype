@@ -11,7 +11,7 @@ export default defineConfig({
   the config file, for snapshot files
   created with toMatchSnapshot and toHaveScreenshot. */
   testMatch:
-    /(agency|campaign|data-story|home-page|information|location|profile|report|resource-collection|step-by-step|news|meeting|transaction|event|about|form|location|home-page|services|topic).spec.tsx/,
+    /(agency|campaign|data-story|home-page|information|location|profile|report|resource-collection|step-by-step|news|meeting|transaction|event|about|form|location|home-page|services|topic|search-results).spec.tsx/,
   /* Maximum time one test can run for. */
   timeout: 10 * 1000,
   /* Run tests in files in parallel */
@@ -54,6 +54,7 @@ export default defineConfig({
           '@/components': path.resolve(__dirname, './components'),
           '@/lib': path.resolve(__dirname, './lib'),
           '@/types': path.resolve(__dirname, './types'),
+          '@/constants': path.resolve(__dirname, './constants'),
           'next/router': path.resolve(__dirname, './__mocks__/next/router.ts'),
           'next/link': path.resolve(__dirname, './__mocks__/next/link.tsx'),
           'next/font/google': path.resolve(

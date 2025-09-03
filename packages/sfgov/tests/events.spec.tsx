@@ -111,7 +111,9 @@ describe('events', () => {
     expect(button).toBeInTheDocument()
     fetchMock.mockResponseOnce(JSON.stringify(data2))
     fireEvent.click(button)
-    expect(fetchMock).toHaveBeenLastCalledWith(`${data.baseUrl}/?page=2`)
+    expect(fetchMock).toHaveBeenLastCalledWith(
+      `${data.baseUrl}/?page=2&page_size=10`
+    )
     expect(screen.getByText(data2.events[0].title)).toBeInTheDocument()
   })
 
@@ -195,7 +197,7 @@ describe('events', () => {
     fireEvent.click(applyFilterBtn)
     expect(fetchMock).toHaveBeenCalledTimes(1)
     expect(fetchMock).toHaveBeenLastCalledWith(
-      `${data.baseUrl}/?page=1` +
+      `${data.baseUrl}/?page=1&page_size=10` +
         `&child_agencies=${childAgencies[0].id}%2C${childAgencies[1].id}` +
         `&start_date=2025-12-01&end_date=2025-12-31`
     )

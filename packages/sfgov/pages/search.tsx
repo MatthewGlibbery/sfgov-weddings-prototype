@@ -107,7 +107,7 @@ export const getServerSideProps = withServerSideTranslations(
       })
       if (searchRes.ok) {
         const searchData = await searchRes.json()
-        results = searchData.results
+        results = searchData?.results ?? []
         attributionToken = searchData.attributionToken
       }
     } catch (error) {
@@ -184,7 +184,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
   return (
     <div className="w-full">
       <label htmlFor="search" className="block mb-28">
-        <DisplayXXXl>Search</DisplayXXXl>
+        <DisplayXXXl as="h1">Search</DisplayXXXl>
       </label>
       <div className="relative flex items-center">
         <input
@@ -235,7 +235,7 @@ const SearchPage = (props: SearchPageData) => {
   const { query, normalizedQuery, results, services, attributionToken } = props
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(0)
-  const pageResults = results.slice(
+  const pageResults = (results || []).slice(
     0,
     currentPage * itemsPerPage + itemsPerPage
   )
@@ -288,11 +288,10 @@ const SearchPage = (props: SearchPageData) => {
             return (
               <div key={url} className="flex flex-col gap-y-8 no-underline">
                 <HeadingLg
-                  as="a"
+                  as="h2"
                   className="text-primary500 font-bold font-body !m-0 no-underline hover:underline focus:underline"
-                  href={url}
                 >
-                  {title}
+                  <a href={url}>{title}</a>
                 </HeadingLg>
                 {snippet ? (
                   <div>
@@ -302,6 +301,7 @@ const SearchPage = (props: SearchPageData) => {
                 <a
                   href={url}
                   className="flex flex-row gap-x-8 items-center text-primary500"
+                  aria-hidden="true"
                 >
                   <span>{url}</span>
                   <IconExternalLink width="20" height="20" />
