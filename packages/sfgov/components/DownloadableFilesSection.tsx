@@ -7,6 +7,8 @@ export const DownloadableFilesSection = (
   props: TypeDownloadableFilesBlockValues & { heading?: FC; isTile?: boolean }
 ) => {
   const { title, documents, heading, isTile } = props
+
+  const filteredDocuments = documents.filter(documents => documents.value && documents.value.id !== undefined)
   let titleComponent, children
   if (heading) titleComponent = heading
   else
@@ -17,7 +19,7 @@ export const DownloadableFilesSection = (
     ) : null
 
   if (isTile)
-    children = documents.map((document) => (
+    children = filteredDocuments.map((document) => (
       <ContentTile
         key={document.value.id}
         link={{
@@ -31,7 +33,7 @@ export const DownloadableFilesSection = (
       />
     ))
   else
-    children = documents.map((document) => (
+    children = filteredDocuments.map((document) => (
       <Link
         href={document.value.file}
         className="flex gap-4"
