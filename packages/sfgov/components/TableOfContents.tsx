@@ -175,7 +175,7 @@ const useHeadingsData = () => {
     // istanbul ignore next
     if (headingElements.length < 3) {
       // istanbul ignore next
-      return { headings: [] }
+      setHeadings([])
     }
     // Created a list of headings
     const newHeadings = []
