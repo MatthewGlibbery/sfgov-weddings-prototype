@@ -7348,6 +7348,65 @@ export const expect = baseExpect.extend({
     }
   },
 
+  async toHaveThumbsAttributes(page: Page) {
+    const assertionName = 'toHaveThumbsAttributes'
+    let pass: boolean
+    let matcherResult: any
+    try {
+      // 1) Locate modal dialog
+  const modal = page.getByRole('dialog', { name: 'Modal Title' });
+  await expect(modal).toBeVisible();
+
+  // 2) Expected accessible name (via aria-label)
+  const YES_NAME = 'Yes this page was helpful';
+  const NO_NAME  = 'No this page was not helpful';
+
+  // 3) Locate by role plus accessible name (this is what screen readers will announce)
+  const yesLink = modal.getByRole('link', { name: YES_NAME });
+  const noLink  = modal.getByRole('link',  { name: NO_NAME });
+
+  await expect(yesLink).toBeVisible();
+  await expect(noLink).toBeVisible();
+
+  // 4) Assert that the aria-label attribute exists and matches exactly
+  await expect(yesLink).toHaveAttribute('aria-label', YES_NAME);
+  await expect(noLink).toHaveAttribute('aria-label', NO_NAME);
+
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
   async toPassAxeCoreTests(page: Page) {
     const assertionName = 'toPassAxeCoreTests'
     let pass: boolean
