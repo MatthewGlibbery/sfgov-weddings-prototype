@@ -8,7 +8,7 @@ export const DownloadableFilesSection = (
 ) => {
   const { title, documents, heading, isTile } = props
 
-  const filteredDocuments = documents.filter(documents => documents.value && documents.value.id !== undefined)
+  const filteredDocuments = documents.filter(documents => documents.value && documents.value.file !== undefined)
   let titleComponent, children
   if (heading) titleComponent = heading
   else
