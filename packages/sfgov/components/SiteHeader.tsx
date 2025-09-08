@@ -118,7 +118,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                 <HeadingXl className="!font-extrabold !mb-0">SF.gov</HeadingXl>
               </Link>
             </div>
-            <div className="order-5 md:order-none">
+            <div className="hidden md:block">
               <NavLinks />
             </div>
             <div className="md:mr-16 ml-auto">
@@ -150,6 +150,9 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                   </>
                 )}
               />
+            </div>
+            <div className="md:hidden">
+              <NavLinks />
             </div>
           </nav>
         </Container>

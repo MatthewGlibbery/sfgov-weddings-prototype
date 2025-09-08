@@ -29,7 +29,7 @@ describe('SiteHeader', () => {
 
   it('renders the smaller screen menu when the menu button is clicked', () => {
     render(<SiteHeader />)
-    const details = screen.getByRole('group', { name: 'navigation' })
+    const details = screen.getAllByRole('group', { name: 'navigation' })[0]
     fireEvent.click(details)
     expect(screen.getAllByRole('list')[1]).toBeVisible()
   })

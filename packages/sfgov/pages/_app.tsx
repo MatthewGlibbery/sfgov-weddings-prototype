@@ -40,12 +40,15 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     if (window?.dataLayer && pageData) {
       const { type: contentType, locale } = pageData.meta || {}
       const partnerAgencies = []
-      if (pageData.primary_agency) {
-        partnerAgencies.push(pageData.primary_agency.title)
-      }
+      const primaryAgency = pageData.primary_agency
+        ? pageData.primary_agency.title
+        : undefined
+
+      // add agency itself if this is an Agency page
       if (contentType === AGENCY_PAGE_TYPE) {
         partnerAgencies.push(pageData.title)
       }
+
       pageData.partner_agencies
         ?.filter((item) => item.value !== null)
         .forEach((item) => {
@@ -54,7 +57,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       window.dataLayer.push({
         contentType,
         locale,
-        partnerAgencies
+        partnerAgencies,
+        primaryAgency
       })
     }
   }, [pathname, pageData])
