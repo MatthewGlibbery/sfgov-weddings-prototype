@@ -27,12 +27,14 @@
     "react-error-boundary": "4.0.13",
     "react-geocode": "1.0.0-alpha.1",
     "react-i18next": "15.0.2",
+    "react-modal": "^3.16.3",
     "safe-json-stringify": "1.2.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.7.3",
     "@playwright/experimental-ct-react": "^1.54.2",
     "@playwright/test": "^1.54.2",
+    "@types/react-modal": "^3.16.3",
     "@types/safe-json-stringify": "^1.1.2",
     "@types/tinycolor2": "^1.4.6",
     "dotenv": "^16.4.5",
