@@ -268,7 +268,7 @@ const EventsPage = (props: EventPageData) => {
   const focusRef = useRef<HTMLAnchorElement | null>(null)
   const lastWindowWidthRef = useRef(0)
   const lg = parseInt(breakpoints.lg, 10)
-  let eventsCount = 0
+  let eventsCount = -1
 
   const months = [
     { label: 'January', value: '01' },
