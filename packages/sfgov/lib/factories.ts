@@ -1332,8 +1332,8 @@ export const TopicPageFactory = factory<TopicPageData>((gen) => ({
   meta: PageMetaFactory.make({
     type: TOPIC_PAGE_TYPE
   }),
-  title: 'Topic',
-  description: 'Topic description',
+  title: gen.lorem.sentence(),
+  description: gen.lorem.paragraph(1),
   top_level_topic: false,
   content_fields: [
     {

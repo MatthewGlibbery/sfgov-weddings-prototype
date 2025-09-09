@@ -1,23 +1,9 @@
 import ServicesPage from '../pages/services'
 import { test, expect } from './fixtures'
-import React from 'react'
+import { TopicPageFactory } from '../lib/factories'
+
 const props = {
-  topics: [
-    {
-      url: '/topics--building/',
-      parent: 2,
-      html_path: 'http://api.sf.gov/topics--building/',
-      detail_url: 'http://api.sf.gov/api/cms/sf.Topic/1680',
-      translation_key: 'ea50e607-f1ab-44f6-9319-ec48c396a089',
-      live: true,
-      title: 'Building',
-      description: 'Construction resources and property information.',
-      top_level_topic: true,
-      partner_agencies: [],
-      locale: 'http://api.sf.gov/api/cms/locales/1',
-      alias_of: null
-    }
-  ]
+  topics: TopicPageFactory.make(3)
 }
 
 test.describe('A11y tests', () => {
