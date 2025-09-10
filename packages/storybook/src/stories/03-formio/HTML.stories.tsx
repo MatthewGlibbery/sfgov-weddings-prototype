@@ -74,17 +74,18 @@ export const IneligibleAlert: Story = {
   args: {
     content: dedent`
       <span class="fg-red-4 mr-2" data-icon="delete"><!-- ... --></span>
-      <strong>Projects in plan review use Bluebeam </strong>
-      <p>If your application is already in plan review, and you are responding
-      to plan check comments, do not use this form. You should:&nbsp;</p>
-      <ul>
-        <li>Add your updated documents directly to the Bluebeam session, or</li>
-        <li>
-          <a href="https://www.sf.gov/resubmit-plans-building-permit-application" target="_blank" rel="noopener noreferrer">
-            Follow these instructions to upload revisions
-          </a>, if you do not have access to Bluebeam.
-        </li>
-      </ul>
+      <span>
+        <strong>Projects in plan review use Bluebeam </strong>
+        <p>If your application is already in plan review, and you are responding
+        to plan check comments, do not use this form. You should:&nbsp;</p>
+        <ul>
+          <li>Add your updated documents directly to the Bluebeam session, or</li>
+          <li>
+            <a href="https://www.sf.gov/resubmit-plans-building-permit-application" target="_blank" rel="noopener noreferrer">
+              Follow these instructions to upload revisions
+            </a>, if you do not have access to Bluebeam.
+          </li>
+        </ul>
       </span>
     `
   }

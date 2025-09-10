@@ -1,12 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 /** @jsx h */
 /** @jsxFrag null */
 /** @jsxRuntime classic */
 import { classes } from '../../components'
 import h from 'vhtml'
 import type { CheckboxSchema, ComponentContext } from '../types'
+import { omit } from '../utils'
 
 export default { form }
 export type CheckboxContext = ComponentContext<CheckboxSchema> & {
@@ -14,7 +12,7 @@ export type CheckboxContext = ComponentContext<CheckboxSchema> & {
     type: 'input'
     component: CheckboxSchema
     changeEvent: string
-    attr: object
+    attr: Record<string, string>
     label: string
     labelClass: string
   }
@@ -25,18 +23,22 @@ export type CheckboxContext = ComponentContext<CheckboxSchema> & {
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/checkbox/Checkbox.js#L115C2-L120
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/checkbox/form.ejs
  */
-export function form(ctx: CheckboxContext) {
+export function form({ component, instance, input, ...ctx }: CheckboxContext) {
+  const uniqueId = `${instance.id}-${component.key}`
+  // omit "class" from attrs, because that class name adds css baggage
+  const attrs = omit(input.attr, ['class'])
   return (
     <label
-      class={`${ctx.input.labelClass} flex items-center gap-x-16 my-20`}
-      data-testid={`checkbox-${ctx.instance.id}`}
+      className={classes(input.labelClass, 'flex items-center gap-x-16 my-20')}
+      data-testid={`checkbox-${instance.id}`}
     >
       <input
         ref="input"
-        id={`${ctx.instance.id}-${ctx.component.key}`}
-        {...ctx.input.attr}
+        id={uniqueId}
+        {...attrs}
         checked={ctx.checked}
-        class={classes(
+        className={classes(
+          // className,
           'appearance-none',
           'w-40',
           'h-40',
@@ -51,12 +53,13 @@ export function form(ctx: CheckboxContext) {
           'disabled:border-neutral300',
           'rounded',
           'checked:border-primary500',
-          'checked:bg-check-white'
+          'checked:bg-check-white',
+          component.properties?.inputClass
         )}
-        aria-required={ctx.component.validate?.required ? 'true' : 'false'}
-        aria-describedby={`d-${ctx.instance.id}-${ctx.component.key}`}
+        aria-required={component.validate?.required ? 'true' : 'false'}
+        aria-describedby={`d-${uniqueId}`}
       />
-      <div dangerouslySetInnerHTML={{ __html: ctx.input.label }} />
+      <div dangerouslySetInnerHTML={{ __html: input.label }} />
     </label>
   )
 }

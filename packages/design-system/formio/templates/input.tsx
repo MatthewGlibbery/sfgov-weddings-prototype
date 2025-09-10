@@ -28,7 +28,7 @@ export type InputContext = ComponentContext<InputComponentSchema> & {
 
 const addendumClass = classed({
   base: classes(
-    'flex align-middle px-8 py-4',
+    'flex align-middle p-8',
     'border-1 border-solid border-neutral300 bg-neutral100 text-neutral700'
   ),
   variants: {
@@ -40,9 +40,16 @@ const addendumClass = classed({
 })
 
 /**
- * @see https://github.com/formio/bootstrap/blob/main/src/templates/bootstrap5/input/form.ejs
+ * @see https://github.com/formio/formio.js/tree/v4.21.3/src/templates/bootstrap/input/form.ejs
  */
-export function form({ component, input, ...ctx }: InputContext) {
+export function form({
+  component,
+  input,
+  prefix,
+  suffix,
+  ...ctx
+}: InputContext) {
+  const uniqueId = `${ctx.instance.id}-${component.key}`
   const { ref } = input
   // istanbul ignore next
   const required =
@@ -50,9 +57,6 @@ export function form({ component, input, ...ctx }: InputContext) {
       ? component.validate?.required
       : // @ts-expect-error this can be a "day" component with sub-fields
         component.fields?.[ref]?.required || null
-
-  const uniqueId = `${ctx.instance.id}-${component.key}`
-  const { prefix, suffix } = ctx
 
   return prefix || suffix ? (
     <div className="flex items-stretch">
@@ -64,8 +68,8 @@ export function form({ component, input, ...ctx }: InputContext) {
       <Input
         className={classes(
           'flex-auto',
-          prefix && 'rounded-l-0',
-          suffix && 'rounded-r-0'
+          prefix && '!rounded-l-0',
+          suffix && '!rounded-r-0'
         )}
       />
       <Addendum
@@ -90,7 +94,8 @@ export function form({ component, input, ...ctx }: InputContext) {
           aria-describedby={`e-${uniqueId}`}
           required={required}
           aria-required={required}
-          className={[
+          {...attrs}
+          className={classes(
             Tag === 'textarea' ? 'h-auto' : 'h-[56px]',
             'w-full',
             'rounded-4 px-8 py-4',
@@ -100,15 +105,15 @@ export function form({ component, input, ...ctx }: InputContext) {
             'shadow-[transparent]',
             'flex-auto',
             'focus:outline-none focus:border-[transparent]',
-            'focus:!ring focus:!ring-3 focus:!ring-primary500',
+            'focus:!ring focus:!ring-primary500',
             'aria-invalid:text-danger600',
             'aria-invalid:border-danger600',
             'aria-invalid:bg-danger100',
             'disabled:border-neutral300',
             'disabled:bg-neutral100',
-            className || ''
-          ].join(' ')}
-          {...attrs}
+            className || '',
+            component.properties?.inputClass
+          )}
           dangerouslySetInnerHTML={{ __html: input.content || '' }}
         />
         {

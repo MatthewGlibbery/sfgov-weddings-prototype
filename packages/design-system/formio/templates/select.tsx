@@ -11,7 +11,7 @@ export type SelectContext = ComponentContext<SelectSchema> & {
     ref: string
     type: 'select'
     component: SelectSchema
-    attr: object
+    attr: Record<string, string>
     multiple: boolean
   }
   selectOptions: string
@@ -20,18 +20,21 @@ export type SelectContext = ComponentContext<SelectSchema> & {
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/select/Select.js#L864-L869
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/select/form.ejs
  */
-export function form({ t, ...ctx }: SelectContext) {
+export function form(ctx: SelectContext) {
   const uniqueId = `${ctx.instance.id}-${ctx.component.key}`
+  const { class: className, ...attrs } = ctx.input.attr
   return (
     <>
       <select
+        {...attrs}
         className={classes(
+          className,
           'appearance-none',
           '!h-[56px] w-full p-16',
           '!border-1 !border-black bg-white !rounded-4',
           'dropdown-open !bg-[right_0.5rem_top_50%]',
           'focus:!border-primary500',
-          'focus:!ring focus:!ring-2 focus:!ring-primary500'
+          'focus:!ring-2 focus:!ring-primary500'
         )}
         ref={ctx.input.ref || 'selectContainer'}
         /**
@@ -45,10 +48,8 @@ export function form({ t, ...ctx }: SelectContext) {
         aria-describedby={`e-${uniqueId}`}
         aria-required={ctx.component.validate?.required}
         data-testid="formio-sfds-select"
-      >
-        <div dangerouslySetInnerHTML={{ __html: ctx.selectOptions }} />
-      </select>
-
+        dangerouslySetInnerHTML={{ __html: ctx.selectOptions }}
+      />
       {/* for the future multiselect autocomplete styling
       <input
         type="text"

@@ -4,31 +4,6 @@ import { FormPageFactory } from '@/sfgov/lib/factories'
 import { FormPageData } from '@/sfgov/types'
 import type { Meta, StoryObj } from '@storybook/react'
 
-// default form URL
-const FEEDBACK_FORM_URL =
-  'https://formio.sfgov.org/live11-ruehbbakcoznmcf/sfgovfeedbackform'
-
-/**
- * This object defines which forms we want to test directly in Storybook, and
- * allows us to alias them to keywords which can be used in story permalinks,
- * e.g.
- *
- * /storybook/?path=/story/pages-form--form&args=url:buildingPermit
- *                                                   ^^^^^^^^^^^^^^
- * We can't permalink URLs in args because Storybook forbids it for safety:
- * https://storybook.js.org/docs/writing-stories/args#setting-args-through-the-url
- */
-const FORM_ALIASES = {
-  feedback: {
-    url: FEEDBACK_FORM_URL,
-    title: 'SF.gov feedback'
-  },
-  buildingPermit: {
-    url: 'https://formio.sfgov.org/dbi/applyforabuildingpermit2024',
-    title: 'Apply for a building permit'
-  }
-} as const
-
 type FormArgs = {
   data: Partial<FormPageData>
   url: string
@@ -45,38 +20,32 @@ const meta: Meta<FormArgs> = {
       // random data on every page load
       page={FormPageFactory.seed(123).make({
         ...data,
-        form_schema_url: url
+        schema_url: url
       })}
       submitted={submitted}
       formComponentKey={component}
-      // page indexes are 0-based, but 1-based makes more sense in Storybook
-      formPage={page ? page - 1 : 0}
+      formPage={page}
     />
   ),
   args: {
-    url: 'feedback',
     submitted: false,
-    component: ''
+    component: '',
+    page: 0
   },
   argTypes: {
     url: {
-      name: 'Form',
-      options: Object.keys(FORM_ALIASES),
-      mapping: Object.fromEntries(
-        Object.entries(FORM_ALIASES).map(([key, { url }]) => [key, url])
-      ),
-      control: {
-        type: 'select',
-        labels: Object.fromEntries(
-          Object.entries(FORM_ALIASES).map(([key, { title }]) => [key, title])
-        )
-      }
+      name: 'Schema URL'
+      // type: 'string',
+      // control: {
+      //   type: 'text',
+      //   disable: true
+      // }
     },
     page: {
       name: 'Skip to page',
       type: 'number',
       control: {
-        min: 1
+        min: 0
       },
       if: {
         arg: 'submitted',
@@ -104,4 +73,26 @@ export default meta
 
 type FormPageStory = StoryObj<typeof meta>
 
-export const _Form: FormPageStory = {}
+export const Default: FormPageStory = {
+  name: 'Feedback form',
+  args: {
+    ...meta.args,
+    url: 'https://formio.sfgov.org/live11-ruehbbakcoznmcf/sfgovfeedbackform'
+  }
+}
+
+export const BuildingPermit: FormPageStory = {
+  name: 'Apply for a building permit',
+  args: {
+    ...meta.args,
+    url: 'https://formio.sfgov.org/dbi/applyforabuildingpermit2024'
+  }
+}
+
+export const HoursOfOperation: FormPageStory = {
+  name: 'Hours of operation',
+  args: {
+    ...meta.args,
+    url: 'https://formio.dev.sf.gov/dev-ruehbbakcoznmcf/hoursofoperation'
+  }
+}

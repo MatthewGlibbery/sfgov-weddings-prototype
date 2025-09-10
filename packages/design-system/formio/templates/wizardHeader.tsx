@@ -14,8 +14,10 @@ function isMobile() {
 function toggleOpenAttribute() {
   const detailsElement = document.getElementById(
     'nav-accordion'
-  ) as HTMLDetailsElement
-  detailsElement.open = !isMobile()
+  ) as HTMLDetailsElement | null
+  if (detailsElement) {
+    detailsElement.open = !isMobile()
+  }
 }
 
 /**

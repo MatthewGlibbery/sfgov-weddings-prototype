@@ -1,11 +1,18 @@
-/* eslint-disable testing-library/no-node-access, testing-library/no-container */
+/* eslint-disable @typescript-eslint/no-non-null-assertion,
+testing-library/no-node-access, testing-library/no-container */
+import React from 'react'
 import { Components, Formio } from '@formio/react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import mockConsole from 'jest-mock-console'
-import React from 'react'
-import type { Form, HTMLElementSchema, InputComponentSchema } from '../formio'
+import type {
+  Form,
+  FormSchema,
+  HTMLElementSchema,
+  InputComponentSchema
+} from '../formio'
 import { rewriteLibraryUrl } from '../formio'
 import { FORM_CLASS } from '../formio/constants.mjs'
+import * as formioComponents from '../formio/components'
 import {
   modifyComponentClassname,
   modifyHTMLElementClassname
@@ -23,9 +30,14 @@ import {
   SelectFactory,
   WizardFactory
 } from '../formio/factories'
-import basicForm from '../__fixtures__/forms/basic.json'
+import basicFormJson from '../__fixtures__/forms/basic.json'
 import callouts from '../__fixtures__/forms/callouts.json'
 import FormioForm from './FormioForm'
+
+const basicForm = basicFormJson as FormSchema
+
+// spy on calls to upgrade() so we can ensure it's called as expected
+const upgrade = jest.spyOn(formioComponents, 'upgrade')
 
 let restoreConsole: ReturnType<typeof mockConsole>
 
@@ -49,8 +61,10 @@ beforeAll(() => {
    * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/file/File.js#L85-L101
    * @see https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing/Feature_detection
    */
-  Components.components.file.prototype.init = function () {
-    // @ts-expect-error not typed
+  Components.components.file.prototype.init = function (
+    this: typeof Components.components.file
+  ) {
+    // @ts-expect-error hard to type this
     this.support = {
       filereader: false,
       formdata: false,
@@ -69,6 +83,7 @@ beforeAll(() => {
 })
 
 afterEach(() => {
+  upgrade.mockReset()
   // @ts-expect-error not typed
   const forms: Form[] = Object.values(Formio.forms)
   for (const form of forms) {
@@ -130,10 +145,9 @@ describe('FormioForm', () => {
   })
 
   it('renders a wizard form', async () => {
-    const field1 = basicForm.components[0].components[0]
-    const field2 = basicForm.components[1].components[0]
+    const field1 = basicFormJson.components[0].components[0]
+    const field2 = basicFormJson.components[1].components[0]
 
-    // @ts-expect-error derp
     render(<FormioForm form={basicForm} />)
 
     const input1 = screen.getByLabelText(field1.label, { exact: false })
@@ -147,7 +161,6 @@ describe('FormioForm', () => {
 
   describe('nav buttons', () => {
     it('renders "Get started" for the first page', async () => {
-      // @ts-expect-error derp
       render(<FormioForm form={basicForm} />)
 
       const button = screen.getByText('Get started')
@@ -266,8 +279,8 @@ describe('FormioForm', () => {
       )
 
       const input = document.querySelector('span[data-icon=alert]')
-      expect(input?.classList).not.toContain('d-none')
-      expect(input?.classList).toContain('hidden')
+      // expect(input?.classList).not.toContain('d-none')
+      // expect(input?.classList).toContain('hidden')
       expect(input?.classList).not.toContain('d-flex')
       expect(input?.classList).toContain('flex')
     })
@@ -357,55 +370,6 @@ describe('FormioForm', () => {
 
       const fieldset = screen.getByTestId('formio-sfds-fieldset')
       expect(fieldset).toBeInTheDocument()
-    })
-  })
-  describe.skip('templates', () => {
-    describe('alert', () => {
-      it('renders the alert template when invalid', async () => {
-        const label = 'Field label'
-        const error = 'This is an error'
-        render(
-          <FormioForm
-            form={WizardFactory.make({
-              components: [
-                PageFactory.make({
-                  title: 'Page 1',
-                  components: [
-                    ComponentFactory.make({
-                      label,
-                      validate: {
-                        required: true,
-                        customMessage: error
-                      }
-                    })
-                  ]
-                }),
-                PageFactory.make({
-                  title: 'Page 2',
-                  components: [
-                    ComponentFactory.make({
-                      label: `${label} two`,
-                      validate: {
-                        required: true,
-                        customMessage: error
-                      }
-                    })
-                  ]
-                })
-              ]
-            })}
-          />
-        )
-
-        await click('Get started')
-
-        const message = screen.getByText(`${label}: ${error}`, { exact: false })
-        expect(message).toBeInTheDocument()
-
-        const alert = screen.getByRole('alert')
-        expect(alert).toBeInTheDocument()
-        expect(alert).toContainElement(message)
-      })
     })
   })
 

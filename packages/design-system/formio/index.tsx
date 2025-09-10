@@ -1,20 +1,23 @@
 import { Components, Form as FormioReactForm, Formio } from '@formio/react'
 import { classed as coreClassed } from '@tw-classed/core'
 import type { ComponentProps } from 'react'
+import { useMemo } from 'react'
+import { BUTTON_VARIANTS } from '../components/Button'
+import { classed, classes } from '../components/utils'
+import { upgrade } from './components'
 import { FORM_CLASS } from './constants.mjs'
 import templates from './templates'
 import type {
   EventError,
   Form,
+  FormioFetchPlugin,
   FormioPlugin,
   FormOptions,
   FormSchema,
   FormSubmission,
   Override
 } from './types'
-import { hook } from './utils'
-import { BUTTON_VARIANTS } from '../components/Button'
-import { classed, classes } from '../components/utils'
+import { getConsole, hook } from './utils'
 
 // @ts-expect-error not typescript
 import formioStyle from './bootstrap.css'
@@ -60,7 +63,15 @@ const INITIALIZED = new Map<object, boolean>()
 export const plugin: FormioPlugin = {
   framework,
   templates: {
-    [framework]: templates
+    // @ts-expect-error why is this so hard to type?
+    [framework]: {
+      /**
+       * Used by some template frameworks to translate icon classes, etc.
+       * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/_classes/component/Component.js#L864-L869
+       */
+      transform: (type, value) => value,
+      ...templates
+    }
   }
 }
 
@@ -70,20 +81,29 @@ const FormWrapper = classed('div', {
 
 type FormWrapperProps = ComponentProps<typeof FormWrapper>
 
-// FIXME: for some reason, coverage for this function isn't being properly
-// calculated in tests even though it's _definitely_ getting called.
-// istanbul ignore next
-export function useFormio(isDev?: boolean) {
-  const debug = isDev ? console.debug.bind(console) : noop
-  const info = isDev ? console.info.bind(console) : noop
-  // const log = isDev ? console.log.bind(console) : noop
-  const warn = console.warn.bind(console)
-  // const error = console.error.bind(console)
-
+export function useFormio(isDev = false) {
+  const console = getConsole(isDev)
   addFormioStyle()
 
   once(Formio, () => {
     Formio.use(plugin)
+    // TODO: override this interface in ambient declarations so we don't have to
+    // type it explicitly
+    /* istanbul ignore next */
+    Formio.registerPlugin(
+      {
+        priority: 0,
+        async wrapRequestPromise(promise, args) {
+          if (args.type === 'form') {
+            const schema = (await promise) as FormSchema
+            upgradeSchemaOnce(schema)
+            return schema
+          }
+          return promise
+        }
+      } as FormioFetchPlugin,
+      'sfgov'
+    )
 
     /**
      * There doesn't appear to be any good way to override the Formio.CDN base
@@ -115,8 +135,9 @@ export function useFormio(isDev?: boolean) {
     const ComponentPrototype = Components.components.base.prototype
     hook(ComponentPrototype, 'renderTemplate', (renderTemplate, ...args) => {
       const content = renderTemplate(...args)
-      info('renderTemplate(', args, ') ->', typeof content)
+      // info('renderTemplate(', args, ') ->', typeof content)
       return modifyComponentClassname(
+        // istanbul ignore next
         Array.isArray(content) ? content.join('') : content
       )
     })
@@ -126,9 +147,13 @@ export function useFormio(isDev?: boolean) {
       HTMLElementPrototype,
       'renderTemplate',
       (renderTemplate, template, context, ...args) => {
-        const content = renderTemplate(template, context, ...args)
-
+        const content: string | string[] = renderTemplate(
+          template,
+          context,
+          ...args
+        )
         return modifyHTMLElementClassname(
+          // istanbul ignore next
           Array.isArray(content) ? content.join('') : content
         )
       }
@@ -136,11 +161,11 @@ export function useFormio(isDev?: boolean) {
   })
 
   function FormioForm(props: FormProps) {
-    const { formReady, ...rest } = props
-
+    const { formReady, form: originalSchema, ...rest } = props
     const formProps: Partial<FormProps> = {}
     const wrapperProps: FormWrapperProps = {}
     for (const [prop, value] of Object.entries(rest)) {
+      // istanbul ignore next
       if (FORMIO_FORM_PROPS.includes(prop as keyof FormProps)) {
         formProps[prop as keyof FormProps] = value
       } else {
@@ -148,11 +173,29 @@ export function useFormio(isDev?: boolean) {
       }
     }
 
+    /**
+     * upgrade the schema if one was passed directly (we do this in the fetch
+     * plugin so that schemas will be upgraded if they're loaded via URL)
+     */
+    const schema = useMemo(() => {
+      if (originalSchema) {
+        upgradeSchemaOnce(originalSchema as FormSchema)
+        return originalSchema
+      }
+    }, [
+      // use the form's ID as the dependency ("cache key") rather than the
+      // schema itself, because we're mutating it
+      /* istanbul ignore next */
+      originalSchema?._id
+    ])
+
     return (
       <FormWrapper {...wrapperProps}>
         <FormioReactForm
+          form={schema}
           formReady={(form: Form) => {
             once(form, addFormHooks)
+            // istanbul ignore next
             formReady?.(form)
           }}
           {...formProps}
@@ -171,6 +214,7 @@ export function useFormio(isDev?: boolean) {
     hook(
       form,
       'setAlert',
+      // istanbul ignore next
       function (
         this: Form,
         setAlert,
@@ -178,7 +222,7 @@ export function useFormio(isDev?: boolean) {
         message: string,
         ...rest
       ) {
-        debug('form.setAlert(', [type, message, ...rest], ')')
+        console.debug('form.setAlert(', [type, message, ...rest], ')')
 
         // XXX: formio.js immediately hides the success alert; this skips
         // calling form.setAlert(...) if the type is falsy and it's submitted
@@ -198,17 +242,21 @@ export function useFormio(isDev?: boolean) {
             block: 'end'
           })
         } else {
-          warn('form.setAlert() did not set this.alert')
+          console.warn('form.setAlert() did not set this.alert')
         }
       }
     )
+  }
+
+  function upgradeSchemaOnce(schema: FormSchema) {
+    once(schema, upgrade)
   }
 }
 
 function addFormioStyle() {
   // istanbul ignore next
   if (typeof formioStyle !== 'string') {
-    console.warn(
+    console.debug(
       [
         'It looks like formio styles are imported automatically;',
         'changes to the CSS may require a hard refresh.'
@@ -256,7 +304,8 @@ export function rewriteLibraryUrl(url: string) {
   return url
 }
 
-// list props here that should be passed through to the Form component instead of the wrapping div
+// list props here that should be passed through to the Form component instead
+// of the wrapping div
 const FORMIO_FORM_PROPS: Array<keyof FormProps> = [
   'form',
   'formioform',
@@ -289,6 +338,7 @@ function once<T extends object>(obj: T, fn: (obj: T) => void) {
     INITIALIZED.set(obj, true)
   }
 }
+
 export function modifyComponentClassname(value?: string) {
   const buttonClass = coreClassed(BUTTON_VARIANTS)
   return value
@@ -298,24 +348,26 @@ export function modifyComponentClassname(value?: string) {
     .replace(/\bbtn-secondary\b/g, buttonClass({ variant: 'link' }))
 }
 
+const defaultCalloutClasses = [
+  'border-1',
+  'callout-titles:text-heading-lg',
+  'callout-titles:font-bold',
+  'link:text-primary500',
+  'link:!underline',
+  'py-20',
+  'px-20',
+  'before:!inline-flex',
+  'before:!pl-[24px]',
+  'callout-titles:inline-block',
+  'callout-titles:mb-8',
+  'max-md:callout-titles:text-desktop-heading-sm',
+  'min-md:callout-titles:text-desktop-heading-md'
+]
+
 export function modifyHTMLElementClassname(value?: string) {
-  const defaultCalloutClasses = [
-    'border-1',
-    'callout-titles:text-heading-lg',
-    'callout-titles:font-bold',
-    'link:text-primary500',
-    'link:!underline',
-    'py-20',
-    'px-20',
-    'before:!inline-flex',
-    'before:!pl-[24px]',
-    'callout-titles:inline-block',
-    'callout-titles:mb-8',
-    'max-md:callout-titles:text-desktop-heading-sm',
-    'min-md:callout-titles:text-desktop-heading-md'
-  ]
-  const replaced = value
-    ?.replace(
+  if (!value) return undefined
+  return value
+    .replace(
       /\bbg-blue-1\b/g,
       classes([
         ...defaultCalloutClasses,
@@ -348,10 +400,4 @@ export function modifyHTMLElementClassname(value?: string) {
       ])
     )
     .replace(/\bfg-red-4\b/g, 'text-danger400')
-
-  return replaced
-}
-
-function noop() {
-  /* noop */
 }
