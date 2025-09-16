@@ -9,6 +9,7 @@ import {
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
 const StyledList = classed(
   'ul',
@@ -41,10 +42,12 @@ export const localeNames: Record<LocaleCode, string> = {
 
 export type LanguageSelectorProps = ComponentProps<typeof StyledList> & {
   isFooter?: boolean
+  onToggle?: () => void
 }
 
 export const LanguageSelector = (props: LanguageSelectorProps) => {
   const { asPath: currentPath, locale: currentLocale, locales } = useRouter()
+  const { t } = useTranslation()
   const [selectedLocale, setSelectedLanguage] = useState(
     currentLocale as LocaleCode
   )
@@ -77,6 +80,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
   return links.length ? (
     <details
       name="menu"
+      onToggle={props.onToggle}
       className="group md:relative"
       ref={detailsRef}
       aria-label="language selector"
@@ -87,24 +91,29 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
           'list-none [&::-webkit-details-marker]:hidden',
           'group-open:md:bg-primary100 hover:md:bg-primary100 md:h-auto md:rounded-4'
         )}
+        aria-label={t('language-menu-label', { defaultValue: 'Language menu' })}
+        data-testid="language-menu-title"
       >
         <IconGlobe
           width="20"
           height="20"
           className="shrink-0 text-primary500 md:text-black"
         />
-        <p className="w-60 text-center text-label-xs text-primary500 font-bold md:text-black md:w-80">
+        <p
+          className="w-60 text-center text-label-xs text-primary500 font-bold md:text-black md:w-80"
+          aria-hidden="true"
+        >
           {localeNames[selectedLocale]}
         </p>
         <IconChevronUp
           width="20"
           height="20"
-          className="hidden shrink-0 group-open:md:block"
+          className="hidden shrink-0 group-open:block text-primary600 md:text-black"
         />
         <IconChevronDown
           width="20"
           height="20"
-          className="hidden shrink-0 md:block group-open:md:hidden"
+          className="shrink-0 group-open:hidden text-primary600 md:text-black"
         />
       </summary>
       <StyledList {...props}>

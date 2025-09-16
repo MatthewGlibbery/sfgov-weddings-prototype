@@ -15,6 +15,7 @@ import Image from 'next/image'
 import logo from '../public/static/CCSF-seal-vector.svg'
 import { getHeaderLinks } from '@/lib/utils'
 import { SearchForm, SearchInput } from './Search'
+import { useState } from 'react'
 
 export type SiteHeaderProps = Omit<JSX.IntrinsicElements['header'], 'className'>
 
@@ -54,22 +55,48 @@ const Links = () => {
 }
 
 const NavLinks = () => {
+  const { t } = useTranslation()
+  const [isOpen, setOpen] = useState(false)
+
+  const ClosedIcon = () => <IconHamburger height="24" width="24" />
+  const OpenedIcon = () => <IconX width="24" height="24" />
+  const ToggleIcon = isOpen ? OpenedIcon : ClosedIcon
   return (
     <>
       {/* small screen - hamburger menu */}
-      <details className="group md:hidden" aria-label="navigation" name="menu">
+      <details
+        className="group md:hidden"
+        onToggle={(e) => setOpen(e.currentTarget.open)}
+        aria-label="navigation"
+        name="menu"
+      >
         <summary
           className={classes(
             'bg-primary500 text-white group-open:bg-neutral50 group-open:text-primary500',
             'list-none [&::-webkit-details-marker]:hidden',
             'flex flex-col items-center justify-center w-60 h-60 md:hidden'
           )}
+          aria-label={
+            isOpen
+              ? t('nav-links-aria-label-open', {
+                  defaultValue: 'Hide navigation menu'
+                })
+              : t('nav-links-menu-button', {
+                  defaultValue: 'Show navigation menu'
+                })
+          }
+          data-testid="navigation-title"
         >
-          <div className="group-open:hidden">
-            <IconHamburger height="24" width="24" />
-            <p className="text-[10px]">Menu</p>
+          <div>
+            <ToggleIcon />
+            {isOpen ? (
+              ''
+            ) : (
+              <p className="text-[10px]" aria-hidden="true">
+                {t('nav-links-menu-button', { defaultValue: 'Menu' })}
+              </p>
+            )}
           </div>
-          <IconX width="24" height="24" className="hidden group-open:block" />
         </summary>
         <Links />
       </details>
@@ -84,6 +111,17 @@ const NavLinks = () => {
 export const SiteHeader = (props: SiteHeaderProps) => {
   const searchParams = useSearchParams()
   const { t } = useTranslation()
+
+  const [isOpen, setOpen] = useState(false)
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false)
+
+  const ClosedIcon = () => (
+    <IconSearch width="24" height="24" className="text-primary500" />
+  )
+  const OpenedIcon = () => (
+    <IconX width="24" height="24" className="text-primary500" />
+  )
+  const ToggleIcon = isOpen ? OpenedIcon : ClosedIcon
 
   return (
     <header
@@ -122,7 +160,9 @@ export const SiteHeader = (props: SiteHeaderProps) => {
               <NavLinks />
             </div>
             <div className="md:mr-16 ml-auto">
-              <LanguageSelector />
+              <LanguageSelector
+                onToggle={() => setLanguageMenuOpen(!languageMenuOpen)}
+              />
             </div>
             <div>
               {/* there are two search inputs here because of small screen vs medium+ screen
@@ -134,13 +174,24 @@ export const SiteHeader = (props: SiteHeaderProps) => {
               <SearchForm
                 searchInput={({ value, setSearchTerm }) => (
                   <>
-                    <details className="group md:hidden" name="menu">
-                      <summary className="bg-white group-open:bg-neutral50 list-none p-16 h-60 flex items-center [&::-webkit-details-marker]:hidden">
-                        <IconSearch
-                          width="24"
-                          height="24"
-                          className="text-primary500"
-                        />
+                    <details
+                      onToggle={(e) => setOpen(e.currentTarget.open)}
+                      className="group md:hidden"
+                      name="menu"
+                    >
+                      <summary
+                        className="bg-white group-open:bg-neutral50 list-none p-16 pl-0 h-60 flex items-center [&::-webkit-details-marker]:hidden"
+                        aria-label="Search menu"
+                        data-testid="search-menu"
+                      >
+                        <div
+                          className={classes(
+                            'flex items-center border-l-1 border-l-neutral200 pl-12 h-[32px] group-open:border-l-neutral50',
+                            languageMenuOpen ? 'border-l-neutral50' : ''
+                          )}
+                        >
+                          <ToggleIcon />
+                        </div>
                       </summary>
                       <SearchInput value={value} onChange={setSearchTerm} />
                     </details>

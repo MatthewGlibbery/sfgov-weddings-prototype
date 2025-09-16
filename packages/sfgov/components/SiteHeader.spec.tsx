@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act } from 'react-dom/test-utils'
 import { SiteHeader } from './SiteHeader'
 import { useSearchParams } from '@/__mocks__/next/navigation'
 
@@ -32,5 +33,32 @@ describe('SiteHeader', () => {
     const details = screen.getAllByRole('group', { name: 'navigation' })[0]
     fireEvent.click(details)
     expect(screen.getAllByRole('list')[1]).toBeVisible()
+  })
+
+  it('toggles nav menu open and closed', async () => {
+    render(<SiteHeader />)
+
+    const summary = screen.getAllByTestId('navigation-title')[0]
+
+    await fireEvent.click(summary)
+    await waitFor(() => expect(screen.getAllByRole('list')[0]).toBeVisible())
+  })
+
+  it('toggles language selector open and closed', async () => {
+    render(<SiteHeader />)
+
+    const summary = screen.getByTestId('language-menu-title')
+
+    await fireEvent.click(summary)
+    await waitFor(() => expect(screen.getAllByRole('list')[2]).toBeVisible())
+  })
+
+  it('toggles search menu open', async () => {
+    render(<SiteHeader />)
+
+    const summary = screen.getByTestId('search-menu')
+
+    await fireEvent.click(summary)
+    await waitFor(() => expect(screen.getAllByRole('list')[1]).toBeVisible())
   })
 })
