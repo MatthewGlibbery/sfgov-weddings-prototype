@@ -26,8 +26,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
             defaultValue: 'Search'
           })}
           className={classes(
-            'w-full px-16 md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4',
-            'focus:ring focus:border-primary500 focus:!ring-primary500 focus:outline-none focus:rounded-tr-4 focus:rounded-br-4'
+            'w-full px-16 md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4'
           )}
           value={value}
           onChange={(e) => {
