@@ -179,15 +179,16 @@ export type TopicPageData = PageData & {
   partner_agencies: RelatedContentData[]
 }
 
-export type NewsPageData = PageData & {
-  headline: string
-  date: string
-  image: WagtailImageData
-  abstract: string
-  body: string
-  news_type: string
-  partner_agencies: RelatedContentData[]
-}
+export type NewsPageData = PageData &
+  PrimaryAgencyData & {
+    headline: string
+    date: string
+    image: WagtailImageData
+    abstract: string
+    body: string
+    news_type: string
+    partner_agencies: RelatedContentData[]
+  }
 
 export type AboutPageData = PageData &
   PrimaryAgencyData & {
@@ -303,18 +304,19 @@ export type CampaignPageData = PageData & {
   contact: TypeContactFooterBlock[]
 }
 
-export type MeetingPageData = PageData & {
-  primary_agencies: RelatedContentData[]
-  partner_agencies: RelatedContentData[]
-  cancelled: boolean
-  date_time: TypeDateTimeBlock[]
-  meeting_location: (TypeLocationBlock | TypeOnlineEventBlock)[]
-  overview: string
-  agenda: TypeAgendaItemBlock[]
-  videos: TypeVideoBlock[]
-  notices: TypeTitleAndTextBlock[]
-  related_documents: TypeDownloadableFilesBlock[]
-}
+export type MeetingPageData = PageData &
+  PrimaryAgencyData & {
+    primary_agencies: RelatedContentData[]
+    partner_agencies: RelatedContentData[]
+    cancelled: boolean
+    date_time: TypeDateTimeBlock[]
+    meeting_location: (TypeLocationBlock | TypeOnlineEventBlock)[]
+    overview: string
+    agenda: TypeAgendaItemBlock[]
+    videos: TypeVideoBlock[]
+    notices: TypeTitleAndTextBlock[]
+    related_documents: TypeDownloadableFilesBlock[]
+  }
 
 export type DataStoryPageData = PageData & {
   description: string
