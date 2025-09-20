@@ -36,7 +36,7 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
     <PageWrapper title={title} meta={{ ...page.meta, description: abstract }}>
       <Container className="mb-20 pb-40">
         <PageTitleSection label={type} title={title}>
-          {primaryAgency ? <PageLinksList pageLinks={[primaryAgency]} /> : null}{' '}
+          {primaryAgency ? <PageLinksList pageLinks={[primaryAgency]} /> : null}
           <HeadingXl as="p" className="text-grey600 my-20 md:my-40 lg:my-60">
             {abstract}
           </HeadingXl>

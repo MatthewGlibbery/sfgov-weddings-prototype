@@ -230,7 +230,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           >
             {primaryAgency ? (
               <PageLinksList pageLinks={[primaryAgency]} />
-            ) : null}{' '}
+            ) : null}
           </PageTitleSection>
         </div>
       </Container>
