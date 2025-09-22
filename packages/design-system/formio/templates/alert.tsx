@@ -22,8 +22,8 @@ type AlertContext = ComponentContext<FormSchema> & {
   attrs: ComponentProps<'div'>
 }
 
-const alertClass = classed({
-  base: 'mt-20 rounded-4 p-16 border-1 border-solid border-current',
+export const alertClass = classed({
+  base: 'mt-20 rounded-4 p-16 mb-8 border-1 border-solid border-current *:!my-0 !space-y-8',
   variants: {
     type: {
       danger: 'text-danger600 bg-danger100',
@@ -38,7 +38,7 @@ const alertClass = classed({
 })
 
 /**
- * @see https://github.com/formio/bootstrap/blob/main/src/templates/bootstrap5/alert/form.ejs
+ * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/alert/form.ejs
  */
 export function form({ type, message, ...ctx }: AlertContext) {
   const attrs = omit(ctx.attrs, ['class', 'style', 'role'])

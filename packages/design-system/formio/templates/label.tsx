@@ -2,14 +2,17 @@
 /** @jsxFrag null */
 /** @jsxRuntime classic */
 import h from 'vhtml'
-import type { ComponentContext } from '../types'
+import { classes } from '../../components'
+import type { AnyComponentSchema, ComponentContext } from '../types'
 
 export default { form }
 
+export type LabelContext = ComponentContext<AnyComponentSchema>
+
 /**
- * @see https://github.com/formio/bootstrap/blob/f2326e05ed5515c86396abf04c44e513f6043ea8/src/templates/bootstrap5/label/form.ejs
+ * @see https://github.com/formio/formio.js/tree/v4.21.3/src/templates/bootstrap/label/form.ejs
  */
-export function form({ t, ...ctx }: ComponentContext) {
+export function form({ t, ...ctx }: LabelContext) {
   const uniqueId = `${ctx.instance.id}-${ctx.component.key}`
   const required = ctx.component.validate?.required ? (
     <span
@@ -28,10 +31,10 @@ export function form({ t, ...ctx }: ComponentContext) {
     <>
       <label
         ref="label"
-        className={`text-label-md ${ctx.label?.className?.replace(
-          'field-required',
-          ''
-        )}`}
+        className={classes(
+          'block text-label-md mb-4 empty:mb-0',
+          ctx.label?.className?.replace('field-required', '')
+        )}
         id={`l-${uniqueId}`}
         dangerouslySetInnerHTML={{
           __html: labelText

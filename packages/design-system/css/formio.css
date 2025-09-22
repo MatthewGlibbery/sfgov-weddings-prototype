@@ -44,14 +44,14 @@
 
         /* Overrides bootstrap styles for SFDS custom components to match design system */
         .bg-blue-1 {
-            @apply  w-full !inline-flex p-20 md:px-28 lg:p-28
+            @apply w-full !inline-flex p-20 md:px-28 lg:p-28
             bg-information50 border-1 border-information600
             link:text-primary500 link:underline
             before:!info-icon before:!pl-[24px];
         }
     
         .bg-green-1 {
-            @apply  w-full !inline-flex p-20 md:px-28 lg:p-28
+            @apply w-full !inline-flex p-20 md:px-28 lg:p-28
             bg-success50 border-1 border-success600
             link:text-primary500 link:underline
             before:!success-icon before:!pl-[24px];

@@ -5,7 +5,11 @@ import {
   HeadingXXl,
   PageTitleSection
 } from '@/design-system'
-import type { Form, FormSubmission } from '@/design-system/formio'
+import type {
+  Form,
+  FormChangeEvent,
+  FormSubmission
+} from '@/design-system/formio'
 import { putMetricData } from '@/lib/metrics'
 import { getPageURL } from '@/lib/utils'
 import type {
@@ -159,11 +163,11 @@ export function FormPage({
               options={{
                 language: i18n.language
               }}
-              onChange={(form: Form) => {
-                warnBeforeLeaving =
-                  form.changed?.instance.pristine === undefined
-                    ? false
-                    : !form.changed.instance.pristine
+              onChange={(event: FormChangeEvent) => {
+                // istanbul ignore next
+                if (event.changed?.instance.root.pristine === false) {
+                  warnBeforeLeaving = true
+                }
               }}
               formReady={onFormReady}
               onSubmitDone={onSubmitDone}
@@ -180,7 +184,7 @@ export function FormPage({
     let formIsValid = true
 
     form.on('blur', (event) => {
-      const component = form.getComponent(event.component.key)
+      const component = form.getComponent(event.component.key!)
       if (component) {
         component.setPristine(false)
         component.checkValidity()

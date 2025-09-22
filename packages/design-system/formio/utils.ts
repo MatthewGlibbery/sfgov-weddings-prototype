@@ -46,3 +46,25 @@ export function omit<T extends object, K extends keyof T>(
   }
   return copy
 }
+
+const PROD_CONSOLE_NOOPS = ['debug', 'info', 'log']
+
+export function getConsole(isDev = false): Console {
+  if (isDev) {
+    const noop = () => undefined
+    // copy all of the methods from the console and bind them to the original
+    // console object unless they're listed in PROD_CONSOLE_NOOPS
+    return Object.fromEntries(
+      Object.entries(console)
+        .filter(([, v]) => typeof v === 'function')
+        .map(([method]) => [
+          method,
+          PROD_CONSOLE_NOOPS.includes(method)
+            ? noop
+            : // @ts-expect-error whateverrrr
+              console[method].bind(console)
+        ])
+    ) as Console
+  }
+  return console
+}

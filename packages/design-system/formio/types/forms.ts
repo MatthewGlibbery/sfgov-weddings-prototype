@@ -1,6 +1,6 @@
 import type {
   AnyComponentSchema,
-  PageSchema,
+  PanelSchema,
   TypedComponentSchema
 } from './components'
 
@@ -44,7 +44,7 @@ export type WizardFormSchema = TypedComponentSchema<
   'form',
   {
     display: 'wizard'
-    components: PageSchema[]
+    components: PanelSchema[]
   },
   BaseFormSchema
 >

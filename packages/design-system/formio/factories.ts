@@ -6,14 +6,14 @@ import type {
   ContainerSchema,
   FieldsetSchema,
   FlatFormSchema,
-  InputComponentSchema,
   InputOption,
-  PageSchema,
+  PanelSchema,
   RadioSchema,
   SelectBoxesSchema,
   SelectSchema,
   WizardFormSchema,
-  WellSchema
+  WellSchema,
+  AnyComponentSchema
 } from './types'
 
 const SEED = 123
@@ -45,7 +45,7 @@ export const WizardFactory = factory<WizardFormSchema>(() => {
   } as WizardFormSchema
 })
 
-export const ComponentFactory = factory<InputComponentSchema>((fake) => {
+export const ComponentFactory = factory<AnyComponentSchema>((fake) => {
   const label = fake.lorem.words(2)
   return {
     type: 'textfield',
@@ -62,11 +62,11 @@ export const ContainerComponentFactory = factory<ContainerSchema>((fake) => {
     type: 'container',
     key: fake.lorem.word(5),
     input: true,
-    components: ComponentFactory.seed(SEED).make(3) as InputComponentSchema[]
+    components: ComponentFactory.seed(SEED).make(3)
   }
 })
 
-export const PageFactory = factory<PageSchema>((fake) => {
+export const PageFactory = factory<PanelSchema>((fake) => {
   const title = fake.company.catchPhrase()
   return {
     type: 'panel',

@@ -1,15 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Formio, Components, Form as _Form } from 'formiojs'
-import type { Component } from 'formiojs/types/components/_classes/component/component'
+/* eslint-disable no-use-before-define */
+import type { Components, ComponentSchema, Form, Formio } from 'formiojs'
 import type { EventEmitter } from 'formiojs/types/eventEmitter'
 import type { i18n } from 'i18next'
 import type { AnyComponentSchema } from './components'
-import type { Override } from './utils'
+import type { FormSchema } from './forms'
+import type { ComponentInstance, ComponentTemplate } from './templates'
 
 export * from './components'
 export * from './forms'
 export * from './templates'
 export * from './utils'
+export type { Form, Formio, Components }
 
 export type EventError =
   | string
@@ -21,7 +22,7 @@ export type EventError =
 export type FormSubmission = {
   _id?: string
   state?: 'draft' | 'submitted'
-  data: Record<string, any>
+  data: Record<string, unknown>
   // https://github.com/formio/formio.js/blob/v4.21.3/src/Webform.js#L1468-L1475
   metadata?: {
     timezone: string
@@ -35,38 +36,115 @@ export type FormSubmission = {
   }
 }
 
-export type Form = Override<
-  _Form,
-  {
-    formio: Formio
+declare module 'formiojs' {
+  interface Form {
+    alert?: HTMLElement
+    // changed: any
+    data: Record<string, unknown>
     element: HTMLElement
-    alert: HTMLElement
-    changed: any
+    formio: Formio
     submitted: boolean
-    submission?: FormSubmission
-    checkValidity(data?: any, dirty?: boolean, row?: any): void
-    getComponent(key: string): Component
-    // override this because the internal argument is optional
+    submission: FormSubmission
+
+    checkValidity<T = unknown>(data?: T, dirty?: boolean, row?: T): void
+
+    getComponent<T extends AnyComponentSchema = AnyComponentSchema>(
+      key: string
+    ): ComponentInstance<T>
+    // focus on a component by its unique id
+    focusOnComponent(key: string): Promise<void>
+
+    get pristine(): boolean
+    setPristine(pristine: boolean): void
+
+    /**
+     * Different events receive different types of data in the callback, so we
+     * declare these as function overloads:
+     * @see https://www.typescriptlang.org/docs/handbook/2/functions.html#function-overloads
+     */
     on(
-      event: string,
-      cb: (...args: any[]) => void,
+      event: 'blur',
+      cb: (instance: ComponentInstance) => void,
       internal?: boolean,
       once?: boolean
     ): void
+    on(
+      event: 'change',
+      cb: (event: FormChangeEvent, flags: FormChangeFlags) => void,
+      internal?: boolean,
+      once?: boolean
+    ): void
+    on(
+      event: 'nextPage' | 'prevPage',
+      cb: (event: WizardPageEvent) => void,
+      internal?: boolean,
+      once?: boolean
+    ): void
+    on(
+      event: 'submitError',
+      cb: (errors: EventError) => void,
+      internal?: boolean,
+      once?: boolean
+    ): void
+    // this is the catch-all (default) implementation, which allows for
+    on(
+      event: string,
+      cb: (event: object) => void,
+      internal?: boolean,
+      once?: boolean
+    ): void
+
+    redraw(): Promise<void>
+
     setAlert(type: string | boolean, message?: string, options?: object): void
-    submit(before?: boolean, options?: object): Promise<object>
-    // focus on a component by its unique id
-    focusOnComponent(key: string): Promise<void>
     /**
      * This method only exists on multi-page forms, which render with the Wizard
      * class: https://github.com/formio/formio.js/blob/v4.21.3/src/Wizard.js#L642
      */
     setPage?: (page: number) => Promise<void>
-    setPristine(pristine: boolean): void
+    submit(before?: boolean, options?: object): Promise<object>
   }
->
 
-type SubmissionHookData = FormSubmission & { component?: AnyComponentSchema }
+  interface Formio {
+    createForm(
+      el: HTMLElement,
+      source: string | FormSchema,
+      options?: FormOptions
+    ): Promise<Form>
+  }
+
+  interface ValidateOptions {
+    customMessage?: string
+  }
+
+  interface ComponentSchema {
+    type?: string
+    key?: string
+    // some components can be marked as read-only
+    disabled?: boolean
+
+    // some components have a title
+    title?: string
+    tags?: string[]
+
+    // many types of text fields can optionally show the word and character
+    // counts
+    showCharCount?: boolean
+    showWordCount?: boolean
+
+    // all components can specify custom attributes
+    attributes?: Record<string, string>
+    // this field is optional for all components
+    properties?: Record<string, string>
+
+    hideOnChildrenHidden?: boolean
+    redrawOn?: string
+  }
+}
+
+interface SubmissionHookData extends FormSubmission {
+  component?: AnyComponentSchema
+}
 
 export type FormOptions = Partial<{
   allowPrevious: boolean
@@ -131,7 +209,6 @@ export type FormOptions = Partial<{
   skipDraftRestore: boolean
   submitOnEnter?: boolean
   template: string
-  // templates: object
   thousandsSeparator: string
   useSessionToken: boolean
   viewAsHtml: boolean
@@ -149,11 +226,85 @@ export type FormioPlugin = {
   }
   templates?: Record<
     string,
-    Record<
+    {
+      transform?: (type: string, value: string) => string
+    } & Record<
       string,
       {
-        form?: (context: any) => string | string[] | JSX.Element
+        form?: ComponentTemplate
+        html?: ComponentTemplate
       }
     >
   >
 }
+
+/**
+ * @see https://github.com/formio/formio.js/blob/v4.21.3/src/Webform.js#L1395-L1417
+ */
+export type FormChangeEvent = FormSubmission & {
+  isValid: boolean
+  changed?: ComponentChanged
+}
+
+/**
+ * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/_classes/component/Component.js#L2205-L2211
+ */
+export type ComponentChanged<T extends ComponentSchema = AnyComponentSchema> = {
+  instance: ComponentInstance<T>
+  component: T
+  value: unknown
+  flags: FormChangeFlags
+}
+
+export type FormChangeFlags =
+  | { silent: true }
+  | {
+      changed: boolean
+      changes: FormChangeFlags[]
+    }
+
+export interface WizardPageEvent {
+  page: number
+  submission: FormSubmission
+}
+
+// https://help.form.io/developers/fetch-plugin-api#request-requestargs
+export type RequestArgs = {
+  formio: Formio
+  type: 'form' | 'forms' | 'submission'
+  url: string
+  method: string
+  data: object
+  opts?: object
+}
+
+// https://help.form.io/developers/fetch-plugin-api#staticrequest-requestargs
+export type StaticRequestArgs = {
+  url: string
+  method: string
+  data: object
+}
+
+// fetch plugin hooks can be sync or async
+export type MaybePromise<T> = T | Promise<T>
+
+// see: https://help.form.io/developers/fetch-plugin-api#plugin-hooks
+export type FormioFetchPlugin = Partial<{
+  priority: number
+  preRequest: (args: RequestArgs) => MaybePromise<RequestArgs | void>
+  preStaticRequest: (
+    args: StaticRequestArgs
+  ) => MaybePromise<StaticRequestArgs | void>
+  request: (args: RequestArgs) => MaybePromise<RequestArgs | void>
+  staticRequest: (
+    args: StaticRequestArgs
+  ) => MaybePromise<StaticRequestArgs | void>
+  wrapRequestPromise: <T extends object>(
+    promise: Promise<T>,
+    args: RequestArgs
+  ) => Promise<T>
+  wrapStaticRequestPromise: <T extends object>(
+    promise: Promise<T>,
+    args: StaticRequestArgs
+  ) => Promise<T>
+}>

@@ -2,7 +2,7 @@
 /** @jsxFrag null */
 /** @jsxRuntime classic */
 import h from 'vhtml'
-import type { ComponentContext, PageSchema, WizardFormSchema } from '../types'
+import type { ComponentContext, PanelSchema, WizardFormSchema } from '../types'
 
 export default { form }
 
@@ -18,7 +18,7 @@ export type WizardRenderContext = ComponentContext<WizardFormSchema> & {
   wizardKey: string
   isBreadcrumbClickable: boolean
   isSubForm: boolean
-  panels: PageSchema[]
+  panels: PanelSchema[]
   currentPage: number
   buttons: Record<ButtonType, boolean>
   buttonOrder: ButtonType[]
@@ -45,7 +45,7 @@ function isMobile() {
 }
 
 /**
- * @see https://github.com/formio/bootstrap/blob/main/src/templates/bootstrap5/input/form.ejs
+ * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/wizard/form.ejs
  */
 export function form(ctx: WizardContext) {
   const title = ctx.panels[ctx.currentPage].title

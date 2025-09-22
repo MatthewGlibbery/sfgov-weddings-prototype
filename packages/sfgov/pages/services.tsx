@@ -8,14 +8,14 @@ import {
 } from '@/design-system'
 import { getPublicEnv, requireEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
+import { getPageURL } from '@/lib/utils'
+import { PageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 
 type Topic = {
   title: string
   description: string
-  url: string
-  translation_key: string
-}
+} & PageData
 
 type TopicPageData = {
   topics: Topic[]
@@ -24,15 +24,17 @@ type TopicPageData = {
 export const getServerSideProps = withServerSideTranslations(
   async ({ locale }) => {
     const url = new URL(
-      requireEnv('NEXT_PUBLIC_CONTENT_CMS_API_BASE_URL') + '/sf.Topic'
+      requireEnv('NEXT_PUBLIC_CONTENT_API_BASE_URL') + '/pages/'
     )
     url.searchParams.set('top_level_topic', 'true')
-    url.searchParams.set('locale__language_code', locale as string)
-    url.searchParams.set('live', 'true')
+    url.searchParams.set('locale', locale as string)
+    url.searchParams.set('type', 'sf.Topic')
+    url.searchParams.set('fields', 'description')
+    url.searchParams.set('order', 'title')
     const res = await fetch(url.href)
     const topics = await res.json()
     return {
-      props: { topics, env: getPublicEnv() }
+      props: { topics: topics.items, env: getPublicEnv() }
     }
   }
 )
@@ -60,12 +62,13 @@ const TopicsPage = (props: TopicPageData) => {
           {topics.map((topic) => {
             return (
               <li
-                key={topic.translation_key}
+                key={topic.meta.slug}
                 className="grid grid-cols-1 gap-y-8"
+                data-testId="service-item"
               >
                 <HeadingLg className="font-body text-primary500 !mb-0">
                   <a
-                    href={topic.url}
+                    href={getPageURL(topic)}
                     className="grid grid-cols-1 gap-y-8 no-underline"
                   >
                     {topic.title}

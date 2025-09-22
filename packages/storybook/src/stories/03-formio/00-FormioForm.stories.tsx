@@ -1,8 +1,8 @@
 import React from 'react'
 import FormioForm from '@/design-system/components/FormioForm'
-import type { WizardFormSchema } from '@/design-system/formio'
+import type { EmailSchema, WizardFormSchema } from '@/design-system/formio'
 import { Alert } from '@/sfgov/components'
-import type { Meta, StoryFn, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 import {
   ComponentFactory,
   PageFactory,
@@ -12,7 +12,10 @@ import {
 
 const meta: Meta<typeof FormioForm> = {
   title: 'formio / Form',
-  component: (args) => <FormioForm {...args} />,
+  component: (args) => {
+    console.clear()
+    return <FormioForm {...args} />
+  },
   args: {
     isDev: true
   },
@@ -54,7 +57,8 @@ type FormStory = StoryObj<typeof meta>
 export const WithURL: FormStory = {
   ...meta,
   args: {
-    src: 'https://formio.sfgov.org/dev-ruehbbakcoznmcf/honeypot'
+    ...meta.args,
+    src: 'https://formio.sfgov.org/live11-ruehbbakcoznmcf/sfgovfeedbackform'
   },
   decorators: [
     (Story) => (
@@ -85,21 +89,25 @@ export const WithSchema: FormStory = {
 export const WithErrors: FormStory = {
   ...meta,
   args: {
+    ...meta.args,
     form: getFormSchema()
   },
+  // @ts-expect-error derp
   decorators: [withFormSubmitted]
 }
 
 export const Completed: FormStory = {
   ...meta,
   args: {
+    ...meta.args,
     form: getFormSchema(false)
   },
+  // @ts-expect-error derp
   decorators: [withFormSubmitted]
 }
 
 function getFormSchema(required = true): WizardFormSchema {
-  return WizardFactory.make({
+  return WizardFactory.seed(123).make({
     title: 'Test form',
     components: [
       PageFactory.make({
@@ -120,7 +128,7 @@ function getFormSchema(required = true): WizardFormSchema {
               required,
               customMessage: 'Enter a valid email address'
             }
-          })
+          } as EmailSchema)
         ]
       })
     ]

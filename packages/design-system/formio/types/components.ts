@@ -1,7 +1,5 @@
-import type {
-  ComponentSchema as _ComponentSchema,
-  ValidateOptions
-} from 'formiojs'
+/* eslint-disable no-use-before-define */
+import type { ComponentSchema, ValidateOptions } from 'formiojs'
 import type { Override } from './utils'
 import type { Options as ChoicesOptions } from '@formio/choices.js'
 
@@ -11,23 +9,7 @@ import type { Options as ChoicesOptions } from '@formio/choices.js'
  * with `TypedComponentSchema<'type', { ... }>` and pass an optional parent
  * schema to extend. (The default is to extend `ComponentSchema`.)
  */
-export interface ComponentSchema extends _ComponentSchema {
-  type: string
-
-  // some fields are missing in the formiojs type
-  validate?: ValidateOptions & {
-    customMessage?: string
-  }
-
-  // many types of text fields can optionally show the word and character counts
-  showCharCount?: boolean
-  showWordCount?: boolean
-
-  // this field is optional for all components
-  properties?: Record<string, string>
-
-  hideOnChildrenHidden?: boolean
-}
+export type { ComponentSchema }
 
 export type TypedComponentSchema<
   T extends string,
@@ -235,14 +217,28 @@ export type FileSchema = TypedComponentSchema<
 >
 
 /**
+ *
+ */
+export type HiddenSchema = TypedComponentSchema<
+  'hidden',
+  {
+    // TODO
+  },
+  TextFieldSchema
+>
+
+/**
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/html/HTML.js#L7-L13
  */
 export type HTMLElementSchema = TypedComponentSchema<
   'htmlelement',
   {
+    content: string
     tag?: keyof HTMLElementTagNameMap
-    attrs?: { attr: string; value: string }[]
     className?: string
+    // not attributes, attr
+    attributes?: never
+    attrs?: { attr: string; value: string }[]
     // https://github.com/formio/formio.js/blob/c3d57d2fcf3a1b2b1081206c773476ff612ad168/src/components/html/editForm/HTML.edit.display.js#L90-L97
     refreshOnChange?: boolean
   }
@@ -376,6 +372,7 @@ export type InputComponentSchema =
   | DateTimeSchema
   | DaySchema
   | EmailSchema
+  | HiddenSchema
   | HTMLElementSchema
   | NumberSchema
   | SelectBoxesSchema
@@ -385,8 +382,8 @@ export type InputComponentSchema =
   | TextFieldSchema
   | TimeSchema
 
-type NestedComponentSchema = ComponentSchema & {
-  components: ComponentSchema[]
+export type NestedComponentSchema = ComponentSchema & {
+  components: AnyComponentSchema[]
   tree?: boolean
 }
 
@@ -394,12 +391,10 @@ type NestedComponentSchema = ComponentSchema & {
  * A single column in the ColumnsSchema['columns'] type
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/columns/Columns.js#L11
  */
-export type SingleColumnSchema<
-  T extends ComponentSchema = InputComponentSchema
-> = {
+export type SingleColumnSchema = {
   label?: string
   width: number
-  components: T[]
+  components: AnyComponentSchema[]
   offset?: number
   push?: number
   pull?: number
@@ -410,28 +405,38 @@ export type SingleColumnSchema<
 /**
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/columns/Columns.js#L7-L18
  */
-export type ColumnsSchema<T extends ComponentSchema = InputComponentSchema> =
-  TypedComponentSchema<
-    'columns',
-    {
-      columns: SingleColumnSchema<T>[]
-      autoAdjust?: boolean
-    }
-  >
+export type ColumnsSchema = TypedComponentSchema<
+  'columns',
+  {
+    columns: SingleColumnSchema[]
+    autoAdjust?: boolean
+  }
+>
 
 /**
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/container/Container.js#L11-L18
  */
-export type ContainerSchema<T extends ComponentSchema = ComponentSchema> =
-  TypedComponentSchema<
-    'container',
-    {
-      // key is required in container components
-      key: string
-      components: T[]
-    },
-    NestedComponentSchema
-  >
+export type ContainerSchema = TypedComponentSchema<
+  'container',
+  {
+    // key is required in container components
+    key: string
+  },
+  NestedComponentSchema
+>
+
+export type DataGridSchema = TypedComponentSchema<
+  'datagrid',
+  {
+    input?: true
+    initEmpty?: boolean
+    noFirstRow?: boolean
+    layoutFixed?: boolean
+    addAnother?: string
+    addAnotherPosition?: 'top' | 'bottom' | 'both'
+  },
+  NestedComponentSchema
+>
 
 /**
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/fieldset/Fieldset.js#L6-L12
@@ -440,20 +445,45 @@ export type FieldsetSchema = TypedComponentSchema<
   'fieldset',
   {
     legend: string
-    components: InputComponentSchema[]
     collapsible: boolean
   },
   NestedComponentSchema
 >
 
 /**
- * A "basic" component is the next step up from "primitive", and includes the
- * Columns and Fieldset types
+ * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/panel/Panel.js#L8-L18
  */
-type PrimitiveOrNestedSchema =
-  | InputComponentSchema
-  | ColumnsSchema
-  | FieldsetSchema
+export type PanelSchema = TypedComponentSchema<
+  'panel',
+  {
+    title: string
+    collapsible?: boolean
+    theme?: string
+  },
+  NestedComponentSchema
+>
+
+/**
+ * @see https://help.form.io/userguide/form-building/form-components/layout-components#table
+ * @see https://github.com/formio/formio.js/wiki/Table-Component
+ * @see https://github.com/formio/formio.js/blob/v4.21.2/src/components/table/Table.js#L18-L36
+ */
+export type TableSchema = TypedComponentSchema<
+  'table',
+  {
+    label: string
+    cellAlignment: 'left' | 'right'
+    numRows: number
+    numCols: number
+    rows: string[][]
+    header: string[]
+    striped: boolean
+    bordered: boolean
+    hover: boolean
+    condensed: boolean
+  },
+  NestedComponentSchema
+>
 
 /**
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/well/Well.js#L6-L10
@@ -462,28 +492,16 @@ export type WellSchema = TypedComponentSchema<
   'well',
   {
     input?: false
-    components: PrimitiveOrNestedSchema[]
-  },
-  NestedComponentSchema
->
-
-/**
- * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/panel/Panel.js#L8-L18
- */
-export type PageSchema = TypedComponentSchema<
-  'panel',
-  {
-    title: string
-    components: (WellSchema | PrimitiveOrNestedSchema)[]
-    collapsible?: boolean
-    theme?: string
   },
   NestedComponentSchema
 >
 
 export type AnyComponentSchema =
   | InputComponentSchema
+  | DataGridSchema
   | ColumnsSchema
   | ContainerSchema
   | FieldsetSchema
-  | PageSchema
+  | PanelSchema
+  | TableSchema
+  | WellSchema

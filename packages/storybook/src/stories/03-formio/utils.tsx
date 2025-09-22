@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import FormioForm from '@/design-system/components/FormioForm'
 import { Form, FormProps } from '@/design-system/formio'
 import { ComponentFactory, FormFactory } from '@/design-system/formio/factories'
@@ -8,6 +9,7 @@ import type {
   FlatFormSchema
 } from '@/design-system/formio/types'
 import type { Args, ArgTypes, Meta, StoryFn } from '@storybook/react'
+import { Button, ButtonProps } from '@/design-system'
 
 export * from '@/design-system/formio/factories'
 
@@ -73,8 +75,19 @@ export function createSingleFieldComponent(
   }
 }
 
-export function singleFieldSchema(
-  component: SingleFieldFormArgs,
+export const DATA_PREVIEW_SCHEMA = ComponentFactory.make({
+  type: 'htmlelement',
+  tag: 'details',
+  label: 'Data preview',
+  content: `
+    <summary class="text-heading-lg cursor-pointer">Data</summary>
+    <pre class="bg-neutral50 p-8 my-40">{{ JSON.stringify(data, null, 2) }}</pre>
+  `,
+  refreshOnChange: true
+})
+
+export function singleFieldSchema<SchemaType extends AnyComponentSchema>(
+  component: SingleFieldFormArgs<SchemaType>,
   formProps?: Partial<FlatFormSchema>
 ): FlatFormSchema {
   const { type = 'textfield', required, errorMessage, ...rest } = component
@@ -133,4 +146,35 @@ export function stackFormReady(
       return formReady?.(form)
     }
   }
+}
+
+type CopyClipboardProps = Omit<ButtonProps, 'ref'> & {
+  clipboardText: string
+  resetMs?: number
+}
+
+export function CopyClipboard({
+  clipboardText,
+  children,
+  resetMs = 1000,
+  ...rest
+}: CopyClipboardProps) {
+  const ref = useRef<HTMLButtonElement>(null)
+  const [copied, setCopied] = useState(false)
+  useEffect(() => {
+    if (copied && resetMs > 0) {
+      const timer = setTimeout(() => {
+        setCopied(false)
+        ref.current?.blur()
+      }, resetMs)
+      return () => clearTimeout(timer)
+    }
+  }, [copied, resetMs])
+  return (
+    <CopyToClipboard text={clipboardText} onCopy={() => setCopied(true)}>
+      <Button ref={ref} {...rest}>
+        {copied ? 'Copied' : children || 'Copy'}
+      </Button>
+    </CopyToClipboard>
+  )
 }

@@ -30,6 +30,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   const { t } = useTranslation()
   const {
     title,
+    primary_agency: primaryAgency,
     primary_agencies: primaryAgencies,
     partner_agencies: agencies,
     cancelled,
@@ -227,8 +228,8 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
             title={title}
             label={t('meeting', { defaultValue: 'Meeting' })}
           >
-            {primaryAgencies.length ? (
-              <PageLinksList pageLinks={primaryAgencies} />
+            {primaryAgency ? (
+              <PageLinksList pageLinks={[primaryAgency]} />
             ) : null}
           </PageTitleSection>
         </div>

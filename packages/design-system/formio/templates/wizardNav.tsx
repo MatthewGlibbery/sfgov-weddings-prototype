@@ -11,7 +11,7 @@ export default { form }
 const buttonClass = classed(BUTTON_VARIANTS)
 
 /**
- * @see https://github.com/formio/bootstrap/blob/main/src/templates/bootstrap5/wizardNav/form.ejs
+ * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/wizardNav/form.ejs
  */
 export function form({ t, ...ctx }: WizardRenderContext) {
   const buttonProps: Partial<

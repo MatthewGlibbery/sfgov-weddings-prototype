@@ -58,7 +58,7 @@ export function form(ctx: RadioContext) {
             )}`}
           >
             <input
-              className={`${classes(
+              className={classes(
                 'appearance-none',
                 'w-40',
                 'h-40',
@@ -70,15 +70,14 @@ export function form(ctx: RadioContext) {
                 'outline-primary500',
                 'focus:outline',
                 'disabled:bg-neutral100',
-                'disabled:border-neutral300'
-              )} ${
+                'disabled:border-neutral300',
                 ctx.component.type === 'selectboxes'
-                  ? classes(
+                  ? [
                       'rounded',
                       'checked:border-primary500',
                       'checked:bg-check-white'
-                    )
-                  : classes(
+                    ]
+                  : [
                       'rounded-full',
                       'ring',
                       'check-shadow-inner',
@@ -86,8 +85,8 @@ export function form(ctx: RadioContext) {
                       'disabled:shadow-none',
                       'disabled:outline-none',
                       'disabled:ring-0'
-                    )
-              }`}
+                    ]
+              )}
               ref="input"
               {...ctx.input.attr}
               value={item.value}
