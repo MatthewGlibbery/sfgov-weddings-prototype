@@ -191,8 +191,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
           type="text"
           placeholder={t('search', { defaultValue: 'Search' })}
           className={classes(
-            'w-full px-16 md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4',
-            'focus:ring focus:border-primary500 focus:!ring-primary500 focus:outline-none focus:rounded-tr-4 focus:rounded-br-4'
+            'w-full px-16 md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4'
           )}
           value={value}
           onChange={(e) => {
@@ -302,9 +301,10 @@ const SearchPage = (props: SearchPageData) => {
                   href={url}
                   className="flex flex-row gap-x-8 items-center text-primary500"
                   aria-hidden="true"
+                  tabIndex={-1}
                 >
                   <span>{url}</span>
-                  <IconExternalLink width="20" height="20" />
+                  <IconExternalLink width="20" height="20" aria-hidden="true" />
                 </a>
               </div>
             )
