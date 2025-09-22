@@ -177,9 +177,14 @@ const EmptyState = (props: EmptyStateData) => {
 }
 
 export const SearchInput = ({ onChange, value }: SearchInputProps) => {
+  const inputRef = useRef<HTMLAnchorElement | null>(null)
+
   const { t } = useTranslation()
   const clearSearch = () => {
     onChange('')
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
   }
   return (
     <div className="w-full">
@@ -191,12 +196,13 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
           type="text"
           placeholder={t('search', { defaultValue: 'Search' })}
           className={classes(
-            'w-full px-16 md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4'
+            'w-full pl-16 pr-[50px] md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4'
           )}
           value={value}
           onChange={(e) => {
             onChange(e.target.value)
           }}
+          ref={inputRef}
         />
         {value ? (
           <button
