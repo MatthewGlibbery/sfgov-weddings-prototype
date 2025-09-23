@@ -98,6 +98,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
           width="20"
           height="20"
           className="shrink-0 text-primary500 md:text-black"
+          aria-hidden="true"
         />
         <p
           className="w-60 text-center text-label-xs text-primary500 font-bold md:text-black md:w-80"
@@ -109,11 +110,13 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
           width="20"
           height="20"
           className="hidden shrink-0 group-open:block text-primary600 md:text-black"
+          aria-hidden="true"
         />
         <IconChevronDown
           width="20"
           height="20"
           className="shrink-0 group-open:hidden text-primary600 md:text-black"
+          aria-hidden="true"
         />
       </summary>
       <StyledList {...props}>

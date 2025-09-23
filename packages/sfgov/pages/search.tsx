@@ -177,9 +177,14 @@ const EmptyState = (props: EmptyStateData) => {
 }
 
 export const SearchInput = ({ onChange, value }: SearchInputProps) => {
+  const inputRef = useRef<HTMLAnchorElement | null>(null)
+
   const { t } = useTranslation()
   const clearSearch = () => {
     onChange('')
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
   }
   return (
     <div className="w-full">
@@ -191,12 +196,13 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
           type="text"
           placeholder={t('search', { defaultValue: 'Search' })}
           className={classes(
-            'w-full px-16 md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4'
+            'w-full pl-16 pr-[50px] md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4'
           )}
           value={value}
           onChange={(e) => {
             onChange(e.target.value)
           }}
+          ref={inputRef}
         />
         {value ? (
           <button
@@ -238,6 +244,8 @@ const SearchPage = (props: SearchPageData) => {
     0,
     currentPage * itemsPerPage + itemsPerPage
   )
+  const [focusIndex, setFocusIndex] = useState(null)
+  const focusRef = useRef<HTMLAnchorElement | null>(null)
   const router = useRouter()
   const lastSearchTerm = useRef<string | null>(null)
   const Bold = classed('strong', 'inline font-bold')
@@ -274,12 +282,18 @@ const SearchPage = (props: SearchPageData) => {
     lastSearchTerm.current = query
   }, [urlQuery, query, normalizedQuery])
 
+  useEffect(() => {
+    if (focusRef.current) {
+      focusRef.current.focus()
+    }
+  }, [currentPage])
+
   if (query && pageResults.length > 0) {
     // we searched and there are results
     content = (
       <div className="flex flex-col gap-y-40">
         <div className="flex flex-col gap-y-[32px]">
-          {pageResults.map((item) => {
+          {pageResults.map((item, i) => {
             const url = item.document.derivedStructData.link
             const title = item.document.derivedStructData.title
             const snippet =
@@ -290,7 +304,9 @@ const SearchPage = (props: SearchPageData) => {
                   as="h2"
                   className="text-primary500 font-bold font-body !m-0 no-underline hover:underline focus:underline"
                 >
-                  <a href={url}>{title}</a>
+                  <a href={url} ref={i === focusIndex ? focusRef : null}>
+                    {title}
+                  </a>
                 </HeadingLg>
                 {snippet ? (
                   <div>
@@ -320,6 +336,7 @@ const SearchPage = (props: SearchPageData) => {
               onClick={(e) => {
                 e.preventDefault()
                 setCurrentPage(currentPage + 1)
+                setFocusIndex(currentPage * itemsPerPage + itemsPerPage)
               }}
             >
               <span>
