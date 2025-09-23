@@ -1,4 +1,4 @@
-import { FormEvent, ReactNode, useState } from 'react'
+import { FormEvent, ReactNode, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { classes, DisplayXXXl, IconSearch, IconX } from '@/design-system'
 import { menuClasses } from './SiteHeader'
@@ -10,9 +10,13 @@ export type SearchInputProps = {
 }
 
 export const SearchInput = ({ onChange, value }: SearchInputProps) => {
+  const inputRef = useRef<HTMLAnchorElement | null>(null)
   const { t } = useTranslation()
   const clearSearch = () => {
     onChange('')
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
   }
   return (
     <div className={classes(menuClasses, 'px-28 py-20', 'md:relative md:p-0')}>
@@ -26,13 +30,13 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
             defaultValue: 'Search'
           })}
           className={classes(
-            'w-full px-16 md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4',
-            'focus:ring focus:border-primary500 focus:!ring-primary500 focus:outline-none focus:rounded-tr-4 focus:rounded-br-4'
+            'w-full pl-16 pr-[50px] md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4'
           )}
           value={value}
           onChange={(e) => {
             onChange(e.target.value)
           }}
+          ref={inputRef}
         />
         {value ? (
           <button
@@ -43,7 +47,12 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
             onClick={clearSearch}
             type="button"
           >
-            <IconX width="20" height="20" className="text-neutral500" />
+            <IconX
+              width="20"
+              height="20"
+              className="text-neutral500"
+              aria-hidden="true"
+            />
           </button>
         ) : null}
         <button
@@ -51,7 +60,12 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
           className="flex items-center justify-center border-1 p-16 rounded-tr-4 rounded-br-4 bg-primary500 h-[44px] w-[44px]  md:h-[56px] md:w-[56px] hover:bg-primary800"
           type="submit"
         >
-          <IconSearch width="20" height="20" className="text-white shrink-0" />
+          <IconSearch
+            width="20"
+            height="20"
+            className="text-white shrink-0"
+            aria-hidden="true"
+          />
         </button>
       </div>
     </div>

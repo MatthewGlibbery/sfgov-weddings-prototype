@@ -58,8 +58,10 @@ const NavLinks = () => {
   const { t } = useTranslation()
   const [isOpen, setOpen] = useState(false)
 
-  const ClosedIcon = () => <IconHamburger height="24" width="24" />
-  const OpenedIcon = () => <IconX width="24" height="24" />
+  const ClosedIcon = () => (
+    <IconHamburger height="24" width="24" aria-hidden="true" />
+  )
+  const OpenedIcon = () => <IconX width="24" height="24" aria-hidden="true" />
   const ToggleIcon = isOpen ? OpenedIcon : ClosedIcon
   return (
     <>
@@ -116,10 +118,20 @@ export const SiteHeader = (props: SiteHeaderProps) => {
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false)
 
   const ClosedIcon = () => (
-    <IconSearch width="24" height="24" className="text-primary500" />
+    <IconSearch
+      width="24"
+      height="24"
+      className="text-primary500"
+      aria-hidden="true"
+    />
   )
   const OpenedIcon = () => (
-    <IconX width="24" height="24" className="text-primary500" />
+    <IconX
+      width="24"
+      height="24"
+      className="text-primary500"
+      aria-hidden="true"
+    />
   )
   const ToggleIcon = isOpen ? OpenedIcon : ClosedIcon
 

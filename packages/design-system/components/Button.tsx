@@ -20,10 +20,6 @@ export const BUTTON_VARIANTS = {
     'no-underline',
     'whitespace-nowrap',
     'w-fit',
-    'focus:ring',
-    'focus:ring-[3px]',
-    'focus:ring-offset-4',
-    'focus:ring-primary500',
     'disabled:text-neutral300',
     'disabled:bg-neutral100',
     'disabled:!cursor-not-allowed'

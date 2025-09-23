@@ -4,12 +4,26 @@
 @import "./formio.css";
 
 @layer base {
+  /* Wagtail UI only allows for 5-layers deep of nesting. */
   ol {
     list-style: decimal;
     margin: 16px 0;
     padding-left: 40px;
-  }
 
+    ol {
+      list-style: lower-alpha;
+      ol {
+        list-style: lower-roman;
+        ol {
+        list-style: decimal;
+          ol {
+            list-style: lower-alpha;
+          }
+        }
+      }
+    }
+  }
+    
   ul {
     list-style: disc;
     margin: 16px 0;
@@ -26,5 +40,11 @@
 
   input::placeholder {
     @apply text-neutral600
+  }
+
+  :focus-visible {
+    outline: 3px solid theme('colors.primary500');
+    outline-offset: 4px;
+    border-radius: 4px;
   }
 }
