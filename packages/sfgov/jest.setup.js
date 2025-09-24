@@ -22,3 +22,13 @@ expect.extend({
     }
   }
 })
+
+// set up DOM element for ReactModal
+// because feedback modal is added to PageWrapper and
+// all page components use it
+let root = document.getElementById('__next')
+if (!root) {
+  root = document.createElement('div')
+  root.id = '__next'
+  document.body.appendChild(root)
+}
