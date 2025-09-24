@@ -44,10 +44,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         page_referrer: prevPagePath.current,
         page_location: router.asPath,
         page_title: document.title,
-        contentType: undefined,
-        locale: undefined,
-        primaryAgency: undefined,
-        partnerAgencies: undefined
+        contentType: null,
+        locale: null,
+        primaryAgency: null,
+        partnerAgencies: null
       }
       if (!pageData) return base
       const { type: contentType, locale } = pageData.meta || {}
