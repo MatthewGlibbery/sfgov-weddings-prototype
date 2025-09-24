@@ -31,6 +31,7 @@ export const EmbeddedContentBlock = (props: TypeEmbeddedContentBlockValues) => {
           ref={embedNavRef}
           onFocus={handleFocus}
           className="p-28 rounded bg-neutral50 mb-40 sr-only focus:not-sr-only focus:p-28 focus:mb-40"
+          data-testid="embed-nav-instructions"
         >
           <div className="flex items-start lg:items-center mb-20">
             <IconAccessibility className="w-[24px] h-[24px] lg:w-40 lg:h-40" />
