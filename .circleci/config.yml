@@ -100,7 +100,6 @@ jobs:
             fi
           no_output_timeout: 60m
 
-
 workflows:
   # Docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   build_and_test:
@@ -116,17 +115,17 @@ workflows:
             branches:
               only: develop
       - aws-ecr/build_and_push_image:
-          auth: 
+          auth:
             - aws-cli/setup:
               auth: static
-              aws_access_key_id: "${$AWS_ACCESS_KEY_ID}"
-              aws_secret_access_key: "${$AWS_SECRET_ACCESS_KEY}"
-          repo: "platform/web"
-          account_id: "395833734759"
-          aws_domain: "amazonaws.com"
-          platform: "linux/amd64/v4"
-          region: "us-west-1"
-          tag: "${CIRCLE_SHA1},latest"
+              aws_access_key_id: '${$AWS_ACCESS_KEY_ID}'
+              aws_secret_access_key: '${$AWS_SECRET_ACCESS_KEY}'
+          repo: 'platform/web'
+          account_id: '395833734759'
+          aws_domain: 'amazonaws.com'
+          platform: 'linux/amd64/v4'
+          region: 'us-west-1'
+          tag: '${CIRCLE_SHA1},latest,${CIRCLE_BRANCH},${CIRCLE_PULL_REQUEST##*/}'
           extra_build_args: --provenance=false
           filters:
             branches:
