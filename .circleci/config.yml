@@ -125,7 +125,7 @@ workflows:
           aws_domain: 'amazonaws.com'
           platform: 'linux/amd64/v4'
           region: 'us-west-1'
-          tag: '${CIRCLE_SHA1},latest,${CIRCLE_BRANCH},${CIRCLE_PULL_REQUEST##*/}'
+          tag: '${CIRCLE_SHA1},latest,${CIRCLE_BRANCH},PR-${CIRCLE_PULL_REQUEST##*/}'
           extra_build_args: --provenance=false
           filters:
             branches:
