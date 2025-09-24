@@ -94,7 +94,7 @@ function formatDateTimeRange(
   const startTimeStr = startDateTime.toLocaleString('default', timeOptions)
   const endDateStr = endDateTime.toLocaleString('default', dateOptions)
   const endTimeStr = endDateTime.toLocaleString('default', timeOptions)
-  console.log(`includeEndDateTime: ${includeEndDateTime}`)
+
   const dateRange =
     !includeEndDateTime ||
     startDateTime.toDateString() === endDateTime.toDateString()

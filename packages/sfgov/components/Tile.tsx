@@ -372,7 +372,7 @@ export const MeetingTile = ({ link }: TileProps) => {
                       year: 'numeric'
                     }}
                     includeEndDateTime={
-                      dateTime?.[0].value.include_end_date_time || ''
+                      dateTime?.[0].value.include_end_date_time || null
                     }
                   />
                 </BodyText>
