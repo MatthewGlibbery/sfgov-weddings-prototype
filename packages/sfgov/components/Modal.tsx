@@ -9,6 +9,7 @@ type ModalProps = {
   title?: string
   isOpen?: boolean
   onClose?: () => void
+  onAfterOpen?: () => void
   children?: React.ReactNode
 }
 
@@ -16,10 +17,16 @@ export const Modal = ({
   title,
   isOpen = false,
   onClose,
+  onAfterOpen,
   children
 }: ModalProps) => {
-  // setAppElement is required for ReactModal to know which content to hide for screen readers
-  ReactModal.setAppElement('#__next')
+  // setAppElement required for ReactModal to hide content for screen readers
+  try {
+    ReactModal.setAppElement('#__next')
+  } catch (e) {
+    /* istanbul ignore next */
+    ReactModal.setAppElement(document.body)
+  }
 
   // grab some refs to set initial focus
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -31,6 +38,7 @@ export const Modal = ({
     } else if (children && childrenContainerRef.current) {
       childrenContainerRef.current.focus()
     }
+    if (onAfterOpen) onAfterOpen()
   }
 
   return (
@@ -39,16 +47,19 @@ export const Modal = ({
       onRequestClose={onClose}
       onAfterOpen={handleAfterOpen}
       htmlOpenClassName="overflow-hidden"
-      shouldFocusAfterRender={false} // shut this off, we'll control the initial focus
+      shouldFocusAfterRender={false} // we'll control the initial focus
       overlayClassName="grid grid-cols-12 w-full fixed inset-0 bg-[#000]/60 z-50 flex items-center justify-center px-20 md:px-0"
       className="p-20 col-span-full md:p-28 md:col-span-6 md:col-start-4 lg:p-32 bg-white rounded-4 shadow-md"
+      aria={{
+        labelledby: 'modalTitle'
+      }}
     >
       <div className="flex flex-col gap-y-[32px] relative">
         {/* TODO: we might want to consider using forwardRef
         on the Heading components if we find ourselves needing
         to set focus on headings in different contexts */}
         {title ? (
-          <h1 ref={headingRef} tabIndex={-1}>
+          <h1 id="modalTitle" ref={headingRef} tabIndex={-1}>
             <HeadingLg className="!m-0 pr-28">{title}</HeadingLg>
           </h1>
         ) : null}

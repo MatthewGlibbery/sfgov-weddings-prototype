@@ -68,6 +68,7 @@ export function FormPage({
   const {
     submission: submissionId,
     submitted: queryParamSubmitted,
+    feedbackSubmission,
     ...rawQueryParams
   } = Object.fromEntries(queryParams?.entries() || [])
 
@@ -261,6 +262,12 @@ export function FormPage({
           })
         )
       }
+    } else if (feedbackSubmission) {
+      // feedback submission only, skip any fetching
+      const { formio } = form
+      formio.submissionId = feedbackSubmission
+      formio.submissionUrl = `${formio.formUrl}/submission/${feedbackSubmission}`
+      await form.render()
     }
 
     if (formComponentKey) {
