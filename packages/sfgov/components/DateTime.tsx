@@ -19,7 +19,7 @@ type ComposedDateProps = {
   endDateInput?: string
   locale?: string
   dateStyle?: 'full' | 'long' | 'medium' | 'short' | FormatOptions | undefined
-  includeEndDateTime?: string
+  includeEndDateTime?: 'yes' | 'no'
   asString: boolean
 }
 

@@ -142,7 +142,7 @@ export type TypeDateTimeValues = {
   end_date: string
   end_time: string
   is_all_day: boolean
-  include_end_date_time: string // TODO: convert to a Boolean later!
+  include_end_date_time: 'yes' | 'no'
 }
 
 export type TypeDateTimeBlock = BlockType<string, TypeDateTimeValues>
