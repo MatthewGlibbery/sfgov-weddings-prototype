@@ -340,11 +340,9 @@ const SearchPage = (props: SearchPageData) => {
                 setFocusIndex(currentPage * itemsPerPage + itemsPerPage)
               }}
             >
-              <span>
-                {t('show-more-search-results', {
-                  defaultValue: 'Show more search results'
-                })}
-              </span>
+              {t('show-more-search-results', {
+                defaultValue: 'Show more search results'
+              })}
               <IconChevronDown width="20" height="20" />
             </button>
           </div>
