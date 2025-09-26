@@ -46,7 +46,7 @@ export const EmbeddedContentBlock = (props: TypeEmbeddedContentBlockValues) => {
               dashboard
             </li>
             <li>
-              <kbd className="border-1 p-2 rounded-2">Tab</kbd> or{' '}
+              <kbd className="border-1 p-2 rounded-2">Tab</kbd> or&nbsp;
               <kbd className="border-1 p-2 rounded-2">Arrow</kbd> to move
               between visuals
             </li>
