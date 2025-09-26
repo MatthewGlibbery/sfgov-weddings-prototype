@@ -67,7 +67,7 @@ export const EmbeddedContentBlock = (props: TypeEmbeddedContentBlockValues) => {
           </div>
           <ul className="list-none space-y-8 m-0 p-0">
             <li>
-              <kbd className="border-1 p-2 rounded-2">Tab</kbd> or{' '}
+              <kbd className="border-1 p-2 rounded-2">Tab</kbd> or&nbsp;
               <kbd className="border-1 p-2 rounded-2">Arrow</kbd> to move around
               a table or visual
             </li>
