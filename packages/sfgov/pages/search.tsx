@@ -62,7 +62,8 @@ export const getServerSideProps = withServerSideTranslations(
       locale
     } = context
 
-    const normalizedQuery = (q || '').trim().toLowerCase().replace(/\s+/g, ' ')
+    const searchTerm = Array.isArray(q) ? q[0] : q || ''
+    const normalizedQuery = searchTerm.trim().toLowerCase().replace(/\s+/g, ' ')
     const searchUrl = new URL('https://discoveryengine.googleapis.com')
     searchUrl.pathname += `v1/projects/${requireEnv(
       'GOOGLE_PROJECT_ID'
@@ -93,11 +94,10 @@ export const getServerSideProps = withServerSideTranslations(
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          servingConfig: `projects/${requireEnv(
-            'GOOGLE_PROJECT_ID'
-          )}/locations/global/collections/default_collection/engines/${requireEnv(
-            'GOOGLE_AGENT_BUILDER_SEARCH_APP_ID'
-          )}`,
+          servingConfig:
+            `projects/${requireEnv('GOOGLE_PROJECT_ID')}` +
+            `/locations/global/collections/default_collection/engines/` +
+            `${requireEnv('GOOGLE_AGENT_BUILDER_SEARCH_APP_ID')}`,
           pageSize: 100, // depends on indexing type, but will coerce to max
           safeSearch: true,
           spellCorrectionSpec: { mode: 'AUTO' },
@@ -126,7 +126,7 @@ export const getServerSideProps = withServerSideTranslations(
 
     return {
       props: {
-        query: q || '',
+        query: searchTerm,
         normalizedQuery,
         results,
         services,
@@ -177,7 +177,7 @@ const EmptyState = (props: EmptyStateData) => {
 }
 
 export const SearchInput = ({ onChange, value }: SearchInputProps) => {
-  const inputRef = useRef<HTMLAnchorElement | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   const { t } = useTranslation()
   const clearSearch = () => {
@@ -244,7 +244,7 @@ const SearchPage = (props: SearchPageData) => {
     0,
     currentPage * itemsPerPage + itemsPerPage
   )
-  const [focusIndex, setFocusIndex] = useState(null)
+  const [focusIndex, setFocusIndex] = useState<number | null>(null)
   const focusRef = useRef<HTMLAnchorElement | null>(null)
   const router = useRouter()
   const lastSearchTerm = useRef<string | null>(null)
@@ -281,7 +281,7 @@ const SearchPage = (props: SearchPageData) => {
       })
     }
     lastSearchTerm.current = query
-  }, [urlQuery, query, normalizedQuery])
+  }, [urlQuery, query, normalizedQuery, attributionToken])
 
   useEffect(() => {
     if (focusRef.current) {
