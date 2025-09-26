@@ -257,7 +257,7 @@ const SearchPage = (props: SearchPageData) => {
     // "show more" state changes
     if (window.dataLayer && urlQuery && urlQuery !== lastSearchTerm.current) {
       // https://developers.google.com/tag-platform/devguides/datalayer#reset
-      window.dataLayer.push(function () {
+      window.dataLayer.push(function (this: { reset: () => void }) {
         this.reset()
       })
 
@@ -265,7 +265,8 @@ const SearchPage = (props: SearchPageData) => {
         event: 'view_search_results',
         search_term: normalizedQuery,
         contentType: undefined, // clear out irrelevant datalayer things
-        partnerAgencies: undefined
+        partnerAgencies: undefined,
+        primaryAgency: undefined
       })
 
       // push for vertex search analytics
