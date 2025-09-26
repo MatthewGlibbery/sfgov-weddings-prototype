@@ -41,7 +41,7 @@ export const EmbeddedContentBlock = (props: TypeEmbeddedContentBlockValues) => {
           </div>
           <ul className="list-none space-y-8 m-0 p-0">
             <li>
-              <kbd className="border-1 p-2 rounded-2">Control</kbd> +{' '}
+              <kbd className="border-1 p-2 rounded-2">Control</kbd> +&nbsp;
               <kbd className="border-1 p-2 rounded-2">Enter</kbd> to enter the
               dashboard
             </li>
