@@ -51,7 +51,7 @@ export const EmbeddedContentBlock = (props: TypeEmbeddedContentBlockValues) => {
               between visuals
             </li>
             <li>
-              <kbd className="border-1 p-2 rounded-2">Control</kbd> +{' '}
+              <kbd className="border-1 p-2 rounded-2">Control</kbd> +&nbsp;
               <kbd className="border-1 p-2 rounded-2">Right arrow</kbd> to enter
               a visual or filter
             </li>
