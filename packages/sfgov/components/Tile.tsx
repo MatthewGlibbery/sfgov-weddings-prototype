@@ -371,6 +371,9 @@ export const MeetingTile = ({ link }: TileProps) => {
                       day: '2-digit',
                       year: 'numeric'
                     }}
+                    includeEndDateTime={
+                      dateTime?.[0].value.include_end_date_time || 'no'
+                    }
                   />
                 </BodyText>
               </div>
