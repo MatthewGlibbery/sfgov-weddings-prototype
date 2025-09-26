@@ -89,4 +89,38 @@ describe('Modal', () => {
     await fireEvent.click(modalCloseButton)
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
+
+  it('executes the after open callback', async () => {
+    const handleAfterOpen = jest.fn()
+    const ModalParent = () => {
+      const [modalOpen, setModalOpen] = useState(false)
+      return (
+        <>
+          <button
+            onClick={() => {
+              setModalOpen(true)
+            }}
+          >
+            open modal
+          </button>
+          <Modal
+            title="A modal title"
+            onClose={() => {
+              setModalOpen(false)
+            }}
+            isOpen={modalOpen}
+            onAfterOpen={handleAfterOpen}
+          >
+            <div>modal content</div>
+          </Modal>
+        </>
+      )
+    }
+    render(<ModalParent />)
+    const openButton = screen.getByRole('button', { name: 'open modal' })
+    await fireEvent.click(openButton)
+    await waitFor(() => {
+      expect(handleAfterOpen).toHaveBeenCalled()
+    })
+  })
 })

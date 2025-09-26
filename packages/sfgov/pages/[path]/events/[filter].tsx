@@ -92,24 +92,19 @@ function formatDateTimeRange(
   const endDateTime = new Date(end)
   const startDateStr = startDateTime.toLocaleString('default', dateOptions)
   const startTimeStr = startDateTime.toLocaleString('default', timeOptions)
+  const endDateStr = endDateTime.toLocaleString('default', dateOptions)
+  const endTimeStr = endDateTime.toLocaleString('default', timeOptions)
 
   const dateRange =
+    !includeEndDateTime ||
     startDateTime.toDateString() === endDateTime.toDateString()
       ? startDateStr
-      : `${startDateStr} to ${endDateTime.toLocaleString(
-          'default',
-          dateOptions
-        )}`
-  let timeRange = `${startTimeStr} to ${endDateTime.toLocaleString(
-    'default',
-    timeOptions
-  )}`
-  if (
-    startDateTime.toTimeString() === endDateTime.toTimeString() ||
-    includeEndDateTime
-  ) {
-    timeRange = startTimeStr
-  }
+      : `${startDateStr} to ${endDateStr}`
+  const timeRange =
+    !includeEndDateTime ||
+    startDateTime.toDateString() === endDateTime.toDateString()
+      ? startTimeStr
+      : `${startTimeStr} to ${endTimeStr}`
 
   return { dateRange, timeRange }
 }
@@ -152,7 +147,7 @@ const EventItem = forwardRef(function EventItem(item: Event, ref: any) {
     item.start_datetime,
     item.end_datetime,
     !!item.date_time?.length &&
-      item.date_time?.[0]?.value?.include_end_date_time === 'no'
+      item.date_time?.[0]?.value?.include_end_date_time === 'yes'
   )
 
   return (

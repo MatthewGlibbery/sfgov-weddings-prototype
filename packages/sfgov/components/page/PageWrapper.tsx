@@ -12,6 +12,7 @@ import {
 import { MainContent } from '@/design-system'
 import { useRouter } from 'next/router'
 import { AlertData } from '@/types'
+import { Feedback } from '../Feedback'
 
 type PageWrapperMetaProps = {
   type?: string
@@ -36,6 +37,7 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
 
   const isSearchPage = router.pathname === '/search'
   const metaKeys = ['type', 'locale', 'description'] // the meta things we care about
+  const excludePaths = ['/500']
 
   // istanbul ignore next
   useEffect(() => {
@@ -93,6 +95,9 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
         </ErrorBoundary>
       </MainContent>
       <SiteFooter />
+      {(!excludePaths.includes(router.pathname) && meta?.type) !== 'sf.Form' ? (
+        <Feedback />
+      ) : null}
     </>
   )
 }
