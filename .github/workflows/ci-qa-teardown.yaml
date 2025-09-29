@@ -1,0 +1,15 @@
+name: QA sites teardown 
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  trigger-circleci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CircleCI Trigger on Pull Request closed
+        id: gha_aws_teardown_qa
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
+        env:
+          CCI_TOKEN: ${{ secrets.QA_SITE_NEXT_TOKEN }}

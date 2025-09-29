@@ -134,3 +134,17 @@ Run `translations-gather` then `translations-upload`.
 [sf.gov design system]: https://design-system.sf.gov
 [sf.gov]: https://sf.gov
 .
+
+### PR based sites(optional)
+
+If your pull request(PR) needs a site to review any changes, you can the phrase `[qa env]` in the commit message anytime to create one.  PR sites are automatically removed upon PR closed(don't delete the branch right away as it relies on querying the branch during tear down).
+
+```
+https://web-{{ pr_number }}.dev.sf.gov
+```
+
+#### AWX job templates:
+
+- [create EC2](https://awx.api.sf.gov/#/templates/job_template/165)
+- [deploy](https://awx.api.sf.gov/#/templates/job_template/164)
+- [teardown on PR closed](https://awx.api.sf.gov/#/templates/job_template/168)
