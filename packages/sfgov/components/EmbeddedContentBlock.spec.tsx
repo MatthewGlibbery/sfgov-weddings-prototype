@@ -32,4 +32,13 @@ describe('EmbeddedContentBlock', () => {
     )
     expect(screen.queryByTestId('embedded-no-source')).not.toBeInTheDocument()
   })
+
+  it('renders the embedded content block with navigation instructions', async () => {
+    const fixture = EmbeddedContentFactory.make()
+    render(<EmbeddedContentBlock {...fixture.value} />)
+    const navInstructEl = screen.getByTestId('embed-nav-instructions')
+    expect(navInstructEl).toHaveClass('sr-only')
+    navInstructEl.focus()
+    expect(navInstructEl).not.toHaveClass('sr-only')
+  })
 })
