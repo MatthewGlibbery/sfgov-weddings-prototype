@@ -1,5 +1,4 @@
 import {
-  Button,
   classed,
   Container,
   HeadingMd,
@@ -23,9 +22,6 @@ import frontFogRight from '../public/static/front-fog-right.svg'
 import transamerica from '../public/static/transamerica.svg'
 import sutro from '../public/static/sutro.svg'
 import salesforce from '../public/static/salesforce.svg'
-import { useRouter } from 'next/router'
-import NextLink from 'next/link'
-import { useSearchParams } from 'next/navigation'
 
 const StyledFooter = classed('div', 'bg-primary900 text-white')
 
@@ -33,44 +29,10 @@ export type SiteFooterProps = ComponentProps<typeof StyledFooter>
 
 export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
   const { t } = useTranslation()
-  const router = useRouter()
-  const queryParams = useSearchParams()
   const links = getFooterLinks(t)
 
-  // istanbul ignore next
-  const { ...rawQueryParams } = Object.fromEntries(queryParams?.entries() || [])
-
-  // istanbul ignore next
-  const isFeedbackForm =
-    rawQueryParams.referrer && router.asPath.includes('feedback')
   return (
     <footer role="contentinfo">
-      {
-        /* istanbul ignore next */ isFeedbackForm ? null : (
-          <Container
-            className="flex flex-col md:flex-row md:items-center py-20 gap-16"
-            data-gtm-id="feedback-form"
-          >
-            <div>
-              {t('feedback-footer-text', {
-                defaultValue: 'Was this page helpful?'
-              })}
-            </div>
-            <Button
-              as={NextLink}
-              variant="tertiary"
-              href={{
-                pathname: '/feedback',
-                query: { referrer: router.asPath }
-              }}
-            >
-              {t('feedback-footer-button', {
-                defaultValue: 'Share your feedback'
-              })}
-            </Button>
-          </Container>
-        )
-      }
       <StyledFooter {...rest}>
         <Container className="pt-28 md:pt-[48px] md:flex md:justify-between">
           <div className="md:content-center">

@@ -17,16 +17,6 @@ describe('Feedback modal', () => {
     })
   })
 
-  beforeAll(() => {
-    if (typeof AbortSignal.timeout !== 'function') {
-      AbortSignal.timeout = function (ms) {
-        const controller = new AbortController()
-        setTimeout(() => controller.abort(), ms)
-        return controller.signal
-      }
-    }
-  })
-
   it('renders the feedback modal if the floating panel is clicked', async () => {
     render(<Feedback />)
     const floatingPanelBtn = screen.getByRole('button', {
@@ -196,7 +186,42 @@ describe('Feedback modal', () => {
     errorSpy.mockRestore()
   })
 
-  it('logs a timeout error if the fetch times out', async () => {
+  it('falls back to AbortController signal if AbortSignal.timeout is unavailable', async () => {
+    jest.useFakeTimers()
+    const errorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined)
+    render(<Feedback />)
+    const floatingPanelBtn = screen.getByRole('button', {
+      name: 'Did you find what you needed?'
+    })
+    await fireEvent.click(floatingPanelBtn)
+    const noBtn = screen.getByRole('button', {
+      name: 'No this page was not helpful'
+    })
+    fetchMock.mockRejectOnce(new DOMException('aborted', 'AbortError'))
+    fireEvent.click(noBtn)
+    jest.advanceTimersByTime(6000)
+    await waitFor(() => {
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'Timeout: could not create formio feedback submission'
+        )
+      )
+    })
+    expect(screen.getByTestId('wrong-section')).toBeInTheDocument()
+    errorSpy.mockRestore()
+    jest.useRealTimers()
+  })
+
+  it('uses AbortSignal.timeout if available', async () => {
+    if (typeof AbortSignal.timeout !== 'function') {
+      AbortSignal.timeout = function (ms) {
+        const controller = new AbortController()
+        setTimeout(() => controller.abort(), ms)
+        return controller.signal
+      }
+    }
     jest.useFakeTimers()
     const errorSpy = jest
       .spyOn(console, 'error')

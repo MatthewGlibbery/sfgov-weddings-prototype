@@ -49,7 +49,7 @@ export const Modal = ({
       htmlOpenClassName="overflow-hidden"
       shouldFocusAfterRender={false} // we'll control the initial focus
       overlayClassName="grid grid-cols-12 w-full fixed inset-0 bg-[#000]/60 z-50 flex items-center justify-center px-20 md:px-0"
-      className="p-20 col-span-full md:p-28 md:col-span-6 md:col-start-4 lg:p-32 bg-white rounded-4 shadow-md"
+      className="p-20 col-span-full md:p-28 md:col-span-6 md:col-start-4 lg:col-span-4 lg:col-start-5 lg:p-32 bg-white rounded-4 shadow-md"
       aria={{
         labelledby: 'modalTitle'
       }}
