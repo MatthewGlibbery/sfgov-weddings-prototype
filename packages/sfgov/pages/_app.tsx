@@ -39,7 +39,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   // when to update the datalayer, otherwise datalayer will be stale
   // when navigating the site using the next/link Links
   useEffect(() => {
-    function getPageDataLayer(pageData) {
+    function getPageDataLayer(pageData: PageWithPartnerAgencies) {
       const base = {
         page_referrer: prevPagePath.current,
         page_location: router.asPath,
@@ -77,12 +77,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       }
     }
     const pageDataLayer = getPageDataLayer(pageData)
-    if (!window.dataLayer) return
     if (isFirstLoad.current) {
       window.dataLayer?.push(pageDataLayer)
       isFirstLoad.current = false
     } else {
-      window?.dataLayer?.push({
+      window.dataLayer?.push({
         event: 'routeChangePageView',
         ...pageDataLayer
       })
