@@ -1,4 +1,3 @@
-import { Utils } from 'formiojs'
 import { classes } from '../../components'
 import type moment from 'moment'
 import type {
@@ -6,7 +5,6 @@ import type {
   ComponentInstance,
   ContainerSchema,
   DataGridSchema,
-  FormSchema,
   HiddenSchema,
   TextAreaSchema,
   TimeSchema
@@ -96,24 +94,6 @@ export const VALIDATE_DAY_GRID_PLACEHOLDER =
   '/* PLACEHOLDER: validateDayGrid() */valid = true'
 export const CALULATE_DAY_VALUES_PLACEHOLDER =
   '/* PLACEHOLDER: stringifyDayValues() */value = ""'
-
-/**
- * Upgrade a form schema with custom validations (for input) and calculated
- * values (for output). This modifies the components in place, replacing the
- * placeholder expression strings with the actual function.
- */
-export function upgradeHoursOfOperation(form: FormSchema) {
-  for (const comp of Utils.searchComponents(form.components, {
-    'validate.custom': VALIDATE_DAY_GRID_PLACEHOLDER
-  })) {
-    comp.validate.custom = validateDayGrid
-  }
-  for (const comp of Utils.searchComponents(form.components, {
-    calculateValue: CALULATE_DAY_VALUES_PLACEHOLDER
-  })) {
-    comp.calculateValue = stringifyDayValues
-  }
-}
 
 export type HoursOfOperationSchema = ContainerSchema
 export type HoursOfOperationOutputSchema = HiddenSchema | TextAreaSchema

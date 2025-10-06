@@ -5,11 +5,7 @@ import {
   HeadingXXl,
   PageTitleSection
 } from '@/design-system'
-import type {
-  Form,
-  FormChangeEvent,
-  FormSubmission
-} from '@/design-system/formio'
+import type { Form, FormSubmission } from '@/design-system/formio'
 import { putMetricData } from '@/lib/metrics'
 import { getPageURL } from '@/lib/utils'
 import type {

@@ -40,6 +40,7 @@ declare module 'formiojs' {
   interface Form {
     alert?: HTMLElement
     // changed: any
+    components: ComponentInstance[]
     data: Record<string, unknown>
     element: HTMLElement
     formio: Formio

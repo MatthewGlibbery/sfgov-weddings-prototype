@@ -12,7 +12,6 @@ export default { form }
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/component/form.ejs
  */
 export function form(ctx: ComponentContext<AnyComponentSchema>) {
-  ctx.component.validateOn = 'blur'
   return (
     <div
       id={ctx.id}
