@@ -7354,24 +7354,96 @@ export const expect = baseExpect.extend({
     let matcherResult: any
     try {
       // 1) Locate modal dialog
-  const modal = page.getByRole('dialog', { name: 'Modal Title' });
-  await expect(modal).toBeVisible();
+      const modal = page.getByRole('dialog', { name: 'Modal Title' })
+      await expect(modal).toBeVisible()
 
-  // 2) Expected accessible name (via aria-label)
-  const YES_NAME = 'Yes this page was helpful';
-  const NO_NAME  = 'No this page was not helpful';
+      // 2) Expected accessible name (via aria-label)
+      const YES_NAME = 'Yes this page was helpful'
+      const NO_NAME = 'No this page was not helpful'
 
-  // 3) Locate by role plus accessible name (this is what screen readers will announce)
-  const yesLink = modal.getByRole('link', { name: YES_NAME });
-  const noLink  = modal.getByRole('link',  { name: NO_NAME });
+      // 3) Locate by role plus accessible name (this is what screen readers will announce)
+      const yesLink = modal.getByRole('link', { name: YES_NAME })
+      const noLink = modal.getByRole('link', { name: NO_NAME })
 
-  await expect(yesLink).toBeVisible();
-  await expect(noLink).toBeVisible();
+      await expect(yesLink).toBeVisible()
+      await expect(noLink).toBeVisible()
 
-  // 4) Assert that the aria-label attribute exists and matches exactly
-  await expect(yesLink).toHaveAttribute('aria-label', YES_NAME);
-  await expect(noLink).toHaveAttribute('aria-label', NO_NAME);
+      // 4) Assert that the aria-label attribute exists and matches exactly
+      await expect(yesLink).toHaveAttribute('aria-label', YES_NAME)
+      await expect(noLink).toHaveAttribute('aria-label', NO_NAME)
 
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
+  async toHaveH1headingInModal(page: Page) {
+    const assertionName = 'toHaveH1headingInModal'
+    let pass: boolean
+    let matcherResult: any
+    try {
+      // --- Open the modal with keyboard ---
+      const openModalButton = page.getByRole('button', {
+        name: /did you find what you needed\?/i
+      })
+      await expect(openModalButton).toBeVisible()
+      await expect(openModalButton).toBeEnabled()
+      await openModalButton.focus()
+      await expect(openModalButton).toBeFocused()
+      await page.keyboard.press('Enter')
+
+      // --- The dialog should be visible and focus should be inside it ---
+      const modal = page.getByRole('dialog')
+      await expect(modal).toBeVisible()
+
+      // Ensure focus moved into the modal on open
+      await expect(async () => {
+        const activeInDialog = await modal.evaluate((el) =>
+          el.contains(document.activeElement)
+        )
+        expect(activeInDialog).toBe(true)
+      }).toPass()
+
+      // Locate the h1 heading inside the modal by role and level
+      const heading = modal.getByRole('heading', {
+        level: 1,
+        name: 'Did you find what you needed?'
+      })
+
+      // Assert that it exists and is visible
+      await expect(heading).toBeVisible()
+
+      // Check that it is an <h1> element
+      await expect(heading).toHaveJSProperty('tagName', 'H1')
 
       pass = true
     } catch (e: any) {

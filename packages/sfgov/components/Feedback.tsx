@@ -42,12 +42,31 @@ export const Feedback = () => {
     setIsModalOpen(true)
   }
 
+  // TODO: we can use AbortSignal.timeout when it's implemented more widely
+  // for now, use AbortSignal if it's available.  otherwise, substitute with
+  // timeoutSignal to setTimeout and AbortController.abort()
+  function timeoutSignal(ms: number): {
+    signal: AbortSignal
+    cleanup: () => void
+  } {
+    if (typeof AbortSignal.timeout === 'function') {
+      return { signal: AbortSignal.timeout(ms), cleanup: () => undefined }
+    }
+
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => {
+      controller.abort()
+    }, ms)
+    return { signal: controller.signal, cleanup: () => clearTimeout(timeoutId) }
+  }
+
   async function recordResponse(value: 'yes' | 'no') {
     // create the submission for formio, retrieve submission id,
     // pass to feedback page to continue capturing response
     // for submission
     setIsFloatingPanelOpen(false)
     if (!responseRecorded) {
+      const { signal, cleanup } = timeoutSignal(5000)
       try {
         setPendingResponse(value)
         // hard coding the feedback form schema_url to avoid an api call
@@ -65,7 +84,7 @@ export const Feedback = () => {
               referrer: router.asPath
             }
           }),
-          signal: AbortSignal.timeout(5000)
+          signal
         })
         const data = await res.json()
         setSubmissionId(data._id)
@@ -73,7 +92,10 @@ export const Feedback = () => {
 
         sessionStorage.setItem('feedbackFloatingPanelClosed', 'true')
       } catch (e: unknown) {
-        if (e instanceof Error && e.name === 'AbortError') {
+        if (
+          e instanceof Error &&
+          (e.name === 'AbortError' || e.name === 'TimeoutError')
+        ) {
           console.error(
             `Timeout: could not create formio feedback submission.  ${e}`
           )
@@ -81,7 +103,7 @@ export const Feedback = () => {
           console.error(e)
         }
       } finally {
-        // show the follow-up section regardless
+        cleanup()
         setPendingResponse(null)
       }
     }
@@ -164,6 +186,7 @@ export const Feedback = () => {
               }}
               aria-label="Yes this page was helpful"
               disabled={pendingResponse !== null}
+              data-gtm="feedback"
             >
               {pendingResponse === 'yes' ? (
                 <IconSpin className="w-16 h-16 text-neutral300 animate-spin" />
@@ -185,6 +208,7 @@ export const Feedback = () => {
               }}
               aria-label="No this page was not helpful"
               disabled={pendingResponse !== null}
+              data-gtm="feedback"
             >
               {pendingResponse === 'no' ? (
                 <IconSpin className="w-16 h-16 text-neutral300 animate-spin" />
