@@ -11,7 +11,7 @@ import atImport from "postcss-import"
 import importUrls from 'postcss-import-url'
 import prefixSelector from "postcss-prefix-selector"
 import { format } from 'prettier'
-import { FORM_CLASS } from './formio/constants.mjs'
+import { FORM_CLASS } from '../formio/constants.mjs'
 
 main('formio/bootstrap.css')
 
@@ -36,9 +36,19 @@ async function main(outfile) {
     prefix: `.${FORM_CLASS}`
   })
 
-  const allowSelectorPatterns = [
+  const allowBootstrapSelectorPatterns = [
     /\./,
     /\b(input|select)\b/
+  ]
+
+  const ignoreBootstrapSelectorPatterns = [
+    /\.[mp][trblxy]?-[123]\b/,
+    // we have our own padding and margin reset utilities
+    /\.[mp][trblxy]?-0\b/,
+  ]
+
+  const ignoreFormioSelectorPatterns = [
+    /formio-component-htmlelement/,
   ]
 
   /**
@@ -63,8 +73,11 @@ async function main(outfile) {
         purge,
         // filter out rules that don't match our allowed selector patterns
         filterRules({
-          filter(selector, parts) {
-            return allowSelectorPatterns.some(pat => pat.test(selector))
+          filter(selector) {
+            return allowBootstrapSelectorPatterns
+              .some(pattern => pattern.test(selector)) &&
+              !ignoreBootstrapSelectorPatterns
+                .some(pattern => pattern.test(selector))
           }
         }),
         // prefix selectors with our class scope
@@ -79,6 +92,12 @@ async function main(outfile) {
         // inline the formio styles
         atImport(),
         purge,
+        filterRules({
+          filter(selector) {
+            return !ignoreFormioSelectorPatterns
+              .some(pattern => pattern.test(selector))
+          }
+        }),
         // prefix selectors with our class scope
         addSelectorPrefix
       ]

@@ -46,7 +46,7 @@ export function form({ ...ctx }: WizardRenderContext) {
         <summary
           className="flex flex-row w-full mb-space-xs
           outline outline-1 outline-black rounded
-          focus:outline-primary500 focus:outline-[3px]
+          focus:outline-focus
           lg:hidden"
           id="nav-toggle"
           aria-controls="nav-menu"

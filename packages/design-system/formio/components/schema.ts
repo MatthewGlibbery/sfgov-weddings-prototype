@@ -1,6 +1,5 @@
-import { Utils } from 'formiojs'
-import type { ComponentSchema } from 'formiojs'
-import type { FormSchema } from '../types'
+import { Utils } from '@formio/react'
+import type { FormSchema, ComponentSchema } from '../types'
 import {
   CALULATE_DAY_VALUES_PLACEHOLDER,
   stringifyDayValues,

@@ -179,7 +179,7 @@ const ActiveFilterButton = (props: TypeActiveFilterButton) => {
   return (
     <button
       aria-label={ariaLabel}
-      className="p-12 border-1 border-solid border-primary600 rounded-[8px] bg-neutral100 flex items-center gap-x-8 focus:outline outline-[3px] outline-offset-4 outline-primary500 text-left"
+      className="p-12 border-1 border-solid border-primary600 rounded-[8px] bg-neutral100 flex items-center gap-x-8 text-left"
       onClick={removeHandler}
     >
       <div>{label}</div>
@@ -547,7 +547,7 @@ const EventsPage = (props: EventPageData) => {
                                     value={childAgency.id}
                                     name="child-agency"
                                     data-title={childAgency.title}
-                                    className="peer appearance-none shrink-0 rounded-4 border-1 border-black w-40 h-40 checked:bg-primary600 focus:outline outline-[3px] outline-offset-4 outline-primary500"
+                                    className="peer appearance-none shrink-0 rounded-4 border-1 border-black w-40 h-40 checked:bg-primary600"
                                   />
                                   <IconCheckmark className="hidden peer-checked:block pointer-events-none shrink-0 absolute left-16 top-16 h-[24px] w-[24px] text-white" />
                                 </div>
@@ -572,7 +572,7 @@ const EventsPage = (props: EventPageData) => {
                         <div className="flex flex-row items-center w-full relative">
                           <select
                             name="filter-month"
-                            className="appearance-none p-16 rounded-4 bg-white border-1 border-solid border-black w-full focus:outline outline-[3px] outline-offset-4 outline-primary500"
+                            className="appearance-none p-16 rounded-4 bg-white border-1 border-solid border-black w-full"
                           >
                             <option value="">
                               {t('all-months', {
@@ -596,7 +596,7 @@ const EventsPage = (props: EventPageData) => {
                         <div className="flex flex-row items-center w-full relative">
                           <select
                             name="filter-year"
-                            className="appearance-none p-16 rounded-4 bg-white border-1 border-black w-full focus:outline outline-[3px] outline-offset-4 outline-primary500"
+                            className="appearance-none p-16 rounded-4 bg-white border-1 border-black w-full"
                           >
                             <option value="">
                               {t('all-years', {
@@ -621,7 +621,7 @@ const EventsPage = (props: EventPageData) => {
                   aria-label={t('apply-filter', {
                     defaultValue: 'Apply filter'
                   })}
-                  className="px-16 py-[15px] h-40 ring-0 focus:outline outline-[3px] outline-offset-4 outline-primary500"
+                  className="px-16 py-[15px] h-40"
                 >
                   {t('apply', {
                     defaultValue: 'Apply'
@@ -631,7 +631,7 @@ const EventsPage = (props: EventPageData) => {
                   aria-label={t('reset-filter', {
                     defaultValue: 'Reset filter'
                   })}
-                  className="px-16 py-[15px] h-40 ring-0 focus:outline outline-[3px] outline-offset-4 outline-primary500"
+                  className="px-16 py-[15px] h-40"
                   variant="secondary"
                   type="reset"
                 >
@@ -692,7 +692,7 @@ const EventsPage = (props: EventPageData) => {
                       aria-label={t('reset-filter', {
                         defaultValue: 'Reset filter'
                       })}
-                      className="underline text-primary600 focus:outline outline-[3px] outline-offset-4 outline-primary500"
+                      className="underline text-primary600"
                       onClick={() => {
                         handleFilterReset(
                           document.getElementById(

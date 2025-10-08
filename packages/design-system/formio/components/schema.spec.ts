@@ -1,4 +1,4 @@
-import type { AnyComponentSchema, FormSchema } from '../types'
+import { Utils } from '@formio/react'
 import {
   CALULATE_DAY_VALUES_PLACEHOLDER,
   HoursOfOperation,
@@ -6,11 +6,11 @@ import {
   setComponentsValidateOnBlur,
   stringifyDayValues,
   upgradeHoursOfOperation,
-  VALIDATE_DAY_GRID_PLACEHOLDER,
-  validateDayGrid
+  validateDayGrid,
+  VALIDATE_DAY_GRID_PLACEHOLDER
 } from '.'
 import { ComponentFactory } from '../factories'
-import { Utils } from 'formiojs'
+import type { AnyComponentSchema, FormSchema } from '../types'
 
 describe('setComponentsValidateOnBlur', () => {
   function formSchemaFixture(): FormSchema {
