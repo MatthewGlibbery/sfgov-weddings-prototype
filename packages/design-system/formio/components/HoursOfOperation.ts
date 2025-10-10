@@ -121,7 +121,7 @@ export function HoursOfOperation({
     properties: excludeFromAirtable
       ? {
           // exclude this component from Airtable
-          'airtable.exclude': 'true'
+          'airtable:exclude': 'true'
         }
       : undefined
   } satisfies HoursOfOperationSchema

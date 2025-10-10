@@ -57,7 +57,7 @@ describe('HoursOfOperation()', () => {
     it('excludes from Airtable by default', () => {
       expect(
         HoursOfOperation({ key: 'hoo', label: 'lol' }).properties?.[
-          'airtable.exclude'
+          'airtable:exclude'
         ]
       ).toBe('true')
     })
@@ -67,7 +67,7 @@ describe('HoursOfOperation()', () => {
           key: 'hoo',
           label: 'lol',
           excludeFromAirtable: false
-        }).properties?.['airtable.exclude']
+        }).properties?.['airtable:exclude']
       ).toBe(undefined)
     })
   })
