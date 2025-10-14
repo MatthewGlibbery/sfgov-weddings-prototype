@@ -64,7 +64,7 @@ const TopicsPage = (props: TopicPageData) => {
               <li
                 key={topic.meta.slug}
                 className="grid grid-cols-1 gap-y-8"
-                data-testId="service-item"
+                data-testid="service-item"
               >
                 <HeadingLg className="font-body text-primary500 !mb-0">
                   <a
