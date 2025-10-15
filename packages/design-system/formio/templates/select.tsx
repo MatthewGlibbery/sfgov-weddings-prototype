@@ -33,8 +33,7 @@ export function form(ctx: SelectContext) {
           '!h-[56px] w-full p-16',
           '!border-1 !border-black bg-white !rounded-4',
           'dropdown-open !bg-[right_0.5rem_top_50%]',
-          'focus:!border-primary500',
-          'focus:!ring-2 focus:!ring-primary500'
+          'focus:outline-focus'
         )}
         ref={ctx.input.ref || 'selectContainer'}
         /**

@@ -1308,30 +1308,6 @@
 .Formio .w-100 {
   width: 100% !important;
 }
-.Formio .m-0 {
-  margin: 0 !important;
-}
-.Formio .mt-0 {
-  margin-top: 0 !important;
-}
-.Formio .mb-0 {
-  margin-bottom: 0 !important;
-}
-.Formio .mr-2 {
-  margin-right: 0.5rem !important;
-}
-.Formio .mb-2 {
-  margin-bottom: 0.5rem !important;
-}
-.Formio .mb-3 {
-  margin-bottom: 1rem !important;
-}
-.Formio .pl-0 {
-  padding-left: 0 !important;
-}
-.Formio .p-2 {
-  padding: 0.5rem !important;
-}
 .Formio .text-right {
   text-align: right !important;
 }
@@ -2328,13 +2304,6 @@
 .Formio .formio-component .table {
   margin-bottom: 0;
   word-break: break-word;
-}
-.Formio .formio-component-htmlelement {
-  word-wrap: break-word;
-}
-.Formio .formio-component-htmlelement ol,
-.Formio .formio-component-htmlelement ul {
-  margin-left: 10px;
 }
 .Formio .editgrid-table-container {
   margin-bottom: 10px;

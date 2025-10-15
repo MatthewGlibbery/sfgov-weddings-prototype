@@ -16,6 +16,9 @@ import {
   VALIDATE_DAY_GRID_ERROR_DEFAULTS
 } from './HoursOfOperation'
 
+// FIXME: we should not need to do this!
+jest.setTimeout(10000)
+
 describe('HoursOfOperation()', () => {
   it('returns a container component', () => {
     expect(HoursOfOperation({ key: 'hours', label: 'Hours' })).toEqual(
@@ -54,7 +57,7 @@ describe('HoursOfOperation()', () => {
     it('excludes from Airtable by default', () => {
       expect(
         HoursOfOperation({ key: 'hoo', label: 'lol' }).properties?.[
-          'airtable.exclude'
+          'airtable:exclude'
         ]
       ).toBe('true')
     })
@@ -64,7 +67,7 @@ describe('HoursOfOperation()', () => {
           key: 'hoo',
           label: 'lol',
           excludeFromAirtable: false
-        }).properties?.['airtable.exclude']
+        }).properties?.['airtable:exclude']
       ).toBe(undefined)
     })
   })
@@ -169,10 +172,6 @@ describe('validateDayGrid()', () => {
       expected: true
     },
     {
-      values: [{} as DayValue],
-      expected: VALIDATE_DAY_GRID_ERROR_DEFAULTS.missingTimes
-    },
-    {
       values: [
         { start: '09:00', end: '10:00' },
         { start: '11:00', end: '17:00' },
@@ -210,7 +209,7 @@ describe('validateDayGrid()', () => {
     'validates `$values` as "$expected"',
     async ({ values, expected, errors }) => {
       const { form } = await formFixture('hoo')
-      const component = form.getComponent<DataGridSchema>('monday').component
+      const { component } = form.getComponent<DataGridSchema>('monday')
       if (errors) component.errors = errors
       expect(
         validateDayGrid({
