@@ -88,13 +88,15 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
       {alertData?.items?.length ? (
         <SitewideAlert {...alertData?.items[0]} />
       ) : null}
-      <SiteHeader />
-      <MainContent>
-        <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
-          {children}
-        </ErrorBoundary>
-      </MainContent>
-      <SiteFooter />
+      <div className="flex flex-col min-h-screen">
+        <SiteHeader />
+        <MainContent className="flex-1">
+          <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
+            {children}
+          </ErrorBoundary>
+        </MainContent>
+        <SiteFooter />
+      </div>
       {(!excludePaths.includes(router.pathname) && meta?.type) !== 'sf.Form' ? (
         <Feedback />
       ) : null}
