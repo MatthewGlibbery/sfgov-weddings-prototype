@@ -281,20 +281,12 @@ export const SiteHeaderNew = (props: SiteHeaderProps) => {
         if (detailsElement.hasAttribute('open')) {
           // Check if the clicked element is outside the current details element
           if (
-            !detailsElement.contains(event.target) &&
-            event.target !== detailsElement
+            (!detailsElement.contains(event.target) &&
+              event.target !== detailsElement) ||
+            event.target.tagName.toLowerCase() === 'a'
           ) {
             detailsElement.removeAttribute('open')
           }
-        }
-      })
-    })
-
-    document.addEventListener('popstate', () => {
-      allDetails.forEach((detailsElement) => {
-        // Check if the details element is currently open
-        if (detailsElement.hasAttribute('open')) {
-          detailsElement.removeAttribute('open')
         }
       })
     })
