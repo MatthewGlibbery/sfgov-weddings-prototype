@@ -1,7 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { LanguageSelector, localeNames } from './LanguageSelector'
 import { useRouter } from 'next/router'
-import { MockedRouter } from '__mocks__/next/router'
+import type { MockedRouter } from '__mocks__/next/router'
+import userEvent from '@testing-library/user-event'
 jest.mock('next/router')
 
 describe('LanguageSelector', () => {
@@ -55,5 +56,15 @@ describe('LanguageSelector', () => {
     fireEvent.click(languageLink)
     // eslint-disable-next-line testing-library/no-node-access
     expect(details.querySelector('summary')?.textContent).toBe('Español')
+  })
+
+  it('closes the list when escape key is pressed', async () => {
+    render(<LanguageSelector />)
+    const details = screen.getByRole('group', { name: 'language selector' })
+
+    await userEvent.tab()
+    await userEvent.keyboard('{Escape}')
+
+    expect(details).not.toHaveAttribute('open')
   })
 })

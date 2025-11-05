@@ -78,7 +78,7 @@ export type PageData = object &
 export type RelatedContentData = MinimalPageData
 
 export type AlertData = {
-  alert_style: string
+  alert_style: 'information' | 'critical'
   alert_text: string
   expiration_date: string
 }

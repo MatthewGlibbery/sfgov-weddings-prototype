@@ -13,15 +13,15 @@ import { useTranslation } from 'next-i18next'
 
 const StyledList = classed(
   'ul',
-  'm-0 px-0 py-20 list-none absolute top-full left-0 w-full bg-neutral50 z-10 shadow-[rgba(0,0,0,0.12)_0px_2px_4px_-2px] md:rounded-4 md:border-1 md:border-neutral200 md:bg-white md:mt-8 md:py-0 md:shadow'
+  'm-0 px-0 py-20 list-none absolute top-full left-0 w-full bg-neutral50 z-10 shadow-[rgba(0,0,0,0.12)_0px_2px_4px_-2px] lg:rounded-4 lg:border-1 lg:border-neutral200 lg:bg-white lg:mt-8 lg:py-0 lg:shadow'
 )
 const StyledDiv = classed(
   'div',
-  'flex flex-wrap gap-x-16 gap-y-4 md:flex-col md:gap-y-12'
+  'flex flex-wrap gap-x-16 gap-y-4 lg:flex-col lg:gap-y-12'
 )
 
 const StyledLanguageLink = classed(NextLink, {
-  base: 'block md:w-full no-underline text-primary500 text-label-xs px-28 py-12 font-bold md:px-16 md:py-15',
+  base: 'block lg:w-full no-underline text-primary500 text-label-xs px-28 py-12 font-bold lg:px-16 lg:py-15',
   variants: {
     current: {
       true: 'font-bold'
@@ -69,7 +69,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
         {links.map((link) => (
           <StyledLanguageLink
             key={link.locale}
-            className="text-slate300 text-white underline p-0 md:p-0 font-normal text-label-sm break-keep"
+            className="text-slate300 text-white underline p-0 lg:p-0 font-normal text-label-sm break-keep"
             {...link}
           />
         ))}
@@ -81,15 +81,22 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
     <details
       name="menu"
       onToggle={props.onToggle}
-      className="group md:relative"
+      onKeyDown={(e) => {
+        if (e.key === 'Escape' && e.currentTarget.open) {
+          // istanbul ignore next
+          e.currentTarget.open = false
+        }
+      }}
+      className="group lg:relative"
       ref={detailsRef}
       aria-label="language selector"
     >
       <summary
         className={classes(
-          'flex h-60 p-8 items-center justify-center group-open:bg-neutral50',
+          'flex h-[52px] md:h-[64px] p-8 pl-8 md:p-16 lg:p-8 items-center justify-center group-open:bg-neutral50',
           'list-none [&::-webkit-details-marker]:hidden',
-          'group-open:md:bg-primary100 hover:md:bg-primary100 md:h-auto md:rounded-4'
+          'group-open:lg:bg-primary100 hover:lg:bg-primary100 lg:h-auto lg:rounded-4',
+          'focus:relative focus:z-50'
         )}
         aria-label={t('language-menu-label', { defaultValue: 'Language menu' })}
         data-testid="language-menu-title"
@@ -97,11 +104,11 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
         <IconGlobe
           width="20"
           height="20"
-          className="shrink-0 text-primary500 md:text-black"
+          className="shrink-0 text-primary500 lg:text-black"
           aria-hidden="true"
         />
         <p
-          className="w-60 text-center text-label-xs text-primary500 font-bold md:text-black md:w-80"
+          className="w-60 text-center text-label-xs text-primary500 font-bold lg:text-black"
           aria-hidden="true"
         >
           {localeNames[selectedLocale]}
@@ -109,13 +116,13 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
         <IconChevronUp
           width="20"
           height="20"
-          className="hidden shrink-0 group-open:block text-primary600 md:text-black"
+          className="hidden shrink-0 group-open:block text-primary600 lg:text-black"
           aria-hidden="true"
         />
         <IconChevronDown
           width="20"
           height="20"
-          className="shrink-0 group-open:hidden text-primary600 md:text-black"
+          className="shrink-0 group-open:hidden text-primary600 lg:text-black"
           aria-hidden="true"
         />
       </summary>

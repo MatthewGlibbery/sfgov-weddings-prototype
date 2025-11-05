@@ -1,8 +1,11 @@
-import { FormEvent, ReactNode, useRef, useState } from 'react'
+import type { FormEvent, ReactNode } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { classes, DisplayXXXl, IconSearch, IconX } from '@/design-system'
 import { menuClasses } from './SiteHeader'
+import { menuClassesNew } from './SiteHeaderNew'
 import { useTranslation } from 'next-i18next'
+import { useTestGroup } from '@/lib/utils'
 
 export type SearchInputProps = {
   onChange: (value: string) => void
@@ -12,14 +15,24 @@ export type SearchInputProps = {
 export const SearchInput = ({ onChange, value }: SearchInputProps) => {
   const inputRef = useRef<HTMLAnchorElement | null>(null)
   const { t } = useTranslation()
+
+  const testGroup = useTestGroup()
+
   const clearSearch = () => {
     onChange('')
     if (inputRef.current) {
       inputRef.current.focus()
     }
   }
+
   return (
-    <div className={classes(menuClasses, 'px-28 py-20', 'md:relative md:p-0')}>
+    <div
+      className={classes(
+        testGroup === 'b' ? menuClassesNew : menuClasses,
+        'px-28 py-[32px]',
+        'lg:relative lg:p-0'
+      )}
+    >
       <label htmlFor="search" className="sr-only">
         <DisplayXXXl>Search</DisplayXXXl>
       </label>
@@ -30,7 +43,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
             defaultValue: 'Search'
           })}
           className={classes(
-            'w-full pl-16 pr-[50px] md:block h-[44px] md:h-[56px] border-1 border-r-0 rounded-tl-4 rounded-bl-4'
+            'w-full pl-16 pr-[50px] lg:block h-[44px] lg:h-[46px] border-1 border-r-0 rounded-tl-4 rounded-bl-4'
           )}
           value={value}
           onChange={(e) => {
@@ -43,7 +56,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
             aria-label={t('clear-search-aria-label', {
               defaultValue: 'clear search'
             })}
-            className="absolute right-[88px] md:right-[72px]"
+            className="absolute right-[88px] lg:right-[72px]"
             onClick={clearSearch}
             type="button"
           >
@@ -57,7 +70,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
         ) : null}
         <button
           aria-label="search"
-          className="flex items-center justify-center border-1 p-16 rounded-tr-4 rounded-br-4 bg-primary500 h-[44px] w-[44px]  md:h-[56px] md:w-[56px] hover:bg-primary800"
+          className="flex items-center justify-center border-1 p-16 rounded-tr-4 rounded-br-4 bg-primary500 h-[44px] w-[44px] lg:h-[46px] lg:w-[44px] hover:bg-primary800"
           type="submit"
         >
           <IconSearch

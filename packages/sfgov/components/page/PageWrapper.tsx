@@ -1,18 +1,21 @@
 'use client'
 
 import Head from 'next/head'
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ErrorBoundary,
   ErrorFallbackReport,
   SiteFooter,
   SiteHeader,
+  SiteHeaderNew,
   SitewideAlert
 } from '@/components'
 import { MainContent } from '@/design-system'
 import { useRouter } from 'next/router'
-import { AlertData } from '@/types'
+import type { AlertData } from '@/types'
 import { Feedback } from '../Feedback'
+import { useTestGroup } from '@/lib/utils'
 
 type PageWrapperMetaProps = {
   type?: string
@@ -38,6 +41,7 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
   const isSearchPage = router.pathname === '/search'
   const metaKeys = ['type', 'locale', 'description'] // the meta things we care about
   const excludePaths = ['/500']
+  const testGroup = useTestGroup()
 
   // istanbul ignore next
   useEffect(() => {
@@ -88,15 +92,13 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
       {alertData?.items?.length ? (
         <SitewideAlert {...alertData?.items[0]} />
       ) : null}
-      <div className="flex flex-col min-h-screen">
-        <SiteHeader />
-        <MainContent className="flex-1">
-          <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
-            {children}
-          </ErrorBoundary>
-        </MainContent>
-        <SiteFooter />
-      </div>
+      {testGroup === 'b' ? <SiteHeaderNew /> : <SiteHeader />}
+      <MainContent>
+        <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
+          {children}
+        </ErrorBoundary>
+      </MainContent>
+      <SiteFooter />
       {(!excludePaths.includes(router.pathname) && meta?.type) !== 'sf.Form' ? (
         <Feedback />
       ) : null}
