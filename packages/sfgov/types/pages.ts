@@ -25,7 +25,6 @@ import type {
   TypeAgendaItemBlock,
   TypeVideoBlock,
   TypeDownloadableFilesBlock,
-  ConfirmationBodyBlock,
   TypeEmbeddedContentBlock,
   TypeDataStoriesSectionBlock,
   TypeCalloutBlock,
@@ -36,7 +35,11 @@ import type {
   TypeDateTimeValues,
   TypeDocumentBlock,
   TypeTileBlockValues,
-  TypeTableBlock
+  TypeTableBlock,
+  TypeTextBlock,
+  TypeButtonLinkBlock,
+  TypeButtonLinkValues,
+  TypeLinkValues
 } from './blocks'
 import type { WagtailImageData } from './images'
 
@@ -336,11 +339,13 @@ export type FormPageData = PageData & {
   schema_url: string
   schema?: FormSchema
   confirmation_title: string
-  confirmation_body: ConfirmationBodyBlock[]
+  // see: https://github.com/SFDigitalServices/platform/blob/v2025-10-29-135629/sf/models/form.py#L107-L109
+  confirmation_body: (TypeButtonLinkBlock | TypeCalloutBlock | TypeTextBlock)[]
+  // see: https://github.com/SFDigitalServices/platform/blob/v2025-10-29-135629/sf/models/form.py#L117-L123
   get_help: (
     | TypeLocationBlock
-    | TypeEmailBlock
     | TypePhoneNumberBlock
+    | TypeEmailBlock
     | TypeTitleAndTextBlock
   )[]
   partner_agencies: RelatedContentData[]

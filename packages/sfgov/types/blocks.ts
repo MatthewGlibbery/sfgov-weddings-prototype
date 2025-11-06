@@ -1,5 +1,5 @@
-import { WagtailImageData } from './images'
-import {
+import type { WagtailImageData } from './images'
+import type {
   AgencyPage,
   MinimalMeta,
   MinimalPageData,
@@ -428,11 +428,6 @@ export type TypeContentSectionBlock = BlockType<
   'section',
   TypeContentSectionBlockValues
 >
-
-export type ConfirmationBodyBlock =
-  | TypeTextBlock
-  | TypeCalloutBlock
-  | TypeButtonLinkBlock
 
 export type TypeDocumentSectionBlockValues = {
   title: string

@@ -1,8 +1,9 @@
-import { Button, ButtonProps, IconArrowRight } from '@/design-system'
+import type { LinkProps } from '@/design-system'
+import { Button, IconArrowRight } from '@/design-system'
 import { getPageURL } from '@/lib/utils'
-import { TypeButtonLinkValues } from '@/types'
+import type { TypeButtonLinkValues } from '@/types'
 
-export type ButtonLinkProps = ButtonProps & {
+export type ButtonLinkProps = LinkProps & {
   link: TypeButtonLinkValues
   iconOnly?: boolean
 }
