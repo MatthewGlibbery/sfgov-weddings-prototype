@@ -263,6 +263,16 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveLogicalTabOrderOnMeetingContentType()
   })
 
+  test('validate feedback trigger button is accessible and includes aria attributes', async ({
+    mount,
+    page
+  }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toBeAccessibleAndIncludeAriaAttributesInFeedbackFAB()
+  })
+
   // Module Specific Tests
 
   test('logical reading order in meeting resources section', async ({
