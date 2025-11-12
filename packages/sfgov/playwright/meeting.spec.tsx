@@ -229,6 +229,16 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveLangAttributes()
   })
 
+  test('has aria attribute and landmark role in navigation landmark', async ({
+    mount,
+    page
+  }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveAriaAttributeAndLandmarkRoleInNavLandmark()
+  })
+
   test.skip('validate axe core accessibility tests', async ({
     mount,
     page

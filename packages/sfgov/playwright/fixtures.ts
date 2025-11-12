@@ -7479,6 +7479,60 @@ export const expect = baseExpect.extend({
     }
   },
 
+  async toHaveAriaAttributeAndLandmarkRoleInNavLandmark(page: Page) {
+    const assertionName = 'toHaveAriaAttributeAndLandmarkRoleInNavLandmark'
+    let pass: boolean
+    let matcherResult: any
+    try {
+      const header = page.getByRole('banner')
+      await expect(header).toBeVisible()
+
+      const primaryNav = header.getByRole('navigation', {
+        name: 'Primary Header Navigation'
+      })
+      await expect(primaryNav).toBeVisible()
+
+      // --- Verify key ARIA attributes ---
+      await expect(primaryNav).toHaveAttribute('role', 'navigation')
+      await expect(primaryNav).toHaveAttribute(
+        'aria-label',
+        'Primary Header Navigation'
+      )
+
+      pass = true
+    } catch (e: any) {
+      matcherResult = e.matcherResult
+      pass = false
+    }
+
+    const message = pass
+      ? (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: ${this.isNot ? 'not' : ''} true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+      : (): string =>
+          this.utils.matcherHint(assertionName, undefined, undefined, {
+            isNot: this.isNot
+          }) +
+          '\n\n' +
+          `Expected: true\n` +
+          (matcherResult
+            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
+            : '')
+
+    return {
+      message,
+      pass,
+      name: assertionName,
+      actual: matcherResult?.actual
+    }
+  },
+
   async toPassAxeCoreTests(page: Page) {
     const assertionName = 'toPassAxeCoreTests'
     let pass: boolean
