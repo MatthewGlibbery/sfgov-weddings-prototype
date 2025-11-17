@@ -150,7 +150,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           variant="preview"
         />
       ) : null}
-      <div className="mb-20 md:py-40">
+      <div className="md:py-40">
         <Container className="mr-0">
           <nav
             role="navigation"

@@ -312,7 +312,7 @@ export const SiteHeaderNew = (props: SiteHeaderProps) => {
 
   return (
     <header
-      className="relative shadow lg:static lg:shadow-none"
+      className="relative shadow lg:static lg:shadow-none z-50"
       role="banner"
       {...props}
     >
@@ -324,7 +324,7 @@ export const SiteHeaderNew = (props: SiteHeaderProps) => {
           variant="preview"
         />
       ) : null}
-      <div className="mb-20 lg:py-40">
+      <div className="lg:mb-20 lg:py-40">
         <Container className="mr-0 md:mr-0">
           <nav
             role="navigation"

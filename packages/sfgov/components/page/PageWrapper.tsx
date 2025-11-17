@@ -27,13 +27,19 @@ export type PageWrapperProps = {
   title?: string
   meta?: PageWrapperMetaProps
   children?: ReactNode
+  className?: string
 }
 
 export type TypeAlertData = {
   items?: AlertData[]
 }
 
-export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
+export const PageWrapper = ({
+  children,
+  title,
+  meta,
+  className
+}: PageWrapperProps) => {
   const router = useRouter()
   const hasFetched = useRef(false)
   const [alertData, setAlertData] = useState<TypeAlertData | null>(null)
@@ -93,7 +99,7 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
         <SitewideAlert {...alertData?.items[0]} />
       ) : null}
       {testGroup === 'b' ? <SiteHeaderNew /> : <SiteHeader />}
-      <MainContent>
+      <MainContent className={className || 'mt-20'}>
         <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
           {children}
         </ErrorBoundary>

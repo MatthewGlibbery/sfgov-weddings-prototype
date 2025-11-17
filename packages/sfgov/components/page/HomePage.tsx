@@ -1,10 +1,6 @@
-import {
-  ComponentType,
-  Container,
-  DisplayXXXl,
-  HeadingXXl
-} from '@/design-system'
-import { HomePageData } from '@/types'
+import type { ComponentType } from '@/design-system'
+import { Container, DisplayXXXl, HeadingXXl } from '@/design-system'
+import type { HomePageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 import {
   ContentTileList,
@@ -24,7 +20,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
   } = page
   const { t } = useTranslation()
   return (
-    <PageWrapper meta={page.meta}>
+    <PageWrapper meta={page.meta} className="mt-0">
       <h1 className="sr-only">
         {t('welcome-to-sf-gov', { defaultValue: 'Welcome to SF.gov' })}
       </h1>
