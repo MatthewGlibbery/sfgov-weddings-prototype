@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import { factory } from 'node-factory'
-import {
+import type {
   BlockType,
   TypeButtonLinkBlock,
   TypeCalloutBlock,
@@ -85,7 +85,7 @@ import {
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
-import { SearchPageData } from '@/pages/search'
+import type { SearchPageData } from '@/pages/search'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
