@@ -38,8 +38,7 @@ import type {
   TypeTableBlock,
   TypeTextBlock,
   TypeButtonLinkBlock,
-  TypeButtonLinkValues,
-  TypeLinkValues
+  LinkBlockValue
 } from './blocks'
 import type { WagtailImageData } from './images'
 
@@ -340,7 +339,11 @@ export type FormPageData = PageData & {
   schema?: FormSchema
   confirmation_title: string
   // see: https://github.com/SFDigitalServices/platform/blob/v2025-10-29-135629/sf/models/form.py#L107-L109
-  confirmation_body: (TypeButtonLinkBlock | TypeCalloutBlock | TypeTextBlock)[]
+  confirmation_body: (
+    | TypeCalloutBlock
+    | TypeTextBlock
+    | BlockType<'button_link', LinkBlockValue>
+  )[]
   // see: https://github.com/SFDigitalServices/platform/blob/v2025-10-29-135629/sf/models/form.py#L117-L123
   get_help: (
     | TypeLocationBlock

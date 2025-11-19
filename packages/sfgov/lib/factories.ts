@@ -30,7 +30,7 @@ import {
   TypeNewsTileBlock,
   TypeContentTileBlock,
   TypeEventTileBlock,
-  TypeLinkValues,
+  LinkBlockValue,
   TypeSpotlightBlock,
   TypeSocialMediaBlockValues,
   TypeSocialMediaBlock,
@@ -56,10 +56,9 @@ import {
   FormPageData,
   TypeDocumentSectionBlock,
   ResourceCollectionPageData,
-  TypeButtonLinkValues,
+  ButtonLinkBlockValue,
   TypeDocumentBlockValues,
   TypeProfileGroupBlock,
-  TypeDateTimeValues,
   TypeBodyTextBlock,
   TypeContactFooterBlock,
   HomePageData,
@@ -1218,7 +1217,7 @@ export const TextBlockFactory = factory<TypeTextBlock>((gen) => ({
   value: gen.lorem.sentence()
 }))
 
-export const LinkFactory = factory<TypeLinkValues>((gen) => ({
+export const LinkFactory = factory<LinkBlockValue>((gen) => ({
   link_to: 'url',
   link_text: gen.lorem.sentence(),
   url: gen.internet.url()
@@ -1230,7 +1229,7 @@ export const ButtonLinkFactory = factory<TypeButtonLinkBlock>((gen) => ({
   value: AriaButtonLinkFactory.make()
 }))
 
-export const AriaButtonLinkFactory = factory<TypeButtonLinkValues>((gen) => ({
+export const AriaButtonLinkFactory = factory<ButtonLinkBlockValue>((gen) => ({
   button: LinkFactory.make(),
   screenreader_label: gen.lorem.sentence()
 }))
