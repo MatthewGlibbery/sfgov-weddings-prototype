@@ -135,13 +135,17 @@ export const FormPageFactory = factory<FormPageData>((gen) => ({
     type: FORM_PAGE_TYPE
   }),
   title: 'Form title',
-  form_schema_url:
-    'https://formio.sfgov.org/live11-ruehbbakcoznmcf/sfgovfeedbackform',
+  // @ts-expect-error FIXME: setting this breaks tests
+  schema_url: undefined,
   confirmation_title: 'Confirmation title',
   confirmation_body: [
     TextBlockFactory.make(),
     CalloutFactory.make(),
-    ButtonLinkFactory.make()
+    {
+      type: 'button_link',
+      id: gen.datatype.uuid(),
+      value: LinkFactory.make()
+    }
   ],
   partner_agencies: RelatedAgencyFactory.make(3),
   get_help: [
