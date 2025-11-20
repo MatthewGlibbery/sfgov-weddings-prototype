@@ -15,8 +15,8 @@ import {
   PageLabel,
   PageTitleSection
 } from '@/design-system'
-import { AgencyPageData, WagtailImageData } from '@/types'
-import { ComponentType } from 'react'
+import type { AgencyPageData, WagtailImageData } from '@/types'
+import type { ComponentType } from 'react'
 import { Trans, useTranslation } from 'next-i18next'
 import {
   Alert,
@@ -98,7 +98,11 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   )
 
   return (
-    <PageWrapper title={title} meta={{ ...page.meta, description }}>
+    <PageWrapper
+      title={title}
+      meta={{ ...page.meta, description }}
+      className={mainImage ? 'mt-0' : 'mt-20'}
+    >
       {alert?.[0]?.value ? <Alert {...alert[0].value} /> : null}
       {mainImage ? (
         <div
@@ -111,7 +115,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
 
       <Container
         className={classes(
-          'bg-white relative p-20 rounded-t-[8px] mx-0',
+          'bg-white relative p-20 pt-0 rounded-t-[8px] mx-0',
           mainImage ? 'top-[100px] xl:top-[250px]' : 'md:px-0'
         )}
       >

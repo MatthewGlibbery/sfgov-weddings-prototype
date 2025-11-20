@@ -5,13 +5,14 @@ import * as icons from '@/design-system/components/icons'
 import { classes, Container } from '@/design-system'
 import { disableArgTypes } from './stories/utils'
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import '!style-loader!css-loader!postcss-loader!../../design-system/css/main.css'
+import '@sfgov/design-system/css/main.css'
 
-const previewClassName = classes(`
-  font-body text-black m-0 p-0
-  ${SansFont.variable} ${SlabFont.variable} ${MonoFont.variable}
-`)
+const previewClassName = classes(
+  'font-body text-black m-0 p-0',
+  SansFont.variable,
+  SlabFont.variable,
+  MonoFont.variable
+)
 
 const iconKeys = Object.keys(icons)
 const preview: Preview = {
@@ -30,7 +31,7 @@ const preview: Preview = {
           // 'IconAlert' becomes 'Alert'
           a[b] = b.substring(4)
           return a
-        }, {} as { [key: string]: unknown })
+        }, {} as Record<string, string>)
       },
       // only show the control if the "icon" arg exists on the story
       if: {

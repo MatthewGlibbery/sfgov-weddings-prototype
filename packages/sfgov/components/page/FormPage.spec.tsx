@@ -1,12 +1,12 @@
-import { FormProps } from '@/design-system/formio'
+import FormioForm from '@/design-system/components/FormioForm'
+import type { FormProps } from '@/design-system/formio'
 import { FormFactory } from '@/design-system/formio/factories'
 import { FormPageFactory } from '@/lib/factories'
 import { MockDynamicComponent } from '@/__mocks__/next/dynamic'
-import { render, screen } from '@testing-library/react'
 import { useSearchParams } from '@/__mocks__/next/navigation'
-import { FormPage } from './FormPage'
+import { render, screen } from '@testing-library/react'
 import { useRouter } from 'next/router'
-import FormioForm from '@/design-system/components/FormioForm'
+import { FormPage } from './FormPage'
 
 type EventHandler = (...args: unknown[]) => void
 

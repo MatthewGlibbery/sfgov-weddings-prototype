@@ -1,5 +1,6 @@
 /* eslint-disable no-return-assign */
 import React, { useMemo, useState } from 'react'
+import { cloneDeep } from 'lodash'
 import {
   singleFieldArgTypes,
   DATA_PREVIEW_SCHEMA,
@@ -91,16 +92,35 @@ const meta: Meta<HOOArgs> = {
     defaultData
   }) {
     const dayLabels = DAYS_BY_LANG[lang || 'en']
-    const schema = HoursOfOperation({
-      key,
-      label,
-      days: Object.fromEntries(DAY_KEYS.map((day, i) => [day, dayLabels[i]])),
-      debug: debugLayout
-    })
-    const output = HoursOfOperationOutput({
-      targetKey: key,
-      type: 'textarea'
-    })
+    const input = useMemo(
+      () =>
+        HoursOfOperation({
+          key,
+          label,
+          days: Object.fromEntries(
+            DAY_KEYS.map((day, i) => [day, dayLabels[i]])
+          ),
+          debug: debugLayout
+        }),
+      [key, label, debugLayout, lang]
+    )
+    const output = useMemo(
+      () =>
+        HoursOfOperationOutput({
+          targetKey: key,
+          type: 'textarea'
+        }),
+      [key]
+    )
+    /**
+     * NB: we need to create deep copies of these because the originals are
+     * mutated by our upgrade() function. These are the values that we display
+     * in the JSON output, so they need to include the original placeholders for
+     * validation and calculated values that get replaced with functions, which
+     * can't be serialized as JSON.
+     */
+    const originalInputSchema = useMemo(() => cloneDeep(input), [input])
+    const originalOutputSchema = useMemo(() => cloneDeep(output), [output])
     return (
       <>
         <FormioForm
@@ -112,7 +132,7 @@ const meta: Meta<HOOArgs> = {
               PageFactory.make({
                 title: 'Hours of operation',
                 components: [
-                  { ...schema, defaultValue: defaultData },
+                  { ...input, defaultValue: defaultData },
                   output,
                   ...(dataPreview ? [DATA_PREVIEW_SCHEMA] : [])
                 ]
@@ -125,8 +145,14 @@ const meta: Meta<HOOArgs> = {
             }
           }}
         />
-        <JSONDisplay value={schema} title="Input component schema" />
-        <JSONDisplay value={output} title="Output component schema" />
+        <JSONDisplay
+          value={originalInputSchema}
+          title="Input component schema"
+        />
+        <JSONDisplay
+          value={originalOutputSchema}
+          title="Output component schema"
+        />
       </>
     )
   }
@@ -157,14 +183,6 @@ export const DataClosedLunch: Story = {
         ]
       ])
     )
-  }
-}
-
-export const InvalidMissingTimes: Story = {
-  args: {
-    defaultData: {
-      monday: [{ start: '09:00', end: '' }]
-    }
   }
 }
 

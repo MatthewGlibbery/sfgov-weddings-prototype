@@ -19,8 +19,7 @@ import type {
 } from './types'
 import { getConsole, hook } from './utils'
 
-// @ts-expect-error not typescript
-import formioStyle from './bootstrap.css'
+import './formio.css'
 
 export * from './types'
 
@@ -83,7 +82,6 @@ type FormWrapperProps = ComponentProps<typeof FormWrapper>
 
 export function useFormio(isDev = false) {
   const console = getConsole(isDev)
-  addFormioStyle()
 
   once(Formio, () => {
     Formio.use(plugin)
@@ -251,28 +249,6 @@ export function useFormio(isDev = false) {
   function upgradeSchemaOnce(schema: FormSchema) {
     once(schema, upgrade)
   }
-}
-
-function addFormioStyle() {
-  // istanbul ignore next
-  if (typeof formioStyle !== 'string') {
-    console.debug(
-      [
-        'It looks like formio styles are imported automatically;',
-        'changes to the CSS may require a hard refresh.'
-      ].join(' ')
-    )
-    return
-  }
-  // reusing the existing element allows us to hot-reload CSS in development
-  const styleId = `${FORM_CLASS}-style`
-  let style = document.getElementById(styleId)
-  if (!style) {
-    style = document.createElement('style')
-    style.id = styleId
-    document.head.append(style)
-  }
-  style.textContent = formioStyle
 }
 
 /**

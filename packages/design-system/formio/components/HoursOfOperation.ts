@@ -1,4 +1,3 @@
-import { Utils } from 'formiojs'
 import { classes } from '../../components'
 import type moment from 'moment'
 import type {
@@ -6,7 +5,6 @@ import type {
   ComponentInstance,
   ContainerSchema,
   DataGridSchema,
-  FormSchema,
   HiddenSchema,
   TextAreaSchema,
   TimeSchema
@@ -31,7 +29,6 @@ export type DayKey =
  * This is the type
  */
 export type DayErrors = {
-  missingTimes: string
   reversedTimes: string
   duplicateTimes: string
   adjacentTimes: string
@@ -42,7 +39,6 @@ export type DayErrors = {
  * These are the default English error messages used to validate
  */
 export const VALIDATE_DAY_GRID_ERROR_DEFAULTS = Object.freeze({
-  missingTimes: 'Please include a start and end time',
   duplicateTimes: 'Please remove duplicate times',
   overlappingTimes: 'Start and end times should not overlap',
   reversedTimes: 'Start time should come before end time',
@@ -97,24 +93,6 @@ export const VALIDATE_DAY_GRID_PLACEHOLDER =
 export const CALULATE_DAY_VALUES_PLACEHOLDER =
   '/* PLACEHOLDER: stringifyDayValues() */value = ""'
 
-/**
- * Upgrade a form schema with custom validations (for input) and calculated
- * values (for output). This modifies the components in place, replacing the
- * placeholder expression strings with the actual function.
- */
-export function upgradeHoursOfOperation(form: FormSchema) {
-  for (const comp of Utils.searchComponents(form.components, {
-    'validate.custom': VALIDATE_DAY_GRID_PLACEHOLDER
-  })) {
-    comp.validate.custom = validateDayGrid
-  }
-  for (const comp of Utils.searchComponents(form.components, {
-    calculateValue: CALULATE_DAY_VALUES_PLACEHOLDER
-  })) {
-    comp.calculateValue = stringifyDayValues
-  }
-}
-
 export type HoursOfOperationSchema = ContainerSchema
 export type HoursOfOperationOutputSchema = HiddenSchema | TextAreaSchema
 
@@ -143,7 +121,7 @@ export function HoursOfOperation({
     properties: excludeFromAirtable
       ? {
           // exclude this component from Airtable
-          'airtable.exclude': 'true'
+          'airtable:exclude': 'true'
         }
       : undefined
   } satisfies HoursOfOperationSchema
@@ -308,7 +286,11 @@ function dayComponentFactory({ key, label, debug }: ComponentFactoryProps) {
  * │ └────────────┴───────┴──────────┴───┘ │
  * └───────────────────────────────────────┘
  */
-function dayGridFactory({ key, label, debug }: ComponentFactoryProps) {
+function dayGridFactory({
+  key,
+  label,
+  debug
+}: ComponentFactoryProps): DataGridSchema {
   return {
     key,
     type: 'datagrid',
@@ -321,9 +303,11 @@ function dayGridFactory({ key, label, debug }: ComponentFactoryProps) {
     properties: {
       addAnotherIcon: 'plus',
       'column.0.className': classes(
+        'align-bottom',
         /* istanbul ignore next */
         debug && 'bg-primary50'
-      )
+      ),
+      'column.1.className': classes('align-bottom')
     },
     initEmpty: true,
     tableView: false,
@@ -333,10 +317,10 @@ function dayGridFactory({ key, label, debug }: ComponentFactoryProps) {
         key: `${key}GridColumns`,
         label: '',
         hideLabel: true,
-        customClass: classes('!gap-8 items-baseline justify-between'),
+        customClass: classes('!gap-8 items-end justify-between'),
         properties: {
           'column.0.className': classes('basis-1/2'),
-          'column.1.className': classes('basis-[1em]'),
+          'column.1.className': classes('basis-[1em] pb-8'),
           'column.2.className': classes('basis-1/2')
         },
         columns: [
@@ -366,10 +350,10 @@ function dayGridFactory({ key, label, debug }: ComponentFactoryProps) {
       custom: VALIDATE_DAY_GRID_PLACEHOLDER
     },
     errors: VALIDATE_DAY_GRID_ERROR_DEFAULTS
-  } as DataGridSchema
+  }
 }
 
-function timeFactory({ key, label }: ComponentFactoryProps) {
+function timeFactory({ key, label }: ComponentFactoryProps): TimeSchema {
   return {
     type: 'time',
     key,
@@ -385,7 +369,7 @@ function timeFactory({ key, label }: ComponentFactoryProps) {
     properties: {
       inputClass: classes('!h-[40px]')
     }
-  } satisfies TimeSchema
+  }
 }
 
 export type ValidateDayContext = {
@@ -405,22 +389,14 @@ export function validateDayGrid({
 }: ValidateDayContext) {
   // the presence of each error message indicates whether to perform that type
   // of validation
-  const {
-    missingTimes,
-    reversedTimes,
-    duplicateTimes,
-    adjacentTimes,
-    overlappingTimes
-  } = component.errors as DayErrors
+  const { reversedTimes, duplicateTimes, adjacentTimes, overlappingTimes } =
+    component.errors as DayErrors
   // if there are no values, yield to formio's built-in validator, which will
   // handle messaging if the component is required
   if (!input || !input.length) {
     return (valid = true)
   }
 
-  if (missingTimes && input.some((v) => !v.start || !v.end)) {
-    return (valid = missingTimes)
-  }
   if (reversedTimes) {
     // validate that none of the empty times have reversed (or equal) start and
     // end times
@@ -438,10 +414,7 @@ export function validateDayGrid({
   }
 
   if (adjacentTimes || overlappingTimes) {
-    const ascending = (a: string, b: string) =>
-      // istanbul ignore next
-      a > b ? 1 : a < b ? -1 : 0
-    const sorted = input.slice().sort((a, b) => ascending(a.start, b.start))
+    const sorted = input.slice().sort((a, b) => a.start.localeCompare(b.start))
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     let { end } = sorted.shift()!
     for (const next of sorted) {
@@ -480,17 +453,13 @@ export function stringifyDayValues({
   const container = instance.root.getComponent(targetKey)
   const days = data[targetKey] as DayValues | undefined
 
-  function ascending(a: string, b: string) {
-    return a > b ? 1 : a < b ? -1 : 0
-  }
-
   value = days
     ? Object.entries(days)
         .map(([day, values]) => {
           const label = container?.getComponent(day)?.component.label || day
           const times = values
             .filter((v) => v.start && v.end)
-            .sort((a, b) => ascending(a.start, b.start))
+            .sort((a, b) => a.start.localeCompare(b.start))
             .map(({ start, end }) =>
               [start, end]
                 .map((t) =>
@@ -507,13 +476,3 @@ export function stringifyDayValues({
     : ''
   return value
 }
-
-// /**
-//  * We need to serialize the validation function
-//  */
-// // eslint-disable-next-line @typescript-eslint/ban-types
-// function stringifyFunction(fn: Function) {
-//   return String(fn)
-//     .replace(/^function\s*\S*\s*\([^)]*\)\s*\{\s*/, '')
-//     .replace(/\s*\}\s*$/, '')
-// }

@@ -1,14 +1,16 @@
 import { HeadingXl, IconDocument, IconDownload, Link } from '@/design-system'
 import { TypeDownloadableFilesBlockValues } from '@/types'
 import { FC } from 'react'
-import { ContentTile } from './Tile'
+import { DocumentTile } from './Tile'
 
 export const DownloadableFilesSection = (
   props: TypeDownloadableFilesBlockValues & { heading?: FC; isTile?: boolean }
 ) => {
   const { title, documents, heading, isTile } = props
 
-  const filteredDocuments = documents.filter(documents => documents.value && documents.value.file !== undefined)
+  const filteredDocuments = documents.filter(
+    (documents) => documents.value && documents.value.file !== undefined
+  )
   let titleComponent, children
   if (heading) titleComponent = heading
   else
@@ -18,9 +20,9 @@ export const DownloadableFilesSection = (
       </HeadingXl>
     ) : null
 
-  if (isTile)
+  if (isTile) {
     children = filteredDocuments.map((document) => (
-      <ContentTile
+      <DocumentTile
         key={document.value.id}
         link={{
           url: document.value.file,
@@ -32,7 +34,7 @@ export const DownloadableFilesSection = (
         }
       />
     ))
-  else
+  } else {
     children = filteredDocuments.map((document) => (
       <Link
         href={document.value.file}
@@ -43,6 +45,7 @@ export const DownloadableFilesSection = (
         {document.value.title}
       </Link>
     ))
+  }
   return (
     <div>
       {titleComponent}

@@ -14,9 +14,8 @@ import type { ComponentProps } from 'react'
 export default { form }
 
 export type DataGridContext = Override<
-  ComponentContext,
+  ComponentContext<DataGridSchema>,
   {
-    component: DataGridSchema
     datagridKey: string
     columns: AnyComponentSchema[]
     rows: Record<string, string>[]
@@ -134,7 +133,9 @@ export function form(ctx: DataGridContext) {
                   />
                 ))}
                 {ctx.hasRemoveButtons ? (
-                  <td className={classes(cellClasses, 'text-right')}>
+                  <td
+                    className={classes(cellClasses, 'align-bottom text-right')}
+                  >
                     <RemoveButton />
                   </td>
                 ) : null}
@@ -145,11 +146,6 @@ export function form(ctx: DataGridContext) {
                     dangerouslySetInnerHTML={{ __html: ctx.placeholder }}
                   />
                 ) : null}
-                {/* {hasAddButton && ctx.hasTopSubmit && rowIndex === 0 ? (
-                  <td className={classes(cellClasses, 'text-right')}>
-                    <AddButton />
-                  </td>
-                ) : null} */}
               </tr>
             </>
           ))}
@@ -189,12 +185,7 @@ export function form(ctx: DataGridContext) {
   function AddButton() {
     const iconName = component.properties?.addAnotherIcon as 'plus'
     const addAnotherText =
-      component.addAnother ||
-      t(
-        'Add Another',
-        // @ts-expect-error not typed
-        { _userInput: true }
-      )
+      component.addAnother || t('Add Another', { defaultValue: 'Add another' })
     return (
       <button
         className="btn btn-primary hover:cursor-pointer !p-8"

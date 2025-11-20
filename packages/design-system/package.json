@@ -3,7 +3,7 @@
   "name": "@sfgov/design-system",
   "scripts": {
     "build": "tsc --build && tsc-alias",
-    "build-formio-css": "node build-formio-css.mjs",
+    "build-formio-css": "./scripts/build-formio-css.mjs",
     "build-tokens": "style-dictionary build --config ./sd.config.js",
     "clean": "tsc --build --clean",
     "lint": "eslint .",

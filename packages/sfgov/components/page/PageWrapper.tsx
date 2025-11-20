@@ -1,18 +1,21 @@
 'use client'
 
 import Head from 'next/head'
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ErrorBoundary,
   ErrorFallbackReport,
   SiteFooter,
   SiteHeader,
+  SiteHeaderNew,
   SitewideAlert
 } from '@/components'
 import { MainContent } from '@/design-system'
 import { useRouter } from 'next/router'
-import { AlertData } from '@/types'
+import type { AlertData } from '@/types'
 import { Feedback } from '../Feedback'
+import { useTestGroup } from '@/lib/utils'
 
 type PageWrapperMetaProps = {
   type?: string
@@ -24,13 +27,19 @@ export type PageWrapperProps = {
   title?: string
   meta?: PageWrapperMetaProps
   children?: ReactNode
+  className?: string
 }
 
 export type TypeAlertData = {
   items?: AlertData[]
 }
 
-export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
+export const PageWrapper = ({
+  children,
+  title,
+  meta,
+  className
+}: PageWrapperProps) => {
   const router = useRouter()
   const hasFetched = useRef(false)
   const [alertData, setAlertData] = useState<TypeAlertData | null>(null)
@@ -38,6 +47,7 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
   const isSearchPage = router.pathname === '/search'
   const metaKeys = ['type', 'locale', 'description'] // the meta things we care about
   const excludePaths = ['/500']
+  const testGroup = useTestGroup()
 
   // istanbul ignore next
   useEffect(() => {
@@ -88,8 +98,8 @@ export const PageWrapper = ({ children, title, meta }: PageWrapperProps) => {
       {alertData?.items?.length ? (
         <SitewideAlert {...alertData?.items[0]} />
       ) : null}
-      <SiteHeader />
-      <MainContent>
+      {testGroup === 'b' ? <SiteHeaderNew /> : <SiteHeader />}
+      <MainContent className={className || 'mt-20'}>
         <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
           {children}
         </ErrorBoundary>

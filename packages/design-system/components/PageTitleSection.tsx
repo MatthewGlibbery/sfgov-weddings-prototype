@@ -21,7 +21,7 @@ export const PageTitleSection = ({
 
     {title ? (
       <>
-        <DisplayXXXl as="h1" className="my-12 md:my-20">
+        <DisplayXXXl as="h1" className="mb-12 md:mb-20">
           {title}
         </DisplayXXXl>
         {children}

@@ -6,7 +6,6 @@ import {
   IconCalendar,
   IconData,
   IconDocument,
-  Label,
   HeadingLg,
   BodyText,
   IconClock,
@@ -180,12 +179,14 @@ export const ContentTile = ({
   icon,
   isQuicklink = false,
   isHomePage = false,
-  isTopic = false
+  isTopic = false,
+  className = ''
 }: TileProps & {
   icon?: ReactElement
   isQuicklink?: boolean
   isHomePage?: boolean
   isTopic?: boolean
+  className?: string
 }) => {
   const TitleComponent = isQuicklink ? HeadingLg : HeadingMd
   return (
@@ -196,7 +197,8 @@ export const ContentTile = ({
           ? ''
           : 'border-b-1 border-solid border-neutral200 pb-20 md:pb-[24px] last:border-b-0 last:pb-0',
         isHomePage ? 'border-b-0 p-12 md:pb-12 last:pb-12' : '',
-        isTopic ? 'p-0' : ''
+        isTopic ? 'p-0' : '',
+        className
       )}
     >
       <div
@@ -278,6 +280,7 @@ export const DocumentTile = ({ link }: TileProps) => (
         className="shrink-0 text-primary500 group-hover:text-primary800 lg:w-[24px]"
       />
     }
+    className="pt-20 md:pt-[24px] pb-20 md:pb-[24px]"
   />
 )
 

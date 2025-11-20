@@ -36,6 +36,7 @@ module.exports = {
       rules: {
         // see: https://typescript-eslint.io/rules/prefer-function-type/#examples
         '@typescript-eslint/prefer-function-type': 'error',
+        '@typescript-eslint/consistent-type-imports': 'warn',
         // these rules are great in JS environments, but TS has its own rules
         'import/named': 'off',
         'import/no-unresolved': 'off',

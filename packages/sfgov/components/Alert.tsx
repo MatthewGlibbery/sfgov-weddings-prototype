@@ -1,11 +1,11 @@
 import { classed, classes, IconInfo } from '@/design-system'
-import { TypeAlertBlockValues } from '@/types'
-import { ComponentProps } from 'react'
+import type { TypeAlertBlockValues } from '@/types'
+import type { ComponentProps } from 'react'
 import { RichText } from './RichText'
 
 const PreviewAlert = classed(
   'div',
-  'w-full bg-[#1F7E9A] flex space-x-20 mb-28 py-28 px-20 md:px-28 lg:px-96 text-white'
+  'w-full bg-[#1F7E9A] flex space-x-20 lg:mb-28 py-28 px-20 md:px-28 lg:px-96 text-white'
 )
 
 const SitewideAlertWrapper = classed('div', {

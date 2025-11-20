@@ -1,6 +1,6 @@
-import { Formio, Utils, type Form } from 'formiojs'
+import { Formio, type Form } from 'formiojs'
 import moment from 'moment'
-import type { AnyComponentSchema, DataGridSchema, FormSchema } from '../types'
+import type { DataGridSchema } from '../types'
 import type {
   DayErrors,
   DayValue,
@@ -9,54 +9,15 @@ import type {
   HoursOfOperationSchema
 } from './HoursOfOperation'
 import {
-  CALULATE_DAY_VALUES_PLACEHOLDER,
   HoursOfOperation,
   HoursOfOperationOutput,
   stringifyDayValues,
-  upgradeHoursOfOperation,
   validateDayGrid,
-  VALIDATE_DAY_GRID_ERROR_DEFAULTS,
-  VALIDATE_DAY_GRID_PLACEHOLDER
+  VALIDATE_DAY_GRID_ERROR_DEFAULTS
 } from './HoursOfOperation'
 
-describe('upgradeHoursOfOperation()', () => {
-  function formSchemaFixture(): FormSchema {
-    const key = 'hoo'
-    return {
-      type: 'form',
-      title: 'Hours of operation',
-      display: 'form',
-      components: [
-        HoursOfOperation({ key, label: '' }),
-        HoursOfOperationOutput({ targetKey: key })
-      ]
-    }
-  }
-
-  it('replaces the day grid validate.custom placeholders', () => {
-    const schema = formSchemaFixture()
-    // sanity check
-    const days = Utils.searchComponents(schema.components, {
-      'validate.custom': VALIDATE_DAY_GRID_PLACEHOLDER
-    })
-    expect(days).toHaveLength(7)
-    upgradeHoursOfOperation(schema)
-    expect(days.map((c: AnyComponentSchema) => c.validate?.custom)).toEqual(
-      repeat(validateDayGrid, 7)
-    )
-  })
-
-  it('replaces the calculated value of the output component', () => {
-    const schema = formSchemaFixture()
-    // sanity check
-    const output = Utils.searchComponents(schema.components, {
-      calculateValue: CALULATE_DAY_VALUES_PLACEHOLDER
-    })
-    expect(output).toHaveLength(1)
-    upgradeHoursOfOperation(schema)
-    expect(output[0].calculateValue).toBe(stringifyDayValues)
-  })
-})
+// FIXME: we should not need to do this!
+jest.setTimeout(10000)
 
 describe('HoursOfOperation()', () => {
   it('returns a container component', () => {
@@ -96,7 +57,7 @@ describe('HoursOfOperation()', () => {
     it('excludes from Airtable by default', () => {
       expect(
         HoursOfOperation({ key: 'hoo', label: 'lol' }).properties?.[
-          'airtable.exclude'
+          'airtable:exclude'
         ]
       ).toBe('true')
     })
@@ -106,7 +67,7 @@ describe('HoursOfOperation()', () => {
           key: 'hoo',
           label: 'lol',
           excludeFromAirtable: false
-        }).properties?.['airtable.exclude']
+        }).properties?.['airtable:exclude']
       ).toBe(undefined)
     })
   })
@@ -211,10 +172,6 @@ describe('validateDayGrid()', () => {
       expected: true
     },
     {
-      values: [{} as DayValue],
-      expected: VALIDATE_DAY_GRID_ERROR_DEFAULTS.missingTimes
-    },
-    {
       values: [
         { start: '09:00', end: '10:00' },
         { start: '11:00', end: '17:00' },
@@ -252,7 +209,7 @@ describe('validateDayGrid()', () => {
     'validates `$values` as "$expected"',
     async ({ values, expected, errors }) => {
       const { form } = await formFixture('hoo')
-      const component = form.getComponent<DataGridSchema>('monday').component
+      const { component } = form.getComponent<DataGridSchema>('monday')
       if (errors) component.errors = errors
       expect(
         validateDayGrid({

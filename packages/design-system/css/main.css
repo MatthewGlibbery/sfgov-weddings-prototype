@@ -1,21 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./formio.css";
 
 @layer base {
+  ol,
+  ul {
+    @apply mx-0 my-16 pl-40;
+  }
+
   /* Wagtail UI only allows for 5-layers deep of nesting. */
   ol {
     list-style: decimal;
-    margin: 16px 0;
-    padding-left: 40px;
 
     ol {
       list-style: lower-alpha;
       ol {
         list-style: lower-roman;
         ol {
-        list-style: decimal;
+          list-style: decimal;
           ol {
             list-style: lower-alpha;
           }
@@ -23,11 +25,9 @@
       }
     }
   }
-    
+
   ul {
     list-style: disc;
-    margin: 16px 0;
-    padding-left: 40px;
   }
 
   a {
@@ -39,12 +39,10 @@
   }
 
   input::placeholder {
-    @apply text-neutral600
+    @apply text-neutral600;
   }
 
   :focus-visible {
-    outline: 3px solid theme('colors.primary500');
-    outline-offset: 4px;
-    border-radius: 4px;
+    @apply rounded-4 outline-focus;
   }
 }

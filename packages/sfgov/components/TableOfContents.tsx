@@ -6,13 +6,11 @@ import {
   classed,
   classes,
   HeadingLg,
-  IconArrowUp,
   IconChevronDown,
   IconChevronUp,
   Link
 } from '@/design-system'
 import { useTranslation } from 'next-i18next'
-import { createPortal } from 'react-dom'
 
 export const tocWrapperClasses = classes(
   'z-50',
@@ -29,17 +27,8 @@ const ListItem = classed('li', 'mb-16')
 
 const TopLevelTOC = classed(Link, 'line-clamp-2')
 
-// istanbul ignore next
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  })
-}
-
 const scrollToHeading = (target) => {
   const element = document.getElementById(target)
-  if (!element) return
   // setting a -1 tabIndex so we can focus it via js
   element.setAttribute('tabIndex', -1)
 
@@ -191,41 +180,11 @@ const useHeadingsData = () => {
   return { headings }
 }
 
-const useIntersectionObserver = (showBackToTop, setShowBackToTop) => {
-  useEffect(() => {
-    // istanbul ignore next
-    const callback = ([firstHeading]) => {
-      if (firstHeading.boundingClientRect.top < 32) {
-        setShowBackToTop(true)
-      } else {
-        setShowBackToTop(false)
-      }
-    }
-
-    const observer = new IntersectionObserver(callback)
-
-    const headingElements = Array.from(
-      document.querySelectorAll('h2[id]:not([id=""])')
-    )
-
-    // We don't have ToC if there are fewer than 3 headings
-    // don't observe if this is the case
-    if (headingElements.length >= 3) {
-      observer.observe(headingElements[0])
-    }
-
-    return () => observer.disconnect()
-  }, [showBackToTop, setShowBackToTop])
-}
-
 /**
  * Renders the table of contents.
  */
 export const TableOfContents = () => {
-  const [showBackToTop, setShowBackToTop] = useState(false)
   const { headings } = useHeadingsData()
-  useIntersectionObserver(showBackToTop, setShowBackToTop)
-
   const { t } = useTranslation()
 
   if (headings.length >= 3) {
@@ -235,23 +194,6 @@ export const TableOfContents = () => {
           {t('table-of-contents-heading', { defaultValue: 'On this page' })}
         </HeadingLg>
         <TOC headings={headings} />
-        {/* istanbul ignore next */}
-        {showBackToTop
-          ? createPortal(
-              <Button
-                variant="secondary"
-                className="fixed bottom-16 right-16 md:bottom-[50px] md:right-[50px] z-50"
-                onClick={
-                  /* istanbul ignore next */ () =>
-                    /* istanbul ignore next */ scrollToTop()
-                }
-              >
-                <IconArrowUp width={20} />
-                {t('back-to-top-button', { defaultValue: 'Back to top' })}
-              </Button>,
-              document.body
-            )
-          : null}
       </nav>
     )
   }

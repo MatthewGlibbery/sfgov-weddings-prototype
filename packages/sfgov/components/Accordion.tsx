@@ -6,8 +6,8 @@ import {
   classes,
   IconChevronUp,
   IconChevronDown,
-  HeadingXs,
-  Label
+  Label,
+  HeadingLg
 } from '@/design-system'
 
 export const StyledDetails = classed('details', 'block list-none group')
@@ -116,6 +116,39 @@ export const Accordion = (props: AccordionProps) => {
       >
         {children}
       </StyledContent>
+    </StyledDetails>
+  )
+}
+
+export const HeaderNavAccordion = /* istanbul ignore next */ (
+  props: AccordionProps
+) => {
+  const { title, open, children, ...rest } = props
+
+  const OpenedIcon = IconMinus
+  const ClosedIcon = IconPlus
+
+  const [isOpen, setOpen] = useState(!!open)
+  const Icon = isOpen ? OpenedIcon : ClosedIcon
+
+  return (
+    <StyledDetails
+      open={isOpen}
+      className={classes(isOpen ? 'border-b-1 border-neutral200' : '')}
+      onToggle={(e) => setOpen(e.currentTarget.open)}
+      name="nav-menu"
+      {...rest}
+    >
+      <StyledSummary
+        className={classes(
+          'py-16 px-20',
+          isOpen ? 'border-b-0' : 'border-neutral200'
+        )}
+      >
+        <HeadingLg className="!mb-0">{title}</HeadingLg>
+        <Icon className="text-black" data-testid={Icon.name} width={24} />
+      </StyledSummary>
+      <StyledContent className="pt-0">{children}</StyledContent>
     </StyledDetails>
   )
 }

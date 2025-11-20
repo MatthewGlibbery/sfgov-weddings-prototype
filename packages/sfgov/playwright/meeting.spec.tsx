@@ -229,6 +229,16 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveLangAttributes()
   })
 
+  test('has aria attribute and landmark role in navigation landmark', async ({
+    mount,
+    page
+  }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toHaveAriaAttributeAndLandmarkRoleInNavLandmark()
+  })
+
   test.skip('validate axe core accessibility tests', async ({
     mount,
     page
@@ -261,6 +271,16 @@ test.describe('A11y tests', () => {
     await mount(<MeetingPage page={data} />)
 
     await expect(page).toHaveLogicalTabOrderOnMeetingContentType()
+  })
+
+  test('validate feedback trigger button is accessible and includes aria attributes', async ({
+    mount,
+    page
+  }) => {
+    const data = MeetingPageFactory.make()
+    await mount(<MeetingPage page={data} />)
+
+    await expect(page).toBeAccessibleAndIncludeAriaAttributesInFeedbackFAB()
   })
 
   // Module Specific Tests

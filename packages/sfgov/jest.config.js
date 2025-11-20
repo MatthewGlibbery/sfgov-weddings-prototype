@@ -18,10 +18,12 @@ const createJestConfig = nextJest({
   dir: './'
 })
 
+const CI = !!process.env.CI
+
 // Add any custom config to be passed to Jest
 /** @type {import('jest').Config} */
 const customJestConfig = {
-  ci: !!process.env.CI,
+  ci: CI,
   coverageThreshold: {
     global: {
       lines: 100,

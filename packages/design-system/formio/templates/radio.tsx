@@ -60,15 +60,11 @@ export function form(ctx: RadioContext) {
             <input
               className={classes(
                 'appearance-none',
-                'w-40',
-                'h-40',
+                'size-40',
                 'shrink-0',
                 'border',
                 'border-1',
-                'outline-2',
-                'outline-offset-4',
-                'outline-primary500',
-                'focus:outline',
+                'focus:outline-focus',
                 'disabled:bg-neutral100',
                 'disabled:border-neutral300',
                 ctx.component.type === 'selectboxes'
@@ -79,12 +75,10 @@ export function form(ctx: RadioContext) {
                     ]
                   : [
                       'rounded-full',
-                      'ring',
                       'check-shadow-inner',
                       'checked:bg-primary500',
                       'disabled:shadow-none',
-                      'disabled:outline-none',
-                      'disabled:ring-0'
+                      'disabled:outline-none'
                     ]
               )}
               ref="input"

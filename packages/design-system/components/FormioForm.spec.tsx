@@ -12,7 +12,7 @@ import type {
 } from '../formio'
 import { rewriteLibraryUrl } from '../formio'
 import { FORM_CLASS } from '../formio/constants.mjs'
-import * as formioComponents from '../formio/components'
+import * as formioComponents from '../formio/components/schema'
 import {
   modifyComponentClassname,
   modifyHTMLElementClassname

@@ -1,5 +1,6 @@
+/* eslint-disable array-callback-return */
+/* eslint { max-len: [warn, 100] } */
 import {
-  Button,
   classed,
   Container,
   HeadingXXl,
@@ -11,18 +12,14 @@ import type {
   FormSubmission
 } from '@/design-system/formio'
 import { putMetricData } from '@/lib/metrics'
-import { getPageURL } from '@/lib/utils'
-import type {
-  ConfirmationBodyBlock,
-  FormPageData,
-  TypeContactFooterBlockValues
-} from '@/types'
+import type { FormPageData } from '@/types'
 import type { Dimension } from '@aws-sdk/client-cloudwatch'
 import { useTranslation } from 'next-i18next'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { useEffect, useState, type ReactNode } from 'react'
+import { ButtonLink } from '../ButtonLink'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
 import { RichText } from '../RichText'
@@ -95,6 +92,9 @@ export function FormPage({
   ]
 
   useEffect(() => {
+    // don't do anything if the form has been submitted
+    if (submitted) return
+
     const handleBeforeUnload = (event: Event) => {
       if (warnBeforeLeaving) {
         event.preventDefault()
@@ -119,7 +119,7 @@ export function FormPage({
       router.events?.off('beforeHistoryChange', nextNavigationHandler)
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
-  }, [warnBeforeLeaving, router.events])
+  }, [warnBeforeLeaving, router.events, submitted])
 
   return (
     <PageWrapper title={title} meta={page.meta}>
@@ -132,17 +132,24 @@ export function FormPage({
         </div>
         {submitted ? (
           <div className="space-y-40">
-            {confirmationBody.map((block) => (
-              <ConfirmationContent key={block.id} block={block} />
-            ))}
+            {confirmationBody.map((block) => {
+              switch (block.type) {
+                case 'text':
+                  return <RichText html={block.value} key={block.id} />
+                case 'callout':
+                  return <Callout html={block.value} key={block.id} />
+                case 'button_link':
+                  return <ButtonLink link={block.value} key={block.id} />
+              }
+            })}
             {getHelp.length ? (
               <div>
                 <HeadingXXl as="h2" className="flex flex-row gap-8">
                   {t('contact-us', { defaultValue: 'Contact us' })}
                 </HeadingXXl>
-                {/* FIXME is this a problem here or in ContactFooter? */}
                 <ContactFooter
-                  items={getHelp as unknown as TypeContactFooterBlockValues[]}
+                  // @ts-expect-error poorly typed props
+                  items={getHelp}
                 />
               </div>
             ) : null}
@@ -185,7 +192,7 @@ export function FormPage({
     let formIsValid = true
 
     form.on('blur', (event) => {
-      const component = form.getComponent(event.component.key!)
+      const component = form.getComponent(event.component.key as string)
       if (component) {
         component.setPristine(false)
         component.checkValidity()
@@ -329,33 +336,6 @@ const FormioForm = dynamic(
     loading: Loading
   }
 )
-
-type ConfirmationContentProps = {
-  block: ConfirmationBodyBlock
-}
-
-const ConfirmationContent = ({ block }: ConfirmationContentProps) => {
-  switch (block.type) {
-    case 'text':
-      return <RichText html={block.value} />
-    case 'callout':
-      return <Callout html={block.value} />
-    case 'button_link':
-      return (
-        <Button
-          as="a"
-          href={
-            // istanbul ignore next
-            block.value.url || getPageURL(block.value.page)
-          }
-        >
-          {block.value.link_text}
-        </Button>
-      )
-  }
-  // istanbul ignore next
-  return <></>
-}
 
 const InfoBox = classed('div', {
   base: 'p-20',

@@ -16,6 +16,7 @@ import logo from '../public/static/CCSF-seal-vector.svg'
 import { getHeaderLinks } from '@/lib/utils'
 import { SearchForm, SearchInput } from './Search'
 import { useState } from 'react'
+import NextLink from 'next/link'
 
 export type SiteHeaderProps = Omit<JSX.IntrinsicElements['header'], 'className'>
 
@@ -40,13 +41,13 @@ const Links = () => {
       {headerLinks.map((link) => {
         return (
           <li key={link.text}>
-            <Link
+            <NextLink
               href={link.href}
               className="ga-header-link block w-full no-underline font-bold text-label-xs px-28 py-12 text-primary500
             md:px-8 md:py-15 md:text-black"
             >
               {link.text}
-            </Link>
+            </NextLink>
           </li>
         )
       })}
@@ -149,7 +150,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           variant="preview"
         />
       ) : null}
-      <div className="mb-20 md:py-40">
+      <div className="md:py-40">
         <Container className="mr-0">
           <nav
             role="navigation"
