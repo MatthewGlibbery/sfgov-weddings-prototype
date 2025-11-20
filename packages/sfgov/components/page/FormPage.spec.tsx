@@ -169,8 +169,7 @@ describe('FormPage', () => {
     it('renders <FormioForm> with schema URL if provided', () => {
       const schemaUrl = 'https://formio.sfgov.org/some/form'
       const page = FormPageFactory.make({
-        schema_url: schemaUrl,
-        schema: undefined
+        schema_url: schemaUrl
       })
       render(<FormPage page={page} />)
       expect(MockDynamicComponent).toHaveBeenLastCalledWith(
