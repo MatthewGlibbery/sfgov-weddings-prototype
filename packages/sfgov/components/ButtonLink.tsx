@@ -1,10 +1,10 @@
 import type { LinkProps } from '@/design-system'
 import { Button, IconArrowRight } from '@/design-system'
 import { getPageURL } from '@/lib/utils'
-import type { TypeButtonLinkValues } from '@/types'
+import type { ButtonLinkBlockValue } from '@/types'
 
 export type ButtonLinkProps = LinkProps & {
-  link: TypeButtonLinkValues
+  link: ButtonLinkBlockValue
   iconOnly?: boolean
 }
 

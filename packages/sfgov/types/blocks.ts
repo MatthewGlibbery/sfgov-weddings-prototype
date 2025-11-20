@@ -24,22 +24,19 @@ interface RangeType {
 }
 
 // cms.blocks.composite.Link
-export type TypeLinkValues = {
-  link_text: string
-} & (
+export type LinkBlockValue =
   | {
       // if link_to === 'url' it will have a url, but no page
       link_to: 'url'
+      link_text: string
       url: string
-      page: never
     }
   | {
       // if link_to === 'page' it will have page, but no url
       link_to: 'page'
+      link_text: string
       page: MinimalPageData
-      url: never
     }
-)
 
 export type TypeCostBlockValues = {
   cost: TypeCostVariant
@@ -176,15 +173,15 @@ export type TypeQuickLinkBlock = TypeTileBlock<'quick_links'>
 export type TypeEventTileBlock = TypeTileBlock<'event'>
 
 // cms.blocks.composite.ButtonLink
-export type TypeButtonLinkValues = {
-  button: TypeLinkValues
+export type ButtonLinkBlockValue = {
+  button: LinkBlockValue
   screenreader_label?: string
 }
 
 export type TypeCallToActionValues = {
   title: string
   description: string
-  button_link: TypeButtonLinkValues
+  button_link: ButtonLinkBlockValue
 }
 
 export type TypeDocumentBlockValues = {
@@ -206,7 +203,7 @@ export type TypeCallToActionBlock = BlockType<string, TypeCallToActionValues>
 
 export type TypeTextBlock = BlockType<'text', string>
 
-export type TypeButtonLinkBlock = BlockType<'button_link', TypeButtonLinkValues>
+export type TypeButtonLinkBlock = BlockType<'button_link', ButtonLinkBlockValue>
 
 export type TypeCalloutBlock = BlockType<'callout', string>
 
@@ -283,7 +280,7 @@ export type TypeSpotlightBlock = BlockType<
 export type TypeTimelineBlockValues = {
   title: string
   timeline_items: BlockType<'item', TypeTitleAndTextValues>[]
-  button_link: TypeButtonLinkValues
+  button_link: ButtonLinkBlockValue
 }
 
 export type TypeResourcesSectionBlock = BlockType<
@@ -345,7 +342,7 @@ export type TypeAccordionSectionBlock = BlockType<
 
 export type TypeOnlineEventBlockValues = {
   description: string
-  link: TypeLinkValues
+  link: LinkBlockValue
   phone: TypePhoneNumberBlock[]
 }
 
@@ -374,7 +371,7 @@ export type TypeVideoEmbedValues = {
 export type TypeVideoBlockValues = {
   title: string
   description: string
-  video_type: (TypeVideoEmbedValues | TypeLinkValues)[]
+  video_type: (TypeVideoEmbedValues | LinkBlockValue)[]
   showTitle?: boolean
 }
 

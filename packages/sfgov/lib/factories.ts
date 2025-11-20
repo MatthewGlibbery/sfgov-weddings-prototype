@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import { factory } from 'node-factory'
-import {
+import type {
   BlockType,
   TypeButtonLinkBlock,
   TypeCalloutBlock,
@@ -30,7 +30,7 @@ import {
   TypeNewsTileBlock,
   TypeContentTileBlock,
   TypeEventTileBlock,
-  TypeLinkValues,
+  LinkBlockValue,
   TypeSpotlightBlock,
   TypeSocialMediaBlockValues,
   TypeSocialMediaBlock,
@@ -56,10 +56,9 @@ import {
   FormPageData,
   TypeDocumentSectionBlock,
   ResourceCollectionPageData,
-  TypeButtonLinkValues,
+  ButtonLinkBlockValue,
   TypeDocumentBlockValues,
   TypeProfileGroupBlock,
-  TypeDateTimeValues,
   TypeBodyTextBlock,
   TypeContactFooterBlock,
   HomePageData,
@@ -86,7 +85,7 @@ import {
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
-import { SearchPageData } from '@/pages/search'
+import type { SearchPageData } from '@/pages/search'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
@@ -136,13 +135,17 @@ export const FormPageFactory = factory<FormPageData>((gen) => ({
     type: FORM_PAGE_TYPE
   }),
   title: 'Form title',
-  form_schema_url:
-    'https://formio.sfgov.org/live11-ruehbbakcoznmcf/sfgovfeedbackform',
+  // @ts-expect-error FIXME: setting this breaks tests
+  schema_url: undefined,
   confirmation_title: 'Confirmation title',
   confirmation_body: [
     TextBlockFactory.make(),
     CalloutFactory.make(),
-    ButtonLinkFactory.make()
+    {
+      type: 'button_link',
+      id: gen.datatype.uuid(),
+      value: LinkFactory.make()
+    }
   ],
   partner_agencies: RelatedAgencyFactory.make(3),
   get_help: [
@@ -1218,7 +1221,7 @@ export const TextBlockFactory = factory<TypeTextBlock>((gen) => ({
   value: gen.lorem.sentence()
 }))
 
-export const LinkFactory = factory<TypeLinkValues>((gen) => ({
+export const LinkFactory = factory<LinkBlockValue>((gen) => ({
   link_to: 'url',
   link_text: gen.lorem.sentence(),
   url: gen.internet.url()
@@ -1230,7 +1233,7 @@ export const ButtonLinkFactory = factory<TypeButtonLinkBlock>((gen) => ({
   value: AriaButtonLinkFactory.make()
 }))
 
-export const AriaButtonLinkFactory = factory<TypeButtonLinkValues>((gen) => ({
+export const AriaButtonLinkFactory = factory<ButtonLinkBlockValue>((gen) => ({
   button: LinkFactory.make(),
   screenreader_label: gen.lorem.sentence()
 }))
