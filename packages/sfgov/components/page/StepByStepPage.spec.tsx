@@ -71,4 +71,19 @@ describe('StepByStepPage', () => {
       screen.queryByRole('heading', { level: 2, name: 'Partner agencies' })
     ).not.toBeInTheDocument()
   })
+
+  describe('primary agency', () => {
+    it('renders if present', () => {
+      render(<StepByStepPage page={fixture} />)
+      expect(
+        screen.getByText(fixture.primary_agency!.title)
+      ).toBeInTheDocument()
+    })
+    it('does not render if empty', () => {
+      render(<StepByStepPage page={{ ...fixture, primary_agency: null }} />)
+      expect(
+        screen.queryByText(fixture.primary_agency!.title)
+      ).not.toBeInTheDocument()
+    })
+  })
 })

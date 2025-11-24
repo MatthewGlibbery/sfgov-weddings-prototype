@@ -45,4 +45,17 @@ describe('MeetingPage', () => {
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(page.title)
   })
+
+  describe('primary agency', () => {
+    it('renders if present', () => {
+      render(<MeetingPage page={page} />)
+      expect(screen.getByText(page.primary_agency!.title)).toBeInTheDocument()
+    })
+    it('does not render if empty', () => {
+      render(<MeetingPage page={{ ...page, primary_agency: null }} />)
+      expect(
+        screen.queryByText(page.primary_agency!.title)
+      ).not.toBeInTheDocument()
+    })
+  })
 })

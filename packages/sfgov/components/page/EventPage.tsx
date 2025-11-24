@@ -1,3 +1,5 @@
+import type { EventPageData } from '@/types'
+import type { ComponentType } from 'react'
 import {
   BodyText,
   Container,
@@ -9,13 +11,8 @@ import {
   IconInfo,
   PageTitleSection
 } from '@/design-system'
-import type {
-  EventPageData,
-  TypeEmailBlock,
-  TypePhoneNumberBlock
-} from '@/types'
 import { useTranslation } from 'next-i18next'
-import type { ComponentType } from 'react'
+
 import {
   CallToAction,
   ContactFooter,
@@ -23,23 +20,25 @@ import {
   DateTimeBlock,
   Image,
   Location,
+  PageLink,
   PageWrapper,
+  RelatedContentList,
   RichText
-} from '../'
-import { RelatedContentList } from '../RelatedContentList'
+} from '..'
 
 export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
   const {
-    title,
-    description,
-    date_time: [dateTime],
-    cost: [cost],
-    location,
-    call_to_action: [callToAction],
-    image,
     body,
+    call_to_action: [callToAction],
     contact: contacts,
-    partner_agencies: agencies
+    cost: [cost],
+    date_time: [dateTime],
+    description,
+    image,
+    location,
+    partner_agencies: agencies,
+    primary_agency: primaryAgency,
+    title
   } = page
 
   const { t } = useTranslation()
@@ -61,6 +60,7 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
                 {description}
               </DisplayLg>
             ) : null}
+            {primaryAgency ? <PageLink page={primaryAgency} /> : null}
           </PageTitleSection>
         </div>
         <Grid className="grid gap-y-60">

@@ -1,3 +1,5 @@
+import type { TransactionPageData } from '@/types'
+import type { ComponentType } from 'react'
 import {
   Container,
   DisplayLg,
@@ -6,40 +8,40 @@ import {
   HeadingXl,
   HeadingXXl,
   IconInfo,
-  IconQuestion,
   PageTitleSection
 } from '@/design-system'
 import { camelCase } from '@/lib/utils'
-import type { TransactionPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
-import type { ComponentType } from 'react'
+
 import {
   Accordion,
   ContactFooter,
   CostBlock,
+  PageLink,
+  PageWrapper,
   RelatedContentList,
   RichText,
   TitleAndText,
   WhatToDo
-} from '../'
-import { PageWrapper } from './PageWrapper'
+} from '..'
 
 export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   page
 }) => {
   const {
-    title,
-    description,
     cost: [cost],
-    things_to_know: thingsToKnow,
-    what_to_do: whatToDo,
-    special_cases: specialCasesHeader,
-    supporting_information: supportingInformation,
     custom_section: customSection,
+    description,
     get_help: getHelp,
     good_for_community: goodForCommunity,
     partner_agencies: agencies,
-    related: relatedContentPages
+    primary_agency: primaryAgency,
+    related: relatedContentPages,
+    special_cases: specialCasesHeader,
+    supporting_information: supportingInformation,
+    things_to_know: thingsToKnow,
+    title,
+    what_to_do: whatToDo
   } = page
 
   const { t } = useTranslation()
@@ -190,6 +192,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
                 {description}
               </DisplayLg>
             ) : null}
+            {primaryAgency ? <PageLink page={primaryAgency} /> : null}
           </PageTitleSection>
         </div>
       </Container>

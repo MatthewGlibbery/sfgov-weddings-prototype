@@ -1,21 +1,27 @@
-import { Container, DisplayLg, Grid, PageTitleSection } from '@/design-system'
 import type { StepByStepData } from '@/types'
-import { useTranslation } from 'next-i18next'
 import type { ComponentType } from 'react'
-import { RelatedContentList } from '../RelatedContentList'
-import { RichText } from '../RichText'
-import { StepList } from '../Step'
-import { PageWrapper } from './PageWrapper'
+
+import { Container, DisplayLg, Grid, PageTitleSection } from '@/design-system'
+import { useTranslation } from 'next-i18next'
+
+import {
+  PageLink,
+  PageWrapper,
+  RelatedContentList,
+  RichText,
+  StepList
+} from '..'
 
 export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
   page
 }) => {
   const {
-    title,
     description,
     intro,
+    partner_agencies: agencies,
+    primary_agency: primaryAgency,
     steps = [],
-    partner_agencies: agencies
+    title
   } = page
 
   const { t } = useTranslation()
@@ -37,6 +43,7 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
               {description}
             </DisplayLg>
           ) : null}
+          {primaryAgency ? <PageLink page={primaryAgency} /> : null}
           <div className="my-60 lg:w-1/2" data-testid="step-by-step-intro">
             <RichText html={intro} />
           </div>

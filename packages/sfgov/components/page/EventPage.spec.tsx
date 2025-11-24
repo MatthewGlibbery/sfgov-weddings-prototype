@@ -31,6 +31,21 @@ describe('EventPage', () => {
     })
   })
 
+  describe('primary agency', () => {
+    it('renders if present', () => {
+      render(<EventPage page={fixture} />)
+      expect(
+        screen.getByText(fixture.primary_agency!.title)
+      ).toBeInTheDocument()
+    })
+    it('does not render if empty', () => {
+      render(<EventPage page={{ ...fixture, primary_agency: null }} />)
+      expect(
+        screen.queryByText(fixture.primary_agency!.title)
+      ).not.toBeInTheDocument()
+    })
+  })
+
   it.each([
     { what: 'cost', input: fixture.cost[0].value.description },
     { what: 'date_time', input: /Sunday, November 19, 2023/ },

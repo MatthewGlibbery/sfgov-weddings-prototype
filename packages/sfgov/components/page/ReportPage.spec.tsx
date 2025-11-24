@@ -47,4 +47,17 @@ describe('ReportPage', () => {
       screen.queryByRole('heading', { level: 3, name: 'Print version' })
     ).not.toBeInTheDocument()
   })
+
+  describe('primary agency', () => {
+    it('renders if present', () => {
+      render(<ReportPage page={page} />)
+      expect(screen.getByText(page.primary_agency!.title)).toBeInTheDocument()
+    })
+    it('does not render if empty', () => {
+      render(<ReportPage page={{ ...page, primary_agency: null }} />)
+      expect(
+        screen.queryByText(page.primary_agency!.title)
+      ).not.toBeInTheDocument()
+    })
+  })
 })

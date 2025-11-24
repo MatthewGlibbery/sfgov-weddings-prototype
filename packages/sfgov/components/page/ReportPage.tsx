@@ -1,27 +1,38 @@
-import { Container, Grid, HeadingXl, PageTitleSection } from '@/design-system'
 import type { ReportPageData } from '@/types'
-import { useTranslation } from 'next-i18next'
 import type { ComponentType } from 'react'
-import { ComposedDate } from '../DateTime'
-import { DocumentLink } from '../DocumentLink'
-import { RelatedContentList } from '../RelatedContentList'
-import { RichText } from '../RichText'
-import { Spotlight } from '../Spotlight'
-import { Table } from '../Table'
-import { TableOfContents, tocWrapperClasses } from '../TableOfContents'
-import { PageWrapper } from './PageWrapper'
+import {
+  Container,
+  DisplayLg,
+  Grid,
+  HeadingXl,
+  PageTitleSection
+} from '@/design-system'
+import { useTranslation } from 'next-i18next'
+
+import {
+  ComposedDate,
+  DocumentLink,
+  PageLink,
+  PageWrapper,
+  RelatedContentList,
+  RichText,
+  Spotlight,
+  Table,
+  TableOfContents
+} from '..'
 
 export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
   page
 }) => {
   const { t } = useTranslation()
   const {
-    title,
+    content,
     date,
+    partner_agencies: agencies,
+    primary_agency: primaryAgency,
     print_version: printVersion,
     spotlight: [spotlight],
-    content,
-    partner_agencies: agencies
+    title
   } = page
 
   return (
@@ -32,7 +43,10 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
           title={title}
           isHidden={true}
         >
-          <ComposedDate startDateInput={date} />
+          <DisplayLg as="p" className="mb-16 text-neutral700">
+            <ComposedDate startDateInput={date} />
+          </DisplayLg>
+          {primaryAgency ? <PageLink page={primaryAgency} /> : null}
         </PageTitleSection>
       </Container>
       {spotlight ? (

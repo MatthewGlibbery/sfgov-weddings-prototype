@@ -1,3 +1,6 @@
+import type { ComponentType } from 'react'
+import type { MeetingPageData } from '@/types'
+
 import {
   Container,
   Grid,
@@ -8,21 +11,23 @@ import {
   IconInfo,
   PageTitleSection
 } from '@/design-system'
-import type { MeetingPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
-import { ComponentType } from 'react'
-import { Accordion } from '../Accordion'
-import { AgendaItemBlock } from '../AgendaItemBlock'
-import { Callout } from '../Callout'
-import { ComposedDate, ComposedTime } from '../DateTime'
-import { DownloadableFilesSection } from '../DownloadableFilesSection'
-import { Location } from '../Location'
-import { OnlineEventBlock } from '../OnlineEventBlock'
-import { PageLinksList } from '../PageLinksList'
-import { RelatedContentList } from '../RelatedContentList'
-import { RichText } from '../RichText'
-import { Video } from '../Video'
-import { PageWrapper } from './PageWrapper'
+
+import {
+  Accordion,
+  AgendaItemBlock,
+  Callout,
+  ComposedDate,
+  ComposedTime,
+  DownloadableFilesSection,
+  Location,
+  OnlineEventBlock,
+  PageLink,
+  PageWrapper,
+  RelatedContentList,
+  RichText,
+  Video
+} from '..'
 
 export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   page
@@ -31,7 +36,6 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   const {
     title,
     primary_agency: primaryAgency,
-    primary_agencies: primaryAgencies,
     partner_agencies: agencies,
     cancelled,
     date_time: date,
@@ -222,17 +226,13 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
       {cancelled ? (
         <Callout html="This meeting has been cancelled."></Callout>
       ) : null}
-      <Container className="flex flex-col gap-y-60">
-        <div className="mb-20 pb-40 flex flex-col space-y-40">
-          <PageTitleSection
-            title={title}
-            label={t('meeting', { defaultValue: 'Meeting' })}
-          >
-            {primaryAgency ? (
-              <PageLinksList pageLinks={[primaryAgency]} />
-            ) : null}
-          </PageTitleSection>
-        </div>
+      <Container className="mb-20 pb-40">
+        <PageTitleSection
+          title={title}
+          label={t('meeting', { defaultValue: 'Meeting' })}
+        >
+          {primaryAgency ? <PageLink page={primaryAgency} /> : null}
+        </PageTitleSection>
       </Container>
       <div className="md:hidden">
         <MeetingDetails />

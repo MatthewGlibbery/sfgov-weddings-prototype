@@ -1,3 +1,12 @@
+import type {
+  CampaignPageData,
+  TypeAccordionSectionBlock,
+  TypeImageWithTextBlock,
+  TypeResourcesSectionBlock,
+  TypeVideoBlock,
+  WagtailImageData
+} from '@/types'
+import type { ComponentType } from 'react'
 import {
   classes,
   Container,
@@ -10,48 +19,44 @@ import {
   PageTitleSection
 } from '@/design-system'
 import { getPageURL } from '@/lib/utils'
-import {
-  CampaignPageData,
-  TypeAccordionSectionBlock,
-  TypeImageWithTextBlock,
-  TypeResourcesSectionBlock,
-  TypeVideoBlock,
-  WagtailImageData
-} from '@/types'
 import { useTranslation } from 'next-i18next'
-import { ComponentType } from 'react'
-import { Accordion } from '../Accordion'
-import { ContactFooter } from '../ContactFooter'
-import { DownloadableFilesSection } from '../DownloadableFilesSection'
-import { Image } from '../Image'
-import { Location } from '../Location'
-import { PhoneNumberBlock } from '../PhoneNumberBlock'
-import { RelatedContentList } from '../RelatedContentList'
-import { RichText } from '../RichText'
-import { Spotlight } from '../Spotlight'
-import { ContentTileList } from '../Tile'
-import { TileContentSection } from '../TileContentSection'
-import { TitleAndText } from '../TitleAndText'
-import { Video } from '../Video'
-import { PageWrapper } from './PageWrapper'
+
+import {
+  Accordion,
+  ContactFooter,
+  ContentTileList,
+  DownloadableFilesSection,
+  Image,
+  Location,
+  PageLink,
+  PageWrapper,
+  PhoneNumberBlock,
+  RelatedContentList,
+  RichText,
+  Spotlight,
+  TileContentSection,
+  TitleAndText,
+  Video
+} from '..'
 
 export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   page
 }) => {
   const {
-    title,
-    logo,
-    background_header_image: headerImage,
-    theme,
-    spotlight_1: spotlight1,
-    facts_title: factsTitle,
-    fact_items: factItems,
-    additional_content: additionalContent,
-    spotlight_2: spotlight2,
     about_campaign: about,
+    additional_content: additionalContent,
+    background_header_image: headerImage,
+    contact,
+    fact_items: factItems,
+    facts_title: factsTitle,
+    logo,
     partner_agencies: agencies,
+    primary_agency: primaryAgency,
     related_links: links,
-    contact
+    spotlight_1: spotlight1,
+    spotlight_2: spotlight2,
+    theme,
+    title
   } = page
 
   const { t } = useTranslation()
@@ -233,7 +238,9 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       >
         <div className="hidden xl:flex xl:justify-between gap-28">
           <div>
-            <PageTitleSection title={title} label={label} isHidden={true} />
+            <PageTitleSection title={title} label={label} isHidden={true}>
+              {primaryAgency ? <PageLink page={primaryAgency} /> : null}
+            </PageTitleSection>
           </div>
           {logo ? <LogoComponent logo={logo} /> : null}
         </div>
@@ -243,6 +250,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
           <DisplayXXXl as="h1" className="my-12 md:my-20">
             {title}
           </DisplayXXXl>
+          {primaryAgency ? <PageLink page={primaryAgency} /> : null}
         </div>
       </Container>
       <div
