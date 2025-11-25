@@ -1,44 +1,43 @@
 import type { FormSchema } from '@/design-system/formio'
 import type {
   BlockType,
-  TypeBodyTextBlock,
-  TypeCallToActionBlock,
-  TypeCostBlock,
-  TypeDateTimeBlock,
-  TypeEmailBlock,
-  TypeImageBlock,
-  TypeLocationBlock,
-  TypePhoneNumberBlock,
-  TypeStepBlock,
-  TypeTitleAndTextBlock,
-  TypeWhatToDoBlock,
-  TypeQuickLinkBlock,
-  TypeSocialMediaBlock,
-  TypeContentSectionBlock,
-  TypeServicesSectionBlock,
-  TypeSpotlightBlock,
-  TypeResourcesSectionBlock,
-  TypeAlertBlock,
-  TypeImageWithTextBlock,
-  TypeAccordionSectionBlock,
-  TypeOnlineEventBlock,
-  TypeAgendaItemBlock,
-  TypeVideoBlock,
-  TypeDownloadableFilesBlock,
-  TypeEmbeddedContentBlock,
-  TypeDataStoriesSectionBlock,
-  TypeCalloutBlock,
-  TypeContactFooterBlock,
+  LinkBlockValue,
   TopicFieldTypes,
-  TypeProfileGroupBlock,
-  TypeDivisionsSubcommitteeBlock,
+  TypeAccordionSectionBlock,
+  TypeAgendaItemBlock,
+  TypeAlertBlock,
+  TypeBodyTextBlock,
+  TypeCalloutBlock,
+  TypeCallToActionBlock,
+  TypeContactFooterBlock,
+  TypeContentSectionBlock,
+  TypeCostBlock,
+  TypeDataStoriesSectionBlock,
+  TypeDateTimeBlock,
   TypeDateTimeValues,
+  TypeDivisionsSubcommitteeBlock,
   TypeDocumentBlock,
-  TypeTileBlockValues,
+  TypeDownloadableFilesBlock,
+  TypeEmailBlock,
+  TypeEmbeddedContentBlock,
+  TypeImageBlock,
+  TypeImageWithTextBlock,
+  TypeLocationBlock,
+  TypeOnlineEventBlock,
+  TypePhoneNumberBlock,
+  TypeProfileGroupBlock,
+  TypeQuickLinkBlock,
+  TypeResourcesSectionBlock,
+  TypeServicesSectionBlock,
+  TypeSocialMediaBlock,
+  TypeSpotlightBlock,
+  TypeStepBlock,
   TypeTableBlock,
   TypeTextBlock,
-  TypeButtonLinkBlock,
-  LinkBlockValue
+  TypeTileBlockValues,
+  TypeTitleAndTextBlock,
+  TypeVideoBlock,
+  TypeWhatToDoBlock
 } from './blocks'
 import type { WagtailImageData } from './images'
 
@@ -360,19 +359,20 @@ export type FormPageData = PageData & {
   partner_agencies: RelatedContentData[]
 }
 
-export type ResourceCollectionPageData = PageData & {
-  description: string
-  data_dashboard: TypeEmbeddedContentBlock[]
-  introductory_text: TypeTitleAndTextBlock[]
-  body: Array<
-    | BlockType<'documents', TypeDocumentBlock[]>
-    | BlockType<'data_stories', TypeDataStoriesSectionBlock[]>
-    | BlockType<'resources', TypeResourcesSectionBlock[]>
-  >
-  custom_section: TypeTitleAndTextBlock[]
-  topics: RelatedContentData[]
-  partner_agencies: RelatedContentData[]
-}
+export type ResourceCollectionPageData = PageData &
+  PrimaryAgencyData & {
+    description: string
+    data_dashboard: TypeEmbeddedContentBlock[]
+    introductory_text: TypeTitleAndTextBlock[]
+    body: Array<
+      | BlockType<'documents', TypeDocumentBlock[]>
+      | BlockType<'data_stories', TypeDataStoriesSectionBlock[]>
+      | BlockType<'resources', TypeResourcesSectionBlock[]>
+    >
+    custom_section: TypeTitleAndTextBlock[]
+    topics: RelatedContentData[]
+    partner_agencies: RelatedContentData[]
+  }
 
 export type HomePageData = PageData & {
   spotlight: TypeSpotlightBlock[]

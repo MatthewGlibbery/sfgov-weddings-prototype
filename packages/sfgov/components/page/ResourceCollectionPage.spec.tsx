@@ -14,8 +14,9 @@ window.IntersectionObserver = jest.fn(() => ({
 }))
 
 describe('ResourceCollectionPage', () => {
+  const page = ResourceCollectionPageFactory.make()
+
   it('renders a resource collection page', () => {
-    const page = ResourceCollectionPageFactory.make()
     render(<ResourceCollectionPage page={page} />)
 
     const title = screen.getByRole('heading', {
@@ -29,25 +30,34 @@ describe('ResourceCollectionPage', () => {
     const page = ResourceCollectionPageFactory.make({
       description: undefined
     })
-    render(<ResourceCollectionPage page={page} />)
+    render(<ResourceCollectionPage page={{ ...page, description: '' }} />)
     expect(screen.queryByTestId('page-description')).not.toBeInTheDocument()
   })
 
   it('does not render related topics list w/o topics', () => {
-    const page = ResourceCollectionPageFactory.make({
-      topics: []
-    })
-    render(<ResourceCollectionPage page={page} />)
+    render(<ResourceCollectionPage page={{ ...page, topics: [] }} />)
     expect(screen.queryByTestId('related-topics-list')).not.toBeInTheDocument()
   })
 
   it('does not render the agencies list w/o agencies', () => {
-    const page = ResourceCollectionPageFactory.make({
-      partner_agencies: []
-    })
-    render(<ResourceCollectionPage page={page} />)
+    render(<ResourceCollectionPage page={{ ...page, partner_agencies: [] }} />)
     expect(
       screen.queryByTestId('partner-agencies-list')
     ).not.toBeInTheDocument()
+  })
+
+  describe('primary agency', () => {
+    it('renders if present', () => {
+      render(<ResourceCollectionPage page={page} />)
+      expect(screen.getByText(page.primary_agency!.title)).toBeInTheDocument()
+    })
+    it('does not render if empty', () => {
+      render(
+        <ResourceCollectionPage page={{ ...page, primary_agency: null }} />
+      )
+      expect(
+        screen.queryByText(page.primary_agency!.title)
+      ).not.toBeInTheDocument()
+    })
   })
 })

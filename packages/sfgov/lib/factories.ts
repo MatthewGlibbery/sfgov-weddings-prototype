@@ -1680,6 +1680,11 @@ export const ResourceCollectionPageFactory =
       meta: {
         type: 'sf.RelatedContentAgency'
       }
+    }),
+    primary_agency: PageFactory.make({
+      meta: {
+        type: 'sf.Agency'
+      }
     })
   }))
 
