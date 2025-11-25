@@ -23,7 +23,10 @@ import transamerica from '../public/static/transamerica.svg'
 import sutro from '../public/static/sutro.svg'
 import salesforce from '../public/static/salesforce.svg'
 
-const StyledFooter = classed('div', 'bg-primary900 text-white')
+const StyledFooter = classed(
+  'div',
+  'bg-primary900 text-white mt-40 md:mt-60 lg:mt-80'
+)
 
 export type SiteFooterProps = ComponentProps<typeof StyledFooter>
 
