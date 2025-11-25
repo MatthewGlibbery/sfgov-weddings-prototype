@@ -44,7 +44,6 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   page
 }) => {
   const {
-    meta: { slug },
     title,
     logo,
     description,
@@ -335,7 +334,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             </Container>
           ) : null}
           {people.length ? (
-            <Container backgroundcolor="primary">
+            <Container backgroundcolor="neutral">
               {people.map((profileGroup) => (
                 <ProfileGroup
                   key={profileGroup.id}

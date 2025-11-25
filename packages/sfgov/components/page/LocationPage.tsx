@@ -219,7 +219,7 @@ export function LocationPage({ page, env }: LocationPageProps) {
           </Container>
         ) : null}
         {people.length ? (
-          <Container backgroundcolor="primary">
+          <Container backgroundcolor="neutral">
             <ProfileGroup
               title={people[0]?.value.title}
               profiles={people[0]?.value.profiles}

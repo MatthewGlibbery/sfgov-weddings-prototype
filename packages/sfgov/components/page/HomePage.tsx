@@ -72,15 +72,13 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
           ) : null}
         </Container>
         {sfGovernment?.length ? (
-          <Container backgroundcolor="primary">
+          <Container className="flex flex-col gap-60" backgroundcolor="neutral">
             {sfGovernment.map((profileGroup) => (
               <ProfileGroup
                 key={profileGroup.id}
                 title={profileGroup.value.title}
                 description={profileGroup.value.description}
                 profiles={profileGroup.value.profiles}
-                isHomePage={true}
-                backgroundcolor="primary"
               />
             ))}
           </Container>
