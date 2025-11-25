@@ -15,7 +15,11 @@ import {
   PageLabel,
   PageTitleSection
 } from '@/design-system'
-import type { AgencyPageData, WagtailImageData } from '@/types'
+import type {
+  AgencyPageData,
+  TypeProfileGroupBlock,
+  WagtailImageData
+} from '@/types'
 import type { ComponentType } from 'react'
 import { Trans, useTranslation } from 'next-i18next'
 import {
@@ -28,12 +32,12 @@ import {
   MeetingTileList,
   NewsTileList,
   PageWrapper,
+  ProfileGroup,
   QuickLinkList,
+  RelatedContentList,
   RichText,
   Spotlight,
-  ZebraStripedSection,
-  RelatedContentList,
-  ProfileGroup
+  ZebraStripedSection
 } from '../'
 import { ResourceSection, ServiceSection } from '../TileContentSection'
 import { ButtonLink } from '../ButtonLink'
@@ -44,6 +48,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
   page
 }) => {
   const {
+    meta: { html_url: htmlUrl },
     title,
     logo,
     description,
@@ -69,6 +74,16 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     about_page: [aboutPage]
   } = page
 
+  const BOS_SLUG = 'departments--board-supervisors'
+  // slug for translation is the translated slug
+  // but html_url comes in like this:
+  // en: http://api.sf.gov/departments--board-supervisors/
+  // es: http://api.sf.gov/es/departments--board-supervisors/
+  const HTML_URL_SLUG = new URL(htmlUrl as string).pathname
+    .split('/')
+    .filter(Boolean)
+    .pop()
+  const isBOS = HTML_URL_SLUG === BOS_SLUG
   const { t } = useTranslation()
   const { locale, asPath } = useRouter()
   const upcomingEventsUrl = `${
@@ -95,6 +110,21 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
       imageRef={logo}
     />
   )
+
+  const ProfileGroupComponent = (people: TypeProfileGroupBlock[]) => {
+    return people.length ? (
+      <Container backgroundcolor="primary">
+        {people.map((profileGroup: TypeProfileGroupBlock) => (
+          <ProfileGroup
+            key={profileGroup.id}
+            title={profileGroup.value.title}
+            description={profileGroup.value.description}
+            profiles={profileGroup.value.profiles}
+          />
+        ))}
+      </Container>
+    ) : null
+  }
 
   return (
     <PageWrapper
@@ -161,6 +191,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               <QuickLinkList links={quicklinks} />
             </Container>
           ) : null}
+          {isBOS ? ProfileGroupComponent(people) : null}
           {events?.past?.length || events?.upcoming?.length ? (
             <Container className="flex flex-col gap-20">
               <div className="flex items-center justify-between">
@@ -333,18 +364,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
               ) : null}
             </Container>
           ) : null}
-          {people.length ? (
-            <Container backgroundcolor="neutral">
-              {people.map((profileGroup) => (
-                <ProfileGroup
-                  key={profileGroup.id}
-                  title={profileGroup.value.title}
-                  description={profileGroup.value.description}
-                  profiles={profileGroup.value.profiles}
-                />
-              ))}
-            </Container>
-          ) : null}
+          {isBOS ? null : ProfileGroupComponent(people)}
           {contact?.length &&
           Object.values(contact[0].value).some((val) => val.length) ? (
             <Container>
