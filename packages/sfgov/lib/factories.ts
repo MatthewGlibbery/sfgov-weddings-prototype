@@ -65,7 +65,6 @@ import type {
   TypeTableBlock,
   TypeQLessData
 } from '@/types'
-import type { SearchPageData } from '@/pages/search'
 import {
   ABOUT_PAGE_TYPE,
   AGENCY_PAGE_TYPE,
@@ -86,6 +85,7 @@ import {
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
+import type { SearchPageData } from '@/pages/search'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
@@ -778,9 +778,11 @@ export const AlertBlockFactory = factory<TypeAlertBlock>((gen) => ({
 export const SitewideAlertBlockFactory = factory<{
   alert_style: 'information' | 'critical'
   alert_text: string
+  lang: string
 }>(() => ({
   alert_style: 'information',
-  alert_text: 'some text'
+  alert_text: 'some text',
+  lang: 'en'
 }))
 
 export const StepBlockFactory = factory<TypeStepBlock>((gen) => ({

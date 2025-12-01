@@ -3,8 +3,20 @@ import { render, screen } from '@testing-library/react'
 import { PageWrapper } from './PageWrapper'
 import { useRouter } from 'next/router'
 import { SitewideAlertBlockFactory } from '@/lib/factories'
+import type { MockedRouter } from '__mocks__/next/router'
 
 jest.mock('next/router', () => ({ useRouter: jest.fn() }))
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () =>
+      Promise.resolve({
+        items: [
+          SitewideAlertBlockFactory.make({ alert_text: 'alert' }),
+          SitewideAlertBlockFactory.make({ alert_text: 'alerta', lang: 'es' })
+        ]
+      })
+  })
+) as jest.Mock
 
 describe('<PageWrapper>', () => {
   const data = {
@@ -73,5 +85,13 @@ describe('<PageWrapper>', () => {
       'name',
       'google-site-verification'
     )
+  })
+
+  it('sets the locale to spanish and renders the spanish alert banner', async () => {
+    ;(useRouter as MockedRouter).mockImplementationOnce(() => ({
+      locale: 'es'
+    }))
+    render(<PageWrapper />)
+    expect(await screen.findByText('alerta')).toBeInTheDocument()
   })
 })

@@ -82,6 +82,8 @@ export type AlertData = {
   alert_style: 'information' | 'critical'
   alert_text: string
   expiration_date: string
+  locale: number
+  lang: string
 }
 
 export type PrimaryAgencyData = {

@@ -41,6 +41,7 @@ export const PageWrapper = ({
   className
 }: PageWrapperProps) => {
   const router = useRouter()
+  const { locale } = router
   const hasFetched = useRef(false)
   const [alertData, setAlertData] = useState<TypeAlertData | null>(null)
 
@@ -55,13 +56,17 @@ export const PageWrapper = ({
       const loadData = async () => {
         const res = await fetch('/api/alerts')
         const data = await res.json().catch(() => ({}))
-        setAlertData(data)
+        const filteredData = {
+          ...data,
+          items: data?.items?.filter((item: AlertData) => item.lang === locale)
+        }
+        setAlertData(filteredData)
         hasFetched.current = true
       }
 
       loadData()
     }
-  }, [alertData])
+  }, [alertData, locale])
 
   return (
     <>
