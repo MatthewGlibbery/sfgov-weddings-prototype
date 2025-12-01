@@ -133,4 +133,19 @@ describe('TransactionPage', () => {
       expect(para).not.toBeVisible()
     })
   })
+
+  describe('primary agency', () => {
+    it('renders if present', () => {
+      render(<TransactionPage page={fixture} />)
+      expect(
+        screen.getByText(fixture.primary_agency!.title)
+      ).toBeInTheDocument()
+    })
+    it('does not render if empty', () => {
+      render(<TransactionPage page={{ ...fixture, primary_agency: null }} />)
+      expect(
+        screen.queryByText(fixture.primary_agency!.title)
+      ).not.toBeInTheDocument()
+    })
+  })
 })

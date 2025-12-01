@@ -1,3 +1,8 @@
+import type { ComponentType } from 'react'
+import type { ResourceCollectionPageData } from '@/types'
+
+import { useTranslation } from 'next-i18next'
+
 import {
   Container,
   DisplayLg,
@@ -6,33 +11,33 @@ import {
   PageTitleSection
 } from '@/design-system'
 import { camelCase } from '@/lib/utils'
-import type { ResourceCollectionPageData } from '@/types'
-import { useTranslation } from 'next-i18next'
-import type { ComponentType } from 'react'
+
 import {
   ContentTileList,
   DataStoryTileList,
+  DocumentSectionBlock,
   EmbeddedContentBlock,
+  PageLink,
   PageLinksList,
+  PageWrapper,
   RelatedContentList,
+  TileContentSection,
   TitleAndText
-} from '../'
-import { DocumentSectionBlock } from '../DocumentSection'
-import { TileContentSection } from '../TileContentSection'
-import { PageWrapper } from './PageWrapper'
+} from '..'
 
 export const ResourceCollectionPage: ComponentType<{
   page: ResourceCollectionPageData
 }> = ({ page }) => {
   const {
-    title,
-    description,
-    data_dashboard: dataDashboard,
-    introductory_text: introductoryText,
     body,
     custom_section: customSection,
-    topics,
-    partner_agencies: agencies
+    data_dashboard: dataDashboard,
+    description,
+    introductory_text: introductoryText,
+    partner_agencies: agencies,
+    primary_agency: primaryAgency,
+    title,
+    topics
   } = page
 
   const { t } = useTranslation()
@@ -67,6 +72,7 @@ export const ResourceCollectionPage: ComponentType<{
                 })}
               />
             ) : null}
+            {primaryAgency ? <PageLink page={primaryAgency} /> : null}
           </PageTitleSection>
         </div>
         <div className="flex flex-col gap-y-20 md:gap-y-40 lg:gap-y-60">

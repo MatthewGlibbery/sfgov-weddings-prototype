@@ -139,7 +139,16 @@ export function FormPage({
                 case 'callout':
                   return <Callout html={block.value} key={block.id} />
                 case 'button_link':
-                  return <ButtonLink link={block.value} key={block.id} />
+                  // FIXME: ButtonLink expects a ButtonLinkBlockValue ({ button: LinkBlockValue })
+                  // but the Form content type uses LinkBlockValue
+                  return (
+                    <ButtonLink
+                      link={{
+                        button: block.value
+                      }}
+                      key={block.id}
+                    />
+                  )
               }
             })}
             {getHelp.length ? (

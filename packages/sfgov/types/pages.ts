@@ -1,45 +1,43 @@
 import type { FormSchema } from '@/design-system/formio'
 import type {
   BlockType,
-  TypeBodyTextBlock,
-  TypeCallToActionBlock,
-  TypeCostBlock,
-  TypeDateTimeBlock,
-  TypeEmailBlock,
-  TypeImageBlock,
-  TypeLocationBlock,
-  TypePhoneNumberBlock,
-  TypeStepBlock,
-  TypeTitleAndTextBlock,
-  TypeWhatToDoBlock,
-  TypeQuickLinkBlock,
-  TypeSocialMediaBlock,
-  TypeContentSectionBlock,
-  TypeServicesSectionBlock,
-  TypeSpotlightBlock,
-  TypeResourcesSectionBlock,
-  TypeAlertBlock,
-  TypeImageWithTextBlock,
-  TypeAccordionSectionBlock,
-  TypeOnlineEventBlock,
-  TypeAgendaItemBlock,
-  TypeVideoBlock,
-  TypeDownloadableFilesBlock,
-  TypeEmbeddedContentBlock,
-  TypeDataStoriesSectionBlock,
-  TypeCalloutBlock,
-  TypeContactFooterBlock,
+  LinkBlockValue,
   TopicFieldTypes,
-  TypeProfileGroupBlock,
-  TypeDivisionsSubcommitteeBlock,
+  TypeAccordionSectionBlock,
+  TypeAgendaItemBlock,
+  TypeAlertBlock,
+  TypeBodyTextBlock,
+  TypeCalloutBlock,
+  TypeCallToActionBlock,
+  TypeContactFooterBlock,
+  TypeContentSectionBlock,
+  TypeCostBlock,
+  TypeDataStoriesSectionBlock,
+  TypeDateTimeBlock,
   TypeDateTimeValues,
+  TypeDivisionsSubcommitteeBlock,
   TypeDocumentBlock,
-  TypeTileBlockValues,
+  TypeDownloadableFilesBlock,
+  TypeEmailBlock,
+  TypeEmbeddedContentBlock,
+  TypeImageBlock,
+  TypeImageWithTextBlock,
+  TypeLocationBlock,
+  TypeOnlineEventBlock,
+  TypePhoneNumberBlock,
+  TypeProfileGroupBlock,
+  TypeQuickLinkBlock,
+  TypeResourcesSectionBlock,
+  TypeServicesSectionBlock,
+  TypeSocialMediaBlock,
+  TypeSpotlightBlock,
+  TypeStepBlock,
   TypeTableBlock,
   TypeTextBlock,
-  TypeButtonLinkBlock,
-  TypeButtonLinkValues,
-  TypeLinkValues
+  TypeTileBlockValues,
+  TypeTitleAndTextBlock,
+  TypeVideoBlock,
+  TypeWhatToDoBlock
 } from './blocks'
 import type { WagtailImageData } from './images'
 
@@ -63,7 +61,7 @@ export type MinimalPageData = {
   page_content?: MinimalPageData
   title: string
   image?: WagtailImageData
-  html_path: string
+  html_path?: string
   redirect_url?: string
   // should we add description here?
 }
@@ -87,7 +85,7 @@ export type AlertData = {
 }
 
 export type PrimaryAgencyData = {
-  primary_agency: RelatedContentData
+  primary_agency: RelatedContentData | null
 }
 
 export type RelatedContentTransactionBlock = BlockType<
@@ -95,18 +93,19 @@ export type RelatedContentTransactionBlock = BlockType<
   MinimalPageData
 >
 
-export type EventPageData = PageData & {
-  description: string
-  date_time: TypeDateTimeBlock[]
-  cost: TypeCostBlock[]
-  location: TypeLocationBlock[]
-  call_to_action: TypeCallToActionBlock[]
-  image: WagtailImageData
-  body: string
-  contact: TypeContactFooterBlock[]
-  partner_agencies: RelatedContentData[]
-  topics: RelatedContentData[]
-}
+export type EventPageData = PageData &
+  PrimaryAgencyData & {
+    description: string
+    date_time: TypeDateTimeBlock[]
+    cost: TypeCostBlock[]
+    location: TypeLocationBlock[]
+    call_to_action: TypeCallToActionBlock[]
+    image: WagtailImageData
+    body: string
+    contact: TypeContactFooterBlock[]
+    partner_agencies: RelatedContentData[]
+    topics: RelatedContentData[]
+  }
 
 export type InfoPageSection =
   | TypeImageBlock
@@ -123,13 +122,14 @@ export type InfoPageData = PageData &
     related: RelatedContentData[]
   }
 
-export type StepByStepData = PageData & {
-  description: string
-  intro: string
-  steps?: TypeStepBlock[]
-  partner_agencies: RelatedContentData[]
-  topics: RelatedContentData[]
-}
+export type StepByStepData = PageData &
+  PrimaryAgencyData & {
+    description: string
+    intro: string
+    steps?: TypeStepBlock[]
+    partner_agencies: RelatedContentData[]
+    topics: RelatedContentData[]
+  }
 
 export type AgencyPage = PageData & {
   description: string
@@ -141,20 +141,21 @@ export type GetHelpBlockTypes =
   | TypeLocationBlock
   | TypeTitleAndTextBlock
 
-export type TransactionPageData = PageData & {
-  description: string
-  cost: TypeCostBlock[]
-  things_to_know: TypeTitleAndTextBlock[]
-  what_to_do: TypeWhatToDoBlock[]
-  special_cases: string
-  supporting_information: TypeTitleAndTextBlock[]
-  custom_section: TypeTitleAndTextBlock[]
-  get_help: GetHelpBlockTypes[]
-  good_for_community: TypeTitleAndTextBlock[]
-  topics: RelatedContentData[]
-  partner_agencies: RelatedContentData[]
-  related: RelatedContentData[]
-}
+export type TransactionPageData = PageData &
+  PrimaryAgencyData & {
+    description: string
+    cost: TypeCostBlock[]
+    things_to_know: TypeTitleAndTextBlock[]
+    what_to_do: TypeWhatToDoBlock[]
+    special_cases: string
+    supporting_information: TypeTitleAndTextBlock[]
+    custom_section: TypeTitleAndTextBlock[]
+    get_help: GetHelpBlockTypes[]
+    good_for_community: TypeTitleAndTextBlock[]
+    topics: RelatedContentData[]
+    partner_agencies: RelatedContentData[]
+    related: RelatedContentData[]
+  }
 
 export type ProfilePageData = PageData &
   PrimaryAgencyData & {
@@ -288,24 +289,25 @@ export type AgencyPageData = PageData & {
   about_page: RelatedContentData[]
 }
 
-export type CampaignPageData = PageData & {
-  logo: WagtailImageData
-  background_header_image: WagtailImageData
-  theme: 'blue' | 'black' | 'green' | 'orange' | ''
-  spotlight_1: TypeSpotlightBlock[]
-  facts_title: string
-  fact_items: (BlockType<'image', WagtailImageData> | TypeTitleAndTextBlock)[]
-  additional_content: (
-    | TypeImageWithTextBlock
-    | TypeResourcesSectionBlock
-    | TypeAccordionSectionBlock
-  )[]
-  spotlight_2: TypeSpotlightBlock[]
-  about_campaign: string
-  partner_agencies: RelatedContentData[]
-  related_links: RelatedContentData[]
-  contact: TypeContactFooterBlock[]
-}
+export type CampaignPageData = PageData &
+  PrimaryAgencyData & {
+    logo: WagtailImageData
+    background_header_image: WagtailImageData
+    theme: 'blue' | 'black' | 'green' | 'orange' | ''
+    spotlight_1: TypeSpotlightBlock[]
+    facts_title: string
+    fact_items: (BlockType<'image', WagtailImageData> | TypeTitleAndTextBlock)[]
+    additional_content: (
+      | TypeImageWithTextBlock
+      | TypeResourcesSectionBlock
+      | TypeAccordionSectionBlock
+    )[]
+    spotlight_2: TypeSpotlightBlock[]
+    about_campaign: string
+    partner_agencies: RelatedContentData[]
+    related_links: RelatedContentData[]
+    contact: TypeContactFooterBlock[]
+  }
 
 export type MeetingPageData = PageData &
   PrimaryAgencyData & {
@@ -321,26 +323,32 @@ export type MeetingPageData = PageData &
     related_documents: TypeDownloadableFilesBlock[]
   }
 
-export type DataStoryPageData = PageData & {
-  description: string
-  content: TypeContentSectionBlock[]
-  partner_agencies: RelatedContentData[]
-}
+export type DataStoryPageData = PageData &
+  PrimaryAgencyData & {
+    description: string
+    content: TypeContentSectionBlock[]
+    partner_agencies: RelatedContentData[]
+  }
 
-export type ReportPageData = PageData & {
-  date: string
-  print_version: TypeDocumentBlock | undefined
-  spotlight: TypeSpotlightBlock[]
-  content: (TypeBodyTextBlock | TypeTableBlock)[]
-  partner_agencies: RelatedContentData[]
-}
+export type ReportPageData = PageData &
+  PrimaryAgencyData & {
+    date: string
+    print_version: TypeDocumentBlock | undefined
+    spotlight: TypeSpotlightBlock[]
+    content: (TypeBodyTextBlock | TypeTableBlock)[]
+    partner_agencies: RelatedContentData[]
+  }
 
 export type FormPageData = PageData & {
   schema_url: string
   schema?: FormSchema
   confirmation_title: string
   // see: https://github.com/SFDigitalServices/platform/blob/v2025-10-29-135629/sf/models/form.py#L107-L109
-  confirmation_body: (TypeButtonLinkBlock | TypeCalloutBlock | TypeTextBlock)[]
+  confirmation_body: (
+    | TypeCalloutBlock
+    | TypeTextBlock
+    | BlockType<'button_link', LinkBlockValue>
+  )[]
   // see: https://github.com/SFDigitalServices/platform/blob/v2025-10-29-135629/sf/models/form.py#L117-L123
   get_help: (
     | TypeLocationBlock
@@ -351,19 +359,20 @@ export type FormPageData = PageData & {
   partner_agencies: RelatedContentData[]
 }
 
-export type ResourceCollectionPageData = PageData & {
-  description: string
-  data_dashboard: TypeEmbeddedContentBlock[]
-  introductory_text: TypeTitleAndTextBlock[]
-  body: Array<
-    | BlockType<'documents', TypeDocumentBlock[]>
-    | BlockType<'data_stories', TypeDataStoriesSectionBlock[]>
-    | BlockType<'resources', TypeResourcesSectionBlock[]>
-  >
-  custom_section: TypeTitleAndTextBlock[]
-  topics: RelatedContentData[]
-  partner_agencies: RelatedContentData[]
-}
+export type ResourceCollectionPageData = PageData &
+  PrimaryAgencyData & {
+    description: string
+    data_dashboard: TypeEmbeddedContentBlock[]
+    introductory_text: TypeTitleAndTextBlock[]
+    body: Array<
+      | BlockType<'documents', TypeDocumentBlock[]>
+      | BlockType<'data_stories', TypeDataStoriesSectionBlock[]>
+      | BlockType<'resources', TypeResourcesSectionBlock[]>
+    >
+    custom_section: TypeTitleAndTextBlock[]
+    topics: RelatedContentData[]
+    partner_agencies: RelatedContentData[]
+  }
 
 export type HomePageData = PageData & {
   spotlight: TypeSpotlightBlock[]

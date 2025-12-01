@@ -1,5 +1,13 @@
-import { WAGTAIL_IMAGE_TYPE } from '@/constants'
-import { PageData } from './pages'
+import type { WAGTAIL_IMAGE_TYPE } from '@/constants'
+import type { PageData } from './pages'
+
+export type WagtailImageRenditionData = {
+  url: string
+  full_url: string
+  width: number
+  height: number
+  alt: string
+}
 
 export interface WagtailImageData extends PageData {
   meta: {
@@ -10,11 +18,8 @@ export interface WagtailImageData extends PageData {
   alt_text: string
   width: number
   height: number
-  original: {
-    url: string
-    full_url: string
-    width: number
-    height: number
-    alt: string
-  }
+  original: WagtailImageRenditionData
+  large?: WagtailImageRenditionData
+  thumbnail?: WagtailImageRenditionData
+  news_card?: WagtailImageRenditionData
 }

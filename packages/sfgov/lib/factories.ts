@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import { factory } from 'node-factory'
-import {
+import type {
   BlockType,
   TypeButtonLinkBlock,
   TypeCalloutBlock,
@@ -30,7 +30,7 @@ import {
   TypeNewsTileBlock,
   TypeContentTileBlock,
   TypeEventTileBlock,
-  TypeLinkValues,
+  LinkBlockValue,
   TypeSpotlightBlock,
   TypeSocialMediaBlockValues,
   TypeSocialMediaBlock,
@@ -56,16 +56,16 @@ import {
   FormPageData,
   TypeDocumentSectionBlock,
   ResourceCollectionPageData,
-  TypeButtonLinkValues,
+  ButtonLinkBlockValue,
   TypeDocumentBlockValues,
   TypeProfileGroupBlock,
-  TypeDateTimeValues,
   TypeBodyTextBlock,
   TypeContactFooterBlock,
   HomePageData,
   TypeTableBlock,
   TypeQLessData
 } from '@/types'
+import type { SearchPageData } from '@/pages/search'
 import {
   ABOUT_PAGE_TYPE,
   AGENCY_PAGE_TYPE,
@@ -86,7 +86,6 @@ import {
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
-import { SearchPageData } from '@/pages/search'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
@@ -127,6 +126,11 @@ export const EventPageFactory = factory<EventPageData>((gen) => ({
     meta: {
       type: 'sfgov_base.RelatedContentTopic'
     }
+  }),
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
+    }
   })
 }))
 
@@ -136,13 +140,17 @@ export const FormPageFactory = factory<FormPageData>((gen) => ({
     type: FORM_PAGE_TYPE
   }),
   title: 'Form title',
-  form_schema_url:
-    'https://formio.sfgov.org/live11-ruehbbakcoznmcf/sfgovfeedbackform',
+  // @ts-expect-error FIXME: setting this breaks tests
+  schema_url: undefined,
   confirmation_title: 'Confirmation title',
   confirmation_body: [
     TextBlockFactory.make(),
     CalloutFactory.make(),
-    ButtonLinkFactory.make()
+    {
+      type: 'button_link',
+      id: gen.datatype.uuid(),
+      value: LinkFactory.make()
+    }
   ],
   partner_agencies: RelatedAgencyFactory.make(3),
   get_help: [
@@ -246,6 +254,11 @@ export const StepByStepPageFactory = factory<StepByStepData>((gen) => ({
     meta: {
       type: 'sfgov_base.RelatedContentTopic'
     }
+  }),
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
+    }
   })
 }))
 
@@ -308,7 +321,12 @@ export const TransactionPageFactory = factory<TransactionPageData>((gen) => ({
       type: 'sfgov_base.RelatedContentPage'
     }
   }),
-  good_for_community: TitleAndTextFactory.make(2)
+  good_for_community: TitleAndTextFactory.make(2),
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
+    }
+  })
 }))
 
 export const ProfilePageFactory = factory<ProfilePageData>((gen) => ({
@@ -385,6 +403,11 @@ export const NewsPageFactory = factory<NewsPageData>((gen) => ({
   partner_agencies: RelatedContentBlockFactory.make(1, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
     }
   })
 }))
@@ -721,7 +744,12 @@ export const CampaignPageFactory = factory<CampaignPageData>((gen) => ({
       },
       id: '1c3ca768-e94b-4f8b-bfae-0c7d52e047b3'
     }
-  ]
+  ],
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
+    }
+  })
 }))
 
 export const AccordionItemFactory = factory<TypeAccordionItemBlock>((gen) => ({
@@ -1218,7 +1246,7 @@ export const TextBlockFactory = factory<TypeTextBlock>((gen) => ({
   value: gen.lorem.sentence()
 }))
 
-export const LinkFactory = factory<TypeLinkValues>((gen) => ({
+export const LinkFactory = factory<LinkBlockValue>((gen) => ({
   link_to: 'url',
   link_text: gen.lorem.sentence(),
   url: gen.internet.url()
@@ -1230,7 +1258,7 @@ export const ButtonLinkFactory = factory<TypeButtonLinkBlock>((gen) => ({
   value: AriaButtonLinkFactory.make()
 }))
 
-export const AriaButtonLinkFactory = factory<TypeButtonLinkValues>((gen) => ({
+export const AriaButtonLinkFactory = factory<ButtonLinkBlockValue>((gen) => ({
   button: LinkFactory.make(),
   screenreader_label: gen.lorem.sentence()
 }))
@@ -1535,7 +1563,12 @@ export const MeetingPageFactory = factory<MeetingPageData>((gen) => ({
       }
     })
   ],
-  related_documents: DownloadableFilesBlockFactory.make(2)
+  related_documents: DownloadableFilesBlockFactory.make(2),
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
+    }
+  })
 }))
 
 export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
@@ -1561,6 +1594,11 @@ export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
     meta: {
       type: 'sf.RelatedContentAgency'
     }
+  }),
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
+    }
   })
 }))
 
@@ -1584,6 +1622,11 @@ export const ReportPageFactory = factory<ReportPageData>((gen) => ({
   partner_agencies: RelatedContentBlockFactory.make(3, {
     meta: {
       type: 'sfgov_base.RelatedContentAgency'
+    }
+  }),
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
     }
   })
 }))
@@ -1636,6 +1679,11 @@ export const ResourceCollectionPageFactory =
     partner_agencies: RelatedContentBlockFactory.make(3, {
       meta: {
         type: 'sf.RelatedContentAgency'
+      }
+    }),
+    primary_agency: PageFactory.make({
+      meta: {
+        type: 'sf.Agency'
       }
     })
   }))

@@ -1,19 +1,26 @@
+import type { DataStoryPageData } from '@/types'
+import type { ComponentType } from 'react'
 import { Container, DisplayLg, Grid, PageTitleSection } from '@/design-system'
-import { DataStoryPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
-import { ComponentType } from 'react'
+
 import {
   ContentSection,
   PageWrapper,
   RelatedContentList,
   TableOfContents,
-  tocWrapperClasses
+  PageLink
 } from '..'
 
 export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
   page
 }) => {
-  const { title, description, content, partner_agencies: agencies } = page
+  const {
+    content,
+    description,
+    partner_agencies: agencies,
+    primary_agency: primaryAgency,
+    title
+  } = page
 
   const { t } = useTranslation()
 
@@ -31,6 +38,7 @@ export const DataStoryPage: ComponentType<{ page: DataStoryPageData }> = ({
                   {description}
                 </DisplayLg>
               ) : null}
+              {primaryAgency ? <PageLink page={primaryAgency} /> : null}
             </PageTitleSection>
           </div>
           <div className="col-span-full lg:col-start-1 lg:col-end-8">

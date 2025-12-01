@@ -1,4 +1,4 @@
-import { AgencyPageFactory } from '@/lib/factories'
+import { AgencyPageFactory, PageMetaFactory } from '@/lib/factories'
 import { cleanup, render, screen } from '@testing-library/react'
 import { AgencyPage } from './AgencyPage'
 import { useRouter } from 'next/router'
@@ -145,5 +145,35 @@ describe('AgencyPage', () => {
     expect(
       screen.queryByRole('heading', { name: 'News' })
     ).not.toBeInTheDocument()
+  })
+
+  it('renders the profile group appropriately for the board of supervisors', () => {
+    const page = AgencyPageFactory.make({
+      meta: PageMetaFactory.make({
+        type: 'sf.Agency',
+        html_url: 'http://api.sf.gov/departments--board-supervisors/'
+      })
+    })
+    render(<AgencyPage page={page} />)
+    const quicklinks = screen.getByText(page.quicklinks[0].value.title)
+    const people = screen.getByText(page.people[0].value.title)
+    const events = screen.getByText('Calendar')
+    expect(people.compareDocumentPosition(quicklinks)).toBe(2)
+    expect(people.compareDocumentPosition(events)).toBe(4)
+  })
+
+  it('renders the profile group appropriately for not the board of supervisors', () => {
+    const page = AgencyPageFactory.make({
+      meta: PageMetaFactory.make({
+        type: 'sf.Agency',
+        html_url: 'http://api.sf.gov/departments--not-board-supervisors/'
+      })
+    })
+    render(<AgencyPage page={page} />)
+    const quicklinks = screen.getByText(page.quicklinks[0].value.title)
+    const people = screen.getByText(page.people[0].value.title)
+    const events = screen.getByText('Calendar')
+    expect(people.compareDocumentPosition(quicklinks)).toBe(2)
+    expect(people.compareDocumentPosition(events)).toBe(2)
   })
 })

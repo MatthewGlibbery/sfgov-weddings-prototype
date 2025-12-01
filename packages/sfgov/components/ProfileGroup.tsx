@@ -1,14 +1,6 @@
-import {
-  BodyText,
-  classes,
-  Grid,
-  HeadingLg,
-  HeadingXl,
-  LabelXs
-} from '@/design-system'
+import { BodyText, Grid, HeadingMd, HeadingXXl, LabelXs } from '@/design-system'
 import { getPageURL } from '@/lib/utils'
-import { TypeProfilePageBlock } from '@/types'
-import { Image } from './Image'
+import type { TypeProfilePageBlock } from '@/types'
 import NextImage from 'next/image'
 import { RichText } from './RichText'
 import citySeal from '../public/static/CCSF-seal-vector.svg'
@@ -26,83 +18,80 @@ export const ProfileGroup = ({
   profiles,
   isHomePage = false
 }: ProfileGroupProps) => (
-  <div
-    className={`${isHomePage ? 'mb-60 last:mb-0' : ''}`}
-    data-gtm-id="profile-group"
-  >
-    <HeadingXl as="h3" className="my-12 md:my-20" romanType="sans">
-      {title}
-    </HeadingXl>
-    <div className="mb-40">
-      <RichText html={description} isHomePage={isHomePage} />
+  <div className="flex flex-col gap-y-40" data-gtm-id="profile-group">
+    <div className="flex flex-col gap-y-16">
+      <HeadingXXl as="h3" className="!mb-0">
+        {title}
+      </HeadingXXl>
+      <div>
+        <RichText html={description} isHomePage={isHomePage} />
+      </div>
     </div>
-    <Grid
-      className={`grid-cols-1 gap-28 ${
-        isHomePage ? 'md:grid-cols-2' : 'md:grid-cols-3'
-      } lg:grid-cols-3`}
-    >
+    <Grid className="grid-cols-1 gap-28 md:gap-y-40 md:grid-cols-2 lg:grid-cols-3">
       {profiles.map((profile) => {
         const profileData = profile.value.profile_page
-        return profileData ? (
-          <div
+        if (!profileData) return null
+
+        const imgSrc = profileData.image
+          ? profileData.image.thumbnail?.full_url
+          : citySeal
+        const imgAlt = profileData.image
+          ? profileData.image.alt_text
+          : profileData.title
+
+        return (
+          <a
             key={profile.id}
-            className="bg-white col-span-1 gap-16 p-12 flex md:flex-col md:basis-1/3 md:shrink md:items-center"
+            className="flex flex-row items-start gap-28 no-underline"
+            href={getPageURL(profileData)}
+            aria-label={`profile page of ${profileData.title}`}
           >
-            {profileData.image ? (
-              <a
-                href={getPageURL(profileData)}
-                aria-label={`profile page of ${profileData.title}`}
-              >
-                <div className="rounded-full overflow-hidden aspect-square w-[68px] h-[68px]">
-                  <Image
-                    className="aspect-square object-cover min-h-full"
-                    imageRef={profileData.image}
-                  />
-                </div>
-              </a>
-            ) : (
-              <a
-                href={getPageURL(profileData)}
-                aria-label={`profile page of ${profileData.title}`}
-              >
-                <div className="rounded-full w-[68px] h-[68px]">
-                  <NextImage
-                    src={citySeal}
-                    width="68"
-                    height="68"
-                    className="aspect-square object-cover"
-                    aria-hidden="true"
-                    alt="san francisco city seal"
-                  />
-                </div>
-              </a>
-            )}
-            <div className="flex flex-col md:text-center">
-              <BodyText className="font-bold mb-16 md:mb-4">
-                {profile.value.role}
-              </BodyText>
-              <HeadingLg
-                as="a"
-                className={classes(profileData.pronouns ? '!mb-0' : '')}
-                href={getPageURL(profileData)}
-                aria-label={`profile page of ${profileData.title}`}
-              >
-                {profileData.title}
-              </HeadingLg>
-              {profileData.pronouns ? (
-                <LabelXs>({profileData.pronouns})</LabelXs>
-              ) : null}
-              {profileData.primary_job_title ? (
-                <BodyText className={profileData.pronouns ? 'mb-4' : ''}>
-                  {profileData.primary_job_title}
-                </BodyText>
-              ) : null}
-              {profileData.primary_job_title_line_2 ? (
-                <BodyText>{profileData.primary_job_title_line_2}</BodyText>
-              ) : null}
-            </div>
-          </div>
-        ) : null
+            <NextImage
+              src={imgSrc}
+              width="80"
+              height="80"
+              alt={imgAlt}
+              className="rounded-4"
+              role="presentation"
+            />
+            <span className="flex flex-col gap-8">
+              <span className="flex flex-col gap-4">
+                <span className="flex flex-col">
+                  {profile.value.role ? (
+                    <BodyText className="font-bold text-black">
+                      {profile.value.role}
+                    </BodyText>
+                  ) : null}
+                  <HeadingMd
+                    as="span"
+                    className="!mb-0 underline text-primary600"
+                  >
+                    {profileData.title}
+                  </HeadingMd>
+                </span>
+                {profileData.pronouns ? (
+                  <span>
+                    <LabelXs className="!mb-0 text-black">
+                      ({profileData.pronouns})
+                    </LabelXs>
+                  </span>
+                ) : null}
+              </span>
+              <span className="flex flex-col">
+                {profileData.primary_job_title ? (
+                  <BodyText className="text-black">
+                    {profileData.primary_job_title}
+                  </BodyText>
+                ) : null}
+                {profileData.primary_job_title_line_2 ? (
+                  <BodyText className="text-black">
+                    {profileData.primary_job_title_line_2}
+                  </BodyText>
+                ) : null}
+              </span>
+            </span>
+          </a>
+        )
       })}
     </Grid>
   </div>
