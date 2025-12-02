@@ -18,6 +18,7 @@ interface BaseFormSchema {
   name?: string
   path?: string
   project?: string
+  properties?: Record<string, string>
   owner?: string
   tags?: string[]
 }

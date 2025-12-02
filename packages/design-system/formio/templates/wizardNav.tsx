@@ -3,6 +3,7 @@
 /** @jsxRuntime classic */
 import h from 'vhtml'
 import { classed } from '@tw-classed/core'
+import { isFormSurvey } from '../utils'
 import { BUTTON_VARIANTS } from '../../components/Button'
 import type { ButtonType, WizardRenderContext } from './wizard'
 
@@ -10,10 +11,16 @@ export default { form }
 
 const buttonClass = classed(BUTTON_VARIANTS)
 
+function isMobile() {
+  return window.innerWidth <= 1024
+}
+
 /**
  * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/wizardNav/form.ejs
  */
 export function form({ t, ...ctx }: WizardRenderContext) {
+  const formSurvey = isFormSurvey(ctx.form)
+  const formSurveySubmitClasses = isMobile() ? 'w-full' : ''
   const buttonProps: Partial<
     Record<ButtonType, { text: string; className: string }>
   > = {
@@ -33,22 +40,31 @@ export function form({ t, ...ctx }: WizardRenderContext) {
     },
     submit: {
       text: t('submit-button', { defaultValue: 'Submit' }),
-      className: buttonClass()
+      className: `${buttonClass()} ${formSurvey ? formSurveySubmitClasses : ''}`
     }
   }
 
   return (
     <ul
-      className="list-none mt-20 p-0 flex space-x-8 justify-between lg:mb-space-desktop-xxl md:mb-space-tablet-xxl xs:mb-space-lg"
+      className={`${
+        formSurvey
+          ? 'mb-space-xl'
+          : 'xs:mb-space-lg md:mb-space-tablet-xxl lg:mb-space-desktop-xxl'
+      } mt-20 flex list-none justify-between space-x-8 p-0`}
       id={`${ctx.wizardKey}-nav`}
     >
       {ctx.buttonOrder.map((type) => {
         const { text, ...props } = buttonProps[type] || {}
         const isSinglePage = ctx.panels.length === 1
         return ctx.buttons[type] && text ? (
-          <li className="m-0 p-0" key={type}>
+          <li
+            className={`m-0 p-0 ${formSurvey ? formSurveySubmitClasses : ''}`}
+            key={type}
+          >
             <button ref={`${ctx.wizardKey}-${type}`} {...props}>
-              {ctx.currentPage === 0 && !isSinglePage
+              {formSurvey
+                ? t('submit-feedback', { defaultValue: 'Submit feedback' })
+                : ctx.currentPage === 0 && !isSinglePage
                 ? t('get-started', { defaultValue: 'Get started' })
                 : text}
             </button>

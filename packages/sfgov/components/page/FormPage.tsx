@@ -24,6 +24,7 @@ import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
 import { RichText } from '../RichText'
 import { PageWrapper } from './PageWrapper'
+import { FormSurvey } from '../FormSurvey'
 
 export type FormPageProps = {
   page: FormPageData
@@ -69,6 +70,7 @@ export function FormPage({
     ...rawQueryParams
   } = Object.fromEntries(queryParams?.entries() || [])
 
+  const [isFormSurvey, setIsFormSurvey] = useState(false)
   const [submitted, setSubmitted] = useState(
     initialSubmitted || queryParamSubmitted === 'true'
   )
@@ -91,9 +93,16 @@ export function FormPage({
     }
   ]
 
+  const EXCLUDE_FORM_SURVEY = [
+    'https://formio.sfgov.org/dbi/applyforabuildingpermit2024'
+  ]
+
   useEffect(() => {
     // don't do anything if the form has been submitted
-    if (submitted) return
+    if (submitted && !isFormSurvey) {
+      setIsFormSurvey(true)
+      return
+    }
 
     const handleBeforeUnload = (event: Event) => {
       if (warnBeforeLeaving) {
@@ -119,12 +128,12 @@ export function FormPage({
       router.events?.off('beforeHistoryChange', nextNavigationHandler)
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
-  }, [warnBeforeLeaving, router.events, submitted])
+  }, [warnBeforeLeaving, router.events, submitted, isFormSurvey])
 
   return (
     <PageWrapper title={title} meta={page.meta}>
       <Container>
-        <div className="space-y-12 mb-40">
+        <div className="mb-space-desktop-md mt-space-md space-y-12 md:mb-40">
           <PageTitleSection
             title={submitted ? confirmationTitle : ''}
             label={submitted ? formSubmittedString : title}
@@ -151,6 +160,17 @@ export function FormPage({
                   )
               }
             })}
+
+            {EXCLUDE_FORM_SURVEY.includes(
+              formSchemaUrl.replace(/\/v\/.*$/, '')
+            ) ? null : (
+              <FormSurvey
+                FormioForm={FormioForm}
+                formReady={onFormReady}
+                onSubmitDone={onSubmitDone}
+              />
+            )}
+
             {getHelp.length ? (
               <div>
                 <HeadingXXl as="h2" className="flex flex-row gap-8">
@@ -199,6 +219,7 @@ export function FormPage({
   // istanbul ignore next
   async function onFormReady(form: Form) {
     let formIsValid = true
+    const { formio } = form
 
     form.on('blur', (event) => {
       const component = form.getComponent(event.component.key as string)
@@ -214,8 +235,64 @@ export function FormPage({
      * handler and sets `isValid` on a copy of the submission object:
      * @see https://github.com/formio/formio.js/blob/v4.19.2/src/Webform.js#L1399
      */
-    form.on('change', (event: FormSubmission & { isValid: boolean }) => {
+    let wizardNav = null
+    if (isFormSurvey) {
+      wizardNav = document.getElementById(`wizard-${form.id}-nav`)
+      wizardNav?.classList.add('hidden')
+    }
+
+    form.on('change', async (event: FormChangeEvent) => {
       formIsValid = event.isValid
+      const WAS_IT_EASY_KEY = 'wasItEasyToFillOutThisForm'
+
+      if (isFormSurvey && event.changed?.component.key === WAS_IT_EASY_KEY) {
+        wizardNav?.classList.remove('hidden')
+
+        const submissionId = queryParams.get('formFeedback')
+
+        const wasItEasy = event.data.wasItEasyToFillOutThisForm
+
+        if (submissionId && !form.formio.submissionId) {
+          try {
+            // update existing submission
+            formio.submissionId = submissionId
+            formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
+
+            const submission: FormSubmission = {
+              _id: submissionId,
+              data: {
+                wasItEasyToFillOutThisForm: wasItEasy,
+                referrer: router.asPath.split('?')[0]
+              }
+            }
+            form.submission = submission
+
+            await formio.saveSubmission(form.submission)
+          } catch {
+            console.error('Failed to update submission.')
+          }
+        } else {
+          try {
+            // create a new submission and update the query string
+            const submission = await formio.saveSubmission({
+              data: {
+                wasItEasyToFillOutThisForm: wasItEasy,
+                referrer: router.asPath.split('?')[0]
+              }
+            })
+            const submissionId = submission._id
+            const params = new URLSearchParams(queryParams)
+            params.set('formFeedback', submissionId)
+            window.history.pushState(
+              null,
+              '',
+              `${router.asPath.split('?')[0]}?${params}`
+            )
+          } catch {
+            console.error('Failed to create submission.')
+          }
+        }
+      }
     })
 
     /**
@@ -262,7 +339,6 @@ export function FormPage({
        * URL) then loading the submission directly and passing _that_ to the
        * form so it can use the submission's data.
        */
-      const { formio } = form
       formio.submissionId = submissionId
       formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
 
@@ -280,7 +356,6 @@ export function FormPage({
       }
     } else if (feedbackSubmission) {
       // feedback submission only, skip any fetching
-      const { formio } = form
       formio.submissionId = feedbackSubmission
       formio.submissionUrl = `${formio.formUrl}/submission/${feedbackSubmission}`
       await form.render()
@@ -305,7 +380,9 @@ export function FormPage({
         type: 'submit',
         dataLayer: eventData
       })
-      setSubmitted(true)
+      if (!isFormSurvey) {
+        setSubmitted(true)
+      }
     } else if (submission.state === 'draft') {
       putFormEvent({
         type: 'save_draft',

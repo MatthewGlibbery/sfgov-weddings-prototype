@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { FormSchema } from './types'
 import type { MethodOf, AnyFunction } from './types/utils'
 
 /**
@@ -67,4 +68,8 @@ export function getConsole(isDev = false): Console {
     ) as Console
   }
   return console
+}
+
+export function isFormSurvey(schema: FormSchema) {
+  return schema.properties?.isFormSurvey === 'true'
 }

@@ -24,43 +24,106 @@ module.exports = {
           outlineStyle: 'solid',
           outlineColor: theme('colors.primary500'),
           outlineWidth: '3px',
-          outlineOffset: '4px',
+          outlineOffset: '4px'
         }
       })
       addUtilities({
+        '.appearance-none': {
+          appearance: 'none',
+          '-webkit-appearance': 'none',
+          '-moz-appearance': 'none'
+        },
         '.bg-check-white': {
-          backgroundImage: svgBackgroundImage(
-            checkIcon, { color: theme('colors.white') }
-          ),
+          backgroundImage: svgBackgroundImage(checkIcon, {
+            color: theme('colors.white')
+          }),
           backgroundColor: theme('colors.primary500'),
           backgroundSize: '24px 24px',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat'
         },
         '.check-shadow-inner': {
-          'box-shadow': `inset -.005rem -.005rem 0 .45rem ${theme('colors.white')}`
+          'box-shadow': `inset -.005rem -.005rem 0 .45rem ${theme(
+            'colors.white'
+          )}`
         },
         '.dropdown-open': {
-          backgroundImage: svgBackgroundImage(dropdownIcon, { size: 20, color: theme('colors.black') }),
+          backgroundImage: svgBackgroundImage(dropdownIcon, {
+            size: 20,
+            color: theme('colors.black')
+          }),
           backgroundSize: '20px 20px',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat'
         },
-        '.alert-icon': iconStyle(alertIcon, { size: 24, color: theme('colors.danger600') }),
-        '.clock-icon': iconStyle(clockIcon, { size: 24, color: theme('colors.black') }),
-        '.delete-icon': iconStyle(deleteIcon, { size: 24, color: theme('colors.primary600') }),
-        '.delete-icon-white': iconStyle(deleteIcon, { size: 24, color: theme('colors.white') }),
-        '.info-icon': iconStyle(infoIcon, { size: 24, color: theme('colors.information600') }),
-        '.pencil-icon': iconStyle(pencilIcon, { size: 18, color: theme('colors.black') }),
-        '.plus-icon': iconStyle(plusIcon, { size: 24, color: theme('colors.primary600') }),
-        '.plus-icon-white': iconStyle(plusIcon, { size: 24, color: theme('colors.white') }),
-        '.success-icon': iconStyle(checkIcon, { size: 24, color: theme('colors.success600') }),
-        '.panel-completed': iconStyle(completedIcon, { size: 18, color: theme('colors.success400') }),
-        '.remove-icon': iconStyle(removeIcon, { size: 20, color: theme('colors.white') }),
-        '.right-arrow-blue': iconStyle(rightArrow, { size: 20, color: theme('colors.primary600') }),
-        '.right-arrow-white': iconStyle(rightArrow, { size: 20, color: theme('colors.white') }),
-        '.right-arrow-disabled': iconStyle(rightArrow, { size: 20, color: theme('colors.neutral200') }),
-        '.document-icon': iconStyle(documentIcon, { size: 20, color: theme('colors.black') })
+        '.alert-icon': iconStyle(alertIcon, {
+          size: 24,
+          color: theme('colors.danger600')
+        }),
+        '.clock-icon': iconStyle(clockIcon, {
+          size: 24,
+          color: theme('colors.black')
+        }),
+        '.delete-icon': iconStyle(deleteIcon, {
+          size: 24,
+          color: theme('colors.primary600')
+        }),
+        '.delete-icon-white': iconStyle(deleteIcon, {
+          size: 24,
+          color: theme('colors.white')
+        }),
+        '.info-icon': iconStyle(infoIcon, {
+          size: 24,
+          color: theme('colors.information600')
+        }),
+        '.pencil-icon': iconStyle(pencilIcon, {
+          size: 18,
+          color: theme('colors.black')
+        }),
+        '.plus-icon': iconStyle(plusIcon, {
+          size: 24,
+          color: theme('colors.primary600')
+        }),
+        '.plus-icon-white': iconStyle(plusIcon, {
+          size: 24,
+          color: theme('colors.white')
+        }),
+        '.success-icon': iconStyle(checkIcon, {
+          size: 24,
+          color: theme('colors.success600')
+        }),
+        '.panel-completed': iconStyle(completedIcon, {
+          size: 18,
+          color: theme('colors.success400')
+        }),
+        '.remove-icon': iconStyle(removeIcon, {
+          size: 20,
+          color: theme('colors.white')
+        }),
+        '.right-arrow-blue': iconStyle(rightArrow, {
+          size: 20,
+          color: theme('colors.primary600')
+        }),
+        '.right-arrow-white': iconStyle(rightArrow, {
+          size: 20,
+          color: theme('colors.white')
+        }),
+        '.right-arrow-disabled': iconStyle(rightArrow, {
+          size: 20,
+          color: theme('colors.neutral200')
+        }),
+        '.thumbs-up-white': iconStyle(thumb, {
+          size: 19,
+          color: theme('colors.white')
+        }),
+        '.thumbs-up-blue': iconStyle(thumb, {
+          size: 19,
+          color: theme('colors.primary600')
+        }),
+        '.document-icon': iconStyle(documentIcon, {
+          size: 20,
+          color: theme('colors.black')
+        })
       })
     })
   ]
@@ -184,6 +247,19 @@ function rightArrow({ color }) {
   `
 }
 
+/** @type {IconFunc} */
+function thumb({ color }) {
+  return `
+    <svg viewBox="0 0 19 19" fill="none" ${XMLNS}>
+      <path d="M11.789 0.00701502C11.2879 0.0597623 10.8132 0.402619 10.5495 0.903718C10.2066 1.58943 7.67473 
+      6.67954 7.17363 7.18064C6.67253 7.68174 6.01319 7.9191 5.27473 7.9191V18.4686H14.5055C15.0593 18.4686 
+      15.5341 18.1257 15.7451 17.651C15.7451 17.651 18.4615 9.97625 18.4615 9.23778C18.4615 8.49932 17.8813 
+      7.9191 17.1429 7.9191H13.1868C12.4484 7.9191 11.8681 7.25976 11.8681 6.60042C11.8681 5.94108 12.8967 
+      2.43339 13.1077 1.74767C13.3187 1.06196 12.9758 0.323499 12.2901 0.0861359C12.1055 0.0333886 11.9736 
+      -0.0193586 11.789 0.00701502ZM0 7.9191V18.4686H2.63736V7.9191H0Z" fill="${color}"/>
+    </svg>
+  `
+}
 
 /**
  * @param {IconFunc | string} svg

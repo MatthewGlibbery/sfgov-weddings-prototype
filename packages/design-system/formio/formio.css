@@ -13,12 +13,8 @@
     margin-top: 1em;
   }
 
-  [ref='component'] + [ref='component'] {
-    @apply mt-40;
-  }
-
   [data-icon='pencil'] {
-    @apply inline-block !w-[24px] pencil-icon !translate-y-[3px];
+    @apply inline-block shrink-0 !w-[24px] pencil-icon !translate-y-[3px];
   }
 
   [data-testid='formio-sfds-fieldset'] label {
@@ -153,19 +149,18 @@
   .mt-1 {
     @apply mt-8;
   }
-  .mt-3 {
-    @apply mt-40;
-  }
-  .mt-5 {
-    @apply mt-80;
-  }
   .mt-100 {
     @apply mt-96;
   }
   .p-2 {
     @apply p-20;
   }
+
+  /* Used only in BAN lookup */
+  .mt-5 {
+    @apply mt-space-md mb-space-md;
+  }
   .p-3 {
-    @apply p-40;
+    @apply py-space-md px-space-lg;
   }
 }

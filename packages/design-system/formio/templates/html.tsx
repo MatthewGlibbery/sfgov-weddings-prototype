@@ -37,6 +37,7 @@ export function form(ctx: HTMLElementContext) {
       ref="html"
       className={classes(
         'formio-component-htmlelement',
+        '!my-0',
         ctx.component.className
       )}
       dangerouslySetInnerHTML={{ __html: ctx.content }}

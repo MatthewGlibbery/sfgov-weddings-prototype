@@ -3,30 +3,10 @@
 /** @jsxRuntime classic */
 import { classes } from '../../components'
 import h from 'vhtml'
-import type {
-  RadioSchema,
-  ComponentContext,
-  InputOption,
-  SelectBoxesSchema
-} from '../types'
+import type { RadioContext } from './radio'
 
 export default { form }
-export type RadioContext = ComponentContext<RadioSchema | SelectBoxesSchema> & {
-  input: {
-    type: string
-    component: RadioSchema
-    changeEvent: string
-    attr: JSX.IntrinsicElements['input']
-  }
-  inline: boolean
-  values: InputOption[]
-  value: string | Record<string, boolean>
-  row: object
-}
-/**
- * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/radio/Radio.js#L167-L173
- * @see https://github.com/formio/formio.js/blob/v4.21.3/src/templates/bootstrap/radio/form.ejs
- */
+
 export function form(ctx: RadioContext) {
   function isChecked(value: string) {
     if (typeof ctx.value === 'object') {
@@ -42,7 +22,7 @@ export function form(ctx: RadioContext) {
           : ''
       }
       ref="radioGroup"
-      role={ctx.component.type === 'selectboxes' ? 'group' : 'radiogroup'}
+      role="radioGroup"
       aria-required={ctx.component.validate?.required ? 'true' : 'false'}
       aria-labelledby={`l-${ctx.instance.id}-${ctx.component.key}`}
       aria-describedby={`d-${ctx.instance.id}-${ctx.component.key}`}
@@ -54,13 +34,21 @@ export function form(ctx: RadioContext) {
           ref="wrapper"
         >
           <label
-            className={`form-check-label ${classes(
+            className={classes(
+              'form-check-label',
               'flex',
-              'items-center',
               'gap-x-16',
               'my-20',
-              'items-center'
-            )}`}
+              'h-[52px]',
+              'w-full',
+              'md:w-[100px]',
+              'text-primary600',
+              'border',
+              'border-1',
+              'border-primary600',
+              'rounded',
+              'focus-within:outline-focus'
+            )}
             htmlFor={`${ctx.instance.root?.id}-${ctx.id}-${ctx.row}-${
               typeof item.value === 'object'
                 ? item.value + '-' + index
@@ -70,27 +58,13 @@ export function form(ctx: RadioContext) {
             <input
               className={classes(
                 'appearance-none',
-                'size-40',
                 'shrink-0',
-                'border',
-                'border-1',
                 'focus:outline-focus',
-                'disabled:bg-neutral100',
-                'disabled:border-neutral300',
-                ctx.component.type === 'selectboxes'
-                  ? [
-                      'rounded',
-                      'bg-white',
-                      'checked:border-primary500',
-                      'checked:bg-check-white'
-                    ]
-                  : [
-                      'rounded-full',
-                      'check-shadow-inner',
-                      'checked:bg-primary500',
-                      'disabled:shadow-none',
-                      'disabled:outline-none'
-                    ]
+                'sr-only',
+                'peer',
+                'h-[52px]',
+                'w-full',
+                'md:w-[100px]'
               )}
               ref="input"
               {...ctx.input.attr}
@@ -101,11 +75,33 @@ export function form(ctx: RadioContext) {
                   ? item.value + '-' + index
                   : item.value
               }`}
-              role={ctx.component.type === 'selectboxes' ? 'checkbox' : 'radio'}
+              role="radio"
               disabled={item.disabled}
-              aria-label={item.label}
+              aria-label={
+                item.value === 'yes'
+                  ? 'Yes it was easy to fill out this form'
+                  : 'No it was not easy to fill out this form'
+              }
             />
-            <span>{item.label}</span>
+            <span
+              className={classes(
+                'flex',
+                'items-center',
+                'justify-center',
+                'w-full',
+                'gap-8',
+                'text-label-xs',
+                'font-medium',
+                'cursor-pointer',
+                'before:thumbs-up-blue',
+                'peer-checked:bg-primary600',
+                'peer-checked:before:thumbs-up-white',
+                'peer-checked:text-white',
+                item.value === 'no' ? 'before:rotate-180' : ''
+              )}
+            >
+              {item.label}
+            </span>
           </label>
         </div>
       ))}

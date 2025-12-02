@@ -7,6 +7,7 @@ import { classed, classes } from '../components/utils'
 import { upgrade } from './components'
 import { FORM_CLASS } from './constants.mjs'
 import templates from './templates'
+import radioThumbsTemplate from './templates/radio-thumbs'
 import type {
   EventError,
   Form,
@@ -15,9 +16,10 @@ import type {
   FormOptions,
   FormSchema,
   FormSubmission,
-  Override
+  Override,
+  RadioSchema
 } from './types'
-import { getConsole, hook } from './utils'
+import { getConsole, hook, isFormSurvey } from './utils'
 
 import './formio.css'
 
@@ -62,14 +64,15 @@ const INITIALIZED = new Map<object, boolean>()
 export const plugin: FormioPlugin = {
   framework,
   templates: {
-    // @ts-expect-error why is this so hard to type?
     [framework]: {
       /**
        * Used by some template frameworks to translate icon classes, etc.
        * @see https://github.com/formio/formio.js/blob/v4.21.3/src/components/_classes/component/Component.js#L864-L869
        */
       transform: (type, value) => value,
-      ...templates
+      ...templates,
+      // @ts-expect-error why is this so hard to type?
+      'radio-wasItEasyToFillOutThisForm': radioThumbsTemplate
     }
   }
 }
@@ -95,6 +98,11 @@ export function useFormio(isDev = false) {
           if (args.type === 'form') {
             const schema = (await promise) as FormSchema
             upgradeSchemaOnce(schema)
+
+            if (isFormSurvey(schema)) {
+              disableRadioUncheck()
+            }
+
             return schema
           }
           return promise
@@ -312,6 +320,40 @@ function once<T extends object>(obj: T, fn: (obj: T) => void) {
   if (!INITIALIZED.has(obj)) {
     fn(obj)
     INITIALIZED.set(obj, true)
+  }
+}
+
+export interface RadioComponent extends RadioSchema {
+  dataValue: string
+  getValue(): string
+  setSelectedClasses(): void
+  updateOnChange(flags: object, changed: boolean): void
+  updateValue(value: string, flags: any): void
+}
+
+/**
+ * Formio allows radio buttons to be unchecked. This function replaces that
+ * logic with a similar function, but without this block:
+ * https://github.com/formio/formio.js/blob/v4.21.3/src/components/radio/Radio.js#L408-L413
+ */
+export function disableRadioUncheck() {
+  const RadioPrototype = Components.components.radio
+    .prototype as unknown as RadioComponent
+
+  RadioPrototype.updateValue = function (
+    value: string,
+    flags: object
+  ): boolean {
+    const newValue = this.getValue()
+    const changed = this.dataValue !== newValue
+
+    if (changed) {
+      this.dataValue = newValue
+      this.setSelectedClasses()
+      this.updateOnChange(flags, changed)
+    }
+
+    return changed
   }
 }
 

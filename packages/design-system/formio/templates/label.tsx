@@ -25,7 +25,7 @@ export function form({ t, ...ctx }: LabelContext) {
   ) : (
     ''
   )
-  const labelText = (ctx.component.label || '') + required
+  const labelText = `<p>${(ctx.component.label || '') + required}</p>`
 
   return (
     <>
