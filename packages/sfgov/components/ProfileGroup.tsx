@@ -23,9 +23,11 @@ export const ProfileGroup = ({
       <HeadingXXl as="h3" className="!mb-0">
         {title}
       </HeadingXXl>
-      <div>
-        <RichText html={description} isHomePage={isHomePage} />
-      </div>
+      {description ? (
+        <div>
+          <RichText html={description} isHomePage={isHomePage} />
+        </div>
+      ) : null}
     </div>
     <Grid className="grid-cols-1 gap-28 md:gap-y-40 md:grid-cols-2 lg:grid-cols-3">
       {profiles.map((profile) => {
@@ -42,7 +44,7 @@ export const ProfileGroup = ({
         return (
           <a
             key={profile.id}
-            className="flex flex-row items-start gap-28 no-underline"
+            className="flex flex-row items-start gap-16 no-underline"
             href={getPageURL(profileData)}
             aria-label={`profile page of ${profileData.title}`}
           >
@@ -51,11 +53,11 @@ export const ProfileGroup = ({
               width="80"
               height="80"
               alt={imgAlt}
-              className="rounded-4"
+              className="rounded-4 w-80 h-80"
               role="presentation"
             />
-            <span className="flex flex-col gap-8">
-              <span className="flex flex-col gap-4">
+            <span className="flex flex-col gap-4">
+              <span className="flex flex-col gap-2">
                 <span className="flex flex-col">
                   {profile.value.role ? (
                     <BodyText className="font-bold text-black">

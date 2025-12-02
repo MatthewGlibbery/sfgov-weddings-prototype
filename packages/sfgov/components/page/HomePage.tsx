@@ -63,16 +63,14 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
               </div>
             </div>
           ) : null}
-          {sfGovernment?.length ? (
+        </Container>
+        {sfGovernment?.length ? (
+          <Container className="flex flex-col gap-60" backgroundcolor="neutral">
             <DisplayXXXl as="h2">
               {t('sf-elected-officials', {
                 defaultValue: 'San Francisco elected officials'
               })}
             </DisplayXXXl>
-          ) : null}
-        </Container>
-        {sfGovernment?.length ? (
-          <Container className="flex flex-col gap-60" backgroundcolor="neutral">
             {sfGovernment.map((profileGroup) => (
               <ProfileGroup
                 key={profileGroup.id}

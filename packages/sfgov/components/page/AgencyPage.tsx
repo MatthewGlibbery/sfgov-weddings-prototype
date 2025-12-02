@@ -113,7 +113,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
 
   const ProfileGroupComponent = (people: TypeProfileGroupBlock[]) => {
     return people.length ? (
-      <Container backgroundcolor="primary">
+      <Container backgroundcolor="neutral">
         {people.map((profileGroup: TypeProfileGroupBlock) => (
           <ProfileGroup
             key={profileGroup.id}
