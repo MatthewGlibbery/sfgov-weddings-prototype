@@ -44,6 +44,7 @@ export const PageWrapper = ({
   const { locale } = router
   const hasFetched = useRef(false)
   const [alertData, setAlertData] = useState<TypeAlertData | null>(null)
+  const [prevLocale, setPrevLocale] = useState(locale)
 
   const isSearchPage = router.pathname === '/search'
   const metaKeys = ['type', 'locale', 'description'] // the meta things we care about
@@ -52,6 +53,10 @@ export const PageWrapper = ({
 
   // istanbul ignore next
   useEffect(() => {
+    if (prevLocale !== locale) {
+      hasFetched.current = false
+      setPrevLocale(locale)
+    }
     if (!hasFetched.current) {
       const loadData = async () => {
         const res = await fetch('/api/alerts')
@@ -66,7 +71,7 @@ export const PageWrapper = ({
 
       loadData()
     }
-  }, [alertData, locale])
+  }, [alertData, locale, prevLocale])
 
   return (
     <>
