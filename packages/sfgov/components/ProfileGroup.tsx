@@ -44,7 +44,7 @@ export const ProfileGroup = ({
         return (
           <a
             key={profile.id}
-            className="flex flex-row items-start gap-16 no-underline"
+            className="flex flex-row items-start gap-16 no-underline group"
             href={getPageURL(profileData)}
             aria-label={`profile page of ${profileData.title}`}
           >
@@ -66,7 +66,7 @@ export const ProfileGroup = ({
                   ) : null}
                   <HeadingMd
                     as="span"
-                    className="!mb-0 underline text-primary600"
+                    className="!mb-0 underline text-primary600 group-hover:text-primary800 group-focus:text-primary800"
                   >
                     {profileData.title}
                   </HeadingMd>
