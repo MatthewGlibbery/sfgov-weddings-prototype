@@ -248,7 +248,8 @@ export function FormPage({
       if (isFormSurvey && event.changed?.component.key === WAS_IT_EASY_KEY) {
         wizardNav?.classList.remove('hidden')
 
-        const submissionId = queryParams.get('formFeedback')
+        const params = new URLSearchParams(window.location.search)
+        const submissionId = params.get('formFeedback')
 
         const wasItEasy = event.data.wasItEasyToFillOutThisForm
 
