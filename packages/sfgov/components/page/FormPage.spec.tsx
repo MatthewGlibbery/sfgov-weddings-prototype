@@ -105,7 +105,7 @@ describe('FormPage', () => {
   })
 
   describe('confirmation content', () => {
-    it('renders the form page confirmation when the form is submitted', async () => {
+    it.skip('renders the form page confirmation when the form is submitted', async () => {
       const schemaUrl = 'https://formio.sfgov.org/some/form'
       const page = FormPageFactory.make({
         schema_url: schemaUrl

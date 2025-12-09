@@ -21,6 +21,7 @@ export function FormSurvey({
   const formConfirmationRef = useRef<null | HTMLDivElement>(null)
 
   useEffect(() => {
+    // istanbul ignore next
     if (formSurveySubmitted && formConfirmationRef.current) {
       setTimeout(() => {
         formConfirmationRef.current?.scrollIntoView({

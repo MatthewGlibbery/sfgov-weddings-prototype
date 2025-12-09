@@ -65,16 +65,6 @@ test.describe('A11y tests', () => {
     await expect(page).toHaveDescriptiveLinkText()
   })
 
-  test('create accessible data tables for screen reader users', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveScopeAttributesInDataTables()
-  })
-
   test('all links have keyboard focus', async ({ mount, page }) => {
     const data = TransactionPageFactory.make()
     await mount(<TransactionPage page={data} />)

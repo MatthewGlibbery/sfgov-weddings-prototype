@@ -1586,7 +1586,7 @@ export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
         section_content: [
           TextBlockFactory.make({
             value:
-              '<h2>Hi!</h2><h2>Hello!</h2><h2>Hiii!</h2><h2>Hiya!</h2><h2>Heyyy!</h2><h2>Sup!</h2><h2>Greeting!</h2><h2>Hiiii!</h2><h2>Yo!</h2><h2>Yoooo!</h2>'
+              '<h2 id="bloop">Hi!</h2><h2 id="ello">Hello!</h2><h2 id="fasdlkj">Hiii!</h2><h2 id="loqwen">Hiya!</h2><h2 id="qweri">Heyyy!</h2><h2 id="lknvd">Sup!</h2><h2 id="aldvl">Greeting!</h2><h2 id="oeoruri">Hiiii!</h2><h2 id="hqqqw">Yo!</h2><h2 id="bcccbc">Yoooo!</h2>'
           })
         ]
       }

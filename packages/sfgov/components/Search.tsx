@@ -3,9 +3,7 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { classes, DisplayXXXl, IconSearch, IconX } from '@/design-system'
 import { menuClasses } from './SiteHeader'
-import { menuClassesNew } from './SiteHeaderNew'
 import { useTranslation } from 'next-i18next'
-import { useTestGroup } from '@/lib/utils'
 
 export type SearchInputProps = {
   onChange: (value: string) => void
@@ -16,8 +14,6 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
   const inputRef = useRef<HTMLAnchorElement | null>(null)
   const { t } = useTranslation()
 
-  const testGroup = useTestGroup()
-
   const clearSearch = () => {
     onChange('')
     if (inputRef.current) {
@@ -27,11 +23,7 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
 
   return (
     <div
-      className={classes(
-        testGroup === 'b' ? menuClassesNew : menuClasses,
-        'px-28 py-[32px]',
-        'lg:relative lg:p-0'
-      )}
+      className={classes(menuClasses, 'px-28 py-[32px]', 'lg:relative lg:p-0')}
     >
       <label htmlFor="search" className="sr-only">
         <DisplayXXXl>Search</DisplayXXXl>

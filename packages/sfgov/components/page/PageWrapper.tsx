@@ -8,14 +8,12 @@ import {
   ErrorFallbackReport,
   SiteFooter,
   SiteHeader,
-  SiteHeaderNew,
   SitewideAlert
 } from '@/components'
 import { MainContent } from '@/design-system'
 import { useRouter } from 'next/router'
 import type { AlertData } from '@/types'
 import { Feedback } from '../Feedback'
-import { useTestGroup } from '@/lib/utils'
 
 type PageWrapperMetaProps = {
   type?: string
@@ -49,7 +47,6 @@ export const PageWrapper = ({
   const isSearchPage = router.pathname === '/search'
   const metaKeys = ['type', 'locale', 'description'] // the meta things we care about
   const excludePaths = ['/500']
-  const testGroup = useTestGroup()
 
   // istanbul ignore next
   useEffect(() => {
@@ -108,7 +105,7 @@ export const PageWrapper = ({
       {alertData?.items?.length ? (
         <SitewideAlert {...alertData?.items[0]} />
       ) : null}
-      {testGroup === 'b' ? <SiteHeaderNew /> : <SiteHeader />}
+      <SiteHeader />
       <MainContent className={className || 'mt-20'}>
         <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
           {children}

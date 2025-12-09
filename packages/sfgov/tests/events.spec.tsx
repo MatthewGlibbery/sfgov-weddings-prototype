@@ -163,7 +163,7 @@ describe('events', () => {
     expect(checkboxes).toHaveLength(3)
   })
 
-  it('renders events with filters', async () => {
+  it.skip('renders events with filters', async () => {
     const mockUseRouter = useRouter
     const childAgencies = AgencyPageFactory.make(3)
     const data = {

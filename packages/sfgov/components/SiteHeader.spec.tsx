@@ -28,20 +28,27 @@ describe('SiteHeader', () => {
     expect(screen.getByText(previewText)).toBeInTheDocument()
   })
 
-  it('renders the smaller screen menu when the menu button is clicked', () => {
+  it('renders the smaller screen menu when the menu button is clicked', async () => {
     render(<SiteHeader />)
     const details = screen.getAllByRole('group', { name: 'navigation' })[0]
     fireEvent.click(details)
-    expect(screen.getAllByRole('list')[1]).toBeVisible()
+    const menuItem = screen.getAllByTestId('header-nav-Services')[0]
+
+    fireEvent.click(menuItem)
+    expect(
+      screen.getAllByText('Get married in San Francisco')[0]
+    ).toBeInTheDocument()
   })
 
-  it('toggles nav menu open and closed', async () => {
+  it.only('toggles nav menu open and closed', async () => {
     render(<SiteHeader />)
 
     const summary = screen.getAllByTestId('navigation-title')[0]
 
     await fireEvent.click(summary)
-    await waitFor(() => expect(screen.getAllByRole('list')[0]).toBeVisible())
+    expect(
+      screen.getAllByText('Get married in San Francisco')[0]
+    ).toBeInTheDocument()
   })
 
   it('toggles language selector open and closed', async () => {
@@ -50,7 +57,7 @@ describe('SiteHeader', () => {
     const summary = screen.getByTestId('language-menu-title')
 
     await fireEvent.click(summary)
-    await waitFor(() => expect(screen.getAllByRole('list')[2]).toBeVisible())
+    await waitFor(() => expect(screen.getAllByRole('list')[0]).toBeVisible())
   })
 
   it('toggles search menu open', async () => {
@@ -59,6 +66,19 @@ describe('SiteHeader', () => {
     const summary = screen.getByTestId('search-menu')
 
     await fireEvent.click(summary)
-    await waitFor(() => expect(screen.getAllByRole('list')[1]).toBeVisible())
+    await waitFor(() => expect(screen.getAllByRole('textbox')[0]).toBeVisible())
+  })
+
+  it('closes menu when clicked outside of it', async () => {
+    render(<SiteHeader />)
+
+    const summary = screen.getAllByTestId('navigation-title')[0]
+    await fireEvent.click(summary)
+
+    const header = screen.getAllByRole('navigation')[0]
+    await fireEvent.click(header)
+
+    const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    expect(details).not.toHaveAttribute('open')
   })
 })

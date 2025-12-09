@@ -137,6 +137,7 @@ export const HeaderNavAccordion = /* istanbul ignore next */ (
       className={classes(isOpen ? 'border-b-1 border-neutral200' : '')}
       onToggle={(e) => setOpen(e.currentTarget.open)}
       name="nav-menu"
+      data-testid={`header-nav-${title}`}
       {...rest}
     >
       <StyledSummary

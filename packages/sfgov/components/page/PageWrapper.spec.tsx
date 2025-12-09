@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 
 import { PageWrapper } from './PageWrapper'
 import { useRouter } from 'next/router'
@@ -92,6 +92,8 @@ describe('<PageWrapper>', () => {
       locale: 'es'
     }))
     render(<PageWrapper />)
-    expect(await screen.findByText('alerta')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText('alerta')).toBeInTheDocument()
+    })
   })
 })

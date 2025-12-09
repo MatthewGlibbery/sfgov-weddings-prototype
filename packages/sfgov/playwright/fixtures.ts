@@ -2436,45 +2436,39 @@ export const expect = baseExpect.extend({
     let pass: boolean
     let matcherResult: any
     try {
+      const mainContent = page.locator('main')
+
       // Get all links on the page
-      const links = await page.$$eval('a', (anchors) =>
-        anchors.map((anchor) => ({
-          href: anchor.getAttribute('href'),
-          text: anchor.textContent?.trim() || ''
-        }))
-      )
+      const linkLocators = await mainContent.locator('a')
 
       // Iterate through each link and check if it receives keyboard focus
-      for (let i = 0; i < links.length; i++) {
-        const { href, text } = links[i]
-
+      for (let i = 0; i < (await linkLocators.count()); i++) {
         // Select the nth link directly
-        const allLinks = await page.$$('a')
-        const link = allLinks[i]
+        const link = linkLocators.nth(i)
 
         if (link) {
           // Ensure the link is visible and interactive before testing focus
           const isVisible = await link.isVisible()
-          const isDisabled = await page.evaluate(
-            (el) =>
-              el.hasAttribute('disabled') ||
-              el.getAttribute('tabindex') === '-1',
-            link
-          )
+
+          const isDisabled =
+            !!link.getAttribute('disabled') ||
+            (await link.getAttribute('tabindex')) === '-1'
 
           if (isVisible && !isDisabled) {
             // Focus the link
             await link.focus()
 
             // Check if the link has received focus
-            const isFocused = await page.evaluate(
+            const isFocused = await link.evaluate(
               (el) => document.activeElement === el,
               link
             )
 
             if (!isFocused) {
               throw new Error(
-                `Link "${text}" (href: "${href}") did not receive focus.`
+                `Link "${link.textContent || ''}" (href: "${link.getAttribute(
+                  'href'
+                )}") did not receive focus.`
               )
             }
           }
@@ -7541,6 +7535,7 @@ export const expect = baseExpect.extend({
       const results = await new AxeBuilder({ page }).analyze()
       if (results.violations.length) {
         console.log(results.violations)
+        console.log(results.violations[0].nodes)
       }
       baseExpect(results.violations.length).toBe(0)
       pass = true
