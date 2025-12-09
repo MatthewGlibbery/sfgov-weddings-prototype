@@ -11,6 +11,7 @@ import {
   Link
 } from '@/design-system'
 import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 
 export const tocWrapperClasses = classes(
   'z-50',
@@ -155,6 +156,8 @@ const TOC = ({ headings }) => <Headings headings={headings} />
  */
 const useHeadingsData = () => {
   const [headings, setHeadings] = useState([])
+  const router = useRouter()
+  const { locale } = router
 
   useEffect(() => {
     const headingElements = Array.from(
@@ -170,12 +173,12 @@ const useHeadingsData = () => {
     const newHeadings = []
     headingElements.forEach((heading) => {
       heading.id = heading.id.replace(/\s+/g, '')
-      const { innerText: title, id } = heading
+      const { textContent: title, id } = heading
 
       newHeadings.push({ id, title })
     })
     setHeadings(newHeadings)
-  }, [])
+  }, [locale])
 
   return { headings }
 }
