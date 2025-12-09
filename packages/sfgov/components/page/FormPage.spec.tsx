@@ -1,10 +1,10 @@
 import FormioForm from '@/design-system/components/FormioForm'
-import type { FormProps } from '@/design-system/formio'
+import type { FormChangeEvent, FormProps } from '@/design-system/formio'
 import { FormFactory } from '@/design-system/formio/factories'
 import { FormPageFactory } from '@/lib/factories'
 import { MockDynamicComponent } from '@/__mocks__/next/dynamic'
 import { useSearchParams } from '@/__mocks__/next/navigation'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/router'
 import { FormPage } from './FormPage'
 
@@ -311,7 +311,10 @@ describe('FormPage', () => {
 
   describe('warn before leaving', () => {
     const router = useRouter()
-    const page = FormPageFactory.make()
+    const schemaUrl = 'https://formio.sfgov.org/some/form'
+    const page = FormPageFactory.make({
+      schema_url: schemaUrl
+    })
 
     const originalConfirm = window.confirm
     let preventDefault: jest.Mock
@@ -330,18 +333,8 @@ describe('FormPage', () => {
       window.confirm = originalConfirm
     })
 
-    it('shows window confirmation when warnBeforeLeaving is true', async () => {
-      render(<FormPage page={page} warnBeforeLeaving={true} />)
-
-      router.events.emit('beforeHistoryChange')
-      expect(window.confirm).toBeCalled()
-
-      window.dispatchEvent(event)
-      expect(preventDefault).toHaveBeenCalled()
-    })
-
-    it('does not show window confirmation when warnBeforeLeaving is false', async () => {
-      render(<FormPage page={page} warnBeforeLeaving={false} />)
+    it('does not show window confirmation when form is not in progress', async () => {
+      render(<FormPage page={page} submitted={false} />)
 
       router.events.emit('beforeHistoryChange')
       expect(window.confirm).not.toBeCalled()
@@ -350,9 +343,44 @@ describe('FormPage', () => {
       expect(preventDefault).not.toHaveBeenCalled()
     })
 
+    it('does not show window confirmation when form has been submitted', async () => {
+      render(<FormPage page={page} submitted={true} />)
+
+      router.events.emit('beforeHistoryChange')
+      expect(window.confirm).not.toBeCalled()
+
+      window.dispatchEvent(event)
+      expect(preventDefault).not.toHaveBeenCalled()
+    })
+
+    it('shows window confirmation when form is in progress', async () => {
+      const mockEvent = {
+        changed: {
+          instance: {
+            pristine: false
+          }
+        },
+        data: {}
+      } as FormChangeEvent
+
+      MockDynamicComponent.mockImplementation((props: FormProps) => {
+        props.onChange?.call(undefined, mockEvent)
+        return <div>Form in progress</div>
+      })
+      render(<FormPage page={page} submitted={false} />)
+
+      await waitFor(() => {
+        router.events.emit('beforeHistoryChange')
+        expect(window.confirm).toBeCalled()
+      })
+
+      window.dispatchEvent(event)
+      expect(preventDefault).toHaveBeenCalled()
+    })
+
     it('throws error if user cancels navigation', async () => {
       window.confirm = jest.fn().mockReturnValue(false)
-      render(<FormPage page={page} warnBeforeLeaving={true} />)
+      render(<FormPage page={page} />)
 
       expect(() => router.events.emit('beforeHistoryChange')).toThrow(
         "Abort route change by user's confirmation."

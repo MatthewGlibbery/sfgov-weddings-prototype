@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { ButtonLink } from '../ButtonLink'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
@@ -31,7 +31,6 @@ export type FormPageProps = {
   submitted?: boolean
   formPage?: number
   formComponentKey?: string
-  warnBeforeLeaving?: boolean
 }
 
 type FormEvent = {
@@ -48,8 +47,7 @@ export function FormPage({
   page,
   submitted: initialSubmitted,
   formComponentKey,
-  formPage = 0,
-  warnBeforeLeaving = false
+  formPage = 0
 }: FormPageProps) {
   const {
     title,
@@ -70,7 +68,8 @@ export function FormPage({
     ...rawQueryParams
   } = Object.fromEntries(queryParams?.entries() || [])
 
-  const [isFormSurvey, setIsFormSurvey] = useState(false)
+  const navHandlerOn = useRef(false)
+
   const [submitted, setSubmitted] = useState(
     initialSubmitted || queryParamSubmitted === 'true'
   )
@@ -93,42 +92,25 @@ export function FormPage({
     }
   ]
 
+  const isFormSurvey = submitted
   const EXCLUDE_FORM_SURVEY = [
     'https://formio.sfgov.org/dbi/applyforabuildingpermit2024'
   ]
 
-  useEffect(() => {
-    // don't do anything if the form has been submitted
-    if (submitted && !isFormSurvey) {
-      setIsFormSurvey(true)
-      return
-    }
+  const handleBeforeUnload = (event: Event) => {
+    event.preventDefault()
+  }
 
-    const handleBeforeUnload = (event: Event) => {
-      if (warnBeforeLeaving) {
-        event.preventDefault()
-      }
+  const nextNavigationHandler = () => {
+    const result = window.confirm(
+      'Navigate away? Changes you made may not be saved.'
+    )
+    if (!result) {
+      router.events?.emit('routeChangeError')
+      // eslint-disable-next-line no-throw-literal
+      throw "Abort route change by user's confirmation."
     }
-
-    const nextNavigationHandler = () => {
-      if (warnBeforeLeaving) {
-        const result = window.confirm(
-          'Navigate away? Changes you made may not be saved.'
-        )
-        if (!result) {
-          router.events?.emit('routeChangeError')
-          // eslint-disable-next-line no-throw-literal
-          throw "Abort route change by user's confirmation."
-        }
-      }
-    }
-    router.events?.on('beforeHistoryChange', nextNavigationHandler)
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => {
-      router.events?.off('beforeHistoryChange', nextNavigationHandler)
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
-  }, [warnBeforeLeaving, router.events, submitted, isFormSurvey])
+  }
 
   return (
     <PageWrapper title={title} meta={page.meta}>
@@ -201,9 +183,10 @@ export function FormPage({
                 language: i18n.language
               }}
               onChange={(event: FormChangeEvent) => {
-                // istanbul ignore next
-                if (event.changed?.instance.root.pristine === false) {
-                  warnBeforeLeaving = true
+                const formInProgress =
+                  !submitted && event.changed?.instance.pristine === false
+                if (formInProgress && !navHandlerOn.current) {
+                  warnBeforeLeaving(true)
                 }
               }}
               formReady={onFormReady}
@@ -243,8 +226,8 @@ export function FormPage({
 
     form.on('change', async (event: FormChangeEvent) => {
       formIsValid = event.isValid
-      const WAS_IT_EASY_KEY = 'wasItEasyToFillOutThisForm'
 
+      const WAS_IT_EASY_KEY = 'wasItEasyToFillOutThisForm'
       if (isFormSurvey && event.changed?.component.key === WAS_IT_EASY_KEY) {
         wizardNav?.classList.remove('hidden')
 
@@ -373,6 +356,7 @@ export function FormPage({
   }
 
   function onSubmitDone(submission: FormSubmission) {
+    warnBeforeLeaving(false)
     const eventData = {
       formio_submission_id: submission._id
     }
@@ -389,6 +373,17 @@ export function FormPage({
         type: 'save_draft',
         dataLayer: eventData
       })
+    }
+  }
+
+  function warnBeforeLeaving(shouldWarn: boolean) {
+    router.events?.off('beforeHistoryChange', nextNavigationHandler)
+    window.removeEventListener('beforeunload', handleBeforeUnload)
+    navHandlerOn.current = shouldWarn
+
+    if (shouldWarn) {
+      router.events?.on('beforeHistoryChange', nextNavigationHandler)
+      window.addEventListener('beforeunload', handleBeforeUnload)
     }
   }
 
