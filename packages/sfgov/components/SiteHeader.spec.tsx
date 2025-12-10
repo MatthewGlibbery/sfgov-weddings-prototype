@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within
+} from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import { SiteHeader } from './SiteHeader'
 import { useSearchParams } from '@/__mocks__/next/navigation'
@@ -69,16 +75,32 @@ describe('SiteHeader', () => {
     await waitFor(() => expect(screen.getAllByRole('textbox')[0]).toBeVisible())
   })
 
-  it('closes menu when clicked outside of it', async () => {
+  it('keeps menu open when clicked inside of it', async () => {
     render(<SiteHeader />)
 
     const summary = screen.getAllByTestId('navigation-title')[0]
     await fireEvent.click(summary)
-
-    const header = screen.getAllByRole('navigation')[0]
-    await fireEvent.click(header)
-
     const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    await fireEvent.click(details)
+  })
+
+  it('closes menu when clicking a link inside of it', async () => {
+    render(<SiteHeader />)
+    const summary = screen.getAllByTestId('navigation-title')[0]
+    await fireEvent.click(summary)
+    const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    const link = within(details).getByRole('link')
+    await fireEvent.click(link)
+    expect(details).not.toHaveAttribute('open')
+  })
+
+  it('closes menu when clicked outside of it', async () => {
+    render(<SiteHeader />)
+    const summary = screen.getAllByTestId('navigation-title')[0]
+    const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    await fireEvent.click(summary)
+    expect(details).toHaveAttribute('open')
+    await fireEvent.click(document.body)
     expect(details).not.toHaveAttribute('open')
   })
 })

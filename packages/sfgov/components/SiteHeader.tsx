@@ -287,14 +287,15 @@ export const SiteHeader = (props: SiteHeaderProps) => {
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false)
 
   if (typeof window !== 'undefined') {
-    // Get all details elements on the page
-    const allDetails = document.querySelectorAll('details')
+    // Get all header details elements on the page
+    const allHeaderDetails = document.querySelectorAll('header details')
 
     document.addEventListener('click', (event) => {
-      allDetails.forEach((detailsElement) => {
+      allHeaderDetails.forEach((detailsElement) => {
         // Check if the details element is currently open
         if (detailsElement.hasAttribute('open')) {
           // Check if the clicked element is outside the current details element
+          /* istanbul ignore next */
           if (
             (!detailsElement.contains(event.target) &&
               event.target !== detailsElement) ||
