@@ -1,9 +1,11 @@
 import type { ReportPageData } from '@/types'
 import type { ComponentType } from 'react'
 import {
+  classed,
   Container,
   DisplayLg,
   Grid,
+  HeadingMd,
   HeadingXl,
   PageTitleSection
 } from '@/design-system'
@@ -11,6 +13,7 @@ import { useTranslation } from 'next-i18next'
 
 import {
   ComposedDate,
+  RICH_TEXT_DEFAULT_COMPONENTS,
   DocumentLink,
   PageLink,
   PageWrapper,
@@ -18,8 +21,11 @@ import {
   RichText,
   Spotlight,
   Table,
-  TableOfContents
+  TableOfContents,
+  Image,
+  getTocId
 } from '..'
+import type { HTMLComponentMap } from '../wagtail'
 
 export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
   page
@@ -34,6 +40,48 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
     spotlight: [spotlight],
     title
   } = page
+
+  const richTextComponents: HTMLComponentMap = {
+    h2: ({
+      'data-block-key': blockKey,
+      ...rest
+    }: JSX.IntrinsicElements['h2'] & { 'data-block-key'?: string }) => (
+      <HeadingXl
+        as="h2"
+        id={getTocId(blockKey)}
+        {...rest}
+        className="mt-40 mb-20"
+      />
+    ),
+    h3: ({
+      'data-block-key': blockKey,
+      ...rest
+    }: JSX.IntrinsicElements['h3'] & { 'data-block-key'?: string }) => (
+      <HeadingMd
+        as="h3"
+        id={getTocId(blockKey)}
+        {...rest}
+        className="mt-40 mb-20"
+      />
+    ),
+    p: classed('p', 'mb-20 min-h-20'),
+    ul: classed('ul', 'pb-20'),
+    ol: classed('ol', 'pb-20'),
+    li: classed('li', 'mb-12'),
+    hr: (props) => (
+      <div
+        className="border-dotted border-b-2 w-full border-neutral200 my-28 md:my-40 lg:my-60"
+        {...props}
+      />
+    ),
+    img: (props) => {
+      const {
+        class: _,
+        ...rest
+      }: JSX.IntrinsicElements['img'] & { class?: string } = props
+      return <Image {...rest} className="mb-20" />
+    }
+  }
 
   return (
     <PageWrapper title={title} meta={page.meta}>
@@ -64,11 +112,11 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
               switch (contentSection.type) {
                 case 'body':
                   return (
-                    <div
-                      className="flex flex-col gap-y-28"
-                      key={`content-section-${i}`}
-                    >
-                      <RichText html={contentSection.value} />
+                    <div key={`content-section-${i}`}>
+                      <RichText
+                        html={contentSection.value}
+                        components={richTextComponents}
+                      />
                     </div>
                   )
                 case 'table':

@@ -1,6 +1,7 @@
-import { TypeTitleAndTextValues } from '@/types'
+import type { TypeTitleAndTextValues } from '@/types'
 import { HeadingSm } from '@/design-system'
 import { RichText } from './RichText'
+import type { HTMLComponentMap } from './wagtail'
 
 export type TitleAndTextProps = JSX.IntrinsicElements['section'] &
   TypeTitleAndTextValues & {
@@ -8,7 +9,7 @@ export type TitleAndTextProps = JSX.IntrinsicElements['section'] &
     id?: string
     heading?: React.FC
     headingClasses?: string
-    isDarkBg?: boolean
+    richTextComponents?: HTMLComponentMap
   }
 
 export const TitleAndText = ({
@@ -18,7 +19,7 @@ export const TitleAndText = ({
   id,
   heading,
   headingClasses,
-  isDarkBg = false,
+  richTextComponents,
   ...rest
 }: TitleAndTextProps) => {
   if (!title && !text) return null
@@ -30,13 +31,7 @@ export const TitleAndText = ({
           {title}
         </TitleComponent>
       ) : null}
-      {text ? (
-        <RichText
-          html={text}
-          isDarkBg={isDarkBg}
-          headingClasses={headingClasses}
-        />
-      ) : null}
+      {text ? <RichText html={text} components={richTextComponents} /> : null}
     </section>
   )
 }

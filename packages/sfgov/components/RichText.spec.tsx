@@ -115,11 +115,17 @@ describe('<RichText>', () => {
     render(
       <RichText
         html={`
-      <img data-id="lol" src='/media/hi' alt='alt text' />
+      <img data-id="lol" src='/media/hi' 
+        alt='alt text' width="128" height="128"/>
     `}
       />
     )
-    expect(screen.getByRole('img')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'alt text' })).toBeInTheDocument()
+  })
+
+  it('renders brs', () => {
+    render(<RichText html={`<br/>`} />)
+    expect(screen.getByTestId('test-br')).toBeInTheDocument()
   })
 
   describe('safety checks', () => {
@@ -172,43 +178,4 @@ describe('<RichText>', () => {
       expect(container.querySelector('a')).not.toHaveAttribute('href')
     })
   })
-
-  it('renders headings with the passed in CSS class', async () => {
-    render(
-      <RichText
-        html={`
-          <h2>Hello, world!</h2>
-          <h3>Hello, world!</h3>
-          <h4>Hello, world!</h4>
-          <p data-id="123">This is a paragraph.</p>
-          <hr/>
-        `}
-        headingClasses="testing-css"
-      />
-    )
-
-    const headings = await screen.findAllByRole('heading')
-    headings.forEach((heading) => {
-      expect(heading).toHaveClass('testing-css')
-    })
-  })
-
-  it.each([
-    ['light background', false, 'text-primary600'],
-    ['dark background', true, 'text-primary400']
-  ])(
-    'renders the appropriate CSS class for links: %s',
-    async (desc, isDarkBg, cssCls) => {
-      render(
-        <RichText
-          html={`
-          <a href='#'>Linky link</a>
-        `}
-          isDarkBg={isDarkBg}
-        />
-      )
-
-      expect(await screen.findByRole('link')).toHaveClass(cssCls)
-    }
-  )
 })

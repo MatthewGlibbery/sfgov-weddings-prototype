@@ -7,7 +7,9 @@ import type {
   WagtailImageData
 } from '@/types'
 import type { ComponentType } from 'react'
+import type { HTMLComponentMap } from '../wagtail'
 import {
+  classed,
   classes,
   Container,
   DisplayXXXl,
@@ -20,11 +22,11 @@ import {
 } from '@/design-system'
 import { getPageURL } from '@/lib/utils'
 import { useTranslation } from 'next-i18next'
-
 import {
   Accordion,
   ContactFooter,
   ContentTileList,
+  RICH_TEXT_DEFAULT_COMPONENTS,
   DownloadableFilesSection,
   Image,
   Location,
@@ -103,6 +105,24 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       break
   }
 
+  const richTextComponents: HTMLComponentMap = {
+    h3: classed(
+      RICH_TEXT_DEFAULT_COMPONENTS.h3,
+      themeText.imageWithTextHeading
+    ),
+    h4: classed(
+      RICH_TEXT_DEFAULT_COMPONENTS.h4,
+      themeText.imageWithTextHeading
+    ),
+    a: (props) => (
+      <Link
+        as="a"
+        className={theme === 'black' ? 'text-primary400' : 'text-primary600'}
+        {...props}
+      />
+    )
+  }
+
   const getAdditionalContentComponent = (
     content:
       | TypeImageWithTextBlock
@@ -129,8 +149,8 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                 heading={HeadingXXl}
                 as="h2"
                 headingClasses={themeText.imageWithTextHeading}
-                isDarkBg={theme === 'black'}
                 text={content.value.description}
+                richTextComponents={richTextComponents}
               />
             </div>
           </div>
