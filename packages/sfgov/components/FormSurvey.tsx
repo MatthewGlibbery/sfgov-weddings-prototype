@@ -36,6 +36,7 @@ export function FormSurvey({
     return (
       <div
         ref={formConfirmationRef}
+        role="alert"
         className="mb-40 w-full border-1 border-success600 bg-success50 px-28 py-20 md:w-[718px]"
       >
         <div className="items-start space-y-12 md:inline-flex md:gap-12 md:space-y-0">

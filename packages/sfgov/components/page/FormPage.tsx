@@ -93,9 +93,6 @@ export function FormPage({
   ]
 
   const isFormSurvey = submitted
-  const EXCLUDE_FORM_SURVEY = [
-    'https://formio.sfgov.org/dbi/applyforabuildingpermit2024'
-  ]
 
   const handleBeforeUnload = (event: Event) => {
     event.preventDefault()
@@ -143,9 +140,7 @@ export function FormPage({
               }
             })}
 
-            {EXCLUDE_FORM_SURVEY.includes(
-              formSchemaUrl.replace(/\/v\/.*$/, '')
-            ) ? null : (
+            {isFormExcludedFromSurvey(formSchemaUrl) ? null : (
               <FormSurvey
                 FormioForm={FormioForm}
                 formReady={onFormReady}
@@ -232,49 +227,51 @@ export function FormPage({
         wizardNav?.classList.remove('hidden')
 
         const params = new URLSearchParams(window.location.search)
-        const submissionId = params.get('formFeedback')
-
+        const referrer = router.asPath.split('?')[0]
         const wasItEasy = event.data.wasItEasyToFillOutThisForm
+        let submissionId = params.get('formFeedback') || ''
 
-        if (submissionId && !form.formio.submissionId) {
-          try {
-            // update existing submission
-            formio.submissionId = submissionId
-            formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
+        if (submissionId && !formio.submissionId) {
+          // update existing submission
+          formio.submissionId = submissionId
+          formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
 
-            const submission: FormSubmission = {
-              _id: submissionId,
-              data: {
-                wasItEasyToFillOutThisForm: wasItEasy,
-                referrer: router.asPath.split('?')[0]
-              }
-            }
-            form.submission = submission
+          const submission: FormSubmission = await formio.loadSubmission()
+          submission.data.wasItEasyToFillOutThisForm = wasItEasy
 
-            await formio.saveSubmission(form.submission)
-          } catch {
-            console.error('Failed to update submission.')
-          }
+          form.submission = submission
+          await formio.saveSubmission(submission)
         } else {
-          try {
-            // create a new submission and update the query string
-            const submission = await formio.saveSubmission({
-              data: {
-                wasItEasyToFillOutThisForm: wasItEasy,
-                referrer: router.asPath.split('?')[0]
-              }
-            })
-            const submissionId = submission._id
-            const params = new URLSearchParams(queryParams)
-            params.set('formFeedback', submissionId)
-            window.history.pushState(
-              null,
-              '',
-              `${router.asPath.split('?')[0]}?${params}`
-            )
-          } catch {
-            console.error('Failed to create submission.')
-          }
+          // create a new submission and update the query string
+          const submission = await formio.saveSubmission({
+            data: {
+              wasItEasyToFillOutThisForm: wasItEasy,
+              referrer
+            }
+          })
+          submissionId = submission._id
+          formio.submissionId = submissionId
+          formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
+
+          params.set('formFeedback', submissionId)
+          window.history.pushState(null, '', `${referrer}?${params}`)
+        }
+      }
+    })
+
+    form.on('submit', async () => {
+      if (isFormSurvey) {
+        const params = new URLSearchParams(window.location.search)
+        const submissionId = params.get('formFeedback')
+        if (submissionId && !formio.submissionId) {
+          formio.submissionId = submissionId
+          formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
+        } else {
+          const submission: FormSubmission = await formio.loadSubmission()
+          submission.data.referrer = router.asPath.split('?')[0]
+
+          form.submission = submission
+          await formio.saveSubmission(submission)
         }
       }
     })
@@ -366,6 +363,7 @@ export function FormPage({
         dataLayer: eventData
       })
       if (!isFormSurvey) {
+        // istanbul ignore next
         setSubmitted(true)
       }
     } else if (submission.state === 'draft') {
@@ -428,6 +426,12 @@ const InfoBox = classed('div', {
     }
   }
 })
+
+const EXCLUDE_FROM_SURVEY = ['/feedbackformwagtail']
+
+function isFormExcludedFromSurvey(url: string) {
+  return EXCLUDE_FROM_SURVEY.some((part) => url.includes(part))
+}
 
 // istanbul ignore next
 function Loading(props: DynamicOptionsLoadingProps) {
