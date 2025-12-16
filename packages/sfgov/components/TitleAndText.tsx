@@ -19,13 +19,19 @@ export const TitleAndText = ({
   id,
   heading,
   headingClasses,
-  richTextComponents,
+  richTextComponents = undefined,
   ...rest
 }: TitleAndTextProps) => {
   if (!title && !text) return null
   const TitleComponent = heading ?? HeadingSm
   return (
-    <section className="flex flex-col gap-y-12" {...rest}>
+    // TODO: richTextComponents and this conditional class can go
+    // away once we've finalized the default rich text components
+    // CMS-1226, CMS-1272, CMS-1273, CMS-1274
+    <section
+      className={`${!richTextComponents ? 'flex flex-col gap-y-12' : ''}`}
+      {...rest}
+    >
       {title ? (
         <TitleComponent as={as} id={id || ''} className={headingClasses}>
           {title}

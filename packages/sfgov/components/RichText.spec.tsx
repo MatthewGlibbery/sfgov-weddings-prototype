@@ -2,7 +2,7 @@
 
 import mockConsole from 'jest-mock-console'
 import { render, screen } from '@testing-library/react'
-import { RichText } from './RichText'
+import { ITERATIVE_RICH_TEXT_COMPONENTS, RichText } from './RichText'
 
 describe('<RichText>', () => {
   // mocking the console is necessary because <RichText> logs "forbidden"
@@ -121,6 +121,40 @@ describe('<RichText>', () => {
       />
     )
     expect(screen.getByRole('img', { name: 'alt text' })).toBeInTheDocument()
+  })
+
+  it('renders imgs without classes', () => {
+    render(
+      <RichText
+        html={`
+      <img data-id="lol" src='/media/hi' 
+        alt='alt text' width="128" height="128"/>
+    `}
+        components={ITERATIVE_RICH_TEXT_COMPONENTS}
+      />
+    )
+    expect(screen.getByAltText('alt text')).not.toHaveClass('wagtail-class')
+  })
+
+  it('renders headings with appropriate toc id', () => {
+    const rand = 0.5
+    jest.spyOn(Math, 'random').mockReturnValueOnce(rand)
+    render(
+      <RichText
+        html={`
+      <h2 data-block-key="abc123">Heading</h2>
+      <h3>No data-block-key attribute</h3>
+    `}
+      />
+    )
+    expect(screen.getByRole('heading', { level: 2 })).toHaveAttribute(
+      'id',
+      'abc123'
+    )
+    expect(screen.getByRole('heading', { level: 3 })).toHaveAttribute(
+      'id',
+      `${Math.floor(rand * 200)}`
+    )
   })
 
   it('renders brs', () => {

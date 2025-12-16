@@ -53,19 +53,6 @@ describe('ReportPage', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('renders the richtext image', () => {
-    page.content = [
-      BodyTextBlockFactory.make({
-        value:
-          '<img class="wagtail-class" src="/path/to/image" width="120" height="120" alt="alt-text"/>'
-      })
-    ]
-    render(<ReportPage page={page} />)
-    expect(screen.getByRole('img', { name: 'alt-text' })).not.toHaveClass(
-      'wagtail-class'
-    )
-  })
-
   describe('primary agency', () => {
     it('renders if present', () => {
       render(<ReportPage page={page} />)

@@ -4,19 +4,23 @@ import type { TypeProfilePageBlock } from '@/types'
 import NextImage from 'next/image'
 import { RichText } from './RichText'
 import citySeal from '../public/static/CCSF-seal-vector.svg'
+import type { HTMLComponentMap } from './wagtail'
 
 type ProfileGroupProps = {
   title: string
   description?: string
   profiles: TypeProfilePageBlock[]
-  isHomePage?: boolean
+  richTextComponents: HTMLComponentMap
 }
 
+// TODO: richTextComponents can go away once
+// we've finalized the default rich text components
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274
 export const ProfileGroup = ({
   title,
   description = '',
   profiles,
-  isHomePage = false
+  richTextComponents
 }: ProfileGroupProps) => (
   <div className="flex flex-col gap-y-40" data-gtm-id="profile-group">
     <div className="flex flex-col gap-y-16">
@@ -25,7 +29,7 @@ export const ProfileGroup = ({
       </HeadingXXl>
       {description ? (
         <div>
-          <RichText html={description} isHomePage={isHomePage} />
+          <RichText html={description} components={richTextComponents} />
         </div>
       ) : null}
     </div>

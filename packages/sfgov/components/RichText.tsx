@@ -9,7 +9,7 @@ type RichTextProps = {
   components?: HTMLComponentMap
 }
 
-export function getTocId(blockKey?: string) {
+function getTocId(blockKey?: string) {
   return blockKey ?? Math.floor(Math.random() * 200)
 }
 
@@ -36,6 +36,53 @@ export const RICH_TEXT_DEFAULT_COMPONENTS = {
   img: Image,
   blockquote: classed('blockquote', 'bg-neutral50 p-20 rounded-4')
 } as const satisfies HTMLComponentMap
+
+// TODO: we are going to eventually use these definitions for
+// the default rich text components above.  iteratively applying it
+// on specific content types for now:
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274
+export const ITERATIVE_RICH_TEXT_COMPONENTS: HTMLComponentMap = {
+  h2: ({
+    'data-block-key': blockKey,
+    ...rest
+  }: JSX.IntrinsicElements['h2'] & { 'data-block-key'?: string }) => (
+    <HeadingXl
+      as="h2"
+      id={getTocId(blockKey)}
+      {...rest}
+      className="mt-40 mb-20"
+    />
+  ),
+  h3: ({
+    'data-block-key': blockKey,
+    ...rest
+  }: JSX.IntrinsicElements['h3'] & { 'data-block-key'?: string }) => (
+    <HeadingMd
+      as="h3"
+      id={getTocId(blockKey)}
+      {...rest}
+      className="mt-40 mb-20"
+    />
+  ),
+  p: classed('p', 'mb-20 min-h-20'),
+  ul: classed('ul', 'mb-20'),
+  ol: classed('ol', 'mb-20'),
+  li: classed('li', 'mb-12'),
+  hr: (props) => (
+    <div
+      className="border-dotted border-b-2 w-full border-neutral200 my-28 md:my-40 lg:my-60"
+      {...props}
+    />
+  ),
+  img: (props) => {
+    const {
+      class: _,
+      ...rest
+    }: JSX.IntrinsicElements['img'] & { class?: string } = props
+    return <Image {...rest} className="mb-20" />
+  },
+  blockquote: classed(RICH_TEXT_DEFAULT_COMPONENTS.blockquote, 'mb-20')
+}
 
 export const RichText = ({ html, components }: RichTextProps) => {
   const mergedComponentMap = {

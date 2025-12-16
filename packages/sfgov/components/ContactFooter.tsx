@@ -16,12 +16,20 @@ import {
   TitleAndText
 } from './'
 import { useTranslation } from 'next-i18next'
+import type { HTMLComponentMap } from './wagtail'
 
+// TODO: richTextComponents can go away once
+// we've finalized the default rich text components
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274
 type ContactFooterProps = {
   items: TypeContactFooterBlockValues[]
+  richTextComponents?: HTMLComponentMap
 }
 
-export const ContactFooter = ({ items }: ContactFooterProps) => {
+export const ContactFooter = ({
+  items,
+  richTextComponents
+}: ContactFooterProps) => {
   const { t } = useTranslation()
   // collect the different contact methods
   const footerSections = {
@@ -113,7 +121,12 @@ export const ContactFooter = ({ items }: ContactFooterProps) => {
           data-testid="contact-additional-info"
         >
           {footerSections.title_and_text.map((extra) => (
-            <TitleAndText {...extra.value} key={extra.id} as={'p'} />
+            <TitleAndText
+              {...extra.value}
+              key={extra.id}
+              as={'p'}
+              richTextComponents={richTextComponents}
+            />
           ))}
         </StackedItem>
       ) : null}
