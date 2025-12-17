@@ -3,6 +3,8 @@ import {
   Container,
   DisplayLg,
   Grid,
+  HeadingMd,
+  HeadingSm,
   HeadingXlSans,
   HeadingXXl,
   IconAccessibility,
@@ -219,9 +221,32 @@ export function LocationPage({ page, env }: LocationPageProps) {
                     key={accordion.id}
                     title={accordion.value.title || ''}
                   >
+                    {/* 
+                      TODO:
+                      we're starting to deviate a bit here.  the end-goal is to
+                      create a default rich text component configuration for
+                      rich text across the site, but it seems we still have
+                      some situational differences (see also Callout component)
+                    */}
                     <RichText
                       html={accordion.value.text}
-                      components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                      components={{
+                        ...ITERATIVE_RICH_TEXT_COMPONENTS,
+                        h3: (props) => (
+                          <HeadingMd
+                            as="h3"
+                            className="mt-40 mb-20 first-of-type:mt-0"
+                            {...props}
+                          />
+                        ),
+                        h4: (props) => (
+                          <HeadingSm
+                            as="h4"
+                            className="first-of-type:mt-0"
+                            {...props}
+                          />
+                        )
+                      }}
                     />
                   </Accordion>
                 ))}

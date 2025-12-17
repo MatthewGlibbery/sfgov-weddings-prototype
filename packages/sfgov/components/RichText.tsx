@@ -64,7 +64,7 @@ export const ITERATIVE_RICH_TEXT_COMPONENTS: HTMLComponentMap = {
       className="mt-40 mb-20"
     />
   ),
-  p: classed('p', 'mb-20 min-h-20'),
+  p: classed('p', 'mb-20'),
   ul: classed('ul', 'mb-20'),
   ol: classed('ol', 'mb-20'),
   li: classed('li', 'mb-12'),

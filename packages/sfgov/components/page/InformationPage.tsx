@@ -15,6 +15,7 @@ import { PageLinksList } from '../PageLinksList'
 import { RelatedContentList } from '../RelatedContentList'
 import { TitleAndText } from '../TitleAndText'
 import { PageWrapper } from './PageWrapper'
+import { ITERATIVE_RICH_TEXT_COMPONENTS } from '../RichText'
 
 export const InformationPage: ComponentType<{ page: InfoPageData }> = ({
   page
@@ -116,15 +117,30 @@ type InfoSectionContentProps = {
   block: InfoPageSection
 }
 
+// TODO: richTextComponents can go away once
+// we've finalized the default rich text components
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274
 const InfoSectionContent = ({ block, ...rest }: InfoSectionContentProps) => {
   switch (block.type) {
     case 'image':
       return <Image imageRef={block.value} {...rest} />
     case 'title_and_text':
       return (
-        <TitleAndText {...block.value} as="h2" heading={HeadingXXl} {...rest} />
+        <TitleAndText
+          {...block.value}
+          as="h2"
+          heading={HeadingXXl}
+          {...rest}
+          richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+        />
       )
     case 'callout':
-      return <Callout html={block.value} {...rest} />
+      return (
+        <Callout
+          html={block.value}
+          {...rest}
+          richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+        />
+      )
   }
 }
