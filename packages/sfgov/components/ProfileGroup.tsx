@@ -58,7 +58,6 @@ export const ProfileGroup = ({
               height="80"
               alt={imgAlt}
               className="rounded-4 w-80 h-80"
-              role="presentation"
             />
             <span className="flex flex-col gap-4">
               <span className="flex flex-col gap-2">

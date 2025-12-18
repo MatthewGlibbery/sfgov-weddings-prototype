@@ -908,6 +908,13 @@ export const ImageFactory = factory<WagtailImageData>((gen) => ({
     width: 300,
     height: 300,
     alt: gen.lorem.sentence()
+  },
+  thumbnail: {
+    url: new URL(gen.internet.url()).pathname,
+    full_url: gen.internet.url(),
+    width: 120,
+    height: 120,
+    alt: gen.lorem.sentence()
   }
 }))
 
@@ -1698,21 +1705,22 @@ export const ProfileGroupFactory = factory<TypeProfileGroupBlock>((gen) => ({
     description: 'some profile group description',
     profiles: [
       {
+        id: gen.datatype.uuid(),
         type: 'profile_page',
         value: {
-          profile_page: RelatedContentBlockFactory.make(),
+          profile_page: ProfilePageFactory.make(),
           role: 'some role'
         }
       },
       {
+        id: gen.datatype.uuid(),
         type: 'profile_page',
         value: {
-          profile_page: {
-            ...RelatedContentBlockFactory.make(),
+          profile_page: ProfilePageFactory.make({
             pronouns: '',
             primary_job_title: 'Job holder',
             primary_job_title_line_2: 'Job seeker'
-          },
+          }),
           role: 'some other role'
         }
       }
