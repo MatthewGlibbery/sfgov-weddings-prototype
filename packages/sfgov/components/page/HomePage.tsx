@@ -4,6 +4,7 @@ import type { HomePageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 import {
   ContentTileList,
+  FeaturedServiceTileList,
   FeaturedTopicTileList,
   PageWrapper,
   ProfileGroup,
@@ -32,7 +33,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
       <ZebraStripedSection>
         <Container>
           {services?.length || topics?.length ? (
-            <div className="mb-28 space-y-12">
+            <div className="mb-28 space-y-28">
               <DisplayXXXl as="h2" className="lg:hidden">
                 {t('services', { defaultValue: 'Services' })}
               </DisplayXXXl>
@@ -40,7 +41,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
                 {t('services', { defaultValue: 'Services' })}
               </HeadingXXl>
               <div className="lg:hidden">
-                <ContentTileList
+                <FeaturedServiceTileList
                   isHomePage={true}
                   links={services}
                   noDescription={true}
@@ -51,7 +52,7 @@ export const HomePage: ComponentType<{ page: HomePageData }> = ({ page }) => {
               </div>
               <div className="hidden lg:flex gap-x-96">
                 <div className="basis-[36%]">
-                  <ContentTileList
+                  <FeaturedServiceTileList
                     isHomePage={true}
                     links={services}
                     noDescription={true}

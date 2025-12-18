@@ -13,7 +13,9 @@ import {
   DocumentTile,
   DataStoryTile,
   FeaturedTopicTileList,
-  FeaturedTopicTile
+  FeaturedTopicTile,
+  FeaturedServiceTile,
+  FeaturedServiceTileList
 } from './Tile'
 import {
   DocumentValueFactory,
@@ -258,6 +260,25 @@ describe('Tile', () => {
 
   it('renders a FeaturedTopicTileList', () => {
     render(<FeaturedTopicTileList links={GenericTileFactory.make(3)} />)
+
+    const tileSection = screen.getByTestId('tile-section')
+    expect(tileSection).toBeInTheDocument()
+  })
+
+  it('renders a FeaturedServiceTile', () => {
+    render(<FeaturedServiceTile link={linkValue} />)
+
+    const resouceTile = screen.getByRole('link')
+    const title = screen.getByText(linkValue.title)
+    const description = screen.getByText(linkValue.description)
+
+    expect(resouceTile).toBeInTheDocument()
+    expect(resouceTile).toContainElement(title)
+    expect(description).toBeInTheDocument()
+  })
+
+  it('renders a FeaturedServiceTileList', () => {
+    render(<FeaturedServiceTileList links={GenericTileFactory.make(3)} />)
 
     const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()
