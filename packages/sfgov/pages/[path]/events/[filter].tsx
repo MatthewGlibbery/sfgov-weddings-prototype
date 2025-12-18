@@ -1,4 +1,6 @@
-import { PageWrapper, ComposedDate, Accordion } from '@/components'
+import type { GetServerSidePropsContext } from 'next'
+import type { PageData, TypeDateTimeBlock, TypeLocationBlock } from '@/types'
+import type { Text } from 'html-react-parser'
 import {
   BodyText,
   Button,
@@ -17,18 +19,18 @@ import {
   Link,
   PageTitleSection
 } from '@/design-system'
+import { breakpoints } from '@/design-system/theme/breakpoints'
+import { Accordion, ComposedDate, PageWrapper } from '@/components'
+import { getPageURL } from '@/lib/utils'
 import { getenv, getPublicEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
-import { getPageURL } from '@/lib/utils'
-import { PageData } from '@/types'
-import { GetServerSidePropsContext } from 'next'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { forwardRef, useEffect, useRef, useState } from 'react'
-import { breakpoints } from '@/design-system/theme/breakpoints'
+import parse from 'html-react-parser'
 
 type Event = PageData & {
-  date_time: []
+  date_time: TypeDateTimeBlock[]
   overview: string
   meeting_location?: []
   cancelled?: boolean
@@ -50,7 +52,7 @@ type EventPageData = {
 
 type ChildAgencyFilter = {
   id: number
-  title: string
+  title: string | undefined
 }
 
 type InPageFilter = {
@@ -109,14 +111,16 @@ function formatDateTimeRange(
   return { dateRange, timeRange }
 }
 
-function getLocation(location) {
+function getLocation(location: TypeLocationBlock[]) {
   return location
-    .map((item) => {
-      if (item.type === 'address') return item?.value?.line1
-      else if (item.type === 'online') return 'Online'
-      else return ''
-    })
-    .join(', ')
+    ? location
+        .map((item) => {
+          if (item.type === 'address') return item?.value?.line1
+          else if (item.type === 'online') return 'Online'
+          else return ''
+        })
+        .join(', ')
+    : null
 }
 
 const EventInfo = ({
@@ -135,8 +139,21 @@ const EventInfo = ({
 const EventItem = forwardRef(function EventItem(item: Event, ref: any) {
   const { t } = useTranslation()
   const descMax = 600
-  const eventLocation = item.location || item.meeting_location || ''
+  const eventLocation = item.location || item.meeting_location || []
   let eventDescription = item.description || item.overview || ''
+  if (item.overview && !item.description) {
+    const plainText: string[] = []
+    parse(eventDescription, {
+      replace: (domNode) => {
+        if (domNode.type === 'text') {
+          plainText.push((domNode as Text).data)
+        }
+        return undefined
+      }
+    })
+    eventDescription = plainText.join(' ').replace(/\s+/g, ' ').trim()
+  }
+
   if (eventDescription.length > descMax) {
     const truncated = eventDescription.substring(0, descMax)
     eventDescription =
@@ -167,7 +184,9 @@ const EventItem = forwardRef(function EventItem(item: Event, ref: any) {
         {!item?.date_time?.[0]?.value?.is_all_day ? (
           <EventInfo Icon={IconClock} content={dateTimeRange.timeRange} />
         ) : null}
-        <EventInfo Icon={IconLocation} content={getLocation(eventLocation)} />
+        {eventLocation.length ? (
+          <EventInfo Icon={IconLocation} content={getLocation(eventLocation)} />
+        ) : null}
       </div>
       {eventDescription ? <p>{eventDescription}</p> : null}
     </div>
@@ -258,7 +277,7 @@ const EventsPage = (props: EventPageData) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(props.total)
   const [inPageFilters, setInPageFilters] = useState<InPageFilter>({})
-  const [focusIndex, setFocusIndex] = useState(null)
+  const [focusIndex, setFocusIndex] = useState<number | null>(null)
   const filtersRef = useRef<HTMLDetailsElement | null>(null)
   const focusRef = useRef<HTMLAnchorElement | null>(null)
   const lastWindowWidthRef = useRef(0)
@@ -299,7 +318,7 @@ const EventsPage = (props: EventPageData) => {
     try {
       const url = new URL(baseUrl)
       url.searchParams.set('page', page.toString())
-      url.searchParams.set('page_size', ITEMS_PER_PAGE)
+      url.searchParams.set('page_size', String(ITEMS_PER_PAGE))
       if (filters.childAgencies?.length) {
         url.searchParams.set(
           'child_agencies',
@@ -455,9 +474,10 @@ const EventsPage = (props: EventPageData) => {
     aggregated[monthYear].push(item)
   })
 
-  const monthLabel =
-    inPageFilters.month && `Month: ${months[inPageFilters.month - 1].label}`
-  const yearLabel = inPageFilters.year && `Year: ${inPageFilters.year}`
+  const monthLabel = inPageFilters.month
+    ? `Month: ${months[inPageFilters.month - 1].label}`
+    : ''
+  const yearLabel = inPageFilters.year ? `Year: ${inPageFilters.year}` : ''
 
   // locale change
   useEffect(() => {
@@ -656,14 +676,14 @@ const EventsPage = (props: EventPageData) => {
                 <ul className="p-0 m-0 list-none flex items-center gap-12 flex-wrap">
                   <li>{t('searching', { defaultValue: 'Searching' })}</li>
                   {inPageFilters?.childAgencies?.map((item) => {
-                    const title = item.title
+                    const title = item.title ?? ''
                     return (
                       <li key={item.id} data-testid="active-filter-item">
                         <ActiveFilterButton
                           label={title}
                           ariaLabel={`Remove filter ${title}.  To activate press Enter`}
                           removeHandler={() =>
-                            handleRemoveFilter('childAgencies', item.id)
+                            handleRemoveFilter('childAgencies', String(item.id))
                           }
                         />
                       </li>
@@ -772,12 +792,12 @@ const EventsPage = (props: EventPageData) => {
 export const getServerSideProps = withServerSideTranslations(
   async ({ params, locale, query }: GetServerSidePropsContext) => {
     const { path, filter } = params!
-    const url = new URL(getenv('API_BASE_URL'))
+    const url = new URL(String(getenv('API_BASE_URL')))
     url.pathname += 'api/related-events/'
-    url.searchParams.set('list', filter)
-    url.searchParams.set('locale', locale)
-    url.searchParams.set('path', path)
-    url.searchParams.set('page', query?.page || 1)
+    url.searchParams.set('list', String(filter))
+    url.searchParams.set('locale', String(locale))
+    url.searchParams.set('path', String(path))
+    url.searchParams.set('page', String(query?.page || 1))
     try {
       const res = await fetch(url.href)
       const data = await res.json()

@@ -217,4 +217,20 @@ describe('events', () => {
     render(<EventPage {...data} />)
     expect(screen.getByText('No events found')).toBeInTheDocument()
   })
+
+  it('strips html from meeting overviews', () => {
+    const meetingPage = MeetingPageFactory.make({
+      overview: '<p>a paragraph tag <strong>with bold text</strong></p>'
+    })
+    const data = {
+      agency: 'An agency page title',
+      total: 2,
+      events: [meetingPage],
+      baseUrl: 'http://a-fake-url'
+    }
+    render(<EventPage {...data} />)
+    expect(
+      screen.getByText('a paragraph tag with bold text')
+    ).toBeInTheDocument()
+  })
 })
