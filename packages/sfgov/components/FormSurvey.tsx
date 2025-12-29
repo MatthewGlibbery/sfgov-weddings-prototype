@@ -16,7 +16,7 @@ export function FormSurvey({
 }: FormSurveyProps) {
   const { t } = useTranslation()
   const FORM_SURVEY_URL =
-    'https://formio.sfgov.org/dev-ruehbbakcoznmcf/prodformsurvey'
+    'https://api.formio.sf.gov/dev-ruehbbakcoznmcf/prodformsurvey'
   const [formSurveySubmitted, setFormSurveySubmitted] = useState(false)
   const formConfirmationRef = useRef<null | HTMLDivElement>(null)
 

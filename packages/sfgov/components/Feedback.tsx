@@ -71,7 +71,7 @@ export const Feedback = () => {
         setPendingResponse(value)
         // hard coding the feedback form schema_url to avoid an api call
         const formSubmissionUrl = new URL(
-          'https://formio.dev.sf.gov/live11-ruehbbakcoznmcf/feedbackformwagtail'
+          'https://api.formio.sf.gov/live/feedbackformwagtail'
         )
         formSubmissionUrl.pathname += '/submission'
         // form submissions are public and anonymous

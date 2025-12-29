@@ -238,6 +238,7 @@ export function FormPage({
 
           const submission: FormSubmission = await formio.loadSubmission()
           submission.data.wasItEasyToFillOutThisForm = wasItEasy
+          submission.data.referrer = referrer
 
           form.submission = submission
           await formio.saveSubmission(submission)
