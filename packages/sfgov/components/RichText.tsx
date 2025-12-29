@@ -64,6 +64,7 @@ export const ITERATIVE_RICH_TEXT_COMPONENTS: HTMLComponentMap = {
       className="mt-40 mb-20"
     />
   ),
+  h4: (props) => <HeadingSm as="h4" {...props} className="mt-28" />,
   p: classed('p', 'mb-20'),
   ul: classed('ul', 'mb-20'),
   ol: classed('ol', 'mb-20'),
@@ -82,6 +83,15 @@ export const ITERATIVE_RICH_TEXT_COMPONENTS: HTMLComponentMap = {
     return <Image {...rest} className="mb-20" />
   },
   blockquote: classed(RICH_TEXT_DEFAULT_COMPONENTS.blockquote, 'mb-20')
+}
+
+export const EMBEDDED_RICH_TEXT_COMPONENTS: HTMLComponentMap = {
+  h3: (props) => (
+    <HeadingMd as="h3" className="mt-40 mb-20 first-of-type:mt-0" {...props} />
+  ),
+  h4: (props) => (
+    <HeadingSm as="h4" className="mt-32 first-of-type:mt-0" {...props} />
+  )
 }
 
 export const RichText = ({ html, components }: RichTextProps) => {

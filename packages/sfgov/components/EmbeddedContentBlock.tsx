@@ -1,19 +1,28 @@
-import { TypeEmbeddedContentBlockValues } from '@/types'
+import type { TypeEmbeddedContentBlockValues } from '@/types'
 import Link from 'next/link'
 import { Accordion } from './Accordion'
 import { useRef } from 'react'
-import { RichText } from './RichText'
+import { EMBEDDED_RICH_TEXT_COMPONENTS, RichText } from './RichText'
 import { useTranslation } from 'next-i18next'
 import { IconAccessibility } from '@/design-system'
+import type { HTMLComponentMap } from './wagtail'
 
-export const EmbeddedContentBlock = (props: TypeEmbeddedContentBlockValues) => {
+// TODO: richTextComponents can go away once
+// we've finalized the default rich text components
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274
+export const EmbeddedContentBlock = (
+  props: TypeEmbeddedContentBlockValues & {
+    richTextComponents?: HTMLComponentMap
+  }
+) => {
   const {
     desktop_embed_url: desktopEmbedURL,
     mobile_embed_url: mobileEmbedURL,
     aspect_ratios: aspectRatios,
     alt_text: altText,
     source_data: sourceData,
-    data_notes: dataNotes
+    data_notes: dataNotes,
+    richTextComponents
   } = props
 
   const embedNavRef = useRef<HTMLDivElement>(null)
@@ -103,7 +112,13 @@ export const EmbeddedContentBlock = (props: TypeEmbeddedContentBlockValues) => {
       {dataNotes ? (
         <Accordion title="Data notes and sources" dataStory>
           <div className="mb-12 text-neutral500">
-            <RichText html={dataNotes} />
+            <RichText
+              html={dataNotes}
+              components={{
+                ...richTextComponents,
+                ...EMBEDDED_RICH_TEXT_COMPONENTS
+              }}
+            />
           </div>
         </Accordion>
       ) : null}

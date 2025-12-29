@@ -1,5 +1,5 @@
 import { BodyText, HeadingMd, HeadingSm, IconInfo } from '@/design-system'
-import { RichText } from './RichText'
+import { RichText, EMBEDDED_RICH_TEXT_COMPONENTS } from './RichText'
 import type { HTMLComponentMap } from './wagtail'
 
 // TODO: richTextComponents can go away once
@@ -10,13 +10,6 @@ import type { HTMLComponentMap } from './wagtail'
 type CalloutProps = {
   html: string
   richTextComponents?: HTMLComponentMap
-}
-
-const CALLOUT_RICHTEXT: HTMLComponentMap = {
-  h3: (props) => (
-    <HeadingMd as="h3" className="mt-40 mb-20 first-of-type:mt-0" {...props} />
-  ),
-  h4: (props) => <HeadingSm as="h4" className="first-of-type:mt-0" {...props} />
 }
 
 export const Callout = ({ html, richTextComponents }: CalloutProps) => (
@@ -31,7 +24,10 @@ export const Callout = ({ html, richTextComponents }: CalloutProps) => (
       {richTextComponents ? (
         <RichText
           html={html}
-          components={{ ...richTextComponents, ...CALLOUT_RICHTEXT }}
+          components={{
+            ...richTextComponents,
+            ...EMBEDDED_RICH_TEXT_COMPONENTS
+          }}
         />
       ) : (
         <RichText html={html} />

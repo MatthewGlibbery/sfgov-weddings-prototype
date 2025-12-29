@@ -3,8 +3,6 @@ import {
   Container,
   DisplayLg,
   Grid,
-  HeadingMd,
-  HeadingSm,
   HeadingXlSans,
   HeadingXXl,
   IconAccessibility,
@@ -18,6 +16,7 @@ import {
   Alert,
   ContactFooter,
   ContentTileList,
+  EMBEDDED_RICH_TEXT_COMPONENTS,
   ImageCard,
   ITERATIVE_RICH_TEXT_COMPONENTS,
   Map,
@@ -232,20 +231,7 @@ export function LocationPage({ page, env }: LocationPageProps) {
                       html={accordion.value.text}
                       components={{
                         ...ITERATIVE_RICH_TEXT_COMPONENTS,
-                        h3: (props) => (
-                          <HeadingMd
-                            as="h3"
-                            className="mt-40 mb-20 first-of-type:mt-0"
-                            {...props}
-                          />
-                        ),
-                        h4: (props) => (
-                          <HeadingSm
-                            as="h4"
-                            className="first-of-type:mt-0"
-                            {...props}
-                          />
-                        )
+                        ...EMBEDDED_RICH_TEXT_COMPONENTS
                       }}
                     />
                   </Accordion>

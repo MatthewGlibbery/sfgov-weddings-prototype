@@ -17,6 +17,7 @@ import {
   DataStoryTileList,
   DocumentSectionBlock,
   EmbeddedContentBlock,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   PageLink,
   PageLinksList,
   PageWrapper,
@@ -42,7 +43,6 @@ export const ResourceCollectionPage: ComponentType<{
 
   const { t } = useTranslation()
   const filteredTopics = topics.filter((item) => item?.value?.live)
-
   return (
     <PageWrapper title={title} meta={{ ...page.meta, description }}>
       <Container className="flex flex-col gap-y-60">
@@ -77,15 +77,23 @@ export const ResourceCollectionPage: ComponentType<{
         </div>
         <div className="flex flex-col gap-y-20 md:gap-y-40 lg:gap-y-60">
           {dataDashboard.map((item, i) => (
-            <EmbeddedContentBlock {...item.value} key={i} />
+            <EmbeddedContentBlock
+              {...item.value}
+              key={i}
+              richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+            />
           ))}
           {introductoryText.map((item, i) => (
+            // TODO: richTextComponents can go away once
+            // we've finalized the default rich text components
+            // CMS-1226, CMS-1272, CMS-1273, CMS-1274
             <TitleAndText
               {...item.value}
               id={camelCase(item.value.title)}
               key={i}
               heading={HeadingXXl}
               as="h2"
+              richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
             />
           ))}
           {body.map((item, i) => {
@@ -143,6 +151,7 @@ export const ResourceCollectionPage: ComponentType<{
                         key={j}
                         title={documentSection.value.title || ''}
                         content={documentSection.value.content}
+                        richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
                       />
                     ))}
                   </div>
@@ -159,6 +168,7 @@ export const ResourceCollectionPage: ComponentType<{
               heading={HeadingXl}
               headingClasses="font-body"
               as="h2"
+              richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
             />
           ))}
           {agencies.length ? (
