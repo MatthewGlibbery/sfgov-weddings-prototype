@@ -418,7 +418,7 @@ export const FeaturedTopicTile = ({ link }) => (
     )}
   >
     <BaseTile
-      href={link.url}
+      href={getPageURL(link)}
       className={classes(
         'border-b-1 border-solid border-neutral200 pb-20 md:pb-[24px] last:border-b-0 last:pb-0'
       )}
