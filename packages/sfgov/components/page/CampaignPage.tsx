@@ -236,7 +236,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
 
   const LogoComponent = ({ logo }: { logo: WagtailImageData }) => (
     <Image
-      className="max-w-[33%] md:max-w-1/4 object-contain mt-20 xl:mt-0"
+      className="max-w-[33%] md:max-w-1/4 object-contain xl:mt-0"
       imageRef={logo}
     />
   )
@@ -253,7 +253,9 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       <Container
         className={classes(
           'bg-white relative p-20 mx-0',
-          headerImage ? 'top-[100px] xl:top-[250px]' : 'md:px-0'
+          headerImage
+            ? 'top-[100px] xl:top-[250px] md:px-28 xl:px-40 pt-[24px] lg:pt-[32px]'
+            : 'md:px-0'
         )}
       >
         <div className="hidden xl:flex xl:justify-between gap-28">
