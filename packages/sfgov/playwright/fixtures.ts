@@ -5912,56 +5912,6 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveAriaLabelForChineseInLanguageDropDownMenu(page: Page) {
-    const assertionName = 'toHaveAriaLabelForChineseInLanguageDropDownMenu'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      const languageLinkLabel = 'Chinese' // Expected aria-label value
-      const languageLinkLocator = page.locator('header a[aria-label="Chinese"]')
-
-      // Ensure the element is present
-      await baseExpect(await languageLinkLocator.count()).toBeGreaterThan(0)
-
-      // Validate aria-label attribute
-      await baseExpect(
-        await languageLinkLocator.getAttribute('aria-label')
-      ).toBe(languageLinkLabel)
-
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
   async toHaveAltTextInGlobalHeader(page: Page) {
     const assertionName = 'toHaveAltTextInGlobalHeader'
     let pass: boolean
@@ -6755,68 +6705,6 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveTOCLinksRedirectToMainContentArea(page: Page) {
-    const assertionName = 'toHaveTOCLinksRedirectToMainContentArea'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // Get all TOC links
-      const tocLinks = await page.$$eval(
-        'nav[role="navigation"][aria-label="Table of contents"] a[href^="#"]',
-        (links) => links.map((link) => link.getAttribute('href'))
-      )
-
-      // Check each anchor exists within the content section
-      for (const href of tocLinks) {
-        if (!href) continue
-
-        const id = href.substring(1) // remove the '#' to get the ID
-        const elementExists = await page
-          .$eval(
-            `div.flex.flex-col.gap-y-60.col-span-full #${id}`,
-            (el) => !!el
-          )
-          .catch(() => false)
-
-        expect(
-          elementExists,
-          `Anchor ${href} should exist in content section`
-        ).toBe(true)
-      }
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
   async toHaveScreenReaderFriendlyURLInOverviewSectionOnMeetingContentType(
     page: Page
   ) {
@@ -7307,79 +7195,6 @@ export const expect = baseExpect.extend({
           `Missing or incorrect <a lang="${lang}">${text}</a> in footer`
         ).toHaveCount(1)
       }
-
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
-  async toHaveH1headingInModal(page: Page) {
-    const assertionName = 'toHaveH1headingInModal'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      // --- Open the modal with keyboard ---
-      const openModalButton = page.getByRole('button', {
-        name: /did you find what you needed\?/i
-      })
-      await expect(openModalButton).toBeVisible()
-      await expect(openModalButton).toBeEnabled()
-      await openModalButton.focus()
-      await expect(openModalButton).toBeFocused()
-      await page.keyboard.press('Enter')
-
-      // --- The dialog should be visible and focus should be inside it ---
-      const modal = page.getByRole('dialog')
-      await expect(modal).toBeVisible()
-
-      // Ensure focus moved into the modal on open
-      await expect(async () => {
-        const activeInDialog = await modal.evaluate((el) =>
-          el.contains(document.activeElement)
-        )
-        expect(activeInDialog).toBe(true)
-      }).toPass()
-
-      // Locate the h1 heading inside the modal by role and level
-      const heading = modal.getByRole('heading', {
-        level: 1,
-        name: 'Did you find what you needed?'
-      })
-
-      // Assert that it exists and is visible
-      await expect(heading).toBeVisible()
-
-      // Check that it is an <h1> element
-      await expect(heading).toHaveJSProperty('tagName', 'H1')
 
       pass = true
     } catch (e: any) {

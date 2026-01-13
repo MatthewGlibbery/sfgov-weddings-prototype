@@ -1,236 +1,61 @@
+// packages/sfgov/playwright/globalA11yTests.ts
+import React from 'react'
+import { test, expect } from './fixtures'
 import { TransactionPage } from '../components/page/TransactionPage'
 import { TransactionPageFactory } from '@/lib/factories'
-import { test, expect } from './fixtures'
-import React from 'react'
+import { runGlobalA11yTests } from './globalA11yTests'
+import AxeBuilder from '@axe-core/playwright'
 
-test.describe('A11y tests', () => {
-  // Required Global Tests
+// ============================================================
+// Skip ONLY specific global tests in THIS file (Transaction)
+// - Skip the global duplicate-ids matcher test
+// - Skip the global axe test and then re-run axe with duplicate-id disabled
+// ============================================================
+test.beforeEach(async ({}, testInfo) => {
+  if (testInfo.title === 'validate that all ids are unique') {
+    test.skip(true, 'Transaction page currently has known duplicate IDs.')
+  }
 
-  test('has accessible landmarks', async ({ mount, page }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
+  if (testInfo.title === 'validate axe core accessibility tests') {
+    test.skip(
+      true,
+      'Transaction page uses custom axe config: disable duplicate-id rule only.'
+    )
+  }
+})
 
-    await expect(page).toHaveLandmarks()
-  })
+// ============================================================
+// Run all shared global accessibility tests
+// (Everything runs EXCEPT the 2 titles skipped above.)
+// ============================================================
+runGlobalA11yTests(TransactionPage, TransactionPageFactory)
 
-  test('has accessible landmark roles', async ({ mount, page }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
+// ============================================================
+// Transaction-only override for axe-core:
+// Run ALL axe rules EXCEPT `duplicate-id`
+// ============================================================
+test('validate axe core accessibility tests (transaction override)', async ({
+  mount,
+  page
+}) => {
+  const data = TransactionPageFactory.make()
+  await mount(<TransactionPage page={data} />)
 
-    await expect(page).toHaveLandmarkRoles()
-  })
+  const results = await new AxeBuilder({ page })
+    .disableRules(['duplicate-id'])
+    .analyze()
 
-  test.skip('has search landmark', async ({ mount, page }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
+  // Extra safety: ensures we're not accidentally ignoring other violations
+  expect(
+    results.violations,
+    JSON.stringify(results.violations, null, 2)
+  ).toEqual([])
+})
 
-    await expect(page).toHaveSearchLandmark()
-  })
-
-  test('has language interaction', async ({ mount, page }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveLanguageInteraction()
-  })
-
-  test('has language access in dropdown menu', async ({ mount, page }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveLanguageAccessInDropdownmenu()
-  })
-
-  test('is keyboard accessible', async ({ mount, page }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toBeKeyboardFocusIndicatorAccessible()
-  })
-
-  test.skip('does keyboard focus indicator have sufficient color contrast', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).keyboardFocusIndicatorToHaveColorContrast()
-  })
-
-  test('do links have descriptive aria label text', async ({ mount, page }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveDescriptiveLinkText()
-  })
-
-  test('all links have keyboard focus', async ({ mount, page }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveKeyboardFocusInLinks()
-  })
-
-  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
-  })
-
-  test.skip('Validates a logical reading order in the global footer', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveLogicalReadingOrderInFooter()
-  })
-
-  test.skip('Validates the correct aria label attribute for search button', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveAriaLabelInSearchSubmitButton()
-  })
-
-  test.skip('Validates the correct aria label attributes for social media links', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveAriaLabelsInSocialMediaLinks()
-  })
-
-  test.skip('Validates that the Chinese option in the language dropdown includes a “Chinese” aria-label', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveAriaLabelForChineseInLanguageDropDownMenu()
-  })
-
-  test.skip('Validates the correct alt text for the logo in the global header', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveAltTextInGlobalHeader()
-  })
-
-  test.skip('Validates the correct alt text for the logo in the global footer', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveAltTextInGlobalFooter()
-  })
-
-  test('Validates that invalid ARIA attributes are not present', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toNotHaveInvalidAriaAttribute()
-  })
-
-  test.skip('Validates that no <span> tags are present within list elements', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toNotHaveSpanTagsInListElements()
-  })
-
-  test('Validates that all iframe elements include a title attribute', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveTitleAttributeIniFrameElements()
-  })
-
-  test.skip('Validates that all link tags include an href attribute and link text', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveNoEmptyLinkTags()
-  })
-
-  test('Validates that all button elements include descriptive link text', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveDescriptiveLinkTextforButtons()
-  })
-
-  test.skip('validate search autocomplete features', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveSearchAutoComplete()
-  })
-
-  test.skip('validate that all ids are unique', async ({ mount, page }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toNotHaveDuplicateIds()
-  })
-
-  test('validate that lang attributes are present in header and footer', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toHaveLangAttributes()
-  })
-
-  test.skip('validate axe core accessibility tests', async ({
-    mount,
-    page
-  }) => {
-    const data = TransactionPageFactory.make()
-    await mount(<TransactionPage page={data} />)
-
-    await expect(page).toPassAxeCoreTests()
-  })
-
-  // Content Type Specific Tests
-
+// ============================================================
+// Content Type Specific Tests
+// ============================================================
+test.describe('Transaction Page – Content Type Specific A11y Tests', () => {
   test.skip('logical reading order in accordion on transaction content type', async ({
     mount,
     page
@@ -252,9 +77,11 @@ test.describe('A11y tests', () => {
 
     await expect(page).toCreateLogicalTabOrderOnTransactionContentType()
   })
-
-  // Module Specific Tests
-
+})
+// ============================================================
+// Module Specific Tests
+// ============================================================
+test.describe('Transaction Page – Module Specific A11y Tests', () => {
   test('logical reading order in the get help section', async ({
     mount,
     page
