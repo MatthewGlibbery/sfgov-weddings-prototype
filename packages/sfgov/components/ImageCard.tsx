@@ -10,10 +10,7 @@ type ImageCardProps = {
 export const ImageCard = ({ item }: { item: ImageCardProps }) => (
   <PageLink className="no-underline" page={item}>
     {item?.value?.image ? (
-      <Image
-        className="mb-20 aspect-[12/7]"
-        imageRef={item?.value.image || 0}
-      />
+      <Image className="mb-20 aspect-[12/7]" imageRef={item?.value.image} />
     ) : null}
     <HeadingLg>{item?.value?.title}</HeadingLg>
   </PageLink>

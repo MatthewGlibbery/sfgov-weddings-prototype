@@ -19,7 +19,7 @@ import logo from '../public/static/CCSF-seal-vector.svg'
 import type { TypeHeaderData } from '@/lib/utils'
 import { getHeaderData, getHeaderLinks } from '@/lib/utils'
 import { SearchForm, SearchInput } from './Search'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Dropdown } from './Dropdown'
 import { HeaderNavAccordion } from './Accordion'
 
@@ -286,28 +286,6 @@ export const SiteHeader = (props: SiteHeaderProps) => {
   const [isOpen, setOpen] = useState(false)
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false)
 
-  if (typeof window !== 'undefined') {
-    // Get all header details elements on the page
-    const allHeaderDetails = document.querySelectorAll('header details')
-
-    document.addEventListener('click', (event) => {
-      allHeaderDetails.forEach((detailsElement) => {
-        // Check if the details element is currently open
-        if (detailsElement.hasAttribute('open')) {
-          // Check if the clicked element is outside the current details element
-          /* istanbul ignore next */
-          if (
-            (!detailsElement.contains(event.target) &&
-              event.target !== detailsElement) ||
-            event.target.tagName.toLowerCase() === 'a'
-          ) {
-            detailsElement.removeAttribute('open')
-          }
-        }
-      })
-    })
-  }
-
   const ClosedIcon = () => (
     <IconSearch
       width="24"
@@ -325,6 +303,27 @@ export const SiteHeader = (props: SiteHeaderProps) => {
     />
   )
   const ToggleIcon = isOpen ? OpenedIcon : ClosedIcon
+
+  useEffect(() => {
+    // Get all header details elements on the page
+    const allHeaderDetails = document.querySelectorAll('header details')
+
+    document.addEventListener('click', (event) => {
+      allHeaderDetails.forEach((detailsElement) => {
+        // Check if the details element is currently open
+        if (detailsElement.hasAttribute('open')) {
+          // Check if the clicked element is outside the current details element
+          if (
+            (!detailsElement.contains(event.target) &&
+              event.target !== detailsElement) ||
+            event.target.tagName.toLowerCase() === 'a'
+          ) {
+            detailsElement.removeAttribute('open')
+          }
+        }
+      })
+    })
+  }, [])
 
   return (
     <header

@@ -5,9 +5,9 @@ import {
   waitFor,
   within
 } from '@testing-library/react'
-import { act } from 'react-dom/test-utils'
 import { SiteHeader } from './SiteHeader'
 import { useSearchParams } from '@/__mocks__/next/navigation'
+import { userEvent } from '@testing-library/user-event'
 
 describe('SiteHeader', () => {
   const previewText = /You are previewing a draft/
@@ -46,7 +46,7 @@ describe('SiteHeader', () => {
     ).toBeInTheDocument()
   })
 
-  it.only('toggles nav menu open and closed', async () => {
+  it('toggles nav menu open and closed', async () => {
     render(<SiteHeader />)
 
     const summary = screen.getAllByTestId('navigation-title')[0]
@@ -77,21 +77,28 @@ describe('SiteHeader', () => {
 
   it('keeps menu open when clicked inside of it', async () => {
     render(<SiteHeader />)
-
     const summary = screen.getAllByTestId('navigation-title')[0]
-    await fireEvent.click(summary)
     const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    await fireEvent.click(summary)
+    await waitFor(() => {
+      expect(details).toHaveAttribute('open')
+    })
     await fireEvent.click(details)
+    await waitFor(() => {
+      expect(details).toHaveAttribute('open')
+    })
   })
 
   it('closes menu when clicking a link inside of it', async () => {
     render(<SiteHeader />)
     const summary = screen.getAllByTestId('navigation-title')[0]
-    await fireEvent.click(summary)
+    await userEvent.click(summary)
     const details = screen.getAllByRole('group', { name: 'navigation' })[0]
-    const link = within(details).getByRole('link')
+    const link = within(details).getAllByRole('link')[0]
     await fireEvent.click(link)
-    expect(details).not.toHaveAttribute('open')
+    await waitFor(() => {
+      expect(details).not.toHaveAttribute('open')
+    })
   })
 
   it('closes menu when clicked outside of it', async () => {
@@ -100,7 +107,21 @@ describe('SiteHeader', () => {
     const details = screen.getAllByRole('group', { name: 'navigation' })[0]
     await fireEvent.click(summary)
     expect(details).toHaveAttribute('open')
-    await fireEvent.click(document.body)
-    expect(details).not.toHaveAttribute('open')
+    await fireEvent.click(screen.getByRole('banner'))
+    await waitFor(() => {
+      expect(details).not.toHaveAttribute('open')
+    })
+  })
+
+  it('closes menu when a link outside is clicked', async () => {
+    render(<SiteHeader />)
+    const summary = screen.getAllByTestId('navigation-title')[0]
+    const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    await fireEvent.click(summary)
+    expect(details).toHaveAttribute('open')
+    await fireEvent.click(screen.getAllByRole('link')[0])
+    await waitFor(() => {
+      expect(details).not.toHaveAttribute('open')
+    })
   })
 })

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { LanguageSelector, localeNames } from './LanguageSelector'
 import { useRouter } from 'next/router'
 import type { MockedRouter } from '__mocks__/next/router'
@@ -61,10 +61,10 @@ describe('LanguageSelector', () => {
   it('closes the list when escape key is pressed', async () => {
     render(<LanguageSelector />)
     const details = screen.getByRole('group', { name: 'language selector' })
-
-    await userEvent.tab()
-    await userEvent.keyboard('{Escape}')
-
+    const summary = screen.getByTestId('language-menu-title')
+    await userEvent.click(summary)
+    expect(details).toHaveAttribute('open')
+    fireEvent.keyDown(summary, { key: 'Escape', code: 'Escape' })
     expect(details).not.toHaveAttribute('open')
   })
 })

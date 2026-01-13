@@ -2,7 +2,8 @@ import {
   PhoneNumberFactory,
   EmailBlockFactory,
   SocialMediaFactory,
-  TitleAndTextFactory
+  TitleAndTextFactory,
+  LocationBlockFactory
 } from '@/lib/factories'
 import { render, screen } from '@testing-library/react'
 import { ContactFooter } from './ContactFooter'
@@ -13,17 +14,15 @@ describe('ContactFooter', () => {
       {
         type: 'contact',
         value: {
-          address: [],
-          phone: [PhoneNumberFactory.make()],
+          address: [LocationBlockFactory.make()],
+          phone: [],
           email: [EmailBlockFactory.make()],
           social_media_other: [SocialMediaFactory.make()]
         }
       }
     ]
     render(<ContactFooter items={contact[0]} />)
-    expect(
-      screen.getByText(contact[0].value.phone[0].value.owner)
-    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'facebook' })).toBeInTheDocument()
   })
 
   it('renders a contact footer with additional info', () => {
@@ -42,5 +41,10 @@ describe('ContactFooter', () => {
     expect(
       screen.getByText(contact[0].value.phone[0].value.owner)
     ).toBeInTheDocument()
+  })
+
+  it('renders a contact footer with something something', () => {
+    const contact = [{ type: 'not-contact-type', value: 'blah' }]
+    render(<ContactFooter items={contact} />)
   })
 })

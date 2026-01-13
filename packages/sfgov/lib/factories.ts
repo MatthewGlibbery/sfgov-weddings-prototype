@@ -1238,7 +1238,7 @@ export const CallToActionFactory = factory<TypeCallToActionBlock>((gen) => ({
   type: 'call_to_action',
   value: {
     title: gen.commerce.productName(),
-    description: '',
+    description: gen.lorem.sentence(),
     button_link: AriaButtonLinkFactory.make()
   }
 }))
@@ -1500,6 +1500,7 @@ export const AgendaItemBlockFactory = factory<TypeAgendaItemBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'agenda_item',
   value: {
+    id: gen.datatype.uuid(),
     index: 0,
     title_and_text: {
       title: 'Agenda title and text 1 title',

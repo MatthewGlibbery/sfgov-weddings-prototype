@@ -35,6 +35,13 @@ describe('<Image>', () => {
     expect(img).toHaveAttribute('alt', data.alt_text)
   })
 
+  it('renders an <img> with fallback dimensions', async () => {
+    const data = ImageFactory.make({
+      original: { width: undefined, height: undefined }
+    })
+    render(<Image imageRef={data} />)
+  })
+
   it('renders an <img> with alt text an empty string if none provided', async () => {
     const noAltTextData = ImageFactory.make({
       title: 'title',

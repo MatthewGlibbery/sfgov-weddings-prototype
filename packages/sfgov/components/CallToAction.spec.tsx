@@ -72,4 +72,20 @@ describe('<CallToAction />', () => {
 
     expect(link).toBeInTheDocument()
   })
+
+  it('does not render a title if a title is not present', () => {
+    const { value: cta } = CallToActionFactory.make({
+      value: { title: undefined }
+    })
+    render(<CallToAction {...cta} />)
+    expect(screen.queryByRole('heading', { level: 3 })).not.toBeInTheDocument()
+  })
+
+  it('does not render a description if a description is not present', () => {
+    const { value: cta } = CallToActionFactory.make({
+      value: { description: undefined }
+    })
+    render(<CallToAction {...cta} />)
+    expect(screen.queryByTestId('cta-description')).not.toBeInTheDocument()
+  })
 })

@@ -156,6 +156,7 @@ export type TypeTileBlockValues = MinimalPageData & {
   date_time?: TypeDateTimeBlock[]
   cancelled?: boolean
   publishedDate?: TypeDateTimeBlock
+  news_type?: string
 }
 
 export type TypeTileBlock<T extends string = string> = BlockType<
@@ -191,6 +192,8 @@ export type TypeDocumentBlockValues = {
   file: string
   description?: string
   published_date?: string
+  publishedDate?: string
+  url?: string
   collection?: number
 }
 
@@ -356,7 +359,7 @@ export type TypeAgendaItemBlockValues = {
   id: string
   index: number
   title_and_text: TypeTitleAndTextValues
-  documents: [] // TODO: expand this when documents are fully serialized
+  documents: TypeDocumentBlock[]
 }
 
 export type TypeAgendaItemBlock = BlockType<
@@ -379,7 +382,7 @@ export type TypeVideoBlockValues = {
 export type TypeVideoBlock = BlockType<'video', TypeVideoBlockValues>
 
 export type TypeDownloadableFilesBlockValues = {
-  title: string
+  title?: string
   documents: TypeDocumentBlock[]
 }
 
