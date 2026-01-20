@@ -531,7 +531,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   meta: PageMetaFactory.make({
     type: AGENCY_PAGE_TYPE
   }),
-  title: 'This is an agency',
+  title: gen.lorem.words(3),
   description: 'description',
   logo: ImageFactory.make(),
   main_image: ImageFactory.make(),
@@ -853,8 +853,11 @@ export const TileValueFactory = factory((gen) => ({
 
 export const NewsTileFactory = factory<TypeNewsTileBlock>((gen) => ({
   id: gen.datatype.uuid(),
-  type: 'news',
-  value: TileValueFactory.make()
+  news_type: 'news',
+  title: gen.commerce.productName(),
+  value: TileValueFactory.make(),
+  image: ImageBlockFactory.make(),
+  date: DateTimeBlockFactory.make()
 }))
 
 export const GenericTileFactory = factory<TypeContentTileBlock>((gen) => ({
