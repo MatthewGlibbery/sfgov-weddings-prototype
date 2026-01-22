@@ -1,7 +1,7 @@
-import type { GetServerSidePropsContext } from 'next'
 import { getenv, getPublicEnv } from '@/lib/env'
 import { withServerSideTranslations } from '@/lib/translations'
-import AgencyEventsListingPage from '@/components/page/AgencyEventsListingPage'
+import type { GetServerSidePropsContext } from 'next'
+import CityEventsListingPage from '@/components/page/CityEventsListingPage'
 
 export const getServerSideProps = withServerSideTranslations(
   async ({ params, locale, query }: GetServerSidePropsContext) => {
@@ -10,8 +10,8 @@ export const getServerSideProps = withServerSideTranslations(
     url.pathname += 'api/related-events/'
     url.searchParams.set('list', String(filter))
     url.searchParams.set('locale', String(locale))
-    url.searchParams.set('path', String(path))
     url.searchParams.set('page', String(query?.page || 1))
+    url.searchParams.set('groupby', 'date')
     try {
       const res = await fetch(url.href)
       const data = await res.json()
@@ -31,4 +31,4 @@ export const getServerSideProps = withServerSideTranslations(
   }
 )
 
-export default AgencyEventsListingPage
+export default CityEventsListingPage
