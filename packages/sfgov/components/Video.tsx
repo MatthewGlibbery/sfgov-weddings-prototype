@@ -5,13 +5,17 @@ import {
   IconTranscript,
   Link
 } from '@/design-system'
-import { TypeVideoBlockValues } from '@/types'
+import type { TypeVideoBlockValues } from '@/types'
 import { RichText } from './RichText'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
+import type { HTMLComponentMap } from './wagtail'
 
-export const Video = (props: TypeVideoBlockValues) => {
+export const Video = ({
+  richTextComponents,
+  ...props
+}: TypeVideoBlockValues & { richTextComponents?: HTMLComponentMap }) => {
   const { title, description, video_type: video, showTitle = true } = props
   const showTrancscriptRef = useRef<HTMLAnchorElement | null>(null)
   const transcriptRef = useRef<HTMLAnchorElement | null>(null)
@@ -119,7 +123,10 @@ export const Video = (props: TypeVideoBlockValues) => {
             className="md:max-w-2/3 lg:basis-1/3 max-h-[200px] overflow-y-scroll lg:max-h-[375px]"
             ref={transcriptRef}
           >
-            <RichText html={videoInfo.video_transcript} />
+            <RichText
+              html={videoInfo.video_transcript}
+              components={richTextComponents}
+            />
           </div>
         ) : null}
       </div>
@@ -131,7 +138,9 @@ export const Video = (props: TypeVideoBlockValues) => {
   return (
     <div className="space-y-28">
       {showTitle ? <HeadingXXl as="p">{title}</HeadingXXl> : null}
-      <RichText html={description} />
+      <div>
+        <RichText html={description} components={richTextComponents} />
+      </div>
       {block}
     </div>
   )

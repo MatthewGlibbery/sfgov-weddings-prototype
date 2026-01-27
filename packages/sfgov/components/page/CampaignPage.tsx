@@ -9,12 +9,13 @@ import type {
 import type { ComponentType } from 'react'
 import type { HTMLComponentMap } from '../wagtail'
 import {
-  classed,
   classes,
   Container,
   DisplayXXXl,
   Grid,
   HeadingLg,
+  HeadingMd,
+  HeadingSm,
   HeadingXXl,
   Link,
   PageLabel,
@@ -26,7 +27,6 @@ import {
   Accordion,
   ContactFooter,
   ContentTileList,
-  RICH_TEXT_DEFAULT_COMPONENTS,
   DownloadableFilesSection,
   Image,
   Location,
@@ -38,9 +38,15 @@ import {
   Spotlight,
   TileContentSection,
   TitleAndText,
-  Video
+  Video,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
+  EMBEDDED_RICH_TEXT_COMPONENTS
 } from '..'
 
+// TODO:
+// Remove usage of ITERATIVE_RICH_TEXT_COMPONENTS
+// when spacing rules have been finalized
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274, CMS-1304
 export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
   page
 }) => {
@@ -105,14 +111,21 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
       break
   }
 
-  const richTextComponents: HTMLComponentMap = {
-    h3: classed(
-      RICH_TEXT_DEFAULT_COMPONENTS.h3,
-      themeText.imageWithTextHeading
+  const themeBlackRichTextComponents: HTMLComponentMap = {
+    ...ITERATIVE_RICH_TEXT_COMPONENTS,
+    h3: (props) => (
+      <HeadingMd
+        as="h3"
+        {...props}
+        className={`mt-40 mb-20 ${themeText.imageWithTextHeading}`}
+      />
     ),
-    h4: classed(
-      RICH_TEXT_DEFAULT_COMPONENTS.h4,
-      themeText.imageWithTextHeading
+    h4: (props) => (
+      <HeadingSm
+        as="h4"
+        {...props}
+        className={`mt-28 ${themeText.imageWithTextHeading}`}
+      />
     ),
     a: (props) => (
       <Link
@@ -150,23 +163,23 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                 as="h2"
                 headingClasses={themeText.imageWithTextHeading}
                 text={content.value.description}
-                richTextComponents={richTextComponents}
+                richTextComponents={themeBlackRichTextComponents}
               />
             </div>
           </div>
         )
       case 'resources': {
-        const resourceSections = content.value.resource_sections.map(
+        const resourceSections = content?.value?.resource_sections?.map(
           (resourceSection) => {
             const TileList = (
               <ContentTileList
-                links={resourceSection.value.resource_sections.resources}
+                links={resourceSection.value.resource_sections?.resources}
               />
             )
             return (
               <TileContentSection
                 key={resourceSection.id}
-                title={resourceSection.value.resource_sections.title}
+                title={resourceSection.value.resource_sections?.title}
                 tileList={TileList}
               />
             )
@@ -196,7 +209,12 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
               <HeadingXXl as="h2">{content.value.title}</HeadingXXl>
             ) : null}
             {content.value.accordion_sidebar ? (
-              <RichText html={content.value.accordion_sidebar} />
+              <div>
+                <RichText
+                  html={content.value.accordion_sidebar}
+                  components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                />
+              </div>
             ) : null}
             {content.value.accordion_items.map((item) => (
               <Accordion
@@ -207,7 +225,15 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                 {item.value.body.map((content) => {
                   switch (content.type) {
                     case 'text':
-                      return <RichText html={content.value} />
+                      return (
+                        <RichText
+                          html={content.value}
+                          components={{
+                            ...ITERATIVE_RICH_TEXT_COMPONENTS,
+                            ...EMBEDDED_RICH_TEXT_COMPONENTS
+                          }}
+                        />
+                      )
                     case 'address':
                       return <Location {...content.value} />
                     case 'phone_number':
@@ -228,7 +254,10 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
               'py-40 px-20 md:px-28 lg:px-40 mb-20 max-w-xl lg:mx-auto'
             )}
           >
-            <Video {...content.value} />
+            <Video
+              {...content.value}
+              richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+            />
           </div>
         )
     }
@@ -321,6 +350,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                         heading={HeadingLg}
                         title={titleAndText.title}
                         text={titleAndText.text}
+                        richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
                       />
                     ) : null}
                   </div>
@@ -350,7 +380,10 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
               <HeadingXXl as="h2" className="mb-[20px]">
                 {t('about', { defaultValue: 'About' })}
               </HeadingXXl>
-              <RichText html={about} />
+              <RichText
+                html={about}
+                components={ITERATIVE_RICH_TEXT_COMPONENTS}
+              />
             </div>
           ) : null}
           <RelatedContentList
@@ -385,7 +418,10 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                   defaultValue: 'Contact information'
                 })}
               </HeadingXXl>
-              <ContactFooter items={contact[0]} />
+              <ContactFooter
+                items={contact[0]}
+                richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+              />
             </div>
           ) : null}
         </Container>

@@ -40,8 +40,8 @@ export const RICH_TEXT_DEFAULT_COMPONENTS = {
 // TODO: we are going to eventually use these definitions for
 // the default rich text components above.  iteratively applying it
 // on specific content types for now:
-// CMS-1226, CMS-1272, CMS-1273, CMS-1274
-export const ITERATIVE_RICH_TEXT_COMPONENTS: HTMLComponentMap = {
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274, CMS-1304
+export const ITERATIVE_RICH_TEXT_COMPONENTS = {
   h2: ({
     'data-block-key': blockKey,
     ...rest
@@ -83,7 +83,7 @@ export const ITERATIVE_RICH_TEXT_COMPONENTS: HTMLComponentMap = {
     return <Image {...rest} className="mb-20" />
   },
   blockquote: classed(RICH_TEXT_DEFAULT_COMPONENTS.blockquote, 'mb-20')
-}
+} as const satisfies HTMLComponentMap
 
 export const EMBEDDED_RICH_TEXT_COMPONENTS: HTMLComponentMap = {
   h3: (props) => (
