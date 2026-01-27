@@ -3,17 +3,24 @@ on:
   pull_request:
     types:
       - closed
-    branches-ignore:
-      - main
-      - develop
-      - training
 
 jobs:
-  trigger-circleci:
+  on-pr-closed:
     runs-on: ubuntu-latest
+    container:
+      image: continuumio/miniconda3
     steps:
-      - name: CircleCI Trigger on Pull Request closed
-        id: gha_aws_teardown_qa
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
-        env:
-          CCI_TOKEN: ${{ secrets.QA_SITE_NEXT_TOKEN }}
+      - name: install ansible tower cli
+        run: |
+          if [ "${{ vars.QA_TEARDOWN_JOB_ID }}" != "" ]; then
+            apt-get update && apt-get install -y vim
+            pip install --root-user-action=ignore ansible-tower-cli
+          fi
+      - name: teardown qa site instance via tower-cli
+        run: |
+          if [ "${{ vars.QA_TEARDOWN_JOB_ID }}" != "" ]; then
+            export TOWER_HOST=${{ vars.AWX_HOST }}
+            export TOWER_OAUTH_TOKEN=${{ secrets.AWX_ACCESS_TOKEN }}
+            export TOWER_VERBOSE=true
+            tower-cli job launch --job-template=${{ vars.QA_TEARDOWN_JOB_ID }} --extra-vars="prbranch=${{ github.event.number }}" --wait
+          fi
