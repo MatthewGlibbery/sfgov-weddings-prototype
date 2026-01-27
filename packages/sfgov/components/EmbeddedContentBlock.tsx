@@ -2,7 +2,7 @@ import type { TypeEmbeddedContentBlockValues } from '@/types'
 import Link from 'next/link'
 import { Accordion } from './Accordion'
 import { useRef } from 'react'
-import { EMBEDDED_RICH_TEXT_COMPONENTS, RichText } from './RichText'
+import { RichText } from './RichText'
 import { useTranslation } from 'next-i18next'
 import { IconAccessibility } from '@/design-system'
 import type { HTMLComponentMap } from './wagtail'
@@ -112,13 +112,7 @@ export const EmbeddedContentBlock = (
       {dataNotes ? (
         <Accordion title="Data notes and sources" dataStory>
           <div className="mb-12 text-neutral500">
-            <RichText
-              html={dataNotes}
-              components={{
-                ...richTextComponents,
-                ...EMBEDDED_RICH_TEXT_COMPONENTS
-              }}
-            />
+            <RichText html={dataNotes} components={richTextComponents} />
           </div>
         </Accordion>
       ) : null}

@@ -20,6 +20,7 @@ import {
   ComposedDate,
   ComposedTime,
   DownloadableFilesSection,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   Location,
   OnlineEventBlock,
   PageLink,
@@ -29,6 +30,10 @@ import {
   Video
 } from '..'
 
+// TODO:
+// Remove usage of ITERATIVE_RICH_TEXT_COMPONENTS
+// when spacing rules have been finalized
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274, CMS-1304, CMS-1305
 export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   page
 }) => {
@@ -58,7 +63,12 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           >
             {t('overview', { defaultValue: 'Overview' })}
           </HeadingXXl>
-          <RichText html={overview} />
+          <div>
+            <RichText
+              html={overview}
+              components={ITERATIVE_RICH_TEXT_COMPONENTS}
+            />
+          </div>
         </>
       ) : null}
       {agenda.length ? (
@@ -74,6 +84,7 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                 index={i}
                 title_and_text={item.value?.title_and_text}
                 documents={item.value?.documents}
+                richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
               />
             ))}
           </div>
@@ -98,7 +109,11 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
                 {t('video-recording', { defaultValue: 'Video recording' })}
               </HeadingXl>
 
-              <Video {...videos[0]?.value} showTitle={false} />
+              <Video
+                {...videos[0]?.value}
+                showTitle={false}
+                richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+              />
             </div>
           ) : null}
           {relatedDocuments.length ? (
@@ -135,7 +150,10 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
           </HeadingXXl>
           {notices.map((notice) => (
             <Accordion key={notice.id} title={notice.value.title}>
-              <RichText html={notice.value.text} />
+              <RichText
+                html={notice.value.text}
+                components={ITERATIVE_RICH_TEXT_COMPONENTS}
+              />
             </Accordion>
           ))}
         </div>

@@ -50,7 +50,7 @@ export const ITERATIVE_RICH_TEXT_COMPONENTS = {
       as="h2"
       id={getTocId(blockKey)}
       {...rest}
-      className="mt-40 mb-20"
+      className="mt-40 mb-20 first-of-type:mt-0"
     />
   ),
   h3: ({
@@ -61,10 +61,12 @@ export const ITERATIVE_RICH_TEXT_COMPONENTS = {
       as="h3"
       id={getTocId(blockKey)}
       {...rest}
-      className="mt-40 mb-20"
+      className="mt-40 mb-20 first-of-type:mt-0"
     />
   ),
-  h4: (props) => <HeadingSm as="h4" {...props} className="mt-28" />,
+  h4: (props) => (
+    <HeadingSm as="h4" {...props} className="mt-28 mb-20 first-of-type:mt-0" />
+  ),
   p: classed('p', 'mb-20'),
   ul: classed('ul', 'mb-20'),
   ol: classed('ol', 'mb-20'),

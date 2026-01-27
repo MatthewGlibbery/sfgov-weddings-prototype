@@ -1,5 +1,5 @@
-import { BodyText, HeadingMd, HeadingSm, IconInfo } from '@/design-system'
-import { RichText, EMBEDDED_RICH_TEXT_COMPONENTS } from './RichText'
+import { BodyText, IconInfo } from '@/design-system'
+import { RichText } from './RichText'
 import type { HTMLComponentMap } from './wagtail'
 
 // TODO: richTextComponents can go away once
@@ -22,13 +22,7 @@ export const Callout = ({ html, richTextComponents }: CalloutProps) => (
     />
     <BodyText>
       {richTextComponents ? (
-        <RichText
-          html={html}
-          components={{
-            ...richTextComponents,
-            ...EMBEDDED_RICH_TEXT_COMPONENTS
-          }}
-        />
+        <RichText html={html} components={richTextComponents} />
       ) : (
         <RichText html={html} />
       )}

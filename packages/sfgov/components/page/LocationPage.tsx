@@ -16,7 +16,6 @@ import {
   Alert,
   ContactFooter,
   ContentTileList,
-  EMBEDDED_RICH_TEXT_COMPONENTS,
   ImageCard,
   ITERATIVE_RICH_TEXT_COMPONENTS,
   Map,
@@ -229,10 +228,7 @@ export function LocationPage({ page, env }: LocationPageProps) {
                     */}
                     <RichText
                       html={accordion.value.text}
-                      components={{
-                        ...ITERATIVE_RICH_TEXT_COMPONENTS,
-                        ...EMBEDDED_RICH_TEXT_COMPONENTS
-                      }}
+                      components={ITERATIVE_RICH_TEXT_COMPONENTS}
                     />
                   </Accordion>
                 ))}
