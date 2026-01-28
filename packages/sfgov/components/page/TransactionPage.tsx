@@ -17,6 +17,7 @@ import {
   Accordion,
   ContactFooter,
   CostBlock,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   PageLink,
   PageWrapper,
   RelatedContentList,
@@ -25,6 +26,10 @@ import {
   WhatToDo
 } from '..'
 
+// TODO:
+// Remove usage of ITERATIVE_RICH_TEXT_COMPONENTS
+// when spacing rules have been finalized CMS-1306
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274, CMS-1304, CMS-1305
 export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
   page
 }) => {
@@ -79,7 +84,10 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
                   data-testid={`special-case-${item.id}`}
                   open={i === 0}
                 >
-                  <RichText html={item.value.text} />
+                  <RichText
+                    html={item.value.text}
+                    components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                  />
                 </Accordion>
               ))}
             </div>
@@ -90,6 +98,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
                 {...block.value}
                 id={camelCase(block.value.title) + screen}
                 heading={HeadingXl}
+                richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
               />
             </div>
           ))}
@@ -102,6 +111,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             as="h2"
             heading={HeadingXXl}
             id={camelCase(block.value.title) + screen}
+            richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
           />
         </div>
       ))}
@@ -140,7 +150,10 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
             })}
           </HeadingXXl>
 
-          <ContactFooter items={getHelp} />
+          <ContactFooter
+            items={getHelp}
+            richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+          />
         </div>
       ) : null}
     </span>
@@ -168,6 +181,7 @@ export const TransactionPage: ComponentType<{ page: TransactionPageData }> = ({
               {...thing.value}
               id={camelCase(thing.value.title) + screen}
               heading={HeadingLg}
+              richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
             />
           </div>
         ))}

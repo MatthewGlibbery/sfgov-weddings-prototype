@@ -39,8 +39,7 @@ import {
   TileContentSection,
   TitleAndText,
   Video,
-  ITERATIVE_RICH_TEXT_COMPONENTS,
-  EMBEDDED_RICH_TEXT_COMPONENTS
+  ITERATIVE_RICH_TEXT_COMPONENTS
 } from '..'
 
 // TODO:
@@ -228,10 +227,7 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
                       return (
                         <RichText
                           html={content.value}
-                          components={{
-                            ...ITERATIVE_RICH_TEXT_COMPONENTS,
-                            ...EMBEDDED_RICH_TEXT_COMPONENTS
-                          }}
+                          components={ITERATIVE_RICH_TEXT_COMPONENTS}
                         />
                       )
                     case 'address':

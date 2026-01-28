@@ -3,8 +3,8 @@ import { Callout } from './Callout'
 import { EmailBlock } from './EmailBlock'
 import { Location } from './Location'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
-import { RichText } from './RichText'
-import {
+import { ITERATIVE_RICH_TEXT_COMPONENTS, RichText } from './RichText'
+import type {
   TypeWhatToDoStepBlock,
   TypeStepSpecificsBlock,
   TypeWhatToDoBlock
@@ -24,10 +24,22 @@ const StyledStep = classed('div', {
   }
 })
 
+// TODO: sprinkled in some ITERATIVE_RICH_TEXT_COMPONENTS HERE
+// for CMS-1306 rich text spacing, to be removed later when
+// rich text spacing is finalized.  WhatToDo is only used on
+// Transaction pages, so we can apply directly here without passing
+// it around
+// related: CMS-1226, CMS-1272, CMS-1273, CMS-1274, CMS-1304, CMS-1305
+
 const StepContent = (block: TypeStepSpecificsBlock) => {
   switch (block.type) {
     case 'callout':
-      return <Callout html={block.value} />
+      return (
+        <Callout
+          html={block.value}
+          richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+        />
+      )
     case 'address':
       return <Location {...block.value} />
     case 'email':
@@ -39,7 +51,10 @@ const StepContent = (block: TypeStepSpecificsBlock) => {
     case 'text':
       return (
         <BodyText>
-          <RichText html={block.value} />
+          <RichText
+            html={block.value}
+            components={ITERATIVE_RICH_TEXT_COMPONENTS}
+          />
         </BodyText>
       )
     case 'document':
@@ -82,7 +97,12 @@ export const WhatToDo = ({
 }) => {
   return (
     <div className="flex flex-col gap-y-20" {...rest}>
-      {block.type === 'callout' ? <Callout html={block.value} /> : null}
+      {block.type === 'callout' ? (
+        <Callout
+          html={block.value}
+          richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+        />
+      ) : null}
       {block.type === 'what_to_do_step' ? (
         <WhatToDoStep screen={screen} {...block.value} />
       ) : null}
