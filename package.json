@@ -9,8 +9,6 @@
     "dev": "npm run dev -w @sfgov/next",
     "lint": "npm run lint -w @sfgov/next -w @sfgov/design-system",
     "test": "npm run test -w @sfgov/next -w @sfgov/design-system",
-    "storybook": "npm run storybook -w sfgov-storybook",
-    "build-storybook": "npm run build -w sfgov-storybook",
     "e2e": "npx playwright test -w @sfgov/next",
     "translations-gather": "rm -f locales/en/translation.json 2> /dev/null; npx i18next-parser",
     "translations-upload": "node tools/scripts/translations-upload.mjs",

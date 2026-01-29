@@ -6,7 +6,6 @@
     "dev": "next dev",
     "dev-e2e": "NODE_ENV=test next dev",
     "lint": "eslint . *.js __*",
-    "prebuild": "npm run build -w ../storybook",
     "start": "next start",
     "test": "jest --coverage",
     "test-ct": "playwright test -c playwright-ct.config.ts"
