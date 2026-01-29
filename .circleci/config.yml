@@ -176,9 +176,6 @@ workflows:
           region: 'us-west-1'
           tag: '${CIRCLE_SHA1},latest,${CIRCLE_BRANCH},PR-${CIRCLE_PULL_REQUEST##*/}'
           extra_build_args: --provenance=false
-          filters:
-            branches:
-              only: /^CMS.*/
 
   qa_site_deploy:
     jobs:
