@@ -14,7 +14,10 @@ RUN npm install
 RUN npm run -w @sfgov/next build 
 
 # Expose the port the app will run on  
-EXPOSE 3000  
+EXPOSE 3000 
 
+USER root 
+
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl -f http://localhost:3000/services || exit 1
 # Start the app  
 CMD ["npm", "run", "-w", "@sfgov/next", "start"]
