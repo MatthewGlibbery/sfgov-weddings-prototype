@@ -13,7 +13,9 @@ import {
   DocumentTile,
   DataStoryTile,
   FeaturedTopicTileList,
-  FeaturedTopicTile
+  FeaturedTopicTile,
+  FeaturedServiceTile,
+  FeaturedServiceTileList
 } from './Tile'
 import {
   DocumentValueFactory,
@@ -43,13 +45,13 @@ describe('Tile', () => {
   })
 
   it('renders a NewsTile', () => {
-    render(<NewsTile link={linkValue} />)
-
-    const newsTile = screen.getByRole('link')
-    const title = screen.getByText(linkValue.title)
-
-    expect(newsTile).toBeInTheDocument()
-    expect(newsTile).toContainElement(title)
+    const { value: newsLinkValue } = NewsTileFactory.make({
+      value: { news_type: 'press_release' }
+    })
+    render(<NewsTile link={newsLinkValue} />)
+    expect(screen.getByRole('link')).toBeInTheDocument()
+    expect(screen.getByText(newsLinkValue.title)).toBeInTheDocument()
+    expect(screen.getByText(/Press release/)).toBeInTheDocument()
   })
 
   it('renders a ContentTile (with rich text description)', () => {
@@ -127,27 +129,6 @@ describe('Tile', () => {
     expect(type).toBeInTheDocument()
   })
 
-  it('renders a DocumentTile', () => {
-    const link = DocumentValueFactory.make()
-    // Do this because the "raw" data, which DocumentValueFactory produces is
-    // not how the component expects it to be shaped. It instead expects a similar
-    // object but with the following transformations
-    // published_date --> publishDate
-    // file --> url
-    link.publishedDate = link.published_date
-    link.url = link.file
-
-    render(<DocumentTile link={link} />)
-
-    const docTile = screen.getByRole('link')
-    const title = screen.getByText(link.title)
-    const publishDate = screen.getByRole('time')
-
-    expect(docTile).toBeInTheDocument()
-    expect(docTile).toContainElement(title)
-    expect(publishDate).toBeInTheDocument()
-  })
-
   it('renders a DataStoryTile', () => {
     render(<DataStoryTile link={linkValue} />)
 
@@ -184,6 +165,12 @@ describe('Tile', () => {
     expect(tileSection).toBeInTheDocument()
     expect(within(newsLeft).getAllByTestId('tile')).toHaveLength(3)
     expect(within(newsRight).getAllByTestId('tile')).toHaveLength(3)
+  })
+
+  it('renders a single news item without right column', () => {
+    render(<NewsTileList links={NewsTileFactory.make(1)} />)
+    expect(screen.getByTestId('news-left')).toBeInTheDocument()
+    expect(screen.queryByTestId('news-right')).not.toBeInTheDocument()
   })
 
   it('renders a list of service tiles inside a TileSection', () => {
@@ -261,5 +248,56 @@ describe('Tile', () => {
 
     const tileSection = screen.getByTestId('tile-section')
     expect(tileSection).toBeInTheDocument()
+  })
+
+  it('renders a FeaturedServiceTile', () => {
+    render(<FeaturedServiceTile link={linkValue} />)
+
+    const resouceTile = screen.getByRole('link')
+    const title = screen.getByText(linkValue.title)
+    const description = screen.getByText(linkValue.description)
+
+    expect(resouceTile).toBeInTheDocument()
+    expect(resouceTile).toContainElement(title)
+    expect(description).toBeInTheDocument()
+  })
+
+  it('renders a FeaturedServiceTileList', () => {
+    render(<FeaturedServiceTileList links={GenericTileFactory.make(3)} />)
+
+    const tileSection = screen.getByTestId('tile-section')
+    expect(tileSection).toBeInTheDocument()
+  })
+})
+
+describe('DocumentTile', () => {
+  it('renders a DocumentTile', () => {
+    const link = DocumentValueFactory.make()
+    // Do this because the "raw" data, which DocumentValueFactory produces is
+    // not how the component expects it to be shaped. It instead expects a similar
+    // object but with the following transformations
+    // published_date --> publishDate
+    // file --> url
+    link.publishedDate = link.published_date
+    link.url = link.file
+
+    render(<DocumentTile link={link} />)
+
+    const docTile = screen.getByRole('link')
+    const title = screen.getByText(link.title)
+    const publishDate = screen.getByRole('time')
+
+    expect(docTile).toBeInTheDocument()
+    expect(docTile).toContainElement(title)
+    expect(publishDate).toBeInTheDocument()
+  })
+
+  it('renders a DocumentTile without a description', () => {
+    const link = DocumentValueFactory.make({ description: undefined })
+    link.publishedDate = link.published_date
+    link.url = link.file
+
+    render(<DocumentTile link={link} />)
+    expect(screen.getByRole('link')).toBeInTheDocument()
   })
 })

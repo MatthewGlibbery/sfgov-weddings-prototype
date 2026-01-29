@@ -1,4 +1,5 @@
 import {
+  classed,
   Container,
   HeadingMd,
   HeadingXl,
@@ -51,9 +52,17 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
             <div>
               <RichText
                 html={body}
-                // @ts-expect-error erg
-                components={{ blockquote: PullQuote }}
-                isNews
+                components={{
+                  p: classed('p', 'md:w-[90%] lg:w-3/4 my-28'),
+                  blockquote: ({ children, ...rest }) => (
+                    <>
+                      <PullQuote aria-hidden="true" {...rest}>
+                        {children}
+                      </PullQuote>
+                      <p className="mb-20 lg:mb-0 md:w-1/2">{children}</p>
+                    </>
+                  )
+                }}
               />
             </div>
           </div>

@@ -43,14 +43,14 @@ export const TileSection = classed('div', {
       true: ''
     },
     isHomePage: {
-      true: 'grid grid-cols-1 lg:grid-cols-2 space-y-0 gap-x-28 gap-y-12 lg:gap-y-[32px]'
+      true: 'grid grid-cols-1 lg:grid-cols-2 space-y-0 gap-y-20 lg:gap-[24px]'
     }
   },
   compoundVariants: [
     {
       isContentTile: true,
       isHomePage: true,
-      className: 'block'
+      className: 'lg:grid-cols-1'
     }
   ]
 })
@@ -178,14 +178,10 @@ export const ContentTile = ({
   link,
   icon,
   isQuicklink = false,
-  isHomePage = false,
-  isTopic = false,
   className = ''
 }: TileProps & {
   icon?: ReactElement
   isQuicklink?: boolean
-  isHomePage?: boolean
-  isTopic?: boolean
   className?: string
 }) => {
   const TitleComponent = isQuicklink ? HeadingLg : HeadingMd
@@ -196,8 +192,6 @@ export const ContentTile = ({
         isQuicklink
           ? ''
           : 'border-b-1 border-solid border-neutral200 pb-20 md:pb-[24px] last:border-b-0 last:pb-0',
-        isHomePage ? 'border-b-0 p-12 md:pb-12 last:pb-12' : '',
-        isTopic ? 'p-0' : '',
         className
       )}
     >
@@ -227,8 +221,7 @@ export const ContentTile = ({
           <TitleComponent
             className={classes(
               'm-0 mb-12 text-primary500 group-hover:text-primary800',
-              isQuicklink ? 'group-hover:underline' : 'underline',
-              isHomePage ? 'no-underline' : ''
+              isQuicklink ? 'group-hover:underline' : 'underline'
             )}
           >
             {link.title}
@@ -420,12 +413,88 @@ export const FeaturedTopicTile = ({ link }) => (
   <div
     className={classes(
       'border-solid border-1 border-neutral200',
-      'rounded-4 py-[24px] px-20',
-      'lg:py-[32px] lg:px-40'
+      'rounded-4 p-16 md:p-20',
+      'lg:py-[32px] lg:px-[24px]'
     )}
   >
-    <ContentTile link={link} isHomePage={true} isTopic={true} />
+    <BaseTile
+      href={link.url}
+      className={classes(
+        'border-b-1 border-solid border-neutral200 pb-20 md:pb-[24px] last:border-b-0 last:pb-0'
+      )}
+    >
+      <div className={classes('flex group', 'items-start gap-x-[18px]')}>
+        <IconArrowRight
+          aria-hidden="true"
+          className="order-last mt-2 shrink-0 text-primary500 group-hover:text-primary800"
+          width={20}
+        />
+        <div className="mr-12 space-y-12 grow">
+          <HeadingMd
+            className={classes(
+              'm-0 mb-12 text-primary500 group-hover:text-primary800'
+            )}
+          >
+            {link.title}
+          </HeadingMd>
+          {link.description ? (
+            <div>
+              <RichText html={link.description} />
+            </div>
+          ) : null}
+          {link.publishedDate ? (
+            <div className="text-label-xs text-neutral500">
+              Published{' '}
+              <ComposedDate
+                startDateInput={link.publishedDate}
+                dateStyle={{ month: 'long', day: 'numeric', year: 'numeric' }}
+              />
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </BaseTile>
   </div>
+)
+
+export const FeaturedServiceTile = ({ link }) => (
+  <BaseTile
+    href={link.url}
+    className={classes(
+      'border-b-1 border-solid border-neutral200 pb-16 md:pb-20 lg:pb-[24px] last:border-b-0 last:pb-0'
+    )}
+  >
+    <div className={classes('flex group', 'items-start gap-x-[18px]')}>
+      <IconArrowRight
+        aria-hidden="true"
+        className="order-last mt-2 shrink-0 text-primary500 group-hover:text-primary800"
+        width={20}
+      />
+      <div className="mr-12 space-y-12 grow">
+        <HeadingMd
+          className={classes(
+            'm-0 mb-12 text-primary500 group-hover:text-primary800'
+          )}
+        >
+          {link.title}
+        </HeadingMd>
+        {link.description ? (
+          <div>
+            <RichText html={link.description} />
+          </div>
+        ) : null}
+        {link.publishedDate ? (
+          <div className="text-label-xs text-neutral500">
+            Published{' '}
+            <ComposedDate
+              startDateInput={link.publishedDate}
+              dateStyle={{ month: 'long', day: 'numeric', year: 'numeric' }}
+            />
+          </div>
+        ) : null}
+      </div>
+    </div>
+  </BaseTile>
 )
 
 function createTileList(TileComponent: ComponentType<TileProps>) {
@@ -481,7 +550,8 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
         isContentTile={
           TileComponent === ContentTile ||
           TileComponent === DocumentTile ||
-          TileComponent === DataStoryTile
+          TileComponent === DataStoryTile ||
+          TileComponent === FeaturedServiceTile
         }
         isHomePage={props.isHomePage}
         data-testid="tile-section"
@@ -490,11 +560,7 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
         {items
           .filter((link) => link)
           .map((link) => (
-            <TileComponent
-              key={link.id}
-              link={link}
-              isHomePage={props.isHomePage}
-            />
+            <TileComponent key={link.id} link={link} />
           ))}
       </TileSection>
     )
@@ -504,6 +570,7 @@ function createTileList(TileComponent: ComponentType<TileProps>) {
 export const QuickLinkList = createTileList(QuickLink)
 export const EventTileList = createTileList(EventTile)
 export const ContentTileList = createTileList(ContentTile)
+export const FeaturedServiceTileList = createTileList(FeaturedServiceTile)
 export const FeaturedTopicTileList = createTileList(FeaturedTopicTile)
 export const DataStoryTileList = createTileList(DataStoryTile)
 export const DocumentTileList = createTileList(DocumentTile)

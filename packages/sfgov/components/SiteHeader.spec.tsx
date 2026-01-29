@@ -1,7 +1,13 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { act } from 'react-dom/test-utils'
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within
+} from '@testing-library/react'
 import { SiteHeader } from './SiteHeader'
 import { useSearchParams } from '@/__mocks__/next/navigation'
+import { userEvent } from '@testing-library/user-event'
 
 describe('SiteHeader', () => {
   const previewText = /You are previewing a draft/
@@ -28,11 +34,16 @@ describe('SiteHeader', () => {
     expect(screen.getByText(previewText)).toBeInTheDocument()
   })
 
-  it('renders the smaller screen menu when the menu button is clicked', () => {
+  it('renders the smaller screen menu when the menu button is clicked', async () => {
     render(<SiteHeader />)
     const details = screen.getAllByRole('group', { name: 'navigation' })[0]
     fireEvent.click(details)
-    expect(screen.getAllByRole('list')[1]).toBeVisible()
+    const menuItem = screen.getAllByTestId('header-nav-Services')[0]
+
+    fireEvent.click(menuItem)
+    expect(
+      screen.getAllByText('Get married in San Francisco')[0]
+    ).toBeInTheDocument()
   })
 
   it('toggles nav menu open and closed', async () => {
@@ -41,7 +52,9 @@ describe('SiteHeader', () => {
     const summary = screen.getAllByTestId('navigation-title')[0]
 
     await fireEvent.click(summary)
-    await waitFor(() => expect(screen.getAllByRole('list')[0]).toBeVisible())
+    expect(
+      screen.getAllByText('Get married in San Francisco')[0]
+    ).toBeInTheDocument()
   })
 
   it('toggles language selector open and closed', async () => {
@@ -50,7 +63,7 @@ describe('SiteHeader', () => {
     const summary = screen.getByTestId('language-menu-title')
 
     await fireEvent.click(summary)
-    await waitFor(() => expect(screen.getAllByRole('list')[2]).toBeVisible())
+    await waitFor(() => expect(screen.getAllByRole('list')[0]).toBeVisible())
   })
 
   it('toggles search menu open', async () => {
@@ -59,6 +72,56 @@ describe('SiteHeader', () => {
     const summary = screen.getByTestId('search-menu')
 
     await fireEvent.click(summary)
-    await waitFor(() => expect(screen.getAllByRole('list')[1]).toBeVisible())
+    await waitFor(() => expect(screen.getAllByRole('textbox')[0]).toBeVisible())
+  })
+
+  it('keeps menu open when clicked inside of it', async () => {
+    render(<SiteHeader />)
+    const summary = screen.getAllByTestId('navigation-title')[0]
+    const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    await fireEvent.click(summary)
+    await waitFor(() => {
+      expect(details).toHaveAttribute('open')
+    })
+    await fireEvent.click(details)
+    await waitFor(() => {
+      expect(details).toHaveAttribute('open')
+    })
+  })
+
+  it('closes menu when clicking a link inside of it', async () => {
+    render(<SiteHeader />)
+    const summary = screen.getAllByTestId('navigation-title')[0]
+    await userEvent.click(summary)
+    const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    const link = within(details).getAllByRole('link')[0]
+    await fireEvent.click(link)
+    await waitFor(() => {
+      expect(details).not.toHaveAttribute('open')
+    })
+  })
+
+  it('closes menu when clicked outside of it', async () => {
+    render(<SiteHeader />)
+    const summary = screen.getAllByTestId('navigation-title')[0]
+    const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    await fireEvent.click(summary)
+    expect(details).toHaveAttribute('open')
+    await fireEvent.click(screen.getByRole('banner'))
+    await waitFor(() => {
+      expect(details).not.toHaveAttribute('open')
+    })
+  })
+
+  it('closes menu when a link outside is clicked', async () => {
+    render(<SiteHeader />)
+    const summary = screen.getAllByTestId('navigation-title')[0]
+    const details = screen.getAllByRole('group', { name: 'navigation' })[0]
+    await fireEvent.click(summary)
+    expect(details).toHaveAttribute('open')
+    await fireEvent.click(screen.getAllByRole('link')[0])
+    await waitFor(() => {
+      expect(details).not.toHaveAttribute('open')
+    })
   })
 })

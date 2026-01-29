@@ -1,6 +1,6 @@
-import { IContentAPI } from '@/types'
+import type { IContentAPI } from '@/types'
 import { PageFactory } from './factories'
-import { getPageURL, resolvePage, resolveImage } from './utils'
+import { getPageURL, resolvePage, resolveImage, truncateText } from './utils'
 
 describe('getPageURL()', () => {
   it('returns meta.html_url without the hostname', () => {
@@ -106,6 +106,20 @@ describe('resolvers', () => {
       ])
       expect(values).toEqual([undefined, undefined])
       expect(api.getData).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('truncateText', () => {
+    it('truncates text if max length reached', () => {
+      const longText = 'word '.repeat(50)
+      const result = truncateText(longText, 50)
+      expect(result.endsWith('...')).toBe(true)
+      expect(result.length).toBeLessThanOrEqual(53) // 50 + ...
+    })
+
+    it('does not modify text if less than max length', () => {
+      const text = 'short text'
+      expect(truncateText(text, 50)).toBe(text)
     })
   })
 })

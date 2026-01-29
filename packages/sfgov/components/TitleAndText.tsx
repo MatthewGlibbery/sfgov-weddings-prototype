@@ -1,6 +1,7 @@
-import { TypeTitleAndTextValues } from '@/types'
+import type { TypeTitleAndTextValues } from '@/types'
 import { HeadingSm } from '@/design-system'
 import { RichText } from './RichText'
+import type { HTMLComponentMap } from './wagtail'
 
 export type TitleAndTextProps = JSX.IntrinsicElements['section'] &
   TypeTitleAndTextValues & {
@@ -8,7 +9,7 @@ export type TitleAndTextProps = JSX.IntrinsicElements['section'] &
     id?: string
     heading?: React.FC
     headingClasses?: string
-    isDarkBg?: boolean
+    richTextComponents?: HTMLComponentMap
   }
 
 export const TitleAndText = ({
@@ -18,24 +19,28 @@ export const TitleAndText = ({
   id,
   heading,
   headingClasses,
-  isDarkBg = false,
+  richTextComponents = undefined,
   ...rest
 }: TitleAndTextProps) => {
   if (!title && !text) return null
   const TitleComponent = heading ?? HeadingSm
   return (
-    <section className="flex flex-col gap-y-12" {...rest}>
+    // TODO: richTextComponents and this conditional class can go
+    // away once we've finalized the default rich text components
+    // CMS-1226, CMS-1272, CMS-1273, CMS-1274
+    <section
+      className={`${!richTextComponents ? 'flex flex-col gap-y-12' : ''}`}
+      {...rest}
+    >
       {title ? (
         <TitleComponent as={as} id={id || ''} className={headingClasses}>
           {title}
         </TitleComponent>
       ) : null}
       {text ? (
-        <RichText
-          html={text}
-          isDarkBg={isDarkBg}
-          headingClasses={headingClasses}
-        />
+        <div>
+          <RichText html={text} components={richTextComponents} />
+        </div>
       ) : null}
     </section>
   )

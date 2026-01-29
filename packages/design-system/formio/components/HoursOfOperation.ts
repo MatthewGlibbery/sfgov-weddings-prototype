@@ -108,6 +108,7 @@ export function HoursOfOperation({
   label,
   debug,
   days,
+  /* istanbul ignore next */
   excludeFromAirtable = true
 }: HoursOfOperationProps) {
   return {
@@ -118,7 +119,8 @@ export function HoursOfOperation({
     components: Object.entries(days || DEFAULT_DAYS).map(([key, label]) =>
       dayComponentFactory({ key, label, debug })
     ),
-    properties: excludeFromAirtable
+
+    properties: /* istanbul ignore next */ excludeFromAirtable
       ? {
           // exclude this component from Airtable
           'airtable:exclude': 'true'

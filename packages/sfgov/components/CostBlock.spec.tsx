@@ -3,14 +3,13 @@ import { render, screen } from '@testing-library/react'
 import { CostBlock } from './CostBlock'
 
 describe('Cost', () => {
-  const cost = CostBlockFactory.make({
-    value: {
-      cost: 'free',
-      description: 'This is the description'
-    }
-  })
-
   it('renders a cost block with cost "Free"', () => {
+    const cost = CostBlockFactory.make({
+      value: {
+        cost: 'free',
+        description: 'This is the description'
+      }
+    })
     render(<CostBlock {...cost.value} />)
     const costValue = screen.getByText('Free')
 
@@ -18,10 +17,26 @@ describe('Cost', () => {
   })
 
   it('renders a cost block with a description field', () => {
+    const cost = CostBlockFactory.make({
+      value: {
+        cost: 'free',
+        description: '<p>This is the description</p>'
+      }
+    })
     render(<CostBlock {...cost.value} />)
     const description = screen.getByText(/This is the description/)
 
     expect(description).toBeInTheDocument()
+  })
+
+  it('renders a cost block without a description field', () => {
+    const cost = CostBlockFactory.make({
+      value: {
+        cost: 'free',
+        description: undefined
+      }
+    })
+    render(<CostBlock {...cost.value} />)
   })
 
   it('renders a cost block with a flat fee', () => {
@@ -74,8 +89,43 @@ describe('Cost', () => {
   })
 
   it('renders a step variant cost block', () => {
+    const cost = CostBlockFactory.make({
+      value: {
+        cost: 'free',
+        description: 'This is the description'
+      }
+    })
     render(<CostBlock variant="step" {...cost.value} />)
     expect(screen.getByText('Cost:', { trim: true })).toBeInTheDocument()
     expect(screen.getByText('Free.', { trim: true })).toBeInTheDocument()
+  })
+
+  it('renders a step variant cost block without a description', () => {
+    const cost = CostBlockFactory.make({
+      value: {
+        cost: 'free',
+        description: undefined
+      }
+    })
+    render(<CostBlock {...cost.value} variant="step" />)
+  })
+
+  it('renders a transaction transaction cost block variant', () => {
+    const cost = CostBlockFactory.make({
+      value: {
+        cost: 'free'
+      }
+    })
+    render(<CostBlock {...cost.value} variant="transaction" />)
+  })
+
+  it('renders a transaction transaction cost block variant without a description', () => {
+    const cost = CostBlockFactory.make({
+      value: {
+        cost: 'free',
+        description: undefined
+      }
+    })
+    render(<CostBlock {...cost.value} variant="transaction" />)
   })
 })

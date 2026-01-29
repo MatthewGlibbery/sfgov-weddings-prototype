@@ -9,22 +9,24 @@ import type { WagtailImageData } from '@/types'
 const ImageBase = classed(NextImage as AnyComponent, 'w-auto h-auto')
 
 export type ImageOwnProps = ComponentProps<typeof ImageBase> & {
-  imageRef: WagtailImageData | number
-  baseUrl?: string
+  imageRef?: WagtailImageData
 }
 
 /* istanbul ignore */
 export const Image = classed(
-  ({ className, imageRef, ...rest }: ImageOwnProps) => {
-    return (
+  // destructure children so they don't get passed
+  // to NextImage (<img> is a void element, no children ever)
+  ({ imageRef, children, ...rest }: ImageOwnProps) => {
+    return imageRef ? (
       <ImageBase
-        src={imageRef?.meta?.download_url}
-        className={className}
-        width={imageRef?.original?.width || 50}
-        height={imageRef?.original?.height || 50}
-        alt={imageRef?.alt_text || ''}
+        src={imageRef.meta?.download_url}
+        width={imageRef.original?.width || 50}
+        height={imageRef.original?.height || 50}
+        alt={imageRef.alt_text || ''}
         {...rest}
       />
+    ) : (
+      <ImageBase {...rest} />
     )
   },
   'w-full'

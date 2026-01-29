@@ -10,4 +10,11 @@ describe('ImageCard', () => {
     const img = (await screen.findByRole('img')) as HTMLImageElement
     expect(img).toBeInTheDocument()
   })
+
+  it('should not render an image if there is no image value', async () => {
+    const data = RelatedContentBlockFactory.make({
+      value: { image: undefined }
+    })
+    render(<ImageCard item={data} />)
+  })
 })

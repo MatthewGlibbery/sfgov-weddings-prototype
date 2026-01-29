@@ -106,14 +106,14 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
 
   const LogoComponent = ({ logo }: { logo: WagtailImageData }) => (
     <Image
-      className="max-w-[33%] md:max-w-1/4 object-contain mt-20 xl:mt-0"
+      className="max-w-[33%] md:max-w-1/4 object-contain xl:mt-0"
       imageRef={logo}
     />
   )
 
   const ProfileGroupComponent = (people: TypeProfileGroupBlock[]) => {
     return people.length ? (
-      <Container backgroundcolor="primary">
+      <Container backgroundcolor="neutral">
         {people.map((profileGroup: TypeProfileGroupBlock) => (
           <ProfileGroup
             key={profileGroup.id}
@@ -145,7 +145,9 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
       <Container
         className={classes(
           'bg-white relative p-20 pt-0 rounded-t-[8px] mx-0',
-          mainImage ? 'top-[100px] xl:top-[250px]' : 'md:px-0'
+          mainImage
+            ? 'top-[100px] xl:top-[250px] md:px-28 xl:px-40 pt-[24px] lg:pt-[32px]'
+            : 'md:px-0'
         )}
       >
         <div className="hidden xl:flex xl:justify-between gap-28">

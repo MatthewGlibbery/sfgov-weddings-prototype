@@ -23,7 +23,9 @@ export const CallToAction = ({
           {title}
         </HeadingLg>
       ) : null}
-      {description ? <BodyText>{description}</BodyText> : null}
+      {description ? (
+        <BodyText data-testid="cta-description">{description}</BodyText>
+      ) : null}
       <ButtonLink link={buttonLink} />
     </div>
   )

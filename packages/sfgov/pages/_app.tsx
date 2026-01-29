@@ -8,10 +8,9 @@ import { GoogleTagManager } from '@next/third-parties/google'
 import nextI18nextConfig from '../next-i18next.config'
 import type { BlockType, PageData } from '@/types'
 import type { ComponentProps } from 'react'
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { AGENCY_PAGE_TYPE } from '@/constants'
 import { useRouter } from 'next/router'
-import { getTestGroup, TestGroupContext } from '@/lib/utils'
 
 type PageWithPartnerAgencies = PageData & {
   primary_agency?: PageData
@@ -36,9 +35,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const prevPagePath = useRef<string | undefined>(undefined)
   const router = useRouter()
   const isFirstLoad = useRef(true)
-
-  // manage testGroup state to provide value to TestGroupContext.Provider
-  const [testGroup, setTestGroup] = useState<string | null>(null)
 
   // have to watch the pathname and pageData change here so we know
   // when to update the datalayer, otherwise datalayer will be stale
@@ -82,35 +78,26 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       }
     }
 
-    ;(async () => {
-      const group = await getTestGroup()
-      setTestGroup(group)
-      const pageDataLayer = getPageDataLayer(pageData)
-      pageDataLayer.testGroup = group
-      if (isFirstLoad.current) {
-        window.dataLayer?.push(pageDataLayer)
-        isFirstLoad.current = false
-      } else {
-        window.dataLayer?.push({
-          event: 'routeChangePageView',
-          ...pageDataLayer
-        })
-      }
-      prevPagePath.current = router.asPath
-    })()
+    const pageDataLayer = getPageDataLayer(pageData)
+    if (isFirstLoad.current) {
+      window.dataLayer?.push(pageDataLayer)
+      isFirstLoad.current = false
+    } else {
+      window.dataLayer?.push({
+        event: 'routeChangePageView',
+        ...pageDataLayer
+      })
+    }
   }, [pageData, router.asPath])
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
-      {/* wrap TestGroupContext.Provider, components get testGroup context */}
-      <TestGroupContext.Provider value={testGroup}>
-        {gtmProps ? <GoogleTagManager {...gtmProps} /> : null}
-        <Component {...pageProps} />
-        <div
-          id="keep-me-fonts"
-          className={ALL_FONTS.map((font) => font.className).join(' ')}
-        />
-      </TestGroupContext.Provider>
+      {gtmProps ? <GoogleTagManager {...gtmProps} /> : null}
+      <Component {...pageProps} />
+      <div
+        id="keep-me-fonts"
+        className={ALL_FONTS.map((font) => font.className).join(' ')}
+      />
     </ErrorBoundary>
   )
 }

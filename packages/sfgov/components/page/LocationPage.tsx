@@ -17,6 +17,7 @@ import {
   ContactFooter,
   ContentTileList,
   ImageCard,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   Map,
   PageWrapper,
   ProfileGroup,
@@ -31,6 +32,9 @@ import { isPermitCenter } from '@/lib/utils'
 
 export type LocationPageProps = PageProps<LocationPageData>
 
+// TODO: richTextComponents can go away once
+// we've finalized the default rich text components
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274
 export function LocationPage({ page, env }: LocationPageProps) {
   const {
     title,
@@ -86,7 +90,10 @@ export function LocationPage({ page, env }: LocationPageProps) {
               />
             ) : null}
             <div className="mt-40">
-              <RichText html={body} />
+              <RichText
+                html={body}
+                components={ITERATIVE_RICH_TEXT_COMPONENTS}
+              />
             </div>
           </PageTitleSection>
           {isPermitCenter(page) ? (
@@ -106,7 +113,10 @@ export function LocationPage({ page, env }: LocationPageProps) {
               <HeadingXXl as="h2" className="my-12 md:my-20">
                 {t('getting-here', { defaultValue: 'Getting here' })}
               </HeadingXXl>
-              <RichText html={intro} />
+              <RichText
+                html={intro}
+                components={ITERATIVE_RICH_TEXT_COMPONENTS}
+              />
               <div className="space-y-28">
                 {parking.length ? (
                   <>
@@ -114,7 +124,10 @@ export function LocationPage({ page, env }: LocationPageProps) {
                       <IconParking width={40} />
                       <DisplayLg as="h3">{parking[0].value.title}</DisplayLg>
                     </div>
-                    <RichText html={parking[0].value.text} />
+                    <RichText
+                      html={parking[0].value.text}
+                      components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                    />
                   </>
                 ) : null}
                 {accessibility.length ? (
@@ -125,7 +138,10 @@ export function LocationPage({ page, env }: LocationPageProps) {
                         {accessibility[0].value.title}
                       </DisplayLg>
                     </div>
-                    <RichText html={accessibility[0].value.text} />
+                    <RichText
+                      html={accessibility[0].value.text}
+                      components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                    />
                   </>
                 ) : null}
                 {publicTransportion.length ? (
@@ -136,7 +152,10 @@ export function LocationPage({ page, env }: LocationPageProps) {
                         {publicTransportion[0].value.title}
                       </DisplayLg>
                     </div>
-                    <RichText html={publicTransportion[0].value.text} />
+                    <RichText
+                      html={publicTransportion[0].value.text}
+                      components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                    />
                   </>
                 ) : null}
               </div>
@@ -200,7 +219,17 @@ export function LocationPage({ page, env }: LocationPageProps) {
                     key={accordion.id}
                     title={accordion.value.title || ''}
                   >
-                    <RichText html={accordion.value.text} />
+                    {/* 
+                      TODO:
+                      we're starting to deviate a bit here.  the end-goal is to
+                      create a default rich text component configuration for
+                      rich text across the site, but it seems we still have
+                      some situational differences (see also Callout component)
+                    */}
+                    <RichText
+                      html={accordion.value.text}
+                      components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                    />
                   </Accordion>
                 ))}
               </div>
@@ -223,6 +252,8 @@ export function LocationPage({ page, env }: LocationPageProps) {
             <ProfileGroup
               title={people[0]?.value.title}
               profiles={people[0]?.value.profiles}
+              description={people[0]?.value.description}
+              richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
             />
           </Container>
         ) : null}
@@ -247,7 +278,10 @@ export function LocationPage({ page, env }: LocationPageProps) {
                 defaultValue: 'Contact us'
               })}
             </HeadingXXl>
-            <ContactFooter items={contact} />
+            <ContactFooter
+              items={contact}
+              richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+            />
           </Container>
         ) : null}
       </ZebraStripedSection>

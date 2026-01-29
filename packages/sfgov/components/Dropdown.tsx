@@ -1,4 +1,3 @@
-// istanbul ignore file
 import {
   classed,
   classes,
@@ -17,7 +16,7 @@ const StyledDiv = classed(
 
 export type DropdownProps = ComponentProps<'details'> & {
   title: string
-  children: ReactNode
+  children: ReactNode | ReactNode[]
 }
 
 export const Dropdown = ({ title, children }: DropdownProps) => {
@@ -29,7 +28,9 @@ export const Dropdown = ({ title, children }: DropdownProps) => {
   return children ? (
     <details
       name="menu"
-      onToggle={(e) => setOpen(e.currentTarget.open)}
+      onToggle={(e) => {
+        setOpen(e.currentTarget.open)
+      }}
       onKeyDown={(e) => {
         if (e.key === 'Escape' && e.currentTarget.open) {
           e.currentTarget.open = false

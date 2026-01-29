@@ -83,7 +83,6 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
       onToggle={props.onToggle}
       onKeyDown={(e) => {
         if (e.key === 'Escape' && e.currentTarget.open) {
-          // istanbul ignore next
           e.currentTarget.open = false
         }
       }}

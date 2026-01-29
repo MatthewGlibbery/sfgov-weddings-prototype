@@ -36,7 +36,11 @@ export function form(ctx: RadioContext) {
   }
   return (
     <div
-      className=""
+      className={
+        ctx.inline
+          ? 'flex-rows space-y-8 md:space-y-0 md:inline-flex md:gap-16'
+          : ''
+      }
       ref="radioGroup"
       role={ctx.component.type === 'selectboxes' ? 'group' : 'radiogroup'}
       aria-required={ctx.component.validate?.required ? 'true' : 'false'}
@@ -54,8 +58,14 @@ export function form(ctx: RadioContext) {
               'flex',
               'items-center',
               'gap-x-16',
-              'my-20'
+              'my-20',
+              'items-center'
             )}`}
+            htmlFor={`${ctx.instance.root?.id}-${ctx.id}-${ctx.row}-${
+              typeof item.value === 'object'
+                ? item.value + '-' + index
+                : item.value
+            }`}
           >
             <input
               className={classes(
@@ -70,6 +80,7 @@ export function form(ctx: RadioContext) {
                 ctx.component.type === 'selectboxes'
                   ? [
                       'rounded',
+                      'bg-white',
                       'checked:border-primary500',
                       'checked:bg-check-white'
                     ]
@@ -92,6 +103,7 @@ export function form(ctx: RadioContext) {
               }`}
               role={ctx.component.type === 'selectboxes' ? 'checkbox' : 'radio'}
               disabled={item.disabled}
+              aria-label={item.label}
             />
             <span>{item.label}</span>
           </label>

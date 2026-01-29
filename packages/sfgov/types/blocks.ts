@@ -4,6 +4,7 @@ import type {
   MinimalMeta,
   MinimalPageData,
   PageData,
+  ProfilePageData,
   RelatedContentData,
   RelatedContentTransactionBlock
 } from './pages'
@@ -155,6 +156,7 @@ export type TypeTileBlockValues = MinimalPageData & {
   date_time?: TypeDateTimeBlock[]
   cancelled?: boolean
   publishedDate?: TypeDateTimeBlock
+  news_type?: string
 }
 
 export type TypeTileBlock<T extends string = string> = BlockType<
@@ -190,6 +192,8 @@ export type TypeDocumentBlockValues = {
   file: string
   description?: string
   published_date?: string
+  publishedDate?: string
+  url?: string
   collection?: number
 }
 
@@ -355,7 +359,7 @@ export type TypeAgendaItemBlockValues = {
   id: string
   index: number
   title_and_text: TypeTitleAndTextValues
-  documents: [] // TODO: expand this when documents are fully serialized
+  documents: TypeDocumentBlock[]
 }
 
 export type TypeAgendaItemBlock = BlockType<
@@ -378,7 +382,7 @@ export type TypeVideoBlockValues = {
 export type TypeVideoBlock = BlockType<'video', TypeVideoBlockValues>
 
 export type TypeDownloadableFilesBlockValues = {
-  title: string
+  title?: string
   documents: TypeDocumentBlock[]
 }
 
@@ -471,12 +475,7 @@ export type TopicFieldTypes =
 export type TypeProfilePageBlock = BlockType<
   'profile_page',
   {
-    profile_page: PageData & {
-      pronouns: string
-      image: WagtailImageData
-      primary_job_title: string
-      primary_job_title_line_2: string
-    }
+    profile_page: ProfilePageData | null
     role: string
   }
 >

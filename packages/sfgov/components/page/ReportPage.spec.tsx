@@ -1,4 +1,5 @@
-import { ReportPageFactory } from '@/lib/factories'
+import { BodyTextBlockFactory, ReportPageFactory } from '@/lib/factories'
+import type { ReportPageData } from '@/types'
 import { render, screen } from '@testing-library/react'
 import { ReportPage } from './ReportPage'
 
@@ -14,7 +15,11 @@ window.IntersectionObserver = jest.fn(() => ({
 }))
 
 describe('ReportPage', () => {
-  const page = ReportPageFactory.make()
+  let page: ReportPageData
+
+  beforeEach(() => {
+    page = ReportPageFactory.make()
+  })
 
   it('renders a report page', () => {
     render(<ReportPage page={page} />)

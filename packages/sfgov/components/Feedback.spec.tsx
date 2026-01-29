@@ -94,7 +94,7 @@ describe('Feedback modal', () => {
     }
     expect(fetchMock).toHaveBeenCalledTimes(1)
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://formio.dev.sf.gov/live11-ruehbbakcoznmcf/feedbackformwagtail/submission',
+      'https://api.formio.sf.gov/live/feedbackformwagtail/submission',
       expect.objectContaining({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

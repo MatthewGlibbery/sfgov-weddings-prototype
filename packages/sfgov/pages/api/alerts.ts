@@ -1,5 +1,5 @@
 import { ContentAPI } from '@/lib/api'
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function GET(req: NextApiRequest, res: NextApiResponse) {
   const api = new ContentAPI()

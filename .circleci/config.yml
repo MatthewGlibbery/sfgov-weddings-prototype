@@ -4,16 +4,16 @@ version: 2.1
 parameters:
   GHA_Event:
     type: string
-    default: ''
+    default: ""
   GHA_Actor:
     type: string
-    default: ''
+    default: ""
   GHA_Action:
     type: string
-    default: ''
+    default: ""
   GHA_Meta:
     type: string
-    default: ''
+    default: ""
 
 orbs:
   aws-ecr: circleci/aws-ecr@9.4.0
@@ -23,6 +23,7 @@ jobs:
   test:
     docker:
       - image: cimg/node:20.11.0
+    resource_class: xlarge
     steps:
       - checkout
       - run:
@@ -147,29 +148,6 @@ jobs:
               tower-cli job launch --job-template=$QA_DEPLOY_JOB_ID --extra-vars="version=${CIRCLE_BRANCH} prbranch=${CIRCLE_PULL_REQUEST##*/}" --wait
             fi
           no_output_timeout: 30m
-  teardown_on_aws_qa:
-    docker:
-      - image: continuumio/miniconda3
-    steps:
-      - run:
-          name: install ansible tower cli
-          command: |
-            if [ "$QA_TEARDOWN_JOB_ID" != "" ]; then
-              apt-get update && apt-get install -y vim
-              pip install --root-user-action=ignore ansible-tower-cli
-            fi
-      - run:
-          name: teardown qa site instance via tower-cli
-          # see: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
-          # test
-          command: |
-            if [ "$QA_TEARDOWN_JOB_ID" != "" ]; then
-              export TOWER_HOST=$AWX_HOST
-              export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
-              export TOWER_VERBOSE=true
-              tower-cli job launch --job-template=$QA_TEARDOWN_JOB_ID --extra-vars="version=${CIRCLE_BRANCH} prbranch=${CIRCLE_PULL_REQUEST##*/}" --wait
-            fi
-          no_output_timeout: 30m
 
 workflows:
   # Docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -181,7 +159,7 @@ workflows:
             branches:
               only: main
       - deploy_to_dev:
-          awx_job_env: 'DEVELOP'
+          awx_job_env: "DEVELOP"
           filters:
             branches:
               only: develop
@@ -206,16 +184,4 @@ workflows:
     jobs:
       - deploy_to_aws_qa
     when:
-      equal: ['gha_aws_deploy_qa', << pipeline.parameters.GHA_Action >>]
-
-  qa_site_teardown:
-    jobs:
-      - teardown_on_aws_qa:
-          filters:
-            branches:
-              ignore:
-                - main
-                - develop
-                - training
-    when:
-      equal: ['gha_aws_teardown_qa', << pipeline.parameters.GHA_Action >>]
+      equal: ["gha_aws_deploy_qa", << pipeline.parameters.GHA_Action >>]

@@ -82,6 +82,8 @@ export type AlertData = {
   alert_style: 'information' | 'critical'
   alert_text: string
   expiration_date: string
+  locale: number
+  lang: string
 }
 
 export type PrimaryAgencyData = {
@@ -379,4 +381,58 @@ export type HomePageData = PageData & {
   top_services: BlockType<'services', TypeTileBlockValues>[]
   featured_topics: BlockType<'topics', TypeTileBlockValues>[]
   sf_government: TypeProfileGroupBlock[]
+}
+
+type TypeEventPrimaryAgency = {
+  title: string
+  html_url: string
+}
+
+export type TypeEventItem = EventPageData &
+  MeetingPageData & {
+    date_time: TypeDateTimeBlock[]
+    overview: string
+    meeting_location?: []
+    cancelled?: boolean
+    description: string
+    location?: []
+    start_datetime: string
+    end_datetime: string
+    primary_agency: TypeEventPrimaryAgency
+  }
+
+export type TypeChildAgency = {
+  id: number
+  title: string | undefined
+}
+
+export type TypeEventsListingPageData = {
+  agency: string
+  child_agencies: TypeChildAgency[]
+  total: number
+  meeting_archive_date: string
+  meeting_archive_url: string
+  events: TypeEventItem[]
+  baseUrl: string
+}
+
+export type TypeInPageFilter = {
+  childAgencies?: TypeChildAgency[] | undefined
+  month?: number
+  year?: number
+  startDate?: string | undefined
+  endDate?: string | undefined
+}
+
+export type TypeActiveFilterButton = {
+  label: string | undefined
+  ariaLabel: string
+  removeHandler: (event: React.MouseEvent<HTMLButtonElement>) => void
+}
+
+export type TypePageTabData = {
+  locale: string | undefined
+  filter: string | undefined
+  meetingArchiveDate: string
+  meetingArchiveURL: string
 }

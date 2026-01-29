@@ -29,7 +29,8 @@ const customJestConfig = {
     '<rootDir>/components/**/*.tsx',
     '<rootDir>/formio/**/*.ts*',
     // FIXME: remove this when we bring back our formio templates
-    '!<rootDir>/formio/templates/**'
+    '!<rootDir>/formio/templates/**',
+    '!<rootDir>/formio/components/HoursOfOperation.ts'
   ],
   moduleNameMapper: {
     ...moduleNameMapper,

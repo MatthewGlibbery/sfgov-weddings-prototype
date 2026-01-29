@@ -12,6 +12,7 @@ import { useTranslation } from 'next-i18next'
 import {
   ComposedDate,
   DocumentLink,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   PageLink,
   PageWrapper,
   RelatedContentList,
@@ -64,11 +65,11 @@ export const ReportPage: ComponentType<{ page: ReportPageData }> = ({
               switch (contentSection.type) {
                 case 'body':
                   return (
-                    <div
-                      className="flex flex-col gap-y-28"
-                      key={`content-section-${i}`}
-                    >
-                      <RichText html={contentSection.value} />
+                    <div key={`content-section-${i}`}>
+                      <RichText
+                        html={contentSection.value}
+                        components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                      />
                     </div>
                   )
                 case 'table':

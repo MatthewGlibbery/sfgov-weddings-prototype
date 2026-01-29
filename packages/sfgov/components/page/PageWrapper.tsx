@@ -8,14 +8,12 @@ import {
   ErrorFallbackReport,
   SiteFooter,
   SiteHeader,
-  SiteHeaderNew,
   SitewideAlert
 } from '@/components'
 import { MainContent } from '@/design-system'
 import { useRouter } from 'next/router'
 import type { AlertData } from '@/types'
 import { Feedback } from '../Feedback'
-import { useTestGroup } from '@/lib/utils'
 
 type PageWrapperMetaProps = {
   type?: string
@@ -41,27 +39,36 @@ export const PageWrapper = ({
   className
 }: PageWrapperProps) => {
   const router = useRouter()
+  const { locale } = router
   const hasFetched = useRef(false)
   const [alertData, setAlertData] = useState<TypeAlertData | null>(null)
+  const [prevLocale, setPrevLocale] = useState(locale)
 
   const isSearchPage = router.pathname === '/search'
   const metaKeys = ['type', 'locale', 'description'] // the meta things we care about
   const excludePaths = ['/500']
-  const testGroup = useTestGroup()
 
   // istanbul ignore next
   useEffect(() => {
+    if (prevLocale !== locale) {
+      hasFetched.current = false
+      setPrevLocale(locale)
+    }
     if (!hasFetched.current) {
       const loadData = async () => {
         const res = await fetch('/api/alerts')
         const data = await res.json().catch(() => ({}))
-        setAlertData(data)
+        const filteredData = {
+          ...data,
+          items: data?.items?.filter((item: AlertData) => item.lang === locale)
+        }
+        setAlertData(filteredData)
         hasFetched.current = true
       }
 
       loadData()
     }
-  }, [alertData])
+  }, [alertData, locale, prevLocale])
 
   return (
     <>
@@ -98,7 +105,7 @@ export const PageWrapper = ({
       {alertData?.items?.length ? (
         <SitewideAlert {...alertData?.items[0]} />
       ) : null}
-      {testGroup === 'b' ? <SiteHeaderNew /> : <SiteHeader />}
+      <SiteHeader />
       <MainContent className={className || 'mt-20'}>
         <ErrorBoundary FallbackComponent={ErrorFallbackReport}>
           {children}

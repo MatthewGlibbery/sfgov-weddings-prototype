@@ -1,136 +1,54 @@
+// packages/sfgov/playwright/formTests.tsx  (name may differ in your repo)
+import React from 'react'
+import { test, expect } from './fixtures'
+import { AxeBuilder } from '@axe-core/playwright'
 import { FormPage } from '../components/page/FormPage'
 import { FormPageFactory } from '@/lib/factories'
-import { test, expect } from './fixtures'
-import React from 'react'
+import { runGlobalA11yTests } from './globalA11yTests'
 
-test.describe('A11y tests', () => {
-  // Required Global Tests
+// ============================================================
+// Skip ONLY the global axe test in THIS file
+// Replace it with a custom axe run that disables one rule.)
+// ============================================================
+test.beforeEach(async ({}, testInfo) => {
+  if (testInfo.title === 'validate axe core accessibility tests') {
+    test.skip(
+      true,
+      'Form page uses custom axe config: disable page-has-heading-one only'
+    )
+  }
+})
 
-  test('has accessible landmarks', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
+// ============================================================
+// Run all shared global accessibility tests
+// (All other global tests will still run)
+// ============================================================
+runGlobalA11yTests(FormPage, FormPageFactory)
 
-    await expect(page).toHaveLandmarks()
-  })
+// ============================================================
+// Form-only override for axe-core (disable one rule)
+// ============================================================
+test('validate axe core accessibility tests (form override)', async ({
+  mount,
+  page
+}) => {
+  const data = FormPageFactory.make()
+  await mount(<FormPage page={data} />)
 
-  test('has accessible landmark roles', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
+  const results = await new AxeBuilder({ page })
+    .disableRules(['page-has-heading-one'])
+    .analyze()
 
-    await expect(page).toHaveLandmarkRoles()
-  })
+  expect(
+    results.violations,
+    JSON.stringify(results.violations, null, 2)
+  ).toEqual([])
+})
 
-  test.skip('has search landmark', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveSearchLandmark()
-  })
-
-  test('has language interaction', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLanguageInteraction()
-  })
-
-  test('has language access in dropdown menu', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLanguageAccessInDropdownmenu()
-  })
-
-  test('is keyboard accessible', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toBeKeyboardFocusIndicatorAccessible()
-  })
-
-  test.skip('does keyboard focus indicator have sufficient color contrast', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).keyboardFocusIndicatorToHaveColorContrast()
-  })
-
-  test('do links have descriptive aria label text', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveDescriptiveLinkText()
-  })
-
-  test('create accessible data tables for screen reader users', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveScopeAttributesInDataTables()
-  })
-
-  test('all links have keyboard focus', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveKeyboardFocusInLinks()
-  })
-
-  test.skip('validate presence of aria labels in the primary and secondary navigation landmarks in the footer', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveAriaLabelsInFooterNavigationLandmarks()
-  })
-
-  test.skip('validate search autocomplete features', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveSearchAutoComplete()
-  })
-
-  test('validate that all ids are unique', async ({ mount, page }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toNotHaveDuplicateIds()
-  })
-
-  test('validate that lang attributes are present in header and footer', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toHaveLangAttributes()
-  })
-
-  test.skip('validate axe core accessibility tests', async ({
-    mount,
-    page
-  }) => {
-    const data = FormPageFactory.make()
-    await mount(<FormPage page={data} />)
-
-    await expect(page).toPassAxeCoreTests()
-  })
-
-  // Content Type Specific Tests
-
+// ============================================================
+// Content Type Specific Tests
+// ============================================================
+test.describe('Form Page – Content Type Specific A11y Tests', () => {
   test.skip('create a logical tab order on the Form content type', async ({
     mount,
     page
@@ -152,9 +70,12 @@ test.describe('A11y tests', () => {
       page
     ).toHaveAriaLabelInProgressBarNavLandmarkOnFormsContentType()
   })
+})
 
-  // Forms Related Tests
-
+// ============================================================
+// Form Specific Tests
+// ============================================================
+test.describe('Form Page – Form Specific A11y Tests', () => {
   test('do form elements include required attributes', async ({
     mount,
     page
@@ -191,6 +112,7 @@ test.describe('A11y tests', () => {
 
     await expect(page).toNotHaveDashesAndParenthesesInPlaceholder()
   })
+
   test('keyboard access to date picker', async ({ mount, page }) => {
     const data = FormPageFactory.make()
     await mount(<FormPage page={data} />)

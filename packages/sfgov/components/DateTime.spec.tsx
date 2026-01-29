@@ -8,7 +8,8 @@ describe('DateTime Component', () => {
   describe('<ComposedDate />', () => {
     it.each([
       ['2023-11-19', undefined],
-      ['2023-11-19', '']
+      ['2023-11-19', ''],
+      ['2023-11-19T00:00:00', '']
     ])('constructs the proper date string with valid input: %s, %s', (a, b) => {
       render(<ComposedDate startDateInput={a} endDateInput={b} />)
       expect(screen.getByText('Sunday, November 19, 2023')).toBeInTheDocument()

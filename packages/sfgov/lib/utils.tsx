@@ -1,5 +1,10 @@
 // istanbul ignore file
-import type { IContentAPI, PageData, WagtailImageData } from '@/types'
+import type {
+  IContentAPI,
+  PageData,
+  TypeLocationBlock,
+  WagtailImageData
+} from '@/types'
 import type { TFunction } from 'i18next'
 import type { ComponentType } from 'react'
 import { createContext, useContext } from 'react'
@@ -318,6 +323,62 @@ export function isPermitCenter(page: PageData): boolean {
     (page.meta.html_url !== undefined &&
       page.meta.html_url?.includes('location--san-francisco-permit-center'))
   )
+}
+
+/** event page listing utilities */
+export function formatDateTimeRange(
+  start: string,
+  end: string,
+  includeEndDateTime: boolean
+) {
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+  }
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: 'numeric',
+    minute: '2-digit'
+  }
+  const startDateTime = new Date(start)
+  const endDateTime = new Date(end)
+  const startDateStr = startDateTime.toLocaleString('default', dateOptions)
+  const startTimeStr = startDateTime.toLocaleString('default', timeOptions)
+  const endDateStr = endDateTime.toLocaleString('default', dateOptions)
+  const endTimeStr = endDateTime.toLocaleString('default', timeOptions)
+
+  const dateRange =
+    !includeEndDateTime ||
+    startDateTime.toDateString() === endDateTime.toDateString()
+      ? startDateStr
+      : `${startDateStr} to ${endDateStr}`
+  const timeRange =
+    !includeEndDateTime ||
+    startDateTime.toDateString() === endDateTime.toDateString()
+      ? startTimeStr
+      : `${startTimeStr} to ${endTimeStr}`
+
+  return { dateRange, timeRange }
+}
+
+export function getLocation(location: TypeLocationBlock[]) {
+  return location
+    ? location
+        .map((item) => {
+          if (item.type === 'address') return item?.value?.line1
+          else if (item.type === 'online') return 'Online'
+          else return ''
+        })
+        .join(', ')
+    : null
+}
+
+export function truncateText(desc: string, max: number) {
+  if (desc.length <= max) {
+    return desc
+  }
+  const truncated = desc.substring(0, max)
+  return truncated.substring(0, truncated.lastIndexOf(' ') || max) + ' ...'
 }
 
 /**

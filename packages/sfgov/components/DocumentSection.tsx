@@ -1,12 +1,19 @@
 import { DisplayLg, HeadingXl } from '@/design-system'
-import { TypeDocumentSectionBlockValues } from '@/types'
+import type { TypeDocumentSectionBlockValues } from '@/types'
 import { RichText } from './RichText'
 import { DocumentTileList } from './Tile'
+import type { HTMLComponentMap } from './wagtail'
 
+// TODO: richTextComponents can go away once
+// we've finalized the default rich text components
+// CMS-1226, CMS-1272, CMS-1273, CMS-1274
 export const DocumentSectionBlock = ({
   title,
-  content
-}: TypeDocumentSectionBlockValues) => {
+  content,
+  richTextComponents
+}: TypeDocumentSectionBlockValues & {
+  richTextComponents?: HTMLComponentMap
+}) => {
   return (
     <div className="grid gap-y-20">
       {title ? (
@@ -19,10 +26,9 @@ export const DocumentSectionBlock = ({
           switch (item.type) {
             case 'description':
               return (
-                <DisplayLg>
-                  <RichText html={item.value} />
-                </DisplayLg>
+                <RichText html={item.value} components={richTextComponents} />
               )
+
             case 'documents': {
               // give tile list the thing it wants
               const links = item.value.map((item) => {

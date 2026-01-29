@@ -65,7 +65,6 @@ import type {
   TypeTableBlock,
   TypeQLessData
 } from '@/types'
-import type { SearchPageData } from '@/pages/search'
 import {
   ABOUT_PAGE_TYPE,
   AGENCY_PAGE_TYPE,
@@ -86,6 +85,7 @@ import {
   TRANSACTION_PAGE_TYPE,
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
+import type { SearchPageData } from '@/pages/search'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
@@ -531,7 +531,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   meta: PageMetaFactory.make({
     type: AGENCY_PAGE_TYPE
   }),
-  title: 'This is an agency',
+  title: gen.lorem.words(3),
   description: 'description',
   logo: ImageFactory.make(),
   main_image: ImageFactory.make(),
@@ -778,9 +778,11 @@ export const AlertBlockFactory = factory<TypeAlertBlock>((gen) => ({
 export const SitewideAlertBlockFactory = factory<{
   alert_style: 'information' | 'critical'
   alert_text: string
+  lang: string
 }>(() => ({
   alert_style: 'information',
-  alert_text: 'some text'
+  alert_text: 'some text',
+  lang: 'en'
 }))
 
 export const StepBlockFactory = factory<TypeStepBlock>((gen) => ({
@@ -851,8 +853,11 @@ export const TileValueFactory = factory((gen) => ({
 
 export const NewsTileFactory = factory<TypeNewsTileBlock>((gen) => ({
   id: gen.datatype.uuid(),
-  type: 'news',
-  value: TileValueFactory.make()
+  news_type: 'news',
+  title: gen.commerce.productName(),
+  value: TileValueFactory.make(),
+  image: ImageBlockFactory.make(),
+  date: DateTimeBlockFactory.make()
 }))
 
 export const GenericTileFactory = factory<TypeContentTileBlock>((gen) => ({
@@ -905,6 +910,13 @@ export const ImageFactory = factory<WagtailImageData>((gen) => ({
     full_url: gen.internet.url(),
     width: 300,
     height: 300,
+    alt: gen.lorem.sentence()
+  },
+  thumbnail: {
+    url: new URL(gen.internet.url()).pathname,
+    full_url: gen.internet.url(),
+    width: 120,
+    height: 120,
     alt: gen.lorem.sentence()
   }
 }))
@@ -1229,7 +1241,7 @@ export const CallToActionFactory = factory<TypeCallToActionBlock>((gen) => ({
   type: 'call_to_action',
   value: {
     title: gen.commerce.productName(),
-    description: '',
+    description: gen.lorem.sentence(),
     button_link: AriaButtonLinkFactory.make()
   }
 }))
@@ -1491,6 +1503,7 @@ export const AgendaItemBlockFactory = factory<TypeAgendaItemBlock>((gen) => ({
   id: gen.datatype.uuid(),
   type: 'agenda_item',
   value: {
+    id: gen.datatype.uuid(),
     index: 0,
     title_and_text: {
       title: 'Agenda title and text 1 title',
@@ -1584,7 +1597,7 @@ export const DataStoryPageFactory = factory<DataStoryPageData>((gen) => ({
         section_content: [
           TextBlockFactory.make({
             value:
-              '<h2>Hi!</h2><h2>Hello!</h2><h2>Hiii!</h2><h2>Hiya!</h2><h2>Heyyy!</h2><h2>Sup!</h2><h2>Greeting!</h2><h2>Hiiii!</h2><h2>Yo!</h2><h2>Yoooo!</h2>'
+              '<h2 id="bloop">Hi!</h2><h2 id="ello">Hello!</h2><h2 id="fasdlkj">Hiii!</h2><h2 id="loqwen">Hiya!</h2><h2 id="qweri">Heyyy!</h2><h2 id="lknvd">Sup!</h2><h2 id="aldvl">Greeting!</h2><h2 id="oeoruri">Hiiii!</h2><h2 id="hqqqw">Yo!</h2><h2 id="bcccbc">Yoooo!</h2>'
           })
         ]
       }
@@ -1696,21 +1709,22 @@ export const ProfileGroupFactory = factory<TypeProfileGroupBlock>((gen) => ({
     description: 'some profile group description',
     profiles: [
       {
+        id: gen.datatype.uuid(),
         type: 'profile_page',
         value: {
-          profile_page: RelatedContentBlockFactory.make(),
+          profile_page: ProfilePageFactory.make(),
           role: 'some role'
         }
       },
       {
+        id: gen.datatype.uuid(),
         type: 'profile_page',
         value: {
-          profile_page: {
-            ...RelatedContentBlockFactory.make(),
+          profile_page: ProfilePageFactory.make({
             pronouns: '',
             primary_job_title: 'Job holder',
             primary_job_title_line_2: 'Job seeker'
-          },
+          }),
           role: 'some other role'
         }
       }

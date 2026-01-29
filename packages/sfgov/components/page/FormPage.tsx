@@ -18,19 +18,19 @@ import { useTranslation } from 'next-i18next'
 import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { ButtonLink } from '../ButtonLink'
 import { Callout } from '../Callout'
 import { ContactFooter } from '../ContactFooter'
 import { RichText } from '../RichText'
 import { PageWrapper } from './PageWrapper'
+import { FormSurvey } from '../FormSurvey'
 
 export type FormPageProps = {
   page: FormPageData
   submitted?: boolean
   formPage?: number
   formComponentKey?: string
-  warnBeforeLeaving?: boolean
 }
 
 type FormEvent = {
@@ -47,8 +47,7 @@ export function FormPage({
   page,
   submitted: initialSubmitted,
   formComponentKey,
-  formPage = 0,
-  warnBeforeLeaving = false
+  formPage = 0
 }: FormPageProps) {
   const {
     title,
@@ -68,6 +67,8 @@ export function FormPage({
     feedbackSubmission,
     ...rawQueryParams
   } = Object.fromEntries(queryParams?.entries() || [])
+
+  const navHandlerOn = useRef(false)
 
   const [submitted, setSubmitted] = useState(
     initialSubmitted || queryParamSubmitted === 'true'
@@ -91,40 +92,27 @@ export function FormPage({
     }
   ]
 
-  useEffect(() => {
-    // don't do anything if the form has been submitted
-    if (submitted) return
+  const isFormSurvey = submitted
 
-    const handleBeforeUnload = (event: Event) => {
-      if (warnBeforeLeaving) {
-        event.preventDefault()
-      }
-    }
+  const handleBeforeUnload = (event: Event) => {
+    event.preventDefault()
+  }
 
-    const nextNavigationHandler = () => {
-      if (warnBeforeLeaving) {
-        const result = window.confirm(
-          'Navigate away? Changes you made may not be saved.'
-        )
-        if (!result) {
-          router.events?.emit('routeChangeError')
-          // eslint-disable-next-line no-throw-literal
-          throw "Abort route change by user's confirmation."
-        }
-      }
+  const nextNavigationHandler = () => {
+    const result = window.confirm(
+      'Navigate away? Changes you made may not be saved.'
+    )
+    if (!result) {
+      router.events?.emit('routeChangeError')
+      // eslint-disable-next-line no-throw-literal
+      throw "Abort route change by user's confirmation."
     }
-    router.events?.on('beforeHistoryChange', nextNavigationHandler)
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => {
-      router.events?.off('beforeHistoryChange', nextNavigationHandler)
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
-  }, [warnBeforeLeaving, router.events, submitted])
+  }
 
   return (
     <PageWrapper title={title} meta={page.meta}>
       <Container>
-        <div className="space-y-12 mb-40">
+        <div className="mb-space-desktop-md mt-space-md space-y-12 md:mb-40">
           <PageTitleSection
             title={submitted ? confirmationTitle : ''}
             label={submitted ? formSubmittedString : title}
@@ -151,6 +139,15 @@ export function FormPage({
                   )
               }
             })}
+
+            {isFormExcludedFromSurvey(formSchemaUrl) ? null : (
+              <FormSurvey
+                FormioForm={FormioForm}
+                formReady={onFormReady}
+                onSubmitDone={onSubmitDone}
+              />
+            )}
+
             {getHelp.length ? (
               <div>
                 <HeadingXXl as="h2" className="flex flex-row gap-8">
@@ -181,9 +178,10 @@ export function FormPage({
                 language: i18n.language
               }}
               onChange={(event: FormChangeEvent) => {
-                // istanbul ignore next
-                if (event.changed?.instance.root.pristine === false) {
-                  warnBeforeLeaving = true
+                const formInProgress =
+                  !submitted && event.changed?.instance.pristine === false
+                if (formInProgress && !navHandlerOn.current) {
+                  warnBeforeLeaving(true)
                 }
               }}
               formReady={onFormReady}
@@ -199,6 +197,7 @@ export function FormPage({
   // istanbul ignore next
   async function onFormReady(form: Form) {
     let formIsValid = true
+    const { formio } = form
 
     form.on('blur', (event) => {
       const component = form.getComponent(event.component.key as string)
@@ -214,8 +213,68 @@ export function FormPage({
      * handler and sets `isValid` on a copy of the submission object:
      * @see https://github.com/formio/formio.js/blob/v4.19.2/src/Webform.js#L1399
      */
-    form.on('change', (event: FormSubmission & { isValid: boolean }) => {
+    let wizardNav = null
+    if (isFormSurvey) {
+      wizardNav = document.getElementById(`wizard-${form.id}-nav`)
+      wizardNav?.classList.add('hidden')
+    }
+
+    form.on('change', async (event: FormChangeEvent) => {
       formIsValid = event.isValid
+
+      const WAS_IT_EASY_KEY = 'wasItEasyToFillOutThisForm'
+      if (isFormSurvey && event.changed?.component.key === WAS_IT_EASY_KEY) {
+        wizardNav?.classList.remove('hidden')
+
+        const params = new URLSearchParams(window.location.search)
+        const referrer = router.asPath.split('?')[0]
+        const wasItEasy = event.data.wasItEasyToFillOutThisForm
+        let submissionId = params.get('formFeedback') || ''
+
+        if (submissionId && !formio.submissionId) {
+          // update existing submission
+          formio.submissionId = submissionId
+          formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
+
+          const submission: FormSubmission = await formio.loadSubmission()
+          submission.data.wasItEasyToFillOutThisForm = wasItEasy
+          submission.data.referrer = referrer
+
+          form.submission = submission
+          await formio.saveSubmission(submission)
+        } else {
+          // create a new submission and update the query string
+          const submission = await formio.saveSubmission({
+            data: {
+              wasItEasyToFillOutThisForm: wasItEasy,
+              referrer
+            }
+          })
+          submissionId = submission._id
+          formio.submissionId = submissionId
+          formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
+
+          params.set('formFeedback', submissionId)
+          window.history.pushState(null, '', `${referrer}?${params}`)
+        }
+      }
+    })
+
+    form.on('submit', async () => {
+      if (isFormSurvey) {
+        const params = new URLSearchParams(window.location.search)
+        const submissionId = params.get('formFeedback')
+        if (submissionId && !formio.submissionId) {
+          formio.submissionId = submissionId
+          formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
+        } else {
+          const submission: FormSubmission = await formio.loadSubmission()
+          submission.data.referrer = router.asPath.split('?')[0]
+
+          form.submission = submission
+          await formio.saveSubmission(submission)
+        }
+      }
     })
 
     /**
@@ -262,7 +321,6 @@ export function FormPage({
        * URL) then loading the submission directly and passing _that_ to the
        * form so it can use the submission's data.
        */
-      const { formio } = form
       formio.submissionId = submissionId
       formio.submissionUrl = `${formio.formUrl}/submission/${submissionId}`
 
@@ -280,7 +338,6 @@ export function FormPage({
       }
     } else if (feedbackSubmission) {
       // feedback submission only, skip any fetching
-      const { formio } = form
       formio.submissionId = feedbackSubmission
       formio.submissionUrl = `${formio.formUrl}/submission/${feedbackSubmission}`
       await form.render()
@@ -297,6 +354,7 @@ export function FormPage({
   }
 
   function onSubmitDone(submission: FormSubmission) {
+    warnBeforeLeaving(false)
     const eventData = {
       formio_submission_id: submission._id
     }
@@ -305,12 +363,26 @@ export function FormPage({
         type: 'submit',
         dataLayer: eventData
       })
-      setSubmitted(true)
+      if (!isFormSurvey) {
+        // istanbul ignore next
+        setSubmitted(true)
+      }
     } else if (submission.state === 'draft') {
       putFormEvent({
         type: 'save_draft',
         dataLayer: eventData
       })
+    }
+  }
+
+  function warnBeforeLeaving(shouldWarn: boolean) {
+    router.events?.off('beforeHistoryChange', nextNavigationHandler)
+    window.removeEventListener('beforeunload', handleBeforeUnload)
+    navHandlerOn.current = shouldWarn
+
+    if (shouldWarn) {
+      router.events?.on('beforeHistoryChange', nextNavigationHandler)
+      window.addEventListener('beforeunload', handleBeforeUnload)
     }
   }
 
@@ -355,6 +427,12 @@ const InfoBox = classed('div', {
     }
   }
 })
+
+const EXCLUDE_FROM_SURVEY = ['/feedbackformwagtail']
+
+function isFormExcludedFromSurvey(url: string) {
+  return EXCLUDE_FROM_SURVEY.some((part) => url.includes(part))
+}
 
 // istanbul ignore next
 function Loading(props: DynamicOptionsLoadingProps) {

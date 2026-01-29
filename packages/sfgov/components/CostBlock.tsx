@@ -7,13 +7,17 @@ import {
 } from '@/design-system'
 import { Trans, useTranslation } from 'next-i18next'
 import type { TypeCostBlockValues } from '@/types'
-import { RichText } from './RichText'
+import { ITERATIVE_RICH_TEXT_COMPONENTS, RichText } from './RichText'
 const formatter = new Intl.NumberFormat('default', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 0,
   maximumFractionDigits: 2
 })
+
+// TODO: CMS-1306 remove cost variant transaction rich text spacing
+// when rich text spacing is finalized
+// related: CMS-1226, CMS-1272, CMS-1273, CMS-1274, CMS-1304, CMS-1305
 
 export type CostBlockProps = TypeCostBlockValues & {
   variant?: string
@@ -107,7 +111,14 @@ export function CostBlock({
           {COST_WORD}
         </HeadingLg>
         <span className="block font-bold mb-12">{zzyyxx}</span>
-        {description ? <RichText html={description} /> : null}
+        {description ? (
+          <div>
+            <RichText
+              html={description}
+              components={ITERATIVE_RICH_TEXT_COMPONENTS}
+            />
+          </div>
+        ) : null}
       </div>
     )
   }

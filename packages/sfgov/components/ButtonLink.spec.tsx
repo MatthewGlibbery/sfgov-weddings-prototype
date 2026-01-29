@@ -3,6 +3,16 @@ import { ButtonLinkFactory } from '@/lib/factories'
 import { ButtonLink } from './ButtonLink'
 
 describe('ButtonLink', () => {
+  it('renders an icon only ButtonLink component', () => {
+    const fixture = ButtonLinkFactory.make()
+    render(<ButtonLink link={fixture.value} iconOnly />)
+
+    const buttonLink = screen.getByRole('link', {
+      name: fixture.value.screenreader_label
+    })
+    expect(buttonLink).toBeInTheDocument()
+  })
+
   it('renders the ButtonLink component', () => {
     const fixture = ButtonLinkFactory.make()
     render(<ButtonLink link={fixture.value} />)

@@ -8,9 +8,10 @@ import type {
   Form,
   FormSchema,
   HTMLElementSchema,
-  InputComponentSchema
+  InputComponentSchema,
+  RadioComponent
 } from '../formio'
-import { rewriteLibraryUrl } from '../formio'
+import { disableRadioUncheck, rewriteLibraryUrl } from '../formio'
 import { FORM_CLASS } from '../formio/constants.mjs'
 import * as formioComponents from '../formio/components/schema'
 import {
@@ -593,7 +594,7 @@ describe('FormioForm', () => {
       const alert = screen.getByRole('alert')
       expect(alert).toBeInTheDocument()
       const classes = Array.from(alert.classList)
-      expect(classes).toEqual(['formio-component-htmlelement'])
+      expect(classes).toEqual(['formio-component-htmlelement', '!my-0'])
     })
   })
 
@@ -698,6 +699,48 @@ describe('modifyComponentClassname()', () => {
 describe('modifyHTMLElementClassname()', () => {
   it('returns undefined if undefined is received', () => {
     expect(modifyHTMLElementClassname(undefined)).toEqual(undefined)
+  })
+})
+
+describe('disableRadioUncheck()', () => {
+  it('replaces the radio component updateValue method', () => {
+    const radioPrototype = Components.components.radio
+      .prototype as unknown as RadioComponent
+    const originalUpdateValue = radioPrototype.updateValue
+
+    disableRadioUncheck()
+
+    const newUpdateValue = radioPrototype.updateValue
+
+    expect(typeof newUpdateValue).toBe('function')
+    expect(newUpdateValue).not.toBe(originalUpdateValue)
+  })
+
+  it('updates state when value has changed', () => {
+    const radioPrototype = Components.components.radio
+      .prototype as unknown as RadioComponent
+
+    const mockFieldMethods = {
+      getValue: () => 'new value',
+      updateOnChange: jest.fn()
+    }
+    const mockRadioComponent = {
+      dataValue: 'old value',
+      isEqual: (newValue: string, dataValue: any) => newValue === dataValue,
+      setSelectedClasses: jest.fn(),
+      updateValue: jest.fn(),
+      ...mockFieldMethods
+    } as unknown as RadioComponent
+
+    disableRadioUncheck()
+    mockRadioComponent.updateValue = radioPrototype.updateValue
+
+    const result = mockRadioComponent.updateValue('new value', {})
+
+    expect(mockRadioComponent.dataValue).toBe('new value')
+    expect(mockRadioComponent.setSelectedClasses).toHaveBeenCalled()
+    expect(mockRadioComponent.updateOnChange).toHaveBeenCalledWith({}, true)
+    expect(result).toBe(true)
   })
 })
 
