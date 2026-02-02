@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "name": "sfgov-storybook",
+  "scripts": {
+    "storybook": "storybook dev -c src -p 6006",
+    "prebuild": "rm -rf ../sfgov/public/storybook",
+    "build": "storybook build -c src -o ../sfgov/public/storybook",
+    "chromatic": "chromatic --exit-zero-on-changes"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-react": "^7.23.3",
+    "@babel/preset-typescript": "^7.23.3",
+    "@storybook/addon-a11y": "^8.3.5",
+    "@storybook/addon-essentials": "^8.3.4",
+    "@storybook/blocks": "^8.3.4",
+    "@storybook/nextjs": "^8.3.4",
+    "@storybook/react": "^8.3.4",
+    "@storybook/test": "^8.3.4",
+    "dedent": "^1.5.3",
+    "eslint-plugin-storybook": "^0.6.15",
+    "postcss-loader": "^7.3.3",
+    "react": "^18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^18.2.0",
+    "storybook": "^8.3.4"
+  },
+  "devDependencies": {
+    "@types/react-copy-to-clipboard": "^5.0.7",
+    "chromatic": "^11.0.0",
+    "eslint-plugin-storybook": "^0.6.15"
+  }
+}
