@@ -100,6 +100,102 @@ export function runGlobalA11yTests<PageData>(
       await expect(page).toHaveLangAttributes()
     })
 
+    test('validate that aria labels are present in the expandable header navigation menus', async ({
+      mount,
+      page
+    }) => {
+      const data = factory.make()
+      await mount(<Component page={data} />)
+
+      await page.waitForLoadState('domcontentloaded')
+
+      // ------------------------------------------------------------
+      // Find the main page OR CT iframe frame that contains
+      // the Primary Header Navigation
+      // ------------------------------------------------------------
+      const navSelector = 'nav[aria-label="Primary Header Navigation"]'
+      let ctx: any = page
+      let nav = page.locator(navSelector)
+
+      if ((await nav.count()) === 0) {
+        for (const f of page.frames()) {
+          const candidate = f.locator(navSelector)
+          if ((await candidate.count()) > 0) {
+            ctx = f
+            nav = candidate
+            break
+          }
+        }
+      }
+
+      await expect(nav).toHaveCount(1)
+
+      // ------------------------------------------------------------
+      // Open ALL duplicates of each top nav menu (<details>) so submenu links render
+      // ------------------------------------------------------------
+      const openAllMenus = async (
+        label: 'Services' | 'Departments' | 'Contact'
+      ) => {
+        const details = ctx.locator(`details[aria-label="${label}"]`)
+        const n = await details.count()
+        expect(n).toBeGreaterThan(0)
+
+        await details.evaluateAll((els: HTMLDetailsElement[]) => {
+          els.forEach((el: HTMLDetailsElement) => {
+            el.setAttribute('open', '')
+          })
+        })
+      }
+
+      await openAllMenus('Services')
+      await openAllMenus('Departments')
+      await openAllMenus('Contact')
+
+      // ------------------------------------------------------------
+      // Validate aria-labels WITHOUT hard-coding:
+      // For each menu, ensure there exists at least one link whose aria-label
+      // follows the pattern: "List with <number> items. <some text>"
+      // ------------------------------------------------------------
+      const expectMenuHasListWithAriaLabel = async (
+        menuLabel: 'Services' | 'Departments' | 'Contact'
+      ) => {
+        const menus = nav.locator(`details[aria-label="${menuLabel}"]`)
+        const menuCount = await menus.count()
+        expect(menuCount).toBeGreaterThan(0)
+
+        // Because CT can render duplicates, check all instances and require at least one match.
+        let found = false
+
+        for (let i = 0; i < menuCount; i++) {
+          const menu = menus.nth(i)
+
+          // Any link in this menu whose aria-label starts with "List with "
+          // and matches "List with <digits> items. ..."
+          const candidateLinks = menu.locator('a[aria-label^="List with "]')
+          const cCount = await candidateLinks.count()
+
+          for (let j = 0; j < cCount; j++) {
+            const link = candidateLinks.nth(j)
+            const aria = await link.getAttribute('aria-label')
+            if (!aria) continue
+
+            if (/^List with \d+ items\.\s*\S/.test(aria)) {
+              found = true
+              break
+            }
+          }
+
+          if (found) break
+        }
+
+        expect(found).toBe(true)
+      }
+
+      await expectMenuHasListWithAriaLabel('Services')
+      await expectMenuHasListWithAriaLabel('Departments')
+      await expectMenuHasListWithAriaLabel('Contact')
+    })
+
     test('validate axe core accessibility tests', async ({ mount, page }) => {
       const data = factory.make()
       await mount(<Component page={data} />)
