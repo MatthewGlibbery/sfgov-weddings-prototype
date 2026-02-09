@@ -11,7 +11,7 @@ import { PageLink } from './PageLink'
 import { CostBlock } from './CostBlock'
 import type { PageData, TypeStepBlock } from '@/types'
 import { useTranslation } from 'next-i18next'
-import { RichText } from './RichText'
+import { ITERATIVE_RICH_TEXT_COMPONENTS, RichText } from './RichText'
 import React from 'react'
 import { ZebraStripedSection } from './ZebraStripeSection'
 
@@ -166,7 +166,10 @@ export const Step = ({
           ) : null}
           {step.step_description ? (
             <div className="mb-12" data-testid="step-description">
-              <RichText html={step.step_description || ''} />
+              <RichText
+                html={step.step_description || ''}
+                components={ITERATIVE_RICH_TEXT_COMPONENTS}
+              />
             </div>
           ) : null}
           {step.related_content_transactions?.[0]?.value ? (

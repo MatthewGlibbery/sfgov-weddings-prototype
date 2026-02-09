@@ -10,6 +10,7 @@ import {
 import type { TypeContactFooterBlockValues } from '@/types'
 import {
   EmailBlock,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   Location,
   PhoneNumberBlock,
   SocialMedia,
@@ -125,7 +126,10 @@ export const ContactFooter = ({
               {...extra.value}
               key={extra.id}
               as={'p'}
-              richTextComponents={richTextComponents}
+              richTextComponents={{
+                ...richTextComponents,
+                ...ITERATIVE_RICH_TEXT_COMPONENTS
+              }}
             />
           ))}
         </StackedItem>

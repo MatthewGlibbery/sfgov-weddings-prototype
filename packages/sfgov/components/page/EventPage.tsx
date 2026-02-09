@@ -19,6 +19,7 @@ import {
   CostBlock,
   DateTimeBlock,
   Image,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   Location,
   PageLink,
   PageWrapper,
@@ -68,7 +69,10 @@ export const EventPage: ComponentType<{ page: EventPageData }> = ({ page }) => {
             {image ? <Image imageRef={image} className="rounded-4" /> : null}
             {body ? (
               <div>
-                <RichText html={body} />
+                <RichText
+                  html={body}
+                  components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                />
               </div>
             ) : null}
           </div>
