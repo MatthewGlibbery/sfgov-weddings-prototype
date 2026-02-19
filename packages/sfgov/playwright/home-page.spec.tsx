@@ -1,14 +1,19 @@
-// packages/sfgov/playwright/globalA11yTests.ts
 import React from 'react'
 import { test, expect } from './fixtures'
 import { HomePage } from '../components/page/HomePage'
 import { HomePageFactory } from '@/lib/factories'
 import { runGlobalA11yTests } from './globalA11yTests'
+import { runModuleA11yTests } from './moduleA11yTests'
 
 // ============================================================
 // Run all shared global accessibility tests
 // ============================================================
 runGlobalA11yTests(HomePage, HomePageFactory)
+
+// ============================================================
+// Run all module specific accessibility tests
+// ============================================================
+runModuleA11yTests(HomePage, HomePageFactory)
 
 // ============================================================
 // Module Specific Tests
