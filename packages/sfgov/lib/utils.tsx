@@ -138,9 +138,9 @@ function getServicesLinks(t: TFunction) {
       })
     },
     {
-      href: '/topics--building-permits',
-      text: t('building-permits-link', {
-        defaultValue: 'Get a building permit'
+      href: '/topic-permitting',
+      text: t('get-permit-link', {
+        defaultValue: 'Get a permit'
       })
     },
     {
