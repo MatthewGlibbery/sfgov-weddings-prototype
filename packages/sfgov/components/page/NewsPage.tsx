@@ -14,6 +14,7 @@ import { useTranslation } from 'next-i18next'
 import {
   ComposedDate,
   Image,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   PageLink,
   PageWrapper,
   RelatedContentList,
@@ -53,13 +54,14 @@ export const NewsPage: ComponentType<{ page: NewsPageData }> = ({ page }) => {
               <RichText
                 html={body}
                 components={{
-                  p: classed('p', 'md:w-[90%] lg:w-3/4 my-28'),
+                  ...ITERATIVE_RICH_TEXT_COMPONENTS,
+                  p: classed('p', 'md:w-[90%] lg:w-3/4 mb-20'),
                   blockquote: ({ children, ...rest }) => (
                     <>
                       <PullQuote aria-hidden="true" {...rest}>
                         {children}
                       </PullQuote>
-                      <p className="mb-20 lg:mb-0 md:w-1/2">{children}</p>
+                      <p className="mb-20 md:w-1/2">{children}</p>
                     </>
                   )
                 }}

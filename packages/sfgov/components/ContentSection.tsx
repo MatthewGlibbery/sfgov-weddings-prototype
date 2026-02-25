@@ -1,11 +1,11 @@
 import { BodyText, Button, Container, HeadingXXl } from '@/design-system'
-import { TypeContentSectionBlockValues } from '@/types'
+import type { TypeContentSectionBlockValues } from '@/types'
 import { Callout } from './Callout'
 import { EmbeddedContentBlock } from './EmbeddedContentBlock'
 import { Image } from './Image'
 import { PhoneNumberBlock } from './PhoneNumberBlock'
 import { Spotlight } from './Spotlight'
-import { RichText } from './RichText'
+import { ITERATIVE_RICH_TEXT_COMPONENTS, RichText } from './RichText'
 import { Timeline } from './Timeline'
 import { TileContentSection } from './TileContentSection'
 import { ContentTileList } from './Tile'
@@ -69,14 +69,20 @@ export const ContentSection = ({
               return (
                 <Wrapper {...props}>
                   <BodyText>
-                    <RichText html={block.value} />{' '}
+                    <RichText
+                      html={block.value}
+                      components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                    />{' '}
                   </BodyText>
                 </Wrapper>
               )
             case 'callout':
               return (
                 <Wrapper {...props}>
-                  <Callout html={block.value} />
+                  <Callout
+                    html={block.value}
+                    richTextComponents={ITERATIVE_RICH_TEXT_COMPONENTS}
+                  />
                 </Wrapper>
               )
             case 'image':

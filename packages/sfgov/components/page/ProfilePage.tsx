@@ -17,6 +17,7 @@ import type { ComponentType, ReactNode } from 'react'
 import {
   ContactFooter,
   EmailBlock,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   PhoneNumberBlock,
   ProfileCard,
   QuickLinkList,
@@ -94,7 +95,10 @@ export const ProfilePage: ComponentType<{ page: ProfilePageData }> = ({
                     biography.replace(/<[^>]*>/g, '').length > 1000 ? 300 : null
                   }
                 >
-                  <RichText html={biography} />
+                  <RichText
+                    html={biography}
+                    components={ITERATIVE_RICH_TEXT_COMPONENTS}
+                  />
                 </ShowMore>
               ) : null}
             </div>
