@@ -5,6 +5,7 @@ import { Container, DisplayLg, Grid, PageTitleSection } from '@/design-system'
 import { useTranslation } from 'next-i18next'
 
 import {
+  ITERATIVE_RICH_TEXT_COMPONENTS,
   PageLink,
   PageWrapper,
   RelatedContentList,
@@ -45,7 +46,10 @@ export const StepByStepPage: ComponentType<{ page: StepByStepData }> = ({
           ) : null}
           {primaryAgency ? <PageLink page={primaryAgency} /> : null}
           <div className="my-60 lg:w-1/2" data-testid="step-by-step-intro">
-            <RichText html={intro} />
+            <RichText
+              html={intro}
+              components={ITERATIVE_RICH_TEXT_COMPONENTS}
+            />
           </div>
         </PageTitleSection>
       </Container>

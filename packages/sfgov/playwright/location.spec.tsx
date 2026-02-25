@@ -4,11 +4,17 @@ import { test, expect } from './fixtures'
 import { LocationPage } from '../components/page/LocationPage'
 import { LocationPageFactory } from '@/lib/factories'
 import { runGlobalA11yTests } from './globalA11yTests'
+import { runModuleA11yTests } from './moduleA11yTests'
 
 // ============================================================
 // Run all shared global accessibility tests
 // ============================================================
 runGlobalA11yTests(LocationPage, LocationPageFactory)
+
+// ============================================================
+// Run all module specific accessibility tests
+// ============================================================
+runModuleA11yTests(LocationPage, LocationPageFactory)
 
 // ============================================================
 // Content Type Specific Tests

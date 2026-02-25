@@ -3,19 +3,26 @@ import {
   Grid,
   HeadingXXl,
   IconArrowLeft,
-  IconDownload,
-  Link,
   PageTitleSection
 } from '@/design-system'
 import type { AboutPageData } from '@/types'
 import { useTranslation } from 'next-i18next'
 import type { ComponentType } from 'react'
-import { ContentTileList, PageLink, TileContentSection } from '../'
+import {
+  ContentTileList,
+  ITERATIVE_RICH_TEXT_COMPONENTS,
+  PageLink,
+  TileContentSection
+} from '../'
 import { DownloadableFilesSection } from '../DownloadableFilesSection'
 import { TitleAndText } from '../TitleAndText'
 import { PageWrapper } from './PageWrapper'
+import type { HTMLComponentMap } from '../wagtail'
 
-export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
+export const AboutPage: ComponentType<{
+  page: AboutPageData
+  richTextComponents?: HTMLComponentMap
+}> = ({ page, richTextComponents }) => {
   const { t } = useTranslation()
   const {
     title,
@@ -52,6 +59,10 @@ export const AboutPage: ComponentType<{ page: AboutPageData }> = ({ page }) => {
                       key={item.id}
                       as="h2"
                       heading={HeadingXXl}
+                      richTextComponents={{
+                        ...richTextComponents,
+                        ...ITERATIVE_RICH_TEXT_COMPONENTS
+                      }}
                       {...item.value}
                     />
                   ))

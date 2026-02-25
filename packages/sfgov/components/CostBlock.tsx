@@ -99,7 +99,10 @@ export function CostBlock({
         {description ? (
           <>
             {' '}
-            <RichText html={description} />
+            <RichText
+              html={description}
+              components={ITERATIVE_RICH_TEXT_COMPONENTS}
+            />
           </>
         ) : null}
       </div>
