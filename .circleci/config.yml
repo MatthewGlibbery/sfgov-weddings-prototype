@@ -200,7 +200,7 @@ workflows:
             - aws-ecr/build_and_push_image
           filters:
             branches:
-              only: training
+              only: CMS-1293-auto-deploy-frontend-code-to-the-training-site-after-a-production-release
 
   qa_site_deploy:
     jobs:
