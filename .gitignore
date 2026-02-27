@@ -49,3 +49,5 @@ storybook-static/
 
 #i18next-parse output
 locales/
+
+.terraform
