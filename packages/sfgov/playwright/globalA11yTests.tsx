@@ -196,6 +196,82 @@ export function runGlobalA11yTests<PageData>(
       await expectMenuHasListWithAriaLabel('Contact')
     })
 
+    test('validate accessible markup in the feedback modal dialog', async ({
+      mount,
+      page
+    }) => {
+      const data = factory.make()
+      await mount(<Component page={data} />)
+
+      await page.waitForLoadState('domcontentloaded')
+
+      const buttonName = /did you find what you needed\?/i
+      let ctx: any = page
+
+      // Find CT frame that contains the FAB button
+      if (
+        (await page.getByRole('button', { name: buttonName }).count()) === 0
+      ) {
+        for (const f of page.frames()) {
+          if ((await f.getByRole('button', { name: buttonName }).count()) > 0) {
+            ctx = f
+            break
+          }
+        }
+      }
+
+      const openModalButton = ctx.getByRole('button', { name: buttonName })
+
+      await expect(openModalButton).toHaveCount(1)
+      await expect(openModalButton).toBeVisible()
+      await expect(openModalButton).toBeEnabled()
+
+      await openModalButton.click()
+
+      const modal = ctx
+        .locator('[role="dialog"]:visible, [role="alertdialog"]:visible')
+        .first()
+
+      await expect(modal).toHaveCount(1)
+      await expect(modal).toBeVisible()
+
+      // Validate visible H1 with expected text
+      const h1 = modal.locator('h1:visible', {
+        hasText: /did you find what you needed\?/i
+      })
+
+      await expect(h1).toHaveCount(1)
+      await expect(h1).toBeVisible()
+
+      // aria-labelledby must exist
+      const ariaLabelledby = await modal.getAttribute('aria-labelledby')
+      expect(ariaLabelledby).toBeTruthy()
+
+      // aria-labelledby must reference exactly one element inside modal
+      const labelledEl = modal.locator(`#${ariaLabelledby}`)
+      await expect(labelledEl).toHaveCount(1)
+
+      // Validate close button
+      const closeBtn = ctx.locator('button[aria-label="Close modal"]:visible')
+      await expect(closeBtn).toHaveCount(1)
+
+      // Yes button validation
+      const yesBtn = modal.locator(
+        'button[aria-label="Yes this page was helpful"]:visible'
+      )
+      await expect(yesBtn).toHaveCount(1)
+
+      // No button validation
+      const noBtn = modal.locator(
+        'button[aria-label="No this page was not helpful"]:visible'
+      )
+      await expect(noBtn).toHaveCount(1)
+
+      // Close modal
+      await closeBtn.click()
+      await modal.waitFor({ state: 'detached' })
+    })
+
     test('validate axe core accessibility tests', async ({ mount, page }) => {
       const data = factory.make()
       await mount(<Component page={data} />)
