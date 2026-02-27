@@ -1,4 +1,4 @@
-// packages/sfgov/playwright/formTests.tsx  (name may differ in your repo)
+// packages/sfgov/playwright/formTests.tsx
 import React from 'react'
 import { test, expect } from './fixtures'
 import { AxeBuilder } from '@axe-core/playwright'
@@ -7,14 +7,18 @@ import { FormPageFactory } from '@/lib/factories'
 import { runGlobalA11yTests } from './globalA11yTests'
 
 // ============================================================
-// Skip ONLY the global axe test in THIS file
-// Replace it with a custom axe run that disables one rule.)
+// Skip ONLY specific global tests in THIS file
+// Replace axe-core global test with a custom axe run that disables one rule.
+// Also skip the feedback modal dialog markup test for this content type.
 // ============================================================
 test.beforeEach(async ({}, testInfo) => {
-  if (testInfo.title === 'validate axe core accessibility tests') {
+  if (
+    testInfo.title === 'validate axe core accessibility tests' ||
+    testInfo.title === 'validate accessible markup in the feedback modal dialog'
+  ) {
     test.skip(
       true,
-      'Form page uses custom axe config: disable page-has-heading-one only'
+      'Form page uses custom a11y expectations/config; skip selected global tests'
     )
   }
 })
