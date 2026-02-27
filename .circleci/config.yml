@@ -15,6 +15,10 @@ parameters:
     type: string
     default: ""
 
+orbs:
+  aws-ecr: circleci/aws-ecr@9.4.0
+  aws-cli: circleci/aws-cli@5.2.0
+
 jobs:
   test:
     docker:
@@ -159,6 +163,19 @@ workflows:
           filters:
             branches:
               only: develop
+      - aws-ecr/build_and_push_image:
+          auth:
+            - aws-cli/setup:
+              auth: static
+              aws_access_key_id: '${$AWS_ACCESS_KEY_ID}'
+              aws_secret_access_key: '${$AWS_SECRET_ACCESS_KEY}'
+          repo: 'platform/web'
+          account_id: '395833734759'
+          aws_domain: 'amazonaws.com'
+          platform: 'linux/amd64/v4'
+          region: 'us-west-1'
+          tag: '${CIRCLE_SHA1},latest,${CIRCLE_BRANCH},PR-${CIRCLE_PULL_REQUEST##*/}'
+          extra_build_args: --provenance=false
 
   qa_site_deploy:
     jobs:
