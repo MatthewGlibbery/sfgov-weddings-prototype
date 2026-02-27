@@ -162,7 +162,7 @@ jobs:
           command: |
             aws ecs update-service \
               --cluster cms-common \
-              --service cms-${CIRCLE_BRANCH}-web \
+              --service cms-training-web \
               --force-new-deployment \
               --region us-west-1
 
