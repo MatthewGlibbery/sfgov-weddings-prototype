@@ -162,7 +162,7 @@ jobs:
           command: |
             aws ecs update-service \
               --cluster cms-common \
-              --service cms-training-web \
+              --service cms-${CIRCLE_BRANCH}-web \
               --force-new-deployment \
               --region us-west-1
 
@@ -200,7 +200,7 @@ workflows:
             - aws-ecr/build_and_push_image
           filters:
             branches:
-              only: CMS-1293-auto-deploy-frontend-code-to-the-training-site-after-a-production-release-update
+              only: training
 
   qa_site_deploy:
     jobs:
