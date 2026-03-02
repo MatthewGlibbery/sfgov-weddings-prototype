@@ -161,8 +161,8 @@ jobs:
           name: Restart ECS service
           command: |
             aws ecs update-service \
-              --cluster sfgov-common-default \
-              --service sfgov-branch-training-web-service-0qzu0uov \
+              --cluster cms-common \
+              --service cms-training-web \
               --force-new-deployment \
               --region us-west-1
 
