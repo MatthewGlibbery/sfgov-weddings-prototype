@@ -1,5 +1,5 @@
-import { TypeCallToActionValues } from '@/types'
-import { BodyText, Button, HeadingLg } from '@/design-system'
+import type { TypeCallToActionValues } from '@/types'
+import { BodyText, HeadingLg } from '@/design-system'
 import { ButtonLink } from './ButtonLink'
 
 /* FYI: In current sf.gov there are CTA variants that aren't accounted for

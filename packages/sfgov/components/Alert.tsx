@@ -1,11 +1,20 @@
-import { classed, classes, IconInfo } from '@/design-system'
+import {
+  classed,
+  classes,
+  HeadingMd,
+  HeadingSm,
+  HeadingXl,
+  IconInfo,
+  Link
+} from '@/design-system'
 import type { TypeAlertBlockValues } from '@/types'
 import type { ComponentProps } from 'react'
 import { RichText } from './RichText'
+import type { HTMLComponentMap } from './wagtail'
 
 const PreviewAlert = classed(
   'div',
-  'w-full bg-[#1F7E9A] flex space-x-20 lg:mb-28 py-28 px-20 md:px-28 lg:px-96 text-white'
+  'w-full bg-[#1F7E9A] flex space-x-12 p-20 md:px-28 lg:p-28 text-white'
 )
 
 const SitewideAlertWrapper = classed('div', {
@@ -20,8 +29,26 @@ const SitewideAlertWrapper = classed('div', {
 
 const InfoAlert = classed(
   'div',
-  'w-full bg-information10 border-1 border-information600 flex items-start md:items-center space-x-20 mb-28 py-28 px-20 md:px-28 lg:px-96'
+  'w-full bg-information50 border-1 border-information600 flex items-start space-x-12 p-20 md:px-28 lg:p-28'
 )
+
+export const ALERT_RICH_TEXT_COMPONENTS = {
+  h2: (props) => <HeadingXl as="h2" className="mb-8 last:mb-0" {...props} />,
+  h3: (props) => <HeadingMd as="h3" className="mb-8 last:mb-0" {...props} />,
+  h4: (props) => <HeadingSm as="h4" className="mb-8 last:mb-0" {...props} />,
+  a: (props) => (
+    <Link as="a" className="text-primary600 mb-8 last:mb-0" {...props} />
+  ),
+  p: classed('p', 'mb-8 last:mb-0'),
+  ul: classed('ul', 'mb-8 last:mb-0'),
+  ol: classed('ol', 'mb-8 last:mb-0'),
+  li: classed('li', 'mb-8 last:mb-0'),
+  br: () => <br data-testid="test-br" />,
+  blockquote: classed(
+    'blockquote',
+    'bg-neutral50 p-20 rounded-4 mb-8 last:mb-0'
+  )
+} as const satisfies HTMLComponentMap
 
 export type AlertProps = ComponentProps<
   typeof PreviewAlert | typeof InfoAlert
@@ -37,12 +64,16 @@ export const Alert = ({
   variant === 'preview' ? (
     <PreviewAlert {...rest}>
       <IconInfo className="shrink-0" width={20} />
-      <RichText html={description} />
+      <div>
+        <RichText html={description} components={ALERT_RICH_TEXT_COMPONENTS} />
+      </div>
     </PreviewAlert>
-  ) : (expirationDate ? new Date(expirationDate) > new Date() : false) ? (
+  ) : !expirationDate || new Date(expirationDate) > new Date() ? (
     <InfoAlert {...rest}>
       <IconInfo className="text-information600 shrink-0" width={20} />
-      <RichText html={description} />
+      <div>
+        <RichText html={description} components={ALERT_RICH_TEXT_COMPONENTS} />
+      </div>
     </InfoAlert>
   ) : null
 

@@ -1,4 +1,4 @@
-import { BodyText, Button, Container, HeadingXXl } from '@/design-system'
+import { BodyText, Container, HeadingXXl } from '@/design-system'
 import type { TypeContentSectionBlockValues } from '@/types'
 import { Callout } from './Callout'
 import { EmbeddedContentBlock } from './EmbeddedContentBlock'
