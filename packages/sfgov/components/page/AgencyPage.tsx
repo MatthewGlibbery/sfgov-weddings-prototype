@@ -133,7 +133,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
       className={mainImage ? 'mt-0' : 'mt-20'}
     >
       {alert?.[0]?.value ? (
-        <Container>
+        <Container className="my-20">
           <Alert {...alert[0].value} />
         </Container>
       ) : null}

@@ -63,14 +63,14 @@ export const Alert = ({
 }: AlertProps) =>
   variant === 'preview' ? (
     <PreviewAlert {...rest}>
-      <IconInfo className="shrink-0" width={20} />
+      <IconInfo className="shrink-0" width={24} />
       <div>
         <RichText html={description} components={ALERT_RICH_TEXT_COMPONENTS} />
       </div>
     </PreviewAlert>
   ) : !expirationDate || new Date(expirationDate) > new Date() ? (
     <InfoAlert {...rest}>
-      <IconInfo className="text-information600 shrink-0" width={20} />
+      <IconInfo className="text-information600 shrink-0" width={24} />
       <div>
         <RichText html={description} components={ALERT_RICH_TEXT_COMPONENTS} />
       </div>

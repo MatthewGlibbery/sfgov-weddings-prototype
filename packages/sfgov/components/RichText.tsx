@@ -10,7 +10,9 @@ type RichTextProps = {
 }
 
 function getTocId(blockKey?: string) {
-  return blockKey ?? Math.floor(Math.random() * 200)
+  return blockKey
+    ? blockKey + (Math.random() + 1).toString(36).substring(7)
+    : Math.floor(Math.random() * 200)
 }
 
 // h2 and h3 get an extra data-block-key type for table of contents
