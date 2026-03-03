@@ -12,7 +12,7 @@ const SitewideAlertWrapper = classed('div', {
   base: 'flex border-1 items-start',
   variants: {
     variant: {
-      information: 'bg-information10 border-information600',
+      information: 'bg-information50 border-information600',
       critical: 'bg-danger10 border-danger600'
     }
   }
@@ -62,9 +62,16 @@ export const SitewideAlert = ({
         )}
         width={20}
       />
-      <div className="xl:w-[1280px]">
+      <RichTextWrapper className="xl:w-[1280px]">
         <RichText html={text} />
-      </div>
+      </RichTextWrapper>
     </div>
   </SitewideAlertWrapper>
 )
+
+/**
+ * This wrapper undoes the margins on its direct descendants and adds it back in
+ * more consistently with a vertical spacing utility:
+ * https://v3.tailwindcss.com/docs/space#add-vertical-space-between-children
+ */
+const RichTextWrapper = classed('div', '*:!m-0 !space-y-8')
