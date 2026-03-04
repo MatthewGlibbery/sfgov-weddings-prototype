@@ -24,162 +24,167 @@ import sutro from '../public/static/sutro.svg'
 import salesforce from '../public/static/salesforce.svg'
 
 const StyledFooter = classed(
-  'footer',
+  'div',
   'bg-primary900 text-white mt-40 md:mt-60 lg:mt-80'
 )
 
 export type SiteFooterProps = ComponentProps<typeof StyledFooter>
 
-export function SiteFooter(props: SiteFooterProps) {
+export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
   const { t } = useTranslation()
   const links = getFooterLinks(t)
 
   return (
-    <StyledFooter role="contentinfo" {...props}>
-      <Container className="pt-28 md:pt-[48px] md:flex md:justify-between">
-        <div className="md:content-center">
-          <Image
-            src={footerSeal}
-            alt="City of San Francisco seal and text reading 'City and County of San Francisco'"
-            width={215}
-            height={40}
-            className="mb-28 md:w-[264px] md:h-[59px] lg:w-[344px] lg:h-[77px] shrink-0"
-          />
-          <div className="flex gap-28 ml-12 mb-40">
-            <Link
-              className="text-white"
-              href="https://www.facebook.com/SF"
-              aria-label="link to sf.gov facebook"
-            >
-              <IconFacebook width={24} />
-            </Link>
-            <Link
-              className="text-white"
-              href="https://www.instagram.com/sfgov"
-              aria-label="link to sf.gov instagram"
-            >
-              <IconInstagram width={24} />
-            </Link>
-            <Link
-              className="text-white"
-              href="https://www.threads.net/@sfgov"
-              aria-label="link to sf.gov threads"
-            >
-              <IconThreads width={24} />
-            </Link>
-            <Link
-              className="text-white"
-              href="https://x.com/sfgov"
-              aria-label="link to sf.gov x"
-            >
-              <IconTwitter width={24} />
-            </Link>
-            <Link
-              className="text-white"
-              href="https://bsky.app/profile/sfgov.sf.gov"
-              aria-label="link to sf.gov bluesky"
-            >
-              <IconBluesky width={24} />
-            </Link>
-          </div>
-        </div>
-        <div className="mb-40 md:flex-col">
-          <HeadingMd as="p" className="text-white">
-            {t('our-city', { defaultValue: 'Our City' })}
-          </HeadingMd>
-          <div className="flex flex-wrap gap-x-16 md:flex-col md:gap-y-12">
-            {links.map((link, i) => (
+    <footer role="contentinfo">
+      <StyledFooter {...rest}>
+        <Container className="pt-28 md:pt-[48px] md:flex md:justify-between">
+          <div className="md:content-center">
+            <Image
+              src={footerSeal}
+              alt="City of San Francisco seal and text reading 'City and County of San Francisco'"
+              width={215}
+              height={40}
+              className="mb-28 md:w-[264px] md:h-[59px] lg:w-[344px] lg:h-[77px] shrink-0"
+            />
+            <div className="flex gap-28 ml-12 mb-40">
               <Link
-                key={i}
-                className="text-white ga-footer-link"
-                href={link.href}
+                className="text-white"
+                href="https://www.facebook.com/SF"
+                aria-label="link to sf.gov facebook"
               >
-                {link.text}
+                <IconFacebook width={24} />
               </Link>
-            ))}
+              <Link
+                className="text-white"
+                href="https://www.instagram.com/sfgov"
+                aria-label="link to sf.gov instagram"
+              >
+                <IconInstagram width={24} />
+              </Link>
+              <Link
+                className="text-white"
+                href="https://www.threads.net/@sfgov"
+                aria-label="link to sf.gov threads"
+              >
+                <IconThreads width={24} />
+              </Link>
+              <Link
+                className="text-white"
+                href="https://x.com/sfgov"
+                aria-label="link to sf.gov x"
+              >
+                <IconTwitter width={24} />
+              </Link>
+              <Link
+                className="text-white"
+                href="https://bsky.app/profile/sfgov.sf.gov"
+                aria-label="link to sf.gov bluesky"
+              >
+                <IconBluesky width={24} />
+              </Link>
+            </div>
           </div>
+          <div className="mb-40 md:flex-col">
+            <HeadingMd as="p" className="text-white">
+              {t('our-city', { defaultValue: 'Our City' })}
+            </HeadingMd>
+            <div className="flex flex-wrap gap-x-16 md:flex-col md:gap-y-12">
+              {links.map((link, i) => (
+                <Link
+                  key={i}
+                  className="text-white ga-footer-link"
+                  href={link.href}
+                >
+                  {link.text}
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="mb-40 md:flex-col">
+            <HeadingMd as="p" className="text-white">
+              {t('languages', { defaultValue: 'Languages' })}
+            </HeadingMd>
+            <LanguageSelector isFooter={true} />
+          </div>
+          <div className="mb-40 md:flex-col">
+            <HeadingMd as="p" className="text-white">
+              {t('policy', { defaultValue: 'Policy' })}
+            </HeadingMd>
+            <div className="flex flex-wrap gap-x-16 md:flex-col md:gap-y-12">
+              <Link
+                className="text-white"
+                href="/information--privacy-policy-sfgov"
+              >
+                {t('privacy-policy', { defaultValue: 'Privacy policy' })}
+              </Link>
+              <Link
+                className="text-white"
+                href="/information--disclaimer-sfgov"
+              >
+                {t('disclaimer', { defaultValue: 'Disclaimer' })}
+              </Link>
+            </div>{' '}
+          </div>
+        </Container>
+        <div className="relative overflow-hidden h-96 md:h-[103px]">
+          <Image
+            src={rearFog}
+            alt="a poof of fog"
+            aria-hidden="true"
+            width={215}
+            height={73}
+            className="absolute bottom-0 left-0"
+          />
+          <Image
+            src={frontFog}
+            alt="a poof of fog"
+            aria-hidden="true"
+            width={324}
+            height={73}
+            className="absolute bottom-0 left-[55px] z-20"
+          />
+          <Image
+            src={sutro}
+            alt="the sutro tower"
+            aria-hidden="true"
+            width={16}
+            height={52}
+            className="absolute bottom-0 left-[95px] z-10"
+          />
+          <Image
+            src={transamerica}
+            alt="the transamerica building"
+            aria-hidden="true"
+            width={24}
+            height={128}
+            className="hidden md:block absolute top-[29px] right-[183px] md:top-[33px] md:right-[259px] z-10"
+          />
+          <Image
+            src={salesforce}
+            alt="the salesforce tower building"
+            aria-hidden="true"
+            width={24}
+            height={82}
+            className="hidden md:block absolute bottom-0 right-[17px] z-10"
+          />
+          <Image
+            src={rearFogRight}
+            alt="a poof of fog"
+            aria-hidden="true"
+            width={220}
+            height={103}
+            className="hidden md:block absolute right-[-70px] bottom-[-6px] md:right-0 md:bottom-0"
+          />
+          <Image
+            src={frontFogRight}
+            alt="a poof of fog"
+            aria-hidden="true"
+            width={341}
+            height={81}
+            className="hidden md:block absolute bottom-0 right-[-60px] md:right-0 z-20"
+          />
         </div>
-        <div className="mb-40 md:flex-col">
-          <HeadingMd as="p" className="text-white">
-            {t('languages', { defaultValue: 'Languages' })}
-          </HeadingMd>
-          <LanguageSelector isFooter={true} />
-        </div>
-        <div className="mb-40 md:flex-col">
-          <HeadingMd as="p" className="text-white">
-            {t('policy', { defaultValue: 'Policy' })}
-          </HeadingMd>
-          <div className="flex flex-wrap gap-x-16 md:flex-col md:gap-y-12">
-            <Link
-              className="text-white"
-              href="/information--privacy-policy-sfgov"
-            >
-              {t('privacy-policy', { defaultValue: 'Privacy policy' })}
-            </Link>
-            <Link className="text-white" href="/information--disclaimer-sfgov">
-              {t('disclaimer', { defaultValue: 'Disclaimer' })}
-            </Link>
-          </div>{' '}
-        </div>
-      </Container>
-      <div className="relative overflow-hidden h-96 md:h-[103px]">
-        <Image
-          src={rearFog}
-          alt="a poof of fog"
-          aria-hidden="true"
-          width={215}
-          height={73}
-          className="absolute bottom-0 left-0"
-        />
-        <Image
-          src={frontFog}
-          alt="a poof of fog"
-          aria-hidden="true"
-          width={324}
-          height={73}
-          className="absolute bottom-0 left-[55px] z-20"
-        />
-        <Image
-          src={sutro}
-          alt="the sutro tower"
-          aria-hidden="true"
-          width={16}
-          height={52}
-          className="absolute bottom-0 left-[95px] z-10"
-        />
-        <Image
-          src={transamerica}
-          alt="the transamerica building"
-          aria-hidden="true"
-          width={24}
-          height={128}
-          className="hidden md:block absolute top-[29px] right-[183px] md:top-[33px] md:right-[259px] z-10"
-        />
-        <Image
-          src={salesforce}
-          alt="the salesforce tower building"
-          aria-hidden="true"
-          width={24}
-          height={82}
-          className="hidden md:block absolute bottom-0 right-[17px] z-10"
-        />
-        <Image
-          src={rearFogRight}
-          alt="a poof of fog"
-          aria-hidden="true"
-          width={220}
-          height={103}
-          className="hidden md:block absolute right-[-70px] bottom-[-6px] md:right-0 md:bottom-0"
-        />
-        <Image
-          src={frontFogRight}
-          alt="a poof of fog"
-          aria-hidden="true"
-          width={341}
-          height={81}
-          className="hidden md:block absolute bottom-0 right-[-60px] md:right-0 z-20"
-        />
-      </div>
-    </StyledFooter>
+      </StyledFooter>
+    </footer>
   )
 }

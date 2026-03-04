@@ -80,10 +80,6 @@ export function getFooterLinks(t: TFunction) {
     {
       href: '/contact-sfgov',
       text: t('contact-us', { defaultValue: 'Contact us' })
-    },
-    {
-      href: '/departments--311-customer-service-center',
-      text: t('contact-311', { defaultValue: 'Contact 311' })
     }
   ]
 }
