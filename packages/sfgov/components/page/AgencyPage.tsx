@@ -132,7 +132,11 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
       meta={{ ...page.meta, description }}
       className={mainImage ? 'mt-0' : 'mt-20'}
     >
-      {alert?.[0]?.value ? <Alert {...alert[0].value} /> : null}
+      {alert?.[0]?.value ? (
+        <Container className="my-20">
+          <Alert {...alert[0].value} />
+        </Container>
+      ) : null}
       {mainImage ? (
         <div
           className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0"

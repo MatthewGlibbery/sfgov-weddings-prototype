@@ -29,15 +29,16 @@ describe('Alert', () => {
     expect(screen.queryByText(alert.value.description)).not.toBeInTheDocument()
   })
 
-  it('does not render an alert if no expiration date', () => {
+  it.only('renders an alert if no expiration date', () => {
     const alert = AlertBlockFactory.make({
       value: {
-        description: 'alert description'
+        description: 'alert description',
+        expiration_date: undefined
       }
     })
     render(<Alert {...alert.value} />)
 
-    expect(screen.queryByText(alert.value.description)).not.toBeInTheDocument()
+    expect(screen.getByText(alert.value.description)).toBeInTheDocument()
   })
 
   it('renders preview banner', () => {

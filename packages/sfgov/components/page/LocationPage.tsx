@@ -63,9 +63,9 @@ export function LocationPage({ page, env }: LocationPageProps) {
   return (
     <PageWrapper title={title} meta={{ ...page.meta, description }}>
       {alert ? (
-        <div className="mx-12 md:mx-28 lg:mx-96">
+        <Container>
           <Alert {...alert.value} />
-        </div>
+        </Container>
       ) : null}
       <ZebraStripedSection>
         <Container className="mb-20 pb-40">

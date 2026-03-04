@@ -16,7 +16,7 @@ import { useTranslation } from 'next-i18next'
 import {
   Accordion,
   AgendaItemBlock,
-  Callout,
+  Alert,
   ComposedDate,
   ComposedTime,
   DownloadableFilesSection,
@@ -242,7 +242,9 @@ export const MeetingPage: ComponentType<{ page: MeetingPageData }> = ({
   return (
     <PageWrapper title={title} meta={page.meta}>
       {cancelled ? (
-        <Callout html="This meeting has been cancelled."></Callout>
+        <Container className="mb-28">
+          <Alert description="This meeting has been cancelled."></Alert>
+        </Container>
       ) : null}
       <Container className="mb-20 pb-40">
         <PageTitleSection
