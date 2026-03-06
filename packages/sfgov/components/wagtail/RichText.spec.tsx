@@ -5,6 +5,17 @@ import { RichText } from './RichText'
 import mockConsole from 'jest-mock-console'
 
 describe('<RichText>', () => {
+  it.each([null, undefined, '', '\n \n'])(
+    'renders nothing with html={%p}',
+    (value) => {
+      const { container } = render(
+        // @ts-expect-error not a string
+        <RichText html={value} />
+      )
+      expect(container.innerHTML).toBe('')
+    }
+  )
+
   it('renders content without components', () => {
     render(<RichText html={'<p>Yo yo yo</p>'} />)
     expect(screen.getByRole('paragraph')).toHaveTextContent('Yo yo yo')
