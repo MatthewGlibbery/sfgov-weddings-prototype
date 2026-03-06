@@ -45,12 +45,9 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
             case 'child_topics':
               return section.value.page_content.length ? (
                 <Container>
-                  <TileContentSection
-                    title=""
-                    tileList={
-                      <ContentTileList links={section.value.page_content} />
-                    }
-                  />
+                  <TileContentSection>
+                    <ContentTileList links={section.value.page_content} />
+                  </TileContentSection>
                 </Container>
               ) : null
             case 'content_top':

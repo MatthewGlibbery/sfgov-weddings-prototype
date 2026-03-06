@@ -26,7 +26,7 @@ import {
   RichText,
   ZebraStripedSection
 } from '..'
-import { TileContentSection } from '../TileContentSection'
+import { ServiceSection, TileContentSection } from '../TileContentSection'
 import type { LocationPageData, PageProps } from '@/types'
 import { isPermitCenter } from '@/lib/utils'
 
@@ -164,21 +164,7 @@ export function LocationPage({ page, env }: LocationPageProps) {
         ) : null}
         {services.length ? (
           <Container>
-            <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('services', { defaultValue: 'Services' })}
-            </HeadingXXl>
-            {services.map((service) => {
-              const servicesTileList = (
-                <ContentTileList links={service.value.services} />
-              )
-              return (
-                <TileContentSection
-                  key={service.id}
-                  title={service.value.title}
-                  tileList={servicesTileList}
-                />
-              )
-            })}
+            <ServiceSection sections={services} />
           </Container>
         ) : null}
         {about ||

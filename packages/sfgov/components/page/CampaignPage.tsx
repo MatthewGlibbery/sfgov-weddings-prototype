@@ -169,20 +169,16 @@ export const CampaignPage: ComponentType<{ page: CampaignPageData }> = ({
         )
       case 'resources': {
         const resourceSections = content?.value?.resource_sections?.map(
-          (resourceSection) => {
-            const TileList = (
+          (resourceSection) => (
+            <TileContentSection
+              key={resourceSection.id}
+              title={resourceSection.value.resource_sections?.title}
+            >
               <ContentTileList
                 links={resourceSection.value.resource_sections?.resources}
               />
-            )
-            return (
-              <TileContentSection
-                key={resourceSection.id}
-                title={resourceSection.value.resource_sections?.title}
-                tileList={TileList}
-              />
-            )
-          }
+            </TileContentSection>
+          )
         )
 
         return (

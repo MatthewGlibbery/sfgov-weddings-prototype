@@ -1,16 +1,15 @@
 import { HeadingXl, HeadingXXl } from '@/design-system'
-import {
+import type {
   TypeContentTileBlock,
   TypeResourcesSectionBlock,
   TypeServicesSectionBlock
 } from '@/types'
 import { useTranslation } from 'next-i18next'
-import { ContentTileList } from './Tile'
 import type { ReactNode } from 'react'
+import { ContentTileList } from './Tile'
 
-type TileContentSectionProps = {
-  title: string
-  tileList: ReactNode
+type TileContentSectionProps = JSX.IntrinsicElements['div'] & {
+  title?: string
 }
 
 type ServiceSectionProps = {
@@ -26,34 +25,39 @@ type TileSectionWrapperProps = {
   title: string
 }
 
-export const TileContentSection = ({
+export function TileContentSection({
   title,
-  tileList
-}: TileContentSectionProps) => (
-  <div>
-    {title ? (
-      <HeadingXl as="p" className="font-body !mb-20">
-        {title}
-      </HeadingXl>
-    ) : null}
-    {tileList}
-  </div>
-)
-
-const TileSectionWrapper = ({ links, title }: TileSectionWrapperProps) => {
-  const tileList = <ContentTileList links={links} />
-  return <TileContentSection title={title} tileList={tileList} />
+  children,
+  ...rest
+}: TileContentSectionProps) {
+  return (
+    <div {...rest}>
+      {title ? (
+        <HeadingXl as="p" className="font-body !mb-20">
+          {title}
+        </HeadingXl>
+      ) : null}
+      {children}
+    </div>
+  )
 }
 
-export const ServiceSection = ({ sections }: ServiceSectionProps) => {
-  const { t } = useTranslation()
+function TileSectionWrapper({ links, title }: TileSectionWrapperProps) {
+  return (
+    <TileContentSection title={title}>
+      <ContentTileList links={links} />
+    </TileContentSection>
+  )
+}
 
+export function ServiceSection({ sections }: ServiceSectionProps) {
+  const { t } = useTranslation()
   return (
     <>
       <HeadingXXl as="h2" className="!mb-28">
         {t('services', { defaultValue: 'Services' })}
       </HeadingXXl>
-      <div className="flex flex-col space-y-40 lg:space-y-60">
+      <div className="space-y-40 lg:space-y-60">
         {sections.map((serviceSection) => (
           <TileSectionWrapper
             key={serviceSection.id}
@@ -66,9 +70,8 @@ export const ServiceSection = ({ sections }: ServiceSectionProps) => {
   )
 }
 
-export const ResourceSection = ({ sections }: ResourceSectionProps) => {
+export function ResourceSection({ sections }: ResourceSectionProps) {
   const { t } = useTranslation()
-
   return (
     <>
       <HeadingXXl as="h2" className="!mb-28">

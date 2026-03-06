@@ -46,10 +46,9 @@ export const ContentSection = ({
             case 'resources':
               return (
                 <Wrapper {...props}>
-                  <TileContentSection
-                    title={block.value.title}
-                    tileList={<ContentTileList links={block.value.resources} />}
-                  />
+                  <TileContentSection title={block.value.title}>
+                    <ContentTileList links={block.value.resources} />
+                  </TileContentSection>
                 </Wrapper>
               )
 

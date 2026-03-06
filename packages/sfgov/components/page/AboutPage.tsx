@@ -79,12 +79,9 @@ export const AboutPage: ComponentType<{
                           <TileContentSection
                             key={section.id}
                             title={section.value.title}
-                            tileList={
-                              <ContentTileList
-                                links={section.value.resources}
-                              />
-                            }
-                          />
+                          >
+                            <ContentTileList links={section.value.resources} />
+                          </TileContentSection>
                         )
                       }
                       case 'downloadable_files': {
