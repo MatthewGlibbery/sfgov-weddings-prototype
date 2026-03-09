@@ -136,9 +136,9 @@ export type TypePhoneNumberBlock = BlockType<'phone_number', PhoneNumberData>
 
 export type TypeDateTimeValues = {
   start_date: string
-  start_time: string
-  end_date: string
-  end_time: string
+  start_time: string | null
+  end_date: string | null
+  end_time: string | null
   is_all_day: boolean
   include_end_date_time: 'yes' | 'no'
 }

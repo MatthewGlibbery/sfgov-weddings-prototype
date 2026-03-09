@@ -261,6 +261,22 @@ describe('DateTime Component', () => {
       expect(screen.queryByText(/to/)).not.toBeInTheDocument()
     })
 
+    it('renders a single day with no time (all day) with no end date', () => {
+      const props = {
+        ...baseProps,
+        ...{ is_all_day: true, end_date: null }
+      }
+      render(<DateTimeBlock {...props} />)
+      screen.getByRole('heading')
+
+      expect(screen.getByRole('heading')).toHaveTextContent('Date')
+      expect(screen.getByText('Sunday, November 19, 2023')).toBeInTheDocument()
+      ;['1:23 am', '9:02 pm'].forEach((input) =>
+        expect(screen.queryByText(input)).not.toBeInTheDocument()
+      )
+      expect(screen.queryByText(/to/)).not.toBeInTheDocument()
+    })
+
     it('renders a date range with a simple time range', () => {
       const props = {
         ...baseProps,
