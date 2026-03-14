@@ -4,8 +4,6 @@ import type {
   TypeResourcesSectionBlock,
   TypeServicesSectionBlock
 } from '@/types'
-import { useTranslation } from 'next-i18next'
-import type { ReactNode } from 'react'
 import { ContentTileList } from './Tile'
 
 type TileContentSectionProps = JSX.IntrinsicElements['div'] & {
@@ -13,10 +11,12 @@ type TileContentSectionProps = JSX.IntrinsicElements['div'] & {
 }
 
 type ServiceSectionProps = {
+  heading: string
   sections: TypeServicesSectionBlock[]
 }
 
 type ResourceSectionProps = {
+  heading: string
   sections: TypeResourcesSectionBlock[]
 }
 
@@ -50,12 +50,11 @@ function TileSectionWrapper({ links, title }: TileSectionWrapperProps) {
   )
 }
 
-export function ServiceSection({ sections }: ServiceSectionProps) {
-  const { t } = useTranslation()
+export function ServiceSection({ heading, sections }: ServiceSectionProps) {
   return (
     <>
       <HeadingXXl as="h2" className="!mb-28">
-        {t('services', { defaultValue: 'Services' })}
+        {heading}
       </HeadingXXl>
       <div className="space-y-40 lg:space-y-60">
         {sections.map((serviceSection) => (
@@ -70,12 +69,11 @@ export function ServiceSection({ sections }: ServiceSectionProps) {
   )
 }
 
-export function ResourceSection({ sections }: ResourceSectionProps) {
-  const { t } = useTranslation()
+export function ResourceSection({ heading, sections }: ResourceSectionProps) {
   return (
     <>
       <HeadingXXl as="h2" className="!mb-28">
-        {t('resources', { defaultValue: 'Resources' })}
+        {heading}
       </HeadingXXl>
       <div className="flex flex-col space-y-40 lg:space-y-60">
         {sections.map((resourceSection) => (

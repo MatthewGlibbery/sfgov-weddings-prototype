@@ -263,8 +263,10 @@ export type AgencyPageData = PageData & {
   meeting_information: (TypeLocationBlock | TypeTitleAndTextBlock)[]
   meeting_archive_date: string
   meeting_archive_url: string
+  services_title: string
   services: TypeServicesSectionBlock[]
   spotlight_2: TypeSpotlightBlock[]
+  resources_title: string
   resources: TypeResourcesSectionBlock[]
   about_description: string
   events: TypeAgencyEvents

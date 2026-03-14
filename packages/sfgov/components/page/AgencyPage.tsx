@@ -57,8 +57,10 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     spotlight_1: spotlight1,
     quicklinks,
     meeting_information: meetingInformation,
+    services_title: servicesTitle,
     services,
     spotlight_2: spotlight2,
+    resources_title: resourcesTitle,
     resources,
     about_description: aboutDescription,
     events,
@@ -281,7 +283,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
           ) : null}
           {services.length ? (
             <Container>
-              <ServiceSection sections={services} />
+              <ServiceSection heading={servicesTitle} sections={services} />
             </Container>
           ) : null}
           {spotlight2?.length ? (
@@ -301,7 +303,10 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             <Container className="mt-40">
               {resources.length ? (
                 <div className="mb-40">
-                  <ResourceSection sections={resources} />
+                  <ResourceSection
+                    heading={resourcesTitle}
+                    sections={resources}
+                  />
                 </div>
               ) : null}
               {aboutDescription ||

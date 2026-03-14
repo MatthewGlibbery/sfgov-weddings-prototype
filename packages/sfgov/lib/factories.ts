@@ -544,6 +544,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   ],
   meeting_archive_date: '',
   meeting_archive_url: '',
+  services_title: gen.lorem.words(3),
   services: [
     {
       type: 'services',
@@ -555,6 +556,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
     }
   ],
   spotlight_2: SpotlightFactory.make(1),
+  resources_title: gen.lorem.words(3),
   resources: [
     {
       type: 'resources',
