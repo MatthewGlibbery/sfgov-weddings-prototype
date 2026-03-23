@@ -41,6 +41,6 @@ export interface IContentAPI {
  */
 export type PageProps<T, SpecificData = T extends PageData ? T : unknown> = {
   page: SpecificData
-  alerts: AlertData
+  alerts?: AlertData
   env?: Record<string, string | undefined>
 }

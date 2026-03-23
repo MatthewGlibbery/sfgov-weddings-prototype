@@ -2,6 +2,7 @@ import type { FormSchema } from '@/design-system/formio'
 import type {
   BlockType,
   LinkBlockValue,
+  ServicesSectionBlock,
   TopicFieldTypes,
   TypeAccordionSectionBlock,
   TypeAgendaItemBlock,
@@ -63,7 +64,7 @@ export type MinimalPageData = {
   image?: WagtailImageData
   html_path?: string
   redirect_url?: string
-  // should we add description here?
+  description?: string
 }
 
 export type PageMeta<Parent extends MinimalPageData = MinimalPageData> =
@@ -233,7 +234,7 @@ export type LocationPageData = PageData & {
   parking: TypeTitleAndTextBlock[]
   accessibility: TypeTitleAndTextBlock[]
   public_transportation: TypeTitleAndTextBlock[]
-  services: TypeServicesSectionBlock[]
+  services: ServicesSectionBlock[]
   related_locations: RelatedContentData[]
   at_this_location: RelatedContentData[]
   people: TypeProfileGroupBlock[]
