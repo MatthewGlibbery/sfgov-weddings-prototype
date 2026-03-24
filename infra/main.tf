@@ -57,7 +57,7 @@ module "cms_training" {
   listener_rule_priority = 10
   host_header            = "web-training-ecs.dev.sf.gov"
   alb_dns_name           = aws_lb.cms_common.dns_name
-  container_image        = "395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:training-ecs"
+  container_image        = "395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:infra"
 
   # vpc_id, subnets, security_groups, alb_security_groups, route53_zone_id,
   # task_role_arn, execution_role_arn, and acm_certificate_arn
