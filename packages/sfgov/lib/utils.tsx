@@ -74,16 +74,6 @@ export function getHeaderLinks(t: TFunction) {
   ]
 }
 
-export function getFooterLinks(t: TFunction) {
-  return [
-    ...getHeaderLinks(t),
-    {
-      href: '/contact-sfgov',
-      text: t('contact-us', { defaultValue: 'Contact us' })
-    }
-  ]
-}
-
 type TypeHeaderWithContent = {
   title: string
   links: { href: string; text: string }[]
