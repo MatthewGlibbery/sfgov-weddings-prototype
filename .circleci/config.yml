@@ -200,7 +200,9 @@ workflows:
             - aws-ecr/build_and_push_image
           filters:
             branches:
-              only: training
+              only:
+                - training
+                - infra
 
   qa_site_deploy:
     jobs:
