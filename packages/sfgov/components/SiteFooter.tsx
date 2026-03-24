@@ -33,9 +33,10 @@ export type SiteFooterProps = ComponentProps<typeof StyledFooter>
 export const SiteFooter = ({ children, ...rest }: SiteFooterProps) => {
   const { t } = useTranslation()
   const links = getFooterLinks(t)
+  const gitHash = process.env.NEXT_PUBLIC_GIT_HASH || 'unknown'
 
   return (
-    <footer role="contentinfo">
+    <footer role="contentinfo" data-git-hash={gitHash}>
       <StyledFooter {...rest}>
         <Container className="pt-28 md:pt-[48px] md:flex md:justify-between">
           <div className="md:content-center">
