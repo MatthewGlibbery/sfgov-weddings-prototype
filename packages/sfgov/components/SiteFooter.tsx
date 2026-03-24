@@ -43,7 +43,7 @@ export function SiteFooter(props: SiteFooterProps) {
   const { t } = useTranslation()
 
   return (
-    <StyledFooter {...props}>
+    <StyledFooter {...props} role="contentinfo">
       <Container className="pt-28 md:pt-[48px]">
         <div className="grid gap-y-40 md:grid-cols-12 md:gap-28">
           <div className="md:col-span-5 content-center">

@@ -91,7 +91,7 @@ export function runGlobalA11yTests<PageData>(
       await expect(page).toNotHaveDuplicateIds()
     })
 
-    test('validate that lang attributes are present in header and footer', async ({
+    test('validate that lang attributes are present in header', async ({
       mount,
       page
     }) => {

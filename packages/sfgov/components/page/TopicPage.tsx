@@ -63,7 +63,10 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
             case 'services':
               return section.value.services?.length ? (
                 <Container>
-                  <ServiceSection sections={section.value.services} />
+                  <ServiceSection
+                    heading={t('services', { defaultValue: 'Services' })}
+                    sections={section.value.services}
+                  />
                 </Container>
               ) : null
             case 'spotlight':
@@ -78,7 +81,10 @@ export const TopicPage: ComponentType<{ page: TopicPageData }> = ({ page }) => {
             case 'resources':
               return section.value.resources?.length ? (
                 <Container>
-                  <ResourceSection sections={section.value.resources} />
+                  <ResourceSection
+                    heading={t('resources', { defaultValue: 'Resources' })}
+                    sections={section.value.resources}
+                  />
                 </Container>
               ) : null
             case 'content':
