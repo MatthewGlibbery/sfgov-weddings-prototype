@@ -1,4 +1,4 @@
-import { BodyText, Button, Container, HeadingXXl } from '@/design-system'
+import { BodyText, Container, HeadingXXl } from '@/design-system'
 import type { TypeContentSectionBlockValues } from '@/types'
 import { Callout } from './Callout'
 import { EmbeddedContentBlock } from './EmbeddedContentBlock'
@@ -46,10 +46,9 @@ export const ContentSection = ({
             case 'resources':
               return (
                 <Wrapper {...props}>
-                  <TileContentSection
-                    title={block.value.title}
-                    tileList={<ContentTileList links={block.value.resources} />}
-                  />
+                  <TileContentSection title={block.value.title}>
+                    <ContentTileList links={block.value.resources} />
+                  </TileContentSection>
                 </Wrapper>
               )
 

@@ -1,3 +1,4 @@
+import type { TileProps, TileSectionProps } from '@/design-system'
 import {
   BodyText,
   Container,
@@ -8,14 +9,23 @@ import {
   IconAccessibility,
   IconParking,
   IconTransportation,
-  PageTitleSection
+  PageTitleSection,
+  Tile,
+  TileSection,
+  TileSet
 } from '@/design-system'
+import { getPageURL, isPermitCenter } from '@/lib/utils'
+import type {
+  LocationPageData,
+  PageProps,
+  ServiceBlock,
+  ServicesSectionBlock
+} from '@/types'
 import { useTranslation } from 'next-i18next'
 import {
   Accordion,
   Alert,
   ContactFooter,
-  ContentTileList,
   ImageCard,
   ITERATIVE_RICH_TEXT_COMPONENTS,
   Map,
@@ -26,9 +36,6 @@ import {
   RichText,
   ZebraStripedSection
 } from '..'
-import { TileContentSection } from '../TileContentSection'
-import type { LocationPageData, PageProps } from '@/types'
-import { isPermitCenter } from '@/lib/utils'
 
 export type LocationPageProps = PageProps<LocationPageData>
 
@@ -63,9 +70,9 @@ export function LocationPage({ page, env }: LocationPageProps) {
   return (
     <PageWrapper title={title} meta={{ ...page.meta, description }}>
       {alert ? (
-        <div className="mx-12 md:mx-28 lg:mx-96">
+        <Container>
           <Alert {...alert.value} />
-        </div>
+        </Container>
       ) : null}
       <ZebraStripedSection>
         <Container className="mb-20 pb-40">
@@ -164,21 +171,7 @@ export function LocationPage({ page, env }: LocationPageProps) {
         ) : null}
         {services.length ? (
           <Container>
-            <HeadingXXl as="h2" className="my-12 md:my-20">
-              {t('services', { defaultValue: 'Services' })}
-            </HeadingXXl>
-            {services.map((service) => {
-              const servicesTileList = (
-                <ContentTileList links={service.value.services} />
-              )
-              return (
-                <TileContentSection
-                  key={service.id}
-                  title={service.value.title}
-                  tileList={servicesTileList}
-                />
-              )
-            })}
+            <ServicesSection id="services" blocks={services} />
           </Container>
         ) : null}
         {about ||
@@ -287,4 +280,96 @@ export function LocationPage({ page, env }: LocationPageProps) {
       </ZebraStripedSection>
     </PageWrapper>
   )
+}
+
+type TileLinkProps = Pick<TileProps, 'href' | 'heading' | 'description'>
+
+type ServicesSectionProps = Omit<TileSectionProps, 'children'> & {
+  blocks: ServicesSectionBlock[]
+}
+
+function ServicesSection({ blocks, heading, ...rest }: ServicesSectionProps) {
+  const { t } = useTranslation()
+  // transform the blocks into a simpler data structure
+  const sections = getTileSections(blocks)
+  // render nothing if all sections are empty
+  if (!sections.length) return null
+  return (
+    <TileSection
+      heading={heading || t('services', { defaultValue: 'Services' })}
+      {...rest}
+    >
+      {sections.map((section, i) => (
+        <TileSet heading={section.heading} key={i}>
+          {section.tiles.map((tile, j) => (
+            <Tile {...(tile as TileLinkProps)} key={j} />
+          ))}
+        </TileSet>
+      ))}
+    </TileSection>
+  )
+}
+
+type TileSectionData = {
+  heading: string
+  tiles: TileLinkProps[]
+}
+
+/**
+ * Turn an array of possibly sparse {@link ServicesSectionBlock} blocks into a
+ * simpler data structure that excludes empty tiles and sections (those with
+ * zero non-empty tiles). An "empty" tile is a block for which we can't get the
+ * link, namely because the page data is missing from the chooser in the CMS.
+ */
+function getTileSections(blocks: ServicesSectionBlock[]): TileSectionData[] {
+  return (
+    blocks
+      .map(({ value: section }) => {
+        return {
+          heading: section.title,
+          // transform the service blocks into tile props
+          tiles: section.services
+            .map((block) => (block.value ? getTileProps(block) : undefined))
+            // and filter out any that returned falsy (the type guard ensures
+            // that the returned type is `TileLinkProps[]` and excludes null)
+            .filter((link): link is TileLinkProps => Boolean(link))
+        }
+      })
+      // filter out sections with no (valid) tiles
+      .filter((section) => section.tiles.length > 0)
+  )
+}
+
+/**
+ * Get the tile props (href, heading, and description) for a
+ * {@link ServiceBlock} object. ServiceBlocks can be either "page" or
+ * "external_link" blocks, and there's one weird edge case (unconfirmed, but
+ * it's safe to assume that it exists) where {@link getPageURL} might not be
+ * able to get the URL for a page object, in which case we return undefined.
+ *
+ * This will also return undefined for other block types until we add a case for
+ * them (and the corresponding type declarations).
+ */
+function getTileProps(block: ServiceBlock): TileLinkProps | undefined {
+  const { type, value } = block
+  switch (type) {
+    case 'page': {
+      // istanbul ignore next (this case is handled outside this function)
+      if (!value) return undefined
+      const url = getPageURL(value)
+      return url
+        ? {
+            href: url,
+            heading: value.title,
+            description: value.description
+          }
+        : undefined
+    }
+    case 'external_link':
+      return {
+        href: value.url,
+        heading: value.title,
+        description: value.description
+      }
+  }
 }

@@ -63,7 +63,9 @@ import type {
   TypeContactFooterBlock,
   HomePageData,
   TypeTableBlock,
-  TypeQLessData
+  TypeQLessData,
+  ServicesSectionBlock,
+  ResourceBlockValue
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -460,16 +462,7 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
       }
     })
   ],
-  services: [
-    {
-      type: 'services',
-      value: {
-        title: 'Service section 1',
-        services: [GenericTileFactory.make()]
-      },
-      id: gen.datatype.uuid()
-    }
-  ],
+  services: ServicesSectionBlockFactory.make(2),
   people: ProfileGroupFactory.make(2),
   related_locations: RelatedContentBlockFactory.make(1, {
     meta: {
@@ -488,6 +481,42 @@ export const LocationPageFactory = factory<LocationPageData>((gen) => ({
   }),
   about_location: 'blah'
 }))
+
+export const PageBlockFactory = factory<BlockType<'page', PageData>>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'page',
+  value: PageFactory.make()
+}))
+
+export const ExternalLinkBlockFactory = factory<
+  BlockType<'external_link', ResourceBlockValue>
+>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'external_link',
+  value: {
+    title: gen.commerce.productName(),
+    description: gen.commerce.productDescription(),
+    url: gen.internet.url()
+  }
+}))
+
+export const ServicesSectionBlockValueFactory = factory<
+  ServicesSectionBlock['value']
+>((gen) => ({
+  title: gen.commerce.department(),
+  services: [
+    ...PageBlockFactory.make(3),
+    ...ExternalLinkBlockFactory.make(3)
+  ].sort((a, b) => a.id.localeCompare(b.id))
+}))
+
+export const ServicesSectionBlockFactory = factory<ServicesSectionBlock>(
+  (gen) => ({
+    id: gen.datatype.uuid(),
+    type: 'services',
+    value: ServicesSectionBlockValueFactory.make()
+  })
+)
 
 export const QLessDataFactory = factory<TypeQLessData>((gen) => ({
   status: 'success',
@@ -544,6 +573,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
   ],
   meeting_archive_date: '',
   meeting_archive_url: '',
+  services_title: gen.lorem.words(3),
   services: [
     {
       type: 'services',
@@ -555,6 +585,7 @@ export const AgencyPageFactory = factory<AgencyPageData>((gen) => ({
     }
   ],
   spotlight_2: SpotlightFactory.make(1),
+  resources_title: gen.lorem.words(3),
   resources: [
     {
       type: 'resources',

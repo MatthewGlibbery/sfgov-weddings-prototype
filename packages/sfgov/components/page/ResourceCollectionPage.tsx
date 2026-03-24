@@ -104,19 +104,16 @@ export const ResourceCollectionPage: ComponentType<{
                     <HeadingXXl as="h2" className="!mb-0" id="resources">
                       {t('resources', { defaultValue: 'Resources' })}
                     </HeadingXXl>
-                    {item.value.map((resourceSection, j) => {
-                      return (
-                        <TileContentSection
-                          key={j}
-                          title={resourceSection.value.title || ''}
-                          tileList={
-                            <ContentTileList
-                              links={resourceSection.value.resources}
-                            />
-                          }
+                    {item.value.map((resourceSection, j) => (
+                      <TileContentSection
+                        key={j}
+                        title={resourceSection.value.title || ''}
+                      >
+                        <ContentTileList
+                          links={resourceSection.value.resources}
                         />
-                      )
-                    })}
+                      </TileContentSection>
+                    ))}
                   </div>
                 )
               case 'data_stories':
@@ -125,19 +122,16 @@ export const ResourceCollectionPage: ComponentType<{
                     <HeadingXXl as="h2" className="!mb-0" id="data">
                       {t('data', { defaultValue: 'Data' })}
                     </HeadingXXl>
-                    {item.value.map((dataStorySection, j) => {
-                      return (
-                        <TileContentSection
-                          key={j}
-                          title={dataStorySection.value.title || ''}
-                          tileList={
-                            <DataStoryTileList
-                              links={dataStorySection.value.content}
-                            />
-                          }
+                    {item.value.map((dataStorySection, j) => (
+                      <TileContentSection
+                        key={j}
+                        title={dataStorySection.value.title || ''}
+                      >
+                        <DataStoryTileList
+                          links={dataStorySection.value.content}
                         />
-                      )
-                    })}
+                      </TileContentSection>
+                    ))}
                   </div>
                 )
               case 'documents':

@@ -48,6 +48,9 @@ export function RichText({
   components = {},
   options: opts
 }: RichTextProps) {
+  // don't bother rendering if there's no content
+  if (!html?.trim()) return null
+
   // TODO: we _could_ move this into replace() if we need rich text components
   // to specify custom components to their children
   const options: HTMLReactParserOptions = {

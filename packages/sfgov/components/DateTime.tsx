@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import type { ReactElement } from 'react'
 import type { TypeDateTimeValues } from '@/types'
 import { BodyText, HeadingLg } from '@/design-system'
 import { useTranslation } from 'next-i18next'
@@ -259,7 +259,7 @@ export const DateTimeBlock = ({
       <BodyText>
         <ComposedDate
           startDateInput={start_date}
-          endDateInput={end_date}
+          endDateInput={end_date ?? ''} // if end_date is null, mark as empty string so we still operate on the date
           includeEndDateTime={include_end_date_time}
         />
         {hasComposedTime ? (

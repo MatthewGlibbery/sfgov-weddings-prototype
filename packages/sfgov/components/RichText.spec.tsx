@@ -138,7 +138,7 @@ describe('<RichText>', () => {
 
   it('renders headings with appropriate toc id', () => {
     const rand = 0.5
-    jest.spyOn(Math, 'random').mockReturnValueOnce(rand)
+    jest.spyOn(Math, 'random').mockReturnValue(rand)
     render(
       <RichText
         html={`

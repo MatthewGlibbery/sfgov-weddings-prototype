@@ -36,17 +36,3 @@ test.describe('Profile Page – Content Type Specific A11y Tests', () => {
     ).toCreateLogicalReadingOrderInContactSectionsOnProfileContentType()
   })
 })
-// ============================================================
-// Module Specific Tests
-// ============================================================
-test.describe('Profile Page – Module Specific A11y Tests', () => {
-  test('the aside landmark should have a complementary landmark role', async ({
-    mount,
-    page
-  }) => {
-    const data = ProfilePageFactory.make()
-    await mount(<ProfilePage page={data} />)
-
-    await expect(page).toHaveAsideLandmarkRole()
-  })
-})

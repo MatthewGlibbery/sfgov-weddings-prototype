@@ -136,9 +136,9 @@ export type TypePhoneNumberBlock = BlockType<'phone_number', PhoneNumberData>
 
 export type TypeDateTimeValues = {
   start_date: string
-  start_time: string
-  end_date: string
-  end_time: string
+  start_time: string | null
+  end_date: string | null
+  end_time: string | null
   is_all_day: boolean
   include_end_date_time: 'yes' | 'no'
 }
@@ -231,13 +231,19 @@ export type TypeWhatToDoStepBlock = BlockType<
 export type TypeWhatToDoBlock = TypeCalloutBlock | TypeWhatToDoStepBlock
 
 export type TypeResourcesSectionValues = {
-  resources: TypeContentTileBlock[]
   title: string
+  resources: TypeContentTileBlock[]
 }
 
+/**
+ * NOTE: this type is too broad (TypeContentTileBlock includes a ton of block
+ * types that aren't used in service sections). If a streamfield contains a
+ * composite.ServiceSection(), you should type it with
+ * {@link ServicesSectionBlock}.
+ */
 export type TypeServicesSectionValues = {
-  services: TypeContentTileBlock[]
   title: string
+  services: TypeContentTileBlock[]
 }
 
 export type TypeDataStorySectionValues = {
@@ -526,3 +532,28 @@ export type TypeTableBlockValues = {
 }
 
 export type TypeTableBlock = BlockType<'table', TypeTableBlockValues>
+
+// https://github.com/SFDigitalServices/platform/blob/b544c96e6588c0361c8e4080224d69ddf5ff14cf/cms/blocks/primitive.py#L96
+export type ResourceBlockValue = {
+  title: string
+  url: string
+  description?: string
+}
+
+export type ServiceBlock =
+  // NOTE: page blocks can be null if they were imported with empty values,
+  // but they can't be saved without fixing the validation error.
+  | BlockType<'page', PageData | null>
+  | BlockType<'external_link', ResourceBlockValue>
+
+/**
+ * A block containing a "section" of services with a heading.
+ */
+export type ServicesSectionBlock = BlockType<
+  'services',
+  // https://github.com/SFDigitalServices/platform/blob/b544c96e6588c0361c8e4080224d69ddf5ff14cf/cms/blocks/composite.py#L407
+  {
+    title: string
+    services: ServiceBlock[]
+  }
+>

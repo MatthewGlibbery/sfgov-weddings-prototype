@@ -98,7 +98,7 @@ test.describe('A11y tests', () => {
     await expect(page).toNotHaveDuplicateIds()
   })
 
-  test('validate that lang attributes are present in header and footer', async ({
+  test('validate that lang attributes are present in header', async ({
     mount,
     page
   }) => {

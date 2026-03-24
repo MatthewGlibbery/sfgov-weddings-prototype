@@ -4621,64 +4621,6 @@ export const expect = baseExpect.extend({
     }
   },
 
-  async toHaveAsideLandmarkRole(page: Page) {
-    const assertionName = 'toHaveAsideLandmarkRole'
-    let pass: boolean
-    let matcherResult: any
-    try {
-      try {
-        // Locate the <aside> landmark
-        const specificLandmark = page.locator('aside')
-
-        // Check if the <aside> landmark exists
-        const count = await specificLandmark.count()
-
-        if (count > 0) {
-          // If <aside> exists, validate its 'role' attribute
-          await expect(specificLandmark).toHaveAttribute(
-            'role',
-            'complementary'
-          )
-        } else {
-          // The <aside> landmark does not exist on the page. Pass test.
-        }
-      } catch (error) {
-        console.error('Test failed due to an error:', error)
-      }
-      pass = true
-    } catch (e: any) {
-      matcherResult = e.matcherResult
-      pass = false
-    }
-
-    const message = pass
-      ? (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: ${this.isNot ? 'not' : ''} true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-      : (): string =>
-          this.utils.matcherHint(assertionName, undefined, undefined, {
-            isNot: this.isNot
-          }) +
-          '\n\n' +
-          `Expected: true\n` +
-          (matcherResult
-            ? `Received: ${this.utils.printReceived(matcherResult.pass)}`
-            : '')
-
-    return {
-      message,
-      pass,
-      name: assertionName,
-      actual: matcherResult?.actual
-    }
-  },
-
   async toHaveAriaLabelInProgressBarNavLandmarkOnFormsContentType(page: Page) {
     const assertionName =
       'toHaveAriaLabelInProgressBarNavLandmarkOnFormsContentType'
@@ -7181,21 +7123,6 @@ export const expect = baseExpect.extend({
           `Missing or incorrect <a lang="${lang}">${text}</a> in header nav`
         ).toHaveCount(1)
       }
-
-      // Check <footer>
-      const footer = page.getByRole('contentinfo')
-      await expect(footer).toHaveCount(1)
-
-      for (const [lang, text] of Object.entries(langLinks)) {
-        const footerLink = footer.locator(`a[lang="${lang}"]`, {
-          hasText: text
-        })
-        await expect(
-          footerLink,
-          `Missing or incorrect <a lang="${lang}">${text}</a> in footer`
-        ).toHaveCount(1)
-      }
-
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult

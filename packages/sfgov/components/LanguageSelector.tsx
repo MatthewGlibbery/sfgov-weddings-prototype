@@ -15,10 +15,6 @@ const StyledList = classed(
   'ul',
   'm-0 px-0 py-20 list-none absolute top-full left-0 w-full bg-neutral50 z-10 shadow-[rgba(0,0,0,0.12)_0px_2px_4px_-2px] lg:rounded-4 lg:border-1 lg:border-neutral200 lg:bg-white lg:mt-8 lg:py-0 lg:shadow'
 )
-const StyledDiv = classed(
-  'div',
-  'flex flex-wrap gap-x-16 gap-y-4 lg:flex-col lg:gap-y-12'
-)
 
 const StyledLanguageLink = classed(NextLink, {
   base: 'block lg:w-full no-underline text-primary500 text-label-xs px-28 py-12 font-bold lg:px-16 lg:py-15',
@@ -29,8 +25,7 @@ const StyledLanguageLink = classed(NextLink, {
   }
 })
 
-// TODO: add 'vi-vn' here when we introduce Vietnamese
-type LocaleCode = 'en' | 'es' | 'zh-hant' | 'fil' | 'vi-vn'
+export type LocaleCode = 'en' | 'es' | 'zh-hant' | 'fil' | 'vi-vn'
 
 export const localeNames: Record<LocaleCode, string> = {
   en: 'English',
@@ -41,11 +36,13 @@ export const localeNames: Record<LocaleCode, string> = {
 }
 
 export type LanguageSelectorProps = ComponentProps<typeof StyledList> & {
-  isFooter?: boolean
   onToggle?: () => void
 }
 
-export const LanguageSelector = (props: LanguageSelectorProps) => {
+export const LanguageSelector = ({
+  onToggle,
+  ...listProps
+}: LanguageSelectorProps) => {
   const { asPath: currentPath, locale: currentLocale, locales } = useRouter()
   const { t } = useTranslation()
   const [selectedLocale, setSelectedLanguage] = useState(
@@ -63,24 +60,10 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
       })) || []
   const detailsRef = useRef<HTMLDetailsElement>(null)
 
-  if (props.isFooter) {
-    return (
-      <StyledDiv>
-        {links.map((link) => (
-          <StyledLanguageLink
-            key={link.locale}
-            className="text-slate300 text-white underline p-0 lg:p-0 font-normal text-label-sm break-keep"
-            {...link}
-          />
-        ))}
-      </StyledDiv>
-    )
-  }
-
   return links.length ? (
     <details
       name="menu"
-      onToggle={props.onToggle}
+      onToggle={onToggle}
       onKeyDown={(e) => {
         if (e.key === 'Escape' && e.currentTarget.open) {
           e.currentTarget.open = false
@@ -125,7 +108,7 @@ export const LanguageSelector = (props: LanguageSelectorProps) => {
           aria-hidden="true"
         />
       </summary>
-      <StyledList {...props}>
+      <StyledList {...listProps}>
         {links
           .filter((link) => link.locale !== selectedLocale)
           .map((link) => {

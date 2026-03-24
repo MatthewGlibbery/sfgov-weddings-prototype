@@ -57,8 +57,10 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
     spotlight_1: spotlight1,
     quicklinks,
     meeting_information: meetingInformation,
+    services_title: servicesTitle,
     services,
     spotlight_2: spotlight2,
+    resources_title: resourcesTitle,
     resources,
     about_description: aboutDescription,
     events,
@@ -132,7 +134,11 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
       meta={{ ...page.meta, description }}
       className={mainImage ? 'mt-0' : 'mt-20'}
     >
-      {alert?.[0]?.value ? <Alert {...alert[0].value} /> : null}
+      {alert?.[0]?.value ? (
+        <Container className="my-20">
+          <Alert {...alert[0].value} />
+        </Container>
+      ) : null}
       {mainImage ? (
         <div
           className="w-1/1 max-h-[200px] md:max-h-[300px] xl:max-h-[400px] absolute overflow-hidden z-0"
@@ -277,7 +283,7 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
           ) : null}
           {services.length ? (
             <Container>
-              <ServiceSection sections={services} />
+              <ServiceSection heading={servicesTitle} sections={services} />
             </Container>
           ) : null}
           {spotlight2?.length ? (
@@ -297,7 +303,10 @@ export const AgencyPage: ComponentType<{ page: AgencyPageData }> = ({
             <Container className="mt-40">
               {resources.length ? (
                 <div className="mb-40">
-                  <ResourceSection sections={resources} />
+                  <ResourceSection
+                    heading={resourcesTitle}
+                    sections={resources}
+                  />
                 </div>
               ) : null}
               {aboutDescription ||
