@@ -78,6 +78,12 @@ resource "aws_ecs_cluster" "cms_common" {
     value = "enabled"
   }
 
+  configuration {
+    execute_command_configuration {
+      logging = "DEFAULT"
+    }
+  }
+
   tags = merge(local.common_tags, {
     Name = "cms-common"
   })
