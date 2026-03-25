@@ -67,6 +67,9 @@ docker-compose*.yml
 # Documentation
 *.md
 docs/
+README.md
+git-hash-bookmarklet.md
+adrs/
 
 # CI/CD configuration files
 .github/
@@ -74,6 +77,26 @@ docs/
 .travis.yml
 .circleci/
 Jenkinsfile
+
+# Infrastructure as Code (not needed in container)
+infra/
+terraform.tfstate*
+*.tfvars
+.terraform/
+
+# Browser extension (development tool)
+browser-extension/
+
+# Scripts and development tools (not needed in container)
+scripts/
+tools/
+
+# Platform-specific configs (not needed for Docker)
+app.json
+Procfile
+Procfile.*
+heroku.yml
+.heroku/
 
 # Cache directories and temporary data
 .cache/
