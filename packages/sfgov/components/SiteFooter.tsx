@@ -41,6 +41,7 @@ const FooterColumn = classed('div', 'md:basis-1/3')
 
 export function SiteFooter(props: SiteFooterProps) {
   const { t } = useTranslation()
+  // eslint-disable-next-line no-process-env
   const gitHash = process.env.NEXT_PUBLIC_GIT_HASH || 'unknown'
 
   return (
