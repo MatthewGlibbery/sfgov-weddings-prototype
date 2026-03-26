@@ -16,13 +16,13 @@ This directory contains Terraform configuration for the CMS frontend infrastruct
 
 ## Infrastructure Resources
 
-### Shared Resources (existing)
-- VPC: `platform_vpc`
-- Subnets: Auto-discovered loadbalancer subnets
-- Security Groups: Platform training security groups
-- IAM Roles: `platform-ecsTaskRole`, `platform-ecsTaskExecutionRole`
-- ALB: `cms-common`
-- ECS Cluster: `cms-common`
+### Shared Resources
+- VPC: `platform_vpc` (existing)
+- Subnets: Auto-discovered loadbalancer subnets (existing)
+- Security Groups: Platform training security groups (existing)
+- IAM Roles: `platform-ecsTaskRole`, `platform-ecsTaskExecutionRole` (existing)
+- ALB: `cms-common` (managed by this Terraform config)
+- ECS Cluster: `cms-common` (managed by this Terraform config)
 
 ### Per-Environment Resources
 - ECS Task Definition
@@ -43,13 +43,85 @@ This directory contains Terraform configuration for the CMS frontend infrastruct
 
 ## Usage
 
-### Apply Infrastructure Changes
+### Setup Terraform
+
+#### Install Prerequisites
+
+**AWS CLI**:
+```bash
+# macOS (Homebrew)
+brew install awscli
+```
+
+Configure credentials:
+```bash
+aws configure
+```
+
+You'll be prompted for:
+- **AWS Access Key ID**: Your IAM user access key
+- **AWS Secret Access Key**: Your IAM user secret key
+- **Default region**: `us-west-1`
+- **Default output format**: `json` (recommended)
+
+**Terraform**:
+```bash
+# macOS (Homebrew)
+brew install terraform
+```
+
+#### Initial Setup
+
+1. **Verify AWS credentials**:
+   ```bash
+   aws sts get-caller-identity
+   ```
+   Should show account `395833734759`
+
+2. **Initialize Terraform**:
+   ```bash
+   cd infra
+   terraform init
+   ```
+   This downloads required providers and configures the S3 backend with state locking.
+
+### Verify Changes
+
+Before applying changes, always preview what Terraform will do:
 
 ```bash
 cd infra
-terraform init
 terraform plan
+```
+
+The plan output shows:
+- Resources to be created (`+`)
+- Resources to be modified (`~`)
+- Resources to be destroyed (`-`)
+
+Review carefully, especially:
+- Any resources marked for destruction
+- Changes to production resources
+- Security group or IAM role modifications
+
+### Apply Changes
+
+Once you've reviewed the plan and confirmed it's correct:
+
+```bash
+cd infra
 terraform apply
+```
+
+Terraform will:
+1. Show the plan again
+2. Prompt for confirmation (type `yes`)
+3. Apply changes sequentially
+4. Display outputs when complete
+
+For non-interactive apply (use with caution):
+```bash
+terraform apply -auto-approve
 ```
 
 ### Connect to Running Container
