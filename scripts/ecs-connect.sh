@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Script to connect to an ECS container via SSM
-# Usage: ./ecs-connect.sh <task-name> [environment]
+# Usage: ./ecs-connect.sh <task-name> [environment] [-cmd "command"]
 # Example: ./ecs-connect.sh web training
+# Example: ./ecs-connect.sh api training -cmd "python manage.py diffsettings"
 
 set -e
 
@@ -13,12 +14,28 @@ REGION="us-west-1"
 # Parse arguments
 TASK_NAME="${1}"
 ENVIRONMENT="${2:-develop}"
+CUSTOM_COMMAND=""
+
+# Check for -cmd flag
+shift 2 2>/dev/null || shift 1 2>/dev/null || true
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -cmd)
+      CUSTOM_COMMAND="$2"
+      shift 2
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
 
 # Validate required arguments
 if [ -z "$TASK_NAME" ]; then
   echo "Error: Task name is required"
-  echo "Usage: $0 <task-name> [environment]"
+  echo "Usage: $0 <task-name> [environment] [-cmd \"command\"]"
   echo "Example: $0 web training"
+  echo "Example: $0 api training -cmd \"python manage.py diffsettings\""
   exit 1
 fi
 
@@ -57,11 +74,20 @@ echo "Container name: $CONTAINER_NAME"
 echo "Connecting via SSM..."
 echo ""
 
+# Determine command to execute
+if [ -z "$CUSTOM_COMMAND" ]; then
+  EXEC_COMMAND="/bin/bash"
+else
+  EXEC_COMMAND="$CUSTOM_COMMAND"
+  echo "Running command: $EXEC_COMMAND"
+  echo ""
+fi
+
 # Execute command to connect to the container
 aws ecs execute-command \
   --cluster "$CLUSTER" \
   --task "$TASK_ARNS" \
   --container "$CONTAINER_NAME" \
   --interactive \
-  --command "/bin/sh" \
+  --command "$EXEC_COMMAND" \
   --region "$REGION"

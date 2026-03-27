@@ -51,3 +51,6 @@ storybook-static/
 locales/
 
 .terraform
+
+# Claude Code
+.claude
