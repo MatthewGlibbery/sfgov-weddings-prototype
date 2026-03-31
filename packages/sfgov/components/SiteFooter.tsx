@@ -41,11 +41,9 @@ const FooterColumn = classed('div', 'md:basis-1/3')
 
 export function SiteFooter(props: SiteFooterProps) {
   const { t } = useTranslation()
-  // eslint-disable-next-line no-process-env
-  const gitHash = process.env.NEXT_PUBLIC_GIT_HASH || 'unknown'
 
   return (
-    <StyledFooter {...props} role="contentinfo" data-git-hash={gitHash}>
+    <StyledFooter {...props} role="contentinfo">
       <Container className="pt-28 md:pt-[48px]">
         <div className="grid gap-y-40 md:grid-cols-12 md:gap-28">
           <div className="md:col-span-5 content-center">

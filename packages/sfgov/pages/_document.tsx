@@ -9,10 +9,14 @@ const StyledBody = classed(
 )
 
 const Document = (props: DocumentProps) => {
+  // eslint-disable-next-line no-process-env
+  const gitHash = process.env.NEXT_PUBLIC_GIT_HASH || 'unknown'
+
   return (
     <Html>
       <Head>
         <link rel="icon" href="/icon.ico" />
+        <meta name="githash" content={gitHash} />
       </Head>
       <StyledBody>
         <a href="#main-content" className="sr-only focus:not-sr-only">

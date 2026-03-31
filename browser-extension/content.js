@@ -1,13 +1,13 @@
 // Wait for page to load
 (function() {
   function displayGitHash() {
-    const footer = document.querySelector('footer[role="contentinfo"]');
+    const metaTag = document.querySelector('meta[name="githash"]');
 
-    if (!footer || !footer.dataset.gitHash) {
+    if (!metaTag || !metaTag.content) {
       return;
     }
 
-    const hash = footer.dataset.gitHash;
+    const hash = metaTag.content;
     const shortHash = hash.substring(0, 7);
 
     // Check if badge already exists
