@@ -32,71 +32,109 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Fetch all branches
+      - name: Validate source branch name
         run: |
-          git fetch origin main:main
-          if [ "${{ inputs.source_branch }}" != "main" ]; then
-            git fetch origin ${{ inputs.source_branch }}:${{ inputs.source_branch }}
+          # Validate branch name is a safe git ref and matches expected pattern
+          if ! git check-ref-format --branch "$SOURCE_BRANCH" >/dev/null 2>&1; then
+            echo "Error: Invalid branch name format"
+            exit 1
           fi
 
-      - name: Validate source branch exists
+          # Additional strict validation: only allow safe characters
+          # Allows alphanumeric, dash, underscore, slash, and dot
+          if ! echo "$SOURCE_BRANCH" | grep -qE '^[a-zA-Z0-9/_.-]+$'; then
+            echo "Error: Branch name contains invalid characters"
+            exit 1
+          fi
+
+          # Prevent leading dash (would be interpreted as option)
+          if echo "$SOURCE_BRANCH" | grep -qE '^-'; then
+            echo "Error: Branch name cannot start with dash"
+            exit 1
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Validate source branch exists on remote
         run: |
-          if [ "${{ inputs.source_branch }}" != "main" ]; then
-            if ! git rev-parse --verify ${{ inputs.source_branch }} >/dev/null 2>&1; then
-              echo "Error: Branch '${{ inputs.source_branch }}' does not exist"
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            if ! git ls-remote --heads origin "$SOURCE_BRANCH" | grep -q "$SOURCE_BRANCH"; then
+              echo "Error: Branch '$SOURCE_BRANCH' does not exist on remote"
               exit 1
             fi
           fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Fetch all branches
+        run: |
+          git fetch origin main:main
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            git fetch origin "$SOURCE_BRANCH:$SOURCE_BRANCH"
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
 
       - name: Checkout source branch and pull latest
         if: ${{ inputs.source_branch != 'main' }}
         run: |
-          git checkout ${{ inputs.source_branch }}
-          git pull origin ${{ inputs.source_branch }}
+          git checkout "$SOURCE_BRANCH"
+          git pull --ff-only origin "$SOURCE_BRANCH"
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
 
       - name: Checkout main and pull latest
         run: |
           git checkout main
-          git pull origin main
+          git pull --ff-only origin main
 
       - name: Determine version
         id: version
         run: |
-          # Get the latest tag
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v2025-01-01-000000")
-          echo "Latest tag: $LATEST_TAG"
+          # Get the latest tag, or use initial commit if no tags exist
+          if LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null); then
+            echo "Latest tag: $LATEST_TAG"
+            echo "previous_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
+          else
+            echo "No tags found, using initial commit"
+            INITIAL_COMMIT=$(git rev-list --max-parents=0 HEAD)
+            echo "Initial commit: $INITIAL_COMMIT"
+            echo "previous_tag=${INITIAL_COMMIT}" >> $GITHUB_OUTPUT
+          fi
 
           # Generate new version based on current datetime
           # Format: vYYYY-MM-DD-HHMMSS
           NEW_VERSION=$(date -u +'v%Y-%m-%d-%H%M%S')
 
           echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
-          echo "previous_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
           echo "New version will be: ${NEW_VERSION}"
 
       - name: Delete existing draft releases
         run: |
-          # Find and delete any draft releases to ensure fresh notes
-          gh release list --limit 100 | grep "Draft" | awk '{print $1}' | while read -r tag; do
-            echo "Deleting draft release: $tag"
-            gh release delete "$tag" --yes || true
-          done
+          # Find and delete draft releases created by this workflow
+          # Filter by isDraft=true and tag name pattern (vYYYY-MM-DD-HHMMSS)
+          # Also clean up any associated tags to avoid cluttering git describe/tag logic
+          gh release list --limit 100 --json tagName,isDraft,name | \
+            jq -r '.[] | select(.isDraft == true) | select(.tagName | test("^v[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}$")) | .tagName' | \
+            while read -r tag; do
+              if [ -n "$tag" ]; then
+                echo "Deleting draft release and tag: $tag"
+                gh release delete "$tag" --yes --cleanup-tag || true
+              fi
+            done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate release notes
         id: release_notes
         run: |
-          PREV_TAG="${{ steps.version.outputs.previous_tag }}"
-          SOURCE_BRANCH="${{ inputs.source_branch }}"
-
           # Start release notes
-          echo "# Release ${{ steps.version.outputs.new_version }}" > release_notes.md
+          echo "# Release $NEW_VERSION" > release_notes.md
           echo "" >> release_notes.md
 
           # Use custom release notes if provided, otherwise generate from commits
-          if [ -n "${{ inputs.release_notes }}" ]; then
-            echo "${{ inputs.release_notes }}" >> release_notes.md
+          if [ -n "$CUSTOM_NOTES" ]; then
+            echo "$CUSTOM_NOTES" >> release_notes.md
             echo "" >> release_notes.md
           else
             echo "## Changes" >> release_notes.md
@@ -104,32 +142,42 @@ jobs:
             # Generate changelog from commits since last tag
             # If source_branch is main, use main; otherwise use the source branch
             if [ "$SOURCE_BRANCH" = "main" ]; then
-              git log ${PREV_TAG}..main --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+              git log "$PREV_TAG"..main --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
             else
-              git log ${PREV_TAG}..${SOURCE_BRANCH} --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+              git log "$PREV_TAG".."$SOURCE_BRANCH" --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
             fi
             echo "" >> release_notes.md
           fi
 
           echo "" >> release_notes.md
           if [ "$SOURCE_BRANCH" != "main" ]; then
-            echo "**Source**: ${SOURCE_BRANCH} → main" >> release_notes.md
+            echo "**Source**: $SOURCE_BRANCH → main" >> release_notes.md
             echo "" >> release_notes.md
           fi
-          echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${{ steps.version.outputs.new_version }}" >> release_notes.md
+          echo "**Full Changelog**: https://github.com/$GITHUB_REPO/compare/$PREV_TAG...$NEW_VERSION" >> release_notes.md
 
           cat release_notes.md
 
-          # Set output for later use
-          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          # Set output for later use with unique delimiter
+          DELIMITER="ghadelimiter_$(uuidgen)"
+          echo "release_notes<<${DELIMITER}" >> $GITHUB_OUTPUT
           cat release_notes.md >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "${DELIMITER}" >> $GITHUB_OUTPUT
+        env:
+          PREV_TAG: ${{ steps.version.outputs.previous_tag }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          CUSTOM_NOTES: ${{ inputs.release_notes }}
+          GITHUB_REPO: ${{ github.repository }}
 
       - name: Merge source branch into main
         if: ${{ inputs.source_branch != 'main' }}
         run: |
           git checkout main
-          git merge ${{ inputs.source_branch }} --no-ff -m "Release ${{ steps.version.outputs.new_version }}: Merge ${{ inputs.source_branch }} into main"
+          git merge "$SOURCE_BRANCH" --no-ff -m "Release $NEW_VERSION: Merge $SOURCE_BRANCH into main"
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
 
       - name: Create and push tag
         run: |
@@ -147,19 +195,25 @@ jobs:
           body: ${{ steps.release_notes.outputs.release_notes }}
           draft: false
           prerelease: false
+          target_commitish: main
 
       - name: Summary
         run: |
           echo "## Release Created Successfully! 🚀" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Version**: ${{ steps.version.outputs.new_version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Previous Release**: ${{ steps.version.outputs.previous_tag }}" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ inputs.source_branch }}" = "main" ]; then
+          echo "- **Version**: $NEW_VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "- **Previous Release**: $PREV_TAG" >> $GITHUB_STEP_SUMMARY
+          if [ "$SOURCE_BRANCH" = "main" ]; then
             echo "- **Action**: Tagged main (no merge)" >> $GITHUB_STEP_SUMMARY
           else
-            echo "- **Merged**: ${{ inputs.source_branch }} → main" >> $GITHUB_STEP_SUMMARY
+            echo "- **Merged**: $SOURCE_BRANCH → main" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "The CircleCI deployment to production will start automatically." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "[View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.new_version }})" >> $GITHUB_STEP_SUMMARY
+          echo "[View Release](https://github.com/$GITHUB_REPO/releases/tag/$NEW_VERSION)" >> $GITHUB_STEP_SUMMARY
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          PREV_TAG: ${{ steps.version.outputs.previous_tag }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          GITHUB_REPO: ${{ github.repository }}

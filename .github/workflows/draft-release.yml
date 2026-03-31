@@ -27,45 +27,75 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Fetch branches
+      - name: Validate source branch name
         run: |
-          git fetch origin main:main
-          if [ "${{ inputs.source_branch }}" != "main" ]; then
-            git fetch origin ${{ inputs.source_branch }}:${{ inputs.source_branch }}
+          # Validate branch name is a safe git ref and matches expected pattern
+          if ! git check-ref-format --branch "$SOURCE_BRANCH" >/dev/null 2>&1; then
+            echo "Error: Invalid branch name format"
+            exit 1
           fi
 
-      - name: Validate source branch exists
+          # Additional strict validation: only allow safe characters
+          # Allows alphanumeric, dash, underscore, slash, and dot
+          if ! echo "$SOURCE_BRANCH" | grep -qE '^[a-zA-Z0-9/_.-]+$'; then
+            echo "Error: Branch name contains invalid characters"
+            exit 1
+          fi
+
+          # Prevent leading dash (would be interpreted as option)
+          if echo "$SOURCE_BRANCH" | grep -qE '^-'; then
+            echo "Error: Branch name cannot start with dash"
+            exit 1
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Validate source branch exists on remote
         run: |
-          if [ "${{ inputs.source_branch }}" != "main" ]; then
-            if ! git rev-parse --verify ${{ inputs.source_branch }} >/dev/null 2>&1; then
-              echo "Error: Branch '${{ inputs.source_branch }}' does not exist"
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            if ! git ls-remote --heads origin "$SOURCE_BRANCH" | grep -q "$SOURCE_BRANCH"; then
+              echo "Error: Branch '$SOURCE_BRANCH' does not exist on remote"
               exit 1
             fi
           fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Fetch branches
+        run: |
+          git fetch origin main:main
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            git fetch origin "$SOURCE_BRANCH:$SOURCE_BRANCH"
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
 
       - name: Determine version
         id: version
         run: |
-          # Get the latest tag
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v2025-01-01-000000")
-          echo "Latest tag: $LATEST_TAG"
+          # Get the latest tag, or use initial commit if no tags exist
+          if LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null); then
+            echo "Latest tag: $LATEST_TAG"
+            echo "previous_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
+          else
+            echo "No tags found, using initial commit"
+            INITIAL_COMMIT=$(git rev-list --max-parents=0 HEAD)
+            echo "Initial commit: $INITIAL_COMMIT"
+            echo "previous_tag=${INITIAL_COMMIT}" >> $GITHUB_OUTPUT
+          fi
 
           # Generate new version based on current datetime
           # Format: vYYYY-MM-DD-HHMMSS
           NEW_VERSION=$(date -u +'v%Y-%m-%d-%H%M%S')
 
           echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
-          echo "previous_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
           echo "Proposed version: ${NEW_VERSION}"
 
       - name: Generate release notes
         id: release_notes
         run: |
-          PREV_TAG="${{ steps.version.outputs.previous_tag }}"
-          SOURCE_BRANCH="${{ inputs.source_branch }}"
-
           # Start release notes
-          echo "# Release ${{ steps.version.outputs.new_version }} (DRAFT)" > release_notes.md
+          echo "# Release $NEW_VERSION (DRAFT)" > release_notes.md
           echo "" >> release_notes.md
           echo "> **⚠️ Note**: This is a preview draft. Any edits you make here will be discarded when you run the actual release workflow, which will generate fresh notes with the latest commits and a new timestamp." >> release_notes.md
           echo "" >> release_notes.md
@@ -75,18 +105,18 @@ jobs:
 
           # Generate changelog from commits since last tag
           if [ "$SOURCE_BRANCH" = "main" ]; then
-            git log ${PREV_TAG}..main --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+            git log "$PREV_TAG"..main --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
           else
-            git log ${PREV_TAG}..${SOURCE_BRANCH} --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+            git log "$PREV_TAG".."$SOURCE_BRANCH" --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
           fi
           echo "" >> release_notes.md
 
           echo "" >> release_notes.md
           if [ "$SOURCE_BRANCH" != "main" ]; then
-            echo "**Source**: ${SOURCE_BRANCH} → main" >> release_notes.md
+            echo "**Source**: $SOURCE_BRANCH → main" >> release_notes.md
             echo "" >> release_notes.md
           fi
-          echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${SOURCE_BRANCH}" >> release_notes.md
+          echo "**Full Changelog**: https://github.com/$GITHUB_REPO/compare/$PREV_TAG...$SOURCE_BRANCH" >> release_notes.md
           echo "" >> release_notes.md
           echo "---" >> release_notes.md
           echo "" >> release_notes.md
@@ -96,10 +126,25 @@ jobs:
 
           cat release_notes.md
 
-          # Set output for later use
-          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          # Set output for later use with unique delimiter
+          DELIMITER="ghadelimiter_$(uuidgen)"
+          echo "release_notes<<${DELIMITER}" >> $GITHUB_OUTPUT
           cat release_notes.md >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "${DELIMITER}" >> $GITHUB_OUTPUT
+        env:
+          PREV_TAG: ${{ steps.version.outputs.previous_tag }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Get source branch commit SHA
+        id: get_commit
+        run: |
+          COMMIT_SHA=$(git rev-parse "$SOURCE_BRANCH")
+          echo "commit_sha=${COMMIT_SHA}" >> $GITHUB_OUTPUT
+          echo "Source branch $SOURCE_BRANCH is at commit $COMMIT_SHA"
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
 
       - name: Create Draft Release
         uses: actions/create-release@v1
@@ -111,17 +156,18 @@ jobs:
           body: ${{ steps.release_notes.outputs.release_notes }}
           draft: true
           prerelease: false
+          target_commitish: ${{ steps.get_commit.outputs.commit_sha }}
 
       - name: Summary
         run: |
           echo "## Draft Release Created! 📝" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Proposed Version**: ${{ steps.version.outputs.new_version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Previous Release**: ${{ steps.version.outputs.previous_tag }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Source Branch**: ${{ inputs.source_branch }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Proposed Version**: $NEW_VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "- **Previous Release**: $PREV_TAG" >> $GITHUB_STEP_SUMMARY
+          echo "- **Source Branch**: $SOURCE_BRANCH" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
-          echo "1. [Review the draft release](https://github.com/${{ github.repository }}/releases)" >> $GITHUB_STEP_SUMMARY
+          echo "1. [Review the draft release](https://github.com/$GITHUB_REPO/releases)" >> $GITHUB_STEP_SUMMARY
           echo "2. When ready, run the \"Create Release and Deploy to Production\" workflow" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "> **⚠️ Important**: This draft is for preview only. When you run the actual release workflow, it will:" >> $GITHUB_STEP_SUMMARY
@@ -129,3 +175,8 @@ jobs:
           echo "> - Generate fresh release notes with all commits since the last release" >> $GITHUB_STEP_SUMMARY
           echo "> - Create a new tag with the current timestamp" >> $GITHUB_STEP_SUMMARY
           echo "> - Any manual edits to this draft will be lost" >> $GITHUB_STEP_SUMMARY
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          PREV_TAG: ${{ steps.version.outputs.previous_tag }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          GITHUB_REPO: ${{ github.repository }}
