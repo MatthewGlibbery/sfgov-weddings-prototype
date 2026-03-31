@@ -1,0 +1,131 @@
+name: Draft Release Notes
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_branch:
+        description: 'Branch to generate release notes from'
+        required: true
+        default: 'develop'
+        type: string
+
+jobs:
+  draft-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch branches
+        run: |
+          git fetch origin main:main
+          if [ "${{ inputs.source_branch }}" != "main" ]; then
+            git fetch origin ${{ inputs.source_branch }}:${{ inputs.source_branch }}
+          fi
+
+      - name: Validate source branch exists
+        run: |
+          if [ "${{ inputs.source_branch }}" != "main" ]; then
+            if ! git rev-parse --verify ${{ inputs.source_branch }} >/dev/null 2>&1; then
+              echo "Error: Branch '${{ inputs.source_branch }}' does not exist"
+              exit 1
+            fi
+          fi
+
+      - name: Determine version
+        id: version
+        run: |
+          # Get the latest tag
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v2025-01-01-000000")
+          echo "Latest tag: $LATEST_TAG"
+
+          # Generate new version based on current datetime
+          # Format: vYYYY-MM-DD-HHMMSS
+          NEW_VERSION=$(date -u +'v%Y-%m-%d-%H%M%S')
+
+          echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+          echo "previous_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
+          echo "Proposed version: ${NEW_VERSION}"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          PREV_TAG="${{ steps.version.outputs.previous_tag }}"
+          SOURCE_BRANCH="${{ inputs.source_branch }}"
+
+          # Start release notes
+          echo "# Release ${{ steps.version.outputs.new_version }} (DRAFT)" > release_notes.md
+          echo "" >> release_notes.md
+          echo "> **⚠️ Note**: This is a preview draft. Any edits you make here will be discarded when you run the actual release workflow, which will generate fresh notes with the latest commits and a new timestamp." >> release_notes.md
+          echo "" >> release_notes.md
+
+          echo "## Changes" >> release_notes.md
+          echo "" >> release_notes.md
+
+          # Generate changelog from commits since last tag
+          if [ "$SOURCE_BRANCH" = "main" ]; then
+            git log ${PREV_TAG}..main --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+          else
+            git log ${PREV_TAG}..${SOURCE_BRANCH} --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+          fi
+          echo "" >> release_notes.md
+
+          echo "" >> release_notes.md
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            echo "**Source**: ${SOURCE_BRANCH} → main" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+          echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${SOURCE_BRANCH}" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "---" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "**To publish this release**: Edit the draft as needed, then either:" >> release_notes.md
+          echo "- Publish manually from the GitHub UI, OR" >> release_notes.md
+          echo "- Run the \"Create Release and Deploy to Production\" workflow" >> release_notes.md
+
+          cat release_notes.md
+
+          # Set output for later use
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          cat release_notes.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Draft Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.new_version }}
+          release_name: Release ${{ steps.version.outputs.new_version }} (DRAFT)
+          body: ${{ steps.release_notes.outputs.release_notes }}
+          draft: true
+          prerelease: false
+
+      - name: Summary
+        run: |
+          echo "## Draft Release Created! 📝" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Proposed Version**: ${{ steps.version.outputs.new_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Previous Release**: ${{ steps.version.outputs.previous_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Source Branch**: ${{ inputs.source_branch }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. [Review the draft release](https://github.com/${{ github.repository }}/releases)" >> $GITHUB_STEP_SUMMARY
+          echo "2. When ready, run the \"Create Release and Deploy to Production\" workflow" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> **⚠️ Important**: This draft is for preview only. When you run the actual release workflow, it will:" >> $GITHUB_STEP_SUMMARY
+          echo "> - Delete this draft" >> $GITHUB_STEP_SUMMARY
+          echo "> - Generate fresh release notes with all commits since the last release" >> $GITHUB_STEP_SUMMARY
+          echo "> - Create a new tag with the current timestamp" >> $GITHUB_STEP_SUMMARY
+          echo "> - Any manual edits to this draft will be lost" >> $GITHUB_STEP_SUMMARY
