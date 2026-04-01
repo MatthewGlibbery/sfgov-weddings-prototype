@@ -183,13 +183,6 @@ workflows:
       - aws-ecr/build_and_push_image:
           requires:
             - test
-          filters:
-            branches:
-              only:
-                - infra
-                - develop
-                - main
-                - training
           auth:
             - aws-cli/setup:
               auth: static
@@ -200,16 +193,14 @@ workflows:
           aws_domain: 'amazonaws.com'
           platform: 'linux/amd64/v4'
           region: 'us-west-1'
-          tag: '${CIRCLE_SHA1},latest,${CIRCLE_BRANCH},PR-${CIRCLE_PULL_REQUEST##*/}'
-          extra_build_args: --provenance=false --build-arg GIT_COMMIT_HASH=${CIRCLE_SHA1}
+          tag: '${CIRCLE_SHA1},latest,PR-${CIRCLE_PULL_REQUEST##*/}'
+          extra_build_args: --provenance=false
       - restart_training_ecs_service:
           requires:
             - aws-ecr/build_and_push_image
           filters:
             branches:
-              only:
-                - training
-                - infra
+              only: training
 
   qa_site_deploy:
     jobs:
