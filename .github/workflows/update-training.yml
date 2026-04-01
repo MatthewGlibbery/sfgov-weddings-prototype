@@ -4,11 +4,11 @@
 # 1. Triggers when a release is published on main
 # 2. Creates a temporary training-update branch from training
 # 3. Merges the release tag into training-update (preserving training-specific features like banners, CSS, user permissions)
-# 4. Runs full integration tests with Docker
+# 4. Runs tests (lint, unit tests, build)
 # 5. If tests pass:
-#    - Tags Docker image as :training
+#    - Builds and tags Docker image as platform/web:training
 #    - Pushes to ECR
-#    - Restarts training-web and training-api ECS services
+#    - Restarts cms-training-web ECS service
 #
 # Note: Currently does NOT push training-update back to the training branch.
 # This allows us to observe deployments before automatically updating the branch.
@@ -40,8 +40,6 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    env:
-      COMPOSE_PROJECT_NAME: project  # Ensures Docker images have predictable names (project-api, project-web, etc.)
 
     steps:
       - name: Checkout code
@@ -60,6 +58,26 @@ jobs:
           git checkout -b training-update origin/training
           git merge ${{ github.event.release.tag_name }} --no-edit -m "Merge release ${{ github.event.release.tag_name }} into training-update from training"
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.0'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Remove dev dependencies
+        run: npm prune --omit=dev
+
+      - name: Build SF.gov site
+        run: npm run build -w @sfgov/next
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -69,30 +87,17 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and run tests
+      - name: Build and push Docker image
         run: |
-          export GIT_HASH=${{ github.sha }}
-          docker compose -f compose.playwright.yaml run --name playwright playwright
+          docker build --platform linux/amd64 -t 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:training .
+          docker push 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:training
 
-      - name: Store test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results
-          path: test-results/
-
-      - name: Tag and push Docker image as training
+      - name: Restart ECS service
         run: |
-          docker tag project-api 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/api:training
-          docker push 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/api:training
-
-      - name: Restart ECS services
-        run: |
-          aws ecs update-service --cluster cms-common --service cms-training-api --force-new-deployment --region us-west-1
           aws ecs update-service --cluster cms-common --service cms-training-web --force-new-deployment --region us-west-1
 
       - name: Comment on release
-        if: success()
+        if: success() && github.event_name == 'release'
         uses: actions/github-script@v7
         with:
           script: |
@@ -102,9 +107,3 @@ jobs:
               release_id: context.payload.release.id,
               body: '✅ Training environment has been updated with this release and is now deployed to ECS.'
             });
-
-      - name: Show logs on failure
-        if: failure()
-        run: |
-          # Collect logs for all relevant services; ignore failures so diagnostics aren't hidden
-          docker compose -f compose.playwright.yaml logs api web db playwright || true
