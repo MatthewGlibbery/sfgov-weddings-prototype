@@ -1,3 +1,40 @@
+# Draft Release Notes Workflow
+#
+# This workflow creates a preview draft release so you can review what the release
+# notes will look like before actually creating the release and deploying to production.
+#
+# USAGE:
+#   1. Go to Actions → "Draft Release Notes"
+#   2. Enter source branch name (default: "develop")
+#   3. Click "Run workflow"
+#   4. Review the draft release at: https://github.com/SFDigitalServices/sfgov-next/releases
+#   5. When ready, run the "Create Release and Deploy to Production" workflow
+#
+# WHAT IT DOES:
+#   - Validates the branch name for security
+#   - Checks that the branch exists on remote
+#   - Generates a proposed version tag using current UTC datetime (vYYYY-MM-DD-HHMMSS)
+#   - Creates release notes from all commits since the last tag
+#   - Creates a GitHub draft release (visible to repository collaborators)
+#   - NO git tag is created until the draft is published
+#
+# IMPORTANT NOTES:
+#   - This is a PREVIEW only - for review before releasing
+#   - When you run the actual release workflow, it will:
+#     * Delete this draft
+#     * Generate fresh release notes with ALL commits since last tag
+#     * Create a NEW tag with the current timestamp
+#   - Any manual edits to the draft will be LOST when you release
+#   - If you add more commits after creating the draft, they will be included
+#     in the final release notes (not in the draft)
+#   - Draft releases do NOT create git tags until published
+#
+# SECURITY FEATURES:
+#   - Strict branch name validation with git check-ref-format
+#   - Character allowlist (alphanumeric, /, _, ., - only)
+#   - Prevents command injection via proper quoting and env vars
+#   - Sets target_commitish to ensure draft references correct commit
+
 name: Draft Release Notes
 
 on:

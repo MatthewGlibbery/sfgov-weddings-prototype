@@ -1,3 +1,40 @@
+# Release Workflow
+#
+# This workflow automates the release process by merging a source branch into main,
+# creating a git tag with the current timestamp, and publishing a GitHub release.
+# When code is pushed to main, CircleCI automatically triggers production deployment.
+#
+# USAGE:
+#   1. Go to Actions → "Create Release and Deploy to Production"
+#   2. Enter source branch name:
+#      - "develop" (default) - normal release from develop branch
+#      - "hotfix-xyz" - release from a hotfix branch
+#      - "main" - tag main without merging (for hotfixes already on main)
+#   3. Optionally add custom release notes (otherwise auto-generated from commits)
+#   4. Click "Run workflow"
+#
+# WHAT IT DOES:
+#   - Validates the branch name for security (prevents injection attacks)
+#   - Checks that the branch exists on remote before fetching
+#   - Merges source branch → main (unless source is already main)
+#   - Generates version tag using current UTC datetime (vYYYY-MM-DD-HHMMSS)
+#   - Creates release notes from commits since last tag
+#   - Pushes tag to main (triggers CircleCI production deployment)
+#   - Publishes GitHub release
+#   - Cleans up any stale draft releases from preview workflow
+#
+# SECURITY FEATURES:
+#   - Strict branch name validation with git check-ref-format
+#   - Character allowlist (alphanumeric, /, _, ., - only)
+#   - Prevents command injection via proper quoting and env vars
+#   - Fast-forward-only pulls (no accidental merge commits)
+#
+# NOTES:
+#   - Uses datetime-based tags, not semantic versioning
+#   - Works with repos that have no tags (uses initial commit)
+#   - Handles hotfixes on main via source_branch="main" option
+#   - Draft releases from the preview workflow are automatically cleaned up
+
 name: Create Release and Deploy to Production
 
 on:
