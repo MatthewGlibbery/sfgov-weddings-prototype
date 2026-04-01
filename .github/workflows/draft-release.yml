@@ -13,9 +13,10 @@
 # WHAT IT DOES:
 #   - Validates the branch name for security
 #   - Checks that the branch exists on remote
-#   - Generates a proposed version tag using current UTC datetime (vYYYY-MM-DD-HHMMSS)
-#   - Creates release notes from all commits since the last tag
+#   - Generates a proposed version tag using current UTC datetime (draft-vYYYY-MM-DD-HHMMSS)
+#   - Creates release notes from all commits since the last REAL release tag (excludes draft tags)
 #   - Creates a GitHub draft release (visible to repository collaborators)
+#   - Uses "draft-v" prefix to prevent interference with git describe/real releases
 #   - NO git tag is created until the draft is published
 #
 # IMPORTANT NOTES:
@@ -90,7 +91,8 @@ jobs:
       - name: Validate source branch exists on remote
         run: |
           if [ "$SOURCE_BRANCH" != "main" ]; then
-            if ! git ls-remote --heads origin "$SOURCE_BRANCH" | grep -q "$SOURCE_BRANCH"; then
+            # Check for exact match on refs/heads/$SOURCE_BRANCH to avoid prefix matches
+            if ! git ls-remote --heads origin "$SOURCE_BRANCH" | grep -q "refs/heads/$SOURCE_BRANCH$"; then
               echo "Error: Branch '$SOURCE_BRANCH' does not exist on remote"
               exit 1
             fi
@@ -100,9 +102,10 @@ jobs:
 
       - name: Fetch branches
         run: |
-          git fetch origin main:main
+          # Fetch without destination refs to avoid issues with checked-out branches
+          git fetch origin main
           if [ "$SOURCE_BRANCH" != "main" ]; then
-            git fetch origin "$SOURCE_BRANCH:$SOURCE_BRANCH"
+            git fetch origin "$SOURCE_BRANCH"
           fi
         env:
           SOURCE_BRANCH: ${{ inputs.source_branch }}
@@ -110,8 +113,9 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          # Get the latest tag, or use initial commit if no tags exist
-          if LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null); then
+          # Get the latest REAL tag (not draft tags), or use initial commit if no tags exist
+          # Exclude draft- prefix to avoid picking up preview drafts
+          if LATEST_TAG=$(git describe --tags --abbrev=0 --match='v*' --exclude='draft-*' 2>/dev/null); then
             echo "Latest tag: $LATEST_TAG"
             echo "previous_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
           else
@@ -122,8 +126,8 @@ jobs:
           fi
 
           # Generate new version based on current datetime
-          # Format: vYYYY-MM-DD-HHMMSS
-          NEW_VERSION=$(date -u +'v%Y-%m-%d-%H%M%S')
+          # Format: draft-vYYYY-MM-DD-HHMMSS (draft prefix prevents interference with real releases)
+          NEW_VERSION=$(date -u +'draft-v%Y-%m-%d-%H%M%S')
 
           echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
           echo "Proposed version: ${NEW_VERSION}"
