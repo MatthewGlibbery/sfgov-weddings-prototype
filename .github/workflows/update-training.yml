@@ -23,7 +23,7 @@
 # - Only one run at a time (cancel-in-progress prevents race conditions)
 # - Newer releases cancel older in-flight runs
 
-name: Deploy Training After Production Release
+name: Update Training
 
 on:
   workflow_dispatch:
@@ -31,7 +31,7 @@ on:
     types: [published]
 
 concurrency:
-  group: deploy-training-after-release
+  group: update-training
   cancel-in-progress: true
 
 jobs:
