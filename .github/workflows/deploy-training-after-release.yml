@@ -1,0 +1,110 @@
+# This workflow automatically updates the training environment after a production release.
+#
+# What it does:
+# 1. Triggers when a release is published on main
+# 2. Creates a temporary training-update branch from training
+# 3. Merges the release tag into training-update (preserving training-specific features like banners, CSS, user permissions)
+# 4. Runs full integration tests with Docker
+# 5. If tests pass:
+#    - Tags Docker image as :training
+#    - Pushes to ECR
+#    - Restarts training-web and training-api ECS services
+#
+# Note: Currently does NOT push training-update back to the training branch.
+# This allows us to observe deployments before automatically updating the branch.
+# The training ECS environment will be up-to-date, but the training branch in Git will remain frozen.
+#
+# AWS Authentication:
+# - Uses OIDC (OpenID Connect) with role: GitHubActionsDeployRole
+# - No long-lived credentials stored
+# - Temporary credentials granted per workflow run
+#
+# Concurrency:
+# - Only one run at a time (cancel-in-progress prevents race conditions)
+# - Newer releases cancel older in-flight runs
+
+name: Deploy Training After Production Release
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+concurrency:
+  group: deploy-training-after-release
+  cancel-in-progress: true
+
+jobs:
+  deploy-training:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      COMPOSE_PROJECT_NAME: project  # Ensures Docker images have predictable names (project-api, project-web, etc.)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for merge
+
+      - name: Configure git
+        run: |
+          git config user.email "github-actions@sfgov.org"
+          git config user.name "GitHub Actions Bot"
+
+      - name: Create training-update branch and merge release into it
+        run: |
+          git fetch origin training
+          git checkout -b training-update origin/training
+          git merge ${{ github.event.release.tag_name }} --no-edit -m "Merge release ${{ github.event.release.tag_name }} into training-update from training"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::395833734759:role/GitHubActionsDeployRole
+          aws-region: us-west-1
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and run tests
+        run: |
+          export GIT_HASH=${{ github.sha }}
+          docker compose -f compose.playwright.yaml run --name playwright playwright
+
+      - name: Store test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: test-results/
+
+      - name: Tag and push Docker image as training
+        run: |
+          docker tag project-api 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/api:training
+          docker push 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/api:training
+
+      - name: Restart ECS services
+        run: |
+          aws ecs update-service --cluster cms-common --service cms-training-api --force-new-deployment --region us-west-1
+          aws ecs update-service --cluster cms-common --service cms-training-web --force-new-deployment --region us-west-1
+
+      - name: Comment on release
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createReleaseComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: context.payload.release.id,
+              body: '✅ Training environment has been updated with this release and is now deployed to ECS.'
+            });
+
+      - name: Show logs on failure
+        if: failure()
+        run: |
+          # Collect logs for all relevant services; ignore failures so diagnostics aren't hidden
+          docker compose -f compose.playwright.yaml logs api web db playwright || true
