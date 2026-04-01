@@ -11,7 +11,7 @@ export default defineConfig({
   the config file, for snapshot files
   created with toMatchSnapshot and toHaveScreenshot. */
   testMatch:
-    /(agency|campaign|data-story|home-page|information|location|profile|report|resource-collection|step-by-step|news|meeting|transaction|event|about|form|location|home-page|services|topic|search-results).spec.tsx/,
+    /(agency|campaign|data-story|home-page|information|location|profile|report|resource-collection|step-by-step|news|meeting|transaction|event|about|form|404-page|services|topic|search-results).spec.tsx/,
   /* Maximum time one test can run for. */
   timeout: 10 * 1000,
   /* Run tests in files in parallel */
