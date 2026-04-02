@@ -141,6 +141,9 @@ export function SiteFooter(props: SiteFooterProps) {
                       defaultValue: 'Report a Problem'
                     })}
                   </FooterLink>
+                  <FooterLink href="/departments--311-customer-service-center">
+                    {t('contact-311', { defaultValue: 'Contact 311' })}
+                  </FooterLink>
                   <FooterLink href="/accessibility-on-sfgov">
                     {t('accessibility', { defaultValue: 'Accessibility' })}
                   </FooterLink>

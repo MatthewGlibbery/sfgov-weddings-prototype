@@ -1,0 +1,278 @@
+# Release Workflow
+#
+# This workflow automates the release process by merging a source branch into main,
+# creating a git tag with the current timestamp, and publishing a GitHub release.
+# When code is pushed to main, CircleCI automatically triggers production deployment.
+#
+# USAGE:
+#   1. Go to Actions → "Create Release and Deploy to Production"
+#   2. Enter source branch name:
+#      - "develop" (default) - normal release from develop branch
+#      - "hotfix-xyz" - release from a hotfix branch
+#      - "main" - tag main without merging (for hotfixes already on main)
+#   3. Optionally add custom release notes (otherwise auto-generated from commits)
+#   4. Click "Run workflow"
+#
+# WHAT IT DOES:
+#   - Validates the branch name for security (prevents injection attacks)
+#   - Checks that the branch exists on remote before fetching
+#   - Merges source branch → main (unless source is already main)
+#   - Generates version tag using current UTC datetime (vYYYY-MM-DD-HHMMSS)
+#   - Creates release notes from commits since last tag
+#   - Pushes tag to main (triggers CircleCI production deployment)
+#   - Publishes GitHub release
+#   - Cleans up any stale draft releases from preview workflow
+#
+# SECURITY FEATURES:
+#   - Strict branch name validation with git check-ref-format
+#   - Character allowlist (alphanumeric, /, _, ., - only)
+#   - Prevents command injection via proper quoting and env vars
+#   - Fast-forward-only pulls (no accidental merge commits)
+#
+# NOTES:
+#   - Uses datetime-based tags, not semantic versioning
+#   - Works with repos that have no tags (uses initial commit)
+#   - Handles hotfixes on main via source_branch="main" option
+#   - Draft releases use "draft-v" prefix and are automatically cleaned up
+#   - git describe excludes draft-* tags to ensure accurate version detection
+
+name: Create Release and Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_branch:
+        description: 'Branch to merge into main (or "main" to tag main without merging)'
+        required: true
+        default: 'develop'
+        type: string
+      release_notes:
+        description: 'Release notes (optional - auto-generated from commits if empty)'
+        required: false
+        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Validate source branch name
+        run: |
+          # Validate branch name is a safe git ref and matches expected pattern
+          if ! git check-ref-format --branch "$SOURCE_BRANCH" >/dev/null 2>&1; then
+            echo "Error: Invalid branch name format"
+            exit 1
+          fi
+
+          # Additional strict validation: only allow safe characters
+          # Allows alphanumeric, dash, underscore, slash, and dot
+          if ! echo "$SOURCE_BRANCH" | grep -qE '^[a-zA-Z0-9/_.-]+$'; then
+            echo "Error: Branch name contains invalid characters"
+            exit 1
+          fi
+
+          # Prevent leading dash (would be interpreted as option)
+          if echo "$SOURCE_BRANCH" | grep -qE '^-'; then
+            echo "Error: Branch name cannot start with dash"
+            exit 1
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Validate source branch exists on remote
+        run: |
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            # Check for exact match on refs/heads/$SOURCE_BRANCH to avoid prefix matches
+            if ! git ls-remote --heads origin "$SOURCE_BRANCH" | grep -q "refs/heads/$SOURCE_BRANCH$"; then
+              echo "Error: Branch '$SOURCE_BRANCH' does not exist on remote"
+              exit 1
+            fi
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Fetch all branches
+        run: |
+          # Fetch without destination refs to avoid issues with checked-out branches
+          git fetch origin main
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            git fetch origin "$SOURCE_BRANCH"
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Checkout source branch and pull latest
+        if: ${{ inputs.source_branch != 'main' }}
+        run: |
+          git checkout "$SOURCE_BRANCH"
+          git pull --ff-only origin "$SOURCE_BRANCH"
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Checkout main and pull latest
+        run: |
+          git checkout main
+          git pull --ff-only origin main
+
+      - name: Delete existing draft releases
+        run: |
+          # IMPORTANT: Clean up drafts BEFORE determining version
+          # Draft releases use draft-v* prefix to avoid interfering with git describe
+          # Find and delete draft releases created by the preview workflow
+          # Filter by isDraft=true and tag name pattern (draft-vYYYY-MM-DD-HHMMSS)
+          # Also clean up any associated tags to avoid cluttering git describe/tag logic
+          gh release list --limit 100 --json tagName,isDraft,name | \
+            jq -r '.[] | select(.isDraft == true) | select(.tagName | test("^draft-v[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}$")) | .tagName' | \
+            while read -r tag; do
+              if [ -n "$tag" ]; then
+                echo "Deleting draft release and tag: $tag"
+                gh release delete "$tag" --yes --cleanup-tag || true
+              fi
+            done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine version
+        id: version
+        run: |
+          # Get the latest REAL tag (not draft tags), or use initial commit if no tags exist
+          # Exclude draft-* prefix to avoid picking up preview drafts
+          # Note: draft releases were cleaned up in previous step as additional safety
+          if LATEST_TAG=$(git describe --tags --abbrev=0 --match='v*' --exclude='draft-*' 2>/dev/null); then
+            echo "Latest tag: $LATEST_TAG"
+            echo "previous_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
+          else
+            echo "No tags found, using initial commit"
+            INITIAL_COMMIT=$(git rev-list --max-parents=0 HEAD)
+            echo "Initial commit: $INITIAL_COMMIT"
+            echo "previous_tag=${INITIAL_COMMIT}" >> $GITHUB_OUTPUT
+          fi
+
+          # Generate new version based on current datetime
+          # Format: vYYYY-MM-DD-HHMMSS
+          NEW_VERSION=$(date -u +'v%Y-%m-%d-%H%M%S')
+
+          echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+          echo "New version will be: ${NEW_VERSION}"
+
+      - name: Generate release notes
+        run: |
+          # Find and delete draft releases created by this workflow
+          # Filter by isDraft=true and tag name pattern (vYYYY-MM-DD-HHMMSS)
+          # Also clean up any associated tags to avoid cluttering git describe/tag logic
+          gh release list --limit 100 --json tagName,isDraft,name | \
+            jq -r '.[] | select(.isDraft == true) | select(.tagName | test("^v[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}$")) | .tagName' | \
+            while read -r tag; do
+              if [ -n "$tag" ]; then
+                echo "Deleting draft release and tag: $tag"
+                gh release delete "$tag" --yes --cleanup-tag || true
+              fi
+            done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          # Start release notes
+          echo "# Release $NEW_VERSION" > release_notes.md
+          echo "" >> release_notes.md
+
+          # Use custom release notes if provided, otherwise generate from commits
+          if [ -n "$CUSTOM_NOTES" ]; then
+            echo "$CUSTOM_NOTES" >> release_notes.md
+            echo "" >> release_notes.md
+          else
+            echo "## Changes" >> release_notes.md
+            echo "" >> release_notes.md
+            # Generate changelog from commits since last tag
+            # If source_branch is main, use main; otherwise use the source branch
+            if [ "$SOURCE_BRANCH" = "main" ]; then
+              git log "$PREV_TAG"..main --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+            else
+              git log "$PREV_TAG".."$SOURCE_BRANCH" --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+            fi
+            echo "" >> release_notes.md
+          fi
+
+          echo "" >> release_notes.md
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            echo "**Source**: $SOURCE_BRANCH → main" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+          echo "**Full Changelog**: https://github.com/$GITHUB_REPO/compare/$PREV_TAG...$NEW_VERSION" >> release_notes.md
+
+          cat release_notes.md
+
+          # Set output for later use with unique delimiter
+          DELIMITER="ghadelimiter_$(uuidgen)"
+          echo "release_notes<<${DELIMITER}" >> $GITHUB_OUTPUT
+          cat release_notes.md >> $GITHUB_OUTPUT
+          echo "${DELIMITER}" >> $GITHUB_OUTPUT
+        env:
+          PREV_TAG: ${{ steps.version.outputs.previous_tag }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          CUSTOM_NOTES: ${{ inputs.release_notes }}
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Merge source branch into main
+        if: ${{ inputs.source_branch != 'main' }}
+        run: |
+          git checkout main
+          git merge "$SOURCE_BRANCH" --no-ff -m "Release $NEW_VERSION: Merge $SOURCE_BRANCH into main"
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+
+      - name: Create and push tag
+        run: |
+          git tag -a ${{ steps.version.outputs.new_version }} -m "Release ${{ steps.version.outputs.new_version }}"
+          git push origin main
+          git push origin ${{ steps.version.outputs.new_version }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.new_version }}
+          release_name: Release ${{ steps.version.outputs.new_version }}
+          body: ${{ steps.release_notes.outputs.release_notes }}
+          draft: false
+          prerelease: false
+          target_commitish: main
+
+      - name: Summary
+        run: |
+          echo "## Release Created Successfully! 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: $NEW_VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "- **Previous Release**: $PREV_TAG" >> $GITHUB_STEP_SUMMARY
+          if [ "$SOURCE_BRANCH" = "main" ]; then
+            echo "- **Action**: Tagged main (no merge)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Merged**: $SOURCE_BRANCH → main" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The CircleCI deployment to production will start automatically." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[View Release](https://github.com/$GITHUB_REPO/releases/tag/$NEW_VERSION)" >> $GITHUB_STEP_SUMMARY
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          PREV_TAG: ${{ steps.version.outputs.previous_tag }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          GITHUB_REPO: ${{ github.repository }}

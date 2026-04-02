@@ -1,0 +1,223 @@
+# Draft Release Notes Workflow
+#
+# This workflow creates a preview draft release so you can review what the release
+# notes will look like before actually creating the release and deploying to production.
+#
+# USAGE:
+#   1. Go to Actions → "Draft Release Notes"
+#   2. Enter source branch name (default: "develop")
+#   3. Click "Run workflow"
+#   4. Review the draft release at: https://github.com/SFDigitalServices/sfgov-next/releases
+#   5. When ready, run the "Create Release and Deploy to Production" workflow
+#
+# WHAT IT DOES:
+#   - Validates the branch name for security
+#   - Checks that the branch exists on remote
+#   - Generates a proposed version tag using current UTC datetime (draft-vYYYY-MM-DD-HHMMSS)
+#   - Creates release notes from all commits since the last REAL release tag (excludes draft tags)
+#   - Creates a GitHub draft release (visible to repository collaborators)
+#   - Uses "draft-v" prefix to prevent interference with git describe/real releases
+#   - NO git tag is created until the draft is published
+#
+# IMPORTANT NOTES:
+#   - This is a PREVIEW only - for review before releasing
+#   - When you run the actual release workflow, it will:
+#     * Delete this draft
+#     * Generate fresh release notes with ALL commits since last tag
+#     * Create a NEW tag with the current timestamp
+#   - Any manual edits to the draft will be LOST when you release
+#   - If you add more commits after creating the draft, they will be included
+#     in the final release notes (not in the draft)
+#   - Draft releases do NOT create git tags until published
+#
+# SECURITY FEATURES:
+#   - Strict branch name validation with git check-ref-format
+#   - Character allowlist (alphanumeric, /, _, ., - only)
+#   - Prevents command injection via proper quoting and env vars
+#   - Sets target_commitish to ensure draft references correct commit
+
+name: Draft Release Notes
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_branch:
+        description: 'Branch to generate release notes from'
+        required: true
+        default: 'develop'
+        type: string
+
+jobs:
+  draft-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Validate source branch name
+        run: |
+          # Validate branch name is a safe git ref and matches expected pattern
+          if ! git check-ref-format --branch "$SOURCE_BRANCH" >/dev/null 2>&1; then
+            echo "Error: Invalid branch name format"
+            exit 1
+          fi
+
+          # Additional strict validation: only allow safe characters
+          # Allows alphanumeric, dash, underscore, slash, and dot
+          if ! echo "$SOURCE_BRANCH" | grep -qE '^[a-zA-Z0-9/_.-]+$'; then
+            echo "Error: Branch name contains invalid characters"
+            exit 1
+          fi
+
+          # Prevent leading dash (would be interpreted as option)
+          if echo "$SOURCE_BRANCH" | grep -qE '^-'; then
+            echo "Error: Branch name cannot start with dash"
+            exit 1
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Validate source branch exists on remote
+        run: |
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            # Check for exact match on refs/heads/$SOURCE_BRANCH to avoid prefix matches
+            if ! git ls-remote --heads origin "$SOURCE_BRANCH" | grep -q "refs/heads/$SOURCE_BRANCH$"; then
+              echo "Error: Branch '$SOURCE_BRANCH' does not exist on remote"
+              exit 1
+            fi
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Fetch branches
+        run: |
+          # Fetch without destination refs to avoid issues with checked-out branches
+          git fetch origin main
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            git fetch origin "$SOURCE_BRANCH"
+          fi
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Determine version
+        id: version
+        run: |
+          # Get the latest REAL tag (not draft tags), or use initial commit if no tags exist
+          # Exclude draft- prefix to avoid picking up preview drafts
+          if LATEST_TAG=$(git describe --tags --abbrev=0 --match='v*' --exclude='draft-*' 2>/dev/null); then
+            echo "Latest tag: $LATEST_TAG"
+            echo "previous_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
+          else
+            echo "No tags found, using initial commit"
+            INITIAL_COMMIT=$(git rev-list --max-parents=0 HEAD)
+            echo "Initial commit: $INITIAL_COMMIT"
+            echo "previous_tag=${INITIAL_COMMIT}" >> $GITHUB_OUTPUT
+          fi
+
+          # Generate new version based on current datetime
+          # Format: draft-vYYYY-MM-DD-HHMMSS (draft prefix prevents interference with real releases)
+          NEW_VERSION=$(date -u +'draft-v%Y-%m-%d-%H%M%S')
+
+          echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+          echo "Proposed version: ${NEW_VERSION}"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          # Start release notes
+          echo "# Release $NEW_VERSION (DRAFT)" > release_notes.md
+          echo "" >> release_notes.md
+          echo "> **⚠️ Note**: This is a preview draft. Any edits you make here will be discarded when you run the actual release workflow, which will generate fresh notes with the latest commits and a new timestamp." >> release_notes.md
+          echo "" >> release_notes.md
+
+          echo "## Changes" >> release_notes.md
+          echo "" >> release_notes.md
+
+          # Generate changelog from commits since last tag
+          if [ "$SOURCE_BRANCH" = "main" ]; then
+            git log "$PREV_TAG"..main --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+          else
+            git log "$PREV_TAG".."$SOURCE_BRANCH" --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+          fi
+          echo "" >> release_notes.md
+
+          echo "" >> release_notes.md
+          if [ "$SOURCE_BRANCH" != "main" ]; then
+            echo "**Source**: $SOURCE_BRANCH → main" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+          echo "**Full Changelog**: https://github.com/$GITHUB_REPO/compare/$PREV_TAG...$SOURCE_BRANCH" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "---" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "**To publish this release**: Edit the draft as needed, then either:" >> release_notes.md
+          echo "- Publish manually from the GitHub UI, OR" >> release_notes.md
+          echo "- Run the \"Create Release and Deploy to Production\" workflow" >> release_notes.md
+
+          cat release_notes.md
+
+          # Set output for later use with unique delimiter
+          DELIMITER="ghadelimiter_$(uuidgen)"
+          echo "release_notes<<${DELIMITER}" >> $GITHUB_OUTPUT
+          cat release_notes.md >> $GITHUB_OUTPUT
+          echo "${DELIMITER}" >> $GITHUB_OUTPUT
+        env:
+          PREV_TAG: ${{ steps.version.outputs.previous_tag }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Get source branch commit SHA
+        id: get_commit
+        run: |
+          COMMIT_SHA=$(git rev-parse "$SOURCE_BRANCH")
+          echo "commit_sha=${COMMIT_SHA}" >> $GITHUB_OUTPUT
+          echo "Source branch $SOURCE_BRANCH is at commit $COMMIT_SHA"
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+
+      - name: Create Draft Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.new_version }}
+          release_name: Release ${{ steps.version.outputs.new_version }} (DRAFT)
+          body: ${{ steps.release_notes.outputs.release_notes }}
+          draft: true
+          prerelease: false
+          target_commitish: ${{ steps.get_commit.outputs.commit_sha }}
+
+      - name: Summary
+        run: |
+          echo "## Draft Release Created! 📝" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Proposed Version**: $NEW_VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "- **Previous Release**: $PREV_TAG" >> $GITHUB_STEP_SUMMARY
+          echo "- **Source Branch**: $SOURCE_BRANCH" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. [Review the draft release](https://github.com/$GITHUB_REPO/releases)" >> $GITHUB_STEP_SUMMARY
+          echo "2. When ready, run the \"Create Release and Deploy to Production\" workflow" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> **⚠️ Important**: This draft is for preview only. When you run the actual release workflow, it will:" >> $GITHUB_STEP_SUMMARY
+          echo "> - Delete this draft" >> $GITHUB_STEP_SUMMARY
+          echo "> - Generate fresh release notes with all commits since the last release" >> $GITHUB_STEP_SUMMARY
+          echo "> - Create a new tag with the current timestamp" >> $GITHUB_STEP_SUMMARY
+          echo "> - Any manual edits to this draft will be lost" >> $GITHUB_STEP_SUMMARY
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          PREV_TAG: ${{ steps.version.outputs.previous_tag }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          GITHUB_REPO: ${{ github.repository }}
