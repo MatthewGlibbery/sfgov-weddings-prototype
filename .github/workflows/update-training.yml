@@ -85,7 +85,7 @@ jobs:
           node-version: '20.11.0'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Lint
         run: npm run lint
@@ -128,12 +128,17 @@ jobs:
               release_id: context.payload.release.id
             });
 
-            const deploymentNotice = '\n\n---\n\n✅ Training environment has been updated with this release and is now deployed to ECS.';
-            const updatedBody = (release.data.body || '') + deploymentNotice;
+            const deploymentNotice = '✅ Training environment has been updated with this release and is now deployed to ECS.';
+            const currentBody = release.data.body || '';
 
-            await github.rest.repos.updateRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: context.payload.release.id,
-              body: updatedBody
-            });
+            // Only append if notice doesn't already exist
+            if (!currentBody.includes(deploymentNotice)) {
+              const updatedBody = currentBody + '\n\n---\n\n' + deploymentNotice;
+
+              await github.rest.repos.updateRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: context.payload.release.id,
+                body: updatedBody
+              });
+            }
