@@ -4,11 +4,13 @@
 # 1. Triggers when a release is published on main
 # 2. Creates a temporary training-update branch from training
 # 3. Merges the release tag into training-update (preserving training-specific features like banners, CSS, user permissions)
-# 4. Runs tests (lint, unit tests, build)
+# 4. Runs tests (lint, unit tests)
 # 5. If tests pass:
-#    - Builds and tags Docker image as platform/web:training
+#    - Builds and tags Docker image as platform/web:training (build happens in Dockerfile)
 #    - Pushes to ECR
 #    - Restarts cms-training-web ECS service
+#    - Waits for deployment to stabilize
+#    - Updates release with deployment notice
 #
 # Note: Currently does NOT push training-update back to the training branch.
 # This allows us to observe deployments before automatically updating the branch.
@@ -67,7 +69,7 @@ jobs:
 
       - name: Create training-update branch and merge release into it
         run: |
-          RELEASE_TAG="${{ github.event_name == 'workflow_dispatch' && inputs.release_tag || github.event.release.tag_name }}"
+          RELEASE_TAG="${{ github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag || github.event.release.tag_name }}"
 
           # Verify tag exists
           if ! git rev-parse "$RELEASE_TAG" >/dev/null 2>&1; then
@@ -93,12 +95,6 @@ jobs:
       - name: Unit tests
         run: npm test
 
-      - name: Remove dev dependencies
-        run: npm prune --omit=dev
-
-      - name: Build SF.gov site
-        run: npm run build -w @sfgov/next
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -116,6 +112,15 @@ jobs:
       - name: Restart ECS service
         run: |
           aws ecs update-service --cluster cms-common --service cms-training-web --force-new-deployment --region us-west-1
+
+      - name: Wait for deployment to stabilize
+        if: github.event_name == 'release'
+        run: |
+          aws ecs wait services-stable \
+            --cluster cms-common \
+            --services cms-training-web \
+            --region us-west-1
+        timeout-minutes: 15
 
       - name: Update release with deployment notice
         if: success() && github.event_name == 'release'
