@@ -27,6 +27,11 @@ name: Update Training
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to deploy (e.g., v2026-04-01-160903)'
+        required: true
+        type: string
   release:
     types: [published]
 
@@ -62,9 +67,17 @@ jobs:
 
       - name: Create training-update branch and merge release into it
         run: |
+          RELEASE_TAG="${{ github.event_name == 'workflow_dispatch' && inputs.release_tag || github.event.release.tag_name }}"
+
+          # Verify tag exists
+          if ! git rev-parse "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Error: Tag $RELEASE_TAG does not exist"
+            exit 1
+          fi
+
           git fetch origin training
           git checkout -b training-update origin/training
-          git merge ${{ github.event.release.tag_name }} --no-edit -m "Merge release ${{ github.event.release.tag_name }} into training-update from training"
+          git merge "$RELEASE_TAG" --no-edit -m "Merge release $RELEASE_TAG into training-update from training"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
