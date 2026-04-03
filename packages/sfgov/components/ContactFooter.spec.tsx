@@ -42,6 +42,26 @@ describe('ContactFooter', () => {
       screen.getByText(contact[0].value.phone[0].value.owner)
     ).toBeInTheDocument()
   })
+  it('renders a contact footer from an array', () => {
+    const phone = { type: 'phone', value: PhoneNumberFactory.make().value }
+    const socialMedia = {
+      type: 'social_media_other',
+      value: [SocialMediaFactory.make()]
+    }
+    const titleAndText = {
+      type: 'social_media_other',
+      value: [TitleAndTextFactory.make()]
+    }
+    const contactArray = [
+      phone,
+      EmailBlockFactory.make(),
+      socialMedia,
+      titleAndText
+    ]
+
+    render(<ContactFooter items={contactArray} />)
+    expect(screen.getByText(phone.value.owner)).toBeInTheDocument()
+  })
 
   it('renders a contact footer with something something', () => {
     const contact = [{ type: 'not-contact-type', value: 'blah' }]
