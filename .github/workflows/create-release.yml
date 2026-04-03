@@ -276,13 +276,13 @@ jobs:
             -H "Content-Type: application/json" \
             -d @- <<EOF
           {
-            "text": "🚀 Release Deployed to Staging",
+            "text": "🚀 Release Created - Staging Deploy Starting",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*🚀 Release Deployed to Staging*\n\n*Version:* \`$NEW_VERSION\`\n*Previous Release:* \`$PREV_TAG\`\n*Action:* $ACTION_TEXT\n\n_CircleCI deployment to staging will start automatically_"
+                  "text": "*🚀 Release Created - Staging Deploy Starting*\n\n*Version:* \`$NEW_VERSION\`\n*Previous Release:* \`$PREV_TAG\`\n*Action:* $ACTION_TEXT\n\n_CircleCI deployment to staging will start automatically_"
                 }
               },
               {
@@ -330,13 +330,13 @@ jobs:
             -H "Content-Type: application/json" \
             -d @- <<EOF
           {
-            "text": "❌ Staging Deployment Failed",
+            "text": "❌ Release Workflow Failed",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*❌ Staging Deployment Failed*\n\n*Version:* \`$NEW_VERSION\`\n*Action:* $ACTION_TEXT\n\n⚠️ The release creation or deployment to staging failed.\n\n*Common issues:*\n• Merge conflict when merging to main\n• Draft release cleanup failed\n• Git push to main failed\n• GitHub release creation failed"
+                  "text": "*❌ Release Workflow Failed*\n\n*Version:* \`$NEW_VERSION\`\n*Action:* $ACTION_TEXT\n\n⚠️ The release creation workflow failed. Staging deployment did not start.\n\n*Common issues:*\n• Merge conflict when merging to main\n• Draft release cleanup failed\n• Git push to main failed\n• GitHub release creation failed"
                 }
               },
               {

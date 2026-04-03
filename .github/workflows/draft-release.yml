@@ -120,15 +120,14 @@ jobs:
           # Delete any existing draft releases to keep only one current draft
           # This prevents confusion and clutter in the releases page and Slack notifications
           DELETED_COUNT=0
-          gh release list --limit 100 --json tagName,isDraft,name | \
-            jq -r '.[] | select(.isDraft == true) | select(.tagName | test("^draft-v[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}$")) | .tagName' | \
-            while read -r tag; do
-              if [ -n "$tag" ]; then
-                echo "Deleting old draft: $tag"
-                gh release delete "$tag" --yes --cleanup-tag || true
-                DELETED_COUNT=$((DELETED_COUNT + 1))
-              fi
-            done
+          while read -r tag; do
+            if [ -n "$tag" ]; then
+              echo "Deleting old draft: $tag"
+              gh release delete "$tag" --yes --cleanup-tag || true
+              DELETED_COUNT=$((DELETED_COUNT + 1))
+            fi
+          done < <(gh release list --limit 100 --json tagName,isDraft,name | \
+            jq -r '.[] | select(.isDraft == true) | select(.tagName | test("^draft-v[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}$")) | .tagName')
 
           # Set output to track if drafts were deleted (for Slack notification)
           if [ $DELETED_COUNT -gt 0 ]; then
@@ -308,3 +307,42 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           HAD_PREVIOUS_DRAFTS: ${{ steps.cleanup_drafts.outputs.had_previous_drafts }}
+
+      - name: Notify Slack on Failure
+        if: failure()
+        run: |
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "text": "❌ Draft Release Creation Failed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*❌ Draft Release Creation Failed*\n\n*Source Branch:* \`$SOURCE_BRANCH\`\n\n⚠️ The draft release creation failed.\n\n*Common issues:*\n• Branch validation failed\n• GitHub API rate limit\n• Invalid branch name\n• Git fetch failed"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Workflow Run"
+                    },
+                    "url": "https://github.com/$GITHUB_REPO/actions/runs/$GITHUB_RUN_ID",
+                    "style": "danger"
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_FAILURE }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}

@@ -81,7 +81,7 @@ jobs:
             exit 1
           fi
           if [ -z "$AWX_PROD_DEPLOY_JOB_ID" ]; then
-            echo "Error: AWX_PROD_DEPLOY_JOB_ID secret/variable is not configured"
+            echo "Error: AWX_PROD_DEPLOY_JOB_ID secret is not configured"
             echo "This should contain the AWX job template ID for production deployments"
             exit 1
           fi
@@ -109,7 +109,7 @@ jobs:
       - name: Install ansible-tower-cli
         run: |
           pip install --upgrade pip
-          pip install ansible-tower-cli
+          pip install --root-user-action=ignore ansible-tower-cli
           echo "✓ ansible-tower-cli installed"
 
       - name: Deploy to production via AWX
@@ -147,7 +147,7 @@ jobs:
           echo "- **Deployed via**: AWX (ansible-tower-cli)" >> $GITHUB_STEP_SUMMARY
           echo "- **Job Template**: \$AWX_PROD_DEPLOY_JOB_ID" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "[View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.release_info.outputs.release_tag }})"
+          echo "[View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.release_info.outputs.release_tag }})" >> $GITHUB_STEP_SUMMARY
 
       - name: Notify Slack on Success
         if: success()
