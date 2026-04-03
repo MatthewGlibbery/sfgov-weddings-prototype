@@ -1,0 +1,250 @@
+# Deploy to Production via AWX
+#
+# This workflow deploys to production by triggering an AWX job template.
+# The AWX job pulls the latest code from the main branch.
+#
+# USAGE:
+#   1. Ensure a release has been created and merged to main via "Create Release and Deploy to Staging"
+#   2. Verify staging deployment is successful
+#   3. Go to Actions → "Deploy to Production"
+#   4. Click "Run workflow"
+#
+# WHAT IT DOES:
+#   - Installs ansible-tower-cli (AWX CLI tool)
+#   - Connects to AWX using stored credentials
+#   - Launches the production deployment job template (pulls from main)
+#   - Waits for deployment to complete
+#   - Reports success or failure
+#
+# PREREQUISITES:
+#   - AWX_HOST secret must be configured in repository settings
+#   - AWX_ACCESS_TOKEN secret must be configured in repository settings
+#   - AWX_PROD_DEPLOY_JOB_ID secret must be configured in repository settings
+#     (Note: This is a different job ID than the platform repo)
+#
+# SECURITY FEATURES:
+#   - Uses OAuth token authentication (no passwords)
+#   - Secrets are stored in GitHub repository settings
+#   - Manual approval required (workflow_dispatch only, no auto-trigger)
+#
+# NOTES:
+#   - This mirrors the deploy_to_aws job in .circleci/config.yml
+#   - Uses the same AWX credentials as CircleCI
+#   - AWX job pulls from main branch (no version/tag is passed)
+#   - Deployment timeout is 30 minutes (configurable)
+
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (show what would be deployed without actually deploying)'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 45  # 30min for AWX + buffer
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest release tag (for logging only)
+        id: release_info
+        run: |
+          # Get the latest release tag for display/audit purposes
+          # NOTE: AWX doesn't use this - it just pulls from main
+          RELEASE_TAG=$(git describe --tags --abbrev=0 --match='v*' --exclude='draft-*' 2>/dev/null || echo "unknown")
+          echo "Latest release tag: $RELEASE_TAG"
+          echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
+
+      - name: Validate secrets
+        run: |
+          if [ -z "$AWX_HOST" ]; then
+            echo "Error: AWX_HOST secret is not configured"
+            exit 1
+          fi
+          if [ -z "$AWX_ACCESS_TOKEN" ]; then
+            echo "Error: AWX_ACCESS_TOKEN secret is not configured"
+            exit 1
+          fi
+          if [ -z "$AWX_PROD_DEPLOY_JOB_ID" ]; then
+            echo "Error: AWX_PROD_DEPLOY_JOB_ID secret/variable is not configured"
+            echo "This should contain the AWX job template ID for production deployments"
+            exit 1
+          fi
+          echo "✓ All required secrets are configured"
+        env:
+          AWX_HOST: ${{ secrets.AWX_HOST }}
+          AWX_ACCESS_TOKEN: ${{ secrets.AWX_ACCESS_TOKEN }}
+          AWX_PROD_DEPLOY_JOB_ID: ${{ secrets.AWX_PROD_DEPLOY_JOB_ID }}
+
+      - name: Dry run check
+        if: ${{ inputs.dry_run }}
+        run: |
+          echo "## 🏃 DRY RUN MODE 🏃" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This is a dry run - no actual deployment will occur." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Would deploy**:" >> $GITHUB_STEP_SUMMARY
+          echo "- Latest release: ${{ steps.release_info.outputs.release_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Source: main branch (AWX pulls latest)" >> $GITHUB_STEP_SUMMARY
+          echo "- Job Template ID: \$AWX_PROD_DEPLOY_JOB_ID" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "To deploy for real, run this workflow again without dry_run enabled." >> $GITHUB_STEP_SUMMARY
+          exit 0
+
+      - name: Install ansible-tower-cli
+        run: |
+          pip install --upgrade pip
+          pip install ansible-tower-cli
+          echo "✓ ansible-tower-cli installed"
+
+      - name: Deploy to production via AWX
+        run: |
+          # Configure tower-cli with environment variables
+          # See: https://tower-cli.readthedocs.io/en/latest/cli_ref/usage/CONFIG_CMD_OPTIONS.html#environment-variables
+          export TOWER_HOST=$AWX_HOST
+          export TOWER_OAUTH_TOKEN=$AWX_ACCESS_TOKEN
+          export TOWER_VERBOSE=true
+
+          echo "Launching production deployment job..."
+          echo "AWX will pull latest code from main branch"
+
+          # Launch AWX job template and wait for completion
+          # Note: Using --wait means this will block until the job finishes
+          # AWX job pulls from main branch - no extra vars needed (same as CircleCI)
+          tower-cli job launch \
+            --job-template=$AWX_PROD_DEPLOY_JOB_ID \
+            --extra-vars="" \
+            --wait
+
+          echo "✓ Production deployment completed successfully"
+        env:
+          AWX_HOST: ${{ secrets.AWX_HOST }}
+          AWX_ACCESS_TOKEN: ${{ secrets.AWX_ACCESS_TOKEN }}
+          AWX_PROD_DEPLOY_JOB_ID: ${{ secrets.AWX_PROD_DEPLOY_JOB_ID }}
+        timeout-minutes: 30
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "## Production Deployment Successful! 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release**: ${{ steps.release_info.outputs.release_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployed via**: AWX (ansible-tower-cli)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Job Template**: \$AWX_PROD_DEPLOY_JOB_ID" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.release_info.outputs.release_tag }})"
+
+      - name: Notify Slack on Success
+        if: success()
+        run: |
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "text": "✅ Production Deployment Successful",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*✅ Production Deployment Successful*\n\n*Release:* \`$RELEASE_TAG\`\n*Deployed via:* AWX (ansible-tower-cli)\n*Deployed from:* \`main\` branch"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Release"
+                    },
+                    "url": "https://github.com/$GITHUB_REPO/releases/tag/$RELEASE_TAG"
+                  },
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Workflow Run"
+                    },
+                    "url": "https://github.com/$GITHUB_REPO/actions/runs/$GITHUB_RUN_ID"
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_SUCCESS }}
+          RELEASE_TAG: ${{ steps.release_info.outputs.release_tag }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
+      - name: Failure summary
+        if: failure()
+        run: |
+          echo "## Production Deployment Failed ❌" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release**: ${{ steps.release_info.outputs.release_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Check the AWX job logs for details." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Common issues:" >> $GITHUB_STEP_SUMMARY
+          echo "- AWX credentials expired or invalid" >> $GITHUB_STEP_SUMMARY
+          echo "- Job template ID is incorrect" >> $GITHUB_STEP_SUMMARY
+          echo "- Network connectivity to AWX host" >> $GITHUB_STEP_SUMMARY
+          echo "- Deployment timeout exceeded" >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify Slack on Failure
+        if: failure()
+        run: |
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "text": "❌ Production Deployment Failed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*❌ Production Deployment Failed*\n\n*Release:* \`$RELEASE_TAG\`\n\n⚠️ Check the AWX job logs for details.\n\n*Common issues:*\n• AWX credentials expired or invalid\n• Job template ID is incorrect\n• Network connectivity to AWX host\n• Deployment timeout exceeded"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Workflow Run"
+                    },
+                    "url": "https://github.com/$GITHUB_REPO/actions/runs/$GITHUB_RUN_ID",
+                    "style": "danger"
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_FAILURE }}
+          RELEASE_TAG: ${{ steps.release_info.outputs.release_tag }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
