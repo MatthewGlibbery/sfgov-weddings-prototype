@@ -1,5 +1,6 @@
 import { PageWrapper, RichText } from '@/components'
-import { SearchForm, SearchInputProps } from '@/components/Search'
+import type { SearchInputProps } from '@/components/Search'
+import { SearchForm } from '@/components/Search'
 import {
   Container,
   HeadingLg,
@@ -18,7 +19,7 @@ import { getPublicEnv, requireEnv } from '@/lib/env'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { withServerSideTranslations } from '@/lib/translations'
-import { TopicPageData } from '@/types'
+import type { TopicPageData } from '@/types'
 import { useRouter } from 'next/router'
 import { getPageURL } from '@/lib/utils'
 import { TOPIC_PAGE_TYPE } from '@/constants'
@@ -108,7 +109,9 @@ export const getServerSideProps = withServerSideTranslations(
       if (searchRes.ok) {
         const searchData = await searchRes.json()
         results = searchData?.results ?? []
-        attributionToken = searchData.attributionToken
+        const attrToken = searchData?.attributionToken
+        attributionToken =
+          typeof attrToken === 'string' && attrToken.length > 0 ? attrToken : ''
       }
     } catch (error) {
       console.error(`error fetching search results: ${error}`)
@@ -235,6 +238,88 @@ export const SearchInput = ({ onChange, value }: SearchInputProps) => {
   )
 }
 
+function searchResultClick(
+  e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  url: string,
+  query: string,
+  productId: string,
+  attributionToken: string
+) {
+  // unlikely scenario
+  // attributionToken comes from the vertex search response,
+  // but if it doesn't exist, we don't want to send the click event
+  if (!attributionToken) {
+    console.warn('Missing attributionToken, skipping click event')
+    return
+  }
+
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  let navigated = false
+  const navigate = () => {
+    if (navigated) return
+    navigated = true
+
+    let parsedUrl: URL
+
+    try {
+      parsedUrl = new URL(url, window.location.origin)
+    } catch (error) {
+      console.warn(`Invalid URL: ${url}`)
+      return
+    }
+    const hostname = parsedUrl.hostname.toLowerCase()
+    const currentHostname = window.location.hostname.toLowerCase()
+    const isAllowedHostname =
+      hostname === 'sf.gov' ||
+      hostname === 'www.sf.gov' ||
+      hostname.endsWith('.sf.gov') ||
+      hostname === currentHostname
+    if (!isAllowedHostname) {
+      console.warn(`Blocked navigation to ${url} - domain not in allowed list`)
+      return
+    }
+    window.location.href = parsedUrl.href
+  }
+
+  // only preventDefault, assign eventCallback and eventTimeout,
+  // and fallback navigate on plain left clicks without modifier keys
+  const isPlainLeftClick =
+    e.button === 0 && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey
+
+  if (isPlainLeftClick) {
+    e.preventDefault()
+  }
+
+  // push the vertex search click event
+  // eventCallback will navigate to the result page after the event is sent
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({
+    event: 'vertex_search_click',
+    eventCallback: isPlainLeftClick ? navigate : undefined,
+    eventTimeout: isPlainLeftClick ? 1000 : undefined,
+    cloud_retail: {
+      eventType: 'search', // event type expected by vertex search analytics
+      visitorId: 'id-replaced-in-gtm',
+      productDetails: [
+        {
+          product: {
+            id: productId // result id from vertex search response
+          }
+        }
+      ],
+      searchQuery: query,
+      attributionToken
+    }
+  })
+
+  if (isPlainLeftClick) {
+    setTimeout(navigate, 1500) // fallback in case eventCallback doesn't fire
+  }
+}
+
 const SearchPage = (props: SearchPageData) => {
   const { t } = useTranslation()
   const { query, normalizedQuery, results, services, attributionToken } = props
@@ -269,16 +354,18 @@ const SearchPage = (props: SearchPageData) => {
         primaryAgency: undefined
       })
 
-      // push for vertex search analytics
-      window.dataLayer.push({
-        event: 'vertex_search',
-        cloud_retail: {
-          eventType: 'search',
-          visitorId: 'id-replaced-in-gtm',
-          searchQuery: query,
-          attributionToken
-        }
-      })
+      // push for vertex search analytics (view results page)
+      if (attributionToken) {
+        window.dataLayer.push({
+          event: 'vertex_search',
+          cloud_retail: {
+            eventType: 'search',
+            visitorId: 'id-replaced-in-gtm',
+            searchQuery: query,
+            attributionToken
+          }
+        })
+      }
     }
     lastSearchTerm.current = query
   }, [urlQuery, query, normalizedQuery, attributionToken])
@@ -305,7 +392,19 @@ const SearchPage = (props: SearchPageData) => {
                   as="h2"
                   className="text-primary500 font-bold font-body !m-0 no-underline hover:underline focus:underline"
                 >
-                  <a href={url} ref={i === focusIndex ? focusRef : null}>
+                  <a
+                    href={url}
+                    ref={i === focusIndex ? focusRef : null}
+                    onClick={(e) =>
+                      searchResultClick(
+                        e,
+                        url,
+                        query,
+                        item.id,
+                        attributionToken
+                      )
+                    }
+                  >
                     {title}
                   </a>
                 </HeadingLg>
@@ -319,6 +418,9 @@ const SearchPage = (props: SearchPageData) => {
                   className="flex flex-row gap-x-8 items-center text-primary500"
                   aria-hidden="true"
                   tabIndex={-1}
+                  onClick={(e) => {
+                    searchResultClick(e, url, query, item.id, attributionToken)
+                  }}
                 >
                   <span>{url}</span>
                   <IconExternalLink width="20" height="20" aria-hidden="true" />

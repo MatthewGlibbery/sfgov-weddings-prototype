@@ -1904,8 +1904,10 @@ export const TableBlockFactory = factory<TypeTableBlock>((gen) => ({
 
 export const SearchResultsPageFactory = factory<SearchPageData>((gen) => {
   const title = gen.lorem.words(5)
+  const searchTerm = gen.lorem.word()
   return {
-    query: gen.lorem.word(),
+    query: searchTerm,
+    normalizedQuery: searchTerm.trim().toLowerCase().replace(/\s+/g, ' '),
     results: [
       {
         id: gen.datatype.uuid(),
@@ -1934,7 +1936,8 @@ export const SearchResultsPageFactory = factory<SearchPageData>((gen) => {
         description: 'Description of topic result 1',
         html_path: '/path1'
       }
-    ]
+    ],
+    attributionToken: gen.datatype.uuid()
   }
 })
 
