@@ -726,6 +726,7 @@ describe('disableRadioUncheck()', () => {
     }
     const mockRadioComponent = {
       dataValue: 'old value',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       isEqual: (newValue: string, dataValue: any) => newValue === dataValue,
       setSelectedClasses: jest.fn(),
       updateValue: jest.fn(),

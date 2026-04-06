@@ -328,6 +328,7 @@ export interface RadioComponent extends RadioSchema {
   getValue(): string
   setSelectedClasses(): void
   updateOnChange(flags: object, changed: boolean): void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateValue(value: string, flags: any): void
 }
 

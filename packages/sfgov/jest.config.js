@@ -38,7 +38,7 @@ const customJestConfig = {
     '<rootDir>/lib/**/*.{js,ts,tsx}',
     // FIXME: there's no good way to cover these in tests
     '!<rootDir>/**/ErrorBoundary.tsx',
-    '!<rootDir>/**/GoogleFonts.tsx'
+    '!<rootDir>/**/GoogleFonts.tsx',
   ],
   globals: {
     google: {

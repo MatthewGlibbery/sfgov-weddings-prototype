@@ -21,6 +21,8 @@ import type {
   TypeDownloadableFilesBlock,
   TypeEmailBlock,
   TypeEmbeddedContentBlock,
+  TypeFormConfirmationBlock,
+  TypeFormIntroBlock,
   TypeImageBlock,
   TypeImageWithTextBlock,
   TypeLocationBlock,
@@ -341,6 +343,23 @@ export type ReportPageData = PageData &
     print_version: TypeDocumentBlock | undefined
     spotlight: TypeSpotlightBlock[]
     content: (TypeBodyTextBlock | TypeTableBlock)[]
+    partner_agencies: RelatedContentData[]
+  }
+
+export type FilloutFormPageData = PageData &
+  PrimaryAgencyData & {
+    fillout_form_url: string
+    intro_text: TypeFormIntroBlock[]
+    intro_callout?: string
+    confirmation_title: string
+    confirmation_callout?: string
+    confirmation_text: TypeFormConfirmationBlock[]
+    contact_us: (
+      | TypeLocationBlock
+      | TypePhoneNumberBlock
+      | TypeEmailBlock
+      | TypeSocialMediaBlock[]
+    )[]
     partner_agencies: RelatedContentData[]
   }
 

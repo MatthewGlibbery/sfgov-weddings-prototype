@@ -266,6 +266,7 @@ export type TypeContactFooterBlockValues = {
   phone: TypePhoneNumberBlock[]
   email: TypeEmailBlock[]
   social_media_other: TypeSocialMediaBlock[]
+  title_and_text?: TypeTitleAndTextBlock[]
 }
 
 export type TypeContactFooterBlock = BlockType<
@@ -556,4 +557,26 @@ export type ServicesSectionBlock = BlockType<
     title: string
     services: ServiceBlock[]
   }
+>
+
+/**
+ * Fillout Form
+ */
+
+export type TypeFormIntroValues = {
+  body: string
+  required_information?: string
+  time_to_complete: string
+}
+
+export type TypeFormConfirmationValues = {
+  body: string
+  next_steps?: string
+}
+
+export type TypeFormIntroBlock = BlockType<'form_intro', TypeFormIntroValues>
+
+export type TypeFormConfirmationBlock = BlockType<
+  'form_confirmation',
+  TypeFormConfirmationValues
 >

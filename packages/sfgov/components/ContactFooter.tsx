@@ -62,7 +62,27 @@ export const ContactFooter = ({
     }
   } else {
     for (const item of items) {
-      footerSections[item.type]?.push(item)
+      switch (item.type) {
+        // Items from FilloutFormPage are an array of contact item types
+        // that don't necessarily match the expected structure, so we
+        // check the type of each item before pushing to footerSections
+        case 'phone':
+          footerSections.phone_number.push(item)
+          break
+        case 'social_media_other':
+          if (Array.isArray(item.value)) {
+            for (const socialMediaOther of item.value) {
+              if (socialMediaOther?.type === 'social_media') {
+                footerSections.social_media.push(socialMediaOther)
+              } else if (socialMediaOther?.type === 'title_and_text') {
+                footerSections.title_and_text.push(socialMediaOther)
+              }
+            }
+          }
+          break
+        default:
+          footerSections[item.type]?.push(item)
+      }
     }
   }
 

@@ -65,7 +65,10 @@ import type {
   TypeTableBlock,
   TypeQLessData,
   ServicesSectionBlock,
-  ResourceBlockValue
+  ResourceBlockValue,
+  FilloutFormPageData,
+  TypeFormIntroBlock,
+  TypeFormConfirmationBlock
 } from '@/types'
 import {
   ABOUT_PAGE_TYPE,
@@ -73,6 +76,7 @@ import {
   CAMPAIGN_PAGE_TYPE,
   DATA_STORY_PAGE_TYPE,
   EVENT_PAGE_TYPE,
+  FILLOUT_FORM_PAGE_TYPE,
   FORM_PAGE_TYPE,
   HOME_PAGE_TYPE,
   INFO_PAGE_TYPE,
@@ -134,6 +138,51 @@ export const EventPageFactory = factory<EventPageData>((gen) => ({
       type: 'sf.Agency'
     }
   })
+}))
+
+export const FormIntroFactory = factory<TypeFormIntroBlock>((gen) => ({
+  id: gen.datatype.uuid(),
+  type: 'form_intro',
+  value: {
+    body: `<p>${gen.lorem.paragraphs(2, '</p><p>')}</p>`,
+    required_information: `<p>${gen.lorem.paragraphs(2, '</p><p>')}</p>`,
+    time_to_complete: "10 minutes if you're lucky"
+  }
+}))
+
+export const FormConfirmationFactory = factory<TypeFormConfirmationBlock>(
+  (gen) => ({
+    id: gen.datatype.uuid(),
+    type: 'form_confirmation',
+    value: {
+      body: `<p>${gen.lorem.paragraphs(2, '</p><p>')}</p>`,
+      next_steps: `<p>Pay online here</p>`
+    }
+  })
+)
+
+export const FilloutFormPageFactory = factory<FilloutFormPageData>((gen) => ({
+  id: gen.datatype.number(),
+  meta: PageMetaFactory.make({
+    type: FILLOUT_FORM_PAGE_TYPE
+  }),
+  title: 'Fillout Form title',
+  fillout_form_url: 'https://digital.forms.sf.gov/t/hello',
+  intro_text: [FormIntroFactory.make()],
+  confirmation_title: 'Confirmation title',
+  confirmation_text: [FormConfirmationFactory.make()],
+  primary_agency: PageFactory.make({
+    meta: {
+      type: 'sf.Agency'
+    }
+  }),
+  partner_agencies: RelatedAgencyFactory.make(3),
+  contact_us: [
+    EmailBlockFactory.make(),
+    PhoneNumberFactory.make(),
+    LocationBlockFactory.make(),
+    TitleAndTextFactory.make()
+  ]
 }))
 
 export const FormPageFactory = factory<FormPageData>((gen) => ({

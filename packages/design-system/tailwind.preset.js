@@ -273,7 +273,8 @@ function iconStyle(svg, props) {
     backgroundImage: svgBackgroundImage(svg, props),
     backgroundSize: `${size}px ${size}px`,
     backgroundPosition: 'center center',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
+    flexShrink: 0
   }
 }
 
