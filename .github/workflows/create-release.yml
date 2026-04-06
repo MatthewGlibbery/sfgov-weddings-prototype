@@ -2,10 +2,10 @@
 #
 # This workflow automates the release process by merging a source branch into main,
 # creating a git tag with the current timestamp, and publishing a GitHub release.
-# When code is pushed to main, CircleCI automatically triggers production deployment.
+# When code is pushed to main, CircleCI automatically triggers staging deployment.
 #
 # USAGE:
-#   1. Go to Actions → "Create Release and Deploy to Production"
+#   1. Go to Actions → "Create Release and Deploy to Staging"
 #   2. Enter source branch name:
 #      - "develop" (default) - normal release from develop branch
 #      - "hotfix-xyz" - release from a hotfix branch
@@ -19,7 +19,7 @@
 #   - Merges source branch → main (unless source is already main)
 #   - Generates version tag using current UTC datetime (vYYYY-MM-DD-HHMMSS)
 #   - Creates release notes from commits since last tag
-#   - Pushes tag to main (triggers CircleCI production deployment)
+#   - Pushes tag to main (triggers CircleCI staging deployment)
 #   - Publishes GitHub release
 #   - Cleans up any stale draft releases from preview workflow
 #
@@ -36,7 +36,7 @@
 #   - Draft releases use "draft-v" prefix and are automatically cleaned up
 #   - git describe excludes draft-* tags to ensure accurate version detection
 
-name: Create Release and Deploy to Production
+name: Create Release and Deploy to Staging
 
 on:
   workflow_dispatch:
@@ -50,6 +50,10 @@ on:
         description: 'Release notes (optional - auto-generated from commits if empty)'
         required: false
         type: string
+
+concurrency:
+  group: create-release
+  cancel-in-progress: false
 
 jobs:
   create-release:
@@ -169,22 +173,6 @@ jobs:
           echo "New version will be: ${NEW_VERSION}"
 
       - name: Generate release notes
-        run: |
-          # Find and delete draft releases created by this workflow
-          # Filter by isDraft=true and tag name pattern (vYYYY-MM-DD-HHMMSS)
-          # Also clean up any associated tags to avoid cluttering git describe/tag logic
-          gh release list --limit 100 --json tagName,isDraft,name | \
-            jq -r '.[] | select(.isDraft == true) | select(.tagName | test("^v[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}$")) | .tagName' | \
-            while read -r tag; do
-              if [ -n "$tag" ]; then
-                echo "Deleting draft release and tag: $tag"
-                gh release delete "$tag" --yes --cleanup-tag || true
-              fi
-            done
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate release notes
         id: release_notes
         run: |
           # Start release notes
@@ -245,16 +233,14 @@ jobs:
           git push origin ${{ steps.version.outputs.new_version }}
 
       - name: Create GitHub Release
-        uses: actions/create-release@v1
+        run: |
+          gh release create "$NEW_VERSION" \
+            --title "Release $NEW_VERSION" \
+            --notes-file release_notes.md \
+            --target main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.version.outputs.new_version }}
-          release_name: Release ${{ steps.version.outputs.new_version }}
-          body: ${{ steps.release_notes.outputs.release_notes }}
-          draft: false
-          prerelease: false
-          target_commitish: main
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
 
       - name: Summary
         run: |
@@ -268,7 +254,7 @@ jobs:
             echo "- **Merged**: $SOURCE_BRANCH → main" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "The CircleCI deployment to production will start automatically." >> $GITHUB_STEP_SUMMARY
+          echo "The CircleCI deployment to staging will start automatically." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "[View Release](https://github.com/$GITHUB_REPO/releases/tag/$NEW_VERSION)" >> $GITHUB_STEP_SUMMARY
         env:
@@ -276,3 +262,103 @@ jobs:
           PREV_TAG: ${{ steps.version.outputs.previous_tag }}
           SOURCE_BRANCH: ${{ inputs.source_branch }}
           GITHUB_REPO: ${{ github.repository }}
+
+      - name: Notify Slack on Success
+        if: success()
+        run: |
+          if [ "$SOURCE_BRANCH" = "main" ]; then
+            ACTION_TEXT="Tagged main (no merge)"
+          else
+            ACTION_TEXT="Merged \`$SOURCE_BRANCH\` → \`main\`"
+          fi
+
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "text": "🚀 Release Created - Staging Deploy Starting",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*🚀 Release Created - Staging Deploy Starting*\n\n*Version:* \`$NEW_VERSION\`\n*Previous Release:* \`$PREV_TAG\`\n*Action:* $ACTION_TEXT\n\n_CircleCI deployment to staging will start automatically_"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Release"
+                    },
+                    "url": "https://github.com/$GITHUB_REPO/releases/tag/$NEW_VERSION"
+                  },
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Workflow Run"
+                    },
+                    "url": "https://github.com/$GITHUB_REPO/actions/runs/$GITHUB_RUN_ID"
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_SUCCESS }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          PREV_TAG: ${{ steps.version.outputs.previous_tag }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
+      - name: Notify Slack on Failure
+        if: failure()
+        run: |
+          if [ "$SOURCE_BRANCH" = "main" ]; then
+            ACTION_TEXT="Tag main (no merge)"
+          else
+            ACTION_TEXT="Merge \`$SOURCE_BRANCH\` → \`main\`"
+          fi
+
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "text": "❌ Release Workflow Failed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*❌ Release Workflow Failed*\n\n*Version:* \`$NEW_VERSION\`\n*Action:* $ACTION_TEXT\n\n⚠️ The release creation workflow failed. Staging deployment did not start.\n\n*Common issues:*\n• Merge conflict when merging to main\n• Draft release cleanup failed\n• Git push to main failed\n• GitHub release creation failed"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Workflow Run"
+                    },
+                    "url": "https://github.com/$GITHUB_REPO/actions/runs/$GITHUB_RUN_ID",
+                    "style": "danger"
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_FAILURE }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
