@@ -35,4 +35,15 @@ test.describe('Profile Page – Content Type Specific A11y Tests', () => {
       page
     ).toCreateLogicalReadingOrderInContactSectionsOnProfileContentType()
   })
+  test('create a logical reading order in the Additional Roles section on the Profile content type', async ({
+    mount,
+    page
+  }) => {
+    const data = ProfilePageFactory.make()
+    await mount(<ProfilePage page={data} />)
+
+    await expect(
+      page
+    ).toHaveLogicalReadingOrderInAdditionalRolesSectionOnProfile()
+  })
 })
