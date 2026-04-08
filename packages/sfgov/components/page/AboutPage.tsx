@@ -1,28 +1,29 @@
+import type { TileSetProps } from '@/design-system'
 import {
   Container,
   Grid,
   HeadingXXl,
   IconArrowLeft,
-  PageTitleSection
+  PageTitleSection,
+  Tile,
+  TileSection,
+  TileSet
 } from '@/design-system'
-import type { AboutPageData } from '@/types'
+import { filterTruthy, getPageURL } from '@/lib/utils'
+import type { AboutPageData, ResourceBlock } from '@/types'
 import { useTranslation } from 'next-i18next'
-import type { ComponentType } from 'react'
-import {
-  ContentTileList,
-  ITERATIVE_RICH_TEXT_COMPONENTS,
-  PageLink,
-  TileContentSection
-} from '../'
+import { ITERATIVE_RICH_TEXT_COMPONENTS, PageLink } from '../'
 import { DownloadableFilesSection } from '../DownloadableFilesSection'
 import { TitleAndText } from '../TitleAndText'
-import { PageWrapper } from './PageWrapper'
 import type { HTMLComponentMap } from '../wagtail'
+import { PageWrapper } from './PageWrapper'
 
-export const AboutPage: ComponentType<{
+export type AboutPageProps = {
   page: AboutPageData
   richTextComponents?: HTMLComponentMap
-}> = ({ page, richTextComponents }) => {
+}
+
+export function AboutPage({ page, richTextComponents }: AboutPageProps) {
   const { t } = useTranslation()
   const {
     title,
@@ -45,7 +46,7 @@ export const AboutPage: ComponentType<{
                 >
                   <div className="flex gap-4">
                     <IconArrowLeft className="text-primary500" width={20} />
-                    <PageLink page={primaryAgency}>
+                    <PageLink page={primaryAgency!}>
                       {t('back-to-main-page', {
                         defaultValue: 'Back to main page'
                       })}
@@ -66,43 +67,76 @@ export const AboutPage: ComponentType<{
                       {...item.value}
                     />
                   ))
-                : null}
+                : /* istanbul ignore next */ null}
               {resources.length ? (
-                <div>
-                  <HeadingXXl as="h2">
-                    {t('resources', { defaultValue: 'Resources' })}
-                  </HeadingXXl>
+                <TileSection
+                  id="resources"
+                  heading={t('resources', { defaultValue: 'Resources' })}
+                >
                   {resources.map((section) => {
                     switch (section.type) {
                       case 'resources': {
                         return (
-                          <TileContentSection
+                          <ResourcesSection
                             key={section.id}
-                            title={section.value.title}
-                          >
-                            <ContentTileList links={section.value.resources} />
-                          </TileContentSection>
+                            heading={section.value.title}
+                            blocks={section.value.resources}
+                          />
                         )
                       }
                       case 'downloadable_files': {
                         return (
                           <DownloadableFilesSection
+                            key={section.id}
                             title={section?.value?.title}
                             documents={section?.value?.documents}
                           />
                         )
                       }
-                      /* istanbul ignore next */
-                      default:
-                        return <></>
                     }
                   })}
-                </div>
-              ) : null}
+                </TileSection>
+              ) : /* istanbul ignore next */ null}
             </div>
           </div>
         </Grid>
       </Container>
     </PageWrapper>
   )
+}
+
+type ResourceSectionProps = Omit<TileSetProps, 'children'> & {
+  blocks: ResourceBlock[]
+}
+
+function ResourcesSection({ blocks, ...rest }: ResourceSectionProps) {
+  const tiles = filterTruthy(
+    blocks.map((block) => {
+      switch (block.type) {
+        case 'external_link':
+          return (
+            <Tile
+              href={block.value.url}
+              heading={block.value.title}
+              description={block.value.description}
+              key={block.id}
+            />
+          )
+        case 'page': {
+          if (!block.value) return null
+          const url = getPageURL(block.value)
+          return url ? (
+            <Tile
+              href={url}
+              heading={block.value.title}
+              description={block.value.description}
+              key={block.id}
+            />
+          ) : null
+        }
+      }
+    })
+  )
+  if (!tiles.length) return null
+  return <TileSet {...rest}>{tiles}</TileSet>
 }

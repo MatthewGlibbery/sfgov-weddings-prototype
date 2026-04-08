@@ -559,6 +559,19 @@ export type ServicesSectionBlock = BlockType<
   }
 >
 
+export type ResourceBlock =
+  | BlockType<'page', PageData | null>
+  | BlockType<'external_link', ResourceBlockValue>
+
+// https://github.com/SFDigitalServices/platform/blob/ec1ea03190548fb4311ef42ea4d258ac1be187ef/cms/blocks/composite.py#L350
+export type ResourceSectionBlock = BlockType<
+  'resources',
+  {
+    title: string
+    resources: ResourceBlock[]
+  }
+>
+
 /**
  * Fillout Form
  */

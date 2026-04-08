@@ -1,75 +1,4 @@
 /* istanbul ignore file */
-
-import { factory } from 'node-factory'
-import type {
-  BlockType,
-  TypeButtonLinkBlock,
-  TypeCalloutBlock,
-  TypeCallToActionBlock,
-  TypeCostBlock,
-  TypeCostVariant,
-  TypeDateTimeBlock,
-  TypeEmailBlock,
-  EventPageData,
-  InfoPageData,
-  TypeLocationBlock,
-  PageData,
-  PageMeta,
-  TypePhoneNumberBlock,
-  TypeQuickLinkBlock,
-  RelatedContentData,
-  TypeStepBlock,
-  StepByStepData,
-  TypeTextBlock,
-  TypeTitleAndTextBlock,
-  TransactionPageData,
-  WagtailImageData,
-  TypeWhatToDoBlock,
-  TypeWhatToDoStepBlock,
-  ProfilePageData,
-  TypeNewsTileBlock,
-  TypeContentTileBlock,
-  TypeEventTileBlock,
-  LinkBlockValue,
-  TypeSpotlightBlock,
-  TypeSocialMediaBlockValues,
-  TypeSocialMediaBlock,
-  TopicPageData,
-  TypeContentSectionBlock,
-  TypeImageBlock,
-  NewsPageData,
-  AboutPageData,
-  LocationPageData,
-  TypeAlertBlock,
-  AgencyPageData,
-  CampaignPageData,
-  TypeAccordionItemBlock,
-  MeetingPageData,
-  TypeAgendaItemBlock,
-  TypeOnlineEventBlock,
-  TypeVideoBlock,
-  TypeEmbeddedContentBlock,
-  DataStoryPageData,
-  TypeDownloadableFilesBlock,
-  TypeDocumentBlock,
-  ReportPageData,
-  FormPageData,
-  TypeDocumentSectionBlock,
-  ResourceCollectionPageData,
-  ButtonLinkBlockValue,
-  TypeDocumentBlockValues,
-  TypeProfileGroupBlock,
-  TypeBodyTextBlock,
-  TypeContactFooterBlock,
-  HomePageData,
-  TypeTableBlock,
-  TypeQLessData,
-  ServicesSectionBlock,
-  ResourceBlockValue,
-  FilloutFormPageData,
-  TypeFormIntroBlock,
-  TypeFormConfirmationBlock
-} from '@/types'
 import {
   ABOUT_PAGE_TYPE,
   AGENCY_PAGE_TYPE,
@@ -92,6 +21,78 @@ import {
   WAGTAIL_IMAGE_TYPE
 } from '@/constants'
 import type { SearchPageData } from '@/pages/search'
+import type {
+  AboutPageData,
+  AgencyPageData,
+  BlockType,
+  ButtonLinkBlockValue,
+  CampaignPageData,
+  DataStoryPageData,
+  EventPageData,
+  FilloutFormPageData,
+  FormPageData,
+  HomePageData,
+  InfoPageData,
+  LinkBlockValue,
+  LocationPageData,
+  MeetingPageData,
+  NewsPageData,
+  PageData,
+  PageMeta,
+  ProfilePageData,
+  RelatedContentData,
+  ReportPageData,
+  ResourceBlockValue,
+  ResourceCollectionPageData,
+  ResourceSectionBlock,
+  ServicesSectionBlock,
+  StepByStepData,
+  TopicPageData,
+  TransactionPageData,
+  TypeAccordionItemBlock,
+  TypeAgendaItemBlock,
+  TypeAlertBlock,
+  TypeBodyTextBlock,
+  TypeButtonLinkBlock,
+  TypeCalloutBlock,
+  TypeCallToActionBlock,
+  TypeContactFooterBlock,
+  TypeContentSectionBlock,
+  TypeContentTileBlock,
+  TypeCostBlock,
+  TypeCostVariant,
+  TypeDateTimeBlock,
+  TypeDocumentBlock,
+  TypeDocumentBlockValues,
+  TypeDocumentSectionBlock,
+  TypeDownloadableFilesBlock,
+  TypeEmailBlock,
+  TypeEmbeddedContentBlock,
+  TypeEventTileBlock,
+  TypeFormConfirmationBlock,
+  TypeFormIntroBlock,
+  TypeImageBlock,
+  TypeLocationBlock,
+  TypeNewsTileBlock,
+  TypeOnlineEventBlock,
+  TypePhoneNumberBlock,
+  TypeProfileGroupBlock,
+  TypeQLessData,
+  TypeQuickLinkBlock,
+  TypeSocialMediaBlock,
+  TypeSocialMediaBlockValues,
+  TypeSpotlightBlock,
+  TypeStepBlock,
+  TypeTableBlock,
+  TypeTextBlock,
+  TypeTitleAndTextBlock,
+  TypeVideoBlock,
+  TypeWhatToDoBlock,
+  TypeWhatToDoStepBlock,
+  WagtailImageData
+} from '@/types'
+import { factory } from 'node-factory'
+import { randomUUID } from 'crypto'
 
 export const PageMetaFactory = factory<PageMeta>((gen) => ({
   type: gen.lorem.word(),
@@ -564,6 +565,20 @@ export const ServicesSectionBlockFactory = factory<ServicesSectionBlock>(
     id: gen.datatype.uuid(),
     type: 'services',
     value: ServicesSectionBlockValueFactory.make()
+  })
+)
+
+export const ResourceSectionBlockFactory = factory<ResourceSectionBlock>(
+  (gen) => ({
+    id: gen.datatype.uuid(),
+    type: 'resources',
+    value: {
+      title: gen.commerce.productName(),
+      resources: [
+        ...PageBlockFactory.make(3),
+        ...ExternalLinkBlockFactory.make(5)
+      ]
+    }
   })
 )
 
@@ -1072,6 +1087,69 @@ export const PageFactory = factory<PageData>((gen) => ({
   live: true
 }))
 
+/**
+ * This is an explicit way to create block objects with a null value and a type
+ * that unions null with a known datatype. Because TypeScript, you need to pass
+ * the block type as both a generic and an argument:
+ *
+ * ```ts
+ * const empty = makeNullBlock<'page', PageData>('page')
+ * // empty is now of type BlockType<'page', PageData | null> and `value: null`
+ * ```
+ */
+export function makeNullBlock<T extends string, Value = unknown>(
+  type: T
+): BlockType<T, Value | null> {
+  return {
+    id: randomUUID(),
+    type,
+    value: null
+  }
+}
+
+/**
+ * Shortcut for creating a "page" block with a null value, which is a useful
+ * fixture in tests that need to operate on page chooser blocks without a page
+ * chosen.
+ */
+export function makeNullPageBlock() {
+  return makeNullBlock<'page', PageData>('page')
+}
+
+/**
+ * Create a PageData object with meta properties that would cause
+ * `getPageURL(page)` to return null/undefined.
+ *
+ * FIXME: This is only useful because `getPageURL()` is written in such a way
+ * that allows for page and related content data that might not have either
+ * `meta.html_url` or `meta.url_path`. If it turns out that this is not the
+ * case:
+ *
+ * 1. Both the PageMeta types and `getPageURL()` should be rewritten so that the
+ *    meta values _can't_ be null/undefined.
+ * 2. Code that checks for the return value of `getPageURL()` should be
+ *    rewritten to account for it always returning a non-empty string.
+ * 3. Corresponding tests that account for pages without URLs should be removed.
+ */
+export function makePageWithNoURL() {
+  return PageFactory.make({
+    meta: {
+      url_path: undefined,
+      html_url: undefined
+    }
+  })
+}
+
+/**
+ * Create a "page" block with meta properties that would cause
+ * `getPageURL(block.value)` to return null/undefined.
+ */
+export function makePageBlockWithNoURL() {
+  return PageBlockFactory.make({
+    value: makePageWithNoURL()
+  })
+}
+
 export const RelatedContentBlockFactory = factory<RelatedContentData>((gen) => {
   const laterDate = '2028-09-11'
   const pastDate = '2022-09-11'
@@ -1420,31 +1498,12 @@ export const AboutPageFactory = factory<AboutPageData>((gen) => ({
   title: 'About',
   description: 'About description',
   about_agency: PageFactory.make(),
-  about_info: [
-    TitleAndTextFactory.make({
-      value: {
-        title: 'About info title and text 1',
-        text: 'About info title and text 1 text'
-      }
-    }),
-    TitleAndTextFactory.make({
-      value: {
-        title: 'About info title and text 2',
-        text: 'About info title and text 2 text'
-      }
-    })
-  ],
+  about_info: TitleAndTextFactory.make(2),
   resources: [
-    {
-      type: 'resources',
-      value: {
-        title: 'Resource section 1',
-        resources: [GenericTileFactory.make()]
-      },
-      id: gen.datatype.uuid()
-    },
+    ResourceSectionBlockFactory.make(),
     DownloadableFilesBlockFactory.make()
-  ]
+  ],
+  primary_agency: RelatedAgencyFactory.make()
 }))
 
 export const TopicPageFactory = factory<TopicPageData>((gen) => ({
