@@ -12,7 +12,7 @@ import AxeBuilder from '@axe-core/playwright'
 // - Skip the global axe test and then re-run axe with duplicate-id disabled
 // ============================================================
 test.beforeEach(async ({}, testInfo) => {
-  if (testInfo.title === 'validate that all ids are unique') {
+  if (testInfo.title === 'validate that referenced ids are unique') {
     test.skip(true, 'Transaction page currently has known duplicate IDs.')
   }
 

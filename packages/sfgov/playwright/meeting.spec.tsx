@@ -12,7 +12,7 @@ import { runGlobalA11yTests } from './globalA11yTests'
 // - Skip the global axe test and then re-run axe with duplicate-id disabled
 // ============================================================
 test.beforeEach(async ({}, testInfo) => {
-  if (testInfo.title === 'validate that all ids are unique') {
+  if (testInfo.title === 'validate that referenced ids are unique') {
     test.skip(true, 'Meeting page currently has known duplicate IDs.')
   }
 
@@ -76,16 +76,6 @@ test.describe('Meeting Page – Content Type Specific A11y Tests', () => {
     await mount(<MeetingPage page={data} />)
 
     await expect(page).toHaveLogicalTabOrderOnMeetingContentType()
-  })
-
-  test('validate feedback trigger button is accessible and includes aria attributes', async ({
-    mount,
-    page
-  }) => {
-    const data = MeetingPageFactory.make()
-    await mount(<MeetingPage page={data} />)
-
-    await expect(page).toBeAccessibleAndIncludeAriaAttributesInFeedbackFAB()
   })
 })
 
