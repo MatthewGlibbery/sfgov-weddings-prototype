@@ -1,16 +1,22 @@
-# This workflow automatically updates the training environment after a production release.
+# This workflow updates the training environment from a production release.
+#
+# USAGE:
+#   1. Go to Actions → "Update Training from Release"
+#   2. Click "Run workflow"
+#   3. Enter the release tag to deploy (e.g., v2026-04-01-160903)
 #
 # What it does:
-# 1. Triggers when a release is published on main
-# 2. Creates a temporary training-update branch from training
-# 3. Merges the release tag into training-update (preserving training-specific features like banners, CSS, user permissions)
-# 4. Runs tests (lint, unit tests)
-# 5. If tests pass:
-#    - Builds and tags Docker image as platform/web:training (build happens in Dockerfile)
+# 1. Creates a temporary training-update branch from training
+# 2. Merges the specified release tag into training-update (preserving training-specific features like banners, CSS, user permissions)
+# 3. Runs tests (lint, unit tests)
+# 4. If tests pass:
+#    - Builds and tags Docker image as platform/web:training and platform/web:training-<release-tag>
 #    - Pushes to ECR
 #    - Restarts cms-training-web ECS service
-#    - Waits for deployment to stabilize
-#    - Updates release with deployment notice
+#    - Waits for deployment to stabilize (15 min timeout)
+#
+# Triggers:
+# - Manual only (workflow_dispatch)
 #
 # Note: Currently does NOT push training-update back to the training branch.
 # This allows us to observe deployments before automatically updating the branch.
@@ -25,7 +31,7 @@
 # - Only one run at a time (cancel-in-progress prevents race conditions)
 # - Newer releases cancel older in-flight runs
 
-name: Update Training
+name: Update Training from Release
 
 on:
   workflow_dispatch:
@@ -34,8 +40,6 @@ on:
         description: 'Release tag to deploy (e.g., v2026-04-01-160903)'
         required: true
         type: string
-  release:
-    types: [published]
 
 concurrency:
   group: update-training
@@ -45,18 +49,10 @@ jobs:
   deploy-training:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       id-token: write
 
     steps:
-      - name: Verify release targets main
-        if: github.event_name == 'release'
-        run: |
-          if [ "${{ github.event.release.target_commitish }}" != "main" ]; then
-            echo "Release does not target main branch (target: ${{ github.event.release.target_commitish }})"
-            exit 1
-          fi
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -67,19 +63,17 @@ jobs:
           git config user.email "github-actions@sfgov.org"
           git config user.name "GitHub Actions Bot"
 
+      - name: Set release tag
+        id: release
+        run: |
+          echo "tag=${{ inputs.release_tag }}" >> $GITHUB_OUTPUT
+
       - name: Create training-update branch and merge release into it
         run: |
-          RELEASE_TAG="${{ github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag || github.event.release.tag_name }}"
-
-          # Verify tag exists
-          if ! git rev-parse "$RELEASE_TAG" >/dev/null 2>&1; then
-            echo "Error: Tag $RELEASE_TAG does not exist"
-            exit 1
-          fi
-
           git fetch origin training
+          git fetch origin tag ${{ steps.release.outputs.tag }}
           git checkout -b training-update origin/training
-          git merge "$RELEASE_TAG" --no-edit -m "Merge release $RELEASE_TAG into training-update from training"
+          git merge ${{ steps.release.outputs.tag }} --no-edit -m "Merge release ${{ steps.release.outputs.tag }} into training-update from training"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -107,43 +101,18 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker build --platform linux/amd64 -t 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:training .
+          docker tag 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:training 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:training-${{ steps.release.outputs.tag }}
           docker push 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:training
+          docker push 395833734759.dkr.ecr.us-west-1.amazonaws.com/platform/web:training-${{ steps.release.outputs.tag }}
 
       - name: Restart ECS service
         run: |
           aws ecs update-service --cluster cms-common --service cms-training-web --force-new-deployment --region us-west-1
 
       - name: Wait for deployment to stabilize
-        if: github.event_name == 'release'
         run: |
           aws ecs wait services-stable \
             --cluster cms-common \
             --services cms-training-web \
             --region us-west-1
         timeout-minutes: 15
-
-      - name: Update release with deployment notice
-        if: success() && github.event_name == 'release'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const release = await github.rest.repos.getRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: context.payload.release.id
-            });
-
-            const deploymentNotice = '✅ Training environment has been updated with this release and is now deployed to ECS.';
-            const currentBody = release.data.body || '';
-
-            // Only append if notice doesn't already exist
-            if (!currentBody.includes(deploymentNotice)) {
-              const updatedBody = currentBody + '\n\n---\n\n' + deploymentNotice;
-
-              await github.rest.repos.updateRelease({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                release_id: context.payload.release.id,
-                body: updatedBody
-              });
-            }
