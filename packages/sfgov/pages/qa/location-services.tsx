@@ -1,10 +1,9 @@
 import { localeNames, type LocaleCode } from '@/components/LanguageSelector'
 import { PageWrapper } from '@/components/page/PageWrapper'
+import { LOCATION_PAGE_TYPE } from '@/constants'
 import { classed, Container } from '@/design-system'
-import { ContentAPI } from '@/lib/api'
-import { getenv } from '@/lib/env'
+import { getPages, qaOnly } from '@/lib/qa'
 import type { LocationPageData } from '@/types'
-import type { GetServerSideProps } from 'next'
 import { i18n } from '../../next-i18next.config'
 
 // we only get these fields from the search API:
@@ -14,61 +13,20 @@ type PagesProps = {
   pages: LocationPageInfo[]
 }
 
-function isQA(host?: string): boolean {
-  return (
-    getenv('NODE_ENV') !== 'production' ||
-    !!host?.split(':')[0].endsWith('.dev.sf.gov')
-  )
-}
-
-export const getServerSideProps: GetServerSideProps<PagesProps> = async (
-  context
-) => {
-  if (!isQA(context.req.headers.host)) {
-    return { notFound: true }
-  }
-  const pages = await getPages()
+export const getServerSideProps = qaOnly<PagesProps>(async () => {
+  const pages = await getPages<LocationPageInfo>(LOCATION_PAGE_TYPE, [
+    'services'
+  ])
   return {
     props: {
       pages
     }
   }
-}
+})
 
-async function getPages() {
-  const api = new ContentAPI()
-  const perPage = 50
+const Cell = classed('td', 'text-left align-top p-8')
 
-  async function nextPage() {
-    const res = await api.load('pages', {
-      type: 'sf.locationpage',
-      fields: 'services',
-      locale: 'en',
-      limit: perPage,
-      offset: pages.length
-    })
-    return (await res.json()) as {
-      meta: {
-        total_count: number
-      }
-      items: LocationPageInfo[]
-    }
-  }
-  const pages: LocationPageInfo[] = []
-  while (true) {
-    const page = await nextPage()
-    if (!page.items.length) break
-    pages.push(...page.items)
-    if (pages.length >= page.meta.total_count) {
-      break
-    }
-  }
-  return pages
-}
-
-const Cell = classed('td', 'text-left p-8')
-
-export default function LocationServicesTesting({ pages }: PagesProps) {
+export default function LocationServicesQA({ pages }: PagesProps) {
   const servicePages = pages
     .map((page) => ({
       page,
@@ -95,12 +53,15 @@ export default function LocationServicesTesting({ pages }: PagesProps) {
                 </Cell>
                 <Cell>
                   <>
-                    {serviceGroups
-                      ? `${pluralize(serviceCount, 'service')} in ${pluralize(
-                          serviceGroups,
-                          'group'
-                        )}`
-                      : '0 services'}
+                    {serviceGroups ? (
+                      <>
+                        {pluralize(serviceCount, 'service')}
+                        {', '}
+                        {pluralize(serviceGroups, 'group')}
+                      </>
+                    ) : (
+                      '0 services'
+                    )}
                   </>
                 </Cell>
                 <Cell>

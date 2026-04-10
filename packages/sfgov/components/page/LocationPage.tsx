@@ -14,7 +14,7 @@ import {
   TileSection,
   TileSet
 } from '@/design-system'
-import { getPageURL, isPermitCenter } from '@/lib/utils'
+import { filterTruthy, getPageURL, isPermitCenter } from '@/lib/utils'
 import type {
   LocationPageData,
   PageProps,
@@ -302,17 +302,12 @@ function ServicesSection({ blocks, heading, ...rest }: ServicesSectionProps) {
       {sections.map((section, i) => (
         <TileSet heading={section.heading} key={i}>
           {section.tiles.map((tile, j) => (
-            <Tile {...(tile as TileLinkProps)} key={j} />
+            <Tile {...tile} key={j} />
           ))}
         </TileSet>
       ))}
     </TileSection>
   )
-}
-
-type TileSectionData = {
-  heading: string
-  tiles: TileLinkProps[]
 }
 
 /**
@@ -321,18 +316,18 @@ type TileSectionData = {
  * zero non-empty tiles). An "empty" tile is a block for which we can't get the
  * link, namely because the page data is missing from the chooser in the CMS.
  */
-function getTileSections(blocks: ServicesSectionBlock[]): TileSectionData[] {
+function getTileSections(blocks: ServicesSectionBlock[]) {
   return (
     blocks
       .map(({ value: section }) => {
         return {
           heading: section.title,
-          // transform the service blocks into tile props
-          tiles: section.services
-            .map((block) => (block.value ? getTileProps(block) : undefined))
-            // and filter out any that returned falsy (the type guard ensures
-            // that the returned type is `TileLinkProps[]` and excludes null)
-            .filter((link): link is TileLinkProps => Boolean(link))
+          // transform the service blocks into tile props, and exclude null
+          tiles: filterTruthy(
+            section.services.map((block) =>
+              block.value ? getTileProps(block) : null
+            )
+          )
         }
       })
       // filter out sections with no (valid) tiles

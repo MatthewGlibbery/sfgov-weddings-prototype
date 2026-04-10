@@ -14,7 +14,10 @@ import { runGlobalA11yTests } from './globalA11yTests'
 test.beforeEach(async ({}, testInfo) => {
   if (
     testInfo.title === 'validate axe core accessibility tests' ||
-    testInfo.title === 'validate accessible markup in the feedback modal dialog'
+    testInfo.title ===
+      'validate accessible markup in the feedback modal dialog' ||
+    testInfo.title ===
+      'validate that the feedback form trigger button is fully accessible'
   ) {
     test.skip(
       true,

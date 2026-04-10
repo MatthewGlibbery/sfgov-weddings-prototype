@@ -1,6 +1,5 @@
-import type { IContentAPI } from '@/types'
 import { PageFactory } from './factories'
-import { getPageURL, resolvePage, resolveImage, truncateText } from './utils'
+import { getPageURL, truncateText, filterTruthy } from './utils'
 
 describe('getPageURL()', () => {
   it('returns meta.html_url without the hostname', () => {
@@ -57,69 +56,24 @@ describe('getPageURL()', () => {
   })
 })
 
-describe('resolvers', () => {
-  const mockLoadJSON = jest.fn()
-  const api = {
-    getData: mockLoadJSON
-  } as unknown as IContentAPI
-
-  afterEach(() => {
-    mockLoadJSON.mockClear()
+describe('truncateText()', () => {
+  it('truncates text if max length reached', () => {
+    const longText = 'word '.repeat(50)
+    const result = truncateText(longText, 50)
+    expect(result.endsWith('...')).toBe(true)
+    expect(result.length).toBeLessThanOrEqual(53) // 50 + ...
   })
 
-  describe('resolvePage()', () => {
-    it('resolves an id with api.getData()', async () => {
-      await resolvePage(1, api)
-      expect(api.getData).toHaveBeenCalledWith('pages/1/')
-    })
-
-    it('does not attempt to resolve an object', async () => {
-      // @ts-expect-error intentionally malformed data
-      await resolvePage({ id: 1 }, api)
-      expect(api.getData).not.toHaveBeenCalled()
-    })
+  it('does not modify text if less than max length', () => {
+    const text = 'short text'
+    expect(truncateText(text, 50)).toBe(text)
   })
+})
 
-  describe('resolveImage()', () => {
-    it('resolves an id with api.getData()', async () => {
-      await resolveImage(1, api)
-      expect(api.getData).toHaveBeenCalledWith('images/1')
-    })
-
-    it('attempts to resolve an object without meta.download_url', async () => {
-      // @ts-expect-error intentionally malformed data
-      await resolveImage({ id: 1 }, api)
-      expect(api.getData).toHaveBeenCalledWith('images/1')
-    })
-
-    it('does not attempt to resolve object with meta.download_url', async () => {
-      // @ts-expect-error intentionally sparse data
-      await resolveImage({ meta: { download_url: 'foo.jpg' } }, api)
-      expect(api.getData).not.toHaveBeenCalled()
-    })
-
-    it('does nothing if the value is falsy', async () => {
-      const values = await Promise.all([
-        // @ts-expect-error null is not allowed
-        resolveImage(null, api),
-        resolveImage(0, api)
-      ])
-      expect(values).toEqual([undefined, undefined])
-      expect(api.getData).not.toHaveBeenCalled()
-    })
-  })
-
-  describe('truncateText', () => {
-    it('truncates text if max length reached', () => {
-      const longText = 'word '.repeat(50)
-      const result = truncateText(longText, 50)
-      expect(result.endsWith('...')).toBe(true)
-      expect(result.length).toBeLessThanOrEqual(53) // 50 + ...
-    })
-
-    it('does not modify text if less than max length', () => {
-      const text = 'short text'
-      expect(truncateText(text, 50)).toBe(text)
-    })
+describe('filterTruthy()', () => {
+  it('filters out null, undefined, and false', () => {
+    expect(
+      filterTruthy([0, 1, 2, 3, false, true, 'yes', null, undefined, {}])
+    ).toEqual([0, 1, 2, 3, true, 'yes', {}])
   })
 })

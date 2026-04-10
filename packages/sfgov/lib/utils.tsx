@@ -1,10 +1,5 @@
-// istanbul ignore file
-import type {
-  IContentAPI,
-  PageData,
-  TypeLocationBlock,
-  WagtailImageData
-} from '@/types'
+/* istanbul ignore file */
+import type { PageData, TypeLocationBlock } from '@/types'
 import type { TFunction } from 'i18next'
 import type { ComponentType } from 'react'
 import { createContext, useContext } from 'react'
@@ -23,32 +18,6 @@ export function getPageURL(page: PageData) {
       : meta.html_url
   } else {
     return meta?.url_path
-  }
-}
-
-export async function resolveImage(
-  img: WagtailImageData | number,
-  api: IContentAPI
-) {
-  if (!img) {
-    // noop
-  } else if (typeof img === 'number') {
-    return api.getData<WagtailImageData>(`images/${img}`)
-  } else if (img.meta?.download_url) {
-    return img
-  } else if (img.id && !img.meta?.download_url) {
-    return api.getData<WagtailImageData>(`images/${img.id}`)
-  }
-}
-
-export function resolvePage<T extends PageData = PageData>(
-  idOrObj: number | T,
-  api: IContentAPI
-) {
-  if (typeof idOrObj === 'number') {
-    return api.getData<T>(`pages/${idOrObj}/`)
-  } else {
-    return idOrObj as T
   }
 }
 
@@ -403,3 +372,22 @@ export async function getTestGroup() {
 // mainly for PageWrapper.tsx where we determine which header to show
 export const TestGroupContext = createContext<string | null>(null)
 export const useTestGroup = () => useContext(TestGroupContext)
+
+type Falsy = null | undefined | false
+const FALSY: Falsy[] = [null, undefined, false]
+
+/**
+ * Use this to filter null, undefined, and false values (only!--this will not
+ * exclude 0 or empty strings) from an array and return an array that excludes
+ * those values in a type-safe way. This is preferable to the JavaScript
+ * convention of `list.filter(Boolean)`, which TypeScript doesn't recognize as
+ * an actual type guard.
+ */
+export function filterTruthy<
+  T,
+  Truthy extends Exclude<T, Falsy> = Exclude<T, Falsy>
+>(values: T[]) {
+  return values.filter((value: T | Falsy): value is Truthy => {
+    return !FALSY.includes(value as Falsy)
+  })
+}

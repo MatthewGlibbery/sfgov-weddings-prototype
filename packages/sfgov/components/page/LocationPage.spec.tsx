@@ -4,7 +4,9 @@ import {
   ExternalLinkBlockFactory,
   ServicesSectionBlockValueFactory,
   ServicesSectionBlockFactory,
-  PageFactory
+  PageFactory,
+  makeNullPageBlock,
+  makePageBlockWithNoURL
 } from '@/lib/factories'
 import { getPageURL } from '@/lib/utils'
 import { render, screen } from '@testing-library/react'
@@ -41,7 +43,7 @@ describe('LocationPage', () => {
     const EMPTY_SECTION = ServicesSectionBlockFactory.make({
       value: ServicesSectionBlockValueFactory.make({
         title: 'Empty section',
-        services: [{ id: 'empty', type: 'page', value: null }]
+        services: [makeNullPageBlock()]
       })
     })
 
@@ -113,16 +115,7 @@ describe('LocationPage', () => {
        * block, but getPageURL() still returns undefined. This case is only
        * valid if both meta.html_url and meta.url_path are falsy
        */
-      nonEmptySection.value.services.push({
-        id: 'abc123',
-        type: 'page',
-        value: PageFactory.make({
-          meta: {
-            html_url: undefined,
-            url_path: undefined
-          }
-        })
-      })
+      nonEmptySection.value.services.push(makePageBlockWithNoURL())
       const page = LocationPageFactory.make({
         services: [nonEmptySection, EMPTY_SECTION]
       })

@@ -2,6 +2,7 @@ import type { FormSchema } from '@/design-system/formio'
 import type {
   BlockType,
   LinkBlockValue,
+  ResourceSectionBlock,
   ServicesSectionBlock,
   TopicFieldTypes,
   TypeAccordionSectionBlock,
@@ -202,7 +203,7 @@ export type NewsPageData = PageData &
 export type AboutPageData = PageData &
   PrimaryAgencyData & {
     about_info: TypeTitleAndTextBlock[]
-    resources: (TypeDownloadableFilesBlock | TypeResourcesSectionBlock)[]
+    resources: (TypeDownloadableFilesBlock | ResourceSectionBlock)[]
   }
 
 type TypeQLessQueue = {
