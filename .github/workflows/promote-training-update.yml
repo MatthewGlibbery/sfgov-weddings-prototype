@@ -1,0 +1,26 @@
+# Manual workflow to promote training-update branch to training branch.
+#
+# Use this after verifying that the training environment deployment looks good
+# and you're ready to update the training branch to match what's deployed.
+
+name: Promote Training Update
+
+on:
+  workflow_dispatch:
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push training-update to training
+        run: |
+          git fetch origin training-update
+          git push origin origin/training-update:training
