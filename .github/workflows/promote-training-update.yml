@@ -1,7 +1,9 @@
-# Manual workflow to promote training-update branch to training branch.
+# Manual workflow to promote the training-<release-tag> branch to training branch.
 #
 # Use this after verifying that the training environment deployment looks good
 # and you're ready to update the training branch to match what's deployed.
+#
+# Automatically finds the single training-v* branch (there should only be one).
 
 name: Promote Training Update
 
@@ -20,7 +22,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Push training-update to training
+      - name: Find training branch to promote
+        id: branch
         run: |
-          git fetch origin training-update
-          git push origin origin/training-update:training
+          # Find the single training-v* branch
+          BRANCHES=$(git ls-remote --heads origin 'refs/heads/training-v*' | awk '{print $2}' | sed 's|refs/heads/||')
+          COUNT=$(echo "$BRANCHES" | grep -c .)
+
+          if [ "$COUNT" -eq 0 ]; then
+            echo "Error: No training-v* branch found"
+            exit 1
+          elif [ "$COUNT" -gt 1 ]; then
+            echo "Error: Multiple training-v* branches found. There should only be one:"
+            echo "$BRANCHES"
+            exit 1
+          fi
+
+          BRANCH=$(echo "$BRANCHES" | head -n 1)
+          echo "Found branch to promote: $BRANCH"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Promote training branch
+        run: |
+          git fetch origin ${{ steps.branch.outputs.branch }}
+          git push origin origin/${{ steps.branch.outputs.branch }}:training
+          echo "Successfully promoted ${{ steps.branch.outputs.branch }} to training"

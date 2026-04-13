@@ -6,21 +6,23 @@
 #   3. Enter the release tag to deploy (e.g., v2026-04-01-160903)
 #
 # What it does:
-# 1. Creates a temporary training-update branch from training
-# 2. Merges the specified release tag into training-update (preserving training-specific features like banners, CSS, user permissions)
+# 1. Creates a unique training-<release-tag> branch from training
+# 2. Merges the specified release tag into it (preserving training-specific features like banners, CSS, user permissions)
 # 3. Runs tests (lint, unit tests)
 # 4. If tests pass:
 #    - Builds and tags Docker image as platform/web:training and platform/web:training-<release-tag>
 #    - Pushes to ECR
 #    - Restarts cms-training-web ECS service
 #    - Waits for deployment to stabilize (15 min timeout)
+#    - Pushes the training-<release-tag> branch to remote
+#    - Cleans up old training-* branches (keeps only the new one)
 #
 # Triggers:
 # - Manual only (workflow_dispatch)
 #
-# Note: Currently does NOT push training-update back to the training branch.
-# This allows us to observe deployments before automatically updating the branch.
-# The training ECS environment will be up-to-date, but the training branch in Git will remain frozen.
+# Note: Does NOT automatically promote to the training branch.
+# After verifying the deployment, manually run "Promote Training Update" workflow.
+# This preserves merge conflict resolution for the next deployment.
 #
 # AWS Authentication:
 # - Uses OIDC (OpenID Connect) with role: GitHubActionsDeployRole
@@ -49,7 +51,7 @@ jobs:
   deploy-training:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
 
     steps:
@@ -68,17 +70,17 @@ jobs:
         run: |
           echo "tag=${{ inputs.release_tag }}" >> $GITHUB_OUTPUT
 
-      - name: Create training-update branch and merge release into it
+      - name: Create training branch and merge release into it
         run: |
           git fetch origin training
           git fetch origin tag ${{ steps.release.outputs.tag }}
-          git checkout -b training-update origin/training
-          git merge ${{ steps.release.outputs.tag }} --no-edit -m "Merge release ${{ steps.release.outputs.tag }} into training-update from training"
+          git checkout -b training-${{ steps.release.outputs.tag }} origin/training
+          git merge ${{ steps.release.outputs.tag }} --no-edit -m "Merge release ${{ steps.release.outputs.tag }} into training"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.11.0'
+          node-version-file: 'package.json'
 
       - name: Install dependencies
         run: npm ci
@@ -116,3 +118,24 @@ jobs:
             --services cms-training-web \
             --region us-west-1
         timeout-minutes: 15
+
+      - name: Push training branch to remote
+        run: |
+          git push origin training-${{ steps.release.outputs.tag }}
+
+      - name: Clean up old training branches
+        run: |
+          # List all remote training-* branches except the current one and base training
+          OLD_BRANCHES=$(git ls-remote --heads origin 'refs/heads/training-*' | \
+            grep -v "training-${{ steps.release.outputs.tag }}$" | \
+            awk '{print $2}' | \
+            sed 's|refs/heads/||')
+
+          # Delete old branches if any exist
+          if [ -n "$OLD_BRANCHES" ]; then
+            echo "Deleting old training branches:"
+            echo "$OLD_BRANCHES"
+            echo "$OLD_BRANCHES" | xargs -I {} git push origin --delete {}
+          else
+            echo "No old training branches to clean up"
+          fi
