@@ -33,7 +33,7 @@ export function TileContentSection({
   return (
     <div {...rest}>
       {title ? (
-        <HeadingXl as="p" className="font-body !mb-20">
+        <HeadingXl as="h3" className="font-body !mb-20">
           {title}
         </HeadingXl>
       ) : null}
