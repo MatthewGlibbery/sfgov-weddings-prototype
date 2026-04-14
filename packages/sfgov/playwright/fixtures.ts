@@ -3092,40 +3092,98 @@ export const expect = baseExpect.extend({
       // Step 1: Check that the "AGENCY" paragraph is present on the page
       const specificParagraph = await page.$('p:has-text("AGENCY")')
 
-      if (specificParagraph) {
-        // Step 2: Locate the <h2>Services</h2> heading using XPath
-        const servicesHeading = await page.$('//h2[text()="Services"]')
-
-        if (servicesHeading) {
-          // Collect all headings between <h2>Services</h2> and the next <h2>
-          const headingsBetween = await page.evaluate(() => {
-            const allHeadings = Array.from(
-              document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-            )
-            const servicesIndex = allHeadings.findIndex(
-              (heading) => heading.textContent === 'Services'
-            )
-            const nextH2Index = allHeadings
-              .slice(servicesIndex + 1)
-              .findIndex((heading) => heading.tagName === 'H2')
-            const endIndex =
-              nextH2Index !== -1
-                ? servicesIndex + 1 + nextH2Index
-                : allHeadings.length
-
-            return allHeadings
-              .slice(servicesIndex + 1, endIndex)
-              .map((heading) => heading.tagName)
-          })
-
-          // Assert all collected headings are <h3>
-          headingsBetween.forEach((tagName) => {
-            expect(tagName).toBe('H3')
-          })
+      // Skip test if this is not an Agency page
+      if (!specificParagraph) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
         }
-        // The <h2>Services</h2> heading does not exist on the page
       }
-      // The "AGENCY" paragraph does not exist on the page
+
+      // Step 2: Locate the <h2>Services</h2> heading using XPath
+      const servicesHeading = await page.$('//h2[normalize-space()="Services"]')
+
+      // Services section is optional.
+      // If the Services h2 does not exist on the page,
+      // there is nothing to validate here.
+      if (!servicesHeading) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
+        }
+      }
+
+      // Collect all headings between <h2>Services</h2> and the next <h2>
+      const headingsBetween = await page.evaluate(() => {
+        const allHeadings = Array.from(
+          document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+        )
+
+        const servicesIndex = allHeadings.findIndex(
+          (heading) =>
+            heading.tagName === 'H2' &&
+            heading.textContent?.trim() === 'Services'
+        )
+
+        if (servicesIndex === -1) {
+          return null
+        }
+
+        const nextH2Index = allHeadings
+          .slice(servicesIndex + 1)
+          .findIndex((heading) => heading.tagName === 'H2')
+
+        const endIndex =
+          nextH2Index !== -1
+            ? servicesIndex + 1 + nextH2Index
+            : allHeadings.length
+
+        return allHeadings
+          .slice(servicesIndex + 1, endIndex)
+          .map((heading) => ({
+            tagName: heading.tagName,
+            text: heading.textContent?.trim() || ''
+          }))
+      })
+
+      // Services section subheadings are optional.
+      // If no headings are present between the Services h2 and the next h2,
+      // there is nothing to validate here.
+      if (!headingsBetween || headingsBetween.length === 0) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
+        }
+      }
+
+      // Assert all collected headings are <h3>
+      headingsBetween.forEach((heading) => {
+        expect(heading.tagName).toBe('H3')
+      })
 
       pass = true
     } catch (e: any) {
@@ -3172,40 +3230,100 @@ export const expect = baseExpect.extend({
       // Step 1: Check that the "AGENCY" paragraph is present on the page
       const specificParagraph = await page.$('p:has-text("AGENCY")')
 
-      if (specificParagraph) {
-        // Step 2: Locate the <h2>Resources</h2> heading using XPath
-        const resourcesHeading = await page.$('//h2[text()="Resources"]')
-
-        if (resourcesHeading) {
-          // Collect all headings between <h2>Resources</h2> and the next <h2>
-          const headingsBetween = await page.evaluate(() => {
-            const allHeadings = Array.from(
-              document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-            )
-            const resourcesIndex = allHeadings.findIndex(
-              (heading) => heading.textContent === 'Resources'
-            )
-            const nextH2Index = allHeadings
-              .slice(resourcesIndex + 1)
-              .findIndex((heading) => heading.tagName === 'H2')
-            const endIndex =
-              nextH2Index !== -1
-                ? resourcesIndex + 1 + nextH2Index
-                : allHeadings.length
-
-            return allHeadings
-              .slice(resourcesIndex + 1, endIndex)
-              .map((heading) => heading.tagName)
-          })
-
-          // Assert all collected headings are <h3>
-          headingsBetween.forEach((tagName) => {
-            expect(tagName).toBe('H3')
-          })
+      // Skip test if this is not an Agency page
+      if (!specificParagraph) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
         }
-        // The <h2>Resources</h2> heading does not exist on the page
       }
-      // The "AGENCY" paragraph does not exist on the page
+
+      // Step 2: Locate the <h2>Resources</h2> heading using XPath
+      const resourcesHeading = await page.$(
+        '//h2[normalize-space()="Resources"]'
+      )
+
+      // Resources section is optional.
+      // If the Resources h2 does not exist on the page,
+      // there is nothing to validate here.
+      if (!resourcesHeading) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
+        }
+      }
+
+      // Collect all headings between <h2>Resources</h2> and the next <h2>
+      const headingsBetween = await page.evaluate(() => {
+        const allHeadings = Array.from(
+          document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+        )
+
+        const resourcesIndex = allHeadings.findIndex(
+          (heading) =>
+            heading.tagName === 'H2' &&
+            heading.textContent?.trim() === 'Resources'
+        )
+
+        if (resourcesIndex === -1) {
+          return null
+        }
+
+        const nextH2Index = allHeadings
+          .slice(resourcesIndex + 1)
+          .findIndex((heading) => heading.tagName === 'H2')
+
+        const endIndex =
+          nextH2Index !== -1
+            ? resourcesIndex + 1 + nextH2Index
+            : allHeadings.length
+
+        return allHeadings
+          .slice(resourcesIndex + 1, endIndex)
+          .map((heading) => ({
+            tagName: heading.tagName,
+            text: heading.textContent?.trim() || ''
+          }))
+      })
+
+      // Resources section subheadings are optional.
+      // If no headings are present between the Resources h2 and the next h2,
+      // there is nothing to validate here.
+      if (!headingsBetween || headingsBetween.length === 0) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
+        }
+      }
+
+      // Assert all collected headings are <h3>
+      headingsBetween.forEach((heading) => {
+        expect(heading.tagName).toBe('H3')
+      })
 
       pass = true
     } catch (e: any) {
@@ -4649,40 +4767,99 @@ export const expect = baseExpect.extend({
       const topicParagraphExists =
         (await page.locator('p').filter({ hasText: 'TOPIC' }).count()) > 0
 
-      if (topicParagraphExists) {
-        // Step 1: Locate the <h2>Services</h2> heading using XPath
-        const servicesHeading = await page.$('//h2[text()="Services"]')
-
-        if (servicesHeading) {
-          // Collect all headings between <h2>Services</h2> and the next <h2>
-          const headingsBetween = await page.evaluate(() => {
-            const allHeadings = Array.from(
-              document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-            )
-            const servicesIndex = allHeadings.findIndex(
-              (heading) => heading.textContent === 'Services'
-            )
-            const nextH2Index = allHeadings
-              .slice(servicesIndex + 1)
-              .findIndex((heading) => heading.tagName === 'H2')
-            const endIndex =
-              nextH2Index !== -1
-                ? servicesIndex + 1 + nextH2Index
-                : allHeadings.length
-
-            return allHeadings
-              .slice(servicesIndex + 1, endIndex)
-              .map((heading) => heading.tagName)
-          })
-
-          // Assert all collected headings are <h3>
-          headingsBetween.forEach((tagName) => {
-            expect(tagName).toBe('H3')
-          })
-        } else {
-          // The heading <h2>Services</h2> does not exist on the page.
+      // Skip test if this is not a Topic page
+      if (!topicParagraphExists) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
         }
       }
+
+      // Step 1: Locate the <h2>Services</h2> heading
+      const servicesHeading = await page.$('//h2[normalize-space()="Services"]')
+
+      // Services section is optional.
+      // If the Services h2 does not exist on the page,
+      // there is nothing to validate here.
+      if (!servicesHeading) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
+        }
+      }
+
+      // Collect all headings between <h2>Services</h2> and the next <h2>
+      const headingsBetween = await page.evaluate(() => {
+        const allHeadings = Array.from(
+          document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+        )
+
+        const servicesIndex = allHeadings.findIndex(
+          (heading) =>
+            heading.tagName === 'H2' &&
+            heading.textContent?.trim() === 'Services'
+        )
+
+        if (servicesIndex === -1) {
+          return null
+        }
+
+        const nextH2Index = allHeadings
+          .slice(servicesIndex + 1)
+          .findIndex((heading) => heading.tagName === 'H2')
+
+        const endIndex =
+          nextH2Index !== -1
+            ? servicesIndex + 1 + nextH2Index
+            : allHeadings.length
+
+        return allHeadings
+          .slice(servicesIndex + 1, endIndex)
+          .map((heading) => ({
+            tagName: heading.tagName,
+            text: heading.textContent?.trim() || ''
+          }))
+      })
+
+      // Services section subheadings are optional.
+      // If no headings are present between the Services h2 and the next h2,
+      // there is nothing to validate here.
+      if (!headingsBetween || headingsBetween.length === 0) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
+        }
+      }
+
+      // Assert all collected headings are <h3>
+      headingsBetween.forEach((heading) => {
+        expect(heading.tagName).toBe('H3')
+      })
+
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult
@@ -4727,40 +4904,101 @@ export const expect = baseExpect.extend({
       const topicParagraphExists =
         (await page.locator('p').filter({ hasText: 'TOPIC' }).count()) > 0
 
-      if (topicParagraphExists) {
-        // Step 1: Locate the <h2>Resources</h2> heading using XPath
-        const resourcesHeading = await page.$('//h2[text()="Resources"]')
-
-        if (resourcesHeading) {
-          // Collect all headings between <h2>Resources</h2> and the next <h2>
-          const headingsBetween = await page.evaluate(() => {
-            const allHeadings = Array.from(
-              document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-            )
-            const resourcesIndex = allHeadings.findIndex(
-              (heading) => heading.textContent === 'Resources'
-            )
-            const nextH2Index = allHeadings
-              .slice(resourcesIndex + 1)
-              .findIndex((heading) => heading.tagName === 'H2')
-            const endIndex =
-              nextH2Index !== -1
-                ? resourcesIndex + 1 + nextH2Index
-                : allHeadings.length
-
-            return allHeadings
-              .slice(resourcesIndex + 1, endIndex)
-              .map((heading) => heading.tagName)
-          })
-
-          // Assert all collected headings are <h3>
-          headingsBetween.forEach((tagName) => {
-            expect(tagName).toBe('H3')
-          })
-        } else {
-          // The heading <h2>Resources</h2> does not exist on the page.
+      // Skip test if this is not a Topic page
+      if (!topicParagraphExists) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
         }
       }
+
+      // Step 1: Locate the <h2>Resources</h2> heading
+      const resourcesHeading = await page.$(
+        '//h2[normalize-space()="Resources"]'
+      )
+
+      // Resources section is optional.
+      // If the Resources h2 does not exist on the page,
+      // there is nothing to validate here.
+      if (!resourcesHeading) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
+        }
+      }
+
+      // Collect all headings between <h2>Resources</h2> and the next <h2>
+      const headingsBetween = await page.evaluate(() => {
+        const allHeadings = Array.from(
+          document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+        )
+
+        const resourcesIndex = allHeadings.findIndex(
+          (heading) =>
+            heading.tagName === 'H2' &&
+            heading.textContent?.trim() === 'Resources'
+        )
+
+        if (resourcesIndex === -1) {
+          return null
+        }
+
+        const nextH2Index = allHeadings
+          .slice(resourcesIndex + 1)
+          .findIndex((heading) => heading.tagName === 'H2')
+
+        const endIndex =
+          nextH2Index !== -1
+            ? resourcesIndex + 1 + nextH2Index
+            : allHeadings.length
+
+        return allHeadings
+          .slice(resourcesIndex + 1, endIndex)
+          .map((heading) => ({
+            tagName: heading.tagName,
+            text: heading.textContent?.trim() || ''
+          }))
+      })
+
+      // Resources section subheadings are optional.
+      // If no headings are present between the Resources h2 and the next h2,
+      // there is nothing to validate here.
+      if (!headingsBetween || headingsBetween.length === 0) {
+        pass = true
+        return {
+          message: (): string =>
+            this.utils.matcherHint(assertionName, undefined, undefined, {
+              isNot: this.isNot
+            }) +
+            '\n\n' +
+            `Expected: ${this.isNot ? 'not' : ''} true\n`,
+          pass,
+          name: assertionName,
+          actual: matcherResult?.actual
+        }
+      }
+
+      // Assert all collected headings are <h3>
+      headingsBetween.forEach((heading) => {
+        expect(heading.tagName).toBe('H3')
+      })
+
       pass = true
     } catch (e: any) {
       matcherResult = e.matcherResult

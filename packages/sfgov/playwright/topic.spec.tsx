@@ -49,3 +49,27 @@ test('validate axe core accessibility tests (topic override)', async ({
     JSON.stringify(results.violations, null, 2)
   ).toEqual([])
 })
+
+// ============================================================
+// Content Type Specific Tests
+// ============================================================
+test.describe('Topic Page – Content Type Specific A11y Tests', () => {
+  test('logical reading order in services section on topic content type', async ({
+    mount,
+    page
+  }) => {
+    const data = TopicPageFactory.make()
+    await mount(<TopicPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderInServicesSectionOnTopicPage()
+  })
+  test('logical reading order in resources section on topic content type', async ({
+    mount,
+    page
+  }) => {
+    const data = TopicPageFactory.make()
+    await mount(<TopicPage page={data} />)
+
+    await expect(page).toHaveLogicalReadingOrderInResourcesSectionOnTopicPage()
+  })
+})
