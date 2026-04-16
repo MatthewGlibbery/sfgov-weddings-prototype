@@ -572,7 +572,7 @@ const AgencyEventsListingPage = (props: TypeEventsListingPageData) => {
           </details>
           {/* event list container */}
           <div className="col-span-12 order-2 lg:order-1 lg:col-span-8 flex flex-col gap-y-40">
-            <HeadingXXl className="!mb-0">
+            <HeadingXXl as="h2" className="!mb-0">
               {filter === 'upcoming'
                 ? t('upcoming-events', { defaultValue: 'Upcoming events' })
                 : t('past-events', { defaultValue: 'Past events' })}
@@ -642,7 +642,9 @@ const AgencyEventsListingPage = (props: TypeEventsListingPageData) => {
                           key={monthYearKey}
                           className="flex flex-col gap-y-20"
                         >
-                          <HeadingXl className="!mb-0">{monthYear}</HeadingXl>
+                          <HeadingXl as="h3" className="!mb-0">
+                            {monthYear}
+                          </HeadingXl>
                           <div className="flex flex-col gap-y-[32px]">
                             {monthEvents.map((event: TypeEventItem, i) => {
                               eventsCount++
