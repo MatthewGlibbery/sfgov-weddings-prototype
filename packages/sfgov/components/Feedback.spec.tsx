@@ -17,6 +17,14 @@ describe('Feedback modal', () => {
     })
   })
 
+  const mockData = {
+    fields: {
+      referrer: '/hi',
+      submission_created: '2026-04-10T14:41:56.000Z',
+      submission_id: '123',
+      wasTheLastPageYouViewedHelpful: 'yes'
+    }
+  }
   it('renders the feedback modal if the floating panel is clicked', async () => {
     render(<Feedback />)
     const floatingPanelBtn = screen.getByRole('button', {
@@ -52,7 +60,7 @@ describe('Feedback modal', () => {
     const yesBtn = screen.getByRole('button', {
       name: 'Yes this page was helpful'
     })
-    fetchMock.mockResponseOnce(JSON.stringify({ _id: '123' }))
+    fetchMock.mockResponseOnce(JSON.stringify(mockData))
     await fireEvent.click(yesBtn)
     await waitFor(() => {
       expect(screen.getByTestId('improve-section')).toBeInTheDocument()
@@ -68,7 +76,7 @@ describe('Feedback modal', () => {
     const noBtn = screen.getByRole('button', {
       name: 'No this page was not helpful'
     })
-    fetchMock.mockResponseOnce(JSON.stringify({ _id: '123' }))
+    fetchMock.mockResponseOnce(JSON.stringify(mockData))
     await fireEvent.click(noBtn)
     await waitFor(() => {
       expect(screen.getByTestId('wrong-section')).toBeInTheDocument()
@@ -84,32 +92,22 @@ describe('Feedback modal', () => {
     const yesBtn = screen.getByRole('button', {
       name: 'Yes this page was helpful'
     })
-    fetchMock.mockResponseOnce(JSON.stringify({ _id: '123' }))
+    fetchMock.mockResponseOnce(JSON.stringify(mockData))
     await fireEvent.click(yesBtn)
-    const expectedBody = {
-      data: {
-        wasTheLastPageYouViewedHelpful: 'yes',
-        referrer: expect.any(String)
-      }
-    }
+
     expect(fetchMock).toHaveBeenCalledTimes(1)
-    expect(fetchMock).toHaveBeenCalledWith(
-      'https://api.formio.sf.gov/live/feedbackformwagtail/submission',
-      expect.objectContaining({
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: expect.any(String)
-      })
-    )
-    const postBody = JSON.parse(fetchMock.mock.lastCall[1].body)
-    expect(postBody).toEqual(expectedBody)
+    expect(fetchMock).toHaveBeenCalledWith('/api/feedbackForm', {
+      body: '{"answer":"yes","referrer":"/agency-name"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    })
     await waitFor(() => {
       const router = mockUseRouter()
       const link = screen.getByRole('link')
       expect(decodeURIComponent(link.getAttribute('href'))).toBe(
-        `/feedback/?referrer=${
+        `/feedback?referrer=${
           router.asPath
-        }&wasTheLastPageYouViewedHelpful=yes&feedbackSubmission=${123}`
+        }&wasTheLastPageYouViewedHelpful=yes&submission_id=${123}`
       )
     })
   })
@@ -128,14 +126,14 @@ describe('Feedback modal', () => {
     const yesBtn = screen.getByRole('button', {
       name: 'Yes this page was helpful'
     })
-    fetchMock.mockResponseOnce(JSON.stringify({ _id: '123' }))
+    fetchMock.mockResponseOnce(JSON.stringify(mockData))
     await fireEvent.click(yesBtn)
     await waitFor(() => {
       const link = screen.getByRole('link')
       expect(decodeURIComponent(link.getAttribute('href'))).toBe(
-        `/${router.locale}/feedback/?referrer=${
+        `/${router.locale}/feedback?referrer=${
           router.asPath
-        }&wasTheLastPageYouViewedHelpful=yes&feedbackSubmission=${123}`
+        }&wasTheLastPageYouViewedHelpful=yes&submission_id=${123}`
       )
     })
   })
@@ -154,14 +152,14 @@ describe('Feedback modal', () => {
     const yesBtn = screen.getByRole('button', {
       name: 'Yes this page was helpful'
     })
-    fetchMock.mockResponseOnce(JSON.stringify({ _id: '123' }))
+    fetchMock.mockResponseOnce(JSON.stringify(mockData))
     await fireEvent.click(yesBtn)
     await waitFor(() => {
       const link = screen.getByRole('link')
       expect(decodeURIComponent(link.getAttribute('href'))).toBe(
-        `/${router.locale}/feedback/?referrer=${
+        `/${router.locale}/feedback?referrer=${
           router.asPath
-        }&wasTheLastPageYouViewedHelpful=yes&feedbackSubmission=${123}`
+        }&wasTheLastPageYouViewedHelpful=yes&submission_id=${123}`
       )
     })
   })
@@ -178,7 +176,36 @@ describe('Feedback modal', () => {
     const noBtn = screen.getByRole('button', {
       name: 'No this page was not helpful'
     })
-    fetchMock.mockResponseOnce('')
+    fetchMock.mockResponseOnce(JSON.stringify({ error: 'Not Found' }), {
+      status: 404
+    })
+    await fireEvent.click(noBtn)
+    await waitFor(() => {
+      expect(errorSpy).toHaveBeenCalled()
+    })
+    errorSpy.mockRestore()
+  })
+
+  it('logs an error if no submission ID is returned', async () => {
+    const errorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined)
+    render(<Feedback />)
+    const floatingPanelBtn = screen.getByRole('button', {
+      name: 'Did you find what you needed?'
+    })
+    await fireEvent.click(floatingPanelBtn)
+    const noBtn = screen.getByRole('button', {
+      name: 'No this page was not helpful'
+    })
+    const mockResponse = {
+      ...mockData,
+      fields: {
+        ...mockData.fields,
+        submission_id: ''
+      }
+    }
+    fetchMock.mockResponseOnce(JSON.stringify(mockResponse))
     await fireEvent.click(noBtn)
     await waitFor(() => {
       expect(errorSpy).toHaveBeenCalled()
@@ -204,9 +231,7 @@ describe('Feedback modal', () => {
     jest.advanceTimersByTime(6000)
     await waitFor(() => {
       expect(errorSpy).toHaveBeenCalledWith(
-        expect.stringContaining(
-          'Timeout: could not create formio feedback submission'
-        )
+        expect.stringContaining('Timeout: could not create feedback submission')
       )
     })
     expect(screen.getByTestId('wrong-section')).toBeInTheDocument()
@@ -239,9 +264,7 @@ describe('Feedback modal', () => {
     jest.advanceTimersByTime(6000)
     await waitFor(() => {
       expect(errorSpy).toHaveBeenCalledWith(
-        expect.stringContaining(
-          'Timeout: could not create formio feedback submission'
-        )
+        expect.stringContaining('Timeout: could not create feedback submission')
       )
     })
     expect(screen.getByTestId('wrong-section')).toBeInTheDocument()

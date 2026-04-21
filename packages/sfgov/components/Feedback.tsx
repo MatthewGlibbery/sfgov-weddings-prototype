@@ -29,8 +29,6 @@ export const Feedback = () => {
   const feedbackTitle = t('did-you-find-what-you-needed', {
     defaultValue: 'Did you find what you needed?'
   })
-  // the cms slug for feedback page
-  const feedbackPageSlug = 'feedback'
   const moreFeedbackRef = useRef<HTMLDivElement | null>(null)
 
   function handleModalClose() {
@@ -61,33 +59,34 @@ export const Feedback = () => {
   }
 
   async function recordResponse(value: 'yes' | 'no') {
-    // create the submission for formio, retrieve submission id,
-    // pass to feedback page to continue capturing response
-    // for submission
+    // create the feedback submission via /api/feedbackForm, retrieve the
+    // returned submission id, and pass it to the feedback page to continue
+    // capturing the response
     setIsFloatingPanelOpen(false)
     if (!responseRecorded) {
-      const { signal, cleanup } = timeoutSignal(5000)
+      const { cleanup } = timeoutSignal(5000)
       try {
         setPendingResponse(value)
-        // hard coding the feedback form schema_url to avoid an api call
-        const formSubmissionUrl = new URL(
-          'https://api.formio.sf.gov/live/feedbackformwagtail'
-        )
-        formSubmissionUrl.pathname += '/submission'
-        // form submissions are public and anonymous
-        const res = await fetch(formSubmissionUrl.href, {
+        const res = await fetch('/api/feedbackForm', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            data: {
-              wasTheLastPageYouViewedHelpful: value,
-              referrer: router.asPath
-            }
-          }),
-          signal
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ answer: value, referrer: router.asPath })
         })
-        const data = await res.json()
-        setSubmissionId(data._id)
+        if (!res.ok) {
+          throw new Error(
+            `Failed to create feedback submission: ${res.status} ${res.statusText}`
+          )
+        }
+        const airtableData = await res.json()
+
+        const submissionId = airtableData.fields.submission_id
+
+        if (!submissionId)
+          throw new Error('No submission ID returned from feedback submission')
+
+        setSubmissionId(submissionId)
         setResponseRecorded(true)
 
         sessionStorage.setItem('feedbackFloatingPanelClosed', 'true')
@@ -96,9 +95,7 @@ export const Feedback = () => {
           e instanceof Error &&
           (e.name === 'AbortError' || e.name === 'TimeoutError')
         ) {
-          console.error(
-            `Timeout: could not create formio feedback submission.  ${e}`
-          )
+          console.error(`Timeout: could not create feedback submission.  ${e}`)
         } else {
           console.error(e)
         }
@@ -125,7 +122,7 @@ export const Feedback = () => {
       wasTheLastPageYouViewedHelpful: selectedResponse
     })
     if (submissionId) {
-      params.set('feedbackSubmission', submissionId)
+      params.set('submission_id', submissionId)
     }
     return (
       <div
@@ -139,8 +136,9 @@ export const Feedback = () => {
         <a
           href={`/${
             router.locale !== 'en' ? `${router.locale}/` : ''
-          }${feedbackPageSlug}/?${params}`}
+          }feedback?${params}`}
           target="_blank"
+          rel="noopener noreferrer"
           onClick={handleModalClose}
         >
           {t('share-details-opens-new-tab', {

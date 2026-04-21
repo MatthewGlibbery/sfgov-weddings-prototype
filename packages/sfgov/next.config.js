@@ -31,10 +31,7 @@ module.exports = {
   },
   poweredByHeader: false,
   experimental: {},
-  transpilePackages: [
-    '../design-system',
-    '../../node_modules/lodash/index.js'
-  ],
+  transpilePackages: ['../design-system', '../../node_modules/lodash/index.js'],
   async headers() {
     /**
      * Set headers on responses, filtered by path and/or header and query string
@@ -93,9 +90,7 @@ module.exports = {
     ]
   },
   // redirects cause the browser URL to change
-  redirects: async () => [
-    ...storybookRedirects()
-  ],
+  redirects: async () => [...storybookRedirects(), ...feedbackRedirects()]
 }
 
 /**
@@ -114,6 +109,45 @@ function storybookRedirects() {
       source: '/iframe.html',
       destination: '/storybook/iframe.html',
       permanent: true
+    }
+  ]
+}
+
+/**
+ * Redirects for routing the feedback form to fillout with the proper locale
+ * @returns {Redirect[]}
+ */
+function feedbackRedirects() {
+  const feedbackFormURL = 'https://digital.forms.sf.gov/t/hgxQbWsrRWus/'
+  return [
+    {
+      source: '/feedback',
+      destination: feedbackFormURL,
+      permanent: false
+    },
+    {
+      source: '/es/feedback',
+      destination: `${feedbackFormURL}?lang=es`,
+      locale: false,
+      permanent: false
+    },
+    {
+      source: '/zh-hant/feedback',
+      destination: `${feedbackFormURL}?lang=zh-CHT`,
+      locale: false,
+      permanent: false
+    },
+    {
+      source: '/fil/feedback',
+      destination: `${feedbackFormURL}?lang=fil`,
+      locale: false,
+      permanent: false
+    },
+    {
+      source: '/vi-vn/feedback',
+      destination: `${feedbackFormURL}?lang=vi`,
+      locale: false,
+      permanent: false
     }
   ]
 }
