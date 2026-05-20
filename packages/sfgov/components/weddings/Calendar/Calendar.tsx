@@ -114,6 +114,22 @@ export function Calendar({
     btn?.focus()
   }, [activeDate])
 
+  // On mount, place focus on the active day (today by default) so keyboard
+  // users can start arrow-navigating immediately. preventScroll keeps the
+  // viewport at the top of the page rather than jumping to the calendar.
+  const didInitialFocusRef = useRef(false)
+  useEffect(() => {
+    if (didInitialFocusRef.current) return
+    const grid = gridRef.current
+    if (!grid) return
+    const btn = grid.querySelector<HTMLButtonElement>(
+      `[data-date="${dateKey(activeDate)}"]`
+    )
+    if (!btn) return
+    btn.focus({ preventScroll: true })
+    didInitialFocusRef.current = true
+  }, [activeDate])
+
   const handleDayKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>, date: Date) => {
       let delta = 0
