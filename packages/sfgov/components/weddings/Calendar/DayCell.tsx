@@ -37,7 +37,7 @@ const Circle = classed('span', {
       selected: 'bg-primary600 text-white'
     },
     isToday: {
-      true: 'border-1 border-primary600',
+      true: 'border-[3px] border-primary600',
       false: ''
     }
   },
@@ -58,7 +58,7 @@ const TodayUnavailableCircle = classed(
   classes(
     'flex items-center justify-center',
     'w-[56px] h-[56px] rounded-full',
-    'border-1 border-primary600',
+    'border-[3px] border-primary600',
     numberStyle,
     'text-neutral400 line-through select-none'
   )
