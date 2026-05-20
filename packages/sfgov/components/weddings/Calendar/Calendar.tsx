@@ -114,44 +114,6 @@ export function Calendar({
     btn?.focus()
   }, [activeDate])
 
-  // On mount, place focus on the active day (today by default) so keyboard
-  // users can start arrow-navigating immediately. We defer one frame so the
-  // calendar grid has finished hydrating and Next.js's scroll-restoration
-  // doesn't fight us; preventScroll keeps the viewport at the top of the
-  // page rather than jumping to the calendar.
-  const didInitialFocusRef = useRef(false)
-  useEffect(() => {
-    if (didInitialFocusRef.current) return
-    let cancelled = false
-    const tryFocus = () => {
-      if (cancelled || didInitialFocusRef.current) return
-      const grid = gridRef.current
-      if (!grid) return
-      const btn = grid.querySelector<HTMLButtonElement>(
-        `[data-date="${dateKey(activeDate)}"]`
-      )
-      if (!btn) return
-      btn.focus({ preventScroll: true })
-      // If something else stole focus before our call landed, the focus is
-      // not on btn and the ring won't show. Only mark as done if it stuck.
-      if (document.activeElement === btn) {
-        didInitialFocusRef.current = true
-      }
-    }
-    const raf = requestAnimationFrame(() => {
-      tryFocus()
-      // One more attempt after layout settles, in case the first call ran
-      // before the button was reachable (rare, but cheap to guard against).
-      if (!didInitialFocusRef.current) {
-        setTimeout(tryFocus, 0)
-      }
-    })
-    return () => {
-      cancelled = true
-      cancelAnimationFrame(raf)
-    }
-  }, [activeDate])
-
   const handleDayKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>, date: Date) => {
       let delta = 0
@@ -234,6 +196,7 @@ export function Calendar({
                 cell.inMonth &&
                 state !== 'unavailable' &&
                 isSameDay(cell.date, activeDate)
+              const isToday = cell.inMonth && isSameDay(cell.date, today)
               return (
                 <div role="gridcell" key={di}>
                   <DayCell
@@ -242,6 +205,7 @@ export function Calendar({
                     state={state}
                     isSelected={isSelected}
                     isActive={isActive}
+                    isToday={isToday}
                     onSelect={handleSelect}
                     onKeyDown={handleDayKeyDown}
                   />

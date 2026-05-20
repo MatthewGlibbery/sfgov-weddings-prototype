@@ -35,18 +35,32 @@ const Circle = classed('span', {
         'group-hover:bg-primary200 group-hover:text-primary900'
       ),
       selected: 'bg-primary600 text-white'
+    },
+    isToday: {
+      true: 'border-1 border-primary600',
+      false: ''
     }
   },
-  defaultVariants: { state: 'available' }
+  defaultVariants: { state: 'available', isToday: false }
 })
 
-const StaticUnavailable = classed(
-  'span',
-  classes(
+const StaticUnavailable = classed('span', {
+  base: classes(
     'flex items-center justify-center w-64 h-64',
     'select-none',
     numberStyle,
     'text-neutral400 line-through'
+  )
+})
+
+const TodayUnavailableCircle = classed(
+  'span',
+  classes(
+    'flex items-center justify-center',
+    'w-[56px] h-[56px] rounded-full',
+    'border-1 border-primary600',
+    numberStyle,
+    'text-neutral400 line-through select-none'
   )
 )
 
@@ -56,6 +70,7 @@ export type DayCellProps = {
   state: DayState
   isSelected: boolean
   isActive: boolean
+  isToday?: boolean
   onSelect: (date: Date) => void
   onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>, date: Date) => void
 }
@@ -69,6 +84,7 @@ export function DayCell({
   state,
   isSelected,
   isActive,
+  isToday = false,
   onSelect,
   onKeyDown
 }: DayCellProps) {
@@ -77,14 +93,20 @@ export function DayCell({
   }
 
   const day = date.getDate()
-  const ariaLabel = formatAriaLabel(date, state, isSelected)
+  const ariaLabel = formatAriaLabel(date, state, isSelected, isToday)
 
   if (state === 'unavailable') {
     return (
       <Cell>
-        <StaticUnavailable aria-label={ariaLabel} aria-disabled="true">
-          {day}
-        </StaticUnavailable>
+        {isToday ? (
+          <TodayUnavailableCircle aria-label={ariaLabel} aria-disabled="true">
+            {day}
+          </TodayUnavailableCircle>
+        ) : (
+          <StaticUnavailable aria-label={ariaLabel} aria-disabled="true">
+            {day}
+          </StaticUnavailable>
+        )}
       </Cell>
     )
   }
@@ -105,7 +127,12 @@ export function DayCell({
         }}
         onKeyDown={(e) => onKeyDown?.(e, date)}
       >
-        <Circle state={isSelected ? 'selected' : 'available'}>{day}</Circle>
+        <Circle
+          state={isSelected ? 'selected' : 'available'}
+          isToday={isToday}
+        >
+          {day}
+        </Circle>
       </InteractiveCell>
     </Cell>
   )
@@ -114,7 +141,8 @@ export function DayCell({
 function formatAriaLabel(
   date: Date,
   state: DayState,
-  isSelected: boolean
+  isSelected: boolean,
+  isToday: boolean
 ): string {
   const formatted = date.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -123,6 +151,7 @@ function formatAriaLabel(
     year: 'numeric'
   })
   const parts = [formatted]
+  if (isToday) parts.push('today')
   if (state === 'unavailable') parts.push('no availability')
   else if (state === 'challenge') parts.push('limited availability')
   else parts.push('available')
