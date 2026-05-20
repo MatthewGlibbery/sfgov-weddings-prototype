@@ -16,6 +16,10 @@ export async function middleware(request: NextRequest) {
   } else if (path.startsWith('/weddings')) {
     // Self-contained prototype — bypass CMS redirect lookup.
     return NextResponse.next()
+  } else if (!API_BASE_URL) {
+    // Prototype deploy without a CMS — pass through everything else so the
+    // middleware doesn't crash on `new URL(path, undefined)`.
+    return NextResponse.next()
   } else if (API_REWRITE_PATHS.includes(path)) {
     return NextResponse.rewrite(new URL(path, API_BASE_URL).href)
   }
