@@ -21,10 +21,18 @@ const InteractiveCell = classed('button', {
   )
 })
 
+// Today indicator: 3px primary600 outline that sits OUTSIDE the circle
+// (outline doesn't consume box-model space the way border does).
+const todayOutline = classes(
+  '[outline-style:solid]',
+  '[outline-width:3px]',
+  '[outline-offset:0px]',
+  '[outline-color:theme(colors.primary600)]'
+)
+
 const Circle = classed('span', {
   base: classes(
-    'flex items-center justify-center',
-    'w-[56px] h-[56px] rounded-full',
+    'flex items-center justify-center rounded-full',
     numberStyle,
     'transition-colors'
   ),
@@ -37,8 +45,8 @@ const Circle = classed('span', {
       selected: 'bg-primary600 text-white'
     },
     isToday: {
-      true: 'border-[3px] border-primary600',
-      false: ''
+      true: classes('w-64 h-64', todayOutline),
+      false: 'w-[56px] h-[56px]'
     }
   },
   defaultVariants: { state: 'available', isToday: false }
@@ -57,8 +65,8 @@ const TodayUnavailableCircle = classed(
   'span',
   classes(
     'flex items-center justify-center',
-    'w-[56px] h-[56px] rounded-full',
-    'border-[3px] border-primary600',
+    'w-64 h-64 rounded-full',
+    todayOutline,
     numberStyle,
     'text-neutral400 line-through select-none'
   )
