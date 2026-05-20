@@ -13,6 +13,9 @@ export async function middleware(request: NextRequest) {
   // Skip any internal routing next does
   if (path.startsWith('/_next/')) {
     return NextResponse.next()
+  } else if (path.startsWith('/weddings')) {
+    // Self-contained prototype — bypass CMS redirect lookup.
+    return NextResponse.next()
   } else if (API_REWRITE_PATHS.includes(path)) {
     return NextResponse.rewrite(new URL(path, API_BASE_URL).href)
   }

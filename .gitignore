@@ -49,3 +49,10 @@ storybook-static/
 
 #i18next-parse output
 locales/
+
+# Local agent / IDE context
+.claude/
+.kiro/
+
+# TypeScript incremental build info
+*.tsbuildinfo
