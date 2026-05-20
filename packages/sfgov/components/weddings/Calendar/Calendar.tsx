@@ -115,19 +115,41 @@ export function Calendar({
   }, [activeDate])
 
   // On mount, place focus on the active day (today by default) so keyboard
-  // users can start arrow-navigating immediately. preventScroll keeps the
-  // viewport at the top of the page rather than jumping to the calendar.
+  // users can start arrow-navigating immediately. We defer one frame so the
+  // calendar grid has finished hydrating and Next.js's scroll-restoration
+  // doesn't fight us; preventScroll keeps the viewport at the top of the
+  // page rather than jumping to the calendar.
   const didInitialFocusRef = useRef(false)
   useEffect(() => {
     if (didInitialFocusRef.current) return
-    const grid = gridRef.current
-    if (!grid) return
-    const btn = grid.querySelector<HTMLButtonElement>(
-      `[data-date="${dateKey(activeDate)}"]`
-    )
-    if (!btn) return
-    btn.focus({ preventScroll: true })
-    didInitialFocusRef.current = true
+    let cancelled = false
+    const tryFocus = () => {
+      if (cancelled || didInitialFocusRef.current) return
+      const grid = gridRef.current
+      if (!grid) return
+      const btn = grid.querySelector<HTMLButtonElement>(
+        `[data-date="${dateKey(activeDate)}"]`
+      )
+      if (!btn) return
+      btn.focus({ preventScroll: true })
+      // If something else stole focus before our call landed, the focus is
+      // not on btn and the ring won't show. Only mark as done if it stuck.
+      if (document.activeElement === btn) {
+        didInitialFocusRef.current = true
+      }
+    }
+    const raf = requestAnimationFrame(() => {
+      tryFocus()
+      // One more attempt after layout settles, in case the first call ran
+      // before the button was reachable (rare, but cheap to guard against).
+      if (!didInitialFocusRef.current) {
+        setTimeout(tryFocus, 0)
+      }
+    })
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(raf)
+    }
   }, [activeDate])
 
   const handleDayKeyDown = useCallback(
