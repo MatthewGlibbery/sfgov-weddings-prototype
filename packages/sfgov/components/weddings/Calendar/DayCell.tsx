@@ -3,7 +3,7 @@ import type { DayState } from '../types'
 
 const Cell = classed(
   'div',
-  classes('flex items-center justify-center w-full h-64')
+  classes('flex items-center justify-center w-full h-[64px]')
 )
 
 const numberStyle = classes(
@@ -14,7 +14,7 @@ const InteractiveCell = classed('button', {
   base: classes(
     'group',
     'flex items-center justify-center',
-    'w-64 h-64 rounded-full',
+    'w-[64px] h-[64px] rounded-full',
     'bg-transparent border-0 p-0',
     'cursor-pointer',
     'focus:outline-focus'
@@ -54,7 +54,7 @@ const Circle = classed('span', {
 
 const StaticUnavailable = classed('span', {
   base: classes(
-    'flex items-center justify-center w-64 h-64',
+    'flex items-center justify-center w-[64px] h-[64px]',
     'select-none',
     numberStyle,
     'text-neutral400 line-through'
