@@ -1,12 +1,7 @@
 import { addDays } from 'date-fns'
 import { Fragment } from 'react'
 import { useRouter } from 'next/router'
-import {
-  BodyText,
-  Button,
-  HeadingXlSans,
-  HeadingXXl
-} from '@/design-system'
+import { BodyText, Button, HeadingXlSans, HeadingXXl } from '@/design-system'
 import type {
   EventType,
   LocationInfo,
@@ -68,7 +63,7 @@ export function ResultsList({
     return (
       <section
         aria-labelledby="available-times-heading"
-        className="flex flex-col gap-[24px]"
+        className="flex flex-col gap-16 md:gap-28 lg:gap-[24px]"
       >
         <HeadingXXl
           as="h2"
@@ -95,7 +90,7 @@ export function ResultsList({
         aria-labelledby="available-times-heading"
         className="flex flex-col gap-40"
       >
-        <div className="flex flex-col gap-[24px]">
+        <div className="flex flex-col gap-16 md:gap-28 lg:gap-[24px]">
           <HeadingXXl
             as="h2"
             id="available-times-heading"
@@ -114,8 +109,9 @@ export function ResultsList({
           </BodyText>
           {next ? (
             <Button
+              block
               onClick={() => onJumpToDate(next)}
-              className="h-40 py-[8px] !text-body"
+              className="h-40 py-[8px] !text-body md:!w-1/3 lg:!w-auto"
             >
               See next available date
             </Button>
@@ -135,7 +131,7 @@ export function ResultsList({
       aria-labelledby="available-times-heading"
       className="flex flex-col gap-40"
     >
-      <div className="flex flex-col gap-[24px]">
+      <div className="flex flex-col gap-16 md:gap-28 lg:gap-[24px]">
         <HeadingXXl
           as="h2"
           id="available-times-heading"

@@ -31,8 +31,9 @@ export function ResultCard({
   const dateLabel = formatLongDate(date)
 
   return (
-    <article className="flex gap-28 items-start w-full">
-      <div className="shrink-0 w-[251px] h-[251px] rounded-4 overflow-hidden bg-neutral100">
+    <article className="flex flex-col md:flex-row gap-12 md:gap-28 items-start w-full">
+      {/* Photo: full-width rectangle on mobile, 220px square on tablet, 251px square on desktop — all with 4px radius */}
+      <div className="shrink-0 w-full h-[168px] md:w-[220px] md:h-[220px] lg:w-[251px] lg:h-[251px] rounded-4 overflow-hidden bg-neutral100">
         <img
           src={location.imageSrc}
           alt={location.imageAlt}
@@ -42,11 +43,11 @@ export function ResultCard({
         />
       </div>
 
-      <div className="flex flex-col gap-20 flex-1 min-w-0">
+      <div className="flex flex-col gap-[24px] md:gap-20 flex-1 min-w-0 w-full">
         <div className="flex flex-col gap-8">
           <Link
             href="#"
-            className="text-primary600 font-semibold text-desktop-heading-lg leading-32 no-underline"
+            className="text-primary600 font-semibold text-heading-lg-li md:text-heading-lg-li lg:text-desktop-heading-lg leading-28 lg:leading-32 no-underline"
           >
             {location.name}
           </Link>
@@ -58,7 +59,7 @@ export function ResultCard({
           </ul>
         </div>
 
-        <div className="flex flex-col gap-16 w-[344px]">
+        <div className="flex flex-col gap-16 w-full lg:w-[344px]">
           <p className="text-body font-bold text-black leading-24 m-0">
             {dateLabel}
           </p>
@@ -131,7 +132,7 @@ function TimeRow({
         <Button
           variant="secondary"
           onClick={onClick}
-          className="h-40 w-[251px] py-[8px] !text-body"
+          className="h-40 w-[217px] md:w-[219px] lg:w-[251px] py-[8px] !text-body"
         >
           Request a hold
         </Button>
@@ -139,14 +140,14 @@ function TimeRow({
         <Button
           variant="tertiary"
           onClick={onClick}
-          className="h-40 w-[251px] py-[8px] !text-body !border-primary600 !text-primary600 hover:!text-primary700 hover:!border-primary700"
+          className="h-40 w-[217px] md:w-[219px] lg:w-[251px] py-[8px] !text-body !border-primary600 !text-primary600 hover:!text-primary700 hover:!border-primary700"
         >
           Challenge the hold
         </Button>
       ) : (
         <span
           aria-disabled="true"
-          className="h-40 w-[251px] inline-flex items-center justify-center text-body font-medium text-neutral500 leading-24"
+          className="h-40 w-[217px] md:w-[219px] lg:w-[251px] inline-flex items-center justify-center text-body font-medium text-neutral500 leading-24"
         >
           Not available
         </span>

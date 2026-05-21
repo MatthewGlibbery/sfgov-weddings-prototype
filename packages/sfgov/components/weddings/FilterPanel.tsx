@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   Button,
   HeadingXlSans,
@@ -8,7 +8,7 @@ import {
   classes
 } from '@/design-system'
 import type { EventType, LocationId, WeddingFilters } from './types'
-import { LOCATION_LIST } from './data/locations'
+import { LOCATION_LIST, LOCATIONS } from './data/locations'
 import { CheckboxRow } from './CheckboxRow'
 
 const EVENT_TYPE_OPTIONS: { value: EventType; label: string }[] = [
@@ -27,11 +27,48 @@ function toggle<T>(arr: T[], value: T): T[] {
   return arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value]
 }
 
+/**
+ * Determine which event types should be disabled based on selected locations.
+ * An event type is disabled if at least one location is selected AND none of
+ * the selected locations support that event type.
+ */
+function getDisabledEventTypes(filters: WeddingFilters): Set<EventType> {
+  const disabled = new Set<EventType>()
+  if (filters.locations.length === 0) return disabled
+
+  for (const opt of EVENT_TYPE_OPTIONS) {
+    const anyLocationSupports = filters.locations.some((locId) =>
+      LOCATIONS[locId].eventTypes.includes(opt.value)
+    )
+    if (!anyLocationSupports) disabled.add(opt.value)
+  }
+  return disabled
+}
+
+/**
+ * Determine which locations should be disabled based on selected event types.
+ * A location is disabled if at least one event type is selected AND none of
+ * the selected event types are supported by that location.
+ */
+function getDisabledLocations(filters: WeddingFilters): Set<LocationId> {
+  const disabled = new Set<LocationId>()
+  if (filters.eventTypes.length === 0) return disabled
+
+  for (const loc of LOCATION_LIST) {
+    const anyEventTypeMatches = filters.eventTypes.some((et) =>
+      loc.eventTypes.includes(et)
+    )
+    if (!anyEventTypeMatches) disabled.add(loc.id)
+  }
+  return disabled
+}
+
 const SectionDetails = classed(
   'details',
   classes(
     'group block list-none w-full',
-    'border-b-1 border-solid border-neutral300 pb-20'
+    'border-b-1 border-solid border-neutral300',
+    '[&[open]]:pb-20'
   )
 )
 
@@ -46,18 +83,19 @@ const SectionSummary = classed(
 function FilterSection({
   title,
   children,
-  defaultOpen = true
+  open,
+  onOpenChange
 }: {
   title: string
   children: ReactNode
-  defaultOpen?: boolean
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }) {
-  const [open, setOpen] = useState(defaultOpen)
   const Icon = open ? IconMinus : IconPlus
   return (
     <SectionDetails
       open={open}
-      onToggle={(e) => setOpen(e.currentTarget.open)}
+      onToggle={(e) => onOpenChange(e.currentTarget.open)}
     >
       <SectionSummary>
         <span className="flex-1 text-heading-md font-bold text-primary600">
@@ -76,40 +114,44 @@ export function FilterPanel({
   onReset,
   className
 }: FilterPanelProps) {
-  const [draft, setDraft] = useState<WeddingFilters>(filters)
+  const [eventOpen, setEventOpen] = useState(true)
+  const [locationsOpen, setLocationsOpen] = useState(true)
 
-  useEffect(() => {
-    setDraft(filters)
-  }, [filters])
+  const hasActiveFilters =
+    filters.eventTypes.length > 0 || filters.locations.length > 0
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    onApply(draft)
+  const disabledEventTypes = getDisabledEventTypes(filters)
+  const disabledLocations = getDisabledLocations(filters)
+
+  const handleEventTypeToggle = (value: EventType) => {
+    onApply({
+      ...filters,
+      eventTypes: toggle<EventType>(filters.eventTypes, value)
+    })
   }
 
-  const handleReset = () => {
-    setDraft({ eventTypes: [], locations: [] })
-    onReset()
+  const handleLocationToggle = (value: LocationId) => {
+    onApply({
+      ...filters,
+      locations: toggle<LocationId>(filters.locations, value)
+    })
   }
 
   // Up/Down (and Left/Right) move focus between filter checkboxes.
-  // Without this, the arrows scroll the page because checkbox inputs don't
-  // implement arrow nav natively.
-  const handleArrowNav = (event: React.KeyboardEvent<HTMLFormElement>) => {
+  const handleArrowNav = (event: React.KeyboardEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement
-    if (
-      !(target instanceof HTMLInputElement) ||
-      target.type !== 'checkbox'
-    ) {
+    if (!(target instanceof HTMLInputElement) || target.type !== 'checkbox') {
       return
     }
     let dir = 0
     if (event.key === 'ArrowDown' || event.key === 'ArrowRight') dir = 1
     else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') dir = -1
     else return
-    const form = event.currentTarget
+    const container = event.currentTarget
     const inputs = Array.from(
-      form.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')
+      container.querySelectorAll<HTMLInputElement>(
+        'input[type="checkbox"]:not(:disabled)'
+      )
     )
     const idx = inputs.indexOf(target)
     if (idx === -1) return
@@ -120,65 +162,61 @@ export function FilterPanel({
   }
 
   return (
-    <form
-      className={classes('flex flex-col gap-20 items-start', className)}
-      onSubmit={handleSubmit}
+    <div
+      className={classes('flex flex-col items-start gap-12', className)}
       onKeyDown={handleArrowNav}
+      role="group"
       aria-label="Filters"
-      noValidate
     >
       <HeadingXlSans as="h2" className="!mb-0">
         Filters
       </HeadingXlSans>
-      <FilterSection title="Event type">
+      <FilterSection
+        title="Event type"
+        open={eventOpen}
+        onOpenChange={setEventOpen}
+      >
         {EVENT_TYPE_OPTIONS.map((opt) => (
           <CheckboxRow
             key={opt.value}
             name="event-type"
             value={opt.value}
-            checked={draft.eventTypes.includes(opt.value)}
-            onChange={() =>
-              setDraft((d) => ({
-                ...d,
-                eventTypes: toggle<EventType>(d.eventTypes, opt.value)
-              }))
-            }
+            checked={filters.eventTypes.includes(opt.value)}
+            disabled={disabledEventTypes.has(opt.value)}
+            onChange={() => handleEventTypeToggle(opt.value)}
           >
             {opt.label}
           </CheckboxRow>
         ))}
       </FilterSection>
-      <FilterSection title="Locations">
+      <FilterSection
+        title="Locations"
+        open={locationsOpen}
+        onOpenChange={setLocationsOpen}
+      >
         {LOCATION_LIST.map((loc) => (
           <CheckboxRow
             key={loc.id}
             name="location"
             value={loc.id}
-            checked={draft.locations.includes(loc.id)}
-            onChange={() =>
-              setDraft((d) => ({
-                ...d,
-                locations: toggle<LocationId>(d.locations, loc.id)
-              }))
-            }
+            checked={filters.locations.includes(loc.id)}
+            disabled={disabledLocations.has(loc.id)}
+            onChange={() => handleLocationToggle(loc.id)}
           >
             {loc.name}
           </CheckboxRow>
         ))}
       </FilterSection>
-      <div className="flex gap-12">
-        <Button type="submit" className="h-40 py-[10px]">
-          Apply
-        </Button>
+      {hasActiveFilters ? (
         <Button
           type="button"
           variant="secondary"
-          onClick={handleReset}
+          onClick={onReset}
           className="h-40 py-[10px]"
         >
-          Reset
+          Reset filters
         </Button>
-      </div>
-    </form>
+      ) : null}
+    </div>
   )
 }

@@ -34,6 +34,7 @@ const Box = classed(
 
 export type CheckboxRowProps = {
   checked: boolean
+  disabled?: boolean
   onChange: (checked: boolean) => void
   name: string
   value: string
@@ -42,19 +43,21 @@ export type CheckboxRowProps = {
 
 export function CheckboxRow({
   checked,
+  disabled = false,
   onChange,
   name,
   value,
   children
 }: CheckboxRowProps) {
   return (
-    <Row>
+    <Row className={disabled ? '!cursor-not-allowed opacity-50' : ''}>
       <span className="relative inline-flex">
         <NativeCheckbox
           type="checkbox"
           name={name}
           value={value}
           checked={checked}
+          disabled={disabled}
           onChange={(e) => onChange(e.currentTarget.checked)}
         />
         <Box>

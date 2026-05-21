@@ -31,8 +31,8 @@ export const LOCATIONS: Record<LocationId, LocationInfo> = {
     daysLabel: 'Saturdays only',
     capacityLabel: 'Up to 200 people',
     priceLabel: '$5,000',
-    imageSrc: '/weddings/locations/mayors-balcony.png',
-    imageAlt: "City Hall Rotunda"
+    imageSrc: '/weddings/locations/rotunda.jpg',
+    imageAlt: 'City Hall Rotunda grand staircase interior'
   }
 }
 

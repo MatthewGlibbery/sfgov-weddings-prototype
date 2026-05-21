@@ -3,21 +3,21 @@ import type { DayState } from '../types'
 
 const Cell = classed(
   'div',
-  classes('flex items-center justify-center w-full h-[64px]')
+  classes('flex items-center justify-center w-full h-[48px] md:h-[64px]')
 )
 
 const numberStyle = classes(
-  'font-body font-semibold text-[32px] leading-[44px]'
+  'font-body font-semibold text-[20px] leading-[28px] md:text-[32px] md:leading-[44px]'
 )
 
 const InteractiveCell = classed('button', {
   base: classes(
     'group',
     'flex items-center justify-center',
-    'w-[64px] h-[64px] rounded-full',
+    'w-[48px] h-[48px] md:w-[64px] md:h-[64px] rounded-full',
     'bg-transparent border-0 p-0',
     'cursor-pointer',
-    'focus:outline-focus'
+    '!outline-none'
   )
 })
 
@@ -30,11 +30,24 @@ const todayOutline = classes(
   '[outline-color:theme(colors.primary600)]'
 )
 
+const focusRing = classes(
+  'group-focus-visible:[outline-style:solid]',
+  'group-focus-visible:[outline-width:3px]',
+  'group-focus-visible:[outline-offset:4px]',
+  'group-focus-visible:[outline-color:theme(colors.primary500)]',
+  'group-focus:[outline-style:solid]',
+  'group-focus:[outline-width:3px]',
+  'group-focus:[outline-offset:4px]',
+  'group-focus:[outline-color:theme(colors.primary500)]'
+)
+
 const Circle = classed('span', {
   base: classes(
     'flex items-center justify-center rounded-full',
+    'w-[38px] h-[38px] md:w-[56px] md:h-[56px]',
     numberStyle,
-    'transition-colors'
+    'transition-colors',
+    focusRing
   ),
   variants: {
     state: {
@@ -45,8 +58,8 @@ const Circle = classed('span', {
       selected: 'bg-primary600 text-white'
     },
     isToday: {
-      true: classes('w-[56px] h-[56px]', todayOutline),
-      false: 'w-[56px] h-[56px]'
+      true: todayOutline,
+      false: ''
     }
   },
   defaultVariants: { state: 'available', isToday: false }
@@ -54,7 +67,7 @@ const Circle = classed('span', {
 
 const StaticUnavailable = classed('span', {
   base: classes(
-    'flex items-center justify-center w-[64px] h-[64px]',
+    'flex items-center justify-center w-[48px] h-[48px] md:w-[64px] md:h-[64px]',
     'select-none',
     numberStyle,
     'text-neutral400 line-through'
@@ -65,7 +78,7 @@ const TodayUnavailableCircle = classed(
   'span',
   classes(
     'flex items-center justify-center',
-    'w-[56px] h-[56px] rounded-full',
+    'w-[38px] h-[38px] md:w-[56px] md:h-[56px] rounded-full',
     todayOutline,
     numberStyle,
     'text-neutral400 line-through select-none'
@@ -80,7 +93,10 @@ export type DayCellProps = {
   isActive: boolean
   isToday?: boolean
   onSelect: (date: Date) => void
-  onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>, date: Date) => void
+  onKeyDown?: (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    date: Date
+  ) => void
 }
 
 const dateKey = (date: Date) =>
@@ -135,10 +151,7 @@ export function DayCell({
         }}
         onKeyDown={(e) => onKeyDown?.(e, date)}
       >
-        <Circle
-          state={isSelected ? 'selected' : 'available'}
-          isToday={isToday}
-        >
+        <Circle state={isSelected ? 'selected' : 'available'} isToday={isToday}>
           {day}
         </Circle>
       </InteractiveCell>
