@@ -62,8 +62,9 @@ export function ResultsList({
   if (!selectedDate) {
     return (
       <section
+        id="available-times"
         aria-labelledby="available-times-heading"
-        className="flex flex-col gap-16 md:gap-28 lg:gap-[24px]"
+        className="flex flex-col gap-16 md:gap-28 lg:gap-[24px] scroll-mt-20"
       >
         <HeadingXXl
           as="h2"
@@ -87,8 +88,9 @@ export function ResultsList({
       findNextAvailable(addDays(selectedDate, 1)) ?? findNextAvailable(today)
     return (
       <section
+        id="available-times"
         aria-labelledby="available-times-heading"
-        className="flex flex-col gap-40"
+        className="flex flex-col gap-40 scroll-mt-20"
       >
         <div className="flex flex-col gap-16 md:gap-28 lg:gap-[24px]">
           <HeadingXXl
@@ -128,8 +130,9 @@ export function ResultsList({
 
   return (
     <section
+      id="available-times"
       aria-labelledby="available-times-heading"
-      className="flex flex-col gap-40"
+      className="flex flex-col gap-40 scroll-mt-20"
     >
       <div className="flex flex-col gap-16 md:gap-28 lg:gap-[24px]">
         <HeadingXXl

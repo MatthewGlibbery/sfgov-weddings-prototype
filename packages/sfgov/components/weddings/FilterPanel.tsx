@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import {
   Button,
   HeadingXlSans,
@@ -28,16 +28,16 @@ function toggle<T>(arr: T[], value: T): T[] {
 }
 
 /**
- * Determine which event types should be disabled based on selected locations.
- * An event type is disabled if at least one location is selected AND none of
- * the selected locations support that event type.
+ * Determine which event types should be disabled based on selected
+ * locations. An event type is disabled if at least one location is
+ * selected AND none of the selected locations support that event type.
  */
-function getDisabledEventTypes(filters: WeddingFilters): Set<EventType> {
+function getDisabledEventTypes(draft: WeddingFilters): Set<EventType> {
   const disabled = new Set<EventType>()
-  if (filters.locations.length === 0) return disabled
+  if (draft.locations.length === 0) return disabled
 
   for (const opt of EVENT_TYPE_OPTIONS) {
-    const anyLocationSupports = filters.locations.some((locId) =>
+    const anyLocationSupports = draft.locations.some((locId) =>
       LOCATIONS[locId].eventTypes.includes(opt.value)
     )
     if (!anyLocationSupports) disabled.add(opt.value)
@@ -46,16 +46,16 @@ function getDisabledEventTypes(filters: WeddingFilters): Set<EventType> {
 }
 
 /**
- * Determine which locations should be disabled based on selected event types.
- * A location is disabled if at least one event type is selected AND none of
- * the selected event types are supported by that location.
+ * Determine which locations should be disabled based on selected event
+ * types. A location is disabled if at least one event type is selected
+ * AND none of the selected event types are supported by that location.
  */
-function getDisabledLocations(filters: WeddingFilters): Set<LocationId> {
+function getDisabledLocations(draft: WeddingFilters): Set<LocationId> {
   const disabled = new Set<LocationId>()
-  if (filters.eventTypes.length === 0) return disabled
+  if (draft.eventTypes.length === 0) return disabled
 
   for (const loc of LOCATION_LIST) {
-    const anyEventTypeMatches = filters.eventTypes.some((et) =>
+    const anyEventTypeMatches = draft.eventTypes.some((et) =>
       loc.eventTypes.includes(et)
     )
     if (!anyEventTypeMatches) disabled.add(loc.id)
@@ -108,6 +108,15 @@ function FilterSection({
   )
 }
 
+/** Check if two filter objects are equivalent. */
+function filtersEqual(a: WeddingFilters, b: WeddingFilters): boolean {
+  if (a.eventTypes.length !== b.eventTypes.length) return false
+  if (a.locations.length !== b.locations.length) return false
+  const sameTypes = a.eventTypes.every((t) => b.eventTypes.includes(t))
+  const sameLocs = a.locations.every((l) => b.locations.includes(l))
+  return sameTypes && sameLocs
+}
+
 export function FilterPanel({
   filters,
   onApply,
@@ -117,24 +126,42 @@ export function FilterPanel({
   const [eventOpen, setEventOpen] = useState(true)
   const [locationsOpen, setLocationsOpen] = useState(true)
 
+  // Draft state: tracks checkbox changes before Apply is pressed.
+  const [draft, setDraft] = useState<WeddingFilters>(filters)
+
+  // Sync draft when applied filters change externally (e.g. reset).
+  useEffect(() => {
+    setDraft(filters)
+  }, [filters])
+
+  const hasDraftChanges = !filtersEqual(draft, filters)
   const hasActiveFilters =
     filters.eventTypes.length > 0 || filters.locations.length > 0
 
-  const disabledEventTypes = getDisabledEventTypes(filters)
-  const disabledLocations = getDisabledLocations(filters)
+  const disabledEventTypes = getDisabledEventTypes(draft)
+  const disabledLocations = getDisabledLocations(draft)
 
   const handleEventTypeToggle = (value: EventType) => {
-    onApply({
-      ...filters,
-      eventTypes: toggle<EventType>(filters.eventTypes, value)
-    })
+    setDraft((prev) => ({
+      ...prev,
+      eventTypes: toggle<EventType>(prev.eventTypes, value)
+    }))
   }
 
   const handleLocationToggle = (value: LocationId) => {
-    onApply({
-      ...filters,
-      locations: toggle<LocationId>(filters.locations, value)
-    })
+    setDraft((prev) => ({
+      ...prev,
+      locations: toggle<LocationId>(prev.locations, value)
+    }))
+  }
+
+  const handleApply = () => {
+    onApply(draft)
+  }
+
+  const handleReset = () => {
+    setDraft({ eventTypes: [], locations: [] })
+    onReset()
   }
 
   // Up/Down (and Left/Right) move focus between filter checkboxes.
@@ -144,9 +171,13 @@ export function FilterPanel({
       return
     }
     let dir = 0
-    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') dir = 1
-    else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') dir = -1
-    else return
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+      dir = 1
+    } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+      dir = -1
+    } else {
+      return
+    }
     const container = event.currentTarget
     const inputs = Array.from(
       container.querySelectorAll<HTMLInputElement>(
@@ -181,7 +212,7 @@ export function FilterPanel({
             key={opt.value}
             name="event-type"
             value={opt.value}
-            checked={filters.eventTypes.includes(opt.value)}
+            checked={draft.eventTypes.includes(opt.value)}
             disabled={disabledEventTypes.has(opt.value)}
             onChange={() => handleEventTypeToggle(opt.value)}
           >
@@ -199,7 +230,7 @@ export function FilterPanel({
             key={loc.id}
             name="location"
             value={loc.id}
-            checked={filters.locations.includes(loc.id)}
+            checked={draft.locations.includes(loc.id)}
             disabled={disabledLocations.has(loc.id)}
             onChange={() => handleLocationToggle(loc.id)}
           >
@@ -207,16 +238,28 @@ export function FilterPanel({
           </CheckboxRow>
         ))}
       </FilterSection>
-      {hasActiveFilters ? (
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={onReset}
-          className="h-40 py-[10px]"
-        >
-          Reset filters
-        </Button>
-      ) : null}
+      <div className="flex gap-12 mt-8">
+        {hasDraftChanges ? (
+          <Button
+            type="button"
+            variant="primary"
+            onClick={handleApply}
+            className="h-40 py-[10px]"
+          >
+            Apply
+          </Button>
+        ) : null}
+        {hasActiveFilters || hasDraftChanges ? (
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleReset}
+            className="h-40 py-[10px]"
+          >
+            Reset filters
+          </Button>
+        ) : null}
+      </div>
     </div>
   )
 }

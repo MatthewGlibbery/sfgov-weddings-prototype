@@ -6,7 +6,7 @@ import {
   PageLabel
 } from '@/design-system'
 import { startOfDay } from 'date-fns'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   Calendar,
   FilterPanel,
@@ -16,13 +16,23 @@ import {
 } from '@/components/weddings'
 
 export default function WeddingsLandingPage() {
-  const {
-    selectedDate,
-    filters,
-    setSelectedDate,
-    setFilters,
-    resetFilters
-  } = useBookingState()
+  const { selectedDate, filters, setSelectedDate, setFilters, resetFilters } =
+    useBookingState()
+
+  const handleDateSelect = useCallback(
+    (date: Date) => {
+      setSelectedDate(date)
+      // Smooth-scroll to the results section after a brief tick so the
+      // DOM updates with the new date's results before scrolling.
+      requestAnimationFrame(() => {
+        const el = document.getElementById('available-times')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      })
+    },
+    [setSelectedDate]
+  )
 
   // Default visible selection to today so the calendar lands focused on
   // a date and the results section can show the jump-to-next CTA.
@@ -54,7 +64,7 @@ export default function WeddingsLandingPage() {
             <Calendar
               selectedDate={effectiveSelectedDate}
               filters={filters}
-              onSelect={setSelectedDate}
+              onSelect={handleDateSelect}
             />
             <hr className="border-0 border-t-1 border-neutral200 my-40 lg:my-80" />
             <ResultsList

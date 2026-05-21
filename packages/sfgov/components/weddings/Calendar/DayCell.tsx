@@ -7,7 +7,8 @@ const Cell = classed(
 )
 
 const numberStyle = classes(
-  'font-body font-semibold text-[20px] leading-[28px] md:text-[32px] md:leading-[44px]'
+  'font-body font-semibold text-[20px] leading-[28px]',
+  'md:text-[32px] md:leading-[44px]'
 )
 
 const InteractiveCell = classed('button', {
@@ -20,15 +21,6 @@ const InteractiveCell = classed('button', {
     '!outline-none'
   )
 })
-
-// Today indicator: 3px primary600 outline that sits OUTSIDE the circle
-// (outline doesn't consume box-model space the way border does).
-const todayOutline = classes(
-  '[outline-style:solid]',
-  '[outline-width:3px]',
-  '[outline-offset:0px]',
-  '[outline-color:theme(colors.primary600)]'
-)
 
 const focusRing = classes(
   'group-focus-visible:[outline-style:solid]',
@@ -56,32 +48,32 @@ const Circle = classed('span', {
         'group-hover:bg-primary200 group-hover:text-primary900'
       ),
       selected: 'bg-primary600 text-white'
-    },
-    isToday: {
-      true: todayOutline,
-      false: ''
     }
   },
-  defaultVariants: { state: 'available', isToday: false }
+  defaultVariants: { state: 'available' }
 })
 
 const StaticUnavailable = classed('span', {
   base: classes(
-    'flex items-center justify-center w-[48px] h-[48px] md:w-[64px] md:h-[64px]',
+    'flex items-center justify-center',
+    'w-[48px] h-[48px] md:w-[64px] md:h-[64px]',
     'select-none',
     numberStyle,
     'text-neutral400 line-through'
   )
 })
 
-const TodayUnavailableCircle = classed(
+// Selected date that became unavailable after a filter change:
+// neutral-100 filled circle, neutral-500 text, strikethrough.
+// 40px mobile, 56px desktop/tablet.
+const SelectedUnavailableCircle = classed(
   'span',
   classes(
-    'flex items-center justify-center',
-    'w-[38px] h-[38px] md:w-[56px] md:h-[56px] rounded-full',
-    todayOutline,
+    'flex items-center justify-center rounded-full',
+    'w-[40px] h-[40px] md:w-[56px] md:h-[56px]',
+    'bg-neutral100',
     numberStyle,
-    'text-neutral400 line-through select-none'
+    'text-neutral500 line-through select-none'
   )
 )
 
@@ -122,10 +114,13 @@ export function DayCell({
   if (state === 'unavailable') {
     return (
       <Cell>
-        {isToday ? (
-          <TodayUnavailableCircle aria-label={ariaLabel} aria-disabled="true">
+        {isSelected ? (
+          <SelectedUnavailableCircle
+            aria-label={ariaLabel}
+            aria-disabled="true"
+          >
             {day}
-          </TodayUnavailableCircle>
+          </SelectedUnavailableCircle>
         ) : (
           <StaticUnavailable aria-label={ariaLabel} aria-disabled="true">
             {day}
@@ -151,9 +146,7 @@ export function DayCell({
         }}
         onKeyDown={(e) => onKeyDown?.(e, date)}
       >
-        <Circle state={isSelected ? 'selected' : 'available'} isToday={isToday}>
-          {day}
-        </Circle>
+        <Circle state={isSelected ? 'selected' : 'available'}>{day}</Circle>
       </InteractiveCell>
     </Cell>
   )
