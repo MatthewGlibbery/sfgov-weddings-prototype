@@ -22,7 +22,7 @@ const dateKey = (date: Date) =>
 const DayLabel = classed(
   'div',
   classes(
-    'text-center font-bold text-[20px] leading-[28px] text-neutral900'
+    'text-center font-bold text-[16px] leading-[24px] md:text-[20px] md:leading-[28px] text-neutral900'
   )
 )
 
@@ -170,7 +170,7 @@ export function Calendar({
         prevDisabled={prevDisabled}
         nextDisabled={nextDisabled}
       />
-      <div className="grid grid-cols-[repeat(7,minmax(0,1fr))] mb-28">
+      <div className="grid grid-cols-[repeat(7,minmax(0,1fr))] mb-12 md:mb-28">
         {DAY_LABELS.map((label) => (
           <DayLabel key={label}>{label}</DayLabel>
         ))}
@@ -184,7 +184,7 @@ export function Calendar({
           <div
             key={wi}
             role="row"
-            className="grid grid-cols-[repeat(7,minmax(0,1fr))] mb-28 last:mb-0"
+            className="grid grid-cols-[repeat(7,minmax(0,1fr))] mb-4 md:mb-28 last:mb-0"
           >
             {week.map((cell, di) => {
               const state: DayState = cell.inMonth

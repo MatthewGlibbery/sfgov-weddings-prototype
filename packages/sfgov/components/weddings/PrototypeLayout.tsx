@@ -14,7 +14,7 @@ export type PrototypeLayoutProps = {
  * that PageWrapper performs (no alerts fetch, no feedback widget, etc.).
  */
 export function PrototypeLayout({
-  title = 'Booking a City Hall wedding',
+  title = 'Book a City Hall wedding',
   children
 }: PrototypeLayoutProps) {
   return (

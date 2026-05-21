@@ -10,7 +10,7 @@ import { formatMonthYear } from '../lib/dateHelpers'
 const NavButton = classed('button', {
   base: classes(
     'inline-flex items-center justify-center',
-    'w-52 h-52 p-8 rounded-4',
+    'w-40 h-40 md:w-52 md:h-52 p-8 rounded-4',
     'border-1 border-solid border-primary600',
     'text-primary600 bg-white',
     'transition-colors',
@@ -40,7 +40,7 @@ export function MonthHeader({
       <HeadingXXl as="h2" className="!mb-0">
         {formatMonthYear(month)}
       </HeadingXXl>
-      <div className="flex items-center gap-16">
+      <div className="flex items-center gap-8 md:gap-16">
         <NavButton
           type="button"
           aria-label="Previous month"
