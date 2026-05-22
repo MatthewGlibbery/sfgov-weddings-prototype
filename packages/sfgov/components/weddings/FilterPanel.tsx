@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import {
   Button,
   HeadingXlSans,
+  IconFilter,
   IconMinus,
   IconPlus,
   classed,
@@ -29,8 +30,7 @@ function toggle<T>(arr: T[], value: T): T[] {
 
 /**
  * Determine which event types should be disabled based on selected
- * locations. An event type is disabled if at least one location is
- * selected AND none of the selected locations support that event type.
+ * locations in the draft.
  */
 function getDisabledEventTypes(draft: WeddingFilters): Set<EventType> {
   const disabled = new Set<EventType>()
@@ -46,9 +46,8 @@ function getDisabledEventTypes(draft: WeddingFilters): Set<EventType> {
 }
 
 /**
- * Determine which locations should be disabled based on selected event
- * types. A location is disabled if at least one event type is selected
- * AND none of the selected event types are supported by that location.
+ * Determine which locations should be disabled based on selected
+ * event types in the draft.
  */
 function getDisabledLocations(draft: WeddingFilters): Set<LocationId> {
   const disabled = new Set<LocationId>()
@@ -108,15 +107,6 @@ function FilterSection({
   )
 }
 
-/** Check if two filter objects are equivalent. */
-function filtersEqual(a: WeddingFilters, b: WeddingFilters): boolean {
-  if (a.eventTypes.length !== b.eventTypes.length) return false
-  if (a.locations.length !== b.locations.length) return false
-  const sameTypes = a.eventTypes.every((t) => b.eventTypes.includes(t))
-  const sameLocs = a.locations.every((l) => b.locations.includes(l))
-  return sameTypes && sameLocs
-}
-
 export function FilterPanel({
   filters,
   onApply,
@@ -126,17 +116,17 @@ export function FilterPanel({
   const [eventOpen, setEventOpen] = useState(true)
   const [locationsOpen, setLocationsOpen] = useState(true)
 
+  // Show/hide toggle for mobile/tablet. Desktop always shows.
+  const [filtersVisible, setFiltersVisible] = useState(true)
+
   // Draft state: tracks checkbox changes before Apply is pressed.
   const [draft, setDraft] = useState<WeddingFilters>(filters)
 
-  // Sync draft when applied filters change externally (e.g. reset).
+  // Sync draft when applied filters change externally (e.g. reset,
+  // pill removal).
   useEffect(() => {
     setDraft(filters)
   }, [filters])
-
-  const hasDraftChanges = !filtersEqual(draft, filters)
-  const hasActiveFilters =
-    filters.eventTypes.length > 0 || filters.locations.length > 0
 
   const disabledEventTypes = getDisabledEventTypes(draft)
   const disabledLocations = getDisabledLocations(draft)
@@ -194,52 +184,75 @@ export function FilterPanel({
 
   return (
     <div
-      className={classes('flex flex-col items-start gap-12', className)}
+      className={classes('flex flex-col items-start gap-20', className)}
       onKeyDown={handleArrowNav}
       role="group"
       aria-label="Filters"
     >
-      <HeadingXlSans as="h2" className="!mb-0">
-        Filters
-      </HeadingXlSans>
-      <FilterSection
-        title="Event type"
-        open={eventOpen}
-        onOpenChange={setEventOpen}
+      {/* Show/Hide toggle — visible on mobile/tablet only */}
+      <Button
+        type="button"
+        variant="tertiary"
+        className={classes(
+          'h-40 py-[10px] lg:!hidden',
+          '!border-primary600 !text-primary600'
+        )}
+        onClick={() => setFiltersVisible((v) => !v)}
+        aria-expanded={filtersVisible}
       >
-        {EVENT_TYPE_OPTIONS.map((opt) => (
-          <CheckboxRow
-            key={opt.value}
-            name="event-type"
-            value={opt.value}
-            checked={draft.eventTypes.includes(opt.value)}
-            disabled={disabledEventTypes.has(opt.value)}
-            onChange={() => handleEventTypeToggle(opt.value)}
-          >
-            {opt.label}
-          </CheckboxRow>
-        ))}
-      </FilterSection>
-      <FilterSection
-        title="Locations"
-        open={locationsOpen}
-        onOpenChange={setLocationsOpen}
+        <IconFilter width={20} height={20} aria-hidden="true" />
+        {filtersVisible ? 'Hide filters' : 'Show filters'}
+      </Button>
+
+      {/* Filter body — hidden on mobile/tablet when collapsed,
+          always visible on desktop */}
+      <div
+        className={classes(
+          filtersVisible ? 'flex' : 'hidden',
+          'flex-col items-start gap-12 w-full',
+          'lg:!flex'
+        )}
       >
-        {LOCATION_LIST.map((loc) => (
-          <CheckboxRow
-            key={loc.id}
-            name="location"
-            value={loc.id}
-            checked={draft.locations.includes(loc.id)}
-            disabled={disabledLocations.has(loc.id)}
-            onChange={() => handleLocationToggle(loc.id)}
-          >
-            {loc.name}
-          </CheckboxRow>
-        ))}
-      </FilterSection>
-      <div className="flex gap-12 mt-8">
-        {hasDraftChanges ? (
+        <HeadingXlSans as="h2" className="!mb-0">
+          Filters
+        </HeadingXlSans>
+        <FilterSection
+          title="Event type"
+          open={eventOpen}
+          onOpenChange={setEventOpen}
+        >
+          {EVENT_TYPE_OPTIONS.map((opt) => (
+            <CheckboxRow
+              key={opt.value}
+              name="event-type"
+              value={opt.value}
+              checked={draft.eventTypes.includes(opt.value)}
+              disabled={disabledEventTypes.has(opt.value)}
+              onChange={() => handleEventTypeToggle(opt.value)}
+            >
+              {opt.label}
+            </CheckboxRow>
+          ))}
+        </FilterSection>
+        <FilterSection
+          title="Locations"
+          open={locationsOpen}
+          onOpenChange={setLocationsOpen}
+        >
+          {LOCATION_LIST.map((loc) => (
+            <CheckboxRow
+              key={loc.id}
+              name="location"
+              value={loc.id}
+              checked={draft.locations.includes(loc.id)}
+              disabled={disabledLocations.has(loc.id)}
+              onChange={() => handleLocationToggle(loc.id)}
+            >
+              {loc.name}
+            </CheckboxRow>
+          ))}
+        </FilterSection>
+        <div className="flex gap-12 mt-8">
           <Button
             type="button"
             variant="primary"
@@ -248,17 +261,15 @@ export function FilterPanel({
           >
             Apply
           </Button>
-        ) : null}
-        {hasActiveFilters || hasDraftChanges ? (
           <Button
             type="button"
             variant="secondary"
             onClick={handleReset}
             className="h-40 py-[10px]"
           >
-            Reset filters
+            Reset
           </Button>
-        ) : null}
+        </div>
       </div>
     </div>
   )

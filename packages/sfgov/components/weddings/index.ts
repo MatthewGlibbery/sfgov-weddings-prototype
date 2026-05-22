@@ -1,6 +1,7 @@
 export { Calendar } from './Calendar/Calendar'
 export { CheckboxRow } from './CheckboxRow'
 export { FilterPanel } from './FilterPanel'
+export { FilterPills } from './FilterPills'
 export { PrototypeLayout } from './PrototypeLayout'
 export { ResultsList } from './ResultsList'
 export { useBookingState } from './hooks/useBookingState'

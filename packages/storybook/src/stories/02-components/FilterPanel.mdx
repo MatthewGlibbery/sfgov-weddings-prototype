@@ -1,0 +1,189 @@
+import { Meta, Canvas } from '@storybook/blocks'
+import * as FilterPanelStories from './FilterPanel.stories'
+
+<Meta of={FilterPanelStories} />
+
+# FilterPanel
+
+The `FilterPanel` manages wedding availability filters with a deferred-apply
+pattern. Users toggle checkboxes to build a draft selection, then commit it
+with an explicit **Apply** button. This prevents the calendar and results
+from flickering on every interaction.
+
+## Import
+
+```tsx
+import { FilterPanel } from '@/components/weddings/FilterPanel'
+import type { WeddingFilters } from '@/components/weddings/types'
+```
+
+## Dependencies
+
+| Dependency                               | Role                                                             |
+| ---------------------------------------- | ---------------------------------------------------------------- |
+| `CheckboxRow`                            | Individual filter checkbox with label, supports `disabled` state |
+| `useBookingState`                        | Hook that reads/writes filter state to URL query params          |
+| `LOCATIONS` / `LOCATION_LIST`            | Location metadata including which event types each supports      |
+| `Button` (design system)                 | Apply and Reset buttons                                          |
+| `HeadingXlSans` (design system)          | "Filters" heading                                                |
+| `IconPlus` / `IconMinus` (design system) | Expand/collapse indicators for filter sections                   |
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Page (weddings/index.tsx)                           │
+│                                                     │
+│  ┌─────────────┐    URL params    ┌──────────────┐  │
+│  │ FilterPanel │ ──── Apply ────▶ │useBookingState│  │
+│  │  (draft)    │ ◀── sync ─────── │  (applied)   │  │
+│  └─────────────┘                  └──────┬───────┘  │
+│                                          │          │
+│                              filters prop│          │
+│                                          ▼          │
+│                    ┌──────────┐    ┌────────────┐   │
+│                    │ Calendar │    │ ResultsList │   │
+│                    └──────────┘    └────────────┘   │
+└─────────────────────────────────────────────────────┘
+```
+
+The FilterPanel holds **draft** state internally. The Calendar and ResultsList
+only see the **applied** filters (from URL params). This separation is the
+core design decision — it means:
+
+- Toggling checkboxes is instant (no re-render of calendar/results)
+- The user can explore filter combinations before committing
+- Cross-disable feedback is immediate (operates on draft)
+- The calendar only re-renders when Apply is clicked
+
+---
+
+## Interaction flow
+
+### 1. Deferred apply
+
+<Canvas of={FilterPanelStories.DraftVsApplied} />
+
+Checkboxes update local draft state only. The calendar and results list
+remain unchanged until the user clicks **Apply**.
+
+### 2. Cross-disable logic
+
+<Canvas of={FilterPanelStories.CrossDisableDemo} />
+
+Cross-disable operates on the **draft** state in real-time:
+
+- **Event type → Location:** Selecting "Two-hour wedding" disables Mayor's
+  Balcony and Fourth Floor Gallery (they only host 1-hour events)
+- **Location → Event type:** Selecting "The Rotunda" disables "One-hour
+  wedding" (Rotunda only hosts 2-hour events)
+
+The rule: a filter option is disabled when at least one selection exists in
+the opposite group AND none of those selections are compatible with the option.
+
+### 3. Reset behaviour
+
+<Canvas of={FilterPanelStories.ResetBehaviour} />
+
+Reset is a single action that clears **both** draft and applied state
+simultaneously. It calls `onReset()` which clears URL params, and also
+resets the internal draft to empty.
+
+---
+
+## Props
+
+| Prop        | Type                                | Description                                        |
+| ----------- | ----------------------------------- | -------------------------------------------------- |
+| `filters`   | `WeddingFilters`                    | Currently applied filters (from URL state)         |
+| `onApply`   | `(filters: WeddingFilters) => void` | Called when user clicks Apply with the draft state |
+| `onReset`   | `() => void`                        | Called when user clicks Reset                      |
+| `className` | `string?`                           | Additional classes for the wrapper                 |
+
+### WeddingFilters type
+
+```tsx
+type WeddingFilters = {
+  eventTypes: EventType[] // '1hr' | '2hr'
+  locations: LocationId[] // 'mayors-balcony' | 'fourth-floor-gallery' | 'rotunda'
+}
+```
+
+---
+
+## State management
+
+### Internal (draft)
+
+```tsx
+const [draft, setDraft] = useState<WeddingFilters>(filters)
+
+// Sync when applied filters change externally (e.g. reset)
+useEffect(() => {
+  setDraft(filters)
+}, [filters])
+```
+
+### Button visibility logic
+
+| Condition                            | Apply   | Reset   |
+| ------------------------------------ | ------- | ------- |
+| Draft === Applied, no active filters | Hidden  | Hidden  |
+| Draft !== Applied                    | Visible | Visible |
+| Draft === Applied, filters active    | Hidden  | Visible |
+
+---
+
+## Interaction with Calendar
+
+When filters are applied and a previously-selected date becomes unavailable:
+
+1. The date keeps its `isSelected` state (URL param unchanged)
+2. `dayState(date)` now returns `'unavailable'` for that date
+3. DayCell renders `SelectedUnavailableCircle`: neutral-100 filled circle,
+   neutral-500 text, strikethrough
+4. User selects a different date → old date loses selection → reverts to
+   normal unavailable style (no circle, grey strikethrough)
+
+This is the only way an unavailable date can appear "selected" — the user
+cannot click an unavailable date directly.
+
+---
+
+## Keyboard navigation
+
+Arrow keys (Up/Down/Left/Right) move focus between enabled checkboxes within
+the filter panel. Disabled checkboxes are skipped. This is handled by the
+`handleArrowNav` keydown listener on the wrapper div.
+
+---
+
+## Accessibility
+
+- The wrapper has `role="group"` and `aria-label="Filters"`
+- Each filter section uses native `<details>`/`<summary>` for expand/collapse
+- Checkboxes use native `<input type="checkbox">` with associated labels
+- Disabled checkboxes get `disabled` attribute (removed from tab order,
+  announced as disabled by screen readers)
+- The expand/collapse icon is decorative (the `<summary>` element handles
+  the interactive semantics)
+
+---
+
+## Do's and Don'ts
+
+✅ **Do:**
+
+- Always pass the current applied filters as the `filters` prop (keeps draft
+  in sync after external changes)
+- Call `onReset` to clear both draft and applied — don't just pass empty
+  filters to `onApply`
+- Let cross-disable guide users away from impossible combinations
+
+🚫 **Don't:**
+
+- Don't bypass the Apply button by calling `onApply` on every checkbox change
+  (causes calendar flicker)
+- Don't disable the Apply button when draft matches applied — just hide it
+- Don't add an "undo" for individual checkbox changes — Reset handles bulk
+  clearing, and toggling the checkbox again is the undo
