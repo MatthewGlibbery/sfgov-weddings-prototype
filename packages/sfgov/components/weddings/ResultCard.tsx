@@ -17,7 +17,11 @@ export type ResultCardProps = {
   date: Date
   eventType: EventType
   today: Date
-  onSelectSlot?: (state: SlotState, slotTime: string) => void
+  onSelectSlot?: (
+    state: SlotState,
+    slotTime: string,
+    locationId: string
+  ) => void
 }
 
 export function ResultCard({
@@ -80,7 +84,9 @@ export function ResultCard({
                   <TimeRow
                     label={slot.label}
                     state={state}
-                    onClick={() => onSelectSlot?.(state, slot.time)}
+                    onClick={() =>
+                      onSelectSlot?.(state, slot.time, location.id)
+                    }
                   />
                 </Fragment>
               )

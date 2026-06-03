@@ -123,9 +123,27 @@ export function ResultsList({
     )
   }
 
-  const handleSelectSlot = (state: SlotState) => {
-    if (state === 'available') router.push('/weddings/book')
-    else if (state === 'challenge') router.push('/weddings/challenge')
+  const handleSelectSlot = (
+    state: SlotState,
+    slotTime: string,
+    locationId: string
+  ) => {
+    const dateIso = selectedDate
+      ? `${selectedDate.getFullYear()}-${String(
+          selectedDate.getMonth() + 1
+        ).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
+      : ''
+    const params = new URLSearchParams()
+    if (dateIso) params.set('date', dateIso)
+    params.set('time', slotTime)
+    params.set('location', locationId)
+    if (filters.eventTypes.length)
+      params.set('types', filters.eventTypes.join(','))
+    if (filters.locations.length)
+      params.set('locations', filters.locations.join(','))
+    const target =
+      state === 'available' ? '/weddings/book' : '/weddings/challenge'
+    router.push(`${target}?${params.toString()}`)
   }
 
   return (

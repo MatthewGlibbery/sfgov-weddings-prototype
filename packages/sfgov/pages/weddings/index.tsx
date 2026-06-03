@@ -23,14 +23,6 @@ export default function WeddingsLandingPage() {
   const handleDateSelect = useCallback(
     (date: Date) => {
       setSelectedDate(date)
-      // Smooth-scroll to the results section after a brief tick so the
-      // DOM updates with the new date's results before scrolling.
-      requestAnimationFrame(() => {
-        const el = document.getElementById('available-times')
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
-      })
     },
     [setSelectedDate]
   )
