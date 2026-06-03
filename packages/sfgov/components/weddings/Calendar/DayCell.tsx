@@ -63,17 +63,17 @@ const StaticUnavailable = classed('span', {
   )
 })
 
-// Selected date that became unavailable after a filter change:
-// neutral-100 filled circle, neutral-500 text, strikethrough.
-// 40px mobile, 56px desktop/tablet.
+// Selected date that became unavailable after a filter change (or today on load):
+// primary600 filled circle, white text, strikethrough.
+// 40px mobile, 56px desktop/tablet (same sizing as the interactive Circle).
 const SelectedUnavailableCircle = classed(
   'span',
   classes(
     'flex items-center justify-center rounded-full',
     'w-[40px] h-[40px] md:w-[56px] md:h-[56px]',
-    'bg-neutral100',
+    'bg-primary600',
     numberStyle,
-    'text-neutral500 line-through select-none'
+    'text-white line-through select-none'
   )
 )
 

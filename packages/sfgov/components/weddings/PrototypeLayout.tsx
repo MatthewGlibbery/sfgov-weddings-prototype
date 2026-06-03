@@ -2,6 +2,7 @@ import Head from 'next/head'
 import type { ReactNode } from 'react'
 import { MainContent } from '@/design-system'
 import { SiteFooter, SiteHeader } from '@/components'
+import { DebugPanel } from './DebugPanel'
 
 export type PrototypeLayoutProps = {
   title?: string
@@ -25,6 +26,7 @@ export function PrototypeLayout({
       <SiteHeader />
       <MainContent>{children}</MainContent>
       <SiteFooter />
+      <DebugPanel />
     </>
   )
 }
