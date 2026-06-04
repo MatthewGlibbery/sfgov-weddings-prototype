@@ -52,7 +52,11 @@ const PAGES: PageLink[] = [
     path: '/weddings/book/step-3',
     isForm: true
   },
-  { label: 'Confirmation', path: '/weddings/book/confirmation' }
+  { label: 'Confirmation', path: '/weddings/book/confirmation' },
+  { label: 'Error — Calendar', path: '/weddings/error-calendar' },
+  { label: 'Error — Unavailable', path: '/weddings/error-unavailable' },
+  { label: 'Error — Existing hold', path: '/weddings/error-existing-hold' },
+  { label: 'Error — Submission', path: '/weddings/error-submission' }
 ]
 
 /** Inline X/close icon matching Figma icon.24.ui.x */

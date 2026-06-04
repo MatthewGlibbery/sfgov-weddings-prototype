@@ -1,6 +1,8 @@
 export { Calendar } from './Calendar/Calendar'
 export { Callout } from './Callout'
 export { DebugPanel } from './DebugPanel'
+export { ErrorPage } from './ErrorPage'
+export { PageAlert } from './PageAlert'
 export { FeedbackSurvey } from './FeedbackSurvey'
 export { CheckboxRow } from './CheckboxRow'
 export { FilterPanel } from './FilterPanel'
