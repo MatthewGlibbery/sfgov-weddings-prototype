@@ -1,5 +1,6 @@
 import { Link } from '@/design-system'
 import { ErrorPage } from '@/components/weddings/ErrorPage'
+import { useBookingParams } from '@/components/weddings/hooks/useBookingParams'
 
 /**
  * Error page: Integration failure / couldn't confirm booking
@@ -9,6 +10,8 @@ import { ErrorPage } from '@/components/weddings/ErrorPage'
  * the submission (integration failure).
  */
 export default function ErrorSubmissionPage() {
+  const { withParams } = useBookingParams()
+
   return (
     <ErrorPage
       title="We couldn't confirm your booking"
@@ -29,7 +32,7 @@ export default function ErrorSubmissionPage() {
         </>
       }
       backLabel="Back to calendar"
-      backHref="/weddings"
+      backHref={withParams('/weddings')}
       primaryLabel="Retry"
     />
   )

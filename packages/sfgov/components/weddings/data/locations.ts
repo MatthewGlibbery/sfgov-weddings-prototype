@@ -4,6 +4,7 @@ export const LOCATIONS: Record<LocationId, LocationInfo> = {
   'mayors-balcony': {
     id: 'mayors-balcony',
     name: "The Mayor's Balcony",
+    href: 'https://www.sf.gov/city-hall-venues-the-mayors-balcony?preview=true&ts=20260223133741',
     eventTypes: ['1hr'],
     durationLabel: '1 hour weddings',
     daysLabel: 'Monday - Friday',
@@ -15,6 +16,7 @@ export const LOCATIONS: Record<LocationId, LocationInfo> = {
   'fourth-floor-gallery': {
     id: 'fourth-floor-gallery',
     name: 'Fourth Floor Gallery',
+    href: 'https://www.sf.gov/city-hall-venues-fourth-floor?preview=true&ts=20260223135311',
     eventTypes: ['1hr'],
     durationLabel: '1 hour weddings',
     daysLabel: 'Monday - Friday',
@@ -26,6 +28,7 @@ export const LOCATIONS: Record<LocationId, LocationInfo> = {
   rotunda: {
     id: 'rotunda',
     name: 'The Rotunda',
+    href: 'https://www.sf.gov/city-hall-venues-the-rotunda?preview=true&ts=20260223134813',
     eventTypes: ['2hr'],
     durationLabel: '2 hour weddings',
     daysLabel: 'Saturdays only',

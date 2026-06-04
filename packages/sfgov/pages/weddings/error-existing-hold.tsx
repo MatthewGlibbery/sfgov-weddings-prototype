@@ -32,7 +32,7 @@ export default function ErrorExistingHoldPage() {
         </>
       }
       backLabel="Back to San Francisco City Hall Events"
-      backHref="#"
+      backHref="https://web-training.dev.sf.gov/department-san-francisco-city-hall-events"
       hidePrimary
     />
   )

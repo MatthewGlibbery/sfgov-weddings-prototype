@@ -43,7 +43,7 @@ export default function WeddingsBookConfirmation() {
           We received your request
         </DisplayXXXl>
         <Link
-          href="#"
+          href="https://web-training.dev.sf.gov/department-san-francisco-city-hall-events"
           className="text-primary500 underline text-body leading-24"
         >
           San Francisco City Hall Events Office
@@ -122,7 +122,10 @@ export default function WeddingsBookConfirmation() {
           {/* Process link */}
           <p className="text-body text-black leading-24 m-0">
             You can review the full{' '}
-            <Link href="#" className="text-primary600 underline">
+            <Link
+              href="https://www.sf.gov/book-city-hall-for-your-wedding-or-event?preview=true&ts=20260601121208"
+              className="text-primary600 underline"
+            >
               process for booking a City Hall wedding
             </Link>
             .

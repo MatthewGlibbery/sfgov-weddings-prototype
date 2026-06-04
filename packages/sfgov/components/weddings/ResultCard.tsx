@@ -50,7 +50,7 @@ export function ResultCard({
       <div className="flex flex-col gap-[24px] md:gap-20 flex-1 min-w-0 w-full">
         <div className="flex flex-col gap-8">
           <Link
-            href="#"
+            href={location.href}
             className="text-primary600 font-semibold text-heading-lg-li md:text-heading-lg-li lg:text-desktop-heading-lg leading-28 lg:leading-32 no-underline"
           >
             {location.name}

@@ -22,7 +22,7 @@ export type ErrorPageProps = {
   alertContent: ReactNode
   /** Label for the secondary (back) button. Defaults to "Back to City Hall Events" */
   backLabel?: string
-  /** href for the back button. Defaults to "#" */
+  /** href for the back button. Defaults to City Hall Events page */
   backHref?: string
   /** Label for the primary action button. Defaults to "Retry" */
   primaryLabel?: string
@@ -50,7 +50,7 @@ export function ErrorPage({
   alertVariant = 'danger',
   alertContent,
   backLabel = 'Back to City Hall Events',
-  backHref = '#',
+  backHref = 'https://web-training.dev.sf.gov/department-san-francisco-city-hall-events',
   primaryLabel = 'Retry',
   onPrimaryAction,
   hidePrimary = false

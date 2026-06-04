@@ -16,6 +16,8 @@ export type TimeSlot = {
 export type LocationInfo = {
   id: LocationId
   name: string
+  /** URL to the location's detail page on sf.gov */
+  href: string
   /** Allowed event types for this location */
   eventTypes: EventType[]
   /** Display copy for the result card stats column */

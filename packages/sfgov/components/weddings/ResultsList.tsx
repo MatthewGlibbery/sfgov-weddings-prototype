@@ -141,9 +141,16 @@ export function ResultsList({
       params.set('types', filters.eventTypes.join(','))
     if (filters.locations.length)
       params.set('locations', filters.locations.join(','))
-    const target =
-      state === 'available' ? '/weddings/book' : '/weddings/challenge'
-    router.push(`${target}?${params.toString()}`)
+
+    if (state === 'challenge') {
+      window.open(
+        'https://www.sf.gov/book-city-hall-for-your-wedding-or-event?preview=true&ts=20260601121208',
+        '_blank',
+        'noopener'
+      )
+    } else {
+      router.push(`/weddings/book?${params.toString()}`)
+    }
   }
 
   return (

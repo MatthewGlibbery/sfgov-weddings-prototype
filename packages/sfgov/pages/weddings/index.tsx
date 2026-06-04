@@ -46,7 +46,10 @@ export default function WeddingsLandingPage() {
           Use this calendar to check the available dates for one-hour and
           two-hour weddings. Select an available time to request a booking.
         </BodyText>
-        <Link href="#" className="underline">
+        <Link
+          href="https://web-training.dev.sf.gov/department-san-francisco-city-hall-events"
+          className="underline"
+        >
           San Francisco City Hall Events Office
         </Link>
       </Container>

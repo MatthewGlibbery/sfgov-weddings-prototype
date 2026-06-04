@@ -1,4 +1,5 @@
 import { ErrorPage } from '@/components/weddings/ErrorPage'
+import { useBookingParams } from '@/components/weddings/hooks/useBookingParams'
 
 /**
  * Error page: Time no longer available
@@ -8,6 +9,8 @@ import { ErrorPage } from '@/components/weddings/ErrorPage'
  * but the selected time is no longer available.
  */
 export default function ErrorUnavailablePage() {
+  const { withParams } = useBookingParams()
+
   return (
     <ErrorPage
       title="Your selected time is no longer available"
@@ -19,7 +22,7 @@ export default function ErrorUnavailablePage() {
         </p>
       }
       backLabel="Back to calendar"
-      backHref="/weddings"
+      backHref={withParams('/weddings')}
       hidePrimary
     />
   )
