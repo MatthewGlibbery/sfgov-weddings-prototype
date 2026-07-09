@@ -6,7 +6,13 @@ import {
   IconProfile,
   Link
 } from '@/design-system'
-import { Fragment, type ComponentType, type SVGProps } from 'react'
+import {
+  Fragment,
+  useState,
+  useCallback,
+  type ComponentType,
+  type SVGProps
+} from 'react'
 import type { EventType, LocationInfo, SlotState } from './types'
 import { getTimeSlotsForLocation } from './data/timeSlots'
 import { getSlotState } from './data/mockAvailability'
@@ -35,7 +41,10 @@ export function ResultCard({
   const dateLabel = formatLongDate(date)
 
   return (
-    <article className="flex flex-col md:flex-row gap-12 md:gap-28 items-start w-full">
+    <article
+      className="flex flex-col md:flex-row gap-12 md:gap-28 items-start w-full"
+      data-testid={`weddings-result-card-${location.id}`}
+    >
       {/* Photo: full-width rectangle on mobile, 220px square on tablet, 251px square on desktop — all with 4px radius */}
       <div className="shrink-0 w-full h-[168px] md:w-[220px] md:h-[220px] lg:w-[251px] lg:h-[251px] rounded-4 overflow-hidden bg-neutral100">
         <img
@@ -120,6 +129,35 @@ function Stat({
   )
 }
 
+function SpinnerIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
+      <circle
+        cx="10"
+        cy="10"
+        r="8"
+        stroke="currentColor"
+        strokeOpacity="0.3"
+        strokeWidth="2"
+      />
+      <path
+        d="M10 2a8 8 0 0 1 8 8"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
 function TimeRow({
   label,
   state,
@@ -129,6 +167,16 @@ function TimeRow({
   state: SlotState
   onClick: () => void
 }) {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleClick = useCallback(() => {
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+      onClick()
+    }, 1000)
+  }, [onClick])
+
   return (
     <li className="flex items-center justify-between w-full">
       <span className="text-body font-medium text-black leading-24">
@@ -137,18 +185,30 @@ function TimeRow({
       {state === 'available' ? (
         <Button
           variant="secondary"
-          onClick={onClick}
-          className="h-40 w-[217px] md:w-[219px] lg:w-[251px] py-[8px] !text-body"
+          onClick={handleClick}
+          disabled={isLoading}
+          aria-busy={isLoading}
+          className="h-40 w-[217px] md:w-[219px] lg:w-[251px] py-[8px] !text-body disabled:!bg-primary100 disabled:!text-primary700 disabled:!border-transparent"
         >
-          Request a hold
+          {isLoading ? (
+            <SpinnerIcon className="animate-spin" />
+          ) : (
+            'Request a hold'
+          )}
         </Button>
       ) : state === 'challenge' ? (
         <Button
           variant="tertiary"
-          onClick={onClick}
-          className="h-40 w-[217px] md:w-[219px] lg:w-[251px] py-[8px] !text-body !border-primary600 !text-primary600 hover:!text-primary700 hover:!border-primary700"
+          onClick={handleClick}
+          disabled={isLoading}
+          aria-busy={isLoading}
+          className="h-40 w-[217px] md:w-[219px] lg:w-[251px] py-[8px] !text-body !border-primary600 !text-primary600 hover:!text-primary700 hover:!border-primary700 disabled:!bg-white disabled:!text-primary600 disabled:!border-primary600"
         >
-          Challenge the hold
+          {isLoading ? (
+            <SpinnerIcon className="animate-spin" />
+          ) : (
+            'Challenge the hold'
+          )}
         </Button>
       ) : (
         <span
